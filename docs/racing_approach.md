@@ -439,6 +439,26 @@ was built, what the gates said, and where the build departs from the plan.
   multi-season joint race-pace model, and a separate feasibility check for attacker-only
   overtaking ratings (attacker effects were recovered in simulation; defender effects were not).
 
+## Decisions fixed before the final runs (2026-09-28)
+
+Written down before the 2010-2017 Jolpica lap data were processed, so that the final results
+cannot shape them:
+
+- **First-lap performance.** The final model is the one with a lasting team term, sprint
+  starts, and race starts from 2010 (Jolpica lap-1 positions before 2018); the held-out test
+  starts in 2012. Its standalone ranking gate is unchanged: overall interval above zero, and
+  the interval for drivers who changed team not entirely below zero. An interim run on
+  2018-2026 with sprints passed that second condition by 0.001 (upper end of the interval);
+  that run does not decide. Whatever the final run shows is reported.
+- **Race pace.** The multi-season joint model (racemulti.py) decides the race-specific pace
+  and degradation gates; with the 2010-2017 laps (weaker observation model: unknown compounds,
+  stint offsets) the held-out test starts in 2012. The gate rule is unchanged (interval of the
+  squared-error difference below zero).
+- **Entry into the overall rating.** Every quality with held-out draws gets the nested entry
+  test in championship.py, as the approach specifies; a quality enters if the interval is
+  above zero. Attacker-only overtaking ratings, if tested, are labelled as a rule chosen
+  after defender effects failed their feasibility check.
+
 ## Risks
 
 - **Drivers not pushing** biases race pace. Mitigations and checks above; telemetry is
