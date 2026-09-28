@@ -457,6 +457,10 @@ cannot shape them:
 - **Consistency.** The final run adds 2010-2017 races through a Jolpica-based stage A (no
   compound terms); held-out from the third season, same rule. An interim 2018-2026 run
   (interval -0.0070 to +0.0003) does not decide.
+- **Overtaking.** The final episodes add sprint races and 2010-2017 races (Jolpica: no
+  compounds or speed traps; neutralisations and, before 2012, pit stops inferred), with an
+  indicator for each source and for the pre-DRS season (2010). The feasibility check is
+  rerun with its criteria unchanged; if it passes, the held-out test starts in 2012.
 - **Entry into the overall rating.** Every quality with held-out draws gets the nested entry
   test in championship.py, as the approach specifies; a quality enters if the interval is
   above zero. Attacker-only overtaking ratings, if tested, are labelled as a rule chosen
