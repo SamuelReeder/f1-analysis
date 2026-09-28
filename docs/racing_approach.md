@@ -1,383 +1,397 @@
 # Stage 2: racing ratings and an overall driver rating
 
-Status: proposed approach, not implemented (2026-09-27). Stage 1 (qualifying pace) is
-in `f1rank/` and described in the README.
+Status: proposed approach, not implemented. Revised on 2026-09-27 after an external
+review. Stage 1 (qualifying pace) is in `f1rank/` and described in the README.
 
 ## Summary
 
-1. **Split racing into parts that can each be measured and separated from the car**, and
-   rank each part on its own:
-   - Driver: race pace, tyre management, starts, racecraft (overtaking and defending),
-     consistency and errors.
-   - Car: race pace, tyre wear, reliability, pit stops.
+1. **Rate each racing quality separately, in the order the data can support it.**
+   - Start with race pace and tyre degradation from 2018, estimated jointly.
+   - Then reliability and errors, first-lap performance, and overtaking/defending.
+   - Pit stops are rated as team operations, separate from car performance.
+2. **Record what happened in each race as an event timeline with uncertain causes.**
+   - This replaces one state per driver-race.
+   - Every event keeps its laps, its evidence and how confident its cause is.
+   - Each model derives its own exclusions from the timeline.
+   - The uncertainty about causes flows into every downstream model.
+3. **Build the overall rating as a sequential model of a race weekend:** qualifying →
+   grid → race performance given the grid → incidents and retirements → classification
+   and points. Simulating that sequence with equal machinery gives the headline
+   **equal-car championship**. A simple results model is built early, as a benchmark
+   every later part must beat.
+4. **Test each quality in two ways.**
+   - It gets a standalone ranking only if it beats a baseline that keeps the same car and
+     context terms. The test uses held-out races, with the uncertainty of the
+     improvement measured, plus transfer tests.
+   - It enters the overall rating only if the full model predicts held-out races better
+     with it than without it.
+5. **Work at lap level.** Telemetry is deferred, but with named uses to test (see
+   Granularity), not ruled out.
 
-   Every part uses the same logic as the qualifying model: teammates share a car, and
-   drivers who change teams link the cars together.
-2. **Publish a part's ranking only if the data supports it.** It must beat a baseline with
-   no driver skill on races it has not seen, and agree with itself between two halves of
-   the data. Parts that fail (likely candidates: racecraft, wet weather) still feed the
-   overall rating, but are not shown as rankings of their own.
-3. **Build the overall rating from race results, not from chosen weights.** A
-   finishing-order model learns how many positions each part is worth, using about 340
-   races since 2010.
-   - A leftover driver term catches whatever the parts miss. Its size shows how
-     complete they are.
-   - Headline: an **equal-car championship**, the expected results if every driver had
-     the same car.
-4. **Classify compromised races once and apply the result everywhere.** Every
-   driver-race gets a state (mechanical failure, damage, crash, penalty, safety car, ...).
-   Each part then uses only the laps and events it can interpret. A mechanical failure
-   counts against the car's reliability and nowhere else.
-5. **Work at lap level**, with race events (starts, retirements, penalties, pit stops) on
-   top. Do not use telemetry.
+## What changed after the review
 
-## What the data supports
+| Review point | Change |
+|---|---|
+| Fuel trend, tyre compounds and degradation are confounded | Start with 2018+ (known compounds). Estimate pace and degradation jointly with explicit identification constraints. Keep the pace/slope covariance. Model correlated laps. Check the two-stage shortcut against a joint model. Older data comes later, through a weaker observation model. |
+| One state per driver-race is too coarse; detection rules too strong | Event timeline with evidence and cause probabilities, including an unknown category. The rules produce evidence, not verdicts. |
+| Finishing-order weights are not causal values of skills | Sequential weekend model (qualifying → grid → race → incidents → points), simulated with equal machinery. The finishing-order model is demoted to a benchmark. |
+| Driver errors could be counted twice | The race-performance stage excludes incident-affected periods; incidents come only from the incident model. |
+| Residual term is not a completeness test | Kept as an "unexplained predictive contribution", included only if it improves held-out prediction. |
+| Weak parts entering the overall rating | Nested with/without comparison on held-out races, carrying the part's estimation uncertainty. |
+| Standalone gates too weak | Baselines keep car and context terms; uncertainty of the improvement; transfer tests; separate car checks; calibration and sharpness. |
+| Qualities overclaimed | Renamed: first-lap performance; pit stops as team operations. Consistency includes car and context effects. Overtaking modelled by battle episodes. |
+| Telemetry dismissed without evidence | Deferred with specific uses to test, and measured costs. |
+| Evidence not reproducible; 2023 statuses misdescribed | Data check committed as `analysis/race_signal.py`, with robust statistics and intervals. Outlier-sensitive figures withdrawn. Status coverage restated. |
 
-| Source | Years | Provides |
-|---|---|---|
-| Jolpica (used now) | results 2010+; lap times and positions 1996+; pit stops 2011+; sprints 2021+ | time and running position of every car on every lap, pit laps and durations, finishing status |
-| FastF1 | 2018+ | also: tyre compound, tyre age, stint, pit in/out laps, track status (safety car, VSC, yellow), a lap-accuracy flag, sector times, speed traps, weather, race-control messages |
+## Evidence from the data
 
-Checked while writing this proposal:
+Counts from the committed data (`data/processed/`):
 
 - **Size:** 344 races and 7,241 driver-races since 2010.
-- **Compromised races are common.** In **31%** of team-races, at least one of the two
-  cars did not finish.
-- **Qualifying explains much, but not all.** When both teammates finish, the one who
-  started ahead finishes ahead **70%** of the time (2,469 cases). About 3 in 10
-  teammate battles flip during the race.
-- **Retirement causes stop in 2023.** From 2023 on, Jolpica records every retirement as
-  "Retired" with no cause (before that: "Engine", "Collision", "Accident", ...). For
-  2023 onward, causes must be inferred from FastF1 race-control messages. For example,
-  in the 2024 Australian GP:
-  - "CAR 44 (HAM) STOPPED AT TURN 10" with no incident message means a mechanical
-    failure.
-  - "CAR 63 (RUS) STOPPED" followed by "INCIDENT INVOLVING CARS 14 (ALO) AND 63 (RUS)"
-    means a crash.
+- **Compromised races are common:** 31.0% of two-car team-races include at least one
+  non-finisher.
+- **Qualifying explains much of the race:** among 2,469 teammate pairs where both
+  finished from grid slots, the one who started ahead finished ahead 70.1% of the time.
+- **Retirement causes, as stored in Jolpica:**
+  - Coded through 2022 ("Engine", "Collision", "Accident", ...).
+  - 2023: 53 of 59 retirements are just "Retired"; 6 are coded.
+  - 2024 onward: every retirement is "Retired".
 
-  A small manual override file (2–3 retirements per race) covers the rest.
-- **Signal volume, 2024, per full-season driver** (median, with range):
+  Status coding has already changed once (2023). Builds should therefore keep dated
+  copies of the source responses and treat statuses as revisable, rather than assume a
+  fixed boundary year.
 
-  | Quantity | Median | Range |
+From `analysis/race_signal.py` (FastF1, 2018+; definitions in the script; results in
+`outputs/analysis/race_signal/`):
+
+- **Coverage:** 187 races, 2018 to 2026 round 15. The 2018 Italian GP has no FastF1
+  timing. Races with any rain or intermediate/wet tyres (48) are excluded from the pace
+  comparisons.
+- **Signal volume per full-season driver** (median):
+
+  | Quantity | Median |
+  |---|---|
+  | Clean race laps | 932 |
+  | Clean-air laps | 534 |
+  | Battle laps (within 1 s) | 175 |
+  | On-track passes made | 27 |
+  | On-track passes suffered | 24 |
+
+  - Race pace has far more data than qualifying (about 60 laps per season).
+  - Overtaking rests on about 25–30 events per season.
+- **Teammates are usually comparable:** in 85% of team-races both drivers have at least
+  20 clean laps, and in 73% both have at least 10 clean-air laps.
+- **Teammate race pace vs qualifying.** 69 pair-seasons with at least 8 dry races (993
+  teammate race comparisons); medians per pair-season; bootstrap 95% intervals.
+
+  | Statistic | Estimate | 95% interval |
   |---|---|---|
-  | Clean race laps (green flag, no pit, not lap 1) | 1,148 | 878–1,252 |
-  | Clean-air laps (more than 2 s behind the car ahead) | 664 | 415–941 |
-  | Battle laps (within 1 s of the car ahead) | 259 | 126–300 |
-  | On-track passes made | 28 | 18–50 |
-  | On-track passes suffered | 31 | 8–58 |
-  | Starts | 24 | |
+  | Race-pace gap, reliability over a season (split-half, Spearman–Brown) | 0.73 | 0.57–0.85 |
+  | Qualifying gap, same | 0.81 | 0.74–0.86 |
+  | Race-pace gap vs qualifying gap, correlation | 0.74 | 0.62–0.84 |
+  | Race-minus-qualifying gap, reliability | 0.33 | 0.00–0.70 |
 
-  For comparison, qualifying gives about 60 laps per season.
-  - Race pace therefore has far more data than qualifying.
-  - Racecraft rests on about 30 events per season, so it needs several seasons pooled.
-  - Starts give one noisy observation per race.
-- **Teammates are usually comparable.** In 88% of 2024 team-races, both drivers have at
-  least 20 clean laps. In 76%, both have at least 10 clean-air laps.
-- **Race pace behaves like a separate, stable quality.** A rough check compared
-  teammate race-pace gaps with teammate qualifying gaps. It used 36 dry races in
-  2023–24: clean-air laps, corrected for lap number, compound and tyre age.
-  - **Stable within a season.** Odd and even rounds agree, with split-half reliability
-    0.62 (qualifying: 0.80).
-  - **Only loosely tied to qualifying.** Across 17 teammate pairs, race-pace gaps
-    correlate only 0.25 with qualifying gaps.
-  - **The race-minus-qualifying difference is itself stable** (reliability 0.63).
+  So race pace is measurable and stable. Most of it is the same ability qualifying
+  measures. A distinct race-specific skill is not established by this check: its
+  stability is weak, with an interval reaching zero.
 
-  So qualifying alone would misrank race pace. That is why race pace gets its own
-  model, and why its link to qualifying (`gamma` below) is estimated rather than
-  assumed.
+  For the build this means:
+  - Race skill is linked to qualifying skill by an estimated coefficient.
+  - The race-specific part is shrunk towards zero.
+  - It gets its own ranking only if it improves held-out prediction.
 
-  Caveats:
-  - The sample is small and the per-race estimate crude.
-  - Part of that stability could be persistent team strategy choices. The full model and
-    its validation must separate the two.
-- **Cost of lap data.** Jolpica returns at most 100 lap rows per request, so about 13
-  requests per race. Backfilling 2010–2017 is a one-time download of about 2,000
-  requests, cached like the qualifying data. FastF1 covers 2018+ faster, and adds tyres
-  and track status. 2010 has no pit-stop data, so pit laps there are detected from the
-  lap-time spike.
+**Withdrawn.** Earlier figures (race vs qualifying correlation 0.25; race-minus-qualifying
+stability 0.63, from 17 pair-seasons) averaged per-race gaps with plain means. One
+compromised session (Norris, 2023 round 19, −3.7 s) flipped a pair's qualifying gap.
 
-## The parts
+The robust re-analysis above reverses their conclusion. Race and qualifying gaps are
+strongly related, and the race-specific part is weakly stable at best. Even a stable
+race-specific part would not by itself show a driver skill, because stable gaps can also
+come from stable team strategy or roles.
 
-| Part | Measures | Unit | Main data | Expected signal |
-|---|---|---|---|---|
-| Qualifying pace (done) | one-lap speed | s/lap | qualifying times | strong |
-| Race pace | speed on clean race laps, adjusted for fuel, tyres and traffic | s/lap | race laps | strong |
-| Tyre management | how fast the driver's tyres fall off, vs the car's norm | s/lap per 10 laps | race laps, stints | moderate, mainly 2018+ |
-| Starts | lap-1 positions gained, vs what the grid slot predicts | positions/race | lap-1 positions | moderate, noisy |
-| Racecraft | chance of completing or resisting a pass, given the pace difference | positions/race | battle laps | uncertain, must prove itself |
-| Consistency | lap-to-lap spread on clean laps | s | race laps | moderate |
-| Errors | driver-caused crashes, spins, collision penalties | events/race | results, race control | weak (rare events) |
-| Wet weather | pace change in the wet, vs teammate | s/lap | wet sessions | weak, experimental |
+## Data layer
 
-Car side: qualifying pace (done), race pace, tyre wear, reliability and pit stops. Each
-car part comes out of the same models as the driver parts.
+- **Sources and versions.**
+  - Jolpica (results, lap times and positions, pit stops, sprints).
+  - FastF1 (2018+: tyres, track status, race-control messages, weather, sector times,
+    speed traps).
+  - Raw responses are cached with retrieval dates and a content hash. Each build
+    records the source versions it used, as fits already record the data they were
+    fitted on.
+- **FastF1 runs as its own extraction step** in its own environment (it requires
+  pandas < 3) and writes Parquet. Its API limit (500 calls per hour, about 50 races) makes
+  the one-time 2018+ backfill about 4 hours; after that it is incremental.
+- **Tables:**
+  - race laps: time, position, gap ahead, compound, tyre age, stint, track status
+  - stints, pit stops, race-control messages, results with status, weather
+  - the event timeline
 
-### Race pace, tyre management and consistency (one model)
+### Event timeline with uncertain causes
 
-Fitting every lap (about 350k laps) with NUTS would be slow. The model therefore works in
-two steps, which keeps it near the size of the qualifying model.
+One row per event.
 
-**Step A: within each race** (fast robust regression, no sampling).
+| Field | Content |
+|---|---|
+| race, driver, laps | the affected lap range (start, end or open) |
+| kind | stoppage, retirement, suspected damage, off-track, collision noted, penalty, unexplained pace loss, pit anomaly, track status (SC/VSC/red/yellow), weather change, teammate swap |
+| evidence | source, status code, race-control message text and time, stewards' document, reviewer note |
+| cause probabilities | mechanical, own error, other driver, external, unknown |
+| attribution confidence, reviewed | how firm the cause is; whether a person has checked it |
+| source version | which snapshot of the source data it came from |
 
-- Use clean laps only. Excluded:
-  - green-flag conditions not met, lap 1, the last lap
-  - in and out laps
-  - laps flagged inaccurate
-  - laps being lapped or lapping
-  - laps after damage or a failure
-- Remove what every car shares in that race:
-  - a race lap trend covering fuel burn and track evolution. It is the same for every
-    car, so fuel loads do not need to be modelled.
-  - compound offsets (2018+)
-  - a dirty-air term (gap to the car ahead)
-- Summarise each driver-stint by:
-  - pace at a reference tyre age
-  - degradation slope
-  - residual spread
+**Rules produce evidence, not verdicts:**
+- **STOPPED message:** evidence of a stoppage, cause unknown. A solo spin also produces
+  only STOPPED, so the rule "STOPPED with no incident message means mechanical" is wrong.
+- **Stewards' decisions:** they judge infringements, not necessarily who caused the
+  outcome. A penalty raises the probability of fault; it does not settle it. No penalty
+  does not split fault 50/50: the attribution stays uncertain.
+- **Teammates within 2 s, or swapping places:** flagged as a possible team order, for
+  sensitivity analysis only.
+- **Lasting pace loss:** recorded as "unexplained pace loss". It could be damage,
+  tyres, fuel or energy saving, or an engine mode.
 
-  Each summary gets a standard error. About 7,000 driver-races × 2–3 stints gives about
-  18,000 stint summaries.
+**Using it downstream:**
+- Each model derives its exclusions from the timeline.
+- Uncertain causes are propagated. Each posterior draw or simulation run samples causes
+  from their probabilities. Strict and lenient sensitivity sets are also run.
+- The unknown category stays.
+- Reviewed entries live in an override file with evidence notes, and are never
+  re-inferred.
+- An audit report per build lists the cause assignments and what changed since the last
+  build.
 
-**Step B: a Bayesian state-space model on the stint summaries**, with the same structure
-as qualifying:
+## The qualities
 
-```
-stint pace     = race intercept
-               + car race pace         (random walk per team, regulation resets)
-               + car x circuit
-               + driver race pace      (= gamma x qualifying skill + race-specific skill)
-               + team fit
-               + stint noise (heavy-tailed)
-stint slope    = race x compound + car tyre wear + driver tyre management
-log(spread)    = race + driver consistency
-```
+| Quality | Treatment |
+|---|---|
+| Race pace | Build first. Rated under stated standard conditions: green flag, clean air, dry, slicks, reference tyre age, relative to the field at that race. |
+| Tyre management | Estimated jointly with pace, since going slower early can buy lower degradation. Report pace and degradation together, with their correlation. |
+| Consistency | Lap-time spread explained by race, car (team-season), context (traffic, tyre age, track status) and driver. The driver part is reported only if it passes the gates. |
+| First-lap performance | Positions gained from the grid slot to the end of lap 1. Includes launch, corner fighting and incidents; named as such, not "starts". Telemetry could later separate the launch. |
+| Overtaking and defending | Battle episodes with opportunity counts, accounting for repeated laps against the same opponent. Must first pass a synthetic feasibility check. |
+| Errors and reliability | Competing risks with exposure (laps at risk) and uncertain causes. Time at risk before another kind of retirement is kept. |
+| Pit stops | Team operations rating, separate from car performance and driver ratings. |
+| Wet weather | Driver × wet interaction. Experimental: few wet races. |
 
-- **Link to qualifying.** Race-specific skill has its own slow random walk. Through
-  `gamma`, a driver with few races borrows from qualifying. The race-specific part is
-  also worth showing: who is better on Sunday than on Saturday.
-- **Tyre compounds before 2018 are unknown.** Compound differences then fall into the
-  zero-mean stint noise. Driver averages over many stints stay unbiased, but tyre
-  management is estimated mainly from 2018+.
-- **Main bias: drivers not pushing.** Examples: leading comfortably, saving fuel or
-  tyres, holding station on team orders. Mitigations:
-  - an "unpressured" covariate (more than 5 s of gap both ahead and behind)
-  - dropping laps where teammates run within 2 s of each other
-  - one-sided noise, since a lap can be slower than a driver's potential but rarely
-    faster (the split Student-t from stage 1)
-  - after fitting, checking residuals against the gap behind
-  - a sensitivity variant that drops the final third of each race
+### Race pace and degradation (first build, 2018+)
 
-### Starts and lap 1
+Per clean lap (log ratio to the race reference):
 
 ```
-lap-1 positions gained = grid-slot expectation (slot, clean/dirty side, start compound)
-                       + car launch (team-season) + driver start skill + heavy-tailed noise
+lap = race lap trend (fuel burn + track evolution, common to all cars)
+    + compound (race)
+    + [car degradation + driver degradation] x tyre age
+    + car race pace + driver race pace + team-specific effect
+    + dirty-air term (gap to the car ahead)
+    + noise (heavy-tailed, AR(1) within a stint)
+
+driver race pace = gamma x qualifying skill (estimated)
+                 + race-specific part (shrunk towards 0)
 ```
 
+The data check found race and qualifying gaps strongly related (0.74), with a
+race-specific part that is weakly stable at best. The race-specific part is therefore
+published only if it improves held-out prediction over the qualifying link alone.
+
+**Identification, made explicit:**
+- **Fuel vs common degradation.** Within a stint, tyre age and lap number rise together.
+  The common fuel trend and the common part of degradation can only be told apart
+  through stint resets and compound changes.
+  - Constrain the fuel effect: common per race, with an informative prior.
+  - Report degradation relative to the race's common slope, which is identified.
+  - Sensitivity: fuel effect fixed vs free.
+- **Fuel differences between cars** (starting loads, consumption) are not removed by a
+  shared trend. They fall into car effects, which teammates share; sensitivity checks.
+- **Compound choice is not random.** It depends on strategy, grid position and the car.
+  - Compounds are known from 2018 and enter as fixed effects.
+  - Strategy and grid covariates are added.
+  - A check compares drivers on the same compound at similar tyre age.
+- **Drivers not pushing:**
+  - an unpressured covariate (large gap both ahead and behind)
+  - a sensitivity variant without the final third of each race
+  - later, a coasting flag from telemetry
+
+**Scale.** A two-stage shortcut summarises each stint:
+- pace at a reference tyre age and degradation slope, with their full 2×2 covariance
+- errors from an AR(1) or block-bootstrap model, so correlated laps are not treated as
+  independent
+- shared race-day conditions as race-level random effects in stage 2
+
+It is accepted only after comparison with the joint lap-level model on one or two
+seasons. The test: driver and car posteriors agree within a quarter of a posterior SD.
+
+**Before 2018** (later), unknown compounds get a weaker observation model: latent or
+stint-level effects with larger variance, calibrated and validated separately. Equal
+measurement quality across the whole window is not assumed.
+
+### Reliability and errors
+
+- **Model:** a discrete-time competing-risks hazard per lap. The risks are mechanical
+  failure, own error, other driver, and unknown.
+- **Uncertain causes:** each retirement contributes a mixture over its timeline cause
+  probabilities.
+- **Censoring:** a retirement from one cause censors the others, and the laps at risk
+  before it are kept.
+- **Mechanical risk:** team-season, power-unit supplier (shared by customer teams) and
+  era.
+- **Own-error risk:** a driver effect (slow random walk), plus team, wet and traffic
+  density.
+
+### First-lap performance
+
+```
+positions gained on lap 1 = grid-slot expectation (slot, clean/dirty side, start compound)
+                          + car (team-season) + driver + heavy-tailed noise
+```
+
+- Incidents enter through the timeline, with their uncertainty.
 - Pit-lane starts are excluded.
-- A driver who is hit by someone else is excluded, where race control names or penalises
-  the other car. Lap 1 is chaotic, which is why the noise is heavy-tailed.
 
-### Racecraft (overtaking and defending)
+### Overtaking and defending
 
-**What counts as a battle lap:** a green-flag lap that starts with the attacker within
-1.0 s of the car ahead. Excluded: laps where either car pits, teammate pairs, and laps
-where one car is lapping the other.
+- **Episodes.**
+  - A battle episode starts when a car gets within 1.0 s of the car ahead, under green
+    flag and with neither car pitting.
+  - It ends with a pass, the gap growing beyond about 2 s, a pit stop or a neutralisation.
+  - Excluded: teammates, lapping, and passes made through pit stops.
+- **Model:** the per-lap chance of a pass within an episode, depending on:
+  - the pace difference (from the race-pace model)
+  - the tyre-age and compound gap
+  - the overtaking-aid state (DRS to 2025, the 2026 overtake mode)
+  - circuit difficulty and car straight-line speed
+  - attacker and defender effects
+  - a pair effect for repeated episodes between the same two cars
+- **Opportunity:** reported separately as the number and length of episodes (mostly a
+  consequence of pace).
+- **Feasibility first:** a synthetic check at real sample sizes (about 30 passes per
+  driver per season) comes before any real fit.
 
-```
-logit P(pass on this lap) = circuit-era overtaking difficulty (incl. DRS era)
-                          + b x expected pace difference (race-pace model, incl. tyre age/compound gap)
-                          + car straight-line term (speed trap 2018+, team effect before)
-                          + attacker skill(i) - defender skill(j)
-```
+## The overall rating: a sequential weekend model
 
-- **Attack and defence are separate skills**, with a correlation learned from the data.
-  They can be told apart because each driver fights many different cars.
-- **Passes made through pit stops (undercut, overcut) don't count.** They are strategy,
-  and pit laps are already excluded.
-- **Conversion to positions:** the skills turn into positions per race using typical
-  battle exposure.
-- **The circuit term is reused.** It tells the overall model how much track position is
-  worth at each circuit.
-- **Feasibility is checked first.** With about 30 passes per driver per season, the
-  estimates will be noisy. Run synthetic recovery at these sample sizes before fitting
-  real data.
+1. **Qualifying performance** (stage 1) → **grid**. Grid penalties come from the
+   timeline. In equal-machinery simulation, power-unit penalties are equalised.
+2. **Race performance given the grid:**
+   - first lap
+   - stint pace and degradation
+   - traffic and overtaking/defending
+   - pit stops (team operations)
+   - strategy (a team decision, held at typical strategies in simulation)
+3. **Incidents and retirements** from the competing-risks model.
+4. **Classification and points.**
 
-### Consistency and errors
+Each stage is fitted on its own data with its own validation. The whole chain is then
+validated on held-out races (finishing order, teammate head-to-heads, points) against the
+simple results benchmark.
 
-- **Consistency:** the driver effect on the residual spread in the race-pace model.
-- **Errors:** driver-caused events per race. These are:
-  - crash or spin retirements
-  - crashes the driver continued from (damage detected)
-  - penalties for causing a collision (race control, 2018+)
+- **No double counting.** The race-performance stage is fitted on laps and positions
+  outside incident-affected periods, and incidents enter only through the incident
+  model.
+- **Mechanical failures are not simply deleted.** Pre-failure laps and exposure stay in
+  every stage, and classification handles censoring. Sensitivity: retirement treated
+  as uninformative vs related to performance.
+- **Equal-car championship.**
+  - Every driver gets the same average car and team operations (reliability, pit stops).
+  - The full sequence is simulated, so grids, traffic and passing opportunities change
+    consistently.
+  - Outputs, from posterior draws: expected points per race, P(title), rank ranges.
+- **Contribution breakdowns are conditional model estimates.** Example: the change in
+  expected points when one quality is set to the field average, with the others at the
+  driver's values. Correlated qualities have no unique allocation of credit. The
+  breakdown reports both one-at-a-time and all-at-once differences and says so.
+- **The unexplained predictive contribution** (the residual driver term) is kept only if
+  it improves held-out prediction. It can absorb strategy, team support, missed grid
+  effects or misclassified incidents, and shrinkage can make it small even when
+  components are missing. So its size is not read as completeness.
 
-  Before 2018 only retirements are available.
-- **Model:** a negative-binomial rate with:
-  - a driver effect (slow random walk)
-  - a team effect (some cars are harder to drive)
-  - exposure in laps
-  - wet and midfield indicators
-- **Blame for collisions:**
-  - It goes to the driver the stewards penalised.
-  - A collision with no penalty counts half for each driver.
-  - A sensitivity variant excludes unpenalised collisions entirely.
-- **Precision:** events are rare, so rates settle only over several seasons. Expect
-  wide intervals.
+**Simple results benchmark (built early).** A rank-ordered logit on finishing orders, with
+car strength and driver terms (stage-1 ratings plus a driver results effect). It gives
+every later part a concrete target: does adding it improve held-out results?
 
-### Car reliability and pit stops
+## Validation and gates
 
-- **Reliability:** a per-lap hazard of mechanical retirement, with:
-  - a team-season effect
-  - a power-unit-supplier effect shared by customer teams, which helps small samples
-  - an era effect
-- **Pit stops:** a team operations rating, from pit-lane time relative to the race
-  median. Low priority.
+**Standalone ranking for a quality:**
+- The baseline keeps the same car and context terms, and removes only the driver terms.
+- The improvement is measured on outer held-out races, as paired differences per race.
+  Its uncertainty comes from a block bootstrap over races, and the interval must exclude
+  zero.
+- Transfer tests: drivers who change team, and new pairings.
+- Car predictions are evaluated separately.
+- Calibration (90% intervals cover 85–95%) and sharpness: intervals must be narrower than
+  the baseline's. Wide intervals can pass a coverage test without being useful.
+- Split-half stability is reported, but it is not sufficient: stable confounding is also
+  stable.
+- Synthetic recovery across several independent seeds and parameter settings, not one
+  shared truth.
 
-## Compromised races: one classification, used everywhere
-
-Every driver-race gets a state, built once in the data layer. Principles:
-- Censor, don't impute.
-- Assign blame only where the stewards did.
-- Keep one table so every part agrees.
-
-| Situation | Detection | Race pace | Starts | Racecraft | Errors | Reliability | Overall (results) |
-|---|---|---|---|---|---|---|---|
-| Clean finish | status | all clean laps | yes | yes | none | survived | ranked |
-| Mechanical failure (lap k) | status to 2022; race control with no incident, 2023+ | laps before the problem | yes | laps before | none | failure | removed from that race's ranking |
-| Damage, continued | incident message, or unscheduled stop plus lasting lap-time step | laps before damage | yes | laps before | if at fault | none | ranked, flagged |
-| Driver's own crash or spin | status / race control | laps before | yes | laps before | event | none | ranked behind finishers |
-| Collision | status / race control plus stewards | laps before | yes | laps before | at fault: event; unclear: half | none | at fault: ranked; victim: removed |
-| Penalty | race control | unaffected | none | none | if for causing a collision | none | classified result |
-| Safety car / VSC / red flag | track status 2018+; lap-time bunching before | laps excluded | none | laps excluded | none | none | ranked |
-| Wet race | FastF1 weather and compounds; before 2018, lap-time inflation plus a checked list | separate wet term | yes | yes | wet exposure | none | ranked |
-| Team orders | teammates swap, or run within 2 s | laps excluded | none | teammate passes excluded | none | none | ranked |
-| Pit-lane start | grid = 0 | yes | excluded | yes | none | none | ranked |
-
-**Retirement causes for 2023+:**
-- Rules first: a STOPPED, INCIDENT or penalty message naming the car within 2 laps.
-- A reviewed override file for the rest.
-- A sensitivity variant drops unclear cases.
-
-## The overall "best driver" rating
-
-### Rejected options
-
-- **Hand-picked weights:** arbitrary. The ranking just follows the weights.
-- **Averaging ranks, or PCA:** these weigh parts by how spread out they are, not by how
-  much they win races.
-- **Points or finishing positions alone:** dominated by the car and by luck. They use
-  little of the information in each race.
-
-### Recommended: let race results set the weights
-
-1. **Fit a finishing-order model** (Plackett–Luce, the standard model for rankings) to
-   every race and sprint since 2010:
-
-   ```
-   strength(driver i, race r) = car race strength (team, race; from the car ratings)
-                              + sum_k  w_k x part_k(i)
-                              + w_quali x overtaking difficulty(circuit) x quali skill(i)
-                              + residual results skill(i)      (slow random walk, shrunk)
-                              + race-day noise
-   ```
-
-   - **No double-fitting.** Parts enter as the values the models would have predicted
-     before each race (leave-future-out estimates). The weights `w_k` therefore reflect
-     real predictive value, and aren't fitted twice to the same data.
-   - **Qualifying enters as a skill, not as grid position.** The overall rating should
-     include the benefit of qualifying well. The circuit term makes qualifying count for
-     more where overtaking is hard (Monaco) and less where it is easy.
-   - **Compromised races** are handled by the classification table. Mechanical failures
-     are removed from that race's ranking; driver-caused retirements stay in, ranked
-     behind finishers.
-2. **Use the residual term as a completeness check.** It catches what the parts don't
-   measure, such as strategy input, tyre warm-up, adaptability and pressure.
-   - Report its share of teammate result variance.
-   - If it's small, the parts capture racing.
-   - If it's large, something is missing, and it still counts in the overall rating.
-3. **Report the overall rating** (sum of weighted parts plus residual) in three forms:
-   - **Positions per race**, gained over the average current driver in the same car,
-     with a 90% interval.
-   - **Equal-car championship (headline):** simulate the current calendar with every
-     driver in the same average car, using posterior draws of skills, weights and error
-     rates, with reliability equalised. Outputs: expected points per race, P(champion),
-     rank ranges.
-   - **Breakdown per driver:** positions from qualifying, race pace, starts, racecraft,
-     errors, and unexplained.
-4. **Rate cars the same way:** an equal-driver championship built from car race pace,
-   tyre wear, reliability and pit stops.
-
-Both a "portable" version (team fit excluded) and an "in current car" version are
-reported, as for qualifying.
-
-A "custom weights" view can be offered on the dashboard as a secondary, clearly labelled
-option.
+**Entering the overall rating:** a nested comparison of the complete model with and
+without the quality, on outer held-out races. The comparison uses the quality's
+posterior draws, not point estimates, so its estimation uncertainty is carried through.
+A quality can be too uncertain for its own ranking and still help here. That is fine,
+but it has to show it.
 
 ## Granularity
 
 | Level | Decision | Reason |
 |---|---|---|
-| Lap | core | Smallest unit where teammates face comparable conditions. Public back to 2010, so careers link across team changes. |
-| Race events (starts, retirements, penalties, pit stops) | yes | Needed for starts, errors, reliability and the compromised-race table |
-| Sector times, speed traps (2018+) | optional inputs | Speed traps separate car straight-line speed in racecraft; sectors help detect traffic |
-| Telemetry (throttle, brake, GPS) | no | 2018+ only, dominated by car behaviour, large. Adds explanation, not ranking accuracy. Consider later for "where the time comes from" charts. |
+| Lap | core | Smallest unit where teammates face comparable conditions; public back to 2010. |
+| Race events | via the timeline | First lap, incidents, reliability, pit stops, exclusions |
+| Sector times, speed traps (2018+) | optional inputs | Speed traps: car straight-line speed for overtaking; sectors: traffic detection |
+| Telemetry (2018+) | deferred, with uses to test | See below |
 
-- **Data window:** 2010 onward for all parts. The refuelling ban began in 2010, so fuel
-  behaviour is comparable across the whole window. Tyre-dependent parts rely mainly on
-  2018+.
-- **Updates:** after every race and sprint, like qualifying.
+**Telemetry.**
 
-## Validation and publication gates
+Measured on the 2024 Bahrain race and qualifying:
+- about 7 s to load a session
+- about 700k car-data rows per race, sampled every 0.24 s
+- braking recorded only as on/off
+- about 70 MB of raw cache per session, so about 30 GB for all 2018+ race, qualifying
+  and sprint sessions
 
-The framework is the same as stage 1: 25 leave-future-out cutoffs, synthetic recovery on
-the real team-change network, and sensitivity variants.
+It would be reduced once to a few numbers per lap, so model size does not change. Compute
+is not the obstacle.
 
-| Part | Held-out target | Must beat |
-|---|---|---|
-| Race pace | teammate clean-lap pace gap per race | raw teammate gaps; qualifying-only prediction; zero |
-| Tyre management | teammate degradation-slope gap | no driver effect |
-| Starts | lap-1 positions gained | grid-slot-only model |
-| Racecraft | pass / no pass on battle laps | pace-difference-only model (no driver terms) |
-| Errors | driver-caused incidents | constant rate |
-| Reliability | mechanical retirements | era rate, same for all teams |
-| Overall | finishing orders; teammate head-to-heads when both finish; new pairings after transfers | grid order; qualifying-only rating; plain car + driver Plackett–Luce on results; teammate Elo |
+Uses to test, each by whether it improves held-out prediction:
+1. **A coasting / not-pushing flag for race pace.** In the Bahrain test, Sainz coasted
+   about 0.6 s per lap and Leclerc about 0.1 s. The signal is there, but its meaning is
+   ambiguous, so it enters as a covariate, not a skill.
+2. **Compromised qualifying laps** (yellow-flag lifts, mistakes, traffic), in place of
+   the blunt 5% cut.
+3. **Battle states within a lap:** failed attempts, passes undone within the lap, and
+   overtaking-aid use.
+4. **Launch vs first-lap fighting.**
+5. **The gap to the car ahead through corners**, for dirty air.
 
-**Rule for publishing a part as its own ranking.** It needs all three:
-- It beats its baseline out of sample.
-- Split-half reliability (odd vs even races, Spearman–Brown corrected) is at least 0.5
-  over a rolling window.
-- Synthetic interval coverage is 85–95%.
-
-A part that fails still enters the overall rating, where its learned weight shrinks
-towards zero if it does not predict.
-
-**Racecraft and errors get an extra check.** Before fitting them on real data, run
-synthetic recovery at the real sample sizes. If known skills can't be recovered, don't
-build the ranking.
+Not for rankings: braking points and corner speeds. They are dominated by the car and
+setup, and too coarse at about 4 samples per second. There is also no steering or
+energy-deployment channel, which matters under the 2026 rules.
 
 ## Build order
 
-Each step adds its own validation section to `REPORT.md`.
+1. **Update and reproducibility fixes.**
+   - Done for stage 1: fit metadata and checks, explicit synthetic source, placebo job,
+     write-once snapshots, failures that stop the run.
+   - Remaining stage-1 items:
+     - keep entered drivers without a time
+     - team-effect variants per contiguous spell and per regulation era
+     - synthetic recovery over several seeds
+2. **Event timeline and reproducible audit.**
+3. **2018+ race pace and degradation**, including the two-stage vs joint check.
+4. **Reliability and errors.**
+5. **Simple overall results benchmark.**
+6. **First-lap performance.**
+7. **Overtaking and defending**, after the synthetic feasibility check.
+8. **Equal-car championship** (sequential simulation).
 
-1. **Data layer**, with tests on known races (e.g. 2024 Australia: Hamilton mechanical,
-   Russell crash). Contents:
-   - race laps (Jolpica 2010–2017, FastF1 2018+)
-   - pit stops, sprints, race-control messages
-   - the compromised-race classification
-   - retirement-cause rules and the override file
-2. **Race pace, tyre management and consistency.** Largest value.
-3. **Starts, reliability, errors, pit stops.** Simple count and hazard models.
-4. **Racecraft**, after the synthetic feasibility check.
-5. **Overall model**, the equal-car championship, exports and report sections.
-6. **Dashboard fields:** one card per part, overall ranking, contribution breakdown.
+Each step adds its validation section to `REPORT.md` and has to pass its gates.
 
 ## Risks
 
-- **Drivers not pushing** can bias race pace. Mitigations and checks are listed above.
-- **Team favouritism** (strategy priority, team orders) looks like driver skill in
-  results. It is partly visible in the residual term, but cannot be separated.
-- **2023+ retirement causes are inferred.** The override file and a sensitivity variant
-  limit the damage.
-- **Racecraft and errors may not be measurable precisely enough.** The gates decide.
-- **Compute.** Stint summaries keep the race model near the size of the qualifying model.
-  The results model is small.
+- **Drivers not pushing** biases race pace. Mitigations and checks above; telemetry is
+  the strongest candidate fix.
+- **Team favouritism** (strategy priority, orders) looks like driver skill in results.
+  It is partly visible in the unexplained contribution, but not separable.
+- **Inferred causes can be wrong.** The timeline keeps uncertainty and an audit trail,
+  and sensitivity sets show how much it matters.
+- **Overtaking and errors may not be measurable precisely enough.** The gates decide.
+- **The sequential model has many parts.** The early results benchmark keeps it honest:
+  every added part must improve held-out results.
