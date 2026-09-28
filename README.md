@@ -4,7 +4,8 @@ Separates F1 **driver skill** from **car-package performance** using qualifying 
 times, and produces continuously updatable ratings with honest uncertainty.
 
 Stage 1 scope: **one-lap qualifying pace**, 2010 onward. Race pace, reliability and
-driver sub-skills are later stages.
+driver sub-skills are later stages. The proposed approach for racing and an overall
+driver rating is in `docs/racing_approach.md`.
 
 ## Pipeline
 
