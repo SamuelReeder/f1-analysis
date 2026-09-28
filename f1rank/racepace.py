@@ -2,6 +2,7 @@
 
     python -m f1rank.racepace stage-a     # per-race estimates (outputs/race/stage_a_*.csv)
     python -m f1rank.racepace stage-b     # model across races + held-out test (outputs/race/)
+    python -m f1rank.racepace stage-a-old # stage A for 2010-2017 races from Jolpica laps (*_old.*)
 
 Stage A, per dry race: a robust (Huber) regression of clean laps,
 
@@ -26,6 +27,15 @@ exclusions for that car: from 2 race laps before a retirement; 1 lap either side
 contact incident; the lap of and after a spin or off-track moment; from a contact incident
 to the pit stop that follows (suspected damage); the 2 laps after a neutralisation ends.
 Races with rain or intermediate/wet tyres are excluded.
+
+Before 2018 (stage-a-old), laps come from Jolpica (oldlaps.race_frame): compounds are
+unknown (one "UNKNOWN" compound per race, so a common degradation slope and no compound
+offsets), tyre age counts laps since the car's last pit stop (recorded from 2011, inferred
+before), green-flag laps are those not flagged as neutralised from the field's lap times,
+and FastF1's accuracy flag does not exist. Races are wet by the precipitation proxy
+(conditions.py), which misses about 40% of wet races; the 10%-slower cut removes the
+slowest wet laps of the races it misses. This is the weaker observation model the approach
+specifies for these seasons.
 
 Stage B, across races (NumPyro): for teammates in the same race,
 
@@ -88,7 +98,7 @@ def exclusions(tl: pd.DataFrame) -> tuple[dict, set]:
     return per, wide
 
 
-def clean_laps(laps: pd.DataFrame, tl: pd.DataFrame) -> pd.DataFrame:
+def clean_laps(laps: pd.DataFrame, tl: pd.DataFrame, compounds=SLICKS) -> pd.DataFrame:
     L = laps.sort_values(["lap_number", "position"]).copy()
     lap_at = leader_lap(L)
     L["race_lap"] = lap_at(L.time.to_numpy() - 1e-3)
@@ -97,7 +107,7 @@ def clean_laps(laps: pd.DataFrame, tl: pd.DataFrame) -> pd.DataFrame:
     last = L.groupby("driver_id").lap_number.transform("max")
     ok = ((L.track_status.astype(str) == "1") & (L.lap_number > 1) & (L.lap_number < last)
           & L.pit_in_time.isna() & L.pit_out_time.isna() & L.is_accurate.astype(bool)
-          & L.compound.isin(SLICKS) & L.tyre_life.notna() & L.lap_time.notna() & L.driver_id.notna())
+          & L.compound.isin(compounds) & L.tyre_life.notna() & L.lap_time.notna() & L.driver_id.notna())
     per, wide = exclusions(tl)
     drop = L.race_lap.isin(wide).to_numpy().copy()
     for d, windows in per.items():
@@ -180,21 +190,41 @@ def stage_a_race(C: pd.DataFrame, rng) -> tuple[pd.DataFrame, np.ndarray, dict]:
     return out, draws, common
 
 
-def stage_a() -> None:
+OLD_COMPOUNDS = {"UNKNOWN"}
+
+
+def fastf1_races():
     laps = pd.read_parquet(PROCESSED / "race_laps.parquet")
     weather = pd.read_parquet(PROCESSED / "race_weather.parquet")
-    timeline = pd.read_parquet(PROCESSED / "timeline.parquet")
     rain = weather.groupby("event_id").rainfall.any()
     wet_tyres = laps.groupby("event_id").compound.apply(lambda c: c.isin(WET).any())
+    for event_id, L in laps.groupby("event_id"):
+        yield event_id, L, bool(rain.get(event_id, False) or wet_tyres.get(event_id, False))
+
+
+def jolpica_races():
+    """Pre-FastF1 races from Jolpica laps, in race_laps' layout (oldlaps.race_frame)."""
+    from .oldlaps import race_frame
+    J = pd.read_parquet(PROCESSED / "jolpica_laps.parquet")
+    P = pd.read_parquet(PROCESSED / "jolpica_pitstops.parquet")
+    first = pd.read_parquet(PROCESSED / "race_laps.parquet").event_id.min()
+    wet = pd.read_parquet(PROCESSED / "race_conditions.parquet").set_index("event_id").wet
+    team = pd.read_parquet(PROCESSED / "race.parquet").set_index(["event_id", "driver_id"]).team
+    for event_id, L in J[J.event_id < first].groupby("event_id"):
+        F = race_frame(L, P[P.event_id == event_id], team.loc[event_id])
+        yield event_id, F, bool(wet.get(event_id, False))
+
+
+def stage_a(old: bool = False) -> None:
+    timeline = pd.read_parquet(PROCESSED / "timeline.parquet")
     rng = np.random.default_rng(0)
     drivers, pairs, races = [], [], []
-    for event_id, L in laps.groupby("event_id"):
-        wet = bool(rain.get(event_id, False) or wet_tyres.get(event_id, False))
+    for event_id, L, wet in (jolpica_races() if old else fastf1_races()):
         info = {"event_id": event_id, "wet": wet}
         if wet:
             races.append(info)
             continue
-        C = clean_laps(L, timeline[timeline.event_id == event_id])
+        C = clean_laps(L, timeline[timeline.event_id == event_id], OLD_COMPOUNDS if old else SLICKS)
         if C.driver_id.nunique() < 10:
             races.append({**info, "skipped": "fewer than 10 drivers with enough clean laps"})
             continue
@@ -219,17 +249,18 @@ def stage_a() -> None:
                           "pace_deg_cov": float(cov[0, 1]), "n_laps_a": int(ea.n_laps), "n_laps_b": int(eb.n_laps)})
         print(event_id, len(C), "clean laps", flush=True)
     OUT.mkdir(parents=True, exist_ok=True)
-    pd.concat(drivers).to_csv(OUT / "stage_a_drivers.csv", index=False)
-    pd.DataFrame(pairs).to_csv(OUT / "stage_a_pairs.csv", index=False)
-    (OUT / "stage_a_races.json").write_text(json.dumps(races, indent=1))
+    sfx = "_old" if old else ""
+    pd.concat(drivers).to_csv(OUT / f"stage_a_drivers{sfx}.csv", index=False)
+    pd.DataFrame(pairs).to_csv(OUT / f"stage_a_pairs{sfx}.csv", index=False)
+    (OUT / f"stage_a_races{sfx}.json").write_text(json.dumps(races, indent=1))
 
 
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("step", choices=["stage-a", "stage-b"])
+    p.add_argument("step", choices=["stage-a", "stage-b", "stage-a-old"])
     args = p.parse_args()
-    if args.step == "stage-a":
-        stage_a()
+    if args.step in ("stage-a", "stage-a-old"):
+        stage_a(old=args.step == "stage-a-old")
     else:
         from .racemodel import stage_b
         stage_b()
