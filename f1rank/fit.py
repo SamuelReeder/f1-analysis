@@ -1,7 +1,19 @@
-"""Fit the model with NUTS and save posterior draws of the states and hyperparameters."""
+"""Fit the model with NUTS and save posterior draws of the states and hyperparameters.
+
+Each fit `<name>.npz` has a sidecar `<name>.meta.json` recording the data it was fitted
+on: a fingerprint of every model input, the last event in the data, the training cutoff
+and stable identifiers for every state. Loading a fit against a design checks the
+fingerprint, so draws are never matched to states of a different design (for example
+after a new race has shifted the indices). `design_for` rebuilds the exact design a fit
+was made on, for evaluating older fits against newer data.
+"""
 
 import argparse
+import datetime as dt
+import hashlib
+import json
 import os
+import subprocess
 import time
 from pathlib import Path
 
@@ -83,10 +95,11 @@ def fit(design: Design, warmup=1000, samples=1000, chains=4, seed=0, target_acce
     mcmc.run(jax.random.PRNGKey(seed), data, extra_fields=("num_steps", "diverging"))
     jax.block_until_ready(mcmc.get_samples())
     elapsed = time.time() - t0
-    keep = ["skill", "car", "car_track", "car_event", "track_load", "sd_track_load",
-            "sd_car_event", "slow_scale_ratio", "p_compromised", "compromised_extra_scale",
-            "compromised_shift", "sd_car_segment", "sd_driver_form", "sd_compat", "compat", "sd_placebo",
-            "mu", "sigma_u",
+    # every fitted term is kept, so residuals and forecasts can use all of them
+    keep = ["skill", "car", "car_track", "car_event", "car_segment", "driver_form", "compat",
+            "track_load", "sd_track_load", "sd_car_event", "slow_scale_ratio", "p_compromised",
+            "compromised_extra_scale", "compromised_shift", "sd_car_segment", "sd_driver_form",
+            "sd_compat", "sd_placebo", "mu", "sigma_u",
             *HYPER, *extra_sites]
     post = {k: np.asarray(v) for k, v in mcmc.get_samples(group_by_chain=True).items() if k in keep}
     post = {k: v.astype(np.float32) for k, v in post.items()}
@@ -97,20 +110,137 @@ def fit(design: Design, warmup=1000, samples=1000, chains=4, seed=0, target_acce
     return post, info
 
 
-def save(path: Path, post: dict, info: dict) -> None:
+class IncompatibleFit(RuntimeError):
+    """A saved fit does not belong to the design it is being matched to."""
+
+
+def fingerprint(design: Design) -> str:
+    """Hash of every model input (data, indices, cutoff, circuit factor)."""
+    h = hashlib.sha256(str(design.start_season).encode())
+    for k, v in sorted(design.arrays().items()):
+        a = np.asarray(v)
+        if a.dtype.kind == "f":
+            a = np.round(a.astype(np.float64), 8)
+        h.update(f"{k}:{a.dtype}:{a.shape}".encode())
+        h.update(np.ascontiguousarray(a).tobytes())
+    return h.hexdigest()[:16]
+
+
+def design_ids(design: Design) -> dict[str, list[str]]:
+    """Stable identifiers for every state, in the order the draws are stored."""
+    ev = design.events.event_id.to_numpy()
+    e, c, s = design.entries, design.cars, design.sessions
+    stints = e.groupby("stint_idx")[["driver_id", "team"]].first()
+    return {
+        "events": list(ev),
+        "drivers": design.drivers.driver_id.tolist(),
+        "entries": (e.event_id + "|" + e.driver_id).tolist(),
+        "cars": (c.team + "|" + ev[c.event_idx.to_numpy()]).tolist(),
+        "sessions": (s.event_id + "|" + s.segment).tolist(),
+        "stints": (stints.driver_id + "|" + stints.team).tolist(),
+    }
+
+
+def last_train_event(design: Design) -> str | None:
+    if design.train is None or design.train.all():
+        return None
+    return design.events.event_id.iloc[int(design.obs.event_idx[design.train].max())]
+
+
+def _git_commit() -> str | None:
+    try:
+        return subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True,
+                              text=True, check=True).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+
+def meta_path(path: Path) -> Path:
+    return path.with_name(path.stem + ".meta.json")
+
+
+def describe(design: Design, **extra) -> dict:
+    return {
+        "fingerprint": fingerprint(design), "start_season": int(design.start_season),
+        "data_as_of": design.events.event_id.iloc[-1], "last_train_event": last_train_event(design),
+        "created_utc": dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ"),
+        "git_commit": _git_commit(), **extra, "ids": design_ids(design),
+    }
+
+
+def save(path: Path, post: dict, info: dict, design: Design, **extra) -> None:
+    """Save draws plus a metadata sidecar. `extra` records how the fit was made."""
     path.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(path, **post, **{f"info_{k}": v for k, v in info.items()})
+    meta_path(path).write_text(json.dumps(describe(design, **extra), indent=1))
 
 
-def load(path: Path) -> tuple[dict, dict]:
+def load_meta(path: Path) -> dict | None:
+    m = meta_path(path)
+    return json.loads(m.read_text()) if m.exists() else None
+
+
+def check(path: Path, design: Design, match: str = "fingerprint") -> dict:
+    """Raise IncompatibleFit unless the fit at `path` was made on `design`.
+
+    match="fingerprint": identical model inputs. match="ids": same states in the same
+    order (for synthetic fits, whose lap times differ from the real data by design).
+    """
+    meta = load_meta(path)
+    if meta is None:
+        raise IncompatibleFit(f"{path.name}: no metadata ({meta_path(path).name}); refit it")
+    if match == "fingerprint":
+        ok = meta["fingerprint"] == fingerprint(design)
+    else:
+        ok = meta["ids"] == design_ids(design)
+    if not ok:
+        raise IncompatibleFit(
+            f"{path.name} was fitted on data as of {meta['data_as_of']} (start {meta['start_season']}, "
+            f"trained to {meta['last_train_event'] or 'the end'}); the design here has data as of "
+            f"{design.events.event_id.iloc[-1]} (trained to {last_train_event(design) or 'the end'}). "
+            "Refit, or rebuild the design with fit.design_for().")
+    return meta
+
+
+def load(path: Path, design: Design | None = None, match: str = "fingerprint") -> tuple[dict, dict]:
+    """Load draws. Pass the design whenever draws will be indexed by its states."""
+    if design is not None:
+        check(path, design, match)
     z = np.load(path)
     post = {k: z[k] for k in z.files if not k.startswith("info_")}
     info = {k[5:]: z[k].item() for k in z.files if k.startswith("info_")}
     return post, info
 
 
+def design_for(path: Path) -> Design:
+    """Rebuild the design a fit was made on (same start, data as-of and cutoff)."""
+    meta = load_meta(path)
+    if meta is None:
+        raise IncompatibleFit(f"{path.name}: no metadata ({meta_path(path).name}); refit it")
+    design = build_design(meta["start_season"], end_event=meta["data_as_of"])
+    if meta["last_train_event"]:
+        ev = design.events.set_index("event_id").event_idx
+        design = design.with_cutoff(int(ev[meta["last_train_event"]]))
+    return design
+
+
+def common_data_as_of(paths: list[Path]) -> str:
+    """The shared data as-of date of a batch of fits; raises if they differ."""
+    metas = {p.name: load_meta(p) for p in paths}
+    missing = [n for n, m in metas.items() if m is None]
+    if missing:
+        raise IncompatibleFit(f"fits without metadata: {', '.join(missing)}")
+    dates = {n: m["data_as_of"] for n, m in metas.items()}
+    if len(set(dates.values())) != 1:
+        latest = max(dates.values())
+        stale = sorted(n for n, d in dates.items() if d != latest)
+        raise IncompatibleFit(f"fits use different data: {len(stale)} are older than {latest} "
+                              f"({', '.join(stale[:8])}{'...' if len(stale) > 8 else ''}); rerun them")
+    return next(iter(dates.values()))
+
+
 def main() -> None:
-    p = argparse.ArgumentParser(description=__doc__)
+    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--start", type=int, default=2010)
     p.add_argument("--warmup", type=int, default=1000)
     p.add_argument("--samples", type=int, default=1000)
@@ -119,9 +249,9 @@ def main() -> None:
     args = p.parse_args()
 
     design = build_design(args.start)
-    post, info = fit(design, args.warmup, args.samples, args.chains, target_accept=0.9,
-                     extra_sites=("car_segment",))
-    save(FITS / f"{args.name}.npz", post, info)
+    settings = dict(warmup=args.warmup, samples=args.samples, chains=args.chains, target_accept=0.9)
+    post, info = fit(design, **settings)
+    save(FITS / f"{args.name}.npz", post, info, design, job=args.name, model_kw={}, settings=settings)
     print(info)
 
 

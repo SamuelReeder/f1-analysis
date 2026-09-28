@@ -88,42 +88,56 @@ def main() -> None:
              f"{meta['n_lap_times']:,} qualifying lap times. Model `{meta['model_version']}`.\n")
     L.append("Ratings are **seconds per 90-second lap relative to the average driver / car at "
              "the latest event**; positive = faster. Scope: one-lap qualifying pace only.\n")
+    L.append("**Headline driver rating: pace in the current car** (what teammate comparisons "
+             "measure directly). **Portable skill** (pace expected to carry over to another team) "
+             "is **experimental**: its current-grid ranking fails two of the gates below.\n")
 
     L.append("## Acceptance gates\n")
     L.append(md_table(pd.DataFrame({"gate": list(GATES), "criterion": list(GATES.values()),
                                     "result": ["PASS" if gates[g] else "FAIL" for g in GATES]})))
     L.append("")
 
-    d = drivers.assign(skill=drivers.median_s, lo90=drivers.q05_s, hi90=drivers.q95_s,
-                       ranks=drivers.rank_lo.astype(str) + "–" + drivers.rank_hi.astype(str),
-                       p_fastest=drivers.p_fastest)
+    grid_rho = clean["current_grid"]["spearman"]
+    grid_in_team_rho = clean.get("current_grid_in_team", {}).get("spearman", float("nan"))
+    if "in_team_median_s" in drivers:
+        it = drivers.sort_values("in_team_rank").assign(
+            in_car=lambda x: x.in_team_median_s, lo90=lambda x: x.in_team_q05_s,
+            hi90=lambda x: x.in_team_q95_s,
+            ranks=lambda x: x.in_team_rank_lo.astype(str) + "–" + x.in_team_rank_hi.astype(str),
+            p_fastest=lambda x: x.in_team_p_fastest)
+        L.append("## Drivers in their current car (headline, latest event)\n")
+        L.append("Pace relative to the field's drivers in the car each driver has now: portable skill "
+                 "plus the driver's team-specific effect. This is what teammate comparisons measure "
+                 "directly. In simulation on the real network (one simulated truth) the current-grid "
+                 f"order is recovered with rank correlation {grid_in_team_rho:.2f}. Read ranks as ranges.\n")
+        L.append(md_table(it[["in_team_rank", "name", "team", "in_car", "lo90", "hi90", "ranks",
+                              "p_fastest"]]))
+        L.append("")
+    d = drivers.sort_values("median_s", ascending=False).assign(
+        skill=lambda x: x.median_s, lo90=lambda x: x.q05_s, hi90=lambda x: x.q95_s,
+        ranks=lambda x: x.rank_lo.astype(str) + "–" + x.rank_hi.astype(str))
     cols = ["name", "team", "skill", "lo90", "hi90", "ranks", "p_fastest"]
-    if "compat_median_s" in d:
-        d["team_fit"] = d.compat_median_s
-        cols.append("team_fit")
+    if "team_effect_median_s" in d:
+        d["team_effect"] = d.team_effect_median_s
+        cols.append("team_effect")
     unstable = set(sens.get("unstable_drivers", []))
     d["flag"] = np.where(d.driver_id.isin(unstable), "sensitive to model choice", "")
-    L.append("## Drivers (latest event)\n")
-    L.append("`skill` is **portable ability**: what the driver would bring to any car, excluding "
-             "their fit with the current team. `team_fit` is the estimated driver-team "
-             "compatibility for the current team (added to skill in that car). Drivers who have "
-             "only driven for one team cannot separate the two from teammate comparisons, so "
-             "their skill is pulled towards the average and their intervals are wide.\n")
-    L.append(md_table(d[cols + ["events", "teammates", "flag"]]))
+    L.append("## Portable skill (experimental)\n")
+    L.append("`skill` is the part of a driver's pace expected to carry over to another team: pace in "
+             "the current car minus `team_effect`, the driver's persistent team-specific effect. "
+             "**Experimental:** in simulation the current-grid order of portable skill is recovered "
+             f"with rank correlation only {grid_rho:.2f}, and it moves with two structural choices "
+             "(whether the team-specific effect is modelled, and the data window). The "
+             "team-specific effect is not established to be car-handling compatibility: team "
+             "support, role, adaptation or selection would look the same.\n")
+    L.append(md_table(d[cols + ["events", "teams", "teammates", "flag"]]))
     L.append("")
     L.append("`flag`: rating moves by more than 0.10 s, or rank by 8+ places, across the sensitivity "
              "variants below. (The rule set before the results, 0.05 s or 4 places, flagged every "
-             "driver because it is smaller than the posterior uncertainty, so it was loosened.)\n")
-    if "in_team_median_s" in drivers:
-        it = drivers.sort_values("in_team_rank").assign(
-            in_team=lambda x: x.in_team_median_s, lo90=lambda x: x.in_team_q05_s,
-            hi90=lambda x: x.in_team_q95_s)
-        L.append("### Drivers in their current car (skill + team fit)\n")
-        L.append("What teammate comparisons measure directly, and what a driver delivers in the car "
-                 "they have now. It is better determined than portable skill: in simulation on the "
-                 "real network it is recovered with rank correlation 0.91, against 0.75.\n")
-        L.append(md_table(it[["in_team_rank", "name", "team", "in_team", "lo90", "hi90"]]))
-        L.append("")
+             "driver because it is smaller than the posterior uncertainty, so it was loosened.) "
+             "`teams`: team lineages raced (5+ events). In simulation the portable-skill error is "
+             "about the same for drivers with 1, 2 or 3+ teams (RMSE about 0.10 s), so the counts "
+             "are context, not a precision measure; use the interval.\n")
     c = cars.assign(rating=cars.median_s, lo90=cars.q05_s, hi90=cars.q95_s,
                     gap_to_fastest=cars.gap_median_s,
                     ranks=cars.rank_lo.astype(str) + "–" + cars.rank_hi.astype(str),
@@ -163,7 +177,10 @@ def main() -> None:
     L.append("### Synthetic recovery on the real F1 network\n")
     L.append("Truth drawn from the model's generative process on the real entries, teams and "
              "segments; misspecified scenarios add effects the model does not contain. "
-             "Coverage = share of true values inside the 90% interval.\n")
+             "Coverage = share of true values inside the 90% interval. **All scenarios share one "
+             "simulated truth** (to compare scenarios on equal terms), so this is a recovery check "
+             "on one draw, not yet evidence of calibration; repeating it over independent seeds "
+             "and parameter settings is planned.\n")
     rows = []
     for sc, r in synth.items():
         rows.append({"scenario": sc, "skill_corr": r["skill"]["corr"], "skill_rmse_s": r["skill"]["rmse_s"],
@@ -172,21 +189,30 @@ def main() -> None:
                      "grid_cov90": r["current_grid"]["cov90"],
                      "cross_team_cov90": r["cross_team_diff_current"]["cov90"],
                      "grid_in_team_spearman": r.get("current_grid_in_team", {}).get("spearman", float("nan")),
-                     "car_share_true/est": f"{r['car_share']['truth_mean']:.2f}/{r['car_share']['est_mean']:.2f}"})
+                     "car_latent_share_true/est": f"{r['car_share']['truth_mean']:.2f}/{r['car_share']['est_mean']:.2f}"})
     L.append(md_table(pd.DataFrame(rows)))
     L.append("")
+    L.append("`car_latent_share`: within each season, the variance of the synthetic car states "
+             "divided by the variance of car states plus portable skill states, averaged over "
+             "seasons (true vs estimated). It covers only those two latent components (not the "
+             "team-specific effect, weekend effects or noise) and describes the simulated truth, "
+             "not a share of observed qualifying variation.\n")
 
-    placebo_path = VAL / "placebo.json"
+    placebo_path = VAL / "placebo_summary.json"
     if placebo_path.exists():
         pl = json.loads(placebo_path.read_text())
-        L.append("### Is driver-team compatibility real? (placebo test)\n")
-        L.append(f"Compatibility SD {pl['sd_compat_q05_q50_q95'][1]:.3f}% "
+        L.append("### Is the team-specific effect specific to the team? (placebo test)\n")
+        L.append(f"Team-specific effect SD {pl['sd_compat_q05_q50_q95'][1]:.3f}% "
                  f"(90% interval {pl['sd_compat_q05_q50_q95'][0]:.3f}–{pl['sd_compat_q05_q50_q95'][2]:.3f}) "
                  f"vs placebo SD {pl['sd_placebo_q05_q50_q95'][1]:.3f}% "
                  f"({pl['sd_placebo_q05_q50_q95'][0]:.3f}–{pl['sd_placebo_q05_q50_q95'][2]:.3f}) "
-                 f"when a driver's stint in one team is split in half. P(placebo > compatibility) = "
-                 f"{pl['p_placebo_gt_compat']:.2f}. Performance shifts when a driver changes team, "
-                 "not with time spent in the same team, so the effect is team-specific.\n")
+                 f"when a driver's stint in one team is split in half. P(placebo > team effect) = "
+                 f"{pl['p_placebo_gt_compat']:.2f}. Relative performance shifts when a driver changes "
+                 "team, much less with time spent in the same team: the effect is associated with "
+                 "the team. The test cannot say why (car handling, team support, role, adaptation or "
+                 "selection). The model gives one effect per driver and team lineage, including "
+                 "separate spells years apart (8 cases, e.g. Hülkenberg at Sauber in 2013 and Audi in "
+                 "2025–26); variants per contiguous spell and per regulation era are planned.\n")
 
     L.append("### Sensitivity of the current driver ranking\n")
     L.append(md_table(pd.DataFrame([{"variant": k, **v} for k, v in sens.items() if k.startswith("sens_")])))
@@ -218,21 +244,34 @@ def main() -> None:
     L.append("## What the ratings can and cannot say\n")
     L.append("\n".join([
         "- **Car-package ratings are well determined.** Synthetic recovery correlation ≥ 0.99 in every "
-        "scenario, with calibrated intervals. Car differences dominate qualifying pace: about 97% of "
-        "the variance between entries, recovered without bias.",
+        f"scenario, with 90% intervals covering {clean['car']['cov90']:.0%} in the clean scenario (one simulated truth). "
+        "In the simulated truth, car states vary far more than portable skill states within a season, "
+        "and the estimated share matches the true one; that describes the simulation, not a share of "
+        "observed qualifying variation.",
         "- **Teammate comparisons and forecasts are reliable.** The model beats a static two-way model, "
         "raw teammate gaps and a zero-gap baseline on every forecast target, including brand-new "
         "pairings, with calibrated intervals.",
-        "- **Portable driver skill is only moderately determined.** Performance relative to teammates "
-        "has a large team-specific part: driver-team fit with SD about 0.16%, against about 0.10% "
-        "for differences in portable ability. That limits how well the network can rank the current "
-        "grid (synthetic rank correlation 0.75). Intervals remain honest (coverage about 90%), so "
-        "read ranks as ranges, not positions.",
-        "- **Drivers who have only raced for one team** (e.g. Piastri, Antonelli, Bortoleto) have portable "
-        "skill that teammate data cannot separate from team fit. Their ratings lean on the prior "
-        "and on their teammate's links elsewhere.",
-        "- **The main structural sensitivities** are whether team fit is modelled and how much history is "
-        "used. Details of the car model and noise model barely matter (rank correlation ≥ 0.98).",
+        "- **Portable driver skill is experimental.** Performance relative to teammates has a large "
+        "team-specific part (SD about 0.16%, against about 0.10% for differences in portable skill). "
+        "That limits how well the network can rank the current grid by portable skill (synthetic rank "
+        f"correlation {grid_rho:.2f}, below the 0.8 gate), and the ranking moves with structural "
+        "choices (sensitivity gate fails). In the one simulated truth, 90% intervals covered "
+        f"{clean['skill']['cov90']:.0%} of true values; that is a recovery check, not established calibration. Use pace in "
+        "the current car as the headline and read portable ranks as ranges.",
+        "- **The team-specific effect is associated with the team, not proven to be car compatibility.** "
+        "Support, role, adaptation or selection would produce the same pattern. It is also shared "
+        "across separate spells with the same team lineage.",
+        "- **Drivers who have only raced for one team** (e.g. Piastri, Antonelli, Bortoleto): their "
+        "portable skill depends on the model's assumption about how team-specific effects are "
+        "distributed. In simulation their error was about the same as for drivers with more teams, "
+        "but that simulation follows the model's own assumptions.",
+        "- **The main structural sensitivities of portable skill** are whether the team-specific effect is "
+        f"modelled (rank correlation {sens['sens_nocompat']['spearman']:.2f}) and how much history is used "
+        f"({sens['sens_start2006']['spearman']:.2f}); the weekend-form term and the assumed rate of skill "
+        f"drift matter less ({min(sens[k]['spearman'] for k in ('sens_noform', 'sens_drift_x2', 'sens_drift_half')):.2f}"
+        f"–{max(sens[k]['spearman'] for k in ('sens_noform', 'sens_drift_x2', 'sens_drift_half')):.2f}). "
+        "Details of the car model and noise model barely matter "
+        f"(≥ {min(sens[k]['spearman'] for k in ('sens_notrack', 'sens_gausscar', 'sens_notransient', 'sens_splitt')):.2f}).",
         "- **Main residual risk:** drivers who change team after an unusually lucky or unlucky "
         "season. In simulation this is the violation that degrades the ranking most.",
         "- **Scope:** one-lap qualifying pace only. Race pace, tyre management, starts and racecraft "

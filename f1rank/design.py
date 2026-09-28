@@ -23,6 +23,7 @@ MIN_SEGMENT_TIMES = 4   # a segment needs this many valid laps to compare cars
 AGE_DECLINE_FROM = 32.0  # age after which a linear decline term applies
 RACES_PER_SEASON_PRE_DATA = 17  # to estimate experience for debuts before the data
 SIGN_ANCHOR = ("spa", "monaco")  # circuit factor oriented so the first is above the second
+MIN_FACTOR_CIRCUITS = 3  # circuits with enough history needed to estimate the circuit factor
 
 
 @dataclass
@@ -93,7 +94,8 @@ def circuit_factors(design: "Design", ridge: float = 5.0, iters: int = 200,
     used, so forecasts never see the circuit factor of the future. High-spread
     segments (mostly wet) are excluded and deviations are clipped so a few
     chaotic sessions cannot define the axis. Circuits with fewer than
-    `min_events` training events get 0 (no track-specific adjustment).
+    `min_events` training events get 0 (no track-specific adjustment); with fewer
+    than MIN_FACTOR_CIRCUITS such circuits (a short history), every circuit gets 0.
     """
     o = design.obs if design.train is None else design.obs.loc[design.train]
     o = o.assign(r=o.y - o.groupby("session_idx").y.transform("median"))
@@ -112,6 +114,8 @@ def circuit_factors(design: "Design", ridge: float = 5.0, iters: int = 200,
     n_ts, n_c = int(design.cars.team_season_idx.max()) + 1, int(design.events.circuit_idx.max()) + 1
     events_per_circuit = pace.groupby("circuit").event_idx.nunique().reindex(range(n_c), fill_value=0)
     seen = events_per_circuit.to_numpy() >= min_events
+    if seen.sum() < MIN_FACTOR_CIRCUITS:
+        return np.zeros(n_c)  # too little history to define an axis: no track adjustment
     pace = pace[seen[pace.circuit]]
     ts, circ = pace.team_season_idx.to_numpy(), pace.circuit.to_numpy()
     dev = pace.dev.clip(-clip, clip).to_numpy()
@@ -121,7 +125,10 @@ def circuit_factors(design: "Design", ridge: float = 5.0, iters: int = 200,
         lam = np.bincount(ts, dev * f[circ], n_ts) / (np.bincount(ts, f[circ] ** 2, n_ts) + ridge)
         f = np.bincount(circ, dev * lam[ts], n_c) / (np.bincount(circ, lam[ts] ** 2, n_c) + ridge)
     f[~seen] = 0.0
-    f /= f[seen].std()
+    scale = f[seen].std()
+    if not np.isfinite(scale) or scale < 1e-9:
+        return np.zeros(n_c)
+    f /= scale
     idx = design.events.groupby("circuit_id").circuit_idx.first()
     hi, lo = (idx.get(c) for c in SIGN_ANCHOR)
     if hi is not None and lo is not None and f[hi] < f[lo]:

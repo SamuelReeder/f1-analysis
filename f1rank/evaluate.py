@@ -1,8 +1,11 @@
 """Score validation fits: forecasting (leave-future-out), synthetic recovery, sensitivity.
 
-    python -m f1rank.evaluate lfo | synth | sens | all
+    python -m f1rank.evaluate lfo | synth | sens | placebo | all
 
 Forecast targets never use data after the cutoff, including the circuit factor.
+Each batch of fits is scored on the data it was fitted on: the design is rebuilt as of
+the batch's data date, every fit is checked against it (see fit.py), and a batch whose
+fits were made on different data is refused.
 """
 
 import argparse
@@ -15,8 +18,8 @@ from scipy.sparse.linalg import lsqr
 from scipy.stats import spearmanr
 
 from .design import Design, build_design
-from .fit import FITS, load
-from .jobs import SENS, lfo_cutoffs
+from .fit import FITS, common_data_as_of, load, load_meta
+from .jobs import SENS, SYNTH_SOURCE, lfo_cutoffs
 from .ratings import SEC_PER_PCT, driver_leaderboard, flat
 
 ROOT = FITS.parent
@@ -121,7 +124,8 @@ def crps(draws: np.ndarray, obs: np.ndarray, rng, n: int = 400) -> float:
 
 def evaluate_cutoff(design: Design, name: str, cutoff: int, rng, fit_file=None,
                     end_of_season: bool | None = None) -> dict:
-    post, _ = load(fit_file or FITS / f"{name}.npz")
+    dtrain = design.with_cutoff(cutoff)
+    post, _ = load(fit_file or FITS / f"{name}.npz", dtrain)
     ev = design.events
     season = ev.season[cutoff]
     if end_of_season is None:
@@ -130,7 +134,6 @@ def evaluate_cutoff(design: Design, name: str, cutoff: int, rng, fit_file=None,
     test_events = ev[(ev.event_idx > cutoff) & (ev.season == test_season)].event_idx
     if not len(test_events):
         return {}
-    dtrain = design.with_cutoff(cutoff)
     n_train = dtrain.entries[dtrain.entries.event_idx <= cutoff].groupby("driver_id").size()
     established = lambda d: n_train.get(d, 0) >= MIN_TRAIN_ENTRIES  # noqa: E731
 
@@ -234,11 +237,12 @@ def evaluate_cutoff(design: Design, name: str, cutoff: int, rng, fit_file=None,
 
 
 def evaluate_lfo() -> dict:
-    design = build_design(2010)
+    names = sorted(f.stem for f in FITS.glob("lfo_*.npz") if not f.stem.endswith("_truth"))
+    design = build_design(2010, end_event=common_data_as_of([FITS / f"{n}.npz" for n in names]))
     rng = np.random.default_rng(0)
     results = []
     for name, cutoff in lfo_cutoffs(design).items():
-        if (FITS / f"{name}.npz").exists():
+        if name in names:
             r = evaluate_cutoff(design, name, cutoff, rng)
             if r:
                 results.append(r)
@@ -278,14 +282,19 @@ def evaluate_lfo() -> dict:
 
 def evaluate_synth() -> dict:
     from .simulate import SCENARIOS
-    design = build_design(2010)
+    fits = [FITS / f"synth_{sc}.npz" for sc in SCENARIOS if (FITS / f"synth_{sc}.npz").exists()]
+    design = build_design(2010, end_event=common_data_as_of(fits))
     last = design.events.event_idx.max()
+    source = load_meta(SYNTH_SOURCE) or {}
     out = {}
     for sc in SCENARIOS:
         f, tf = FITS / f"synth_{sc}.npz", FITS / f"synth_{sc}_truth.npz"
         if not (f.exists() and tf.exists()):
             continue
-        post, info = load(f)
+        if load_meta(f).get("source_fingerprint") != source.get("fingerprint"):
+            print(f"note: synth_{sc} was made from an earlier synthetic source")
+        # synthetic lap times differ from the real ones by design: match the states instead
+        post, info = load(f, design, match="ids")
         truth = dict(np.load(tf))
         res = {"divergences": info.get("divergences")}
         for comp in ("skill", "car"):
@@ -352,8 +361,10 @@ def evaluate_synth() -> dict:
 # --------------------------------------------------------------------------- sensitivity
 
 def evaluate_sens() -> dict:
-    main_design = build_design(2010)
-    post, _ = load(FITS / "main.npz")
+    names = [n for n in SENS if (FITS / f"{n}.npz").exists()]
+    as_of = common_data_as_of([FITS / "main.npz", *(FITS / f"{n}.npz" for n in names)])
+    main_design = build_design(2010, end_event=as_of)
+    post, _ = load(FITS / "main.npz", main_design)
     base = driver_leaderboard(main_design, post).set_index("driver_id")
     table = pd.DataFrame({"main": base["median"] * SEC_PER_PCT})
     out = {}
@@ -361,8 +372,8 @@ def evaluate_sens() -> dict:
         f = FITS / f"{name}.npz"
         if not f.exists():
             continue
-        d = build_design(spec.get("start", 2010))
-        lb = driver_leaderboard(d, load(f)[0]).set_index("driver_id")
+        d = build_design(spec.get("start", 2010), end_event=as_of)
+        lb = driver_leaderboard(d, load(f, d)[0]).set_index("driver_id")
         table[name] = (lb["median"] * SEC_PER_PCT).reindex(table.index)
         rank_main, rank_v = table.main.rank(ascending=False), table[name].rank(ascending=False)
         out[name] = {"spearman": float(spearmanr(table.main, table[name])[0]),
@@ -380,12 +391,29 @@ def evaluate_sens() -> dict:
     return out
 
 
+# --------------------------------------------------------------------------- placebo
+
+def evaluate_placebo() -> dict:
+    """Team-specific effect vs a placebo effect for each half of a multi-season stint in
+    the same team (the `placebo` job). A team-associated difference shows in sd_compat;
+    generic drift within a team would show equally in sd_placebo. Neither says why the
+    team-associated difference exists (car handling, support, role, adaptation, selection)."""
+    path = FITS / "placebo.npz"
+    post, info = load(path, build_design(2010, end_event=load_meta(path)["data_as_of"]))
+    q = lambda k: [round(float(x), 4) for x in np.percentile(post[k], [5, 50, 95])]  # noqa: E731
+    return {"description": "Team-specific effect (one per driver x team lineage) vs placebo (each half "
+                           "of a multi-season stint in the same team). A team-associated difference "
+                           "shows in sd_compat; generic career drift would show equally in sd_placebo.",
+            "sd_compat_q05_q50_q95": q("sd_compat"), "sd_placebo_q05_q50_q95": q("sd_placebo"),
+            "p_placebo_gt_compat": float((post["sd_placebo"] > post["sd_compat"]).mean()), "fit": info}
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("what", choices=["lfo", "synth", "sens", "all"])
+    p.add_argument("what", choices=["lfo", "synth", "sens", "placebo", "all"])
     args = p.parse_args()
     REPORTS.mkdir(parents=True, exist_ok=True)
-    fns = {"lfo": evaluate_lfo, "synth": evaluate_synth, "sens": evaluate_sens}
+    fns = {"lfo": evaluate_lfo, "synth": evaluate_synth, "sens": evaluate_sens, "placebo": evaluate_placebo}
     for what in (fns if args.what == "all" else [args.what]):
         res = fns[what]()
         (REPORTS / f"{what}_summary.json").write_text(json.dumps(res, indent=1))

@@ -1,10 +1,10 @@
-/home/sreeder/f1-analysis/f1rank/evaluate.py:371: Pandas4Warning: Starting with pandas version 4.0 all arguments of max will be keyword-only.
+/home/sreeder/f1-analysis/f1rank/evaluate.py:382: Pandas4Warning: Starting with pandas version 4.0 all arguments of max will be keyword-only.
   table["spread_s"] = table.max(1) - table.min(1)
-/home/sreeder/f1-analysis/f1rank/evaluate.py:371: Pandas4Warning: Starting with pandas version 4.0 all arguments of min will be keyword-only.
+/home/sreeder/f1-analysis/f1rank/evaluate.py:382: Pandas4Warning: Starting with pandas version 4.0 all arguments of min will be keyword-only.
   table["spread_s"] = table.max(1) - table.min(1)
-/home/sreeder/f1-analysis/f1rank/evaluate.py:373: Pandas4Warning: Starting with pandas version 4.0 all arguments of max will be keyword-only.
+/home/sreeder/f1-analysis/f1rank/evaluate.py:384: Pandas4Warning: Starting with pandas version 4.0 all arguments of max will be keyword-only.
   table["rank_range"] = ranks.max(1) - ranks.min(1)
-/home/sreeder/f1-analysis/f1rank/evaluate.py:373: Pandas4Warning: Starting with pandas version 4.0 all arguments of min will be keyword-only.
+/home/sreeder/f1-analysis/f1rank/evaluate.py:384: Pandas4Warning: Starting with pandas version 4.0 all arguments of min will be keyword-only.
   table["rank_range"] = ranks.max(1) - ranks.min(1)
 lfo {
  "n_cutoffs": 25,
@@ -299,27 +299,35 @@ sens {
   "max_rank_shift": 6
  },
  "unstable_drivers": [
-  "sainz",
   "max_verstappen",
-  "leclerc",
-  "norris",
   "hadjar",
+  "norris",
   "antonelli",
-  "bottas",
-  "alonso",
-  "gasly",
-  "hamilton",
-  "russell",
-  "bortoleto",
-  "bearman",
   "piastri",
-  "perez",
-  "colapinto",
-  "lawson",
-  "albon",
+  "alonso",
   "arvid_lindblad",
-  "hulkenberg",
+  "gasly",
+  "bottas",
   "ocon",
   "stroll"
  ]
+}
+placebo {
+ "description": "Team-specific effect (one per driver x team lineage) vs placebo (each half of a multi-season stint in the same team). A team-associated difference shows in sd_compat; generic career drift would show equally in sd_placebo.",
+ "sd_compat_q05_q50_q95": [
+  0.1215,
+  0.1607,
+  0.2037
+ ],
+ "sd_placebo_q05_q50_q95": [
+  0.0024,
+  0.0199,
+  0.0483
+ ],
+ "p_placebo_gt_compat": 0.0,
+ "fit": {
+  "elapsed_s": 525.6343882083893,
+  "divergences": 0,
+  "mean_steps": 494.36
+ }
 }

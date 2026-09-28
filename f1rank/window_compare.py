@@ -13,14 +13,15 @@ import pandas as pd
 
 from .design import build_design
 from .evaluate import REPORTS, SEC_PER_PCT, evaluate_cutoff
-from .fit import FITS
+from .fit import FITS, common_data_as_of
 from .jobs import lfo_cutoffs
 
 
 def main() -> None:
-    designs = {2010: build_design(2010), 2006: build_design(2006)}
-    cuts = {w: lfo_cutoffs(d) for w, d in designs.items()}
     names = sorted(f.stem[len("lfo2006_"):] for f in FITS.glob("lfo2006_*.npz"))
+    as_of = common_data_as_of([FITS / f"{w}_{n}.npz" for n in names for w in ("lfo", "lfo2006")])
+    designs = {2010: build_design(2010, end_event=as_of), 2006: build_design(2006, end_event=as_of)}
+    cuts = {w: lfo_cutoffs(d) for w, d in designs.items()}
     pairs, sessions = [], []
     for n in names:
         for w, fit_name in ((2010, f"lfo_{n}"), (2006, f"lfo2006_{n}")):
