@@ -65,3 +65,33 @@ def test_cutoff_masks_future_and_recomputes_circuit_factor(design):
     assert not d2.train[design.obs.event_idx.to_numpy() > cut].any()
     assert d2.train[design.obs.event_idx.to_numpy() <= cut].all()
     assert not np.allclose(d2.circuit_factor, design.circuit_factor)
+
+
+def test_entered_drivers_without_a_time_are_kept(design):
+    e, o = design.entries, design.obs
+    assert (~e.has_time).sum() > 50
+    timed = np.zeros(len(e), bool)
+    timed[o.entry_idx.unique()] = True
+    assert (timed == e.has_time.to_numpy()).all()
+    c = design.cars
+    assert (~c.has_time).any()  # teams entered without a valid lap still have a car state
+    assert set(zip(c.team, c.event_idx)) == set(zip(e.team, e.event_idx))
+
+
+def test_filled_event_has_times(design):
+    sessions = design.sessions[design.sessions.event_id == "2025-06"]
+    assert list(sessions.segment) == ["Q1", "Q2", "Q3"]
+
+
+def test_team_effect_units(design):
+    e = design.entries.set_index(["driver_id", "event_id"])
+    # a return years later is a new spell, but not a new lineage stint
+    assert e.stint_idx["hulkenberg", "2013-01"] == e.stint_idx["hulkenberg", "2025-01"]
+    assert e.spell_idx["hulkenberg", "2013-01"] != e.spell_idx["hulkenberg", "2025-01"]
+    # a one-off stand-in drive elsewhere does not end a spell
+    assert e.spell_idx["russell", "2020-15"] == e.spell_idx["russell", "2020-17"]
+    # a regulation reset starts a new era stint within one spell
+    assert e.spell_idx["leclerc", "2021-22"] == e.spell_idx["leclerc", "2022-01"]
+    assert e.era_stint_idx["leclerc", "2021-22"] != e.era_stint_idx["leclerc", "2022-01"]
+    for col in ("stint_idx", "spell_idx", "era_stint_idx"):  # every unit belongs to one driver and team
+        assert design.entries.groupby(col)[["driver_id", "team"]].nunique().eq(1).all().all()

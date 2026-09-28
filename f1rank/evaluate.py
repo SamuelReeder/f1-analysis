@@ -280,114 +280,165 @@ def evaluate_lfo() -> dict:
 
 # --------------------------------------------------------------------------- synthetic recovery
 
-def evaluate_synth() -> dict:
-    from .simulate import SCENARIOS
-    fits = [FITS / f"synth_{sc}.npz" for sc in SCENARIOS if (FITS / f"synth_{sc}.npz").exists()]
-    design = build_design(2010, end_event=common_data_as_of(fits))
+SEED_METRICS = {  # summarised across the clean seeds
+    "skill_cov90": ("skill", "cov90"), "car_cov90": ("car", "cov90"), "skill_corr": ("skill", "corr"),
+    "car_corr": ("car", "corr"), "skill_rmse_s": ("skill", "rmse_s"),
+    "grid_spearman": ("current_grid", "spearman"), "grid_cov90": ("current_grid", "cov90"),
+    "grid_in_team_spearman": ("current_grid_in_team", "spearman"),
+    "grid_in_team_cov90": ("current_grid_in_team", "cov90"),
+    "teammate_diff_cov90": ("teammate_diff", "cov90"),
+    "cross_team_cov90": ("cross_team_diff_current", "cov90"),
+}
+
+
+def synth_metrics(design: Design, post: dict, truth: dict) -> dict:
+    """Recovery of the synthetic truth: every state, the current grid, teammate and
+    between-team differences, and the car share of latent variation."""
     last = design.events.event_idx.max()
+    res = {}
+    for comp in ("skill", "car"):
+        draws, true = flat(post, comp), truth[comp]
+        m = draws.mean(0)
+        res[comp] = {
+            "corr": float(np.corrcoef(m, true)[0, 1]),
+            "rmse_s": _rmse(m, true) * SEC_PER_PCT,
+            "bias_s": float(np.mean(m - true)) * SEC_PER_PCT,
+            "cov50": _coverage(draws, true, 50), "cov90": _coverage(draws, true, 90),
+        }
+    # current grid: rank recovery and coverage at the latest event
+    rows = np.flatnonzero(design.entries.event_idx.to_numpy() == last)
+    dr, tr = flat(post, "skill")[:, rows], truth["skill"][rows]
+    dr = dr - dr.mean(1, keepdims=True)
+    tr = tr - tr.mean()
+    res["current_grid"] = {
+        "spearman": float(spearmanr(dr.mean(0), tr)[0]),
+        "rmse_s": _rmse(dr.mean(0), tr) * SEC_PER_PCT,
+        "cov90": _coverage(dr, tr, 90),
+    }
+    if "compat" in post and "compat" in truth:
+        ci = flat(post, "skill")[:, rows] + flat(post, "compat")[:, rows]
+        ci = ci - ci.mean(1, keepdims=True)
+        ti = truth["skill"][rows] + truth["compat"][rows]
+        ti = ti - ti.mean()
+        res["current_grid_in_team"] = {"spearman": float(spearmanr(ci.mean(0), ti)[0]),
+                                       "rmse_s": _rmse(ci.mean(0), ti) * SEC_PER_PCT,
+                                       "cov90": _coverage(ci, ti, 90)}
+    # teammate differences (the part the design identifies directly)
+    pe = design.entries.merge(design.entries, on=["event_idx", "team"])
+    pe = pe[pe.driver_id_x < pe.driver_id_y]
+    ia, ib = pe.entry_idx_x.to_numpy(), pe.entry_idx_y.to_numpy()
+    dd = flat(post, "skill")[:, ia] - flat(post, "skill")[:, ib]
+    td = truth["skill"][ia] - truth["skill"][ib]
+    res["teammate_diff"] = {"corr": float(np.corrcoef(dd.mean(0), td)[0, 1]),
+                            "cov90": _coverage(dd, td, 90)}
+    # between-team driver comparisons (identified only through the network)
+    cross = design.entries[design.entries.event_idx == last]
+    cx = cross.merge(cross, how="cross")
+    cx = cx[(cx.team_x != cx.team_y) & (cx.driver_id_x < cx.driver_id_y)]
+    ia, ib = cx.entry_idx_x.to_numpy(), cx.entry_idx_y.to_numpy()
+    dd = flat(post, "skill")[:, ia] - flat(post, "skill")[:, ib]
+    td = truth["skill"][ia] - truth["skill"][ib]
+    res["cross_team_diff_current"] = {"corr": float(np.corrcoef(dd.mean(0), td)[0, 1]),
+                                      "cov90": _coverage(dd, td, 90)}
+    # car vs driver variance share per season: truth vs estimate
+    shares = []
+    for season, g in design.events.groupby("season"):
+        ev_idx = g.event_idx.to_numpy()
+        cm = np.isin(design.cars.event_idx, ev_idx)
+        em = np.isin(design.entries.event_idx, ev_idx)
+        t_share = truth["car"][cm].var() / (truth["car"][cm].var() + truth["skill"][em].var())
+        ec, es = flat(post, "car")[:, cm], flat(post, "skill")[:, em]
+        e_share = np.mean(ec.var(1) / (ec.var(1) + es.var(1)))
+        shares.append((season, t_share, e_share))
+    s = np.array([x[1:] for x in shares])
+    res["car_share"] = {"truth_mean": float(s[:, 0].mean()), "est_mean": float(s[:, 1].mean()),
+                        "max_abs_err": float(np.abs(s[:, 0] - s[:, 1]).max())}
+    return res
+
+
+def evaluate_synth() -> dict:
+    """Scenarios (one shared truth, clean + misspecified) and clean seeds (independent
+    truths, noise and hyperparameters), with a summary across the seeds."""
+    from .jobs import N_SYNTH_SEEDS
+    from .simulate import SCENARIOS
+    names = [f"synth_{sc}" for sc in SCENARIOS] + [f"synth_seed{k}" for k in range(1, N_SYNTH_SEEDS + 1)]
+    names = [n for n in names if (FITS / f"{n}.npz").exists() and (FITS / f"{n}_truth.npz").exists()]
+    design = build_design(2010, end_event=common_data_as_of([FITS / f"{n}.npz" for n in names]))
     source = load_meta(SYNTH_SOURCE) or {}
-    out = {}
-    for sc in SCENARIOS:
-        f, tf = FITS / f"synth_{sc}.npz", FITS / f"synth_{sc}_truth.npz"
-        if not (f.exists() and tf.exists()):
-            continue
-        if load_meta(f).get("source_fingerprint") != source.get("fingerprint"):
-            print(f"note: synth_{sc} was made from an earlier synthetic source")
+    out = {"scenarios": {}, "seeds": {}}
+    for name in names:
+        f = FITS / f"{name}.npz"
+        meta = load_meta(f)
+        if meta.get("source_fingerprint") != source.get("fingerprint"):
+            print(f"note: {name} was made from an earlier synthetic source")
         # synthetic lap times differ from the real ones by design: match the states instead
         post, info = load(f, design, match="ids")
-        truth = dict(np.load(tf))
-        res = {"divergences": info.get("divergences")}
-        for comp in ("skill", "car"):
-            draws, true = flat(post, comp), truth[comp]
-            m = draws.mean(0)
-            res[comp] = {
-                "corr": float(np.corrcoef(m, true)[0, 1]),
-                "rmse_s": _rmse(m, true) * SEC_PER_PCT,
-                "bias_s": float(np.mean(m - true)) * SEC_PER_PCT,
-                "cov50": _coverage(draws, true, 50), "cov90": _coverage(draws, true, 90),
-            }
-        # current grid: rank recovery and coverage at the latest event
-        rows = np.flatnonzero(design.entries.event_idx.to_numpy() == last)
-        dr, tr = flat(post, "skill")[:, rows], truth["skill"][rows]
-        dr = dr - dr.mean(1, keepdims=True)
-        tr = tr - tr.mean()
-        res["current_grid"] = {
-            "spearman": float(spearmanr(dr.mean(0), tr)[0]),
-            "rmse_s": _rmse(dr.mean(0), tr) * SEC_PER_PCT,
-            "cov90": _coverage(dr, tr, 90),
-        }
-        if "compat" in post and "compat" in truth:
-            ci = flat(post, "skill")[:, rows] + flat(post, "compat")[:, rows]
-            ci = ci - ci.mean(1, keepdims=True)
-            ti = truth["skill"][rows] + truth["compat"][rows]
-            ti = ti - ti.mean()
-            res["current_grid_in_team"] = {"spearman": float(spearmanr(ci.mean(0), ti)[0]),
-                                           "rmse_s": _rmse(ci.mean(0), ti) * SEC_PER_PCT,
-                                           "cov90": _coverage(ci, ti, 90)}
-        # teammate differences (the part the design identifies directly)
-        pe = design.entries.merge(design.entries, on=["event_idx", "team"])
-        pe = pe[pe.driver_id_x < pe.driver_id_y]
-        ia, ib = pe.entry_idx_x.to_numpy(), pe.entry_idx_y.to_numpy()
-        dd = flat(post, "skill")[:, ia] - flat(post, "skill")[:, ib]
-        td = truth["skill"][ia] - truth["skill"][ib]
-        res["teammate_diff"] = {"corr": float(np.corrcoef(dd.mean(0), td)[0, 1]),
-                                "cov90": _coverage(dd, td, 90)}
-        # between-team driver comparisons (identified only through the network)
-        cross = design.entries[design.entries.event_idx == last]
-        cx = cross.merge(cross, how="cross")
-        cx = cx[(cx.team_x != cx.team_y) & (cx.driver_id_x < cx.driver_id_y)]
-        ia, ib = cx.entry_idx_x.to_numpy(), cx.entry_idx_y.to_numpy()
-        dd = flat(post, "skill")[:, ia] - flat(post, "skill")[:, ib]
-        td = truth["skill"][ia] - truth["skill"][ib]
-        res["cross_team_diff_current"] = {"corr": float(np.corrcoef(dd.mean(0), td)[0, 1]),
-                                          "cov90": _coverage(dd, td, 90)}
-        # car vs driver variance share per season: truth vs estimate
-        shares = []
-        for season, g in design.events.groupby("season"):
-            ev_idx = g.event_idx.to_numpy()
-            cm = np.isin(design.cars.event_idx, ev_idx)
-            em = np.isin(design.entries.event_idx, ev_idx)
-            t_share = truth["car"][cm].var() / (truth["car"][cm].var() + truth["skill"][em].var())
-            ec, es = flat(post, "car")[:, cm], flat(post, "skill")[:, em]
-            e_share = np.mean(ec.var(1) / (ec.var(1) + es.var(1)))
-            shares.append((season, t_share, e_share))
-        s = np.array([x[1:] for x in shares])
-        res["car_share"] = {"truth_mean": float(s[:, 0].mean()), "est_mean": float(s[:, 1].mean()),
-                            "max_abs_err": float(np.abs(s[:, 0] - s[:, 1]).max())}
-        out[sc] = res
+        res = {"divergences": info.get("divergences"),
+               **synth_metrics(design, post, dict(np.load(FITS / f"{name}_truth.npz")))}
+        if name.startswith("synth_seed"):
+            res["draw"] = meta.get("draw")
+            res["hyper"] = {k: meta["hyper"][k] for k in ("sd_level", "sd_compat", "sd_driver_form")
+                            if k in meta.get("hyper", {})}
+            out["seeds"][name[len("synth_"):]] = res
+        else:
+            out["scenarios"][name[len("synth_"):]] = res
+    if out["seeds"]:
+        vals = {m: [r[a][b] for r in out["seeds"].values() if a in r] for m, (a, b) in SEED_METRICS.items()}
+        out["seeds_summary"] = {"n_seeds": len(out["seeds"]),
+                                **{m: {"mean": float(np.mean(v)), "min": float(np.min(v)),
+                                       "max": float(np.max(v))} for m, v in vals.items() if v}}
     return out
 
 
 # --------------------------------------------------------------------------- sensitivity
 
-def evaluate_sens() -> dict:
-    names = [n for n in SENS if (FITS / f"{n}.npz").exists()]
-    as_of = common_data_as_of([FITS / "main.npz", *(FITS / f"{n}.npz" for n in names)])
-    main_design = build_design(2010, end_event=as_of)
-    post, _ = load(FITS / "main.npz", main_design)
-    base = driver_leaderboard(main_design, post).set_index("driver_id")
-    table = pd.DataFrame({"main": base["median"] * SEC_PER_PCT})
+def _compare_ratings(table: pd.DataFrame) -> dict:
+    """Each variant column vs `main`: rank correlation, largest rating and rank shifts."""
     out = {}
-    for name, spec in SENS.items():
-        f = FITS / f"{name}.npz"
-        if not f.exists():
-            continue
-        d = build_design(spec.get("start", 2010), end_event=as_of)
-        lb = driver_leaderboard(d, load(f, d)[0]).set_index("driver_id")
-        table[name] = (lb["median"] * SEC_PER_PCT).reindex(table.index)
-        rank_main, rank_v = table.main.rank(ascending=False), table[name].rank(ascending=False)
-        out[name] = {"spearman": float(spearmanr(table.main, table[name])[0]),
-                     "max_abs_shift_s": float((table[name] - table.main).abs().max()),
-                     "max_rank_shift": int((rank_main - rank_v).abs().max())}
-    table["spread_s"] = table.max(1) - table.min(1)
-    ranks = table.drop(columns="spread_s").rank(ascending=False)
-    table["rank_range"] = ranks.max(1) - ranks.min(1)
-    REPORTS.mkdir(parents=True, exist_ok=True)
-    table.to_csv(REPORTS / "sensitivity_current_drivers.csv")
+    rank_main = table.main.rank(ascending=False)
+    for name in table.columns.drop("main"):
+        both = table[["main", name]].dropna()
+        out[name] = {"spearman": float(spearmanr(both.main, both[name])[0]),
+                     "max_abs_shift_s": float((both[name] - both.main).abs().max()),
+                     "max_rank_shift": int((rank_main - table[name].rank(ascending=False)).abs().max())}
+    return out
+
+
+def _flag_unstable(table: pd.DataFrame) -> list[str]:
     # flag drivers whose rating moves by more than ~a quarter of a typical 90% interval
     # across variants, or whose rank moves 8+ places (a 0.05 s / 4-place rule, set before
     # the results, flagged every driver - it is smaller than the posterior uncertainty)
-    out["unstable_drivers"] = table.index[(table.spread_s > 0.10) | (table.rank_range >= 8)].tolist()
+    spread = table.max(1) - table.min(1)
+    ranks = table.rank(ascending=False)
+    rank_range = ranks.max(1) - ranks.min(1)
+    table["spread_s"], table["rank_range"] = spread, rank_range
+    return table.index[(spread > 0.10) | (rank_range >= 8)].tolist()
+
+
+def evaluate_sens() -> dict:
+    """The current grid under each sensitivity variant, for portable skill (unprefixed
+    keys) and pace in the current car (in_team_*; for sens_nocompat, which has no
+    team-specific effect, its skill is its pace in the current car)."""
+    names = [n for n in SENS if (FITS / f"{n}.npz").exists()]
+    as_of = common_data_as_of([FITS / "main.npz", *(FITS / f"{n}.npz" for n in names)])
+    main_design = build_design(2010, end_event=as_of)
+    base = driver_leaderboard(main_design, load(FITS / "main.npz", main_design)[0]).set_index("driver_id")
+    portable = pd.DataFrame({"main": base["median"] * SEC_PER_PCT})
+    in_team = pd.DataFrame({"main": base["in_team_median"] * SEC_PER_PCT})
+    for name in names:
+        d = build_design(SENS[name].get("start", 2010), end_event=as_of)
+        lb = driver_leaderboard(d, load(FITS / f"{name}.npz", d)[0]).set_index("driver_id")
+        portable[name] = (lb["median"] * SEC_PER_PCT).reindex(portable.index)
+        col = "in_team_median" if "in_team_median" in lb else "median"
+        in_team[name] = (lb[col] * SEC_PER_PCT).reindex(in_team.index)
+    out = _compare_ratings(portable)
+    for name, r in _compare_ratings(in_team).items():
+        out[name].update({f"in_team_{k}": v for k, v in r.items()})
+    out["unstable_drivers"] = _flag_unstable(portable)
+    out["unstable_drivers_in_team"] = _flag_unstable(in_team)
+    REPORTS.mkdir(parents=True, exist_ok=True)
+    portable.to_csv(REPORTS / "sensitivity_current_drivers.csv")
+    in_team.to_csv(REPORTS / "sensitivity_current_drivers_in_team.csv")
     return out
 
 

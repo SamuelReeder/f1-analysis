@@ -24,6 +24,7 @@ AGE_DECLINE_FROM = 32.0  # age after which a linear decline term applies
 RACES_PER_SEASON_PRE_DATA = 17  # to estimate experience for debuts before the data
 SIGN_ANCHOR = ("spa", "monaco")  # circuit factor oriented so the first is above the second
 MIN_FACTOR_CIRCUITS = 3  # circuits with enough history needed to estimate the circuit factor
+MIN_SPELL_BREAK = 3     # events with other teams after which a return to a team is a new spell
 
 
 @dataclass
@@ -31,8 +32,8 @@ class Design:
     start_season: int
     events: pd.DataFrame     # event_idx order; includes season, circuit
     sessions: pd.DataFrame   # one row per (event, segment)
-    entries: pd.DataFrame    # driver states, sorted by driver then event
-    cars: pd.DataFrame       # car states, sorted by team then event
+    entries: pd.DataFrame    # driver states (every driver entered), sorted by driver then event
+    cars: pd.DataFrame       # car states (every team entered), sorted by team then event
     obs: pd.DataFrame        # one row per lap time used
     drivers: pd.DataFrame    # driver_idx order
     teams: list[str]
@@ -53,6 +54,10 @@ class Design:
             "circuit_factor": self.circuit_factor,
             "entry_driver": e.driver_idx.to_numpy(),
             "entry_stint": e.stint_idx.to_numpy(),
+            "entry_spell": e.spell_idx.to_numpy(),
+            "n_spells": int(e.spell_idx.max()) + 1,
+            "entry_era_stint": e.era_stint_idx.to_numpy(),
+            "n_era_stints": int(e.era_stint_idx.max()) + 1,
             "entry_placebo": e.placebo_idx.to_numpy(),
             "n_placebo": int(e.placebo_idx.max()) + 1,
             "n_stints": int(e.stint_idx.max()) + 1,
@@ -136,8 +141,12 @@ def circuit_factors(design: "Design", ridge: float = 5.0, iters: int = 200,
     return f
 
 
+STAGE1_TABLES = ("events", "drivers", "entries", "quali_times", "race")
+
+
 def load_tables() -> dict[str, pd.DataFrame]:
-    return {p.stem: pd.read_parquet(p) for p in PROCESSED.glob("*.parquet")}
+    """The stage-1 tables (data/processed also holds the racing tables, read by their modules)."""
+    return {name: pd.read_parquet(PROCESSED / f"{name}.parquet") for name in STAGE1_TABLES}
 
 
 def build_design(start_season: int = 2010, end_event: str | None = None,
@@ -170,9 +179,14 @@ def build_design(start_season: int = 2010, end_event: str | None = None,
     q = q[q.y >= -MAX_GAP_PCT]
     q = q[q.groupby(["event_id", "segment"]).y.transform("size") >= MIN_SEGMENT_TIMES]
 
-    # ---- entries (driver states): only driver-events with at least one valid lap
-    ent = all_entries.merge(q[["event_id", "driver_id"]].drop_duplicates(),
-                            on=["event_id", "driver_id"])
+    # ---- entries (driver states): every driver entered in qualifying. A driver-event
+    # without a valid lap (no time set, or only laps far off the pace) has no
+    # observations; its state is carried forward by the skill walk, and it still counts
+    # in the field the ratings are relative to.
+    ent = all_entries[all_entries.event_id.isin(ev.index)].copy()
+    timed = q[["event_id", "driver_id"]].drop_duplicates().assign(has_time=True)
+    ent = ent.merge(timed, on=["event_id", "driver_id"], how="left")
+    ent["has_time"] = ent.has_time.fillna(False).astype(bool)
     ent["event_idx"] = ent.event_id.map(ev.event_idx)
     ent = ent.sort_values(["driver_id", "event_idx"], ignore_index=True)
     driver_ids = sorted(ent.driver_id.unique())
@@ -185,7 +199,17 @@ def build_design(start_season: int = 2010, end_event: str | None = None,
     dob = pd.to_datetime(ent.driver_id.map(drivers.dob))
     ent["age"] = (pd.to_datetime(ent.date) - dob).dt.days / 365.25
     ent["entry_idx"] = np.arange(len(ent))
+    # team-specific effect units: one per driver and team lineage (the model default);
+    # per spell (a return to a former team after MIN_SPELL_BREAK+ events elsewhere starts
+    # a new one, so a one-off stand-in drive does not); or per driver, lineage and
+    # regulation era (a regulation reset starts a new one)
     ent["stint_idx"] = ent.groupby(["driver_id", "team"], sort=True).ngroup()
+    k = ent.groupby("driver_id").cumcount()
+    away = k - k.groupby([ent.driver_id, ent.team]).shift() - 1  # events elsewhere since last here
+    ent["spell_no"] = (away.isna() | (away >= MIN_SPELL_BREAK)).groupby([ent.driver_id, ent.team]).cumsum()
+    ent["spell_idx"] = ent.groupby(["driver_id", "team", "spell_no"], sort=True).ngroup()
+    ent["era"] = np.searchsorted(sorted(REGULATION_RESETS), ent.season.to_numpy(), side="right")
+    ent["era_stint_idx"] = ent.groupby(["driver_id", "team", "era"], sort=True).ngroup()
     # placebo split (diagnostic): stints spanning 2+ seasons are cut in two at the
     # middle season boundary; each half can get its own effect
     seasons = ent.groupby("stint_idx").season.agg(["min", "max"])
@@ -194,8 +218,8 @@ def build_design(start_season: int = 2010, end_event: str | None = None,
     split = ent.stint_idx.map(cut).notna()
     ent["placebo_idx"] = np.where(split, ent.groupby(["stint_idx", "placebo_half"]).ngroup(), -1)
 
-    # ---- car states: one per team per event with any valid lap
-    cars = ent[["team", "event_idx", "season"]].drop_duplicates()
+    # ---- car states: one per team per event entered (has_time: any valid lap)
+    cars = ent.groupby(["team", "event_idx", "season"], as_index=False).has_time.any()
     cars = cars.sort_values(["team", "event_idx"], ignore_index=True)
     teams = sorted(cars.team.unique())
     prev_c = cars.groupby("team")[["season"]].shift()

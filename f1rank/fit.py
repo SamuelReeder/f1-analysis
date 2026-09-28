@@ -83,9 +83,14 @@ def fit(design: Design, warmup=1000, samples=1000, chains=4, seed=0, target_acce
         max_tree_depth=10, model_fn=model, progress=True, extra_sites=()):
     data = to_jax(design.arrays())
     init = {k: jnp.asarray(v) for k, v in initial_values(design, seed).items()}
+    # standard-normal (non-centred) sites start at their prior mean, with the size they
+    # have under this model's options (e.g. the team-effect unit), so they are traced
+    # from the prior; the other sites (some improper) are traced at their start values
+    fixed = {k: v for k, v in init.items() if not k.endswith("_z")}
     sites = numpyro.handlers.trace(numpyro.handlers.substitute(
-        numpyro.handlers.seed(model_fn, 0), data=init)).get_trace(data)
-    init = {k: v for k, v in init.items() if k in sites}
+        numpyro.handlers.seed(model_fn, 0), data=fixed)).get_trace(data)
+    init = {k: (v if v.shape == sites[k]["value"].shape else jnp.zeros_like(sites[k]["value"]))
+            for k, v in init.items() if k in sites}
     kernel = NUTS(model_fn, target_accept_prob=target_accept, max_tree_depth=max_tree_depth,
                   init_strategy=init_to_value(values=init))
     mcmc = MCMC(kernel, num_warmup=warmup, num_samples=samples, num_chains=chains,
@@ -155,6 +160,15 @@ def _git_commit() -> str | None:
         return None
 
 
+def _git_dirty() -> bool | None:
+    """Whether the package differs from the recorded commit (uncommitted changes)."""
+    try:
+        return bool(subprocess.run(["git", "status", "--porcelain", "--", "f1rank"], cwd=ROOT,
+                                   capture_output=True, text=True, check=True).stdout.strip())
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+
 def meta_path(path: Path) -> Path:
     return path.with_name(path.stem + ".meta.json")
 
@@ -164,7 +178,7 @@ def describe(design: Design, **extra) -> dict:
         "fingerprint": fingerprint(design), "start_season": int(design.start_season),
         "data_as_of": design.events.event_id.iloc[-1], "last_train_event": last_train_event(design),
         "created_utc": dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ"),
-        "git_commit": _git_commit(), **extra, "ids": design_ids(design),
+        "git_commit": _git_commit(), "git_dirty": _git_dirty(), **extra, "ids": design_ids(design),
     }
 
 

@@ -5,10 +5,14 @@ Tables
 events      one row per Grand Prix: season, round, date, circuit
 drivers     one row per driver: name, code, date of birth
 entries     one row per driver per event: constructor, team lineage, quali position
-quali_times one row per driver per qualifying segment with a lap time (Q1/Q2/Q3)
+quali_times one row per driver per qualifying segment with a lap time (Q1/Q2/Q3), with its
+            source: "jolpica", or "fastf1" for events Jolpica has no times for (filled by
+            extract/quali_fill.py from FastF1 lap timing and checked against Jolpica)
 race        one row per driver per race: grid, finish position, status (for later stages)
 """
 
+import datetime as dt
+import hashlib
 import json
 from pathlib import Path
 
@@ -19,6 +23,7 @@ from .lineage import lineage_of
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw" / "jolpica"
 OUT = ROOT / "data" / "processed"
+SUPPLEMENT = ROOT / "data" / "supplements" / "quali_times_fastf1.json"
 
 # 2006-2009 Q3 was run with race fuel loads, so those times are not pace.
 RACE_FUEL_Q3_SEASONS = range(2006, 2010)
@@ -81,6 +86,14 @@ def build() -> dict[str, pd.DataFrame]:
                     "laps": int(res["laps"]),
                 })
 
+    times = pd.DataFrame(times).assign(source="jolpica")
+    if SUPPLEMENT.exists():
+        fill = pd.DataFrame(json.loads(SUPPLEMENT.read_text())["times"]).assign(source="fastf1")
+        covered = fill.event_id.isin(times.event_id)
+        if covered.any():  # Jolpica has since added times: prefer them
+            print(f"supplement ignored for {sorted(fill.event_id[covered].unique())}: Jolpica has times")
+        times = pd.concat([times, fill[~covered]], ignore_index=True)
+
     debuts = json.loads((RAW / "debuts.json").read_text())
     for driver_id, d in drivers.items():
         d["debut_season"] = debuts[driver_id]["season"]
@@ -90,7 +103,7 @@ def build() -> dict[str, pd.DataFrame]:
         "events": pd.DataFrame(events).sort_values("event_id", ignore_index=True),
         "drivers": pd.DataFrame(drivers.values()).sort_values("driver_id", ignore_index=True),
         "entries": pd.DataFrame(entries),
-        "quali_times": pd.DataFrame(times),
+        "quali_times": times,
         "race": pd.DataFrame(race),
     }
 
@@ -106,6 +119,24 @@ def main() -> None:
     for name, df in build().items():
         df.to_parquet(OUT / f"{name}.parquet", index=False)
         print(f"{name:12s} {len(df):6d} rows")
+    # which versions of the raw responses this build used (see fetch.py)
+    manifest = RAW / "manifest.json"
+    known = json.loads(manifest.read_text()) if manifest.exists() else {}
+    used = sorted(RAW.glob("*_qualifying.json")) + sorted(RAW.glob("*_results.json"))
+    sources = {}
+    for path in used:
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        entry = known.get(path.name)
+        if entry and entry["sha256"] == digest:
+            sources[path.name] = {"retrieved_utc": entry["retrieved_utc"], "sha256": digest}
+        else:  # fetched before versioning: the file time is when it was downloaded
+            mtime = dt.datetime.fromtimestamp(path.stat().st_mtime, dt.timezone.utc)
+            sources[path.name] = {"retrieved_utc": mtime.strftime("%Y-%m-%dT%H:%M:%SZ"), "sha256": digest,
+                                  "retrieved_from_file_time": True}
+    (OUT / "sources.json").write_text(json.dumps({
+        "jolpica": sources,
+        "supplement": str(SUPPLEMENT.relative_to(ROOT)) if SUPPLEMENT.exists() else None,
+    }, indent=1))
 
 
 if __name__ == "__main__":

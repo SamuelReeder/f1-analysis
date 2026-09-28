@@ -1,7 +1,8 @@
 """Turn posterior draws into rating tables.
 
 All ratings are relative to the field at the event (the average driver and the
-average car entered), positive = faster. Model units are percent of lap time;
+average car entered), positive = faster. A driver entered without a valid qualifying lap
+(has_time False) keeps a rating carried forward from earlier events. Model units are percent of lap time;
 tables also give seconds per 90-second lap.
 
 Driver ratings come in two forms:
@@ -39,7 +40,7 @@ def driver_series(design: Design, post: dict) -> pd.DataFrame:
     """One row per driver per event: portable skill relative to the field at that
     event, and (if modelled) pace in that team including the team-specific effect."""
     e = design.entries
-    out = e[["driver_id", "event_id", "event_idx", "season", "team", "constructor_name"]]
+    out = e[["driver_id", "event_id", "event_idx", "season", "team", "constructor_name", "has_time"]]
     out = out.reset_index(drop=True).join(summarise(flat(post, "skill")))
     if "compat" in post:
         out = out.join(summarise(flat(post, "skill") + flat(post, "compat"), "in_team_"))
@@ -92,7 +93,8 @@ def driver_leaderboard(design: Design, post: dict, event_idx: int | None = None)
     draws = flat(post, "skill")[:, rows]
     draws = draws - draws.mean(axis=1, keepdims=True)  # relative to this field
     ids = e.driver_id.to_numpy()[rows]
-    out = pd.DataFrame({"driver_id": ids, "team": e.constructor_name.to_numpy()[rows]})
+    out = pd.DataFrame({"driver_id": ids, "team": e.constructor_name.to_numpy()[rows],
+                        "has_time": e.has_time.to_numpy()[rows]})
     out = out.join(summarise(draws)).join(rank_summary(draws))
     sort_by = "median"
     if "compat" in post:

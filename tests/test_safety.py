@@ -101,3 +101,15 @@ def test_synthetic_jobs_need_an_explicit_source(monkeypatch, tmp_path):
     monkeypatch.setattr(jobs, "SYNTH_SOURCE", tmp_path / "synth_source.npz")
     with pytest.raises(FileNotFoundError, match="synth-source"):
         jobs.run("synth_clean")
+
+
+@pytest.mark.parametrize("unit", ["spell", "era"])
+def test_team_effect_variants_fit(tables, unit):
+    from functools import partial
+
+    from f1rank.fit import fit
+    from f1rank.model import model
+    d = build_design(2026, tables=tables)
+    post, _ = fit(d, warmup=3, samples=2, chains=1, progress=False, model_fn=partial(model, compat_unit=unit))
+    assert post["compat"].shape[-1] == len(d.entries)
+    assert np.isfinite(post["compat"]).all()

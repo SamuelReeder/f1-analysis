@@ -1,6 +1,6 @@
 """Posterior checks on the main fit.
 
-    python -m f1rank.diagnostics [fit_name]
+    python -m f1rank.diagnostics [fit_name]      # writes outputs/validation/diagnostics.json
 
 teammate residual correlation  residuals of two teammates in the same segment
                                should be uncorrelated if shared car effects are
@@ -11,6 +11,7 @@ residual autocorrelation       a driver's residual teammate gap should not
 """
 
 import ast
+import json
 import sys
 
 import numpy as np
@@ -18,6 +19,8 @@ import pandas as pd
 
 from .fit import FITS, design_for, load, load_meta
 from .ratings import flat
+
+REPORTS = FITS.parent / "validation"
 
 
 def fitted_terms(car_track=True, car_transient=True, car_segment=True, driver_form=True,
@@ -55,7 +58,7 @@ def residuals(design, post, **model_kw) -> pd.DataFrame:
                     driver=e.driver_id.loc[o.entry_idx].to_numpy())
 
 
-def main(fit_name: str = "main") -> None:
+def main(fit_name: str = "main") -> dict:
     path = FITS / f"{fit_name}.npz"
     design = design_for(path)
     post, _ = load(path, design)
@@ -64,20 +67,23 @@ def main(fit_name: str = "main") -> None:
     r = residuals(design, post, **model_kw)
     p = r.merge(r, on=["session_idx", "car_idx"])
     p = p[p.driver_x < p.driver_y]
-    print(f"teammate residual correlation (same segment): {np.corrcoef(p.z_x, p.z_y)[0, 1]:.3f} "
-          f"(n={len(p)})")
+    out = {"fit": fit_name, "fit_id": load_meta(path)["created_utc"],
+           "teammate_residual_corr": {"all": float(np.corrcoef(p.z_x, p.z_y)[0, 1]), "n": int(len(p))}}
     by_seg = p.merge(design.sessions[["session_idx", "segment"]], on="session_idx")
     for seg, g in by_seg.groupby("segment"):
-        print(f"   {seg}: {np.corrcoef(g.z_x, g.z_y)[0, 1]:.3f}")
+        out["teammate_residual_corr"][seg] = float(np.corrcoef(g.z_x, g.z_y)[0, 1])
     # teammate gap residual persistence across a pairing's consecutive events
     p["gap_res"] = p.resid_x - p.resid_y
     ev = p.groupby(["driver_x", "driver_y", "event_idx_x"]).gap_res.mean().reset_index()
     ev["prev"] = ev.groupby(["driver_x", "driver_y"]).gap_res.shift()
     ev = ev.dropna()
-    print(f"lag-1 autocorrelation of teammate-gap residuals across events: "
-          f"{np.corrcoef(ev.gap_res, ev.prev)[0, 1]:.3f} (n={len(ev)})")
-    q = np.quantile(r.z, [0.01, 0.05, 0.5, 0.95, 0.99])
-    print("standardised residual quantiles 1/5/50/95/99%:", np.round(q, 2))
+    out["teammate_gap_residual_lag1"] = {"corr": float(np.corrcoef(ev.gap_res, ev.prev)[0, 1]), "n": int(len(ev))}
+    out["standardised_residual_quantiles"] = dict(zip(
+        ["q01", "q05", "q50", "q95", "q99"], [float(x) for x in np.quantile(r.z, [0.01, 0.05, 0.5, 0.95, 0.99])]))
+    REPORTS.mkdir(parents=True, exist_ok=True)
+    (REPORTS / "diagnostics.json").write_text(json.dumps(out, indent=1))
+    print(json.dumps(out, indent=1))
+    return out
 
 
 if __name__ == "__main__":

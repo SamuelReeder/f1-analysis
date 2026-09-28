@@ -3,7 +3,8 @@
 outputs/ratings/
   driver_series.parquet   every driver at every event (revised = uses all data)
   car_series.parquet      every team at every event: track-neutral pace, pace at that circuit
-  current_drivers.csv     drivers at the latest event, sorted by pace in the current car
+  current_drivers.csv     drivers entered at the latest event (has_time False: no valid
+                          lap, rating carried forward), sorted by pace in the current car
                           (in_team_*, headline); portable skill (experimental) and the
                           team-specific effect (team_effect_*) alongside, with rank ranges
   current_cars.csv        car-package leaderboard at the latest event
@@ -94,7 +95,7 @@ def export(fit_name: str = "main", start: int = 2010) -> dict:
     }
     (OUT / "meta.json").write_text(json.dumps(meta, indent=1))
 
-    driver_cols = ["driver_id", "name", "team",
+    driver_cols = ["driver_id", "name", "team", "has_time",
                    "in_team_median_s", "in_team_q05_s", "in_team_q95_s", "in_team_rank_lo",
                    "in_team_rank_hi", "in_team_p_fastest",
                    "median_s", "q05_s", "q95_s", "rank_median", "rank_lo", "rank_hi", "p_fastest"]

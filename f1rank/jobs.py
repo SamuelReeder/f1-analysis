@@ -5,23 +5,30 @@
     python -m f1rank.jobs run NAME [NAME..]    # run jobs in this process
     python -m f1rank.jobs all --parallel 4     # run every job that is missing or stale
 
-lfo_*     leave-future-out: fit on events up to a cutoff, forecast the rest
-lfo2006_* the same cutoffs with the data window starting in 2006
-synth_*   synthetic recovery on the real design (clean + misspecified)
-sens_*    sensitivity variants of the main model on all data
-placebo   the main model plus a placebo effect per half of a multi-season team stint
+lfo_*        leave-future-out: fit on events up to a cutoff, forecast the rest
+lfo2006_*    some of the same cutoffs with the data window starting in 2006
+lfospell_*,  some of the same cutoffs with one team-specific effect per spell or per
+lfoera_*     regulation era (instead of per team lineage)
+synth_<scenario>  synthetic recovery on the real design, one shared truth (clean +
+             misspecified scenarios)
+synth_seed<k>     clean synthetic recovery, each with its own truth, noise and
+             hyperparameters (a different posterior draw of the synthetic source)
+sens_*       sensitivity variants of the main model on all data
+placebo      the main model plus a placebo effect per half of a multi-season team stint
 
 A fit is up to date when its metadata matches the design it would be fitted on now
 (see fit.py), so new data or a changed design makes the affected fits stale. Synthetic
-fits are up to date when they were made from the current synthetic source, which is a
-frozen copy of the main fit made explicitly with `synth-source` (and by `all` if it is
-missing). Any failed job makes the command exit with status 1.
+fits are up to date when they were made from the current synthetic source (a frozen copy
+of the main fit, made explicitly with `synth-source`, and by `all` if it is missing) on the
+design the current code builds from that source's data. Any failed job makes the command
+exit with status 1.
 """
 
 import argparse
 import shutil
 import subprocess
 import sys
+import time
 import traceback
 from functools import lru_cache, partial
 
@@ -62,9 +69,21 @@ SENS = {
     "sens_drift_x2": dict(model_kw=dict(skill_drift=(2 * DRIFT[0], 2 * DRIFT[1]))),
     "sens_drift_half": dict(model_kw=dict(skill_drift=(0.5 * DRIFT[0], 0.5 * DRIFT[1]))),
 }
+SENS["sens_team_spell"] = dict(model_kw=dict(compat_unit="spell"))
+SENS["sens_team_era"] = dict(model_kw=dict(compat_unit="era"))
 DIAGNOSTIC = {"placebo": dict(model_kw=dict(placebo=True))}
-# cutoffs at which the 2006 data window is compared with 2010 (window_compare.py)
+# forecasting variants, compared with the main model on identical targets at some
+# cutoffs (compare.py): the 2006 data window, and the team-specific effect per spell or
+# per regulation era. The team cutoffs include the ends of 2016, 2021 and 2025, which
+# forecast the first season after a regulation reset.
 WINDOW_CUTS = ("end2016", "end2019", "end2022", "end2024", "end2025", "mid2025")
+TEAM_CUTS = ("end2016", "end2019", "end2021", "end2024", "end2025", "mid2025")
+LFO_VARIANTS = {
+    "lfo2006": dict(start=2006, cuts=WINDOW_CUTS),
+    "lfospell": dict(model_kw=dict(compat_unit="spell"), cuts=TEAM_CUTS),
+    "lfoera": dict(model_kw=dict(compat_unit="era"), cuts=TEAM_CUTS),
+}
+N_SYNTH_SEEDS = 8
 
 
 @lru_cache(maxsize=2)
@@ -72,24 +91,40 @@ def _base_design(start: int):
     return build_design(start)
 
 
+@lru_cache(maxsize=2)
+def _synth_design(data_as_of: str):
+    return build_design(2010, end_event=data_as_of)
+
+
 def job_names() -> list[str]:
     from .simulate import SCENARIOS
-    return [*lfo_cutoffs(_base_design(2010)), *(f"lfo2006_{c}" for c in WINDOW_CUTS),
-            *(f"synth_{s}" for s in SCENARIOS), *SENS, *DIAGNOSTIC]
+    return [*lfo_cutoffs(_base_design(2010)),
+            *(f"{v}_{c}" for v, spec in LFO_VARIANTS.items() for c in spec["cuts"]),
+            *(f"synth_{s}" for s in SCENARIOS), *(f"synth_seed{k}" for k in range(1, N_SYNTH_SEEDS + 1)),
+            *SENS, *DIAGNOSTIC]
+
+
+def job_spec(name: str) -> dict:
+    """Data window, model options and cutoff of a (non-synthetic) job."""
+    prefix, _, cut = name.partition("_")
+    if prefix == "lfo":
+        return dict(start=2010, model_kw={}, cutoff=name)
+    if prefix in LFO_VARIANTS and cut in LFO_VARIANTS[prefix]["cuts"]:
+        v = LFO_VARIANTS[prefix]
+        return dict(start=v.get("start", 2010), model_kw=v.get("model_kw", {}), cutoff="lfo_" + cut)
+    spec = SENS.get(name) or DIAGNOSTIC.get(name)
+    if spec is None:
+        raise ValueError(f"unknown job {name!r}")
+    return dict(start=spec.get("start", 2010), model_kw=spec.get("model_kw", {}), cutoff=None)
 
 
 def job_design(name: str):
     """The design a (non-synthetic) job is fitted on, from the current data."""
-    if name.startswith("lfo2006_"):
-        design = _base_design(2006)
-        return design.with_cutoff(lfo_cutoffs(design)["lfo_" + name[len("lfo2006_"):]])
-    if name.startswith("lfo_"):
-        design = _base_design(2010)
-        return design.with_cutoff(lfo_cutoffs(design)[name])
-    spec = SENS.get(name) or DIAGNOSTIC.get(name)
-    if spec is None:
-        raise ValueError(f"unknown job {name!r}")
-    return _base_design(spec.get("start", 2010))
+    spec = job_spec(name)
+    design = _base_design(spec["start"])
+    if spec["cutoff"] is None:
+        return design
+    return design.with_cutoff(lfo_cutoffs(design)[spec["cutoff"]])
 
 
 def up_to_date(name: str) -> bool:
@@ -98,8 +133,10 @@ def up_to_date(name: str) -> bool:
     if not path.exists() or meta is None:
         return False
     if name.startswith("synth_"):
+        # same frozen source, and the design built from its data by the current code
         source = load_meta(SYNTH_SOURCE)
-        return source is not None and meta.get("source_fingerprint") == source["fingerprint"]
+        return (source is not None and meta.get("source_fingerprint") == source["fingerprint"]
+                and meta.get("real_data_fingerprint") == fingerprint(_synth_design(source["data_as_of"])))
     try:
         check(path, job_design(name))
     except (IncompatibleFit, ValueError):
@@ -117,28 +154,48 @@ def make_synth_source() -> None:
     print(f"synthetic source: frozen copy of {MAIN.name} (data as of {load_meta(MAIN)['data_as_of']})")
 
 
+def synth_setup(name: str, design, main: dict) -> tuple[str, dict, np.ndarray, np.random.Generator,
+                                                     np.random.Generator, dict]:
+    """Scenario, hyperparameters, segment intercepts, truth and noise generators for a
+    synthetic job. synth_<scenario>: the posterior medians and one shared truth (seed
+    1234). synth_seed<k>: clean data with its own truth and noise, and hyperparameters
+    from posterior draw number `draw` of the synthetic source."""
+    from .simulate import SCENARIOS
+    tag = name[len("synth_"):]
+    if tag in SCENARIOS:
+        hyper = {k: float(np.median(v)) for k, v in main.items() if v.ndim == 2}
+        return (tag, hyper, main["mu"].mean((0, 1)), np.random.default_rng(1234),
+                np.random.default_rng(100 + SCENARIOS.index(tag)), {})
+    if not tag.startswith("seed") or not tag[4:].isdigit():
+        raise ValueError(f"unknown job {name!r}")
+    k = int(tag[4:])
+    n_draws = main["sigma0"].size
+    draw = int(np.random.default_rng([k, 0]).integers(n_draws))
+    hyper = {key: float(v.reshape(-1)[draw]) for key, v in main.items() if v.ndim == 2}
+    mu = main["mu"].reshape(n_draws, -1)[draw]
+    return ("clean", hyper, mu, np.random.default_rng([k, 1]), np.random.default_rng([k, 2]),
+            dict(seed=k, draw=draw, hyper=hyper))
+
+
 def run(name: str) -> None:
     out = FITS / f"{name}.npz"
     if name.startswith("synth_"):
-        from .simulate import SCENARIOS, draw_truth, synthetic_design
-        scenario = name[len("synth_"):]
+        from .simulate import draw_truth, synthetic_design
         source = load_meta(SYNTH_SOURCE)
         if source is None:
             raise FileNotFoundError(f"{SYNTH_SOURCE.name} missing: run `python -m f1rank.jobs synth-source`")
-        design = build_design(2010, end_event=source["data_as_of"])
+        design = _synth_design(source["data_as_of"])
         main, _ = load(SYNTH_SOURCE, design)
-        hyper = {k: float(np.median(v)) for k, v in main.items() if v.ndim == 2}
-        rng = np.random.default_rng(1234)  # same truth for every scenario
-        truth = draw_truth(design, hyper, main["mu"].mean((0, 1)), rng)
-        synth = synthetic_design(design, truth, scenario, hyper["nu"],
-                                 np.random.default_rng(100 + SCENARIOS.index(scenario)))
+        scenario, hyper, mu, truth_rng, noise_rng, setting = synth_setup(name, design, main)
+        truth = draw_truth(design, hyper, mu, truth_rng)
+        synth = synthetic_design(design, truth, scenario, hyper["nu"], noise_rng)
         post, info = fit(synth, progress=False, **VALID)
         np.savez_compressed(FITS / f"{name}_truth.npz", **truth)
-        save(out, post, info, synth, job=name, scenario=scenario, settings=VALID,
+        save(out, post, info, synth, job=name, scenario=scenario, settings=VALID, **setting,
              source_fingerprint=source["fingerprint"], real_data_fingerprint=fingerprint(design))
     else:
         design = job_design(name)
-        model_kw = (SENS.get(name) or DIAGNOSTIC.get(name) or {}).get("model_kw", {})
+        model_kw = job_spec(name)["model_kw"]
         post, info = fit(design, progress=False, model_fn=partial(model, **model_kw), **VALID)
         save(out, post, info, design, job=name, model_kw={k: repr(v) for k, v in model_kw.items()},
              settings=VALID)
@@ -155,6 +212,23 @@ def run_many(names: list[str]) -> list[str]:
             traceback.print_exc()
             print(f"FAILED {name}", file=sys.stderr, flush=True)
             failed.append(name)
+    return failed
+
+
+def run_pool(names: list[str], parallel: int) -> list[str]:
+    """Run each job in its own process, `parallel` at a time, taking the next job as soon
+    as a worker is free. Returns the jobs that failed."""
+    queue, running, failed = list(names), {}, []
+    while queue or running:
+        while queue and len(running) < parallel:
+            name = queue.pop(0)
+            running[name] = subprocess.Popen([sys.executable, "-m", "f1rank.jobs", "run", name])
+        for name, proc in list(running.items()):
+            if proc.poll() is not None:
+                if proc.returncode != 0:
+                    failed.append(name)
+                del running[name]
+        time.sleep(2)
     return failed
 
 
@@ -179,13 +253,10 @@ def main(argv: list[str] | None = None) -> None:
         if any(n.startswith("synth_") for n in todo) and load_meta(SYNTH_SOURCE) is None:
             make_synth_source()
         print(f"{len(todo)} jobs to run", flush=True)
-        # round-robin into `parallel` worker processes
-        groups = [todo[i::args.parallel] for i in range(args.parallel) if todo[i::args.parallel]]
-        procs = [(g, subprocess.Popen([sys.executable, "-m", "f1rank.jobs", "run", *g])) for g in groups]
-        bad = [g for g, proc in procs if proc.wait() != 0]
+        bad = run_pool(todo, args.parallel)
         missing = [n for n in todo if not up_to_date(n)]
         if bad or missing:
-            print(f"FAILED: {len(bad)} worker(s) exited with an error; not up to date after the run: "
+            print(f"FAILED: {', '.join(bad) or 'none'}; not up to date after the run: "
                   f"{', '.join(missing) or 'none'}", file=sys.stderr)
             sys.exit(1)
 

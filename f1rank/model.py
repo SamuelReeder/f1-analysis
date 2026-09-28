@@ -47,7 +47,7 @@ def centre(x, group, n_groups):
 
 def model(d, car_track=True, car_step_df=CAR_STEP_DF, skill_drift=None, car_transient=True,
           likelihood="t", car_segment=True, driver_form=True, compat=True,
-          placebo=False):
+          compat_unit="lineage", placebo=False):
     """car_track: include car x circuit term. car_step_df: tail weight of car steps
     (large = Gaussian). skill_drift: None to estimate driver drift, or a fixed
     (per-race sd, per-season sd) pair for sensitivity runs. car_transient: add a
@@ -61,7 +61,10 @@ def model(d, car_track=True, car_step_df=CAR_STEP_DF, skill_drift=None, car_tran
     one-event driver effect (weekend form) that does not persist, so the skill
     walk only tracks lasting changes. compat: add a driver x team effect
     (car compatibility) that applies for as long as the driver stays in that
-    team; the reported skill then excludes it (portable ability). placebo:
+    team; the reported skill then excludes it (portable ability). compat_unit:
+    what one team-specific effect covers - "lineage" (a driver's whole time with a
+    team lineage), "spell" (a return after a spell elsewhere gets a new effect) or
+    "era" (a regulation reset gets a new effect); see design.py. placebo:
     diagnostic only - an extra effect for each half of a multi-season stint
     in one team, to test whether "compatibility" is team-specific."""
     # ---------------- drivers
@@ -156,10 +159,12 @@ def model(d, car_track=True, car_step_df=CAR_STEP_DF, skill_drift=None, car_tran
 
     loc = mu[d["obs_session"]] + car[d["obs_car"]] + skill[d["obs_entry"]]
     if compat:
+        unit, n_units = {"lineage": ("entry_stint", "n_stints"), "spell": ("entry_spell", "n_spells"),
+                         "era": ("entry_era_stint", "n_era_stints")}[compat_unit]
         sd_compat = numpyro.sample("sd_compat", dist.HalfNormal(0.1))
-        fit_ = sd_compat * numpyro.sample("compat_z", dist.Normal(0, 1).expand([d["n_stints"]]))
+        fit_ = sd_compat * numpyro.sample("compat_z", dist.Normal(0, 1).expand([d[n_units]]))
         fit_ = numpyro.deterministic(
-            "compat", centre(fit_[d["entry_stint"]], d["entry_event"], d["n_events"]))
+            "compat", centre(fit_[d[unit]], d["entry_event"], d["n_events"]))
         loc = loc + fit_[d["obs_entry"]]
     if placebo:
         sd_placebo = numpyro.sample("sd_placebo", dist.HalfNormal(0.1))
