@@ -3,7 +3,7 @@
 This is the stage-2 data layer's FastF1 step (docs/racing_approach.md). It runs in the
 FastF1 environment (FastF1 requires pandas < 3):
 
-    .venv-fastf1/bin/python extract/race_extract.py [--first 2018] [--last 2026] [--refresh]
+    .venv-fastf1/bin/python extract/race_extract.py [--first 2018] [--last 2026] [--refresh] [--sprint]
 
 Reads the event list from data/processed/events.parquet. For each race it writes
 data/raw/fastf1_tables/<event_id>_R/:
@@ -15,6 +15,9 @@ data/raw/fastf1_tables/<event_id>_R/:
     results.parquet       classification with status, grid and FastF1 driver ids
     manifest.json         FastF1 version, retrieval time, row counts and a
                           sha256 per table, so a build can record what it used
+
+With --sprint it extracts the sprint races instead (rounds listed in the Jolpica sprint
+results, data/raw/jolpica/<season>_sprint.json) into <event_id>_S/.
 
 Races already extracted are skipped unless --refresh. Races FastF1 has no timing for are
 listed in data/raw/fastf1_tables/failures.json. `python -m f1rank.racedata` (main
@@ -37,6 +40,7 @@ PROCESSED = ROOT / "data" / "processed"
 # races keeps that under Jolpica's limit of 500 requests an hour
 PAUSE_S = 15
 TABLES = ROOT / "data" / "raw" / "fastf1_tables"
+JOLPICA = ROOT / "data" / "raw" / "jolpica"
 
 LAP_COLS = ["Driver", "DriverNumber", "Team", "LapNumber", "Position", "LapTime", "Time", "LapStartTime",
             "Stint", "Compound", "TyreLife", "FreshTyre", "PitInTime", "PitOutTime",
@@ -53,8 +57,8 @@ def seconds(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def extract(season: int, rnd: int, out) -> dict:
-    s = fastf1.get_session(season, rnd, "R")
+def extract(season: int, rnd: int, out, session: str = "R") -> dict:
+    s = fastf1.get_session(season, rnd, {"R": "Race", "S": "Sprint"}[session])
     patient(s.load, laps=True, telemetry=False, weather=True, messages=True)
     if s.laps.empty:
         raise ValueError("no lap timing")
@@ -72,7 +76,7 @@ def extract(season: int, rnd: int, out) -> dict:
         "results": seconds(results.reset_index(drop=True)),
     }
     out.mkdir(parents=True, exist_ok=True)
-    manifest = {"season": season, "round": rnd, "session": "R", "fastf1_version": fastf1.__version__,
+    manifest = {"season": season, "round": rnd, "session": session, "fastf1_version": fastf1.__version__,
                 "retrieved_utc": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                 "event_name": s.event.EventName, "tables": {}}
     for name, df in tables.items():
@@ -89,25 +93,32 @@ def main() -> None:
     p.add_argument("--first", type=int, default=2018)
     p.add_argument("--last", type=int, default=2100)
     p.add_argument("--refresh", action="store_true")
+    p.add_argument("--sprint", action="store_true", help="extract sprint races instead of races")
     args = p.parse_args()
     enable_cache()
+    session = "S" if args.sprint else "R"
     events = pd.read_parquet(PROCESSED / "events.parquet")
     events = events[events.season.between(args.first, args.last)]
+    if args.sprint:
+        rounds = {(int(r["season"]), int(r["round"])) for f in sorted(JOLPICA.glob("*_sprint.json"))
+                  for r in json.loads(f.read_text())}
+        events = events[[(s, r) in rounds for s, r in zip(events.season, events["round"])]]
     fail_path = TABLES / "failures.json"
     failures = json.loads(fail_path.read_text()) if fail_path.exists() else {}
     for ev in events.itertuples():
-        out = TABLES / f"{ev.event_id}_R"
+        out = TABLES / f"{ev.event_id}_{session}"
+        key = ev.event_id if session == "R" else f"{ev.event_id}_{session}"
         if (out / "manifest.json").exists() and not args.refresh:
             continue
         time.sleep(PAUSE_S)
         try:
-            m = extract(ev.season, ev.round, out)
-            failures.pop(ev.event_id, None)
-            print(f"{ev.event_id}: {m['tables']['laps']['rows']} laps, "
+            m = extract(ev.season, ev.round, out, session)
+            failures.pop(key, None)
+            print(f"{key}: {m['tables']['laps']['rows']} laps, "
                   f"{m['tables']['messages']['rows']} messages", flush=True)
         except Exception as e:  # noqa: BLE001 - record and continue with the next race
-            failures[ev.event_id] = f"{type(e).__name__}: {e}"
-            print(f"{ev.event_id}: FAILED {failures[ev.event_id]}", flush=True)
+            failures[key] = f"{type(e).__name__}: {e}"
+            print(f"{key}: FAILED {failures[key]}", flush=True)
         TABLES.mkdir(parents=True, exist_ok=True)
         fail_path.write_text(json.dumps(failures, indent=1))
 

@@ -6,6 +6,10 @@ missing. The current season is always refetched because new rounds appear, and
 statuses). When a refetch changes a file, the previous version is kept in
 data/raw/jolpica/archive/ under its retrieval time. manifest.json records each file's
 retrieval time and sha256; `build` copies the entries it used to data/processed/sources.json.
+
+Stage 2 adds sprint results (per season) and, with `--laps FIRST LAST`, lap-by-lap times and
+positions plus pit stops per race (data/raw/jolpica/laps/). Lap data are about 11 requests per
+race, so `--laps` paces itself under Jolpica's hourly limit (about 3-4 hours for 2010-2017).
 """
 
 import argparse
@@ -21,6 +25,7 @@ BASE = "https://api.jolpi.ca/ergast/f1"
 RAW = Path(__file__).resolve().parent.parent / "data" / "raw" / "jolpica"
 PAGE = 100
 MIN_INTERVAL = 0.35  # seconds between requests; Jolpica allows ~4 req/s burst
+LAPS_INTERVAL = 8.0  # Jolpica allows 500 requests an hour; bulk lap downloads stay under it
 
 MANIFEST = RAW / "manifest.json"
 
@@ -49,16 +54,16 @@ def save_versioned(out: Path, text: str) -> None:
     MANIFEST.write_text(json.dumps(manifest, indent=1, sort_keys=True))
 
 
-def _get(url: str) -> dict:
+def _get(url: str, interval: float = MIN_INTERVAL) -> dict:
     global _last_request
     for attempt in range(8):
-        wait = MIN_INTERVAL - (time.monotonic() - _last_request)
+        wait = interval - (time.monotonic() - _last_request)
         if wait > 0:
             time.sleep(wait)
         _last_request = time.monotonic()
         resp = requests.get(url, timeout=30)
         if resp.status_code == 429 or resp.status_code >= 500:
-            time.sleep(min(60, 2 ** attempt))
+            time.sleep(min(600, 60 * 2 ** attempt) if resp.status_code == 429 else min(60, 2 ** attempt))
             continue
         resp.raise_for_status()
         return resp.json()["MRData"]
@@ -71,7 +76,7 @@ def fetch_table(season: int, endpoint: str, refresh: bool = False) -> list[dict]
     if out.exists() and not refresh:
         return json.loads(out.read_text())
 
-    list_key = {"qualifying": "QualifyingResults", "results": "Results"}[endpoint]
+    list_key = {"qualifying": "QualifyingResults", "results": "Results", "sprint": "SprintResults"}[endpoint]
     races: dict[str, dict] = {}
     offset, total = 0, None
     while total is None or offset < total:
@@ -85,6 +90,33 @@ def fetch_table(season: int, endpoint: str, refresh: bool = False) -> list[dict]
     merged = sorted(races.values(), key=lambda r: int(r["round"]))
     save_versioned(out, json.dumps(merged))
     return merged
+
+
+def fetch_race(season: int, rnd: int, endpoint: str) -> dict | None:
+    """Lap-by-lap timings ("laps") or pit stops ("pitstops") for one race, cached.
+    Returns None when Jolpica has no rows for the race."""
+    out = RAW / "laps" / f"{season}_{rnd:02d}_{endpoint}.json"
+    if out.exists():
+        return json.loads(out.read_text())
+    list_key = {"laps": "Laps", "pitstops": "PitStops"}[endpoint]
+    race, rows, offset, total = None, [], 0, None
+    while total is None or offset < total:
+        data = _get(f"{BASE}/{season}/{rnd}/{endpoint}.json?limit={PAGE}&offset={offset}", LAPS_INTERVAL)
+        total = int(data["total"])
+        for r in data["RaceTable"]["Races"]:
+            race = race or {k: v for k, v in r.items() if k != list_key}
+            rows.extend(r[list_key])
+        offset += PAGE
+    if race is None:
+        return None
+    if endpoint == "laps":  # a lap can be split over two pages
+        merged: dict[str, list] = {}
+        for lap in rows:
+            merged.setdefault(lap["number"], []).extend(lap["Timings"])
+        rows = [{"number": n, "Timings": t} for n, t in sorted(merged.items(), key=lambda kv: int(kv[0]))]
+    doc = {**race, list_key: rows}
+    save_versioned(out, json.dumps(doc))
+    return doc
 
 
 def fetch_debuts(driver_ids: set[str]) -> dict[str, dict]:
@@ -104,13 +136,29 @@ def main() -> None:
     parser.add_argument("--first", type=int, default=2010)
     parser.add_argument("--last", type=int, default=dt.date.today().year)
     parser.add_argument("--refresh-all", action="store_true", help="refetch every season")
+    parser.add_argument("--laps", type=int, nargs=2, metavar=("FIRST", "LAST"),
+                        help="only fetch lap times and pit stops for these seasons (slow)")
     args = parser.parse_args()
+
+    if args.laps:
+        for season in range(args.laps[0], args.laps[1] + 1):
+            for race in fetch_table(season, "results"):
+                rnd = int(race["round"])
+                laps = fetch_race(season, rnd, "laps")
+                stops = fetch_race(season, rnd, "pitstops") if season >= 2012 else None
+                n = sum(len(lap["Timings"]) for lap in laps["Laps"]) if laps else 0
+                print(f"{season}-{rnd:02d} lap timings={n} pit stops={len(stops['PitStops']) if stops else 0}",
+                      flush=True)
+        return
 
     driver_ids = set()
     for season in range(args.first, args.last + 1):
         refresh = args.refresh_all or season == dt.date.today().year
-        for endpoint in ("qualifying", "results"):
+        for endpoint in ("qualifying", "results") + (("sprint",) if season >= 2021 else ()):
             races = fetch_table(season, endpoint, refresh=refresh)
+            if endpoint == "sprint":
+                print(f"{season} sprint     races={len(races):2d}")
+                continue
             n_rows = sum(len(r.get("QualifyingResults", r.get("Results", []))) for r in races)
             print(f"{season} {endpoint:10s} races={len(races):2d} rows={n_rows}")
             for r in races:
