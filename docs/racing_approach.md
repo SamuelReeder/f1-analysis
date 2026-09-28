@@ -454,6 +454,9 @@ cannot shape them:
   and degradation gates; with the 2010-2017 laps (weaker observation model: unknown compounds,
   stint offsets) the held-out test starts in 2012. The gate rule is unchanged (interval of the
   squared-error difference below zero).
+- **Consistency.** The final run adds 2010-2017 races through a Jolpica-based stage A (no
+  compound terms); held-out from the third season, same rule. An interim 2018-2026 run
+  (interval -0.0070 to +0.0003) does not decide.
 - **Entry into the overall rating.** Every quality with held-out draws gets the nested entry
   test in championship.py, as the approach specifies; a quality enters if the interval is
   above zero. Attacker-only overtaking ratings, if tested, are labelled as a rule chosen
