@@ -1,4 +1,4 @@
-"""Battle episodes and on-track passes, 2018 onward (stage 2, step 7: overtaking and defending).
+"""Battle episodes and on-track passes (stage 2, step 7: overtaking and defending).
 
     python -m f1rank.battles episodes      # build episodes (outputs/battles/episodes.parquet)
     python -m f1rank.battles feasibility   # synthetic check at real sample sizes
@@ -10,6 +10,12 @@ with both on green-flag laps and neither pitting. It continues while they stay w
 and ends with a pass (the car behind crosses the line first on the next lap, neither
 pitting), the gap growing beyond 2 s, a pit stop, a neutralisation, or the end of the race.
 Teammates are excluded (team orders), as are lap 1 and the laps after a neutralisation.
+
+Sources (column `source`): races from 2018 (FastF1; neutralisations from the timeline);
+sprint races from 2021 (FastF1; neutralisations from the laps' track status; pace
+difference from the same weekend's race); races before 2018 (Jolpica laps through
+oldlaps.race_frame: no compounds or speed traps, neutralisations and (in 2010) pit stops
+inferred; pace from the Jolpica stage A, racepace.py stage-a-old), when those tables exist.
 
 Each episode lap is one observation: did the attacker pass on the next lap? Covariates:
 the race-pace difference (stage A of racepace.py; attacker minus defender), the tyre-age
@@ -86,11 +92,26 @@ def race_battles(L: pd.DataFrame, neutral_laps: set, pace: pd.Series) -> pd.Data
     return pd.DataFrame(rows)
 
 
+def neutral_from_status(L: pd.DataFrame) -> set:
+    """Laps with a safety car, VSC or red flag at any point (track status 4-7), and the 2 after."""
+    bad = L[L.track_status.astype(str).str.contains("[4567]", regex=True)].lap_number.dropna().astype(int)
+    return {lap + k for lap in set(bad) for k in range(3)}
+
+
 def episodes() -> pd.DataFrame:
     laps = pd.read_parquet(PROCESSED / "race_laps.parquet")
     T = pd.read_parquet(PROCESSED / "timeline.parquet")
     pace = pd.read_csv(ROOT / "outputs" / "race" / "stage_a_drivers.csv")
     out = []
+
+    def add(b, event_id, source, tag=""):
+        if len(b):
+            b.insert(0, "event_id", event_id)
+            b["episode"] = event_id + tag + "#" + b.episode.astype(str)
+            b["source"] = source
+            out.append(b)
+        print(event_id + tag, len(b), flush=True)
+
     for event_id, L in laps.groupby("event_id"):
         tl = T[(T.event_id == event_id) & T.kind.isin(["safety_car", "vsc", "red_flag"])]
         neutral = set()
@@ -98,12 +119,19 @@ def episodes() -> pd.DataFrame:
             end = r.lap_end if pd.notna(r.lap_end) else r.lap_start
             neutral |= set(range(int(r.lap_start), int(end) + 3))  # and 2 laps after it ends
         p = pace[pace.event_id == event_id].set_index("driver_id").pace
-        b = race_battles(L, neutral | {1}, p)
-        if len(b):
-            b.insert(0, "event_id", event_id)
-            b["episode"] = event_id + "#" + b.episode.astype(str)
-            out.append(b)
-        print(event_id, len(b), flush=True)
+        add(race_battles(L, neutral | {1}, p), event_id, "fastf1")
+    sprint = PROCESSED / "sprint_laps.parquet"
+    if sprint.exists():
+        for event_id, L in pd.read_parquet(sprint).groupby("event_id"):
+            p = pace[pace.event_id == event_id].set_index("driver_id").pace  # the same weekend's race
+            add(race_battles(L, neutral_from_status(L) | {1}, p), event_id, "sprint", "S")
+    old_pace = ROOT / "outputs" / "race" / "stage_a_drivers_old.csv"
+    if (PROCESSED / "jolpica_laps.parquet").exists() and old_pace.exists():
+        from .racepace import jolpica_races
+        op = pd.read_csv(old_pace)
+        for event_id, L, _ in jolpica_races():
+            p = op[op.event_id == event_id].set_index("driver_id").pace
+            add(race_battles(L, neutral_from_status(L) | {1}, p), event_id, "jolpica")
     E = pd.concat(out, ignore_index=True)
     E["season"] = E.event_id.str[:4].astype(int)
     OUT.mkdir(parents=True, exist_ok=True)

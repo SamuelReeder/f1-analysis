@@ -2,7 +2,8 @@
 
 Per episode lap (did the attacker pass on the next lap?):
 
-    logit p = base + era (2026 overtake mode vs DRS) + circuit (shrunk)
+    logit p = base + context (2026 overtake mode vs DRS; sprint; Jolpica-sourced race;
+              2010, before DRS) + circuit (shrunk)
             + b_pace * pace diff + b_age * tyre-age diff / 10 + b_soft * softer compound
             + b_speed * straight-line speed diff / 10 + b_gap * gap
             + attacking car[team-season of A] - defending car[team-season of D] (shrunk)
@@ -17,13 +18,22 @@ suggest (and half and double that). Feasible if, at the estimated size, attacker
 defender effects are recovered with correlation >= 0.7 and 90% intervals covering 85-97%
 of true values (drivers with at least 40 episodes on that side), averaged over 3 truths.
 
-If feasible, a held-out test (seasons from 2020, each from the seasons before it; paired
+If feasible, a held-out test (seasons from 2012 when the Jolpica races are in, else from
+2020, each from the seasons before it; paired
 log predictive density per race, bootstrap 95% interval) decides whether attacker and
 defender effects are rated: the interval must be above zero, and the same test on episodes
 involving a driver in a new team (transfer) must not be entirely below zero. Otherwise
 overtaking is reported only as opportunity counts.
 
-Writes outputs/battles/: feasibility.json, summary.json, drivers.csv.
+Attacker-only (a rule chosen after defender effects failed their feasibility check, so
+labelled post hoc; docs/racing_approach.md, decisions fixed before the final runs): if the
+joint check is not feasible but attacker effects alone meet the same criteria, the same
+held-out test is run for a model with attacker effects and no defender effects, against
+the model with neither.
+
+Writes outputs/battles/: feasibility.json, summary.json, drivers.csv; and, when a held-out
+test runs, the driver-effect draws for championship.py's entry test (heldout_effects.npz:
+per held-out season, fitted on the seasons before it; driver_draws.npz: fitted on all).
 """
 
 import json
@@ -46,6 +56,7 @@ N_BOOT = 2000
 FIRST_TEST = 2020
 MIN_EPISODES = 40
 X_COLS = ["pace_diff", "tyre_age_diff", "softer", "speed_diff", "gap"]
+CTX = ["overtake_mode_2026", "sprint", "jolpica", "no_drs_2010"]
 
 
 def load() -> pd.DataFrame:
@@ -55,6 +66,12 @@ def load() -> pd.DataFrame:
     team = pd.read_parquet(PROCESSED / "race.parquet").set_index(["event_id", "driver_id"]).team
     for side, col in (("att", "attacker"), ("def", "defender")):
         E[f"{side}_team_season"] = [f"{team.get((e, d), '?')}|{e[:4]}" for e, d in zip(E.event_id, E[col])]
+    if "source" not in E:
+        E["source"] = "fastf1"
+    E["overtake_mode_2026"] = (E.season >= 2026).astype(float)
+    E["sprint"] = (E.source == "sprint").astype(float)
+    E["jolpica"] = (E.source == "jolpica").astype(float)
+    E["no_drs_2010"] = (E.season == 2010).astype(float)
     E["tyre_age_diff"] = E.tyre_age_diff / 10
     E["speed_diff"] = E.speed_diff / 10
     for c in X_COLS:
@@ -65,7 +82,7 @@ def load() -> pd.DataFrame:
 def data(E: pd.DataFrame, lev: dict, y=None) -> dict:
     idx = lambda col, key: jnp.asarray(E[col].map({x: i for i, x in enumerate(lev[key])})  # noqa: E731
                                        .fillna(-1).astype(int).to_numpy())
-    return {"x": jnp.asarray(E[X_COLS].to_numpy(float)), "era": jnp.asarray((E.season >= 2026).to_numpy(float)),
+    return {"x": jnp.asarray(E[X_COLS].to_numpy(float)), "ctx": jnp.asarray(E[CTX].to_numpy(float)),
             "circuit": idx("circuit_id", "circuits"), "att": idx("attacker", "drivers"),
             "att_ts": idx("att_team_season", "team_seasons"), "def_ts": idx("def_team_season", "team_seasons"),
             "dfn": idx("defender", "drivers"), "ep": idx("episode", "episodes"),
@@ -83,9 +100,9 @@ def take(v, i):
     return jnp.where(i >= 0, v[jnp.maximum(i, 0)], 0.0)
 
 
-def model(d, driver_effects=True):
+def model(d, driver_effects=True, defender_effects=True):
     base = numpyro.sample("base", dist.Normal(-1.5, 2.0))
-    era = numpyro.sample("era", dist.Normal(0, 1.0))
+    ctx = numpyro.sample("ctx", dist.Normal(0, 1.0).expand([len(CTX)]))
     beta = numpyro.sample("beta", dist.Normal(0, 2.0).expand([len(X_COLS)]))
     sd_c = numpyro.sample("sd_circuit", dist.HalfNormal(1.0))
     circ = sd_c * numpyro.sample("circuit_z", dist.Normal(0, 1).expand([d["n_circuits"]]))
@@ -95,14 +112,16 @@ def model(d, driver_effects=True):
     sd_cd = numpyro.sample("sd_car_defend", dist.HalfNormal(0.5))
     ca = sd_ca * numpyro.sample("car_attack_z", dist.Normal(0, 1).expand([d["n_team_seasons"]]))
     cd = sd_cd * numpyro.sample("car_defend_z", dist.Normal(0, 1).expand([d["n_team_seasons"]]))
-    eta = (base + era * d["era"] + d["x"] @ beta + take(circ, d["circuit"]) + take(epi, d["ep"])
+    eta = (base + d["ctx"] @ ctx + d["x"] @ beta + take(circ, d["circuit"]) + take(epi, d["ep"])
            + take(ca, d["att_ts"]) - take(cd, d["def_ts"]))
     if driver_effects:
         sd_a = numpyro.sample("sd_attack", dist.HalfNormal(0.5))
-        sd_d = numpyro.sample("sd_defend", dist.HalfNormal(0.5))
         a = numpyro.deterministic("attack", sd_a * numpyro.sample("attack_z", dist.Normal(0, 1).expand([d["n_drivers"]])))
+        eta = eta + take(a, d["att"])
+    if driver_effects and defender_effects:
+        sd_d = numpyro.sample("sd_defend", dist.HalfNormal(0.5))
         b = numpyro.deterministic("defend", sd_d * numpyro.sample("defend_z", dist.Normal(0, 1).expand([d["n_drivers"]])))
-        eta = eta + take(a, d["att"]) - take(b, d["dfn"])
+        eta = eta - take(b, d["dfn"])
     lp = dist.Bernoulli(logits=eta).log_prob(d["y"])
     numpyro.factor("ll", lp.sum())
     numpyro.deterministic("lp", lp)
@@ -124,7 +143,7 @@ def feasibility() -> dict:
     real = fit(E, lev)
     size = {"attack": float(np.median(real["sd_attack"])), "defend": float(np.median(real["sd_defend"]))}
     # fixed parts of the simulation: the real fit's posterior medians
-    base_eta = (np.median(real["base"]) + np.median(real["era"]) * (E.season >= 2026).to_numpy()
+    base_eta = (np.median(real["base"]) + E[CTX].to_numpy() @ np.median(real["ctx"], 0)
                 + E[X_COLS].to_numpy() @ np.median(real["beta"], 0))
     circ = np.median(real["circuit_z"], 0) * np.median(real["sd_circuit"])
     base_eta += E.circuit_id.map(dict(zip(lev["circuits"], circ))).to_numpy()
@@ -157,6 +176,7 @@ def feasibility() -> dict:
                              "cov90": float(np.mean((true[m] >= lo) & (true[m] <= hi)))}
             results.append(res)
             print(res, flush=True)
+            jax.clear_caches()
     at = [r for r in results if r["scale"] == 1.0]
     mean = lambda side, k: float(np.mean([r[side][k] for r in at]))  # noqa: E731
     feasible = all(mean(s, "corr") >= 0.7 and 0.85 <= mean(s, "cov90") <= 0.97 for s in ("attack", "defend"))
@@ -179,6 +199,48 @@ def log_pred(post, E, lev, **kw) -> np.ndarray:
     return m + np.log(np.exp(lp - m).mean(0))
 
 
+def heldout(E: pd.DataFrame, first_test: int, kw: dict) -> tuple[dict, dict]:
+    """Seasons from first_test, each from the seasons before it: paired log predictive
+    density per race, driver effects (kw: which) vs none, all episode laps and those with a
+    driver in a new team (transfer). Also returns each season's driver-effect draws."""
+    rng = np.random.default_rng(0)
+    rows, effects = [], {}
+    for season in range(first_test, E.season.max() + 1):
+        train, test = E[E.season < season], E[E.season == season]
+        lv = levels(E)
+        lv["team_seasons"] = sorted(set(train.att_team_season) | set(train.def_team_season))
+        post = fit(train, lv, **kw)
+        effects[f"{season}_drivers"] = np.array(lv["drivers"])
+        effects[f"{season}_attack"] = post["attack"].astype(np.float32)
+        if "defend" in post:
+            effects[f"{season}_defend"] = post["defend"].astype(np.float32)
+        w = log_pred(post, test, lv, **kw)
+        wo = log_pred(fit(train, lv, driver_effects=False), test, lv, driver_effects=False)
+        # transfer: a driver whose effect is in the model (attacker, and defender when rated) in a
+        # different team from their previous season
+        last = pd.concat([train[["event_id", "attacker", "att_team_season"]].set_axis(["e", "d", "ts"], axis=1),
+                          train[["event_id", "defender", "def_team_season"]].set_axis(["e", "d", "ts"], axis=1)])
+        last_team = last.sort_values("e").groupby("d").ts.last().str.split("|").str[0]
+        moved = np.zeros(len(test), bool)
+        sides = (("attacker", "att_team_season"), ("defender", "def_team_season"))
+        for col, ts in sides if kw.get("defender_effects", True) else sides[:1]:
+            prev = test[col].map(last_team)
+            moved |= (prev.notna() & (prev != test[ts].str.split("|").str[0])).to_numpy()
+        rows.append(pd.DataFrame({"event_id": test.event_id, "diff": w - wo, "moved": moved}))
+        print(f"held out {season}", flush=True)
+        jax.clear_caches()  # one compilation per season's shapes; free them
+    H = pd.concat(rows)
+
+    def paired(sub):
+        d = sub.groupby("event_id")["diff"].sum().to_numpy()
+        boot = np.array([d[rng.integers(len(d), size=len(d))].mean() for _ in range(N_BOOT)])
+        lo, hi = np.percentile(boot, [2.5, 97.5])
+        return {"n_races": int(len(d)), "n_episode_laps": int(len(sub)), "mean_diff_per_race": float(d.mean()),
+                "ci95": [float(lo), float(hi)]}
+
+    return {**paired(H), "transfer": paired(H[H.moved])}, effects
+
+
 def fit_and_test() -> dict:
     feas = json.loads((OUT / "feasibility.json").read_text())
     E = load()
@@ -194,38 +256,32 @@ def fit_and_test() -> dict:
                "beta_q05_q50_q95": {c: q(post["beta"][:, i]) for i, c in enumerate(X_COLS)},
                "sd_attack_q05_q50_q95": q(post["sd_attack"]), "sd_defend_q05_q50_q95": q(post["sd_defend"]),
                "sd_car_attack_q05_q50_q95": q(post["sd_car_attack"]), "sd_car_defend_q05_q50_q95": q(post["sd_car_defend"]),
-               "era_2026_q05_q50_q95": q(post["era"]), "divergences": post["_divergences"]}
-    if feas["feasible"]:
-        rng = np.random.default_rng(0)
-        rows = []
-        for season in range(FIRST_TEST, E.season.max() + 1):
-            train, test = E[E.season < season], E[E.season == season]
-            lv = levels(E)
-            lv["team_seasons"] = sorted(set(train.att_team_season) | set(train.def_team_season))
-            w = log_pred(fit(train, lv), test, lv)
-            wo = log_pred(fit(train, lv, driver_effects=False), test, lv, driver_effects=False)
-            # transfer: an attacker or defender in a different team from their previous season
-            last = pd.concat([train[["event_id", "attacker", "att_team_season"]].set_axis(["e", "d", "ts"], axis=1),
-                              train[["event_id", "defender", "def_team_season"]].set_axis(["e", "d", "ts"], axis=1)])
-            last_team = last.sort_values("e").groupby("d").ts.last().str.split("|").str[0]
-            moved = np.zeros(len(test), bool)
-            for col, ts in (("attacker", "att_team_season"), ("defender", "def_team_season")):
-                prev = test[col].map(last_team)
-                moved |= (prev.notna() & (prev != test[ts].str.split("|").str[0])).to_numpy()
-            rows.append(pd.DataFrame({"event_id": test.event_id, "diff": w - wo, "moved": moved}))
-            print(f"held out {season}", flush=True)
-        H = pd.concat(rows)
-
-        def paired(sub):
-            d = sub.groupby("event_id")["diff"].sum().to_numpy()
-            boot = np.array([d[rng.integers(len(d), size=len(d))].mean() for _ in range(N_BOOT)])
-            lo, hi = np.percentile(boot, [2.5, 97.5])
-            return {"n_races": int(len(d)), "n_episode_laps": int(len(sub)), "mean_diff_per_race": float(d.mean()),
-                    "ci95": [float(lo), float(hi)]}
-
-        summary["heldout_driver_effects"] = {**paired(H), "transfer": paired(H[H.moved])}
-        t = summary["heldout_driver_effects"]
-        summary["gate_driver_ranking"] = bool(t["ci95"][0] > 0 and t["transfer"]["ci95"][1] >= 0)
+               "context_q05_q50_q95": {c: q(post["ctx"][:, i]) for i, c in enumerate(CTX)},
+               "episodes_by_source": E.groupby("source").episode.nunique().to_dict(),
+               "passes_by_source": E.groupby("source").passed.sum().astype(int).to_dict(),
+               "divergences": post["_divergences"]}
+    ok = lambda side: (feas["at_estimated_size"][side]["corr"] >= 0.7  # noqa: E731
+                       and 0.85 <= feas["at_estimated_size"][side]["cov90"] <= 0.97)
+    kind = "both" if feas["feasible"] else "attacker_only" if ok("attack") else None
+    summary["heldout_kind"] = kind
+    if kind:
+        kw = {"defender_effects": kind == "both"}
+        first_test = 2012 if (E.source == "jolpica").any() else FIRST_TEST
+        summary["heldout_first_season"] = first_test
+        test, effects = heldout(E, first_test, kw)
+        key = "heldout_driver_effects" if kind == "both" else "heldout_attacker_only_post_hoc"
+        summary[key] = test
+        gate = bool(test["ci95"][0] > 0 and test["transfer"]["ci95"][1] >= 0)
+        summary["gate_driver_ranking" if kind == "both" else "gate_attacker_ranking_post_hoc"] = gate
+        if kind == "attacker_only":
+            summary["gate_driver_ranking"] = False
+            full_post = fit(E, lev, warmup=800, samples=800, **kw)
+        else:
+            full_post = post
+        np.savez_compressed(OUT / "heldout_effects.npz", **effects)
+        np.savez_compressed(OUT / "driver_draws.npz", drivers=np.array(lev["drivers"]),
+                            attack=full_post["attack"].astype(np.float32),
+                            **({"defend": full_post["defend"].astype(np.float32)} if kind == "both" else {}))
     else:
         summary["gate_driver_ranking"] = False
     drivers = lev["drivers"]
