@@ -1,0 +1,23 @@
+{
+ "design": "race-specific pace from season S-1 only predicts season S (pair-season means, >= 4 races, both drivers seen in S-1)",
+ "per_method": {
+  "joint": {
+   "n_pair_seasons": 64,
+   "mse_diff": -0.0011140766819662741,
+   "mse_diff_ci95": [
+    -0.009497721582546331,
+    0.0075428586023673794
+   ],
+   "improves": false
+  },
+  "two_stage": {
+   "n_pair_seasons": 64,
+   "mse_diff": 0.0015622328189647855,
+   "mse_diff_ci95": [
+    -0.0068145936596071665,
+    0.010120913518009653
+   ],
+   "improves": false
+  }
+ }
+}

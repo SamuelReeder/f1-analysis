@@ -1,7 +1,8 @@
 # Stage 2: racing ratings and an overall driver rating
 
-Status: proposed approach, not implemented. Revised on 2026-09-27 after an external
-review. Stage 1 (qualifying pace) is in `f1rank/` and described in the README.
+Status: first build of every step done on 2026-09-28 (see Build status below); results and
+gates are in `outputs/REPORT.md` (Racing). The approach was revised on 2026-09-27 after an
+external review. Stage 1 (qualifying pace) is in `f1rank/` and described in the README.
 
 ## Summary
 
@@ -368,12 +369,11 @@ energy-deployment channel, which matters under the 2026 rules.
 ## Build order
 
 1. **Update and reproducibility fixes.**
-   - Done for stage 1: fit metadata and checks, explicit synthetic source, placebo job,
-     write-once snapshots, failures that stop the run.
-   - Remaining stage-1 items:
-     - keep entered drivers without a time
-     - team-effect variants per contiguous spell and per regulation era
-     - synthetic recovery over several seeds
+   - Stage 1: fit metadata and checks, explicit synthetic source, placebo job, write-once
+     snapshots, failures that stop the run; entered drivers without a time kept; team-effect
+     variants per spell and per regulation era; synthetic recovery over 8 independent truths.
+   - Sources: raw Jolpica responses versioned (changed files archived with their retrieval
+     time; `data/processed/sources.json`); FastF1 tables with retrieval time and hashes.
 2. **Event timeline and reproducible audit.**
 3. **2018+ race pace and degradation**, including the two-stage vs joint check.
 4. **Reliability and errors.**
@@ -383,6 +383,61 @@ energy-deployment channel, which matters under the 2026 rules.
 8. **Equal-car championship** (sequential simulation).
 
 Each step adds its validation section to `REPORT.md` and has to pass its gates.
+
+## Build status (2026-09-28)
+
+Every step has a first build. Numbers are in `outputs/REPORT.md`; this section records what
+was built, what the gates said, and where the build departs from the plan.
+
+| Step | Built | Gate result |
+|---|---|---|
+| 2. Event timeline | `f1rank/timeline.py`; audit in `outputs/timeline/AUDIT.md` | Retirement-cause model beats base rates held out a season at a time |
+| 3. Race pace, degradation | `racepace.py` (stage A), `racemodel.py` (stage B), `racejoint.py` | Race pace tracks qualifying (gamma about 1). Race-specific pace and degradation effects do **not** improve held-out prediction. The two-stage shortcut is **not accepted** by the joint check (its driver estimates are not published); a held-out test with the joint model gives the same answer on race-specific pace |
+| 4. Reliability and errors | `reliability.py` | Driver error rates and team-season mechanical effects do **not** improve held-out prediction |
+| 5. Results benchmark | `benchmark.py` | Grid + ratings is the benchmark to beat (better than the grid alone); a driver results effect is not established |
+| 6. First-lap performance | `firstlap.py` | Improves held-out prediction overall but **fails the transfer test** (worse for drivers in a new team): not published as a driver ranking |
+| 7. Overtaking | `battles.py` (episodes), `overtaking.py` | **Not feasible** at real sample sizes: attacker effects are recovered in simulation, defender effects not well enough, so overtaking is reported as opportunity counts only |
+| 8. Equal-car championship | `championship.py` | Race stage beats grid-only and ratings-only on held-out finishing orders; only gated qualities enter |
+
+**Where the build departs from the plan, and why:**
+- **Timeline evidence that changes meaning over time is not used for causes.** "CAR n
+  STOPPED" messages almost vanish after 2019 and "spun" messages after 2023, while
+  track-limits messages surge from 2020. The cause model uses only evidence whose rate is
+  stable (lap 1, contact incidents naming the car, other cars retiring nearby, a
+  neutralisation, stopping in the pits, slow laps before stopping). Rates by season are in
+  the audit.
+- **Outcomes go back to 2010; evidence starts in 2018.** Retirements before 2018 use the
+  coded Jolpica status only. Retirements coded only "Retired" without FastF1 evidence (a few
+  before 2018) get the class base rates.
+- **Race laps use the leader's lap count.** Race-control messages refer to the leader's lap,
+  so every timeline row does too; rows from a car's own laps also keep that car's lap.
+  FastF1 and Jolpica sometimes disagree on a car's completed laps; Jolpica's count is used.
+- **Uncertain causes enter the hazard model as fractional events**, not a free mixture.
+  With a free mixture, the "unknown" hazard (which gets some probability for every
+  retirement) absorbed the lap-1 events and the cause-specific rates were not identified.
+  The first run also left own-error risk without a team term, against the gate rule that
+  baselines keep car terms; with both fixed, the driver error-rate gate fails (it had
+  passed).
+- **Race pace needs a joint model for published numbers.** On 2024 the two-stage estimates
+  agree with the joint lap-level model in order but not within a quarter of a posterior SD:
+  the joint model's driver effects are more spread out (less shrinkage; ratios in the
+  REPORT). A held-out test with the joint model, trained one season at a time, reaches the
+  same conclusion as the two-stage test (no race-specific pace). A multi-season joint model
+  is still needed before any race-pace numbers are published.
+- **The equal-car championship folds first-lap, overtaking and strategy into a
+  grid-to-finish ranking model** fitted on real races, instead of simulating them lap by lap,
+  because no driver-specific racing quality has passed its gates. Retirements use the
+  reliability model with equal mechanical risk and average driver error rates.
+- **Car terms in every driver test.** The first overtaking model had no car terms; it was
+  stopped before its results were used and refitted with attacking-car and defending-car
+  team-season effects, as the gate rule requires.
+- **Transfer tests decide standalone rankings.** First-lap driver effects improve held-out
+  prediction overall but make it worse for drivers in a new team, so they look tied to the
+  driver-team combination and are not published as a driver ranking.
+- **Not built yet:** power-unit supplier effects (no supplier data in the sources), wet
+  races and traffic in the error model, pit stops as team operations, the sprint races, a
+  multi-season joint race-pace model, and a separate feasibility check for attacker-only
+  overtaking ratings (attacker effects were recovered in simulation; defender effects were not).
 
 ## Risks
 

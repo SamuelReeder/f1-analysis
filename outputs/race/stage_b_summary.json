@@ -1,0 +1,83 @@
+{
+ "n_teammate_races": 1218,
+ "n_races": 139,
+ "n_drivers": 44,
+ "seasons": [
+  2018,
+  2019,
+  2020,
+  2021,
+  2022,
+  2023,
+  2024,
+  2025,
+  2026
+ ],
+ "gamma_q05_q50_q95": [
+  0.8731,
+  1.003,
+  1.1388
+ ],
+ "sd_race_specific_q05_q50_q95": [
+  0.0772,
+  0.1032,
+  0.1367
+ ],
+ "sd_degradation_q05_q50_q95": [
+  0.0019,
+  0.0038,
+  0.0058
+ ],
+ "corr_pace_deg_q05_q50_q95": [
+  -0.6941,
+  -0.2992,
+  0.1873
+ ],
+ "extra_pace_sd_q05_q50_q95": [
+  0.2618,
+  0.2784,
+  0.2953
+ ],
+ "nu_q05_q50_q95": [
+  4.783,
+  5.7555,
+  7.0638
+ ],
+ "rhat_max": 1.0034996271133423,
+ "divergences": 0,
+ "heldout": {
+  "units": "percent of lap time (x 0.9 = seconds per 90 s lap); mse in percent squared",
+  "race_specific_pace_vs_quali_link": {
+   "n_pair_seasons": 63,
+   "rmse_baseline": 0.2056135336505501,
+   "rmse_model": 0.18876911435384802,
+   "mse_diff": -0.006643146686329731,
+   "mse_diff_ci95": [
+    -0.020048872316899904,
+    0.004854478247374199
+   ]
+  },
+  "quali_link_vs_zero": {
+   "n_pair_seasons": 74,
+   "rmse_baseline": 0.30176872835618995,
+   "rmse_model": 0.20380990801086155,
+   "mse_diff": -0.049525886810316125,
+   "mse_diff_ci95": [
+    -0.08768776378861756,
+    -0.017872915993293267
+   ]
+  },
+  "degradation_vs_zero": {
+   "n_pair_seasons": 63,
+   "rmse_baseline": 0.010958115743264463,
+   "rmse_model": 0.010754190327737221,
+   "mse_diff": -4.427691037583632e-06,
+   "mse_diff_ci95": [
+    -1.8313579088110257e-05,
+    9.253384691737937e-06
+   ]
+  }
+ },
+ "gate_race_specific_pace": false,
+ "gate_degradation": false
+}
