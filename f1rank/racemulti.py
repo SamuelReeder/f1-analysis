@@ -306,6 +306,12 @@ def heldout(C: pd.DataFrame, sfx: str = "") -> dict:
            "degradation_vs_zero": paired(((ps.deg - ps.dv) ** 2 - ps.deg ** 2).to_numpy(), rng)}
     out["gate_race_specific_pace"] = out["race_specific_pace_vs_quali_link"]["improves"]
     out["gate_degradation"] = out["degradation_vs_zero"]["improves"]
+    if (ps.season < 2018).any():  # descriptive only (added after the gate result); the gates are the pooled intervals
+        out["by_era_descriptive"] = {
+            name: {"race_specific_pace_vs_quali_link": paired(((e.pace - e.full) ** 2 - (e.pace - e.base) ** 2).to_numpy(), rng),
+                   "degradation_vs_zero": paired(((e.deg - e.dv) ** 2 - e.deg ** 2).to_numpy(), rng)}
+            for name, e in (("held out 2012-2017 (Jolpica targets)", ps[ps.season < 2018]),
+                            ("held out 2018 on (FastF1 targets)", ps[ps.season >= 2018]))}
     OUT.mkdir(parents=True, exist_ok=True)
     out["laps_by_source"] = C.source.value_counts().to_dict()
     np.savez_compressed(OUT / f"multi_heldout_effects{sfx}.npz", **effects)
