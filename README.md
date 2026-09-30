@@ -7,6 +7,119 @@ Stage 1: **one-lap qualifying pace**, 2010 onward. Stage 2 (see Racing below): r
 qualities, each tested on held-out races, and an overall rating as an equal-car
 championship; the approach is in `docs/racing_approach.md`.
 
+## Dashboard
+
+**F1 Observatory** is a local React/TypeScript dashboard in `dashboard/` using real
+published model estimates. It provides:
+
+- Driver and car rankings, 90% pace and rank intervals, fastest/top-three
+  probabilities, searchable tables, team filters, entry details and CSV downloads.
+- Driver and car history, including former drivers and team lineages, with season
+  selection, uncertainty bands and optional circuit-adjusted car pace.
+- Head-to-head pace differences and a field-wide probability matrix. Differences
+  use joint posterior samples, preserving dependence between estimates.
+- Model health: data cutoff, publication and convergence checks, refresh status and
+  errors, per-quality readiness, clearly marked historical validation, source
+  fingerprints, and an archive of as-published estimates.
+
+Start it from the repository root (Node 18+ and the existing Python environment):
+
+```bash
+.venv/bin/python -m f1rank.export             # creates the verified export manifest
+.venv/bin/python -m f1rank.dashboard publish  # packages existing results, no refit
+npm --prefix dashboard ci
+npm --prefix dashboard run build
+.venv/bin/python -m f1rank.dashboard serve    # http://localhost:4173
+```
+
+The local server reads published data directly, so **publishing new results does not
+require rebuilding the interface**. For interface development, use
+`npm --prefix dashboard run dev`; it reads the same published data. The UI checks for
+a new release every 30 seconds, retaining the previous release if the check fails.
+It does not fetch new F1 data or start model fitting from the browser.
+
+After a qualifying session, this runs the complete qualifying update (potentially
+tens of minutes for the fit):
+
+```bash
+.venv/bin/python -m f1rank.dashboard refresh
+```
+
+That command runs `fetch`, `build`, `fit`, `export`, then `publish`, with a process lock
+to prevent overlapping refreshes. Failed fits or stale exports cannot replace the
+dashboard release. It records stage, elapsed time and errors in
+`dashboard/public/data/status.json`, a run history in `outputs/dashboard/runs.jsonl`,
+and fitting output in `outputs/dashboard/refresh.log`. The local server also detects
+a refresh process that exited without recording its final status. Refreshes are
+explicit; no model-refresh scheduler has been configured.
+
+Dashboard data uses a versioned JSON contract: `latest.json` points to an immutable,
+content-addressed file in `dashboard/public/data/releases/`. The pointer changes only
+after the complete release has been written. The underlying qualifying export has a
+manifest covering its inputs, model/export code, fit metadata and every consumed
+output. Partial exports and changed inputs are rejected. The full posterior fit is
+checked by `export`, while the browser only receives summaries and pairwise contrasts.
+The new data files are generated locally and ignored by Git. A static build includes
+the publications available at build time; a static host must receive updated `data/`
+files to show subsequent releases. Serve `latest.json` and `status.json` without caching.
+
+Racing standings remain unavailable until the corrected racing pipeline is rerun.
+Portable skill is explicitly experimental. Historical validation files have no run
+manifest and are shown as recorded research, not as fresh acceptance of a new fit.
+
+Verification:
+
+```bash
+.venv/bin/python -m pytest -q
+npm --prefix dashboard run build
+cd dashboard
+npx playwright install chromium              # once, for browser tests
+npm test -- --workers=2
+```
+
+Browser tests cover interactions, exports, release adoption and failure handling,
+mobile overflow, browser errors, and automated accessibility checks on all four
+views. `PLAYWRIGHT_CHROMIUM_EXECUTABLE` optionally selects an existing Chromium
+binary. The Python checks cover publication atomicity, corruption, process locking,
+missing provenance, stale racing outputs and statistically correct comparisons.
+
+### Publish on push with GitHub Pages
+
+`.github/workflows/dashboard.yml` checks and deploys the dashboard when relevant
+changes reach `main`. Pull requests to `main` run the same checks without publishing.
+The workflow can also be started manually from the Actions tab on `main`.
+
+One-time setup in [repository Pages settings](https://github.com/SamuelReeder/f1-analysis/settings/pages):
+choose **GitHub Actions** under **Build and deployment → Source**. Then merge or push
+the dashboard, workflow, checked ratings and supporting files to `main`. The expected
+site address is **https://samuelreeder.github.io/f1-analysis/**. Preparing the workflow
+locally does not enable Pages or publish the uncommitted dashboard.
+
+Each deployment verifies the committed export manifest, builds a browser dataset,
+runs publisher checks, builds the site, and runs browser/accessibility tests against
+the static build under `/f1-analysis/`. Only the checked `dashboard/dist/` artifact
+is deployed. A failed build or check leaves the previous deployed site in place.
+GitHub's built-in deployment token is used; no personal token or hosting secret is
+needed. Versions of the official Actions are pinned to verified commit hashes.
+
+**New data and model fitting are separate from website deployment.** Run
+`python -m f1rank.dashboard refresh` on the fitting machine after a race weekend,
+then commit the updated `data/processed/` model inputs, `outputs/ratings/` (including
+`manifest.json` and `fit_metadata.json`), and new `outputs/snapshots/` entries. Once
+those reach `main`, the workflow publishes the new rankings. A UI-only push reuses
+the existing verified rankings. Changes to model code or data require a matching
+export; a stale manifest deliberately blocks deployment.
+
+The portable `outputs/ratings/fit_metadata.json` preserves the metadata of the fit
+used by the export. GitHub Actions needs only the lightweight dependencies in
+`dashboard/requirements.txt`; it neither refits models nor requires the ignored
+`outputs/fits/` posterior directory. The live site's Model health page describes
+that published dataset. Deployment failures appear in the repository's Actions tab;
+an unsuccessful deployment cannot update the already-live site's status panel.
+
+On a static host, publishing is a deployment. Browser checks still run every 30
+seconds, though GitHub Pages caching can delay visibility of a new release.
+
 ## Pipeline
 
 ```bash
@@ -39,7 +152,7 @@ After each qualifying session: `fetch`, `build`, `fit`, `export`.
   - `evaluate` scores each batch of validation fits on the data they were fitted on.
   - `jobs all` reruns only fits that are missing or stale.
   - `jobs list` shows the status of each fit.
-- **Snapshots.** Each export writes `outputs/snapshots/<event>_<model>_<fit id>.json`
+- **Snapshots.** Each export writes `outputs/snapshots/<event>_<model>_<fit id>_export2.json`
   once and never overwrites it, so what was published for each fit is kept.
 - **Failures.** A failed validation job makes `jobs` exit with status 1.
 
@@ -171,6 +284,13 @@ committed.
 
 ## Racing (stage 2)
 
+**2026-09-30 review update:** the recorded racing results below describe the earlier
+pipeline. Its qualifying features used later qualifying data, and its championship
+entry tests tested qualities individually. Those validation results and equal-car
+standings need regeneration under the corrected procedure. They are not evidence that
+the new gates pass. The qualifying headline remains available; its exports have been
+updated. See **Review fixes and regeneration** below.
+
 Approach, decisions fixed before the final runs, and build status:
 `docs/racing_approach.md`. Results and gates: `outputs/REPORT.md` (Racing). Race outcomes
 run from 2010; lap timing from 2018 (FastF1) and, through a weaker observation model (no
@@ -199,7 +319,7 @@ tyre compounds, speed traps or track status), from 2010 (Jolpica).
    entry test), whether or not it has its own ranking. `benchmark.py` is the simple results
    benchmark.
 
-**What the gates say** (numbers in `outputs/REPORT.md`, Racing):
+**What the earlier gates said** (historical results, pending regeneration):
 - **Pit stops** pass as a team operations rating.
 - **Reliability** (driver error rates, team-season and power-unit supplier-season
   mechanical effects), **consistency** and **wet pace** do not improve held-out prediction.
@@ -264,3 +384,70 @@ same data (results in `outputs/analysis/race_signal/`):
 ```bash
 .venv-fastf1/bin/python analysis/race_signal.py --first 2018 --last 2026
 ```
+
+## Review fixes and regeneration (2026-09-30)
+
+- **Historical qualifying features:** `qualifying.py` loads a checked qualifying fit
+  trained strictly before each held-out season. Both training and test features in
+  that fold use that fit. Test features are **season-ahead forecasts conditional on
+  entrants and circuits**, not estimates updated after the weekend's qualifying.
+  This is a conservative, reproducible validation policy; it does not measure the extra
+  benefit of within-season qualifying updates. There is no fallback to the main fit.
+  Current/full-data estimates still use the checked main fit.
+- **Combined championship:** backward removal tests each quality against the combined
+  model with that quality removed, then retests survivors. An outer held-out season
+  chooses qualities using at least three earlier inner test seasons. The complete
+  selection procedure must improve on the base race model in an outer test before
+  racing qualities enter. Intervals resample whole seasons. Qualities from one fit
+  retain their shared posterior draw indices when scored together.
+- **Race cache:** the fingerprint includes every actual likelihood input, driver
+  identifiers and model source. Tyre, compound and traffic corrections invalidate it.
+- **Publication diagnostics:** all posterior parameters supplied by a fit must have
+  finite draws and R-hat < 1.05 (structurally constant coordinates excluded), with at
+  most one divergence per 1,000 draws. Failed fits cannot publish. The qualifying-fold
+  preparer and joint race fitter have fixed retries; other failures stop for investigation.
+- **Racing provenance:** generated manifests identify the run, input data and code,
+  output hashes, and the data cutoff. Downstream models and the racing report reject
+  missing, changed or partially written artifacts. Legacy results remain on disk for
+  reference; they are excluded from the current report until regenerated. Manifests
+  conservatively invalidate on changes anywhere in the racing inputs or model package.
+- **Dashboard metric names:** `pairwise_drivers.csv` now refers to the headline
+  in-team metric. Explicit `pairwise_drivers_in_team.csv` and
+  `pairwise_drivers_portable.csv` are also provided. `current_draws.npz` contains both
+  `in_team_s` and `portable_skill_s`; `skill_s` remains a legacy alias for the latter.
+  IDs are stored as strings and load without pickle. Export version 2 adds a new
+  immutable snapshot without overwriting a version-1 publication.
+- **Scope:** exported racing `u` remains a lasting career-level effect beyond
+  qualifying, not current total race pace. The car table is qualifying performance.
+  The equal-car scenario and portable skill remain experimental.
+
+The corrected qualifying files can be regenerated without refitting the valid main fit:
+
+```bash
+.venv/bin/python -m f1rank.export
+.venv/bin/python -m pytest -q
+```
+
+Racing regeneration is a long research run. Keep data and code fixed during it. Check
+or prepare the qualifying folds first; existing valid folds are reused, missing or
+nonconverged ones are refitted with a recorded retry rule. New data extending a test
+season requires that season's qualifying fold to cover the added event.
+
+```bash
+.venv/bin/python -m f1rank.qualifying --seasons 2012 2013 2014 2015 2016 2017 2018 2019 2020 2021 2022 2023 2024 2025 2026
+.venv-gpu/bin/python -m f1rank.racemulti --heldout
+.venv-gpu/bin/python -m f1rank.racemulti
+.venv/bin/python -m f1rank.firstlap
+.venv/bin/python -m f1rank.consistency
+.venv/bin/python -m f1rank.reliability
+.venv/bin/python -m f1rank.pitstops
+.venv/bin/python -m f1rank.wetpace
+.venv/bin/python -m f1rank.benchmark
+.venv/bin/python -m f1rank.championship
+.venv/bin/python -m f1rank.report
+```
+
+Regenerate optional battle draws with `f1rank.battles fit` if they exist, and rerun race
+pace variants with their existing flags if their comparison tables are wanted. Commands
+must stop on failure; stale files must not be relabelled as validated. Historical
+as-published charts should read snapshots; the series files are revised using all data.

@@ -28,17 +28,15 @@ The race stage is checked on held-out seasons: grid + ratings must predict finis
 better than the grid alone and than the ratings alone (as in benchmark.py). Outputs are
 posterior simulations: expected points per race, P(title), rank ranges.
 
-Entry test (docs/racing_approach.md, "Entering the overall rating"). A driver quality enters
-only if the race stage predicts held-out finishing orders better with it than without it,
-whether or not it has its own standalone ranking. For each held-out season S the quality's
-driver effects come from its own model fitted on the seasons before S (saved by that model:
-first-lap performance, race-specific pace and degradation, consistency, overtaking when its
-held-out test ran); the race stage is
-fitted on the seasons from 2010 (when those models' data start) to S-1, with and without
-b_q * quality, and scored on season S. The prediction with the quality averages over its posterior draws, so its
-estimation uncertainty is carried; training uses the posterior means. Paired difference in
-log predictive density per race, bootstrap 95% interval over races; enters if it is above
-zero.
+Entry test: qualifying inputs are frozen before each held-out season. Candidate qualities
+use their own earlier-season fits. Backward conditional ablation removes qualities that
+fail to improve the combined model, then retests the survivors. An outer held-out season
+never participates in its own selection: selection uses at least three earlier test
+seasons. Season-block bootstrap intervals assess the complete selection procedure against
+the base race model. If that outer gate fails, no racing quality enters the simulation.
+Training uses posterior means; prediction integrates quality draws and preserves covariance
+between qualities saved by the same fit. The scenario remains experimental and retains
+team-specific effects in its headline version.
 
 Contribution breakdown (in_team version): per driver, the expected points per race lost when
 qualifying pace, or one entered quality, is set to the field average with the others kept,
@@ -125,9 +123,13 @@ def race_model(d, variant="grid_ratings"):
 
 
 def fit_race(R, variant="grid_ratings", warmup=500, samples=500) -> dict:
+    from .artifacts import diagnostics, require_convergence
     mcmc = MCMC(NUTS(partial(race_model, variant=variant)), num_warmup=warmup, num_samples=samples,
                 num_chains=4, chain_method="parallel", progress_bar=False)
-    mcmc.run(jax.random.PRNGKey(0), arrays(R))
+    mcmc.run(jax.random.PRNGKey(0), arrays(R), extra_fields=("diverging",))
+    require_convergence(diagnostics(
+        {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k != "ll_race"},
+        int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())))
     return {k: np.asarray(v) for k, v in mcmc.get_samples().items() if k != "ll_race"}
 
 
@@ -142,7 +144,8 @@ def heldout(F: pd.DataFrame, rng) -> dict:
     """Finishing orders of held-out seasons: grid + ratings vs grid only and vs ratings only."""
     lp = {v: [] for v in ("grid_ratings", "grid", "ratings")}
     for S in range(FIRST_TEST, F.season.max() + 1):
-        train, test = F[F.season < S], F[F.season == S]
+        fold = finishers(race_orders(S))
+        train, test = fold[fold.season < S], fold[fold.season == S]
         for v in lp:
             lp[v].append(log_pred(fit_race(train, v), test, v))
         print(f"held out {S}", flush=True)
@@ -171,10 +174,18 @@ FULL_FILES = {"race/multi_heldout_effects.npz": "race/multi_driver_draws.npz",
 def quality_draws(name: str) -> dict[int, tuple[np.ndarray, np.ndarray]]:
     """Per held-out season S: (driver ids, draws x drivers) of a driver quality fitted on the
     seasons before S, as saved by the quality's own held-out test."""
+    from .artifacts import require
     if name == "first_lap":
+        require(ROOT / "outputs" / "firstlap", required_outputs=[ROOT / "outputs" / "firstlap" / "heldout_effects.npz"])
         z = np.load(ROOT / "outputs" / "firstlap" / "heldout_effects.npz")
         return {int(k): (z["drivers"], z[k]) for k in z.files if k != "drivers"}
     path, key = QUALITY_FILES[name]
+    p = ROOT / "outputs" / path
+    # Missing optional battle draws are distinct from stale, present draws.
+    if not p.exists():
+        raise FileNotFoundError(2, "no held-out draws", str(p))
+    require(p.parent, name="multi_heldout.manifest.json" if name in ("race_specific_pace", "degradation")
+            else "manifest.json", required_outputs=[p])
     z = np.load(ROOT / "outputs" / path)
     seasons = sorted({int(k.split("_")[0]) for k in z.files})
     return {S: (z[f"{S}_drivers"], z[f"{S}_{key}"]) for S in seasons}
@@ -182,51 +193,139 @@ def quality_draws(name: str) -> dict[int, tuple[np.ndarray, np.ndarray]]:
 
 def full_quality_draws(name: str) -> tuple[np.ndarray, np.ndarray]:
     """(driver ids, draws x drivers) of a quality fitted on all its data."""
+    from .artifacts import require
     if name == "first_lap":
+        require(ROOT / "outputs" / "firstlap", required_outputs=[ROOT / "outputs" / "firstlap" / "driver_draws.npz"])
         z = np.load(ROOT / "outputs" / "firstlap" / "driver_draws.npz")
         return z["drivers"], z["driver"]
     path, key = QUALITY_FILES[name]
-    z = np.load(ROOT / "outputs" / FULL_FILES[path])
+    p = ROOT / "outputs" / FULL_FILES[path]
+    require(p.parent, name="multi_full.manifest.json" if name in ("race_specific_pace", "degradation")
+            else "manifest.json", required_outputs=[p])
+    z = np.load(p)
     return z["drivers"], z[key]
 
 
-def entry_test(F: pd.DataFrame, name: str, rng, n_draws: int = 1000, base_cache: dict | None = None) -> dict:
-    """Nested comparison on held-out seasons: race stage with vs without the quality."""
-    diffs, coefs = [], {}
-    base_cache = {} if base_cache is None else base_cache
-    for S, (drivers, draws) in sorted(quality_draws(name).items()):
-        train = F[(F.season >= ENTRY_FIRST_SEASON) & (F.season < S)]
-        test = F[F.season == S].copy()
-        if test.empty or train.empty:
-            continue
-        mean = pd.Series(draws.mean(0), index=drivers)
-        if S not in base_cache:  # the race stage without any quality is the same for every quality
-            base_cache[S] = log_pred(fit_race(train), test)
-        base = base_cache[S]
-        post = fit_race(train.assign(quality_0=train.driver_id.map(mean).fillna(0.0)), "grid_ratings_quality")
-        b_q = post["b_quality"][:, 0]
-        coefs[S] = [float(x) for x in np.percentile(b_q, [5, 50, 95])]
-        d = arrays(test)
-        r, k = slots(test)
-        col = pd.Series(np.arange(len(drivers)), index=drivers).reindex(test.driver_id).to_numpy()
-        pick_q = rng.integers(len(draws), size=n_draws)
-        pick_p = rng.integers(len(b_q), size=n_draws)
-        q = np.zeros((n_draws,) + tuple(d["mask"].shape))
-        known = ~np.isnan(col)
-        q[:, r[known], k[known]] = draws[pick_q][:, col[known].astype(int)]
-        s = (-post["c_grid"][pick_p, None, None] * d["log_grid"] + post["a_car"][pick_p, None, None] * d["car"]
-             + post["b_driver"][pick_p, None, None] * d["driver"] + b_q[pick_p, None, None] * q)
-        ll = np.asarray(jax.vmap(plackett_luce, in_axes=(0, None))(jnp.asarray(s), d["mask"]))
-        m = ll.max(0)
-        with_q = m + np.log(np.exp(ll - m).mean(0))
-        diffs.append(with_q - base)
-        print(f"entry test {name}: held out {S}", flush=True)
-        jax.clear_caches()  # each season's fit compiles for a new shape; the caches otherwise accumulate
-    d = np.concatenate(diffs)
-    boot = np.array([d[rng.integers(len(d), size=len(d))].mean() for _ in range(N_BOOT)])
+MIN_SELECTION_SEASONS = 3
+
+
+def paired_seasons(diffs: dict[int, np.ndarray]) -> dict:
+    """Resample whole seasons so repeated driver/team effects stay in their blocks."""
+    years = sorted(diffs)
+    if not years:
+        return {"n_races": 0, "seasons": [], "mean_diff_per_race": 0.0,
+                "ci95": [0.0, 0.0], "enters": False}
+    sums = np.array([np.sum(diffs[S]) for S in years])
+    counts = np.array([len(diffs[S]) for S in years])
+    picks = np.random.default_rng(0).integers(len(years), size=(N_BOOT, len(years)))
+    boot = sums[picks].sum(1) / counts[picks].sum(1)
     lo, hi = np.percentile(boot, [2.5, 97.5])
-    return {"n_races": int(len(d)), "seasons": [min(coefs), max(coefs)], "mean_diff_per_race": float(d.mean()),
-            "ci95": [float(lo), float(hi)], "b_quality_q05_q50_q95_by_season": coefs, "enters": bool(lo > 0)}
+    return {"n_races": int(counts.sum()), "seasons": [min(years), max(years)],
+            "mean_diff_per_race": float(sums.sum() / counts.sum()),
+            "ci95": [float(lo), float(hi)],
+            "enters": bool(len(years) >= MIN_SELECTION_SEASONS and lo > 0)}
+
+
+def select_qualities(candidates, seasons, score):
+    """Backward removal, using only the supplied inner seasons.
+
+    Every surviving quality must improve the current combined model relative to
+    removing that quality. Re-test after each removal. No outer-season score is
+    accessed here. The same deterministic rule is used for deployment selection.
+    """
+    selected, tests = sorted(candidates), {}
+    if len(seasons) < MIN_SELECTION_SEASONS:
+        return [], tests
+    while selected:
+        full = {S: score(S, tuple(selected)) for S in seasons}
+        checks = {}
+        for name in selected:
+            without = tuple(n for n in selected if n != name)
+            checks[name] = paired_seasons({S: full[S] - score(S, without) for S in seasons})
+            checks[name]["conditioned_on"] = list(without)
+        tests.update(checks)
+        failed = [n for n in selected if not checks[n]["enters"]]
+        if not failed:
+            break
+        drop = min(failed, key=lambda n: (checks[n]["mean_diff_per_race"], n))
+        tests[drop]["enters"] = False
+        selected.remove(drop)
+    return selected, tests
+
+
+def nested_selection(candidates, seasons, score):
+    outer, selections = {}, {}
+    for S in seasons:
+        inner = [s for s in seasons if s < S]
+        if len(inner) < MIN_SELECTION_SEASONS:
+            continue
+        chosen, _ = select_qualities(candidates, inner, score)
+        selections[str(S)] = chosen
+        outer[S] = score(S, tuple(chosen)) - score(S, ())
+    chosen, entry = select_qualities(candidates, seasons, score)
+    result = paired_seasons(outer)
+    result.update(selected_by_outer_season=selections, gate=result.pop("enters"),
+                  design="season-ahead qualifying; backward conditional ablations on inner seasons only; "
+                         "outer test of the selection procedure; season-block bootstrap")
+    return chosen, entry, result
+
+
+def quality_log_pred(post, test, names, effects, season, n_draws=1000):
+    """Integrate quality draws; preserve covariance for qualities from one fit."""
+    d = arrays(test)
+    r, k = slots(test)
+    rng = np.random.default_rng(season)
+    pick = rng.integers(len(post["b_driver"]), size=n_draws)
+    strength = (-post["c_grid"][pick, None, None] * d["log_grid"]
+                + post["a_car"][pick, None, None] * d["car"]
+                + post["b_driver"][pick, None, None] * d["driver"])
+    source_picks = {}
+    for j, name in enumerate(names):
+        drivers, draws = effects[name][season]
+        source = QUALITY_FILES[name][0] if name in QUALITY_FILES else name
+        if source not in source_picks:
+            source_picks[source] = rng.integers(len(draws), size=n_draws)
+        q = np.zeros((n_draws,) + tuple(d["mask"].shape))
+        col = pd.Series(np.arange(len(drivers)), index=drivers).reindex(test.driver_id).to_numpy()
+        known = ~np.isnan(col)
+        q[:, r[known], k[known]] = draws[source_picks[source]][:, col[known].astype(int)]
+        strength = strength + post["b_quality"][pick, j, None, None] * q
+    ll = np.asarray(jax.vmap(plackett_luce, in_axes=(0, None))(jnp.asarray(strength), d["mask"]))
+    m = ll.max(0)
+    return m + np.log(np.exp(ll - m).mean(0))
+
+
+def combined_entry_tests(effects, last_season):
+    """Evaluate the entire selection procedure on outer held-out seasons."""
+    from functools import lru_cache
+    candidates = sorted(effects)
+    if not candidates:
+        return [], {}, {"status": "no candidate qualities", "gate": False}
+    seasons = sorted(set.intersection(*(set(effects[n]) for n in candidates)))
+    seasons = [S for S in seasons if S <= last_season]
+    folds = {}
+
+    @lru_cache(maxsize=None)
+    def score(S, names):
+        if S not in folds:
+            folds[S] = finishers(race_orders(S))
+        F = folds[S]
+        train = F[(F.season >= ENTRY_FIRST_SEASON) & (F.season < S)].copy()
+        test = F[F.season == S]
+        if train.empty or test.empty:
+            raise ValueError(f"Empty championship fold {S}")
+        if not names:
+            return log_pred(fit_race(train), test)
+        for j, name in enumerate(names):
+            drivers, draws = effects[name][S]
+            train[f"quality_{j}"] = train.driver_id.map(pd.Series(draws.mean(0), index=drivers)).fillna(0.0)
+        post = fit_race(train, "grid_ratings_quality")
+        result = quality_log_pred(post, test, names, effects, S)
+        print(f"combined test held out {S}: {', '.join(names)}", flush=True)
+        jax.clear_caches()
+        return result
+
+    return nested_selection(candidates, seasons, score)
 
 
 BREAKDOWN_SEED = 12345
@@ -283,22 +382,37 @@ def simulate(Q: np.ndarray, form_sd: np.ndarray, noise_sd: np.ndarray, b_driver:
 
 
 def main() -> None:
+    from .artifacts import input_files, record, require
+    from .qualifying import POLICY, dependencies, features
     rng = np.random.default_rng(0)
-    R = race_orders()
-    F = finishers(R)
-    test = heldout(F, rng)
-    entry, base_cache = {}, {}
+    # Preflight every dependency before starting expensive validation. Legacy files
+    # without provenance must be regenerated, never quietly treated as current.
+    require(ROOT / "outputs" / "reliability", required_outputs=[
+        ROOT / "outputs" / "reliability" / "summary.json", ROOT / "outputs" / "reliability" / "drivers.csv"])
+    missing, effects = {}, {}
     for name in QUALITIES:
         try:
-            entry[name] = entry_test(F, name, rng, base_cache=base_cache)
+            effects[name] = quality_draws(name)
         except FileNotFoundError as e:
-            entry[name] = {"not_run": f"no held-out draws ({Path(e.filename).relative_to(ROOT)})"}
+            if not name.startswith("overtaking_"):
+                raise
+            missing[name] = {"not_run": f"no held-out draws ({Path(e.filename).relative_to(ROOT)})"}
         except KeyError:  # e.g. defender effects when only attacker effects were tested
-            entry[name] = {"not_run": "no held-out draws for this quality"}
-    entered = [n for n, v in entry.items() if v.get("enters")]
+            if not name.startswith("overtaking_"):
+                raise
+            missing[name] = {"not_run": "no held-out draws for this quality"}
+    full = {n: full_quality_draws(n) for n in effects}
+    R = race_orders()
+    F = finishers(R)
+    all_seasons = sorted(set().union(*(set(v) for v in effects.values())))
+    for S in all_seasons:
+        features(S)
+    test = heldout(F, rng)
+    selected, entry, combined = combined_entry_tests(effects, int(F.season.max()))
+    entry.update(missing)
+    entered = selected if combined["gate"] else []
     if entered:
         # race stage refitted on the seasons the qualities cover, with every quality that entered
-        full = {n: full_quality_draws(n) for n in entered}
         Fq = F[F.season >= ENTRY_FIRST_SEASON].assign(**{
             f"quality_{j}": F.driver_id.map(pd.Series(full[n][1].mean(0), index=full[n][0])).fillna(0.0)
             for j, n in enumerate(entered)})
@@ -339,12 +453,16 @@ def main() -> None:
     extra, extras = None, {}
     if entered:
         extra = np.zeros((N_SEASONS, len(ids)))
+        source_picks = {}
         for j, n in enumerate(entered):
             drivers, draws = full[n]
             col = pd.Series(np.arange(len(drivers)), index=drivers).reindex(ids).to_numpy()
             val = np.zeros((N_SEASONS, len(ids)))
             known = ~np.isnan(col)
-            val[:, known] = draws[rng.integers(len(draws), size=N_SEASONS)][:, col[known].astype(int)]
+            source = QUALITY_FILES[n][0] if n in QUALITY_FILES else n
+            if source not in source_picks:
+                source_picks[source] = rng.integers(len(draws), size=N_SEASONS)
+            val[:, known] = draws[source_picks[source]][:, col[known].astype(int)]
             # centred on the current field in each draw (as qualifying pace is), drivers without
             # data for the quality at the field average
             val[:, ~known] = val[:, known].mean(1, keepdims=True)
@@ -356,6 +474,9 @@ def main() -> None:
 
     names = design.drivers.set_index("driver_id").name
     out_rows, summary = [], {"heldout_race_stage": test, "entry_tests": entry, "qualities_entered": entered,
+                             "combined_validation": combined, "qualities_selected": selected,
+                             "qualifying_validation_policy": POLICY,
+                             "status": "experimental equal-car scenario; team-specific effects retained in headline",
                              "n_races_simulated": n_races,
                              "simulated_seasons": N_SEASONS, "p_retire_per_race": float(p_common),
                              "driver_error_rates_used": bool(rel["gate_driver_error_ranking"]),
@@ -381,6 +502,17 @@ def main() -> None:
     table = pd.DataFrame(out_rows).sort_values(["version", "points_per_race"], ascending=[True, False])
     table.to_csv(OUT / "standings.csv", index=False)
     (OUT / "summary.json").write_text(json.dumps(summary, indent=1))
+    dependency_paths = [ROOT / "outputs" / "reliability" / f for f in ("summary.json", "drivers.csv", "manifest.json")]
+    for n in effects:
+        if n == "first_lap":
+            dependency_paths += [ROOT / "outputs" / "firstlap" / f for f in
+                                 ("heldout_effects.npz", "driver_draws.npz", "manifest.json")]
+        else:
+            path, _ = QUALITY_FILES[n]
+            dependency_paths += [ROOT / "outputs" / p for p in (path, FULL_FILES[path])]
+    record(OUT, [OUT / f for f in ("summary.json", "standings.csv", "contributions.csv")], model="championship-v2",
+           inputs=input_files() + dependencies([None, *all_seasons]) + dependency_paths,
+           details={"qualifying_policy": POLICY, "combined_gate": combined["gate"], "status": "experimental"})
     print(json.dumps(summary, indent=1))
     print(table[table.version == "in_team"].head(10).to_string())
 

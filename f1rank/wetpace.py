@@ -105,9 +105,10 @@ def race_pairs(C: pd.DataFrame, rng) -> list[dict]:
 
 
 def pairs() -> pd.DataFrame:
+    from .qualifying import features
     laps = pd.read_parquet(PROCESSED / "race_laps.parquet")
     timeline = pd.read_parquet(PROCESSED / "timeline.parquet")
-    q = pd.read_parquet(RATINGS / "driver_series.parquet").set_index(["event_id", "driver_id"]).in_team_median
+    q = features()[0].set_index(["event_id", "driver_id"]).driver
     rng = np.random.default_rng(0)
     rows = []
     for event_id, L in laps.groupby("event_id"):
@@ -139,6 +140,7 @@ def model(d, wet_effects=True):
 
 def fit(P, drivers, warmup=800, samples=800, **kw) -> dict:
     from functools import partial
+    from .artifacts import diagnostics, require_convergence
     idx = {x: i for i, x in enumerate(drivers)}
     d = {"n": len(drivers), "a": jnp.asarray(P.a.map(idx).to_numpy()), "b": jnp.asarray(P.b.map(idx).to_numpy()),
          "dq": jnp.asarray(P.quali_gap.to_numpy()), "se": jnp.asarray(P.se.to_numpy()),
@@ -146,15 +148,24 @@ def fit(P, drivers, warmup=800, samples=800, **kw) -> dict:
     mcmc = MCMC(NUTS(partial(model, **kw), target_accept_prob=0.9), num_warmup=warmup, num_samples=samples,
                 num_chains=4, chain_method="parallel", progress_bar=False)
     mcmc.run(jax.random.PRNGKey(0), d, extra_fields=("diverging",))
+    require_convergence(diagnostics(mcmc.get_samples(group_by_chain=True),
+                                   int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())))
     post = {k: np.asarray(v) for k, v in mcmc.get_samples().items()}
     post["_divergences"] = int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())
     return post
 
 
 def heldout(P: pd.DataFrame, rng) -> dict:
+    from .qualifying import features
     rows = []
     for S in sorted(P.season.unique())[2:]:
-        train, test = P[P.season < S], P[P.season == S]
+        q = features(int(S))[0].set_index(["event_id", "driver_id"]).driver
+        fold = P[P.season <= S].copy()
+        fold["quali_gap"] = [q.get((e, a), np.nan) - q.get((e, b), np.nan)
+                             for e, a, b in zip(fold.event_id, fold.a, fold.b)]
+        if fold.quali_gap.isna().any():
+            raise ValueError(f"Qualifying fold {S} does not cover the wet races")
+        train, test = fold[fold.season < S], fold[fold.season == S]
         drivers = sorted(set(train.a) | set(train.b))
         full = fit(train, drivers)
         base = fit(train, drivers, wet_effects=False)
@@ -195,6 +206,11 @@ def main() -> None:
                  ).sort_values("wet_specific_pct_median", ascending=False).to_csv(OUT / "drivers.csv", index=False)
     P.to_csv(OUT / "pairs.csv", index=False)
     (OUT / "summary.json").write_text(json.dumps(summary, indent=1))
+    from .artifacts import input_files, record
+    from .qualifying import POLICY, dependencies
+    record(OUT, [OUT / f for f in ("summary.json", "drivers.csv", "pairs.csv")], model="wetpace-v2",
+           inputs=input_files() + dependencies([None, *map(int, sorted(P.season.unique())[2:])]),
+           details={"qualifying_policy": POLICY})
     print(json.dumps(summary, indent=1))
 
 

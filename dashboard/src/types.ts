@@ -1,0 +1,131 @@
+export type Metric = "headline" | "portable";
+export type View = "drivers" | "cars" | "compare" | "health";
+export interface Estimate {
+  q05: number;
+  q25?: number;
+  median: number;
+  q75?: number;
+  q95: number;
+  rank_lo?: number;
+  rank_hi?: number;
+  rank_median?: number;
+  p_fastest?: number;
+  p_top3?: number;
+}
+export interface Driver {
+  id: string;
+  name: string;
+  code: string;
+  team: string;
+  lineage: string;
+  has_time: boolean;
+  headline: Estimate;
+  portable: Estimate;
+  team_effect: Estimate;
+  evidence: {
+    events: number;
+    seasons: number;
+    teammates: number;
+    teams: number;
+  };
+}
+export interface Car {
+  id: string;
+  name: string;
+  pace: Estimate;
+  gap_to_best: Estimate;
+}
+export interface Event {
+  event_id: string;
+  season: number;
+  round: number;
+  date: string;
+  race_name: string;
+}
+export interface Point {
+  event: string;
+  team: string;
+  headline?: Estimate;
+  portable?: Estimate;
+  pace?: Estimate;
+  at_circuit?: Estimate;
+}
+export interface Pair extends Estimate {
+  p_ahead: number;
+}
+export interface Dataset {
+  schema_version: number;
+  meta: {
+    model_version: string;
+    fit_id: string;
+    generated_at: string;
+    data_as_of: { event_id: string; race_name: string; date: string };
+    window: string;
+    n_lap_times: number;
+    diagnostics: {
+      rhat_max: number;
+      divergences: number;
+      n_draws: number;
+      converged: boolean;
+      elapsed_s: number;
+    };
+  };
+  drivers: Driver[];
+  cars: Car[];
+  events: Event[];
+  catalog: {
+    drivers: { id: string; name: string }[];
+    cars: { id: string; name: string }[];
+  };
+  history: { drivers: Record<string, Point[]>; cars: Record<string, Point[]> };
+  comparisons: Record<Metric | "cars", Record<string, Pair>>;
+  comparison_draws: number;
+  racing: {
+    name: string;
+    status: string;
+    reason: string;
+    detail?: string;
+    source: string;
+  }[];
+  validation: {
+    gates?: { data: Record<string, boolean>; recorded_at: string | null };
+    lfo_summary?: {
+      data: {
+        n_cutoffs: number;
+        pairing_all: {
+          rmse_pred: number;
+          rmse_akm: number;
+          rmse_naive: number;
+          rmse_zero: number;
+        };
+        teammate_session: { cov90: number };
+      };
+    };
+  };
+  provenance: {
+    export_manifest: string;
+    inputs: Record<string, string>;
+    outputs: Record<string, string>;
+  };
+  snapshots: {
+    file: string;
+    fit_id: string;
+    generated_at: string;
+    event: { race_name: string; event_id: string };
+    drivers: Record<string, string | number>[];
+    cars: Record<string, string | number>[];
+  }[];
+}
+export interface RunStatus {
+  state: "ok" | "running" | "failed";
+  stage: string;
+  started_at: string;
+  finished_at?: string;
+  duration_s?: number;
+  error?: string;
+}
+export interface Release {
+  release: string;
+  url: string;
+  published_at: string;
+}

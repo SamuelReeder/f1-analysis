@@ -106,9 +106,13 @@ def levels(P: pd.DataFrame) -> dict:
 
 
 def fit(P, lev, warmup=500, samples=500, **kw) -> dict:
+    from .artifacts import diagnostics, require_convergence
     mcmc = MCMC(NUTS(partial(model, **kw), target_accept_prob=0.9), num_warmup=warmup, num_samples=samples,
                 num_chains=4, chain_method="parallel", progress_bar=False)
     mcmc.run(jax.random.PRNGKey(0), codes(P, lev), extra_fields=("diverging",))
+    require_convergence(diagnostics(
+        {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k != "lp"},
+        int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())))
     post = {k: np.asarray(v) for k, v in mcmc.get_samples().items() if k != "lp"}
     post["_divergences"] = int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())
     return post
@@ -164,6 +168,8 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     T.sort_values(["season", "rel_s_median"]).to_csv(OUT / "team_seasons.csv", index=False)
     (OUT / "summary.json").write_text(json.dumps(summary, indent=1))
+    from .artifacts import record
+    record(OUT, [OUT / "summary.json", OUT / "team_seasons.csv"], model="pitstops-v2")
     print(json.dumps(summary, indent=1))
 
 

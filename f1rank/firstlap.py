@@ -145,9 +145,13 @@ def levels(S: pd.DataFrame) -> dict:
 
 
 def fit(S, lev, warmup=500, samples=500, **kw) -> dict:
+    from .artifacts import diagnostics, require_convergence
     mcmc = MCMC(NUTS(partial(model, **kw), target_accept_prob=0.9), num_warmup=warmup, num_samples=samples,
                 num_chains=4, chain_method="parallel", progress_bar=False)
     mcmc.run(jax.random.PRNGKey(0), codes(S, lev), extra_fields=("diverging",))
+    require_convergence(diagnostics(
+        {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k not in ("lp", "mu")},
+        int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())))
     post = {k: np.asarray(v) for k, v in mcmc.get_samples().items() if k not in ("lp", "mu")}
     post["_divergences"] = int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())
     return post
@@ -250,6 +254,9 @@ def main() -> None:
     np.savez_compressed(OUT / "heldout_effects.npz", **effects)
     np.savez_compressed(OUT / "driver_draws.npz", drivers=np.array(drivers), driver=post["driver"].astype(np.float32))
     (OUT / "summary.json").write_text(json.dumps(summary, indent=1))
+    from .artifacts import record
+    record(OUT, [OUT / f for f in ("summary.json", "drivers.csv", "heldout_effects.npz", "driver_draws.npz")],
+           model="firstlap-v2", details={"training_before_seasons": sorted(int(k) for k in effects if k != "drivers")})
     print(json.dumps(summary, indent=1))
 
 

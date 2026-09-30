@@ -1,5 +1,30 @@
 # Stage 2: racing ratings and an overall driver rating
 
+## Review correction (2026-09-30)
+
+The build status and numerical gate results dated 2026-09-29 below are a historical
+record. They need regeneration under these corrections:
+
+1. Held-out season S uses qualifying fits trained before S for both training and
+   test features. These are season-ahead forecasts conditional on the actual entrants
+   and circuits; later qualifying observations cannot affect the historical test.
+   Current full-data fits still use the main qualifying model.
+2. Championship entry uses backward conditional ablation of the combined model,
+   retesting after each removal. At least three inner test seasons are required.
+   Each outer held-out season selects its qualities using earlier seasons only. The
+   whole selection procedure must beat the base model before any racing qualities
+   enter. Confidence intervals resample seasons, and qualities from the same fit
+   share draw indices during predictive integration.
+3. Cache fingerprints cover the entire race likelihood input. Fits must pass
+   convergence and divergence checks before writing ratings. Provenance manifests
+   connect inputs, code, output hashes and data cutoffs; stale or unversioned racing
+   artifacts cannot be consumed by the championship or advertised by the report.
+
+These are revised methods, not a new claim that the old positive results survive.
+The README's regeneration instructions describe the required reruns. Race-specific
+pace remains a lasting career-level effect beyond qualifying, and the equal-car
+scenario remains experimental.
+
 Status: every step built and run on data from 2010 (final runs 2026-09-28 and 2026-09-29;
 see Build status below); results and gates are in `outputs/REPORT.md` (Racing). The approach was revised on 2026-09-27 after an
 external review. Stage 1 (qualifying pace) is in `f1rank/` and described in the README.

@@ -36,7 +36,9 @@ when FastF1 laps are too (it is defined relative to them: with Jolpica laps alon
 the held-out fits for 2012-2018, sigma and k_old are not separately identified).
 
 y is percent of the race's median clean lap (positive = faster), from racepace.clean_laps;
-the qualifying pace is stage 1's pace in the current car at that event (percent). Only
+the qualifying pace is stage 1's pace in the current car (percent). Held-out
+fits and targets use a qualifying fit trained before the test season; only the full
+current fit uses the main qualifying fit. Only
 within-team differences identify the driver terms (the car term is free per team and race).
 
 Held-out test: for each season S from 2012 (2020 with --fastf1-only), fit on every season
@@ -67,7 +69,6 @@ import numpyro.distributions as dist  # noqa: E402
 import pandas as pd  # noqa: E402
 from numpyro.infer import MCMC, NUTS  # noqa: E402
 
-from .racemodel import RATINGS, load_pairs  # noqa: E402
 from .racepace import OLD_COMPOUNDS, OUT, PROCESSED, REF_AGE, WET, clean_laps, jolpica_races  # noqa: E402
 
 FIRST_SEASON, FIRST_TEST = 2018, 2020
@@ -99,8 +100,6 @@ def all_laps(old: bool = True, telemetry: bool = False) -> pd.DataFrame:
                 out.append(clean_laps(L, timeline[timeline.event_id == event_id], OLD_COMPOUNDS)
                            .assign(event_id=event_id, source="jolpica"))
     C = pd.concat(out, ignore_index=True)
-    q = pd.read_parquet(RATINGS / "driver_series.parquet").set_index(["event_id", "driver_id"]).in_team_median
-    C["quali"] = [q.get(k, np.nan) for k in zip(C.event_id, C.driver_id)]
     C["season"] = C.event_id.str[:4].astype(int)
     if telemetry:
         T = pd.read_parquet(PROCESSED / "race_telemetry.parquet")
@@ -108,7 +107,17 @@ def all_laps(old: bool = True, telemetry: bool = False) -> pd.DataFrame:
         C = C.merge(T[["event_id", "driver_number", "lap_number", "coast_s"]],
                     on=["event_id", "driver_number", "lap_number"], how="inner")
         C["coast"] = C.coast_s - C.groupby("event_id").coast_s.transform("median")
-    return C.dropna(subset=["quali"]).sort_values(["event_id", "stint_key", "lap_number"], ignore_index=True)
+    return C.sort_values(["event_id", "stint_key", "lap_number"], ignore_index=True)
+
+
+def with_qualifying(C: pd.DataFrame, season: int | None = None) -> pd.DataFrame:
+    from .qualifying import features
+    q, _ = features(season)
+    if not set(C.event_id) <= set(q.event_id):
+        raise ValueError("Qualifying fold does not cover these race laps; prepare it again")
+    return C.drop(columns="quali", errors="ignore").merge(
+        q.rename(columns={"driver": "quali"}), on=["event_id", "driver_id"],
+        how="left", validate="many_to_one").dropna(subset=["quali"])
 
 
 def arrays(C: pd.DataFrame) -> tuple[dict, list[str]]:
@@ -181,14 +190,14 @@ COAST = False  # set by --coast
 
 
 RHAT_MAX = 1.05
-MODEL_VERSION = "2"  # change with the model: saved held-out fits of another version are not reused
+MODEL_VERSION = "3"  # all design inputs hashed; qualifying frozen before held-out seasons
 
 
 def fit(C: pd.DataFrame, warmup: int = 500, samples: int = 500, tries: int = 3) -> tuple[dict, list[str]]:
     """NUTS fit, started at the prior medians (random starts can put the scales far in their
     tails, where a chain can stick). If any kept parameter has R-hat above RHAT_MAX, the fit
     is repeated with another seed and a longer warmup; every attempt is recorded."""
-    from numpyro.diagnostics import summary
+    from .artifacts import diagnostics
     from numpyro.infer import init_to_median
     d, drivers = arrays(C)
     attempts = []
@@ -199,20 +208,20 @@ def fit(C: pd.DataFrame, warmup: int = 500, samples: int = 500, tries: int = 3) 
                     num_chains=4, chain_method=CHAINS, progress_bar=False)
         mcmc.run(jax.random.PRNGKey(attempt), d, extra_fields=("diverging",))
         grouped = mcmc.get_samples(group_by_chain=True)
-        s = summary({k: v for k, v in grouped.items() if k in KEEP})
-        rhat = float(max(np.nanmax(v["r_hat"]) for v in s.values()))
         div = int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())
+        checked = diagnostics(grouped, div)
+        rhat = checked["rhat_max"]
         attempts.append({"seed": attempt, "warmup": warmup * (1 + attempt), "rhat_max": rhat, "divergences": div,
                          "minutes": round((time.time() - t0) / 60, 1)})
         print(f"  fit attempt {attempt}: {attempts[-1]}", flush=True)
-        if rhat <= RHAT_MAX:
+        if checked["converged"]:
             break
     post = {k: np.asarray(v) for k, v in mcmc.get_samples().items() if k in KEEP}
     post["_rhat_max"], post["_divergences"] = rhat, div
     post["_minutes"] = sum(a["minutes"] for a in attempts)
     post["_backend"] = jax.default_backend()
     post["_attempts"] = attempts
-    post["_converged"] = rhat <= RHAT_MAX
+    post["_converged"] = checked["converged"]
     return post, drivers
 
 
@@ -221,12 +230,20 @@ def checkpointed(C: pd.DataFrame, path) -> tuple[dict, list[str]]:
     fit is reused only if its training laps (sha256 of the design columns) and MODEL_VERSION
     are identical."""
     import hashlib
-    key = hashlib.sha256(MODEL_VERSION.encode() + pd.util.hash_pandas_object(
-        C[["event_id", "driver_id", "lap_number", "stint", "y", "quali"] + (["coast"] if COAST else [])], index=False
-    ).to_numpy().tobytes()).hexdigest()
+    from pathlib import Path
+    # Include every input actually consumed by the likelihood and the stored driver
+    # ordering. Hashing a hand-picked subset misses corrections to tyres or traffic.
+    design, driver_ids = arrays(C)
+    h = hashlib.sha256(MODEL_VERSION.encode() + json.dumps(driver_ids).encode())
+    h.update(Path(__file__).read_bytes())
+    for name, value in sorted(design.items()):
+        a = np.asarray(value)
+        h.update(f"{name}:{a.dtype}:{a.shape}".encode())
+        h.update(a.tobytes())
+    key = h.hexdigest()
     if path.exists():
         z = np.load(path, allow_pickle=False)
-        if str(z["key"]) == key:
+        if str(z["key"]) == key and json.loads(str(z["meta"])).get("_converged"):
             meta = json.loads(str(z["meta"]))
             print(f"  reusing {path.name}", flush=True)
             return {**{k: z[k] for k in z.files if k not in ("key", "meta", "drivers")}, **meta}, [str(x) for x in z["drivers"]]
@@ -240,17 +257,22 @@ def checkpointed(C: pd.DataFrame, path) -> tuple[dict, list[str]]:
     return post, drivers
 
 
-def target_pairs() -> pd.DataFrame:
+def target_pairs(season: int | None = None) -> pd.DataFrame:
     """Stage-A teammate gaps (FastF1, plus Jolpica before 2018) with the qualifying gap."""
-    P = load_pairs().assign(source="fastf1")
+    from .qualifying import features
+    P = pd.read_csv(OUT / "stage_a_pairs.csv").assign(source="fastf1")
     old = OUT / "stage_a_pairs_old.csv"
     if old.exists():
         O = pd.read_csv(old)
-        q = pd.read_parquet(RATINGS / "driver_series.parquet").set_index(["event_id", "driver_id"]).in_team_median
-        O["quali_gap"] = [q.get((e, a), np.nan) - q.get((e, b), np.nan) for e, a, b in zip(O.event_id, O.a, O.b)]
-        O["season"] = O.event_id.str[:4].astype(int)
-        P = pd.concat([P, O.dropna(subset=["quali_gap"]).assign(source="jolpica")], ignore_index=True)
-    return P
+        P = pd.concat([P, O.assign(source="jolpica")], ignore_index=True)
+    P["season"] = P.event_id.str[:4].astype(int)
+    if season is not None:
+        P = P[P.season <= season].copy()
+    q = features(season)[0].set_index(["event_id", "driver_id"]).driver
+    if not set(P.event_id) <= set(q.index.get_level_values("event_id")):
+        raise ValueError("Qualifying fold does not cover the target races")
+    P["quali_gap"] = [q.get((e, a), np.nan) - q.get((e, b), np.nan) for e, a, b in zip(P.event_id, P.a, P.b)]
+    return P.dropna(subset=["quali_gap"])
 
 
 def paired(d: np.ndarray, rng) -> dict:
@@ -261,17 +283,14 @@ def paired(d: np.ndarray, rng) -> dict:
 
 
 def heldout(C: pd.DataFrame, sfx: str = "") -> dict:
-    P = target_pairs()
-    P = P[P.source.isin(C.source.unique()) & P.event_id.isin(C.event_id.unique())]
     if "coast" in C:
         mc = C.groupby(["event_id", "driver_id"]).coast.mean()
-        P["coast_gap"] = [mc.get((e, a), np.nan) - mc.get((e, b), np.nan) for e, a, b in zip(P.event_id, P.a, P.b)]
-        P = P.dropna(subset=["coast_gap"])
     rng = np.random.default_rng(0)
     rows, fits, effects = [], {}, {}
     first = FIRST_TEST_OLD if (C.source == "jolpica").any() else FIRST_TEST
     for S in range(first, int(C.season.max()) + 1):
-        post, drivers = checkpointed(C[C.season < S], OUT / f"multi_heldout_cache{sfx}" / f"{S}.npz")
+        train = with_qualifying(C[C.season < S], S)
+        post, drivers = checkpointed(train, OUT / f"multi_heldout_cache{sfx}" / f"{S}.npz")
         fits[S] = {k: post[k] for k in ("_rhat_max", "_divergences", "_minutes", "_backend", "_attempts", "_converged")}
         if not post["_converged"]:
             raise RuntimeError(f"fit for held-out season {S} did not converge: {post['_attempts']}")
@@ -281,7 +300,12 @@ def heldout(C: pd.DataFrame, sfx: str = "") -> dict:
         u = pd.Series(post["u"].mean(0), index=drivers)
         v = pd.Series(post["v"].mean(0), index=drivers)
         g = float(post["gamma"].mean())
-        t = P[P.season == S]
+        P = target_pairs(S)
+        t = P[(P.season == S) & P.source.isin(C.source.unique()) & P.event_id.isin(C.event_id.unique())].copy()
+        if "coast" in C:
+            t["coast_gap"] = [mc.get((e, a), np.nan) - mc.get((e, b), np.nan)
+                              for e, a, b in zip(t.event_id, t.a, t.b)]
+            t = t.dropna(subset=["coast_gap"])
         if COAST:  # targets at typical coasting, with the training fit's coefficient
             t = t.assign(pace_gap=t.pace_gap - float(post["b_coast"].mean()) * t.coast_gap)
             fits[S]["b_coast"] = float(post["b_coast"].mean())
@@ -316,6 +340,13 @@ def heldout(C: pd.DataFrame, sfx: str = "") -> dict:
     out["laps_by_source"] = C.source.value_counts().to_dict()
     np.savez_compressed(OUT / f"multi_heldout_effects{sfx}.npz", **effects)
     (OUT / f"multi_heldout{sfx}.json").write_text(json.dumps(out, indent=1))
+    from .artifacts import input_files, record
+    from .qualifying import POLICY, dependencies
+    record(OUT, [OUT / f"multi_heldout{sfx}.json", OUT / f"multi_heldout_effects{sfx}.npz"],
+           model="race-joint-v3-heldout", inputs=input_files() + dependencies(list(fits))
+           + [p for p in (OUT / "stage_a_pairs.csv", OUT / "stage_a_pairs_old.csv") if p.exists()],
+           details={"qualifying_policy": POLICY, "training_before_seasons": list(fits)},
+           name=f"multi_heldout{sfx}.manifest.json")
     print(json.dumps(out, indent=1))
     return out
 
@@ -324,13 +355,16 @@ def prefit(C: pd.DataFrame, seasons: list[int], sfx: str = "") -> None:
     """Fit and save the held-out training fits for these seasons only (parallel workers; a
     later --heldout run reuses them)."""
     for S in seasons:
-        post, _ = checkpointed(C[C.season < S], OUT / f"multi_heldout_cache{sfx}" / f"{S}.npz")
+        post, _ = checkpointed(with_qualifying(C[C.season < S], S), OUT / f"multi_heldout_cache{sfx}" / f"{S}.npz")
         print(f"prefit {S}: converged {post['_converged']}, {post['_attempts']}", flush=True)
         jax.clear_caches()
 
 
 def full(C: pd.DataFrame, sfx: str = "") -> None:
+    C = with_qualifying(C)
     post, drivers = fit(C, warmup=800, samples=800)
+    if not post["_converged"]:
+        raise RuntimeError(f"Full race fit failed diagnostics; existing outputs retained: {post['_attempts']}")
     q = lambda x: [round(float(v), 4) for v in np.percentile(x, [5, 50, 95])]  # noqa: E731
     summary = {"n_laps": int(len(C)), "n_races": int(C.event_id.nunique()),
                "seasons": [int(C.season.min()), int(C.season.max())], "n_drivers": len(drivers),
@@ -353,6 +387,15 @@ def full(C: pd.DataFrame, sfx: str = "") -> None:
     np.savez_compressed(OUT / f"multi_driver_draws{sfx}.npz", drivers=np.array(drivers), u=post["u"].astype(np.float32),
                         v=post["v"].astype(np.float32))
     (OUT / f"multi_summary{sfx}.json").write_text(json.dumps(summary, indent=1))
+    from .artifacts import input_files, record
+    from .qualifying import dependencies
+    record(OUT, [OUT / f"multi_summary{sfx}.json", OUT / f"multi_drivers{sfx}.csv",
+                 OUT / f"multi_driver_draws{sfx}.npz"], model="race-joint-v3-full",
+           inputs=input_files() + dependencies([None])
+           + [p for p in (OUT / "stage_a_pairs.csv", OUT / "stage_a_pairs_old.csv") if p.exists()],
+           details={"diagnostics": {k: post[k] for k in ("_converged", "_rhat_max", "_divergences")},
+                    "scope": "lasting career-level race pace beyond qualifying; not current total race pace"},
+           name=f"multi_full{sfx}.manifest.json")
     print(json.dumps(summary, indent=1))
 
 
@@ -374,7 +417,7 @@ def main() -> None:
     sfx = ("_fastf1only_coast" if args.coast else "_fastf1only_telemetry" if tel
            else "_fastf1only" if args.fastf1_only else "")
     if args.timing:
-        post, _ = fit(C[C.season.between(*args.timing)], warmup=150, samples=150)
+        post, _ = fit(with_qualifying(C[C.season.between(*args.timing)]), warmup=150, samples=150)
         print({k: post[k] for k in ("_rhat_max", "_divergences", "_minutes", "_attempts")},
               len(C[C.season.between(*args.timing)]))
         return

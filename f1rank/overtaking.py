@@ -129,9 +129,13 @@ def model(d, driver_effects=True, defender_effects=True):
 
 
 def fit(E, lev, y=None, warmup=500, samples=500, seed=0, **kw) -> dict:
+    from .artifacts import diagnostics, require_convergence
     mcmc = MCMC(NUTS(partial(model, **kw), target_accept_prob=0.85), num_warmup=warmup, num_samples=samples,
                 num_chains=4, chain_method="parallel", progress_bar=False)
     mcmc.run(jax.random.PRNGKey(seed), data(E, lev, y), extra_fields=("diverging",))
+    require_convergence(diagnostics(
+        {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k not in ("lp", "eta")},
+        int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())))
     post = {k: np.asarray(v) for k, v in mcmc.get_samples().items() if k not in ("lp", "eta")}
     post["_divergences"] = int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())
     return post
@@ -292,5 +296,12 @@ def fit_and_test() -> dict:
     dr = dr.merge(counts, left_on="driver_id", right_index=True, how="left")
     dr.to_csv(OUT / "drivers.csv", index=False)
     (OUT / "summary.json").write_text(json.dumps(summary, indent=1))
+    from .artifacts import input_files, record
+    files = [OUT / "summary.json", OUT / "drivers.csv"]
+    if kind:
+        files += [OUT / "heldout_effects.npz", OUT / "driver_draws.npz"]
+    record(OUT, files, model="overtaking-v2", inputs=input_files() + [OUT / "episodes.parquet", OUT / "feasibility.json"],
+           details={"training_before_seasons": [int(k.split("_")[0]) for k in effects if k.endswith("_drivers")]
+                    if kind else [], "feasible": bool(kind)})
     print(json.dumps(summary, indent=1))
     return summary

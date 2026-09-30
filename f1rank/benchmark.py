@@ -11,10 +11,9 @@ Jolpica ranks them) is modelled as a Plackett-Luce ranking with strength
     grid:               -c * log(grid slot)                  (pit-lane starts: last slot)
     grid + ratings:     -c * log(grid slot) + a * car + b * driver
 
-car is stage 1's car rating at that circuit (percent of lap time; posterior median) and
-driver is stage 1's pace in the current car. Both use qualifying only, including that
-weekend's session, which precedes the race. (They come from the main fit, which also
-smooths with later qualifying data; every model compared here uses the same inputs.)
+car is stage 1's car rating at that circuit and driver is pace in the current car.
+Historical tests use qualifying fits frozen before the test season (qualifying.py).
+Only the final, current fit uses the main qualifying fit.
 
 Held-out: each season from 2014 is predicted by models fitted on the seasons before it.
 Scores per race: log-likelihood of the observed order, Spearman correlation of predicted
@@ -49,13 +48,17 @@ N_BOOT = 2000
 VARIANTS = ("ratings", "ratings_results", "grid", "grid_ratings")
 
 
-def race_orders() -> pd.DataFrame:
+def race_orders(season: int | None = None) -> pd.DataFrame:
+    from .qualifying import features
     race = pd.read_parquet(PROCESSED / "race.parquet")
     race = race[race.event_id.str[:4].astype(int) >= FIRST_SEASON]
-    ds = pd.read_parquet(RATINGS / "driver_series.parquet")[["event_id", "driver_id", "in_team_median"]]
-    cs = pd.read_parquet(RATINGS / "car_series.parquet")[["event_id", "team", "at_circuit_median"]]
+    if season is not None:
+        race = race[race.event_id.str[:4].astype(int) <= season]
+    ds, cs = features(season)
+    expected = set(race.event_id)
+    if not expected <= set(ds.event_id):
+        raise ValueError(f"Qualifying features missing races: {sorted(expected - set(ds.event_id))}")
     R = race.merge(ds, on=["event_id", "driver_id"]).merge(cs, on=["event_id", "team"])
-    R = R.rename(columns={"in_team_median": "driver", "at_circuit_median": "car"})
     n = R.groupby("event_id").driver_id.transform("size")
     R["grid_slot"] = np.where(R.grid > 0, R.grid, n)  # pit-lane start: last
     R["season"] = R.event_id.str[:4].astype(int)
@@ -109,9 +112,13 @@ def model(d, variant="ratings"):
 
 
 def fit(R, drivers, variant, warmup=400, samples=400) -> dict:
+    from .artifacts import diagnostics, require_convergence
     mcmc = MCMC(NUTS(partial(model, variant=variant)), num_warmup=warmup, num_samples=samples, num_chains=4,
                 chain_method="parallel", progress_bar=False)
-    mcmc.run(jax.random.PRNGKey(0), arrays(R, drivers))
+    mcmc.run(jax.random.PRNGKey(0), arrays(R, drivers), extra_fields=("diverging",))
+    require_convergence(diagnostics(
+        {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k not in ("ll_race", "strength")},
+        int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())))
     return {k: np.asarray(v) for k, v in mcmc.get_samples().items() if k not in ("ll_race", "strength")}
 
 
@@ -151,7 +158,8 @@ def main() -> None:
     rng = np.random.default_rng(0)
     rows = []
     for S in range(FIRST_TEST, R.season.max() + 1):
-        train, test = R[R.season < S], R[R.season == S]
+        fold = race_orders(S)
+        train, test = fold[fold.season < S], fold[fold.season == S]
         per = {}
         for v in VARIANTS:
             post = fit(train, drivers, v)
@@ -177,6 +185,11 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     H.to_csv(OUT / "heldout_races.csv", index=False)
     (OUT / "summary.json").write_text(json.dumps(summary, indent=1))
+    from .artifacts import input_files, record
+    from .qualifying import POLICY, dependencies
+    record(OUT, [OUT / "summary.json", OUT / "heldout_races.csv"], model="benchmark-v2",
+           inputs=input_files() + dependencies([None, *range(FIRST_TEST, int(R.season.max()) + 1)]),
+           details={"qualifying_policy": POLICY})
     print(json.dumps(summary, indent=1))
 
 

@@ -79,7 +79,10 @@ def test_heldout_fit_checkpoint_is_reused_only_for_the_same_laps(tmp_path, monke
 
     monkeypatch.setattr(racemulti, "fit", fake_fit)
     C = pd.DataFrame({"event_id": ["2018-01"] * 3, "driver_id": ["a"] * 3, "lap_number": [2, 3, 4], "stint": [1, 1, 1],
-                      "y": [0.1, 0.2, 0.3], "quali": [0.0] * 3})
+                      "y": [0.1, 0.2, 0.3], "quali": [0.0] * 3, "season": [2018] * 3,
+                      "team": ["A"] * 3, "compound": ["SOFT"] * 3, "stint_key": ["a_1"] * 3,
+                      "source": ["fastf1"] * 3, "tyre_life": [2, 3, 4],
+                      "close": [False] * 3, "near": [False] * 3, "unpressured": [False] * 3})
     path = tmp_path / "2019.npz"
     racemulti.checkpointed(C, path)
     post, drivers = racemulti.checkpointed(C, path)

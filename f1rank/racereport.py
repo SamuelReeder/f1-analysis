@@ -12,10 +12,29 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "outputs"
 SEC_PER_PCT = 0.9  # seconds per percent of a 90 s lap
+STALE = set()
 
 
 def _load(rel: str):
     p = OUT / rel
+    if not p.exists():
+        return None
+    manifest = None
+    if p.parent.name in ("championship", "benchmark", "firstlap", "consistency", "reliability", "pitstops", "wet"):
+        manifest = "manifest.json"
+    elif p.parent.name == "battles" and p.name == "summary.json":
+        manifest = "manifest.json"
+    elif p.name.startswith("multi_heldout"):
+        manifest = p.stem + ".manifest.json"
+    elif p.name.startswith("multi_summary"):
+        manifest = p.stem.replace("multi_summary", "multi_full") + ".manifest.json"
+    if manifest:
+        from .artifacts import StaleArtifact, require
+        try:
+            require(p.parent, name=manifest, required_outputs=[p])
+        except StaleArtifact:
+            STALE.add(rel)
+            return None
     return json.loads(p.read_text()) if p.exists() else None
 
 
@@ -61,7 +80,7 @@ def summary_table() -> list[str]:
         e = entry.get(name)
         if not e or "not_run" in e:
             return "not tested (no held-out draws)"
-        return ("enters" if e["enters"] else "does not enter") + f" ({e['mean_diff_per_race']:+.3f}, " \
+        return ("enters" if name in (ch or {}).get("qualities_entered", []) else "does not enter") + f" ({e['mean_diff_per_race']:+.3f}, " \
                f"{e['ci95'][0]:+.3f} to {e['ci95'][1]:+.3f})"
 
     if mh:
@@ -459,8 +478,12 @@ def championship() -> list[str]:
          "equal mechanical risk, driver error rates "
          f"{'used' if cs['driver_error_rates_used'] else 'at the average'}) -> points. Race stage on held-out "
          f"finishing orders: vs grid alone {ci(h['vs_grid'])}; vs ratings alone {ci(h['vs_ratings'])}.\n",
-         "Entry tests (race stage with vs without the quality, fitted from 2010 up to each held-out season, the "
-         "quality's own held-out draws for that season):\n", md(pd.DataFrame(rows)), "",
+         "Conditional entry tests: the combined model with each quality removed in turn; backward removal "
+         "retests the remaining qualities. Qualifying features are frozen before each held-out season. "
+         "The entire selection procedure also has an outer test; its gate must pass before any quality enters.\n",
+         md(pd.DataFrame(rows)), "",
+         "Outer validation of selection vs no racing qualities: "
+         + ci(cs["combined_validation"]) + "; " + verdict(cs["combined_validation"]["gate"]) + ".\n",
          "Qualities in the simulation: qualifying pace" + (", " + ", ".join(entered) if entered else
                                                             " only (no racing quality entered)") + ".\n",
          md(top[["name", "team", "points_per_race", "p_title", "ranks"]] if "team" in top else
@@ -478,6 +501,7 @@ def championship() -> list[str]:
 
 
 def section() -> list[str]:
+    STALE.clear()
     L = ["## Racing (stage 2)\n",
          "Every racing quality has a standalone test on held-out data and, where it has held-out draws, the "
          "equal-car championship's entry test. Racing outcomes run from 2010; lap-level evidence from 2018 "
@@ -485,4 +509,10 @@ def section() -> list[str]:
     for part in (summary_table, data_sources, timeline, race_pace, reliability, pit_stops, consistency, wet, first_lap,
                  overtaking, benchmark, championship):
         L += part()
+    if STALE:
+        L.insert(1, "**Racing validation needs regeneration.** Outputs without current provenance are excluded "
+                 "from this report and cannot enter the championship. Earlier pass/fail results and equal-car "
+                 "standings are historical results, not validated results of the corrected pipeline. "
+                 "See README, Review fixes and regeneration.\n\nAffected files: "
+                 + ", ".join(f"`{s}`" for s in sorted(STALE)) + ".\n")
     return L

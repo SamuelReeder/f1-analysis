@@ -8,11 +8,13 @@ outputs/ratings/
                           (in_team_*, headline); portable skill (experimental) and the
                           team-specific effect (team_effect_*) alongside, with rank ranges
   current_cars.csv        car-package leaderboard at the latest event
-  pairwise_drivers.csv    P(row driver faster than column driver in the same car), portable
-                          skill (experimental) at the latest event
-  current_draws.npz       thinned joint draws (portable skill, cars) for a swap calculator
+  pairwise_drivers.csv    headline P(row driver's in-team pace exceeds column driver's)
+  pairwise_drivers_in_team.csv    explicitly named headline comparison
+  pairwise_drivers_portable.csv   explicitly named experimental portable comparison
+  current_draws.npz       aligned in_team_s, portable_skill_s, car_s; skill_s is a legacy
+                          alias of portable_skill_s, never the headline
   meta.json               data as-of, model version, fit identity and diagnostics
-outputs/snapshots/<event_id>_<model_version>_<fit_id>.json
+outputs/snapshots/<event_id>_<model_version>_<fit_id>_export2.json
                           what was published for each fit; written once, never overwritten
 
 The main fit must have been made on the current data (checked against its metadata);
@@ -35,6 +37,7 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "outputs" / "ratings"
 SNAPSHOTS = ROOT / "outputs" / "snapshots"
 MODEL_VERSION = "quali-v1"
+EXPORT_VERSION = "2"
 N_DRAWS_EXPORT = 400
 SECONDS_COLS = ["q05", "q25", "median", "q75", "q95"]
 
@@ -54,6 +57,9 @@ def export(fit_name: str = "main", start: int = 2010) -> dict:
     path = FITS / f"{fit_name}.npz"
     post, info = load(path, design)  # refuses a fit made on other data
     fit_meta = load_meta(path)
+    from .artifacts import diagnostics, require_convergence
+    checked = diagnostics(post, info["divergences"])
+    require_convergence(checked)  # no current file or snapshot is touched on failure
     last = design.events.iloc[-1]
     OUT.mkdir(parents=True, exist_ok=True)
     SNAPSHOTS.mkdir(parents=True, exist_ok=True)
@@ -71,18 +77,31 @@ def export(fit_name: str = "main", start: int = 2010) -> dict:
     c_rows = np.flatnonzero(design.cars.event_idx.to_numpy() == last.event_idx)
     sk = flat(post, "skill")[:, e_rows]
     sk -= sk.mean(1, keepdims=True)
+    in_team = sk + flat(post, "compat")[:, e_rows]
+    in_team -= in_team.mean(1, keepdims=True)
     cr = flat(post, "car")[:, c_rows]
     cr -= cr.mean(1, keepdims=True)
-    ids = design.entries.driver_id.to_numpy()[e_rows]
-    teams = design.cars.team.to_numpy()[c_rows]
-    ahead = (sk[:, :, None] > sk[:, None, :]).mean(0)
-    pd.DataFrame(ahead, index=ids, columns=ids).to_csv(OUT / "pairwise_drivers.csv")
-    pick = np.random.default_rng(0).choice(sk.shape[0], N_DRAWS_EXPORT, replace=False)
+    ids = design.entries.driver_id.to_numpy()[e_rows].astype(str)
+    teams = design.cars.team.to_numpy()[c_rows].astype(str)
+    for metric, draws in (("in_team", in_team), ("portable", sk)):
+        ahead = pairwise(draws)
+        table = pd.DataFrame(ahead, index=ids, columns=ids)
+        table.to_csv(OUT / f"pairwise_drivers_{metric}.csv")
+        if metric == "in_team":
+            table.to_csv(OUT / "pairwise_drivers.csv")
+    pick = np.random.default_rng(0).choice(sk.shape[0], min(N_DRAWS_EXPORT, sk.shape[0]), replace=False)
     np.savez_compressed(OUT / "current_draws.npz", driver_ids=ids, skill_s=sk[pick] * SEC_PER_PCT,
+                        portable_skill_s=sk[pick] * SEC_PER_PCT, in_team_s=in_team[pick] * SEC_PER_PCT,
                         teams=teams, car_s=cr[pick] * SEC_PER_PCT)
 
     meta = {
         "model_version": MODEL_VERSION, "fit": fit_name,
+        "export_version": EXPORT_VERSION,
+        "pairwise_default": "in_team",
+        "draw_fields": {"in_team_s": "headline: pace in current car",
+                        "portable_skill_s": "experimental: portable skill",
+                        "skill_s": "legacy alias for portable_skill_s"},
+        "history_kind": "revised using all qualifying data; snapshots preserve as-published estimates",
         "fit_id": fit_meta["created_utc"], "fit_fingerprint": fit_meta["fingerprint"],
         "headline": "in_team: pace in the current car relative to the field's drivers",
         "portable_skill": "experimental: moderate recovery in simulation, sensitive to model choices",
@@ -91,7 +110,7 @@ def export(fit_name: str = "main", start: int = 2010) -> dict:
         "scope": "one-lap qualifying pace; ratings relative to the field at each event",
         "units": "seconds per 90-second lap (positive = faster); model units are % of lap time",
         "window": f"{start}-{int(design.events.season.max())}",
-        "n_lap_times": int(len(design.obs)), "diagnostics": info,
+        "n_lap_times": int(len(design.obs)), "diagnostics": {**info, **checked},
     }
     (OUT / "meta.json").write_text(json.dumps(meta, indent=1))
 
@@ -105,12 +124,33 @@ def export(fit_name: str = "main", start: int = 2010) -> dict:
         "cars": cars[["team", "constructor", "median_s", "q05_s", "q95_s", "gap_median_s",
                       "rank_lo", "rank_hi"]].to_dict("records"),
     }
-    snap_path = SNAPSHOTS / f"{last.event_id}_{MODEL_VERSION}_{meta['fit_id']}.json"
+    snap_path = SNAPSHOTS / f"{last.event_id}_{MODEL_VERSION}_{meta['fit_id']}_export{EXPORT_VERSION}.json"
     if write_once(snap_path, snap):
         print(f"snapshot written: {snap_path.name}")
     else:
         print(f"snapshot for this fit already exists, left unchanged: {snap_path.name}")
+    # Commit marker for consumers: a partial export must never become a dashboard release.
+    from .artifacts import atomic_json, record
+    # Carry the fit identity with the published tables. Deployment needs the checked
+    # export, not the ignored multi-GB posterior directory on the fitting machine.
+    atomic_json(OUT / "fit_metadata.json", fit_meta)
+    sources = [ROOT / "data" / "processed" / f"{name}.parquet"
+               for name in ("events", "entries", "drivers", "quali_times")]
+    sources += [ROOT / "f1rank" / f"{name}.py"
+                for name in ("design", "model", "ratings", "export", "lineage", "fit")]
+    files = [OUT / name for name in (
+        "meta.json", "current_drivers.csv", "current_cars.csv", "driver_series.parquet",
+        "car_series.parquet", "current_draws.npz", "pairwise_drivers.csv",
+        "pairwise_drivers_in_team.csv", "pairwise_drivers_portable.csv", "fit_metadata.json")]
+    record(OUT, files, model=MODEL_VERSION, inputs=sources,
+           details={"fit_id": meta["fit_id"], "fit_fingerprint": meta["fit_fingerprint"]})
     return meta
+
+
+def pairwise(draws: np.ndarray) -> np.ndarray:
+    """Probability of higher latent pace, sharing ties equally (including diagonal)."""
+    a, b = draws[:, :, None], draws[:, None, :]
+    return (a > b).mean(0) + 0.5 * (a == b).mean(0)
 
 
 def write_once(path: Path, obj: dict) -> bool:
