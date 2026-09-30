@@ -44,23 +44,14 @@ export default function Health({
   const snap = data.snapshots[snapshot];
   return (
     <>
-      <PageHeading
-        eyebrow="TRANSPARENCY, BUILT IN"
-        title="Behind the rankings."
-      >
-        What is published, how it was checked, and where the model still has
-        limits.
-      </PageHeading>
+      <PageHeading title="Model health" />
       <div className="health-status panel">
         <div className="health-icon">
           <ShieldCheck size={27} />
         </div>
         <div>
           <h2>Qualifying publication checks passed</h2>
-          <p>
-            Source and output fingerprints matched at publication. The published
-            fit passed its convergence checks.
-          </p>
+          <p>Source checksums matched · fit converged</p>
         </div>
         <Badge tone="amber">Racing revalidation pending</Badge>
       </div>
@@ -116,10 +107,7 @@ export default function Health({
           <div>
             <strong>Refresh stopped at {run.stage}</strong>
             <p>{run.error}</p>
-            <p>
-              The current release remains available. Resolve the error before
-              running another refresh.
-            </p>
+            <p>Showing the last published release.</p>
           </div>
         </div>
       )}
@@ -127,9 +115,7 @@ export default function Health({
         <div className="panel-heading">
           <div>
             <h2>Model readiness</h2>
-            <p>Availability is tracked separately for each quality.</p>
           </div>
-          <Badge>Evidence before rankings</Badge>
         </div>
         <div className="readiness">
           <div>
@@ -138,10 +124,7 @@ export default function Health({
             </span>
             <div>
               <strong>Qualifying pace</strong>
-              <p>
-                Driver pace in the current team and track-neutral car
-                performance.
-              </p>
+              <p>In-team driver pace and track-neutral car pace</p>
             </div>
             <Badge tone="green">Published</Badge>
           </div>
@@ -151,10 +134,7 @@ export default function Health({
             </span>
             <div>
               <strong>Portable driver skill</strong>
-              <p>
-                Available with an experimental label; sensitive to structural
-                model choices.
-              </p>
+              <p>Sensitive to model assumptions</p>
             </div>
             <Badge tone="amber">Experimental</Badge>
           </div>
@@ -165,13 +145,11 @@ export default function Health({
               </span>
               <div>
                 <strong>{r.name}</strong>
-                <p>{r.reason}</p>
-                {r.detail && (
-                  <details>
-                    <summary>Technical detail</summary>
-                    <code>{r.detail}</code>
-                  </details>
-                )}
+                <details>
+                  <summary>Status details</summary>
+                  <p>{r.reason}</p>
+                  {r.detail && <code>{r.detail}</code>}
+                </details>
               </div>
               <Badge tone={r.status === "passed" ? "green" : ""}>
                 {r.status === "stale"
@@ -191,13 +169,11 @@ export default function Health({
           <div className="panel-heading">
             <div>
               <h2>Historical validation</h2>
-              <p>Recorded research results · not a fresh validation run</p>
             </div>
           </div>
           <div className="validation-note">
-            These summaries predate dashboard publication and have no
-            validation-run manifest. They provide research context, not proof
-            that a new fit has passed all tests.
+            Earlier research runs; not revalidated for this release. No
+            validation-run manifest.
           </div>
           {gates ? (
             <div className="gate-list">
@@ -265,10 +241,8 @@ export default function Health({
                 </div>
               ))}
               <p className="small-note">
-                RMSE in seconds on a 90-second lap. Session-level 90% intervals
-                covered {pct(validation.teammate_session.cov90)} of held-out
-                observations. These recorded summaries have not been revalidated
-                by this dashboard.
+                RMSE per 90s lap · held-out session coverage (90% intervals):{" "}
+                {pct(validation.teammate_session.cov90)}
               </p>
             </div>
           ) : (
@@ -278,58 +252,46 @@ export default function Health({
           )}
         </section>
       </div>
-      <section className="panel method-panel">
-        <div className="panel-heading">
+      <details className="panel metric-notes method-panel">
+        <summary>Methodology</summary>
+        <dl>
           <div>
-            <h2>How to read these estimates</h2>
-            <p>A statistical separation, with visible assumptions.</p>
+            <dt>Model</dt>
+            <dd>
+              A time-varying Bayesian model separates driver and car pace using
+              teammate comparisons and drivers who change teams.
+            </dd>
           </div>
-        </div>
-        <div className="method-grid">
-          <article>
-            <span>01</span>
-            <h3>Teammates provide the anchor</h3>
-            <p>
-              Drivers share a car package with their teammate. Drivers changing
-              teams connect those comparisons across the grid. A time-varying
-              Bayesian model estimates the driver and car contributions.
-            </p>
-          </article>
-          <article>
-            <span>02</span>
-            <h3>Uncertainty belongs in the result</h3>
-            <p>
-              Dots show posterior medians. The 90% intervals describe
-              uncertainty in estimated pace, not the variability of a single
-              lap. Overlapping rank ranges mean a precise ordering is not
-              established.
-            </p>
-          </article>
-          <article>
-            <span>03</span>
-            <h3>The scope stays explicit</h3>
-            <p>
-              These are qualifying ratings. The headline includes a driver’s
-              team-specific effect; portable skill remains experimental. Neither
-              is yet an overall measure of racing ability.
-            </p>
-          </article>
-          <article>
-            <span>04</span>
-            <h3>History can be revised</h3>
-            <p>
-              New comparisons can change the interpretation of old performances.
-              Trend charts use the latest fit; immutable publication snapshots
-              preserve what was shown at the time.
-            </p>
-          </article>
-        </div>
-      </section>
+          <div>
+            <dt>Scope</dt>
+            <dd>
+              Qualifying only. In-team pace includes a persistent driver–team
+              effect. Portable skill excludes that effect and remains
+              experimental.
+            </dd>
+          </div>
+          <div>
+            <dt>Uncertainty</dt>
+            <dd>
+              Dots show posterior medians; 90% intervals describe uncertainty in
+              estimated pace and rank, not variation between laps.
+            </dd>
+          </div>
+          <div>
+            <dt>History</dt>
+            <dd>
+              Charts use the latest fit and each event’s field average. The
+              archive preserves earlier publications. Historical curves are not
+              forecasts or absolute pace comparisons across eras.
+            </dd>
+          </div>
+        </dl>
+      </details>
       <section className="panel">
         <div className="panel-heading">
           <div>
             <h2>Publication archive</h2>
-            <p>As-published estimates · kept separately from revised trends</p>
+            <p>Original published estimates</p>
           </div>
           {snap && (
             <button
@@ -372,11 +334,7 @@ export default function Health({
                 </div>
               ))}
             </div>
-            <p className="small-note">
-              Showing the first five drivers by headline qualifying pace in this
-              publication. Only snapshots with explicit headline / portable
-              metric labels are included.
-            </p>
+            <p className="small-note">Top 5 · in-team qualifying pace</p>
           </div>
         ) : (
           <Empty title="No compatible snapshots">
@@ -388,7 +346,6 @@ export default function Health({
         <div className="panel-heading">
           <div>
             <h2>Release details</h2>
-            <p>Reproducible source identity and update timing.</p>
           </div>
           <button
             className="button"
@@ -409,6 +366,13 @@ export default function Health({
           </button>
         </div>
         <dl className="release-details">
+          <div>
+            <dt>Dataset</dt>
+            <dd>
+              {data.meta.n_lap_times.toLocaleString()} qualifying times ·{" "}
+              {data.events.length} events · {data.meta.window}
+            </dd>
+          </div>
           <div>
             <dt>Release</dt>
             <dd>{release?.release || "Loading"}</dd>
@@ -440,10 +404,7 @@ export default function Health({
           </div>
           <div>
             <dt>Refresh policy</dt>
-            <dd>
-              Checks for publications every 30 seconds. Model fitting runs
-              separately.
-            </dd>
+            <dd>Publication check every 30s; model fitting runs separately.</dd>
           </div>
         </dl>
       </section>

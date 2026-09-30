@@ -89,22 +89,19 @@ export function Band({
 }
 
 export function PageHeading({
-  eyebrow,
   title,
   children,
   action,
 }: {
-  eyebrow: string;
   title: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   action?: React.ReactNode;
 }) {
   return (
     <div className="page-heading">
       <div>
-        <div className="eyebrow">{eyebrow}</div>
         <h1>{title}</h1>
-        <p>{children}</p>
+        {children && <p>{children}</p>}
       </div>
       {action}
     </div>
@@ -129,7 +126,7 @@ export function MetricControl({
         onClick={() => setMetric("portable")}
         aria-pressed={metric === "portable"}
       >
-        Portable skill <span>LAB</span>
+        Portable skill <span>Experimental</span>
       </button>
     </div>
   );

@@ -9,7 +9,7 @@ test.beforeEach(async ({ page, request }) => {
   current = await (await request.get(`data/${pointer.url}`)).json();
   await page.goto("./");
   await expect(
-    page.getByRole("heading", { name: "The drivers, separated." }),
+    page.getByRole("heading", { name: "Driver rankings" }),
   ).toBeVisible();
 });
 
@@ -19,6 +19,10 @@ test("rankings, search, team filter, driver details and metric-specific CSV", as
   await expect(page.locator(".rank-table tbody tr")).toHaveCount(
     current.drivers.length,
   );
+  await page.getByText("Metric definitions", { exact: true }).click();
+  await expect(
+    page.getByText("Driver qualifying pace including a persistent"),
+  ).toBeVisible();
   await page.getByLabel("Search drivers").fill("norris");
   await expect(page.locator(".rank-table tbody tr")).toHaveCount(1);
   await page.getByRole("button", { name: "Inspect Lando Norris" }).click();
@@ -30,9 +34,11 @@ test("rankings, search, team filter, driver details and metric-specific CSV", as
   await page.getByLabel("Clear search").click();
   await page.getByLabel("Filter by team").selectOption("Ferrari");
   await expect(page.locator(".rank-table tbody tr")).toHaveCount(2);
-  await page.getByRole("button", { name: "Portable skill LAB" }).click();
+  await page
+    .getByRole("button", { name: "Portable skill Experimental" })
+    .click();
   await expect(
-    page.getByText("Experimental: portable skill is sensitive"),
+    page.getByText("Experimental: sensitive to model assumptions"),
   ).toBeVisible();
   const downloadPromise = page.waitForEvent("download");
   await page.getByRole("button", { name: "Export rankings" }).click();
@@ -69,7 +75,7 @@ test("season trends support absent entrants and car circuit adjustment", async (
     .getAttribute("d");
   expect(after).not.toBe(before);
   await expect(
-    page.getByRole("heading", { name: "Development over time" }),
+    page.getByRole("heading", { name: "Pace history" }),
   ).toBeVisible();
 });
 
@@ -95,6 +101,10 @@ test("comparisons reverse correctly and matrix cells select the actual pair", as
   await expect(page.locator(".matrix tbody tr")).toHaveCount(
     current.cars.length,
   );
+  await page.getByText("Calculation details", { exact: true }).click();
+  await expect(
+    page.getByText("Gap intervals:", { exact: false }),
+  ).toBeVisible();
 });
 
 test("health discloses unavailable racing, historical gates and snapshots", async ({
@@ -112,6 +122,10 @@ test("health discloses unavailable racing, historical gates and snapshots", asyn
       .length,
   );
   await expect(page.locator(".archive-top>div")).toHaveCount(5);
+  await page.getByText("Methodology", { exact: true }).click();
+  await expect(
+    page.getByText("A time-varying Bayesian model separates"),
+  ).toBeVisible();
   await expect(
     page.getByText("This dataset format is not supported."),
   ).toHaveCount(0);
@@ -187,7 +201,7 @@ test("initial unavailable dataset has a working retry", async ({ page }) => {
   await page.unroute("**/data/latest.json");
   await page.getByRole("button", { name: "Try again" }).click();
   await expect(
-    page.getByRole("heading", { name: "The drivers, separated." }),
+    page.getByRole("heading", { name: "Driver rankings" }),
   ).toBeVisible();
 });
 

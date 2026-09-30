@@ -1,26 +1,8 @@
 import { useState } from "react";
-import {
-  ArrowDownToLine,
-  ArrowRight,
-  CircleHelp,
-  Flag,
-  Info,
-  Layers3,
-  Search,
-  TrendingUp,
-  X,
-} from "lucide-react";
+import { ArrowDownToLine, ArrowRight, Info, Search, X } from "lucide-react";
 import type { Dataset, Driver, Car, Metric, Estimate } from "../types";
 import { Badge, Empty, Band, PageHeading, MetricControl } from "../components";
-import {
-  color,
-  signed,
-  pct,
-  date,
-  metricLabel,
-  shortName,
-  exportCsv,
-} from "../lib";
+import { color, signed, pct, date, metricLabel, exportCsv } from "../lib";
 import Trend from "./Trend";
 
 export default function Rankings({
@@ -44,8 +26,6 @@ export default function Rankings({
   const [search, setSearch] = useState("");
   const [team, setTeam] = useState("all");
   const selectedRow = rows.find((r) => r.id === selected) || rows[0];
-  const top = rows[0];
-  const topValue = val(top);
   const filtered = rows.filter(
     (r) =>
       `${r.name} ${car ? "" : (r as Driver).team}`
@@ -61,8 +41,7 @@ export default function Rankings({
   return (
     <>
       <PageHeading
-        eyebrow={`${e.event_id.slice(0, 4)} · ROUND ${Number(e.event_id.slice(5))} · QUALIFYING`}
-        title={car ? "The machinery, measured." : "The drivers, separated."}
+        title={car ? "Car rankings" : "Driver rankings"}
         action={
           <button
             className="button"
@@ -72,72 +51,28 @@ export default function Rankings({
             Export rankings
           </button>
         }
-      >
-        {car
-          ? "Track-neutral car performance, with the driver contribution accounted for."
-          : "Estimated driver pace with car performance accounted for. Read the ranges, not just the rank."}
-      </PageHeading>
+      />
       <div className="event-line">
-        <Badge tone="green">Published estimates</Badge>
+        <Badge tone="green">Qualifying</Badge>
         <span>
-          Through {e.race_name} <span className="muted">· {date(e.date)}</span>
+          Round {Number(e.event_id.slice(5))} · {e.race_name}{" "}
+          <span className="muted">· {date(e.date)}</span>
         </span>
         <a href="#health">
-          View evidence <ArrowRight size={14} />
+          Model details <ArrowRight size={14} />
         </a>
-      </div>
-      <div className="stat-grid">
-        <div className="stat-card">
-          <div className="stat-label">
-            {car ? "LEADING CAR ESTIMATE" : "LEADING DRIVER ESTIMATE"}
-            <Flag size={15} />
-          </div>
-          <div className="stat-name">
-            {top.name}
-            <span className="tiny-tag">P1</span>
-          </div>
-          <div className="stat-sub">
-            <strong>{signed(topValue.median)}s</strong> relative to the field
-            average
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">
-            PROBABILITY OF BEING FASTEST
-            <TrendingUp size={15} />
-          </div>
-          <div className="stat-number">
-            {pct(topValue.p_fastest)}
-            <span>for {car ? top.name : shortName(top.name)}</span>
-          </div>
-          <div className="stat-sub">
-            Model uncertainty · not a race-win probability
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">
-            THE EVIDENCE BASE
-            <Layers3 size={15} />
-          </div>
-          <div className="stat-number">
-            {data.meta.n_lap_times.toLocaleString()}
-            <span>qualifying times</span>
-          </div>
-          <div className="stat-sub">
-            {data.events.length} events · {data.meta.window} · {rows.length}{" "}
-            current {car ? "cars" : "drivers"}
-          </div>
-        </div>
       </div>
       <div className="ranking-layout">
         <section className="panel ranking-panel">
           <div className="panel-heading">
             <div>
-              <h2>{car ? "Car performance" : "Driver rankings"}</h2>
+              <h2>Qualifying pace</h2>
               <p>
                 {car
-                  ? "Average circuit · qualifying pace"
-                  : metricLabel(metric)}
+                  ? "Average circuit"
+                  : metric === "headline"
+                    ? "Includes driver–team effect"
+                    : "Experimental transferable skill"}
               </p>
             </div>
             {!car && <MetricControl metric={metric} setMetric={setMetric} />}
@@ -146,8 +81,8 @@ export default function Rankings({
             <div className="inline-warning">
               <Info size={16} />
               <span>
-                Experimental: portable skill is sensitive to model choices and
-                has weaker ranking recovery.
+                Experimental: sensitive to model assumptions; weaker ranking
+                recovery in simulations.
               </span>
             </div>
           )}
@@ -197,7 +132,7 @@ export default function Rankings({
                   <th>{car ? "CONSTRUCTOR" : "DRIVER"}</th>
                   <th className="numeric">PACE / 90s</th>
                   <th className="range-col">90% PACE INTERVAL</th>
-                  <th className="numeric">RANK RANGE</th>
+                  <th className="numeric">90% RANK RANGE</th>
                 </tr>
               </thead>
               <tbody>
@@ -290,39 +225,36 @@ export default function Rankings({
             rank={rows.indexOf(selectedRow) + 1}
             metric={metric}
           />
-          <div className="context-card">
-            <CircleHelp size={19} />
-            <h3>What does +0.100s mean?</h3>
-            <p>
-              An estimated advantage of one tenth on a reference 90-second lap,
-              relative to the average {car ? "car" : "driver"} in this field.
-            </p>
-            <p>
-              {car
-                ? "The car rating covers the whole package. Pit crew performance and reliability are separate qualities."
-                : "The headline includes a persistent team-specific driver effect. It is not a definitive ranking of pure, transferable skill."}
-            </p>
-            <a href="#health">
-              Understand the model <ArrowRight size={14} />
-            </a>
-          </div>
+          <details className="metric-notes">
+            <summary>Metric definitions</summary>
+            <dl>
+              <div>
+                <dt>Pace</dt>
+                <dd>
+                  Seconds gained per 90-second lap against the average{" "}
+                  {car ? "car" : "driver"} in the field.
+                </dd>
+              </div>
+              <div>
+                <dt>{car ? "Car rating" : "In-team pace"}</dt>
+                <dd>
+                  {car
+                    ? "Qualifying performance at an average circuit, excluding reliability and pit stops."
+                    : "Driver qualifying pace including a persistent driver–team effect. Portable skill excludes that effect and remains experimental."}
+                </dd>
+              </div>
+              <div>
+                <dt>90% intervals</dt>
+                <dd>
+                  Uncertainty in estimated pace and rank. Probabilities refer to
+                  qualifying ability, not race results.
+                </dd>
+              </div>
+            </dl>
+          </details>
         </div>
       </div>
       <Trend data={data} car={car} metric={metric} initial={selectedRow.id} />
-      <div className="notice roadmap">
-        <Layers3 size={20} />
-        <div>
-          <strong>Beyond qualifying</strong>
-          <p>
-            Race pace, tyre management, racecraft and an equal-car championship
-            are in development. Racing estimates remain hidden until their
-            results are regenerated and checked.
-          </p>
-        </div>
-        <a href="#health">
-          See readiness <ArrowRight size={16} />
-        </a>
-      </div>
     </>
   );
 }
@@ -343,7 +275,8 @@ function Detail({
   return (
     <section className="panel detail-card" aria-label="Selected entry">
       <div className="detail-kicker">
-        {car ? "CONSTRUCTOR" : "DRIVER"} SPOTLIGHT<span>#{rank}</span>
+        {car ? "CONSTRUCTOR" : "DRIVER"}
+        <span>#{rank}</span>
       </div>
       <div
         className="monogram"
@@ -362,7 +295,7 @@ function Detail({
         <span>s</span>
       </div>
       <div className="detail-caption">
-        per 90-second lap · above / below average
+        seconds / 90s lap · positive = faster
       </div>
       <div className="detail-rule" />
       <dl className="detail-stats">
@@ -386,6 +319,12 @@ function Detail({
           <dt>Probability top 3</dt>
           <dd>{pct(value.p_top3)}</dd>
         </div>
+        {car && (
+          <div>
+            <dt>Gap to fastest car</dt>
+            <dd>{Math.abs((row as Car).gap_to_best.median).toFixed(3)}s</dd>
+          </div>
+        )}
       </dl>
       {!car && (
         <>
@@ -404,17 +343,7 @@ function Detail({
               <span>team lineages</span>
             </div>
           </div>
-          <p className="small-note">
-            Evidence counts provide context; they are not confidence scores.
-          </p>
         </>
-      )}
-      {car && (
-        <p className="small-note">
-          Estimated gap to the fastest car:{" "}
-          {Math.abs((row as Car).gap_to_best.median).toFixed(3)}s. Calculated
-          across joint model samples.
-        </p>
       )}
     </section>
   );

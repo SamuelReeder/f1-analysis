@@ -137,17 +137,11 @@ p {
   letter-spacing: 1px;
   color: #bfccbe;
 }
-.sidebar-caption {
-  font-size: 9px;
-  letter-spacing: 1.6px;
-  color: #789381;
-  font-weight: 650;
-  margin: 47px 12px 17px;
-}
 .sidebar nav {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  margin-top: 36px;
 }
 .sidebar nav a {
   display: flex;
@@ -173,32 +167,6 @@ p {
 }
 .sidebar nav a svg:last-child:not(:first-child) {
   margin-left: auto;
-}
-.sidebar-note {
-  border: 1px solid #304336;
-  border-radius: 9px;
-  margin: 54px 5px 24px;
-  padding: 18px 16px;
-}
-.orbit {
-  color: #c4e686;
-  margin-bottom: 17px;
-}
-.sidebar-note strong {
-  font-size: 13px;
-}
-.sidebar-note p {
-  color: #9bad9c;
-  font-size: 12px;
-  margin: 8px 0 18px;
-  line-height: 1.75;
-}
-.sidebar-note a {
-  font-size: 11px;
-  color: #c5dfae;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 .sidebar-foot {
   margin-top: auto;
@@ -279,7 +247,11 @@ main {
   justify-content: space-between;
   align-items: center;
   gap: 18px;
-  margin: 0 0 23px;
+  margin: 0 0 16px;
+}
+.page-heading h1 {
+  font-size: 27px;
+  letter-spacing: -0.7px;
 }
 .eyebrow {
   font-size: 10px;
@@ -291,7 +263,7 @@ main {
 .page-heading p {
   font-size: 13px;
   color: #7a8577;
-  margin-top: 12px;
+  margin-top: 6px;
   max-width: 710px;
 }
 .button {
@@ -687,7 +659,7 @@ select {
 .detail-column {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
 }
 .detail-card {
   padding: 22px 21px;
@@ -798,43 +770,8 @@ select {
   color: #929d86 !important;
   margin-top: 17px !important;
 }
-.context-card {
-  border: 1px solid #e1e6d7;
-  border-radius: 8px;
-  background: #eef2e7;
-  padding: 22px;
-  color: #718360;
-}
-.context-card > svg {
-  color: #869a70;
-  margin-bottom: 12px;
-}
-.context-card h3 {
-  color: #536a40;
-  font-size: 12px;
-}
-.context-card p {
-  font-size: 11px;
-  line-height: 1.8;
-  margin-top: 10px;
-  color: #88967a;
-}
-.context-card a {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 17px;
-  font-size: 10px;
-  color: #698553;
-  font-weight: 550;
-}
 .trend-panel {
   margin-top: 24px;
-}
-.trend-panel .eyebrow {
-  font-size: 8px;
-  letter-spacing: 1.4px;
-  margin-bottom: 5px;
 }
 .inline-label {
   font-size: 10px;
@@ -973,10 +910,6 @@ select {
 }
 .notice.warning strong {
   color: #8b7139;
-}
-.notice.roadmap {
-  margin-top: 24px;
-  background: transparent;
 }
 .page-footer {
   display: flex;
@@ -1128,15 +1061,8 @@ select {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-.comparison-note {
-  margin-top: 28px;
-  margin-bottom: 0;
-}
-.comparison-note p {
-  margin: 0;
-}
 .comparison-panel > .panel-foot {
-  margin: 25px -30px -30px;
+  margin: 25px -30px 0;
 }
 .matrix-panel {
   margin-top: 25px;
@@ -1394,29 +1320,34 @@ select {
 .method-panel {
   margin: 24px 0;
 }
-.method-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  padding: 5px 25px 26px;
-  gap: 27px;
-}
-.method-grid article > span {
-  display: block;
-  color: #a7b592;
-  font-size: 11px;
-  font-variant-numeric: tabular-nums;
-  margin-bottom: 13px;
-}
-.method-grid h3 {
+.metric-notes {
+  padding: 14px 18px;
+  color: #5e7053;
   font-size: 12px;
-  color: #6a8451;
-  line-height: 1.6;
+  line-height: 1.65;
 }
-.method-grid p {
-  font-size: 11px;
-  line-height: 1.85;
-  color: #98a688;
-  margin-top: 9px;
+.metric-notes summary {
+  cursor: pointer;
+  font-weight: 550;
+}
+.metric-notes dl {
+  margin: 14px 0 0;
+}
+.metric-notes dl > div + div {
+  margin-top: 12px;
+}
+.metric-notes dt {
+  font-weight: 600;
+  color: #263f2d;
+}
+.metric-notes dd {
+  margin: 3px 0 0;
+}
+.metric-notes > p {
+  margin-top: 12px;
+}
+.comparison-method {
+  padding: 16px 0 0;
 }
 .archive {
   padding: 0 24px 24px;
@@ -1555,7 +1486,6 @@ select {
 .panel-foot,
 .notice p,
 .readiness p,
-.method-grid p,
 .release-details dt {
   color: #717e68 !important;
 }
@@ -1567,7 +1497,6 @@ select {
   fill: #77856c;
 }
 .readiness strong,
-.method-grid h3,
 .release-details dd,
 .archive-top strong,
 .gate-list > div,
@@ -1593,9 +1522,6 @@ select {
     font-size: 12px;
   }
   .detail-card {
-    padding: 25px;
-  }
-  .context-card {
     padding: 25px;
   }
 }
@@ -1674,18 +1600,12 @@ select {
   .stat-grid.four {
     grid-template-columns: repeat(2, 1fr);
   }
-  .method-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
   .brand {
     margin: 0 3px;
   }
   .sidebar {
     padding-left: 14px;
     padding-right: 14px;
-  }
-  .sidebar-note {
-    margin-top: 42px;
   }
   .health-status > .badge {
     white-space: normal;
@@ -1726,9 +1646,6 @@ select {
   }
   .evidence-grid {
     max-width: 280px;
-  }
-  .context-card {
-    align-self: start;
   }
   .ranking-panel .panel-heading {
     flex-direction: row;
@@ -1814,14 +1731,13 @@ select {
     font-size: 10px;
     letter-spacing: 0.3px;
   }
-  .sidebar-caption,
-  .sidebar-note,
   .sidebar-foot {
     display: none;
   }
   .sidebar nav {
     flex-direction: row;
     gap: 5px;
+    margin-top: 0;
   }
   .sidebar nav a {
     font-size: 0;
@@ -2014,15 +1930,6 @@ select {
   .detail-card .detail-pace {
     font-size: 37px;
   }
-  .context-card {
-    padding: 20px;
-  }
-  .context-card p {
-    font-size: 12px;
-  }
-  .context-card h3 {
-    font-size: 13px;
-  }
   .evidence-grid strong {
     font-size: 21px;
   }
@@ -2173,13 +2080,10 @@ select {
     font-size: 10px;
   }
   .comparison-panel > .panel-foot {
-    margin: 20px -16px -21px;
+    margin: 20px -16px 0;
   }
   .probability-labels {
     font-size: 9px;
-  }
-  .comparison-note p {
-    font-size: 10px;
   }
   .matrix-scroll {
     padding: 0 12px 18px;
@@ -2259,17 +2163,6 @@ select {
   }
   .benchmark {
     padding: 5px 18px 22px;
-  }
-  .method-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 25px 18px;
-    padding: 5px 18px 23px;
-  }
-  .method-grid h3 {
-    font-size: 11px;
-  }
-  .method-grid p {
-    font-size: 10px;
   }
   .archive {
     padding: 0 17px 20px;
@@ -2378,7 +2271,6 @@ select {
 .panel-foot,
 .notice p,
 .readiness p,
-.method-grid p,
 .release-details dt {
   color: #64745d !important;
 }
@@ -2423,8 +2315,6 @@ select {
 .detail-kicker,
 .detail-kicker > span,
 .evidence-grid span,
-.context-card p,
-.context-card a,
 .inline-label,
 .checkbox,
 .chart-unit,
@@ -2441,7 +2331,6 @@ select {
 .benchmark-head > div,
 .benchmark-head > div > span,
 .benchmark-row strong,
-.method-grid article > span,
 .archive > label,
 .archive-top b,
 .archive-top span,
@@ -2461,9 +2350,6 @@ select {
 }
 .sidebar-foot > span:last-child {
   color: #a0b4a5;
-}
-.sidebar-caption {
-  color: #97af9e;
 }
 .trend-chart text {
   fill: #617156;

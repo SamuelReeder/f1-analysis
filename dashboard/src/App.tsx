@@ -9,7 +9,6 @@ import {
   RefreshCw,
   TriangleAlert,
   Users,
-  Flag,
 } from "lucide-react";
 import type { Dataset, Metric, Release, RunStatus, View } from "./types";
 import Rankings from "./views/Rankings";
@@ -49,9 +48,7 @@ export default function App() {
           signal: AbortSignal.timeout(15000),
         });
         if (!r.ok)
-          throw new Error(
-            "A published dataset is not available. Run the dashboard publisher, then retry.",
-          );
+          throw new Error("Published data is unavailable. Try again shortly.");
         return r.json();
       };
       const pointer: Release & { schema_version: number } =
@@ -122,7 +119,6 @@ export default function App() {
             F1<span className="brand-light">Observatory</span>
           </span>
         </a>
-        <div className="sidebar-caption">THE PERFORMANCE PICTURE</div>
         <nav aria-label="Main navigation">
           {navigation.map((n) => (
             <a
@@ -137,16 +133,6 @@ export default function App() {
             </a>
           ))}
         </nav>
-        <div className="sidebar-note">
-          <div className="orbit">
-            <Flag size={20} />
-          </div>
-          <strong>Beyond the results.</strong>
-          <p>Separating the driver from the car, one comparison at a time.</p>
-          <a href="#health">
-            How the model works <ArrowRight size={14} />
-          </a>
-        </div>
         <div className="sidebar-foot">
           <span className="online-dot" />
           Independent F1 analysis<span>Qualifying · 2010 onward</span>
@@ -190,8 +176,7 @@ export default function App() {
               ) : (
                 <>
                   <LoaderCircle className="spin" />
-                  <h1>Loading the performance picture</h1>
-                  <p>Reading the latest verified release.</p>
+                  <h1>Loading rankings</h1>
                 </>
               )}
             </div>
@@ -206,10 +191,7 @@ export default function App() {
                         ? "Update check unavailable"
                         : "The latest refresh failed"}
                     </strong>
-                    <p>
-                      {error ||
-                        "You are viewing the last successfully published release. See Model health for details."}
-                    </p>
+                    <p>{error || "Showing the last published release."}</p>
                   </div>
                   <a href="#health">
                     View health <ArrowRight size={14} />
@@ -219,8 +201,7 @@ export default function App() {
               {run?.state === "running" && (
                 <div className="notice" role="status">
                   <LoaderCircle size={17} className="spin" />
-                  Refresh in progress: {run.stage}. The last published release
-                  remains available.
+                  Refresh in progress: {run.stage}. Showing the last release.
                 </div>
               )}
               {view === "drivers" || view === "cars" ? (
@@ -240,10 +221,7 @@ export default function App() {
                 <span>
                   Independent estimates. Not affiliated with Formula 1.
                 </span>
-                <span title={checked}>
-                  Checks for published updates every 30s{" "}
-                  {checked && "· Connected"}
-                </span>
+                <span title={checked}>Update check every 30s</span>
               </footer>
             </>
           )}

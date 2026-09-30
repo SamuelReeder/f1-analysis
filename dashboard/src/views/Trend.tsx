@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Info } from "lucide-react";
 import type { Dataset, Metric, Estimate } from "../types";
 import { signed, shortName } from "../lib";
 import { Empty } from "../components";
@@ -64,9 +63,8 @@ export default function Trend({
     <section className="panel trend-panel">
       <div className="panel-heading">
         <div>
-          <div className="eyebrow">THE LONG VIEW</div>
-          <h2>{car ? "Development over time" : "Form over time"}</h2>
-          <p>Revised estimates · later evidence can change earlier ratings</p>
+          <h2>Pace history</h2>
+          <p>Revised estimates</p>
         </div>
         <label className="inline-label">
           Season
@@ -145,7 +143,7 @@ export default function Trend({
       </div>
       {!values.length ? (
         <Empty title="No estimates in this season">
-          Choose another season or entry to explore their history.
+          Choose another season or entry.
         </Empty>
       ) : (
         <div className="chart-wrap">
@@ -284,22 +282,15 @@ export default function Trend({
               </>
             ) : (
               <span>
-                Hover, tap or focus an event to inspect pace.{" "}
-                {season === "all"
-                  ? "The horizontal axis follows race events."
-                  : "The horizontal axis shows race rounds."}
+                {season === "all" ? "Race events" : "Race rounds"} · select an
+                event for values
               </span>
             )}
           </div>
         </div>
       )}
       <div className="panel-foot">
-        <Info size={15} />
-        <span>
-          Relative to the field entered at each event. These curves include
-          later evidence; they are not historical forecasts or a direct
-          comparison of absolute pace across eras.
-        </span>
+        <span>Relative to each event’s field, revised using later data.</span>
       </div>
     </section>
   );

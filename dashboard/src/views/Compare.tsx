@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeftRight, Info } from "lucide-react";
+import { ArrowLeftRight } from "lucide-react";
 import type { Dataset, Metric, Car, Driver } from "../types";
 import { metricLabel, shortName, pct, signed } from "../lib";
 import { PageHeading, MetricControl, Badge, Band } from "../components";
@@ -31,8 +31,8 @@ export default function Compare({
   ];
   return (
     <>
-      <PageHeading eyebrow="A CLOSER COMPARISON" title="Head to head.">
-        Compare underlying qualifying pace, with uncertainty carried through.
+      <PageHeading title="Head to head">
+        Qualifying pace · seconds per 90s lap
       </PageHeading>
       <div className="comparison-toolbar">
         <div className="segmented">
@@ -79,7 +79,7 @@ export default function Compare({
                   </option>
                 ))}
             </select>
-            <p>{car ? "Car package pace" : (first as Driver).team}</p>
+            {!car && <p>{(first as Driver).team}</p>}
           </div>
           <button
             className="swap"
@@ -106,7 +106,7 @@ export default function Compare({
                   </option>
                 ))}
             </select>
-            <p>{car ? "Car package pace" : (second as Driver).team}</p>
+            {!car && <p>{(second as Driver).team}</p>}
           </div>
         </div>
         <div className="matchup">
@@ -118,7 +118,7 @@ export default function Compare({
             </p>
           </div>
           <div className="matchup-gap">
-            <span className="eyebrow">ESTIMATED PACE DIFFERENCE</span>
+            <span className="eyebrow">PACE DIFFERENCE</span>
             <div>
               {signed(pair.median)}
               <small>s</small>
@@ -148,31 +148,30 @@ export default function Compare({
             </div>
           ))}
         </div>
-        <div className="notice comparison-note">
-          <Info size={18} />
-          <p>
-            {pair.q05 <= 0 && pair.q95 >= 0
-              ? "The gap’s 90% interval includes zero: the ordering is uncertain."
-              : "The gap’s 90% interval excludes zero: the model finds a clearer pace difference."}{" "}
-            This is a comparison of lasting qualifying pace, not a prediction of
-            the next session or race result.
-          </p>
-        </div>
         <div className="panel-foot">
-          Gap intervals use {data.comparison_draws} shared posterior samples.{" "}
-          {car
-            ? "Car probabilities use the same samples."
-            : `Driver probabilities use all ${data.meta.diagnostics.n_draws.toLocaleString()} posterior samples.`}
+          {pair.q05 <= 0 && pair.q95 >= 0
+            ? "90% gap interval includes zero."
+            : "90% gap interval excludes zero."}
         </div>
+        <details className="metric-notes comparison-method">
+          <summary>Calculation details</summary>
+          <p>
+            Gap intervals: {data.comparison_draws} shared posterior samples.
+            Probabilities:{" "}
+            {(car
+              ? data.comparison_draws
+              : data.meta.diagnostics.n_draws
+            ).toLocaleString()}{" "}
+            samples. Estimates describe qualifying ability, not a forecast for
+            the next race.
+          </p>
+        </details>
       </section>
       <section className="panel matrix-panel">
         <div className="panel-heading">
           <div>
-            <h2>The whole field, at a glance</h2>
-            <p>
-              Probability the row has higher pace than the column. Select a cell
-              to compare.
-            </p>
+            <h2>Pairwise probabilities</h2>
+            <p>Probability row is faster than column (%)</p>
           </div>
           <div className="matrix-key">
             Less likely <span /> More likely
@@ -241,10 +240,6 @@ export default function Compare({
               ))}
             </tbody>
           </table>
-        </div>
-        <div className="panel-foot">
-          Percent probability · the table does not imply certainty about a
-          complete finishing order.
         </div>
       </section>
     </>
