@@ -212,15 +212,15 @@ export default function Compare({
                             style={{
                               background:
                                 p >= 0.9
-                                  ? "#2d6146"
+                                  ? "#b80500"
                                   : p >= 0.75
-                                    ? "#c4dcc3"
+                                    ? "#f5aaa6"
                                     : p >= 0.5
-                                      ? "#e6efe1"
+                                      ? "#ffe3e0"
                                       : p >= 0.25
-                                        ? "#f7f1e5"
-                                        : "#efdbc0",
-                              color: p >= 0.9 ? "#fff" : "#263f2d",
+                                        ? "#f3f3f4"
+                                        : "#e0e0e4",
+                              color: p >= 0.9 ? "#fff" : "#15151e",
                             }}
                             title={`${r.name} ahead of ${c.name}: ${pct(p)}`}
                             aria-label={`${r.name} ahead of ${c.name}: ${pct(p)}`}

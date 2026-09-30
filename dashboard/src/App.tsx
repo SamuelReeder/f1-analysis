@@ -113,10 +113,10 @@ export default function App() {
         Skip to content
       </a>
       <aside className="sidebar">
-        <a href="#drivers" className="brand">
+        <a href="#drivers" className="brand" aria-label="F1 Analysis">
           <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" />
           <span>
-            F1<span className="brand-light">Observatory</span>
+            F1<span className="brand-light">Analysis</span>
           </span>
         </a>
         <nav aria-label="Main navigation">
@@ -141,7 +141,7 @@ export default function App() {
       <div className="workspace">
         <header className="topbar">
           <span className="breadcrumb">
-            Observatory <ChevronRight size={14} />
+            F1 Analysis <ChevronRight size={14} />
             <strong>{navigation.find((n) => n.id === view)?.name}</strong>
           </span>
           <div className="top-actions">

@@ -35,7 +35,8 @@ export default function Trend({
   const series = [a, b].filter(Boolean).map((id, i) => ({
     id,
     name: entities.find((e) => e.id === id)?.name || id,
-    color: i === 0 ? "#286b55" : "#a88144",
+    color: i === 0 ? "var(--accent)" : "var(--ink)",
+    dash: i === 0 ? undefined : "7 4",
     points: events.map(
       (e) => history[id]?.find((p) => p.event === e.event_id)?.[key],
     ),
@@ -87,7 +88,10 @@ export default function Trend({
       </div>
       <div className="trend-controls">
         <label>
-          <span className="series-dot" style={{ background: "#286b55" }} />
+          <span
+            className="series-dot"
+            style={{ background: "var(--accent)" }}
+          />
           <select
             aria-label="First trend entry"
             value={a}
@@ -106,7 +110,7 @@ export default function Trend({
           </select>
         </label>
         <label>
-          <span className="series-dot" style={{ background: "#a88144" }} />
+          <span className="series-dot series-dashed" />
           <select
             aria-label="Second trend entry"
             value={b}
@@ -161,7 +165,13 @@ export default function Trend({
               const v = ymin + ((ymax - ymin) * i) / 4;
               return (
                 <g key={i}>
-                  <line x1="65" x2="900" y1={y(v)} y2={y(v)} stroke="#e8ebe5" />
+                  <line
+                    x1="65"
+                    x2="900"
+                    y1={y(v)}
+                    y2={y(v)}
+                    stroke="var(--line)"
+                  />
                   <text x="50" y={y(v) + 4} textAnchor="end">
                     {signed(v, 2)}
                   </text>
@@ -173,7 +183,7 @@ export default function Trend({
               x2="900"
               y1={y(0)}
               y2={y(0)}
-              stroke="#a7b3a7"
+              stroke="var(--line-strong)"
               strokeDasharray="4 4"
             />
             {series.map((s) => (
@@ -197,6 +207,7 @@ export default function Trend({
                       fill="none"
                       stroke={s.color}
                       strokeWidth="2.5"
+                      strokeDasharray={s.dash}
                       strokeLinejoin="round"
                     />
                     {seg.length === 1 && (
@@ -245,7 +256,7 @@ export default function Trend({
                   x2={x(hover)}
                   y1="32"
                   y2="255"
-                  stroke="#68786a"
+                  stroke="var(--muted)"
                   strokeDasharray="3 3"
                 />
                 {series.map(

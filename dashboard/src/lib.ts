@@ -1,20 +1,22 @@
 import type { Car, Driver, Dataset, Metric } from "./types";
 
+// Current team colours from Formula 1's --f1-team-colour values (2026-09-30).
+// https://www.formula1.com/en/teams — keyed by the model's team lineages.
 const colors: Record<string, string> = {
-  brackley: "#218981",
-  ferrari: "#cf4549",
-  mclaren: "#d37b2c",
-  red_bull: "#4677ba",
-  milton_keynes: "#4677ba",
-  williams: "#5684c7",
-  enstone: "#a065a5",
-  silverstone: "#548775",
-  sauber: "#707b69",
-  faenza: "#6b83ab",
-  haas: "#9b7773",
-  cadillac: "#888a99",
+  brackley: "#27f4d2",
+  ferrari: "#e8002d",
+  mclaren: "#ff8000",
+  red_bull: "#3671c6",
+  milton_keynes: "#3671c6",
+  williams: "#1868db",
+  enstone: "#00a1e8",
+  silverstone: "#229971",
+  hinwil: "#ff2d00",
+  faenza: "#6692ff",
+  haas: "#dee1e2",
+  cadillac: "#aaaaad",
 };
-export const color = (id: string) => colors[id] || "#7c8795";
+export const color = (id: string) => colors[id] || "#606066";
 export const signed = (n: number, digits = 3) =>
   `${n > 0 ? "+" : n < 0 ? "−" : ""}${Math.abs(n).toFixed(digits)}`;
 export const pct = (n: number = 0) => `${(n * 100).toFixed(1)}%`;

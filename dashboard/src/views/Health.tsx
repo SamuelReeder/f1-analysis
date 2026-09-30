@@ -10,6 +10,7 @@ import {
 import type { Dataset, RunStatus, Release } from "../types";
 import { date, pct, download, signed } from "../lib";
 import { Badge, Empty, PageHeading } from "../components";
+import Methodology from "./Methodology";
 
 const gateNames: Record<string, string> = {
   convergence: "Sampler convergence",
@@ -234,7 +235,7 @@ export default function Health({
                     <span
                       style={{
                         width: `${(r.v / 0.35) * 100}%`,
-                        background: i ? "#c6cfbf" : "#356b50",
+                        background: i ? "var(--line-strong)" : "var(--accent)",
                       }}
                     />
                   </div>
@@ -252,41 +253,7 @@ export default function Health({
           )}
         </section>
       </div>
-      <details className="panel metric-notes method-panel">
-        <summary>Methodology</summary>
-        <dl>
-          <div>
-            <dt>Model</dt>
-            <dd>
-              A time-varying Bayesian model separates driver and car pace using
-              teammate comparisons and drivers who change teams.
-            </dd>
-          </div>
-          <div>
-            <dt>Scope</dt>
-            <dd>
-              Qualifying only. In-team pace includes a persistent driver–team
-              effect. Portable skill excludes that effect and remains
-              experimental.
-            </dd>
-          </div>
-          <div>
-            <dt>Uncertainty</dt>
-            <dd>
-              Dots show posterior medians; 90% intervals describe uncertainty in
-              estimated pace and rank, not variation between laps.
-            </dd>
-          </div>
-          <div>
-            <dt>History</dt>
-            <dd>
-              Charts use the latest fit and each event’s field average. The
-              archive preserves earlier publications. Historical curves are not
-              forecasts or absolute pace comparisons across eras.
-            </dd>
-          </div>
-        </dl>
-      </details>
+      <Methodology data={data} />
       <section className="panel">
         <div className="panel-heading">
           <div>

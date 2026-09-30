@@ -9,8 +9,18 @@ championship; the approach is in `docs/racing_approach.md`.
 
 ## Dashboard
 
-**F1 Observatory** is a local React/TypeScript dashboard in `dashboard/` using real
-published model estimates. It provides:
+**F1 Analysis** is a local React/TypeScript dashboard in `dashboard/` using real
+published model estimates.
+
+The interface uses Formula 1 red (`#e10600`), charcoal (`#15151e`) and white.
+Team markers use the current colours from [Formula 1’s team directory](https://www.formula1.com/en/teams),
+recorded on 2026-09-30 in `dashboard/src/lib.ts` and keyed by team lineage.
+Historical entries retain that lineage palette. Chart comparisons use red and
+charcoal, with a dashed second series, to stay distinct even for teammates.
+The Methodology section in Model health describes the qualifying model, rating
+definitions, uncertainty, validation limits and publication process.
+
+It provides:
 
 - Driver and car rankings, 90% pace and rank intervals, fastest/top-three
   probabilities, searchable tables, team filters, entry details and CSV downloads.

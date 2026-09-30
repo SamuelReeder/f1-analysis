@@ -54,7 +54,7 @@ export function Band({
         x2={pos(0)}
         y1="0"
         y2="26"
-        stroke="#d5dbd4"
+        stroke="var(--line-strong)"
         strokeDasharray="2 3"
       />
       <line

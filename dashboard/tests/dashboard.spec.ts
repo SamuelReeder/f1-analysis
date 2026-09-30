@@ -8,6 +8,7 @@ test.beforeEach(async ({ page, request }) => {
   const pointer = await (await request.get("data/latest.json")).json();
   current = await (await request.get(`data/${pointer.url}`)).json();
   await page.goto("./");
+  await expect(page).toHaveTitle("F1 Analysis");
   await expect(
     page.getByRole("heading", { name: "Driver rankings" }),
   ).toBeVisible();
@@ -122,9 +123,19 @@ test("health discloses unavailable racing, historical gates and snapshots", asyn
       .length,
   );
   await expect(page.locator(".archive-top>div")).toHaveCount(5);
-  await page.getByText("Methodology", { exact: true }).click();
   await expect(
-    page.getByText("A time-varying Bayesian model separates"),
+    page.getByRole("heading", { name: "Methodology", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("A time-varying Bayesian model estimates"),
+  ).toBeVisible();
+  await page.getByText("Data and lap filtering", { exact: true }).click();
+  await expect(
+    page.getByText("pace = −100 × ln(time / segment median)"),
+  ).toBeVisible();
+  await page.getByText("What each rating measures", { exact: true }).click();
+  await expect(
+    page.getByText("The driver component after removing"),
   ).toBeVisible();
   await expect(
     page.getByText("This dataset format is not supported."),

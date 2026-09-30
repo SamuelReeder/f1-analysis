@@ -187,7 +187,9 @@ export default function Rankings({
                         className="range-col"
                         style={{
                           color:
-                            r.id === selectedRow.id ? "#35795d" : "#819485",
+                            r.id === selectedRow.id
+                              ? "var(--accent)"
+                              : "var(--muted)",
                         }}
                       >
                         <Band value={v} domain={domain} compact />
