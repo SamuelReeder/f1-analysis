@@ -57,3 +57,32 @@ def test_simulated_points_are_consistent():
     # the fastest driver scores more on average than the slowest
     order = Q.mean(0).argsort()
     assert pts[:, order[-1]].mean() > pts[:, order[0]].mean()
+
+
+def test_entered_quality_adds_race_strength():
+    rng = np.random.default_rng(1)
+    Q = np.zeros((200, 20))
+    extra = np.zeros((200, 20))
+    extra[:, 7] = 20.0  # overwhelming race-stage strength for one driver
+    pts = championship.simulate(Q, np.full(200, 0.05), np.full(200, 0.1), np.full(200, 5.0), np.full(200, 1.0),
+                                np.zeros(20), 2, rng, extra)
+    np.testing.assert_allclose(pts[:, 7], 2 * championship.POINTS[0])
+
+
+def test_heldout_fit_checkpoint_is_reused_only_for_the_same_laps(tmp_path, monkeypatch):
+    from f1rank import racemulti
+    calls = []
+
+    def fake_fit(C, **kw):
+        calls.append(len(C))
+        return {"u": np.zeros((2, 1)), "_converged": True, "_rhat_max": 1.0, "_attempts": [{"seed": 0}]}, ["a"]
+
+    monkeypatch.setattr(racemulti, "fit", fake_fit)
+    C = pd.DataFrame({"event_id": ["2018-01"] * 3, "driver_id": ["a"] * 3, "lap_number": [2, 3, 4], "stint": [1, 1, 1],
+                      "y": [0.1, 0.2, 0.3], "quali": [0.0] * 3})
+    path = tmp_path / "2019.npz"
+    racemulti.checkpointed(C, path)
+    post, drivers = racemulti.checkpointed(C, path)
+    assert calls == [3] and drivers == ["a"] and post["_attempts"] == [{"seed": 0}]
+    racemulti.checkpointed(C.assign(y=C.y + 0.01), path)
+    assert calls == [3, 3]

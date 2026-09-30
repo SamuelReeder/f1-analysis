@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 from numpyro.diagnostics import summary
 
+from . import racereport
 from .design import build_design
 from .fit import FITS, HYPER, load
 
@@ -18,8 +19,6 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "outputs"
 VAL = OUT / "validation"
 RAT = OUT / "ratings"
-BASIS_LABEL = {"status code": "from a coded status", "inferred from evidence": "inferred from race evidence",
-               "class base rates": "from class base rates (uncoded, no race evidence)"}
 FILL_CHECK = OUT / "analysis" / "quali_fill" / "check.json"
 
 GATES = {
@@ -87,195 +86,6 @@ def _paired_row(label: str, r: dict) -> dict:
             "rmse_variant_s": r["rmse_variant_s"], "mse_diff_s2": f"{r['mse_diff_s2']:+.4f}",
             "95% interval": f"{lo:+.4f} to {hi:+.4f}", "in90_main": r["in90_main"],
             "in90_variant": r["in90_variant"]}
-
-
-def _num(x: float) -> str:
-    return f"{x:+.4f}" if abs(x) >= 1e-3 or x == 0 else f"{x:+.1e}"
-
-
-def _heldout_row(label: str, r: dict) -> dict:
-    lo, hi = r["mse_diff_ci95"]
-    return {"test": label, "pair-seasons": r["n_pair_seasons"], "rmse_baseline_s": r["rmse_baseline"] * 0.9,
-            "rmse_model_s": r["rmse_model"] * 0.9, "mse_diff_%2": _num(r["mse_diff"]),
-            "95% interval": f"{_num(lo)} to {_num(hi)}"}
-
-
-def racing_section() -> list[str]:
-    """Stage 2 (racing), from the timeline audit and the race-pace outputs, when present."""
-    audit_path, race_path = OUT / "timeline" / "audit.json", OUT / "race" / "stage_b_summary.json"
-    if not audit_path.exists():
-        return []
-    a = json.loads(audit_path.read_text())
-    v = a["cause_model"]["validation"]
-    ret = a["retirements"]
-    L = ["## Racing (stage 2, in progress)\n",
-         "### Event timeline (outcomes from 2010, race evidence from 2018)\n",
-         f"{a['rows']:,} rows over {a['races']} races: neutralisations, retirements and other outcomes, and "
-         "race-control evidence (incidents, penalties, stoppages, off-track moments), plus pit anomalies, "
-         "suspected damage and possible team orders. Rules produce evidence, not verdicts. Full audit: "
-         "`outputs/timeline/AUDIT.md`.\n",
-         f"- **Retirement causes.** {ret['n']} retirements: "
-         + ", ".join(f"{n} {BASIS_LABEL.get(k, k)}" for k, n in ret["by_basis"].items())
-         + ". Jolpica codes causes through 2022 but records almost every later retirement only as "
-           "\"Retired\"; those get probabilities from a model of the cause class given race-control and "
-           f"lap evidence, fitted on {v['n']} coded retirements. Held out a season at a time, its log loss "
-           f"is {v['log_loss_model']:.3f} against {v['log_loss_base_rates']:.3f} for base rates (accuracy "
-           f"{v['accuracy_model']:.2f} vs {v['accuracy_base_rates']:.2f}): informative, far from certain.",
-         "- **Who caused an incident** is split by stated assumptions (the audit lists them), not "
-         "estimates; later models vary them.", ""]
-    if not race_path.exists():
-        return L
-    r = json.loads(race_path.read_text())
-    h = r["heldout"]
-    L += ["### Race pace and tyre degradation (2018 onward, dry races)\n",
-          f"Stage A estimates each driver's pace (at tyre age 10 laps) and degradation per race from clean laps "
-          f"(robust regression with fuel/track trend, compounds, dirty air; block-bootstrap errors). Stage B "
-          f"models {r['n_teammate_races']:,} teammate comparisons in {r['n_races']} races: pace gap = gamma × "
-          "qualifying gap (stage 1, pace in the current car) + a race-specific part, and a degradation gap. "
-          f"gamma = {r['gamma_q05_q50_q95'][1]:.2f} (90% interval {r['gamma_q05_q50_q95'][0]:.2f}–"
-          f"{r['gamma_q05_q50_q95'][2]:.2f}); SD of race-specific pace {r['sd_race_specific_q05_q50_q95'][1]:.3f}% "
-          f"({r['sd_race_specific_q05_q50_q95'][0]:.3f}–{r['sd_race_specific_q05_q50_q95'][2]:.3f}); max R-hat "
-          f"{r['rhat_max']:.3f}, {r['divergences']} divergences.\n",
-          "Held-out seasons (each predicted from the seasons before it; pair-season means; mse in %², "
-          "negative = model better; bootstrap 95% interval over pair-seasons):\n",
-          md_table(pd.DataFrame([
-              _heldout_row("qualifying link vs zero", h["quali_link_vs_zero"]),
-              _heldout_row("+ race-specific part vs qualifying link", h["race_specific_pace_vs_quali_link"]),
-              _heldout_row("degradation effects vs zero", h["degradation_vs_zero"])])), "",
-          f"- **Race-specific pace:** {'passes' if r['gate_race_specific_pace'] else 'does not pass'} its gate "
-          "(the interval must lie below zero), so it " + ("gets its own ranking." if r["gate_race_specific_pace"] else
-                                              "is not published as a ranking; race pace is represented by the "
-                                              "qualifying link."),
-          f"- **Degradation:** {'passes' if r['gate_degradation'] else 'does not pass'} its gate.", ""]
-    jc_path = OUT / "race" / "joint_check_2024.json"
-    if jc_path.exists():
-        jc = json.loads(jc_path.read_text())
-        ag = jc["agreement"]
-        L += [f"- **Two-stage shortcut vs joint lap-level model ({jc['season']}, {jc['n_laps']:,} laps):** "
-              f"{'accepted' if jc['accepted'] else 'not accepted'} by the rule set beforehand "
-              f"({jc['acceptance_rule']}). Race-specific pace: {ag['race_specific_pace']['share_within_quarter_sd']:.0%} "
-              f"of drivers within a quarter SD (correlation of driver means "
-              f"{ag['race_specific_pace']['corr_of_means']:.2f}); degradation "
-              f"{ag['degradation']['share_within_quarter_sd']:.0%} ({ag['degradation']['corr_of_means']:.2f}). "
-              + _scale_note(jc)
-              + ("The two-stage driver estimates are therefore not published; the held-out conclusion is "
-                 "checked with the joint model below." if not jc["accepted"] else ""), ""]
-    jh_path = OUT / "race" / "joint_heldout.json"
-    if jh_path.exists():
-        jh = json.loads(jh_path.read_text())
-        rows = [{"method": m, "pair-seasons": r["n_pair_seasons"], "mse_diff_%2": f"{r['mse_diff']:+.4f}",
-                 "95% interval": f"{r['mse_diff_ci95'][0]:+.4f} to {r['mse_diff_ci95'][1]:+.4f}",
-                 "improves": "yes" if r["improves"] else "no"} for m, r in jh["per_method"].items()]
-        same = len({r["improves"] for r in jh["per_method"].values()}) == 1
-        L += [f"Race-specific pace with the joint model ({jh['design']}), against the qualifying link alone:\n",
-              md_table(pd.DataFrame(rows)), "",
-              ("Both methods give the same answer, so the conclusion on race-specific pace does not depend on "
-               "the two-stage shortcut." if same else "The methods disagree: the race-specific pace conclusion "
-               "depends on the method."), ""]
-    L += _stage2_parts()
-    return L
-
-
-def _scale_note(jc: dict) -> str:
-    """How much of the disagreement is scale: spread of the joint model's driver means over
-    the two-stage ones (same drivers)."""
-    d = pd.DataFrame(jc["drivers"])
-    ratio = {q: g.joint_mean.std() / g.two_stage_mean.std() for q, g in d.groupby("quantity")}
-    return (f"The driver means differ mostly in scale: the joint model's spread is {ratio['race_specific_pace']:.1f}× "
-            f"the two-stage one for race-specific pace and {ratio['degradation']:.1f}× for degradation (less "
-            "shrinkage). ")
-
-
-def _ci(r: dict, nd: int = 3) -> str:
-    return f"{r['mean_diff_per_race']:+.{nd}f} per race (95% interval {r['ci95'][0]:+.{nd}f} to {r['ci95'][1]:+.{nd}f})"
-
-
-def _stage2_parts() -> list[str]:
-    L = []
-    rel_path = OUT / "reliability" / "summary.json"
-    if rel_path.exists():
-        r = json.loads(rel_path.read_text())
-        h = r["heldout"]
-        L += ["### Reliability and driver errors (2010 onward)\n",
-              f"Retirements as competing risks per lap ({r['driver_races']:,} starts, {r['retirements']:,} "
-              f"retirements, {r['laps_at_risk']:,.0f} laps at risk); each retirement counts fractionally for each "
-              "cause by its timeline probabilities. Held-out seasons, paired log predictive density per race:\n",
-              f"- **Driver own-error effects** (baseline keeps team-season terms): {_ci(h['driver_effects'])}: "
-              f"{'passes' if r['gate_driver_error_ranking'] else 'does not pass'} its gate.",
-              f"- **Team-season mechanical effects** (second half of each season from its first half): "
-              f"{_ci(h['team_season_effects'])}: {'passes' if r['gate_team_reliability'] else 'does not pass'}.",
-              "- Own-error attribution rests on the timeline's stated assumptions (who caused an incident); the "
-              "driver ranking inherits them.", ""]
-    b_path = OUT / "benchmark" / "summary.json"
-    if b_path.exists():
-        b = json.loads(b_path.read_text())
-        rows = [{"model": v, "log_lik_per_race": x["mean_log_lik_per_race"], "spearman": x["mean_spearman"],
-                 "teammate_h2h": x["teammate_h2h_accuracy"]} for v, x in b["per_variant"].items()]
-        L += ["### Simple results benchmark\n",
-              f"Rank-ordered logit on full classifications, held-out seasons {b['seasons_held_out'][0]}–"
-              f"{b['seasons_held_out'][1]} ({b['races']} races):\n", md_table(pd.DataFrame(rows)), "",
-              f"- Driver results effect over stage-1 ratings: {_ci(b['ratings_results_minus_ratings'])}.",
-              f"- Stage-1 ratings vs grid position alone: {_ci(b['ratings_minus_grid'])}."]
-        if "grid_ratings_minus_grid" in b:
-            L.append(f"- Grid + ratings vs grid alone: {_ci(b['grid_ratings_minus_grid'])}.")
-        L.append("")
-    f_path = OUT / "firstlap" / "summary.json"
-    if f_path.exists():
-        f = json.loads(f_path.read_text())
-        L += ["### First-lap performance (2018 onward)\n",
-              f"Positions gained on lap 1 ({f['starts']:,} starts). Driver SD {f['sd_driver_q05_q50_q95'][1]:.2f} "
-              f"positions (90% interval {f['sd_driver_q05_q50_q95'][0]:.2f}–{f['sd_driver_q05_q50_q95'][2]:.2f}); "
-              f"held-out driver effects {_ci(f['heldout_driver_effects'])}. Rank correlation "
-              f"with lap-1 contact incidents dropped: {f['sensitivity_no_lap1_contact']['driver_rank_corr']:.2f}."
-              + (f" Transfer test (starts by drivers in a new team, {f['heldout_driver_effects']['transfer']['n_starts']} "
-                 f"starts): {_ci(f['heldout_driver_effects']['transfer'])}. Held-out 90% intervals cover "
-                 f"{f['heldout_driver_effects']['cov90']:.0%}." if "transfer" in f["heldout_driver_effects"] else ""),
-              f"- **Gate (held-out improvement, and not worse for drivers who changed team):** "
-              f"{'passes' if f['gate_driver_ranking'] else 'does not pass'}."
-              + ("" if f["gate_driver_ranking"] else " The improvement comes from drivers staying in the same "
-                 "team; for drivers in a new team the effects made predictions worse, so the effect looks tied "
-                 "to the driver-team combination (e.g. a team's launch procedures), not a portable driver "
-                 "skill. No driver ranking is published."), ""]
-        if f["gate_driver_ranking"]:
-            cur = pd.read_csv(RAT / "current_drivers.csv")[["driver_id", "name"]]
-            fl = pd.read_csv(OUT / "firstlap" / "drivers.csv").merge(cur, on="driver_id")
-            fl = fl.assign(gained=fl.gained_per_start_median, lo90=fl.q05, hi90=fl.q95)
-            L += ["Current grid, positions gained per start relative to the model's expectation for the slot, "
-                  "tyre and car (provisional: see the transfer and calibration results above):\n",
-                  md_table(fl[["name", "gained", "lo90", "hi90", "starts"]]), ""]
-    o_path = OUT / "battles" / "summary.json"
-    fe_path = OUT / "battles" / "feasibility.json"
-    if fe_path.exists():
-        fe = json.loads(fe_path.read_text())
-        a = fe["at_estimated_size"]
-        L += ["### Overtaking and defending (2018 onward)\n",
-              f"Synthetic feasibility at the estimated effect size (criteria: {fe['criteria']}): attacker "
-              f"correlation {a['attack']['corr']:.2f}, coverage {a['attack']['cov90']:.0%}; defender correlation "
-              f"{a['defend']['corr']:.2f}, coverage {a['defend']['cov90']:.0%}: "
-              f"{'feasible' if fe['feasible'] else 'not feasible'}."]
-        if o_path.exists():
-            o = json.loads(o_path.read_text())
-            L.append(f"{o['episodes']:,} battle episodes, {o['passes']:,} passes. "
-                     + (f"Held-out attacker/defender effects (car terms kept): {_ci(o['heldout_driver_effects'])}; "
-                        f"transfer (a driver in a new team): {_ci(o['heldout_driver_effects']['transfer'])}: "
-                        f"{'passes' if o['gate_driver_ranking'] else 'does not pass'} its gate."
-                        if "heldout_driver_effects" in o else "Not rated: reported as opportunity counts only."))
-        L.append("")
-    c_path = OUT / "championship" / "standings.csv"
-    if c_path.exists():
-        cs = json.loads((OUT / "championship" / "summary.json").read_text())
-        st = pd.read_csv(c_path)
-        top = st[st.version == "in_team"].head(10).assign(ranks=lambda x: x.rank_lo.astype(str) + "–" + x.rank_hi.astype(str))
-        h = cs["heldout_race_stage"]
-        L += ["### Equal-car championship (in progress)\n",
-              f"{cs['simulated_seasons']:,} simulated {cs['n_races_simulated']}-race seasons with equal cars: "
-              "qualifying from stage 1 (pace in the current car), race given the grid from a ranking model, "
-              "retirements from the reliability model (equal mechanical risk; driver error rates "
-              f"{'used' if cs['driver_error_rates_used'] else 'not used'}). No other driver-specific racing "
-              "quality enters, because none has passed its gate. The race stage on held-out finishing orders: "
-              f"vs grid alone {_ci(h['vs_grid'])}; vs ratings alone {_ci(h['vs_ratings'])}.\n",
-              md_table(top[["name", "points_per_race", "p_title", "ranks"]]), ""]
-    return L
 
 
 def main() -> None:
@@ -627,7 +437,7 @@ def main() -> None:
         "- **Scope:** one-lap qualifying pace. Racing qualities are in the Racing section below.",
     ]))
     L.append("")
-    L += racing_section()
+    L += racereport.section()
     (OUT / "REPORT.md").write_text("\n".join(L))
     (VAL / "gates.json").write_text(json.dumps(gates, indent=1))
     print(json.dumps(gates, indent=1))

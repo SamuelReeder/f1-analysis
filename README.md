@@ -3,9 +3,9 @@
 Separates F1 **driver skill** from **car-package performance** using qualifying lap
 times, and produces continuously updatable ratings with honest uncertainty.
 
-Stage 1 scope: **one-lap qualifying pace**, 2010 onward. Race pace, reliability and
-driver sub-skills are later stages. The proposed approach for racing and an overall
-driver rating is in `docs/racing_approach.md`.
+Stage 1: **one-lap qualifying pace**, 2010 onward. Stage 2 (see Racing below): racing
+qualities, each tested on held-out races, and an overall rating as an equal-car
+championship; the approach is in `docs/racing_approach.md`.
 
 ## Pipeline
 
@@ -58,15 +58,21 @@ After each qualifying session: `fetch`, `build`, `fit`, `export`.
 | `compare.py` | Variants (2006 data window; team-specific effect per spell or per era) vs the main model on identical forecast targets |
 | `report.py` | `outputs/REPORT.md` and acceptance gates |
 | `diagnostics.py` | Residual checks (every fitted term) |
-| `extract/` | FastF1 extraction (own environment): qualifying-time fill, race timing tables |
+| `extract/` | FastF1 extraction (own environment): qualifying-time fill, race and sprint timing tables, telemetry summaries |
 | `racedata.py` | Combines extracted race tables into `data/processed/race_*.parquet` |
 | `timeline.py` | Race event timeline with evidence and cause probabilities; audit |
-| `racepace.py`, `racemodel.py`, `racejoint.py` | Race pace and degradation (stage A per race, stage B across races, joint-model check) |
-| `reliability.py` | Retirements as competing risks: mechanical reliability, driver error rates |
+| `oldlaps.py` | Jolpica lap-by-lap data for 2010-2017 (database dump), with inferred neutralisations and pit stops |
+| `powerunits.py`, `conditions.py` | Power-unit suppliers per team-season; wet-race proxy (precipitation) and traffic |
+| `racepace.py`, `racemulti.py` | Race pace and degradation: stage A per race; one joint lap-level model across seasons |
+| `racemodel.py`, `racejoint.py` | The earlier two-stage path and its joint-model check (not accepted) |
+| `reliability.py` | Retirements as competing risks: mechanical reliability (team-season, supplier), driver error rates |
+| `pitstops.py` | Pit stops as a team operations rating |
+| `consistency.py`, `wetpace.py` | Lap-time consistency; wet-weather pace (experimental) |
 | `benchmark.py` | Simple results benchmark (rank-ordered logit on finishing orders) |
 | `firstlap.py` | Positions gained on lap 1 |
 | `battles.py`, `overtaking.py` | Battle episodes; pass model with a synthetic feasibility check |
-| `championship.py` | Equal-car championship simulation |
+| `championship.py` | Equal-car championship simulation and the entry test for racing qualities |
+| `racereport.py` | The Racing section of `outputs/REPORT.md` |
 
 ## Method
 
@@ -163,61 +169,94 @@ Outputs for the dashboard are in `outputs/ratings/`, and `outputs/snapshots/` ke
 was published for each fit. Posterior draws (`outputs/fits/`, several GB) are not
 committed.
 
-## Racing (stage 2, in progress)
+## Racing (stage 2)
 
-Approach and build order: `docs/racing_approach.md`. Built so far (race timing from 2018;
-retirement outcomes from 2010):
+Approach, decisions fixed before the final runs, and build status:
+`docs/racing_approach.md`. Results and gates: `outputs/REPORT.md` (Racing). Race outcomes
+run from 2010; lap timing from 2018 (FastF1) and, through a weaker observation model (no
+tyre compounds, speed traps or track status), from 2010 (Jolpica).
 
-1. **Race data layer.** FastF1 race timing (laps, race-control messages, track status,
-   weather, classification) is extracted per race and combined into
-   `data/processed/race_*.parquet`, with each race's FastF1 version, retrieval time and
-   table hashes in `race_sources.json`.
-2. **Event timeline** (`f1rank/timeline.py`): one row per thing that happened in a race
-   (neutralisations, retirements, incidents, penalties, off-track moments, pit anomalies,
-   suspected damage, possible team orders), with its evidence and, for retirements, cause
-   probabilities. Reviewed causes go in `data/overrides/timeline_overrides.csv`. Audit:
-   `outputs/timeline/AUDIT.md`.
-3. **Race pace and degradation** (`f1rank/racepace.py`, `f1rank/racemodel.py`): per-race
-   estimates from clean laps, then a model across races linked to qualifying pace, with a
-   held-out test of whether race pace adds anything beyond qualifying. Results in
-   `outputs/REPORT.md` (Racing) and `outputs/race/`.
-4. **Reliability and errors, results benchmark, first-lap performance, overtaking and an
-   equal-car championship** (`reliability.py`, `benchmark.py`, `firstlap.py`,
-   `battles.py`/`overtaking.py`, `championship.py`).
+1. **Race data.** FastF1 race and sprint timing (laps, race-control messages, track status,
+   weather, classification) per race, combined into `data/processed/race_*.parquet` and
+   `sprint_*.parquet` with each race's FastF1 version, retrieval time and table hashes in
+   `race_sources.json`; per-lap lift-and-coast seconds from FastF1 car data
+   (`race_telemetry.parquet`). Jolpica lap-by-lap data for 2010-2017 (`oldlaps.py`, from
+   Jolpica's delayed CSV dump, sha256 checked), with neutralisations, 2010 pit stops and
+   gaps at the line inferred and checked against FastF1. Power-unit suppliers per
+   team-season (`powerunits.py`, Wikipedia entry lists), wet races before 2018 from hourly
+   precipitation (`conditions.py`, Open-Meteo; a weak proxy), traffic exposure per car.
+2. **Event timeline** (`timeline.py`): one row per thing that happened in a race, with its
+   evidence and, for retirements, cause probabilities. Reviewed causes go in
+   `data/overrides/timeline_overrides.csv`. Audit: `outputs/timeline/AUDIT.md`.
+3. **Qualities**, each with a held-out test against a baseline that keeps the car and
+   context terms: race pace and degradation (`racepace.py` stage A, `racemulti.py` joint
+   model), reliability and errors (`reliability.py`), pit stops as team operations
+   (`pitstops.py`), consistency (`consistency.py`), wet pace (`wetpace.py`, experimental),
+   first-lap performance (`firstlap.py`), overtaking (`battles.py`, `overtaking.py`).
+4. **Overall rating** (`championship.py`): an equal-car championship simulated from
+   qualifying, the grid, a race stage fitted on real finishing orders, and retirements. A
+   racing quality enters the race stage only if it improves held-out finishing orders (the
+   entry test), whether or not it has its own ranking. `benchmark.py` is the simple results
+   benchmark.
 
-**What the gates say so far** (numbers in `outputs/REPORT.md`, Racing):
-- **Race pace follows qualifying pace.** A race-specific pace skill, tyre degradation
-  differences and driver error rates do not improve held-out predictions.
-- **The race-pace shortcut** failed its agreement check against a joint lap-level model, so
-  its driver estimates are not published. A held-out test with the joint model gives the same
-  conclusion.
-- **First-lap gains** improve held-out predictions for drivers who stay in a team, but not
-  for drivers in a new team. So no first-lap driver ranking is published.
-- **Overtaking and defending** cannot be rated at real sample sizes. The synthetic
-  feasibility check fails for defender effects, so overtaking is reported as counts only.
-- **Overall rating: the equal-car championship.** It combines qualifying pace (stage 1)
-  with a grid-to-finish model and average reliability. No other driver-specific racing
-  quality has passed its gates yet.
+**What the gates say** (numbers in `outputs/REPORT.md`, Racing):
+- **Pit stops** pass as a team operations rating.
+- **Reliability** (driver error rates, team-season and power-unit supplier-season
+  mechanical effects), **consistency** and **wet pace** do not improve held-out prediction.
+- **First-lap performance:** with a lasting team term (the model fixed in advance), the
+  driver effects do not improve held-out prediction; the team term does. No first-lap
+  driver ranking.
+- **Overtaking and defending** cannot be rated: attacker and defender effects are not
+  recovered at real sample sizes in the synthetic check, so overtaking is reported as
+  counts only.
+- **Race-specific pace and degradation** both pass (held out 2012-2026): race pace beyond
+  what qualifying predicts, and the lasting change in pace with tyre age, improve held-out
+  teammate gaps. Split by era (descriptive, after the gate), degradation's improvement comes
+  from 2012-2017, when compounds are unknown, and race-specific pace's from 2018 on.
+- **Entry into the overall rating** (race stage with vs without the quality, held out
+  2012-2026): race-specific pace enters (+0.246 log predictive density per race; 95% interval
+  +0.156 to +0.341) and so does first-lap performance (+0.049; +0.017 to +0.086), although
+  its standalone ranking fails. Degradation (-0.002; -0.009 to +0.005) and consistency
+  (+0.030; -0.002 to +0.062) do not enter; overtaking has no held-out draws.
 
-FastF1 requires pandas < 3, so extraction runs in its own environment:
+FastF1 requires pandas < 3, so extraction runs in its own environment; the lap-level
+race-pace model runs on a GPU (`.venv-gpu`, JAX with CUDA) and falls back to CPU (slow).
+Long fits are best run one or two at a time: the machine this was built on has 19 GB.
 
 ```bash
 python3 -m venv .venv-fastf1 && .venv-fastf1/bin/pip install fastf1 pyarrow
-.venv-fastf1/bin/python extract/race_extract.py --first 2018   # ~15 s per race (API limits)
+.venv-fastf1/bin/python extract/race_extract.py --first 2018            # ~15 s per race (API limits)
+.venv-fastf1/bin/python extract/race_extract.py --first 2021 --sprint   # sprint races
 .venv/bin/python -m f1rank.racedata          # combine into data/processed/race_*.parquet
+.venv/bin/python -m f1rank.oldlaps download  # Jolpica's delayed CSV dump (sha256 checked)
+.venv/bin/python -m f1rank.oldlaps dump      # check the dump against the API pages
+.venv/bin/python -m f1rank.oldlaps           # jolpica_laps / jolpica_pitstops
+.venv/bin/python -m f1rank.oldlaps check     # inferences against FastF1
+.venv/bin/python -m f1rank.powerunits        # data/reference/power_units.csv
+.venv/bin/python -m f1rank.conditions        # wet proxy and traffic
 .venv/bin/python -m f1rank.timeline          # event timeline + audit
-.venv/bin/python -m f1rank.racepace stage-a  # per-race pace and degradation
-.venv/bin/python -m f1rank.racepace stage-b  # across races, held-out test (needs `export`)
-.venv/bin/python -m f1rank.racejoint --season 2024   # two-stage vs joint lap-level check
-.venv/bin/python -m f1rank.racejoint --heldout       # held-out test with the joint model
-.venv/bin/python -m f1rank.reliability       # competing risks, held-out tests
-.venv/bin/python -m f1rank.benchmark         # results benchmark
-.venv/bin/python -m f1rank.firstlap          # first-lap performance
+.venv/bin/python -m f1rank.racepace stage-a && .venv/bin/python -m f1rank.racepace stage-a-old
+.venv-fastf1/bin/python extract/telemetry.py # coasting per lap, for stage A's races
+.venv/bin/python -m f1rank.racedata          # again, to combine the telemetry
+.venv-gpu/bin/python -m f1rank.racemulti --heldout   # race pace: held-out test (decides the gate)
+.venv-gpu/bin/python -m f1rank.racemulti             # full fit: summary and driver terms
+.venv-gpu/bin/python -m f1rank.racemulti --heldout --fastf1-only      # variants
+.venv-gpu/bin/python -m f1rank.racemulti --heldout --telemetry-races
+.venv-gpu/bin/python -m f1rank.racemulti --heldout --coast
+.venv/bin/python -m f1rank.reliability
+.venv/bin/python -m f1rank.pitstops
+.venv/bin/python -m f1rank.consistency
+.venv/bin/python -m f1rank.wetpace
+.venv/bin/python -m f1rank.benchmark
+.venv/bin/python -m f1rank.firstlap
 .venv/bin/python -m f1rank.battles episodes && .venv/bin/python -m f1rank.battles feasibility \
-  && .venv/bin/python -m f1rank.battles fit  # overtaking
-.venv/bin/python -m f1rank.championship      # equal-car championship
+  && .venv/bin/python -m f1rank.battles fit
+.venv/bin/python -m f1rank.championship      # needs the quality modules' draws (not committed)
 .venv/bin/python -m f1rank.report            # adds the Racing section to outputs/REPORT.md
 ```
+
+The earlier two-stage race-pace path (`racepace.py stage-b`, `racejoint.py`) is kept for the
+record; its driver estimates were not accepted by the joint-model check.
 
 `analysis/race_signal.py` is the earlier reproducible check of the racing signal in the
 same data (results in `outputs/analysis/race_signal/`):
