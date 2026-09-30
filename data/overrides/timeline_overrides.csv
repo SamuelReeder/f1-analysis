@@ -1,0 +1,4 @@
+# Reviewed timeline rows (python -m f1rank.timeline). Each row replaces the cause probabilities
+# of the timeline row with the same event_id, driver_id, kind and lap_start (race lap), and is
+# never re-inferred. Probabilities must sum to 1. Give the evidence in `note`.
+event_id,driver_id,kind,lap_start,p_mechanical,p_own_error,p_other_driver,p_external,p_team_ops,p_unknown,note,reviewer,reviewed_on

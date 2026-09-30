@@ -1,0 +1,150 @@
+{
+ "design": "fit on every season before S (from 2018); predict season S's teammate gaps (pair-season means of stage A gaps, >= 4 races, both drivers seen in training)",
+ "units": "percent of lap time; mse in percent squared",
+ "fits": {
+  "2020": {
+   "_rhat_max": 1.017356276512146,
+   "_divergences": 2,
+   "_minutes": 20.9,
+   "_backend": "gpu",
+   "_attempts": [
+    {
+     "seed": 0,
+     "warmup": 500,
+     "rhat_max": 1.017356276512146,
+     "divergences": 2,
+     "minutes": 20.9
+    }
+   ],
+   "_converged": true
+  },
+  "2021": {
+   "_rhat_max": 1.0156806707382202,
+   "_divergences": 2,
+   "_minutes": 24.0,
+   "_backend": "gpu",
+   "_attempts": [
+    {
+     "seed": 0,
+     "warmup": 500,
+     "rhat_max": 1.0156806707382202,
+     "divergences": 2,
+     "minutes": 24.0
+    }
+   ],
+   "_converged": true
+  },
+  "2022": {
+   "_rhat_max": 1.0181968212127686,
+   "_divergences": 0,
+   "_minutes": 18.2,
+   "_backend": "gpu",
+   "_attempts": [
+    {
+     "seed": 0,
+     "warmup": 500,
+     "rhat_max": 1.0181968212127686,
+     "divergences": 0,
+     "minutes": 18.2
+    }
+   ],
+   "_converged": true
+  },
+  "2023": {
+   "_rhat_max": 1.0109808444976807,
+   "_divergences": 0,
+   "_minutes": 16.1,
+   "_backend": "gpu",
+   "_attempts": [
+    {
+     "seed": 0,
+     "warmup": 500,
+     "rhat_max": 1.0109808444976807,
+     "divergences": 0,
+     "minutes": 16.1
+    }
+   ],
+   "_converged": true
+  },
+  "2024": {
+   "_rhat_max": 1.0075833797454834,
+   "_divergences": 0,
+   "_minutes": 12.4,
+   "_backend": "gpu",
+   "_attempts": [
+    {
+     "seed": 0,
+     "warmup": 500,
+     "rhat_max": 1.0075833797454834,
+     "divergences": 0,
+     "minutes": 12.4
+    }
+   ],
+   "_converged": true
+  },
+  "2025": {
+   "_rhat_max": 1.0190757513046265,
+   "_divergences": 0,
+   "_minutes": 12.9,
+   "_backend": "gpu",
+   "_attempts": [
+    {
+     "seed": 0,
+     "warmup": 500,
+     "rhat_max": 1.0190757513046265,
+     "divergences": 0,
+     "minutes": 12.9
+    }
+   ],
+   "_converged": true
+  },
+  "2026": {
+   "_rhat_max": 1.013617753982544,
+   "_divergences": 0,
+   "_minutes": 8.3,
+   "_backend": "gpu",
+   "_attempts": [
+    {
+     "seed": 0,
+     "warmup": 500,
+     "rhat_max": 1.013617753982544,
+     "divergences": 0,
+     "minutes": 8.3
+    }
+   ],
+   "_converged": true
+  }
+ },
+ "race_specific_pace_vs_quali_link": {
+  "n_pair_seasons": 62,
+  "mse_diff": -0.010686182424558032,
+  "mse_diff_ci95": [
+   -0.02135053501853053,
+   -0.0024651201415015886
+  ],
+  "improves": true
+ },
+ "quali_link_vs_zero": {
+  "n_pair_seasons": 62,
+  "mse_diff": -0.05685844795374425,
+  "mse_diff_ci95": [
+   -0.10154974569523763,
+   -0.02253037029315711
+  ],
+  "improves": true
+ },
+ "degradation_vs_zero": {
+  "n_pair_seasons": 62,
+  "mse_diff": -2.852200396889948e-06,
+  "mse_diff_ci95": [
+   -1.6852201278993612e-05,
+   1.1204528839544504e-05
+  ],
+  "improves": false
+ },
+ "gate_race_specific_pace": true,
+ "gate_degradation": false,
+ "laps_by_source": {
+  "fastf1": 118755
+ }
+}
