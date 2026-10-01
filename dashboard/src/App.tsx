@@ -75,6 +75,23 @@ export default function App() {
           throw new Error(
             "The dataset is incomplete. The previous release is still shown.",
           );
+        const race = next.race_pace;
+        if (
+          race &&
+          (race.model !== "total-dry-race-pace-v1" ||
+            !race.diagnostics?.converged ||
+            race.diagnostics.rhat_max >= 1.05 ||
+            !Array.isArray(race.drivers) ||
+            !Array.isArray(race.cars) ||
+            !race.validation?.metrics?.drivers ||
+            !race.validation?.metrics?.cars ||
+            (race.drivers.length > 0 &&
+              !race.validation.metrics.drivers.passed) ||
+            (race.cars.length > 0 && !race.validation.metrics.cars.passed))
+        )
+          throw new Error(
+            "The race dataset is incomplete. The previous release is still shown.",
+          );
         if (mounted.current) {
           setData(next);
           releaseRef.current = pointer.release;

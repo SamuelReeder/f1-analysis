@@ -215,3 +215,14 @@ def test_race_publication_rejects_changed_source(tmp_path, race_release):
     source.write_text("version 2")
     with pytest.raises(StaleArtifact):
         load(tmp_path)
+
+
+def test_race_point_forecasts_exclude_future_random_noise():
+    import pandas as pd
+    from f1rank.race_total import point_prediction
+    entries = pd.DataFrame(dict(event_id=["2026-11"] * 2, driver_id=["a", "rookie"], team=["x"] * 2))
+    meta = {"catalog": {"drivers": ["a"], "driver_seasons": ["2026|a"], "cars": ["2026|x"]}}
+    post = {"skill": np.array([[.1], [.3]]), "form": np.array([[.2], [.2]]), "package": np.array([[1.], [1.]])}
+    np.testing.assert_allclose(point_prediction(post, meta, entries), [1.4, 1.])
+    # A refitted no-driver model predicts identical teammate means, exactly.
+    np.testing.assert_array_equal(point_prediction({"package": post["package"]}, meta, entries), [1., 1.])

@@ -461,7 +461,9 @@ requires lower squared error (race-block bootstrap 95% interval below zero),
 85–95% coverage of 90% prediction intervals, and narrower intervals than its
 baseline. These prediction tests do not establish a causal separation of innate
 skill, strategy and machinery. Team-priority and fuel-load differences remain
-possible confounders; car-target measurement covariance is approximated.
+possible confounders. Test-race targets are regenerated from the clean laps and
+cached separately. Resampling whole bootstrap rows preserves their shared
+measurement uncertainty across drivers and teams.
 
 After refreshing the FastF1 race tables and event timeline, run:
 

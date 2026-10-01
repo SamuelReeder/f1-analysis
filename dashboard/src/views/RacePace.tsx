@@ -352,8 +352,9 @@ export default function RacePace({ data }: { data?: RaceData | null }) {
           <p>
             Driver testing uses teammate pace gaps. Car testing uses observed
             team-average pace, without subtracting this model’s driver estimates
-            from the target. Car target uncertainty approximates errors in the
-            per-race estimates as independent.
+            from the target. Shared uncertainty in the per-race estimates is
+            retained by resampling whole bootstrap draws across drivers and
+            teams.
           </p>
           <p>
             The 90% pace and rank intervals come from joint posterior draws.

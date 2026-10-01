@@ -92,7 +92,10 @@ export interface RacePace {
   cars: RaceEntity[];
   unrated_drivers: string[];
   unrated_cars: string[];
-  diagnostics: Dataset["meta"]["diagnostics"];
+  diagnostics: Pick<
+    Dataset["meta"]["diagnostics"],
+    "rhat_max" | "divergences" | "n_draws" | "converged"
+  >;
   validation: {
     folds: string[];
     design: string;

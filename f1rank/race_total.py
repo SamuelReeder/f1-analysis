@@ -24,13 +24,21 @@ BOOTSTRAPS = 4000
 
 def inputs():
     return [ROOT / p for p in (
-        "f1rank/race_total_model.py", "f1rank/race_total.py", "f1rank/race_publication.py",
+        "f1rank/race_total_model.py", "f1rank/race_total.py", "f1rank/race_publication.py", "f1rank/race_targets.py",
         "f1rank/racepace.py", "f1rank/artifacts.py",
         "data/processed/race_laps.parquet", "data/processed/race_weather.parquet",
         "data/processed/timeline.parquet", "data/processed/entries.parquet",
         "data/processed/race.parquet", "data/processed/race_classification.parquet",
-        "data/processed/events.parquet", "data/processed/drivers.parquet",
-        "outputs/race/stage_a_drivers.csv", "outputs/race/stage_a_pairs.csv")]
+        "data/processed/events.parquet", "data/processed/drivers.parquet")]
+
+
+def source_snapshot():
+    return {str(path): digest(path) for path in inputs()}
+
+
+def check_snapshot(snapshot):
+    if source_snapshot() != snapshot:
+        raise RuntimeError("Race inputs or scoring code changed during the run; rerun before publishing")
 
 
 def improvement(rows, baseline):
@@ -54,14 +62,22 @@ def improvement(rows, baseline):
                 calibrated=bool(.85 <= coverage <= .95), sharper=bool(width < baseline_width))
 
 
+def point_prediction(post, meta, entries):
+    """Conditional means: future random effects and unseen states have mean zero."""
+    catalog = meta["catalog"]
+    maps = {key: dict(zip(catalog[names], post[key].mean(0))) if key in post else {}
+            for key, names in (("skill", "drivers"), ("form", "driver_seasons"), ("package", "cars"))}
+    return np.array([maps["skill"].get(r.driver_id, 0.)
+                     + maps["form"].get(r.event_id[:4] + "|" + r.driver_id, 0.)
+                     + maps["package"].get(r.event_id[:4] + "|" + r.team, 0.) for r in entries.itertuples()])
+
+
 def validate():
+    snapshot = source_snapshot()
     from .race_total_model import laps, fit, predict
+    from .race_targets import target
     C = laps()
     entries = pd.read_parquet(ROOT / "data/processed/race.parquet")
-    targets = pd.read_csv(ROOT / "outputs/race/stage_a_drivers.csv")
-    pairs = pd.read_csv(ROOT / "outputs/race/stage_a_pairs.csv")
-    targets = targets.drop(columns="team").merge(entries[["event_id", "driver_id", "team"]],
-                    on=["event_id", "driver_id"], validate="one_to_one")
     driver_rows, car_rows, checks = [], [], {}
     for end in FOLDS:
         season = int(end[:4])
@@ -76,25 +92,30 @@ def validate():
             fits[mode] = (post, meta)
             checks[end][mode] = {k: meta[k] for k in ("key", "diagnostics", "data_as_of", "n_laps", "n_races")}
         for event in test_events:
-            t = targets[targets.event_id == event].sort_values("driver_id").reset_index(drop=True)
-            if t.empty:
-                continue
+            t, target_draws = target(C[C.event_id == event])
+            t = t.assign(event_id=event).merge(entries[["event_id", "driver_id", "team"]],
+                          on=["event_id", "driver_id"], validate="one_to_one").sort_values("driver_id").reset_index(drop=True)
             pred = {m: predict(*fits[m], t, noise=True, seed=season + 1) for m in fits}
+            point = {m: point_prediction(*fits[m], t) for m in fits}
+            point = {m: x - x.mean() for m, x in point.items()}
             # Stage A pace estimates are centred on this race's eligible drivers.
             pred = {m: x - x.mean(1, keepdims=True) for m, x in pred.items()}
             by_id = {d: i for i, d in enumerate(t.driver_id)}
-            pair_targets = pairs[pairs.event_id == event]
-            for p in pair_targets.itertuples():
-                if p.a not in by_id or p.b not in by_id:
+            # Resample entire bootstrap rows: compound/fuel fits induce shared
+            # errors across entrants, so independent marginal SEs are inadequate.
+            error = target_draws - target_draws.mean(0, keepdims=True)
+            observed_pred = {m: x + error[np.random.default_rng(1).integers(len(error), size=len(x))]
+                             for m, x in pred.items()}
+            for _, team_entries in t.groupby("team"):
+                if len(team_entries) != 2:
                     continue
-                # Exact bootstrap uncertainty of each teammate contrast from Stage A.
-                row = dict(event_id=event, a=p.a, b=p.b, observed=p.pace_gap)
+                a, b = sorted(team_entries.driver_id)
+                ia, ib = by_id[a], by_id[b]
+                row = dict(event_id=event, a=a, b=b, observed=float(t.pace.iloc[ia] - t.pace.iloc[ib]))
                 for m in ("full", "no_driver"):
-                    rng = np.random.default_rng(1)
-                    error = rng.normal(0, p.pace_gap_se, pred[m].shape[0])
-                    x = pred[m][:, by_id[p.a]] - pred[m][:, by_id[p.b]] + error
+                    x = observed_pred[m][:, ia] - observed_pred[m][:, ib]
                     lo, hi = np.quantile(x, [.05, .95])
-                    row[m] = float(x.mean())
+                    row[m] = float(point[m][ia] - point[m][ib])
                     row["lo" if m == "full" else m + "_lo"] = float(lo)
                     row["hi" if m == "full" else m + "_hi"] = float(hi)
                 driver_rows.append(row)
@@ -104,11 +125,9 @@ def validate():
                 # by subtracting the model's own driver ratings.
                 row = dict(event_id=event, team=team, observed=float(tteam.pace.mean()))
                 for m in ("full", "no_car"):
-                    rng = np.random.default_rng(2)
-                    error = rng.normal(0, np.sqrt(np.square(tteam.pace_se).sum()) / len(idx), pred[m].shape[0])
-                    x = pred[m][:, idx].mean(1) + error
+                    x = observed_pred[m][:, idx].mean(1)
                     lo, hi = np.quantile(x, [.05, .95])
-                    row[m] = float(x.mean())
+                    row[m] = float(point[m][idx].mean())
                     row["lo" if m == "full" else m + "_lo"] = float(lo)
                     row["hi" if m == "full" else m + "_hi"] = float(hi)
                 car_rows.append(row)
@@ -120,11 +139,13 @@ def validate():
     summary = dict(design="Later races of the same season, excluded from all fitting; refitted ablations",
                    folds=list(FOLDS), fits=checks, metrics=results,
                    units="percent of lap time; MSE in percent squared",
-                   calibration_note="Car target uncertainty approximates Stage A errors as independent; shared errors may affect coverage.")
+                   calibration_note="Whole Stage-A bootstrap rows preserve shared target uncertainty across drivers and teams.")
     OUT.mkdir(parents=True, exist_ok=True)
+    check_snapshot(snapshot)
     atomic_json(OUT / "validation.json", summary)
     pd.DataFrame(driver_rows).to_csv(OUT / "driver_predictions.csv", index=False)
     pd.DataFrame(car_rows).to_csv(OUT / "car_predictions.csv", index=False)
+    check_snapshot(snapshot)
     record(OUT, [OUT / n for n in ("validation.json", "driver_predictions.csv", "car_predictions.csv")],
            model="total-dry-race-pace-validation-v1", inputs=inputs(), name="validation.manifest.json")
     return summary
@@ -146,6 +167,7 @@ def estimates(draws):
 
 
 def export():
+    snapshot = source_snapshot()
     from .race_total_model import laps, fit, predict
     from .race_publication import check
     C = laps()
@@ -196,9 +218,11 @@ def export():
                 unrated_drivers=grid.loc[~grid.driver_id.isin(eligible), "driver_id"].tolist(),
                 unrated_cars=grid.loc[~grid.team.isin(eligible_cars), "team"].drop_duplicates().tolist())
     check(data)
+    check_snapshot(snapshot)
     # Inspectable research values remain separate from the gated public tables.
     atomic_json(OUT / "research_estimates.json", {"drivers": driver_rows, "cars": car_rows, "fit": meta})
     atomic_json(OUT / "pace.json", data)
+    check_snapshot(snapshot)
     record(OUT, [OUT / "pace.json"], model=meta["model"],
            inputs=inputs() + [OUT / "validation.json", OUT / "validation.manifest.json"],
            details={"posterior_key": meta["key"], "validation_fit_id": validation_manifest["fit_id"]})

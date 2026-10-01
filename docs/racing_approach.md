@@ -14,6 +14,9 @@ The model and these decisions were fixed before inspecting the new validation:
   team-season package. Driver/car race-day deviations, race lap trend, compounds,
   degradation and traffic remain in the joint lap likelihood. AR(1) Student-t errors
   account for serial dependence and unusually slow laps.
+  Driver and car pace are centred within season, and temporary effects within
+  race. These identification constraints were added after a full fit failed to
+  converge, before the held-out scores were inspected.
 - No qualifying features or qualifying posterior point estimates enter this model.
   The driver prior has scale 0.5 percentage points and the car-season prior 1.5;
   season-form and race-day scales are estimated. These priors participate in the
@@ -27,8 +30,8 @@ The model and these decisions were fixed before inspecting the new validation:
 - A table requires at least 12 held-out races, a race-bootstrap 95% interval for
   the squared-error difference entirely below zero, 85–95% coverage of the 90%
   predictive intervals, and sharper intervals than the corresponding ablation.
-  Calibration includes race-day variability and target measurement uncertainty;
-  the car target's cross-driver measurement covariance is approximated as zero.
+  Calibration includes race-day variability and the full shared uncertainty of
+  freshly fitted test-race targets, resampling whole Stage-A bootstrap rows.
 - Driver and car gates decide independently. Failed tables remain withheld, and
   stale artifacts stop publication. These mid-season tests establish neither
   transfer to an unseen team nor recovery of an exactly known causal skill.

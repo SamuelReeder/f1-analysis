@@ -64,7 +64,7 @@ def comparisons(ids, draws, probabilities=None):
 def racing_health():
     rows = []
     specs = [
-        ("Race pace & tyre management", "race/multi_heldout.json", "multi_heldout.manifest.json",
+        ("Qualifying-adjusted race pace & tyre management", "race/multi_heldout.json", "multi_heldout.manifest.json",
          ["gate_race_specific_pace", "gate_degradation"]),
         ("Starts", "firstlap/summary.json", "manifest.json", ["gate_driver_ranking"]),
         ("Consistency", "consistency/summary.json", "manifest.json", ["gate_driver_ranking"]),

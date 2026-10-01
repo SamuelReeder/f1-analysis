@@ -45,3 +45,27 @@ def test_new_season_form_carries_uncertainty_not_a_zero_rating():
     np.testing.assert_allclose(draws[:, 0], .3)
     assert .27 < draws[:, 1].std() < .33
     np.testing.assert_array_equal(draws[:, 1], draws[:, 2])
+
+
+def test_race_model_identifies_season_and_race_effects_separately():
+    import jax
+    import numpyro.handlers as handlers
+    rows = []
+    for event in ("2025-01", "2025-02", "2026-01"):
+        for i, driver in enumerate(("a", "b", "c", "d")):
+            for lap in (2, 3, 4, 5):
+                rows.append(dict(event_id=event, season=int(event[:4]), driver_id=driver,
+                                 team="x" if i < 2 else "y", stint_key=driver + "|1", lap_number=lap,
+                                 tyre_life=lap, compound="HARD", y=0., close=0., near=0., unpressured=0.))
+    C = pd.DataFrame(rows)
+    d, catalog = model.design(C)
+    trace = handlers.trace(handlers.seed(model.model, jax.random.PRNGKey(2))).get_trace(d)
+    for parameter, labels in (("package", catalog["cars"]), ("driver_pace", catalog["driver_seasons"])):
+        values = np.asarray(trace[parameter]["value"])
+        for season in ("2025", "2026"):
+            mask = np.array([s.startswith(season + "|") for s in labels])
+            assert abs(values[mask].mean()) < 1e-6
+    for parameter, group in (("day", "dr_race"), ("car_day", "cr_race"), ("wear", "dr_race")):
+        values = np.asarray(trace[parameter]["value"])
+        for event in range(3):
+            assert abs(values[np.asarray(d[group]) == event].mean()) < 1e-6

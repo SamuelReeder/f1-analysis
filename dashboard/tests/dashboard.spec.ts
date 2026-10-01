@@ -354,6 +354,39 @@ test("a withheld car race ranking does not hide a supported driver table", async
   ).toHaveCount(0);
 });
 
+test("an unsupported race ranking cannot replace the previous release", async ({
+  page,
+}) => {
+  const race = raceFixture();
+  race.validation.metrics.cars = {
+    ...race.validation.metrics.cars,
+    passed: false,
+  };
+  const id = "abcdef1234567890abcd";
+  await page.route("**/data/latest.json", (route) =>
+    route.fulfill({
+      json: {
+        schema_version: 1,
+        release: id,
+        url: `releases/${id}.json`,
+        published_at: "2026-09-30T00:00:00Z",
+      },
+    }),
+  );
+  await page.route(`**/data/releases/${id}.json`, (route) =>
+    route.fulfill({ json: { ...current, race_pace: race } }),
+  );
+  await page.getByLabel("Check for updates").click();
+  await expect(
+    page.getByText(
+      "The race dataset is incomplete. The previous release is still shown.",
+    ),
+  ).toBeVisible();
+  await expect(page.locator(".rank-table tbody tr")).toHaveCount(
+    current.drivers.length,
+  );
+});
+
 for (const view of ["drivers", "cars", "race", "compare", "health"]) {
   test(`${view} has no browser errors, no mobile overflow, and accessible controls`, async ({
     page,

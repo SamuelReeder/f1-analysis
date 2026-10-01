@@ -62,6 +62,10 @@ def design(C):
     cr, car_races = codes(C.event_id + "|" + C.team)
     dr, driver_races = codes(C.event_id + "|" + C.driver_id)
     rc, compounds = codes(C.event_id + "|" + C.compound)
+    years = sorted(C.season.astype(str).unique())
+    year_index = {s: i for i, s in enumerate(years)}
+    race_index = {s: i for i, s in enumerate(races)}
+    driver_index = {s: i for i, s in enumerate(drivers)}
     ref = C.groupby("event_id").compound.agg(lambda s: s.value_counts().index[0])
     prev = ((C.stint_key == C.stint_key.shift()) & (C.event_id == C.event_id.shift())
             & (C.lap_number == C.lap_number.shift() + 1)).to_numpy()
@@ -70,6 +74,12 @@ def design(C):
              lap=(C.lap_number - C.groupby("event_id").lap_number.transform("mean")).to_numpy() / 10,
              nonref=(C.compound != C.event_id.map(ref)).to_numpy(),
              traffic=C[["close", "near", "unpressured"]].to_numpy(float), prev=prev,
+             ds_year=np.array([year_index[s.split("|")[0]] for s in driver_seasons]),
+             ds_driver=np.array([driver_index[s.split("|")[1]] for s in driver_seasons]),
+             car_year=np.array([year_index[s.split("|")[0]] for s in cars]),
+             cr_race=np.array([race_index[s.split("|")[0]] for s in car_races]),
+             dr_race=np.array([race_index[s.split("|")[0]] for s in driver_races]),
+             n_year=len(years),
              n_race=len(races), n_driver=len(drivers), n_ds=len(driver_seasons), n_car=len(cars),
              n_cr=len(car_races), n_dr=len(driver_races), n_rc=len(compounds))
     catalog = dict(drivers=drivers, driver_seasons=driver_seasons, cars=cars, races=races)
@@ -79,29 +89,39 @@ def design(C):
 def model(d, driver=True, car=True):
     def normal(name, size, scale):
         return numpyro.sample(name, dist.Normal(0, scale).expand([size]))
-    def varying(name, size, scale):
+    def centred(value, group, count):
+        means = jnp.bincount(group, weights=value, length=count) / jnp.bincount(group, length=count)
+        return value - means[group]
+    def varying(name, size, scale, group=None, count=None):
         sd = numpyro.sample("sd_" + name, dist.HalfNormal(scale))
-        return numpyro.deterministic(name, sd * normal(name + "_z", size, 1))
+        value = sd * normal(name + "_z", size, 1)
+        if group is not None:
+            value = centred(value, group, count)
+        return numpyro.deterministic(name, value)
     intercept = normal("intercept", d["n_race"], 3)
     trend = normal("trend", d["n_race"], 2)
     compound = normal("compound", d["n_rc"], 3)
     slope = normal("slope", d["n_rc"], .3)
     traffic = numpyro.sample("traffic", dist.Normal(0, 1).expand([d["n_race"], 3]))
     # These deviations are context in all ablations, not lasting ability.
-    day = varying("day", d["n_dr"], .3)
-    car_day = varying("car_day", d["n_cr"], .4)
-    wear = varying("wear", d["n_dr"], .05)
+    day = varying("day", d["n_dr"], .3, d["dr_race"], d["n_race"])
+    car_day = varying("car_day", d["n_cr"], .4, d["cr_race"], d["n_race"])
+    wear = varying("wear", d["n_dr"], .05, d["dr_race"], d["n_race"])
     mean = (intercept[d["race"]] + trend[d["race"]] * d["lap"]
             + jnp.where(d["nonref"], compound[d["rc"]], 0)
             + (slope[d["rc"]] + wear[d["dr"]]) * d["age"]
             + (traffic[d["race"]] * d["traffic"]).sum(-1)
             + day[d["dr"]] + car_day[d["cr"]])
     if driver:
-        skill = normal("skill", d["n_driver"], .5)
-        form = varying("form", d["n_ds"], .2)
-        mean = mean + skill[d["driver"]] + form[d["ds"]]
+        raw_skill = normal("skill_raw", d["n_driver"], .5)
+        skill = numpyro.deterministic("skill", raw_skill - raw_skill.mean())
+        form = varying("form", d["n_ds"], .2, d["ds_year"], d["n_year"])
+        driver_pace = numpyro.deterministic("driver_pace", centred(
+            skill[d["ds_driver"]] + form, d["ds_year"], d["n_year"]))
+        mean = mean + driver_pace[d["ds"]]
     if car:
-        package = normal("package", d["n_car"], 1.5)
+        package = numpyro.deterministic("package", centred(normal("package_raw", d["n_car"], 1.5),
+                                                              d["car_year"], d["n_year"]))
         mean = mean + package[d["car"]]
     rho = numpyro.sample("rho", dist.Uniform(-.5, .95))
     sigma = numpyro.sample("sigma", dist.HalfNormal(1))
@@ -137,7 +157,7 @@ def fit(C, name, *, driver=True, car=True, warmup=800, samples=800, tries=3):
     attempts = []
     for attempt in range(tries):
         started = time.monotonic()
-        dense = [("skill", "package")] if driver and car else False
+        dense = [("skill_raw", "package_raw")] if driver and car else False
         kernel = NUTS(model, target_accept_prob=.9, dense_mass=dense,
                       init_strategy=init_to_median(num_samples=15))
         mcmc = MCMC(kernel, num_warmup=warmup * (attempt + 1), num_samples=samples * 2 ** attempt,
@@ -145,17 +165,32 @@ def fit(C, name, *, driver=True, car=True, warmup=800, samples=800, tries=3):
                     progress_bar=False)
         print(f"{name}: attempt {attempt + 1}, {len(C):,} laps, {C.event_id.nunique()} races", flush=True)
         mcmc.run(jax.random.PRNGKey(attempt), d, driver=driver, car=car, extra_fields=("diverging",))
-        checked = diagnostics(mcmc.get_samples(group_by_chain=True),
+        grouped = mcmc.get_samples(group_by_chain=True)
+        checked = diagnostics(grouped,
                               int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum()))
-        attempts.append(dict(**checked, seconds=round(time.monotonic() - started, 1)))
+        from numpyro.diagnostics import split_gelman_rubin
+        mixing = []
+        for parameter, values in grouped.items():
+            values = np.asarray(values).reshape(4, samples * 2 ** attempt, -1)
+            varying = np.ptp(values.reshape(-1, values.shape[-1]), axis=0) > 0
+            if varying.any():
+                rhat = np.asarray(split_gelman_rubin(values[:, :, varying]))
+                mixing.append(dict(parameter=parameter, rhat=float(np.nanmax(rhat))))
+        mixing.sort(key=lambda r: r["rhat"], reverse=True)
+        attempts.append(dict(**checked, seconds=round(time.monotonic() - started, 1), worst_parameters=mixing[:5]))
         print(f"{name}: {attempts[-1]}", flush=True)
         if checked["converged"]:
             break
+        CACHE.mkdir(parents=True, exist_ok=True)
+        worst = {x["parameter"] for x in mixing[:5]}
+        np.savez_compressed(CACHE / f"{name}.failed_{attempt}.npz",
+                            **{k: np.asarray(v) for k, v in grouped.items() if k in worst})
     require_convergence(checked)
     if Path(__file__).read_bytes() != source:
         raise RuntimeError("Race model source changed during fitting")
     post = {k: np.asarray(v) for k, v in mcmc.get_samples().items() if k in KEEP}
     meta = dict(model=MODEL, key=key, settings=settings, diagnostics=checked, attempts=attempts,
+                backend=jax.default_backend(), jax_version=jax.__version__, numpyro_version=numpyro.__version__,
                 catalog=catalog, n_laps=len(C), n_races=C.event_id.nunique(),
                 data_as_of=str(C.event_id.max()), first_event=str(C.event_id.min()))
     CACHE.mkdir(parents=True, exist_ok=True)
