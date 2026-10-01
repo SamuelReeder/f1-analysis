@@ -63,7 +63,24 @@ def main():
     grid = entries[entries.event_id == C.event_id.max()].sort_values("driver_id")
     results = {}
     for seed in (0, 1, 2):
-        fake, truth, cat = simulate(C, seed)
+        # Keep a truth's generation backend stable when CPU/GPU jobs are mixed.
+        # Tiny device-dependent rounding differences otherwise change the exact
+        # input fingerprint and unnecessarily invalidate an already checked fit.
+        generator = m.CACHE / f"recovery_{seed}.generator.json"
+        checkpoint = m.CACHE / f"recovery_{seed}.npz"
+        backend = jax.default_backend()
+        if generator.exists():
+            backend = json.loads(generator.read_text())["backend"]
+        elif checkpoint.exists():
+            with np.load(checkpoint, allow_pickle=False) as z:
+                backend = json.loads(str(z["meta"]))["backend"]
+        try:
+            device = jax.devices(backend)[0]
+        except RuntimeError:
+            backend, device = jax.default_backend(), jax.devices()[0]
+        atomic_json(generator, {"backend": backend})
+        with jax.default_device(device):
+            fake, truth, cat = simulate(C, seed)
         post, meta = m.fit(fake, f"recovery_{seed}", warmup=500, samples=500)
         driver = m.predict({k: v for k, v in post.items() if k != "package"}, meta, grid)
         cars = grid.drop_duplicates("team").sort_values("team")
@@ -75,7 +92,8 @@ def main():
         driver_truth = np.array([sd[r.driver_id] + ds[season + "|" + r.driver_id] for r in grid.itertuples()])
         car_truth = np.array([cs[season + "|" + r.team] for r in cars.itertuples()])
         results[seed] = dict(drivers=compare(driver, driver_truth), cars=compare(car, car_truth),
-                             diagnostics=meta["diagnostics"], fit_key=meta["key"], laps=len(fake))
+                             diagnostics=meta["diagnostics"], fit_key=meta["key"], laps=len(fake),
+                             generation_backend=backend)
         atomic_json(m.ROOT / "outputs/race_total/recovery.json", {"design": __doc__, "seeds": results})
         print(json.dumps(results[seed], indent=1), flush=True)
 
