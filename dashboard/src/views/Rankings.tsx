@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { ArrowDownToLine, ArrowRight, Info, Search, X } from "lucide-react";
 import type { Dataset, Driver, Car, Metric, Estimate } from "../types";
-import { Badge, Empty, Band, PageHeading, MetricControl } from "../components";
+import { Badge, Empty, Band, MetricControl } from "../components";
 import { color, signed, pct, date, metricLabel, exportCsv } from "../lib";
 import Trend from "./Trend";
+import RankingHeader from "./RankingHeader";
 
 export default function Rankings({
   data,
@@ -40,8 +41,9 @@ export default function Rankings({
   const e = data.meta.data_as_of;
   return (
     <>
-      <PageHeading
-        title={car ? "Car rankings" : "Driver rankings"}
+      <RankingHeader
+        kind={car ? "cars" : "drivers"}
+        discipline="qualifying"
         action={
           <button
             className="button"

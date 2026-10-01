@@ -10,7 +10,7 @@ test.beforeEach(async ({ page, request }) => {
   await page.goto("./");
   await expect(page).toHaveTitle("F1 Analysis");
   await expect(
-    page.getByRole("heading", { name: "Driver rankings" }),
+    page.getByRole("heading", { name: "Drivers", level: 1 }),
   ).toBeVisible();
 });
 
@@ -61,7 +61,7 @@ test("season trends support absent entrants and car circuit adjustment", async (
   await expect(page.locator(".trend-chart")).toBeVisible();
   await page.getByLabel("Trend season").selectOption("2026");
   await expect(page.locator(".trend-chart")).toBeVisible();
-  await page.getByRole("link", { name: "Car rankings", exact: true }).click();
+  await page.getByRole("link", { name: "Cars", exact: true }).click();
   await expect(page.locator(".rank-table tbody tr")).toHaveCount(
     current.cars.length,
   );
@@ -212,7 +212,7 @@ test("initial unavailable dataset has a working retry", async ({ page }) => {
   await page.unroute("**/data/latest.json");
   await page.getByRole("button", { name: "Try again" }).click();
   await expect(
-    page.getByRole("heading", { name: "Driver rankings" }),
+    page.getByRole("heading", { name: "Drivers", level: 1 }),
   ).toBeVisible();
 });
 
@@ -274,7 +274,31 @@ function raceFixture(): RacePace {
   };
 }
 
-test("race pace has independent driver and car tables, search, CSV and accessible detail", async ({
+test("ranking metrics support browser history, direct links and switching entity", async ({ page }) => {
+  const mainNav = page.getByRole("navigation", { name: "Main navigation" });
+  await expect(mainNav.getByRole("link")).toHaveCount(4);
+  await expect(mainNav.getByRole("link", { name: "Race pace" })).toHaveCount(0);
+  await page.getByRole("button", { name: "Portable skill Experimental" }).click();
+  await page.getByRole("link", { name: "Race pace", exact: true }).click();
+  await expect(page).toHaveURL(/#drivers\/race$/);
+  await expect(mainNav.getByRole("link", { name: "Drivers", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("heading", { name: "Drivers", level: 1 })).toBeVisible();
+  await page.goBack();
+  await expect(page.getByRole("link", { name: "Qualifying pace", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("button", { name: "Portable skill Experimental" })).toHaveAttribute("aria-pressed", "true");
+  await page.goForward();
+  await expect(page.getByRole("link", { name: "Race pace", exact: true })).toHaveAttribute("aria-current", "page");
+  await mainNav.getByRole("link", { name: "Cars", exact: true }).click();
+  await expect(page).toHaveURL(/#cars\/race$/);
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "Cars", level: 1 })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Race pace", exact: true })).toHaveAttribute("aria-current", "page");
+  await page.getByRole("link", { name: "Qualifying pace", exact: true }).click();
+  await expect(page).toHaveURL(/#cars$/);
+  await expect(page.locator(".rank-table tbody tr")).toHaveCount(current.cars.length);
+});
+
+test("race rankings follow their entity pages, with search, CSV and accessible detail", async ({
   page,
 }) => {
   const fixture = raceFixture();
@@ -282,6 +306,7 @@ test("race pace has independent driver and car tables, search, CSV and accessibl
     route.fulfill({ json: { ...current, race_pace: fixture } }),
   );
   await page.goto("./#race");
+  await expect(page).toHaveURL(/#drivers\/race$/);
   await page.reload();
   await expect(
     page.getByRole("heading", { name: "Driver race pace", exact: true }),
@@ -297,7 +322,7 @@ test("race pace has independent driver and car tables, search, CSV and accessibl
       .locator(".race-detail")
       .getByRole("heading", { name: "Test Driver B" }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Cars", exact: true }).click();
+  await page.getByRole("link", { name: "Cars", exact: true }).click();
   await expect(page.locator(".rank-table tbody tr")).toHaveCount(2);
   const pending = page.waitForEvent("download");
   await page.getByRole("button", { name: "Export race rankings" }).click();
@@ -342,9 +367,10 @@ test("a withheld car race ranking does not hide a supported driver table", async
     route.fulfill({ json: { ...current, race_pace: fixture } }),
   );
   await page.goto("./#race");
+  await expect(page).toHaveURL(/#drivers\/race$/);
   await page.reload();
   await expect(page.locator(".rank-table tbody tr")).toHaveCount(2);
-  await page.getByRole("button", { name: "Cars", exact: true }).click();
+  await page.getByRole("link", { name: "Cars", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Car race-pace ranking withheld" }),
   ).toBeVisible();
@@ -394,7 +420,7 @@ test("an unsupported race ranking cannot replace the previous release", async ({
   );
 });
 
-for (const view of ["drivers", "cars", "race", "compare", "health"]) {
+for (const view of ["drivers", "drivers/race", "cars", "cars/race", "compare", "health"]) {
   test(`${view} has no browser errors, no mobile overflow, and accessible controls`, async ({
     page,
   }) => {
@@ -427,12 +453,12 @@ for (const view of ["drivers", "cars", "race", "compare", "health"]) {
       })),
     ).toEqual([]);
     await page.screenshot({
-      path: `test-results/${view}-mobile.png`,
+      path: `test-results/${view.replace("/", "-")}-mobile.png`,
       fullPage: true,
     });
     await page.setViewportSize({ width: 1440, height: 1100 });
     await page.screenshot({
-      path: `test-results/${view}-desktop.png`,
+      path: `test-results/${view.replace("/", "-")}-desktop.png`,
       fullPage: true,
     });
     expect(errors).toEqual([]);

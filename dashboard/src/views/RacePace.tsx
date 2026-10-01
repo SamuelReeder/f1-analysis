@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { ArrowDownToLine, Search } from "lucide-react";
-import { Badge, Band, Empty, PageHeading } from "../components";
+import { Badge, Band, Empty } from "../components";
 import { color, date, download, pct, signed } from "../lib";
-import type { RacePace as RaceData, RaceEntity } from "../types";
+import type { RacePace as RaceData, RaceEntity, RankingKind } from "../types";
+import RankingHeader from "./RankingHeader";
 
-export default function RacePace({ data }: { data?: RaceData | null }) {
-  const [kind, setKind] = useState<"drivers" | "cars">("drivers");
+export default function RacePace({ data, kind }: {
+  data?: RaceData | null;
+  kind: RankingKind;
+}) {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState("");
   const rows = [...(data?.[kind] || [])].sort(
@@ -78,8 +81,9 @@ export default function RacePace({ data }: { data?: RaceData | null }) {
   }
   return (
     <>
-      <PageHeading
-        title="Race pace"
+      <RankingHeader
+        kind={kind}
+        discipline="race"
         action={
           rows.length > 0 && (
             <button className="button" onClick={exportRows}>
@@ -101,32 +105,10 @@ export default function RacePace({ data }: { data?: RaceData | null }) {
           {data ? `${data.season} season estimates` : "No checked release"}
         </span>
       </div>
-      <div className="race-tabs segmented" aria-label="Race pace rankings">
-        <button
-          aria-pressed={driver}
-          onClick={() => {
-            setKind("drivers");
-            setSelected("");
-            setSearch("");
-          }}
-        >
-          Drivers
-        </button>
-        <button
-          aria-pressed={!driver}
-          onClick={() => {
-            setKind("cars");
-            setSelected("");
-            setSearch("");
-          }}
-        >
-          Cars
-        </button>
-      </div>
       {!data ? (
         <section className="panel">
           <Empty title="Race-pace validation is pending">
-            Separate driver and car rankings appear here when their prediction
+            {driver ? "Driver" : "Car"} rankings appear here when their prediction
             and uncertainty checks pass.
           </Empty>
         </section>

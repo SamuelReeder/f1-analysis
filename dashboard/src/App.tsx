@@ -9,28 +9,38 @@ import {
   RefreshCw,
   TriangleAlert,
   Users,
-  Timer,
 } from "lucide-react";
-import type { Dataset, Metric, Release, RunStatus, View } from "./types";
+import type {
+  Dataset, Discipline, Metric, Release, RunStatus, View,
+} from "./types";
 import Rankings from "./views/Rankings";
 import Compare from "./views/Compare";
 import Health from "./views/Health";
 import RacePace from "./views/RacePace";
 
 const navigation = [
-  { id: "drivers", name: "Driver rankings", icon: Users },
-  { id: "cars", name: "Car rankings", icon: Gauge },
-  { id: "race", name: "Race pace", icon: Timer },
+  { id: "drivers", name: "Drivers", icon: Users },
+  { id: "cars", name: "Cars", icon: Gauge },
   { id: "compare", name: "Head to head", icon: ArrowLeftRight },
   { id: "health", name: "Model health", icon: Activity },
 ] as const;
-function getView(): View {
-  const v = window.location.hash.slice(1);
-  return navigation.some((n) => n.id === v) ? (v as View) : "drivers";
+function getRoute(): { view: View; discipline: Discipline } {
+  const [page, metric] = window.location.hash.slice(1).split("/");
+  if (page === "race") return { view: "drivers", discipline: "race" };
+  const view = navigation.some((n) => n.id === page)
+    ? (page as View)
+    : "drivers";
+  return {
+    view,
+    discipline:
+      (view === "drivers" || view === "cars") && metric === "race"
+        ? "race"
+        : "qualifying",
+  };
 }
 
 export default function App() {
-  const [view, setView] = useState<View>(getView);
+  const [{ view, discipline }, setRoute] = useState(getRoute);
   const [data, setData] = useState<Dataset>();
   const [release, setRelease] = useState<Release>();
   const releaseRef = useRef("");
@@ -118,7 +128,15 @@ export default function App() {
     mounted.current = true;
     refresh();
     const timer = setInterval(refresh, 30000);
-    const nav = () => setView(getView());
+    const nav = () => {
+      if (window.location.hash === "#main") return;
+      const route = getRoute();
+      if (window.location.hash === "#race") {
+        window.history.replaceState(null, "", "#drivers/race");
+      }
+      setRoute(route);
+    };
+    nav();
     window.addEventListener("hashchange", nav);
     return () => {
       mounted.current = false;
@@ -142,7 +160,7 @@ export default function App() {
         <nav aria-label="Main navigation">
           {navigation.map((n) => (
             <a
-              href={`#${n.id}`}
+              href={`#${n.id}${(n.id === "drivers" || n.id === "cars") && discipline === "race" ? "/race" : ""}`}
               key={n.id}
               className={view === n.id ? "active" : ""}
               aria-current={view === n.id ? "page" : undefined}
@@ -225,15 +243,17 @@ export default function App() {
                 </div>
               )}
               {view === "drivers" || view === "cars" ? (
-                <Rankings
-                  key={view}
-                  data={data}
-                  car={view === "cars"}
-                  metric={metric}
-                  setMetric={setMetric}
-                />
-              ) : view === "race" ? (
-                <RacePace data={data.race_pace} />
+                discipline === "race" ? (
+                  <RacePace key={view} kind={view} data={data.race_pace} />
+                ) : (
+                  <Rankings
+                    key={view}
+                    data={data}
+                    car={view === "cars"}
+                    metric={metric}
+                    setMetric={setMetric}
+                  />
+                )
               ) : view === "compare" ? (
                 <Compare data={data} metric={metric} setMetric={setMetric} />
               ) : (

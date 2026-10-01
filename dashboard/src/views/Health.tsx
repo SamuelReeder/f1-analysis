@@ -152,7 +152,7 @@ export default function Health({
                       : "Publication checks not passed"}
                   </p>
                 </div>
-                <a href="#race">View race pace</a>
+                <a href={`#${kind}/race`}>View race pace</a>
               </div>
             ))}
           <div>

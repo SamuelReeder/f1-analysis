@@ -21,7 +21,10 @@ white, with a dashed second series, to stay distinct even for teammates.
 The Methodology section in Model health describes the qualifying model, rating
 definitions, uncertainty, validation limits and publication process.
 
-The Race pace view reads a separate checked export from `outputs/race_total/`.
+The Drivers and Cars pages each switch between qualifying and race pace. Driver
+qualifying also offers the experimental portable-skill estimate. Metric links are
+shareable (`#drivers/race`, `#cars/race`); the former `#race` link redirects to
+driver race pace. Race pace reads a separate checked export from `outputs/race_total/`.
 Its driver and car tables are gated independently; an absent or failed result is
 shown as pending or withheld. The existing qualifying tables and comparisons keep
 their own metric and data cutoff.

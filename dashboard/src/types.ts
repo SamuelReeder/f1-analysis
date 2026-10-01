@@ -1,5 +1,7 @@
 export type Metric = "headline" | "portable";
-export type View = "drivers" | "cars" | "race" | "compare" | "health";
+export type View = "drivers" | "cars" | "compare" | "health";
+export type RankingKind = "drivers" | "cars";
+export type Discipline = "qualifying" | "race";
 export interface Estimate {
   q05: number;
   q25?: number;

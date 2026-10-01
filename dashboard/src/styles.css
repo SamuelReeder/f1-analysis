@@ -2480,9 +2480,25 @@ select {
 .sidebar nav a.active:hover {
   background: #b80500;
 }
-.race-tabs {
-  width: fit-content;
-  margin: 0 0 20px;
+.ranking-metrics {
+  display: flex;
+  gap: 28px;
+  border-bottom: 1px solid var(--line);
+  margin: 0 0 22px;
+}
+.ranking-metrics a {
+  padding: 12px 0;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+.ranking-metrics a:hover {
+  color: var(--ink);
+}
+.ranking-metrics a[aria-current="page"] {
+  border-bottom-color: var(--accent);
+  color: var(--ink);
 }
 .race-detail {
   align-self: start;
