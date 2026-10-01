@@ -156,7 +156,6 @@ export default function App() {
       </a>
       <aside className="sidebar">
         <a href="#drivers" className="brand" aria-label="F1 Analysis">
-          <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" />
           <span>
             F1<span className="brand-light">Analysis</span>
           </span>
