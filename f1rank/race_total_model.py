@@ -29,6 +29,22 @@ ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / "outputs" / "race_total" / "cache"
 
 
+def contrast_basis(groups):
+    """Orthonormal zero-sum coordinates: same centred Normal prior, no unused mean."""
+    groups = np.asarray(groups)
+    levels = np.unique(groups)
+    basis = np.zeros((len(groups), len(groups) - len(levels)))
+    column = 0
+    for group in levels:
+        rows = np.flatnonzero(groups == group)
+        for j in range(1, len(rows)):
+            scale = np.sqrt(j * (j + 1))
+            basis[rows[:j], column] = 1 / scale
+            basis[rows[j], column] = -j / scale
+            column += 1
+    return basis
+
+
 def laps():
     raw = pd.read_parquet(PROCESSED / "race_laps.parquet")
     timeline = pd.read_parquet(PROCESSED / "timeline.parquet")
@@ -82,6 +98,7 @@ def design(C):
              n_year=len(years),
              n_race=len(races), n_driver=len(drivers), n_ds=len(driver_seasons), n_car=len(cars),
              n_cr=len(car_races), n_dr=len(driver_races), n_rc=len(compounds))
+    d["car_basis"] = contrast_basis(d["car_year"])
     catalog = dict(drivers=drivers, driver_seasons=driver_seasons, cars=cars, races=races)
     return {k: jnp.asarray(v) if isinstance(v, np.ndarray) else v for k, v in d.items()}, catalog
 
@@ -120,8 +137,8 @@ def model(d, driver=True, car=True):
             skill[d["ds_driver"]] + form, d["ds_year"], d["n_year"]))
         mean = mean + driver_pace[d["ds"]]
     if car:
-        package = numpyro.deterministic("package", centred(normal("package_raw", d["n_car"], 1.5),
-                                                              d["car_year"], d["n_year"]))
+        package = numpyro.deterministic("package", d["car_basis"] @ normal(
+            "package_contrast", d["n_car"] - d["n_year"], 1.5))
         mean = mean + package[d["car"]]
     rho = numpyro.sample("rho", dist.Uniform(-.5, .95))
     sigma = numpyro.sample("sigma", dist.HalfNormal(1))
@@ -157,7 +174,7 @@ def fit(C, name, *, driver=True, car=True, warmup=800, samples=800, tries=3):
     attempts = []
     for attempt in range(tries):
         started = time.monotonic()
-        dense = [("skill_raw", "package_raw")] if driver and car else False
+        dense = [("skill_raw", "package_contrast")] if driver and car else False
         kernel = NUTS(model, target_accept_prob=.9, dense_mass=dense,
                       init_strategy=init_to_median(num_samples=15))
         mcmc = MCMC(kernel, num_warmup=warmup * (attempt + 1), num_samples=samples * 2 ** attempt,

@@ -5,6 +5,17 @@ import pandas as pd
 from f1rank import race_total_model as model
 
 
+def test_car_contrasts_preserve_the_centred_prior_exactly():
+    groups = np.array([0, 0, 0, 1, 1])
+    basis = model.contrast_basis(groups)
+    np.testing.assert_allclose(basis.T @ basis, np.eye(3), atol=1e-15)
+    expected = np.zeros((5, 5))
+    for group in (0, 1):
+        rows = np.flatnonzero(groups == group)
+        expected[np.ix_(rows, rows)] = np.eye(len(rows)) - np.ones((len(rows), len(rows))) / len(rows)
+    np.testing.assert_allclose(basis @ basis.T, expected, atol=1e-15)
+
+
 def test_race_entries_include_drivers_absent_from_qualifying(monkeypatch):
     drivers = [f"driver{i}" for i in range(8)]
     raw = pd.DataFrame(dict(event_id=["2026-01"] * 8, driver_id=drivers, team=["Display name"] * 8,
