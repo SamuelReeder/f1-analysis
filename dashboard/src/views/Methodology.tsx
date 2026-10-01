@@ -1,4 +1,5 @@
 import type { Dataset } from "../types";
+import { Equation, InlineMath, RatingMath } from "../ModelMath";
 
 const source = "https://github.com/SamuelReeder/f1-analysis/blob/main/";
 
@@ -28,14 +29,21 @@ export default function Methodology({ data }: { data: Dataset }) {
             enter these qualifying ratings.
           </p>
           <p>
-            Times are converted to relative pace within each qualifying segment:
-            <code className="method-formula">
-              pace = −100 × ln(time / segment median)
-            </code>
-            Positive values mean faster laps. Times roughly 5% slower than the
-            segment median are excluded, as are segments with fewer than four
-            usable times. An entrant without a valid time keeps a model estimate
-            based on their other appearances rather than receiving a zero score.
+            Times are converted to relative pace within each qualifying segment.
+          </p>
+          <Equation
+            label="Qualifying pace transformation"
+            tex={String.raw`y_i = -100\ln\!\left(\frac{t_i}{\widetilde t_q}\right)`}
+          />
+          <p>
+            <InlineMath tex="t_i" /> is the recorded time and{" "}
+            <InlineMath tex={String.raw`\widetilde t_q`} /> is the median in
+            that event’s qualifying segment <InlineMath tex="q" />. Positive{" "}
+            <InlineMath tex="y_i" /> means faster. Times roughly 5% slower than
+            the segment median are excluded, as are segments with fewer than
+            four usable times. An entrant without a valid time keeps a model
+            estimate based on their other appearances rather than receiving a
+            zero score.
           </p>
           <p>
             A separate baseline for each segment accounts for common track
@@ -57,12 +65,80 @@ export default function Methodology({ data }: { data: Dataset }) {
             place both teams on the same scale. All qualifying observations are
             fitted together.
           </p>
+          <Equation
+            label="Qualifying observation model"
+            tex={String.raw`\begin{aligned}
+              y_i &\sim t_\nu(\mu_i,\sigma_q) \\
+              \mu_i &= \alpha_q + D_{de} + K_{dje} + C_{je} \\
+                    &\quad + T_{je} + W_{je} + F_{de} + B_{jq}
+            \end{aligned}`}
+          />
           <p>
-            The fitted pace includes persistent driver skill, a driver–team
-            effect, persistent car development, circuit suitability, temporary
-            driver and car weekend effects, and a shared car effect within each
-            segment. Temporary effects allow an exceptional or poor weekend
-            without forcing the same-sized change into the lasting rating.
+            Indices <InlineMath tex="d" />, <InlineMath tex="j" /> and{" "}
+            <InlineMath tex="e" /> identify the driver, team lineage and event.{" "}
+            <InlineMath tex={String.raw`t_\nu(\mu,\sigma)`} /> is a Student-t
+            distribution with location <InlineMath tex={String.raw`\mu`} />,
+            scale <InlineMath tex={String.raw`\sigma`} /> and learned tail
+            parameter <InlineMath tex={String.raw`\nu`} />. Its scale is not its
+            standard deviation.
+          </p>
+          <dl className="math-terms">
+            <div>
+              <dt>
+                <InlineMath tex={String.raw`\alpha_q`} />
+              </dt>
+              <dd>Baseline for this event’s Q1, Q2 or Q3 segment.</dd>
+            </div>
+            <div>
+              <dt>
+                <InlineMath tex="D_{de}" />
+              </dt>
+              <dd>Persistent, time-varying driver skill.</dd>
+            </div>
+            <div>
+              <dt>
+                <InlineMath tex="K_{dje}" />
+              </dt>
+              <dd>
+                Persistent driver–team effect, centred on the event’s drivers.
+              </dd>
+            </div>
+            <div>
+              <dt>
+                <InlineMath tex="C_{je}" />
+              </dt>
+              <dd>Persistent car-package pace.</dd>
+            </div>
+            <div>
+              <dt>
+                <InlineMath tex="T_{je}" />
+              </dt>
+              <dd>Car suitability for the event’s circuit.</dd>
+            </div>
+            <div>
+              <dt>
+                <InlineMath tex="W_{je}" />
+              </dt>
+              <dd>Car weekend deviation shared by teammates.</dd>
+            </div>
+            <div>
+              <dt>
+                <InlineMath tex="F_{de}" />
+              </dt>
+              <dd>Temporary driver weekend form.</dd>
+            </div>
+            <div>
+              <dt>
+                <InlineMath tex="B_{jq}" />
+              </dt>
+              <dd>
+                Car effect shared by teammates within the qualifying segment.
+              </dd>
+            </div>
+          </dl>
+          <p>
+            Temporary effects allow an exceptional or poor weekend without
+            forcing the same-sized change into the lasting rating.
           </p>
           <p>
             This is a statistical separation, not a controlled equal-car test.
@@ -83,11 +159,66 @@ export default function Methodology({ data }: { data: Dataset }) {
             after 32. These effects are estimated from the field; they do not
             prescribe an individual driver’s career path.
           </p>
+          <Equation
+            label="Driver evolution"
+            tex={String.raw`\begin{aligned}
+              w_{de} &= w_{d,e^-} + \eta_{de},\quad \eta_{de}\sim\mathcal N(0,v_{de}) \\
+              v_{de} &= \begin{cases}
+                \sigma_{\rm race}^{2}\Delta e & \text{within a season} \\
+                \sigma_{\rm season}^{2}\max(\Delta s,1) & \text{between seasons}
+              \end{cases} \\
+              D_{de} &= \operatorname{centre}_e\!\bigl[
+                w_{de}+g(1-e^{-n_{de}/\lambda}) \\
+                &\hspace{5em}{}+a\max(\operatorname{age}_{de}-32,0)\bigr]
+            \end{aligned}`}
+          />
+          <p>
+            <InlineMath tex="e^-" /> is the driver’s previous appearance;{" "}
+            <InlineMath tex={String.raw`\Delta e`} /> and{" "}
+            <InlineMath tex={String.raw`\Delta s`} /> count intervening events
+            and seasons. <InlineMath tex="n_{de}" /> is prior race experience.
+            The model learns experience gain <InlineMath tex="g" />, its
+            timescale <InlineMath tex={String.raw`\lambda`} /> and age slope{" "}
+            <InlineMath tex="a" />. A driver’s first walk state has prior{" "}
+            <InlineMath tex={String.raw`\mathcal N(0,\sigma_{\rm level}^2)`} />.
+            The operator{" "}
+            <InlineMath tex={String.raw`\operatorname{centre}_e`} /> subtracts
+            the event’s field mean, separately for drivers and cars.
+          </p>
           <p>
             Car performance can move more abruptly to accommodate upgrades. Some
             performance carries into the next season, with weaker carryover and
             larger possible changes at the 2014, 2017, 2022 and 2026 regulation
             resets. Team rebrands are linked through their underlying lineage.
+          </p>
+          <Equation
+            label="Car development"
+            tex={String.raw`\begin{aligned}
+              c_{je} &= \kappa_e c_{j,e^-}+\xi_{je},\quad C_{je}=\operatorname{centre}_e(c_{je}) \\
+              \kappa_e &= \begin{cases}
+                1 & \text{within a season} \\
+                \rho & \text{ordinary season start} \\
+                \rho_{\rm reset} & \text{regulation reset}
+              \end{cases} \\
+              \xi_{je} &\sim \begin{cases}
+                t_4(0,\sigma_{\rm car,race}) & \text{within a season} \\
+                \mathcal N(0,\sigma_{\rm car,season}^{2}) & \text{ordinary season start} \\
+                \mathcal N(0,\sigma_{\rm car,reset}^{2}) & \text{regulation reset}
+              \end{cases}
+            \end{aligned}`}
+          />
+          <p>
+            <InlineMath tex="c" /> is the uncentred car state. The first state
+            of each team in the window has prior{" "}
+            <InlineMath tex={String.raw`\mathcal N(0,1.5^2)`} />. Within-season
+            innovations use four-degree-of-freedom Student-t tails; season
+            changes use Gaussian jumps. Carryover has priors{" "}
+            <InlineMath tex={String.raw`\rho\sim\operatorname{Beta}(8,2)`} />{" "}
+            and{" "}
+            <InlineMath
+              tex={String.raw`\rho_{\rm reset}\sim\operatorname{Beta}(3,3)`}
+            />
+            .
           </p>
           <p>
             Circuit suitability is represented by a learned axis from slower
@@ -95,6 +226,74 @@ export default function Methodology({ data }: { data: Dataset }) {
             team-season. This is a simplified track adjustment, not a full
             aerodynamic or power-unit model.
           </p>
+          <Equation
+            label="Circuit suitability"
+            tex={String.raw`T_{je}=\operatorname{centre}_e\!\left[\ell_{js}\,x_{\operatorname{circuit}(e)}\right]`}
+          />
+          <p>
+            <InlineMath tex="x" /> is the circuit factor estimated from training
+            data and then held fixed during the fit.{" "}
+            <InlineMath tex={String.raw`\ell_{js}`} /> is the learned loading
+            for team <InlineMath tex="j" /> in season <InlineMath tex="s" />.
+          </p>
+        </div>
+      </details>
+      <details>
+        <summary>Bayesian estimation and priors</summary>
+        <div className="method-body">
+          <Equation
+            label="Posterior distribution"
+            tex={String.raw`p(\theta\mid y)\propto p(y\mid\theta)\,p(\theta)`}
+          />
+          <p>
+            <InlineMath tex={String.raw`\theta`} /> contains the unknown model
+            parameters. The likelihood{" "}
+            <InlineMath tex={String.raw`p(y\mid\theta)`} /> scores how well a
+            parameter set explains the laps; the prior{" "}
+            <InlineMath tex={String.raw`p(\theta)`} /> supplies regularisation.
+            NumPyro’s No-U-Turn Sampler draws from the resulting posterior in
+            four chains. Driver, car and nuisance parameters are estimated
+            jointly.
+          </p>
+          <Equation
+            label="Hierarchical effects and segment noise"
+            tex={String.raw`\begin{aligned}
+              z_k &\sim\mathcal N(0,1),\quad h_k=\sigma_h z_k \\
+              \sigma_h &\sim\operatorname{HalfNormal}(b_h) \\
+              \sigma_q &= \sigma_0\exp(\tau u_q),\quad u_q\sim\mathcal N(0,1) \\
+              \nu &\sim\operatorname{Gamma}(2,0.1)
+            \end{aligned}`}
+          />
+          <p>
+            Effects <InlineMath tex="h_k" /> share a learned scale, then are
+            centred within their comparison group where applicable. Normal
+            distributions use mean and variance; HalfNormal is a positive scale
+            prior; Gamma uses shape and rate. In percentage-point units,{" "}
+            <InlineMath tex="b_h" /> is 0.5 for initial driver levels, 0.1 for
+            driver–team effects, and 0.2 for driver weekend, car weekend and car
+            segment effects. Driver walk scales use HalfNormal(0.03) within
+            seasons and HalfNormal(0.2) between seasons. Car innovation scales
+            use 0.15, 0.5 and 1.0 for within-season, season-start and reset
+            changes. Both <InlineMath tex={String.raw`\sigma_0`} /> and{" "}
+            <InlineMath tex={String.raw`\tau`} /> have HalfNormal(0.5) priors.
+          </p>
+          <p>
+            The experience gain has prior{" "}
+            <InlineMath tex={String.raw`g\sim\mathcal N(0,1)`} />, the age slope{" "}
+            <InlineMath tex={String.raw`a\sim\mathcal N(0,0.2^2)`} />, and the
+            experience timescale{" "}
+            <InlineMath
+              tex={String.raw`\ln\lambda\sim\mathcal N(\ln20,0.7^2)`}
+            />
+            . Neither trend is forced to have a particular sign. Segment
+            baselines have prior{" "}
+            <InlineMath tex={String.raw`\mathcal N(0,2^2)`} />; circuit loadings
+            use a shared HalfNormal(0.5) scale prior. The linked specification
+            includes every prior and centring constraint.
+          </p>
+          <a href={`${source}f1rank/model.py`}>
+            Full model and prior specification
+          </a>
         </div>
       </details>
       <details>
@@ -136,6 +335,14 @@ export default function Methodology({ data }: { data: Dataset }) {
               </dd>
             </div>
           </dl>
+          <Equation
+            label="Qualifying rating components"
+            tex={String.raw`\begin{aligned}
+              x_{\rm in\ team} &= D_{de}+K_{dje} \\
+              x_{\rm portable} &= D_{de} \\
+              x_{\rm car} &= C_{je},\quad x_{\rm at\ circuit}=C_{je}+T_{je}
+            \end{aligned}`}
+          />
           <p>
             Ratings are centred on the average driver or car entered at each
             event and converted to seconds per 90-second reference lap. A
@@ -162,6 +369,7 @@ export default function Methodology({ data }: { data: Dataset }) {
             positions are poorly resolved; these probabilities are not race-win
             probabilities.
           </p>
+          <RatingMath />
           <p>
             A head-to-head gap subtracts the two ratings within each shared
             sample, preserving their dependence. It does not subtract the ends
@@ -170,6 +378,13 @@ export default function Methodology({ data }: { data: Dataset }) {
             comparison probabilities use all{" "}
             {data.meta.diagnostics.n_draws.toLocaleString()}.
           </p>
+          <Equation
+            label="Paired comparison"
+            tex={String.raw`\begin{aligned}
+              \Delta_{AB}^{(m)} &= r_A^{(m)}-r_B^{(m)} \\
+              P(A\text{ faster than }B) &\approx\frac{1}{M}\sum_{m=1}^{M}\mathbf{1}\{\Delta_{AB}^{(m)}>0\}
+            \end{aligned}`}
+          />
         </div>
       </details>
       <details>

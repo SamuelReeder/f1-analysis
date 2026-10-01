@@ -131,8 +131,12 @@ test("health discloses unavailable racing, historical gates and snapshots", asyn
   ).toBeVisible();
   await page.getByText("Data and lap filtering", { exact: true }).click();
   await expect(
-    page.getByText("pace = −100 × ln(time / segment median)"),
+    page.getByRole("region", {
+      name: "Qualifying pace transformation",
+      exact: true,
+    }),
   ).toBeVisible();
+  await expect(page.locator(".method-equation math").first()).toBeAttached();
   await page.getByText("What each rating measures", { exact: true }).click();
   await expect(
     page.getByText("The driver component after removing"),
@@ -540,6 +544,17 @@ for (const view of [
     page.on("pageerror", (e) => errors.push(e.message));
     await page.goto(`./#${view}`);
     await expect(page.locator(".page-heading")).toBeVisible();
+    // Audit the expanded equations as well as the ranking controls.
+    await page
+      .locator(".methodology details, .race-method details")
+      .evaluateAll((details) =>
+        details.forEach((detail) => detail.setAttribute("open", "")),
+      );
+    if (view === "health" || view.endsWith("/race")) {
+      await expect(
+        page.locator(".method-equation math").first(),
+      ).toBeAttached();
+    }
     const audit = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
       .analyze();
