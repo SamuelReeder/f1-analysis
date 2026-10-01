@@ -1,0 +1,173 @@
+{
+ "design": "Later races of the same season, excluded from all fitting; refitted ablations",
+ "folds": [
+  "2024-10",
+  "2025-10",
+  "2026-07"
+ ],
+ "fits": {
+  "2024-10": {
+   "full": {
+    "key": "9eec2876d10666a3829929e2b730c61ad7c9ccacb689e26a04be5d48e4ec8234",
+    "diagnostics": {
+     "rhat_max": 1.0094311237335205,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "data_as_of": "2024-08",
+    "n_laps": 85041,
+    "n_races": 98
+   },
+   "no_driver": {
+    "key": "e3b60d0f7dbe9539bf7feeaba67661a109a32f0a7f354b2509c90a27e91372c4",
+    "diagnostics": {
+     "rhat_max": 1.004766583442688,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "data_as_of": "2024-08",
+    "n_laps": 85041,
+    "n_races": 98
+   },
+   "no_car": {
+    "key": "d5ad8f2d6790e87b65182c7e08868858b92f9be5a35c9a32a33122227b685908",
+    "diagnostics": {
+     "rhat_max": 1.0036437511444092,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "data_as_of": "2024-08",
+    "n_laps": 85041,
+    "n_races": 98
+   }
+  },
+  "2025-10": {
+   "full": {
+    "key": "c692b78af1c8108accda4f99d342c24d8239b360664ab263c908193224f32206",
+    "diagnostics": {
+     "rhat_max": 1.0228403806686401,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "data_as_of": "2025-09",
+    "n_laps": 101785,
+    "n_races": 116
+   },
+   "no_driver": {
+    "key": "67490b0198c6c6d988d702bb7813327070ff3d8f9f881fbcb75bdb7348d369ba",
+    "diagnostics": {
+     "rhat_max": 1.004446029663086,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "data_as_of": "2025-09",
+    "n_laps": 101785,
+    "n_races": 116
+   },
+   "no_car": {
+    "key": "3215a730417bba5adf9ca739a79a378df2dbc52b90a869e8116fe6ad9e763b3b",
+    "diagnostics": {
+     "rhat_max": 1.0077879428863525,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "data_as_of": "2025-09",
+    "n_laps": 101785,
+    "n_races": 116
+   }
+  },
+  "2026-07": {
+   "full": {
+    "key": "395dd05e2962eceb43d859c10c66c17b8945c7a408dc97b3b93c528fb52b52a1",
+    "diagnostics": {
+     "rhat_max": 1.0339809656143188,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "data_as_of": "2026-07",
+    "n_laps": 116521,
+    "n_races": 132
+   },
+   "no_driver": {
+    "key": "ed1ea1a0ec162c89f4cae3b44fba107f5227ff7829834f3df919543db3fad42a",
+    "diagnostics": {
+     "rhat_max": 1.0062834024429321,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "data_as_of": "2026-07",
+    "n_laps": 116521,
+    "n_races": 132
+   },
+   "no_car": {
+    "key": "2e71fdc7a4bc48097b2bddf6ff4cf20bd42f1016c710cc209fcc974a6684768b",
+    "diagnostics": {
+     "rhat_max": 1.0098693370819092,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "data_as_of": "2026-07",
+    "n_laps": 116521,
+    "n_races": 132
+   }
+  }
+ },
+ "metrics": {
+  "drivers": {
+   "n_races": 29,
+   "n_predictions": 262,
+   "mse_difference": -0.07724599678967253,
+   "mse_difference_ci95": [
+    -0.10871706511004053,
+    -0.04701104840482828
+   ],
+   "improves": true,
+   "rmse": 0.3644788250961879,
+   "baseline_rmse": 0.458491015949722,
+   "coverage90": 0.9083969465648855,
+   "mean_interval_width": 1.1892505530586601,
+   "baseline_interval_width": 1.4213194494005754,
+   "calibrated": true,
+   "sharper": true,
+   "passed": true
+  },
+  "cars": {
+   "n_races": 29,
+   "n_predictions": 295,
+   "mse_difference": 0.0040422765164838505,
+   "mse_difference_ci95": [
+    -0.006097129030952936,
+    0.013289672044228039
+   ],
+   "improves": false,
+   "rmse": 0.3839069280720676,
+   "baseline_rmse": 0.37903240621496187,
+   "coverage90": 0.8406779661016949,
+   "mean_interval_width": 1.07368719814789,
+   "baseline_interval_width": 1.1150088872067612,
+   "calibrated": false,
+   "sharper": true,
+   "passed": false
+  }
+ },
+ "units": "percent of lap time; MSE in percent squared",
+ "calibration_note": "Whole Stage-A bootstrap rows preserve shared target uncertainty across drivers and teams."
+}

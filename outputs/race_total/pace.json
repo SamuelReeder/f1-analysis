@@ -1,0 +1,666 @@
+{
+ "schema_version": 1,
+ "model": "total-dry-race-pace-v1",
+ "fit_id": "99765d9e234d64b31509",
+ "data_as_of": {
+  "event_id": "2026-15",
+  "season": 2026,
+  "round": 15,
+  "date": "2026-09-26",
+  "race_name": "Azerbaijan Grand Prix",
+  "circuit_id": "baku"
+ },
+ "grid_as_of": "2026-15",
+ "first_event": "2018-02",
+ "season": 2026,
+ "n_laps": 122648,
+ "n_races": 139,
+ "diagnostics": {
+  "rhat_max": 1.02826988697052,
+  "divergences": 0,
+  "n_draws": 3200,
+  "finite": true,
+  "converged": true
+ },
+ "validation": {
+  "design": "Later races of the same season, excluded from all fitting; refitted ablations",
+  "folds": [
+   "2024-10",
+   "2025-10",
+   "2026-07"
+  ],
+  "fits": {
+   "2024-10": {
+    "full": {
+     "key": "9eec2876d10666a3829929e2b730c61ad7c9ccacb689e26a04be5d48e4ec8234",
+     "diagnostics": {
+      "rhat_max": 1.0094311237335205,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true
+     },
+     "data_as_of": "2024-08",
+     "n_laps": 85041,
+     "n_races": 98
+    },
+    "no_driver": {
+     "key": "e3b60d0f7dbe9539bf7feeaba67661a109a32f0a7f354b2509c90a27e91372c4",
+     "diagnostics": {
+      "rhat_max": 1.004766583442688,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true
+     },
+     "data_as_of": "2024-08",
+     "n_laps": 85041,
+     "n_races": 98
+    },
+    "no_car": {
+     "key": "d5ad8f2d6790e87b65182c7e08868858b92f9be5a35c9a32a33122227b685908",
+     "diagnostics": {
+      "rhat_max": 1.0036437511444092,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true
+     },
+     "data_as_of": "2024-08",
+     "n_laps": 85041,
+     "n_races": 98
+    }
+   },
+   "2025-10": {
+    "full": {
+     "key": "c692b78af1c8108accda4f99d342c24d8239b360664ab263c908193224f32206",
+     "diagnostics": {
+      "rhat_max": 1.0228403806686401,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true
+     },
+     "data_as_of": "2025-09",
+     "n_laps": 101785,
+     "n_races": 116
+    },
+    "no_driver": {
+     "key": "67490b0198c6c6d988d702bb7813327070ff3d8f9f881fbcb75bdb7348d369ba",
+     "diagnostics": {
+      "rhat_max": 1.004446029663086,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true
+     },
+     "data_as_of": "2025-09",
+     "n_laps": 101785,
+     "n_races": 116
+    },
+    "no_car": {
+     "key": "3215a730417bba5adf9ca739a79a378df2dbc52b90a869e8116fe6ad9e763b3b",
+     "diagnostics": {
+      "rhat_max": 1.0077879428863525,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true
+     },
+     "data_as_of": "2025-09",
+     "n_laps": 101785,
+     "n_races": 116
+    }
+   },
+   "2026-07": {
+    "full": {
+     "key": "395dd05e2962eceb43d859c10c66c17b8945c7a408dc97b3b93c528fb52b52a1",
+     "diagnostics": {
+      "rhat_max": 1.0339809656143188,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true
+     },
+     "data_as_of": "2026-07",
+     "n_laps": 116521,
+     "n_races": 132
+    },
+    "no_driver": {
+     "key": "ed1ea1a0ec162c89f4cae3b44fba107f5227ff7829834f3df919543db3fad42a",
+     "diagnostics": {
+      "rhat_max": 1.0062834024429321,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true
+     },
+     "data_as_of": "2026-07",
+     "n_laps": 116521,
+     "n_races": 132
+    },
+    "no_car": {
+     "key": "2e71fdc7a4bc48097b2bddf6ff4cf20bd42f1016c710cc209fcc974a6684768b",
+     "diagnostics": {
+      "rhat_max": 1.0098693370819092,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true
+     },
+     "data_as_of": "2026-07",
+     "n_laps": 116521,
+     "n_races": 132
+    }
+   }
+  },
+  "metrics": {
+   "drivers": {
+    "n_races": 29,
+    "n_predictions": 262,
+    "mse_difference": -0.07724599678967253,
+    "mse_difference_ci95": [
+     -0.10871706511004053,
+     -0.04701104840482828
+    ],
+    "improves": true,
+    "rmse": 0.3644788250961879,
+    "baseline_rmse": 0.458491015949722,
+    "coverage90": 0.9083969465648855,
+    "mean_interval_width": 1.1892505530586601,
+    "baseline_interval_width": 1.4213194494005754,
+    "calibrated": true,
+    "sharper": true,
+    "passed": true
+   },
+   "cars": {
+    "n_races": 29,
+    "n_predictions": 295,
+    "mse_difference": 0.0040422765164838505,
+    "mse_difference_ci95": [
+     -0.006097129030952936,
+     0.013289672044228039
+    ],
+    "improves": false,
+    "rmse": 0.3839069280720676,
+    "baseline_rmse": 0.37903240621496187,
+    "coverage90": 0.8406779661016949,
+    "mean_interval_width": 1.07368719814789,
+    "baseline_interval_width": 1.1150088872067612,
+    "calibrated": false,
+    "sharper": true,
+    "passed": false
+   }
+  },
+  "units": "percent of lap time; MSE in percent squared",
+  "calibration_note": "Whole Stage-A bootstrap rows preserve shared target uncertainty across drivers and teams."
+ },
+ "validation_fit_id": "83ad96be7da860c8b1c7",
+ "drivers": [
+  {
+   "id": "max_verstappen",
+   "name": "Max Verstappen",
+   "code": "VER",
+   "team": "Red Bull Racing",
+   "lineage": "red_bull",
+   "pace": {
+    "q05": 0.41813837855249986,
+    "q25": 0.49099600322026,
+    "median": 0.5448401905294634,
+    "q75": 0.5949871311842634,
+    "q95": 0.6686890939265403,
+    "rank_lo": 1,
+    "rank_hi": 1,
+    "p_fastest": 0.9928125,
+    "p_top3": 1.0
+   },
+   "races": 11,
+   "laps": 491,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "norris",
+   "name": "Lando Norris",
+   "code": "NOR",
+   "team": "McLaren",
+   "lineage": "mclaren",
+   "pace": {
+    "q05": 0.058556912542659455,
+    "q25": 0.14723359755219215,
+    "median": 0.2108557535938665,
+    "q75": 0.27050674614306036,
+    "q95": 0.3583814141091847,
+    "rank_lo": 2,
+    "rank_hi": 8,
+    "p_fastest": 0.0059375,
+    "p_top3": 0.6721875
+   },
+   "races": 11,
+   "laps": 490,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "leclerc",
+   "name": "Charles Leclerc",
+   "code": "LEC",
+   "team": "Ferrari",
+   "lineage": "ferrari",
+   "pace": {
+    "q05": 0.018355523000301965,
+    "q25": 0.09657950983171097,
+    "median": 0.15203313143839214,
+    "q75": 0.2024417075190947,
+    "q95": 0.28243778260604646,
+    "rank_lo": 2,
+    "rank_hi": 10,
+    "p_fastest": 0.0003125,
+    "p_top3": 0.4103125
+   },
+   "races": 11,
+   "laps": 514,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "perez",
+   "name": "Sergio P\u00e9rez",
+   "code": "PER",
+   "team": "Cadillac",
+   "lineage": "cadillac",
+   "pace": {
+    "q05": 0.024281973810231477,
+    "q25": 0.09513423200749622,
+    "median": 0.1464489818931642,
+    "q75": 0.20075723540979776,
+    "q95": 0.2796786277428983,
+    "rank_lo": 2,
+    "rank_hi": 10,
+    "p_fastest": 0.0003125,
+    "p_top3": 0.3859375
+   },
+   "races": 10,
+   "laps": 392,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "gasly",
+   "name": "Pierre Gasly",
+   "code": "GAS",
+   "team": "Alpine",
+   "lineage": "enstone",
+   "pace": {
+    "q05": -0.0694939429061064,
+    "q25": 0.01504790953106501,
+    "median": 0.06804077131885358,
+    "q75": 0.12448764087907463,
+    "q95": 0.20539836756313556,
+    "rank_lo": 3,
+    "rank_hi": 15,
+    "p_fastest": 0.0,
+    "p_top3": 0.11125
+   },
+   "races": 12,
+   "laps": 550,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "sainz",
+   "name": "Carlos Sainz",
+   "code": "SAI",
+   "team": "Williams",
+   "lineage": "williams",
+   "pace": {
+    "q05": -0.06373562112482349,
+    "q25": 0.01840671926197088,
+    "median": 0.06605898810349489,
+    "q75": 0.11663944499080323,
+    "q95": 0.19011713102396408,
+    "rank_lo": 3,
+    "rank_hi": 14,
+    "p_fastest": 0.0003125,
+    "p_top3": 0.0675
+   },
+   "races": 12,
+   "laps": 477,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "hamilton",
+   "name": "Lewis Hamilton",
+   "code": "HAM",
+   "team": "Ferrari",
+   "lineage": "ferrari",
+   "pace": {
+    "q05": -0.09044437621915924,
+    "q25": -0.005447048317133021,
+    "median": 0.05101810646010563,
+    "q75": 0.10689789652295242,
+    "q95": 0.20185316498518327,
+    "rank_lo": 3,
+    "rank_hi": 16,
+    "p_fastest": 0.0,
+    "p_top3": 0.065
+   },
+   "races": 11,
+   "laps": 522,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "arvid_lindblad",
+   "name": "Arvid Lindblad",
+   "code": "LIN",
+   "team": "Racing Bulls",
+   "lineage": "faenza",
+   "pace": {
+    "q05": -0.16540191152619874,
+    "q25": -0.05070563359609382,
+    "median": 0.03214664980980821,
+    "q75": 0.11686440147512424,
+    "q95": 0.23091501755158372,
+    "rank_lo": 2,
+    "rank_hi": 19,
+    "p_fastest": 0.0,
+    "p_top3": 0.13125
+   },
+   "races": 12,
+   "laps": 550,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "hadjar",
+   "name": "Isack Hadjar",
+   "code": "HAD",
+   "team": "Red Bull Racing",
+   "lineage": "red_bull",
+   "pace": {
+    "q05": -0.1460876830220646,
+    "q25": -0.053152146441756164,
+    "median": 0.010899976253594186,
+    "q75": 0.07757476800047286,
+    "q95": 0.18148972366111013,
+    "rank_lo": 3,
+    "rank_hi": 18,
+    "p_fastest": 0.0,
+    "p_top3": 0.0578125
+   },
+   "races": 9,
+   "laps": 418,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "albon",
+   "name": "Alexander Albon",
+   "code": "ALB",
+   "team": "Williams",
+   "lineage": "williams",
+   "pace": {
+    "q05": -0.14540480898873118,
+    "q25": -0.06790623770105993,
+    "median": -0.017744570280509915,
+    "q75": 0.033701988047158175,
+    "q95": 0.10951925000715566,
+    "rank_lo": 6,
+    "rank_hi": 18,
+    "p_fastest": 0.0,
+    "p_top3": 0.00875
+   },
+   "races": 11,
+   "laps": 475,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "alonso",
+   "name": "Fernando Alonso",
+   "code": "ALO",
+   "team": "Aston Martin",
+   "lineage": "silverstone",
+   "pace": {
+    "q05": -0.17837002069774,
+    "q25": -0.09164487029140053,
+    "median": -0.03206112509889697,
+    "q75": 0.03357378387114627,
+    "q95": 0.11446671678536487,
+    "rank_lo": 5,
+    "rank_hi": 19,
+    "p_fastest": 0.0,
+    "p_top3": 0.0178125
+   },
+   "races": 10,
+   "laps": 402,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "bearman",
+   "name": "Oliver Bearman",
+   "code": "BEA",
+   "team": "Haas F1 Team",
+   "lineage": "haas",
+   "pace": {
+    "q05": -0.2100661564685817,
+    "q25": -0.11414343377797526,
+    "median": -0.04643237450244752,
+    "q75": 0.02303851860236715,
+    "q95": 0.11621988077253098,
+    "rank_lo": 5,
+    "rank_hi": 20,
+    "p_fastest": 0.0,
+    "p_top3": 0.0196875
+   },
+   "races": 11,
+   "laps": 454,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "piastri",
+   "name": "Oscar Piastri",
+   "code": "PIA",
+   "team": "McLaren",
+   "lineage": "mclaren",
+   "pace": {
+    "q05": -0.2283414362525483,
+    "q25": -0.12713016896423968,
+    "median": -0.055450559287882326,
+    "q75": 0.01078822318655015,
+    "q95": 0.10990107715066352,
+    "rank_lo": 5,
+    "rank_hi": 21,
+    "p_fastest": 0.0,
+    "p_top3": 0.013125
+   },
+   "races": 10,
+   "laps": 460,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "stroll",
+   "name": "Lance Stroll",
+   "code": "STR",
+   "team": "Aston Martin",
+   "lineage": "silverstone",
+   "pace": {
+    "q05": -0.21083717793818904,
+    "q25": -0.12505331659816546,
+    "median": -0.06681198463298973,
+    "q75": -0.006067164878318601,
+    "q95": 0.08627315913242369,
+    "rank_lo": 6,
+    "rank_hi": 21,
+    "p_fastest": 0.0,
+    "p_top3": 0.005625
+   },
+   "races": 7,
+   "laps": 247,
+   "last_race": "2026-13"
+  },
+  {
+   "id": "hulkenberg",
+   "name": "Nico H\u00fclkenberg",
+   "code": "HUL",
+   "team": "Audi",
+   "lineage": "hinwil",
+   "pace": {
+    "q05": -0.23742212500804188,
+    "q25": -0.1432575725475379,
+    "median": -0.07672934091480618,
+    "q75": -0.014634912435642708,
+    "q95": 0.08152382944345425,
+    "rank_lo": 6,
+    "rank_hi": 21,
+    "p_fastest": 0.0,
+    "p_top3": 0.006875
+   },
+   "races": 11,
+   "laps": 469,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "antonelli",
+   "name": "Andrea Kimi Antonelli",
+   "code": "ANT",
+   "team": "Mercedes",
+   "lineage": "brackley",
+   "pace": {
+    "q05": -0.26559755938328716,
+    "q25": -0.1555057044000767,
+    "median": -0.08079585032749245,
+    "q75": 0.0024704709061717733,
+    "q95": 0.1121472795153121,
+    "rank_lo": 5,
+    "rank_hi": 21,
+    "p_fastest": 0.0003125,
+    "p_top3": 0.015625
+   },
+   "races": 12,
+   "laps": 569,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "ocon",
+   "name": "Esteban Ocon",
+   "code": "OCO",
+   "team": "Haas F1 Team",
+   "lineage": "haas",
+   "pace": {
+    "q05": -0.2313900578028882,
+    "q25": -0.1438611542223953,
+    "median": -0.08871005821803754,
+    "q75": -0.03135355233151296,
+    "q95": 0.051798342008947985,
+    "rank_lo": 8,
+    "rank_hi": 21,
+    "p_fastest": 0.0,
+    "p_top3": 0.0028125
+   },
+   "races": 12,
+   "laps": 540,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "russell",
+   "name": "George Russell",
+   "code": "RUS",
+   "team": "Mercedes",
+   "lineage": "brackley",
+   "pace": {
+    "q05": -0.27107255719940776,
+    "q25": -0.17788543603806334,
+    "median": -0.11183018163904887,
+    "q75": -0.04366101687033237,
+    "q95": 0.05285078980060376,
+    "rank_lo": 8,
+    "rank_hi": 21,
+    "p_fastest": 0.0,
+    "p_top3": 0.0021875
+   },
+   "races": 11,
+   "laps": 533,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "bortoleto",
+   "name": "Gabriel Bortoleto",
+   "code": "BOR",
+   "team": "Audi",
+   "lineage": "hinwil",
+   "pace": {
+    "q05": -0.31749327335464345,
+    "q25": -0.20667582836838183,
+    "median": -0.131088216633229,
+    "q75": -0.05437341602968942,
+    "q95": 0.062328768737444785,
+    "rank_lo": 7,
+    "rank_hi": 22,
+    "p_fastest": 0.0,
+    "p_top3": 0.0059375
+   },
+   "races": 11,
+   "laps": 507,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "colapinto",
+   "name": "Franco Colapinto",
+   "code": "COL",
+   "team": "Alpine",
+   "lineage": "enstone",
+   "pace": {
+    "q05": -0.29551154602710583,
+    "q25": -0.1972271427258172,
+    "median": -0.13510724784361874,
+    "q75": -0.0711070245282661,
+    "q95": 0.019659967358774323,
+    "rank_lo": 9,
+    "rank_hi": 22,
+    "p_fastest": 0.0,
+    "p_top3": 0.0003125
+   },
+   "races": 12,
+   "laps": 537,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "lawson",
+   "name": "Liam Lawson",
+   "code": "LAW",
+   "team": "Racing Bulls",
+   "lineage": "faenza",
+   "pace": {
+    "q05": -0.31617581690492275,
+    "q25": -0.22739893806336278,
+    "median": -0.16308290319813584,
+    "q75": -0.09855219629138115,
+    "q95": -0.005359152320095163,
+    "rank_lo": 11,
+    "rank_hi": 22,
+    "p_fastest": 0.0,
+    "p_top3": 0.0
+   },
+   "races": 12,
+   "laps": 549,
+   "last_race": "2026-15"
+  },
+  {
+   "id": "bottas",
+   "name": "Valtteri Bottas",
+   "code": "BOT",
+   "team": "Cadillac",
+   "lineage": "cadillac",
+   "pace": {
+    "q05": -0.4375816547273743,
+    "q25": -0.3470295724511908,
+    "median": -0.28348860110431406,
+    "q75": -0.22294992037204792,
+    "q95": -0.1372176775061103,
+    "rank_lo": 17,
+    "rank_hi": 22,
+    "p_fastest": 0.0,
+    "p_top3": 0.0
+   },
+   "races": 7,
+   "laps": 262,
+   "last_race": "2026-15"
+  }
+ ],
+ "cars": [],
+ "unrated_drivers": [],
+ "unrated_cars": []
+}

@@ -17,6 +17,16 @@ export default function RacePace({ data }: { data?: RaceData | null }) {
   );
   const driver = kind === "drivers";
   const validation = data?.validation.metrics[kind];
+  const failedChecks = validation
+    ? [
+        validation.n_races < 12 && "enough held-out races",
+        !validation.improves && "prediction improvement",
+        !validation.calibrated && "interval coverage",
+        !validation.sharper && "narrower prediction intervals",
+      ]
+        .filter(Boolean)
+        .join(", ")
+    : "";
   const domain = [
     Math.min(0, ...rows.map((r) => r.pace.q05)),
     Math.max(0, ...rows.map((r) => r.pace.q95)),
@@ -248,7 +258,7 @@ export default function RacePace({ data }: { data?: RaceData | null }) {
               >
                 {validation?.passed
                   ? "Each entry needs two usable dry races this season before it appears in the table."
-                  : "The current model has not passed all publication checks for this ranking."}
+                  : `Publication checks not met: ${failedChecks}.`}
               </Empty>
             </section>
           )}

@@ -352,6 +352,13 @@ test("a withheld car race ranking does not hide a supported driver table", async
   await expect(
     page.getByRole("button", { name: "Export race rankings" }),
   ).toHaveCount(0);
+  await page.getByRole("link", { name: "Model health", exact: true }).click();
+  await expect(
+    page.getByText("Driver race pace published", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Racing validation pending", { exact: true }),
+  ).toHaveCount(0);
 });
 
 test("an unsupported race ranking cannot replace the previous release", async ({

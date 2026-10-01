@@ -94,7 +94,10 @@ The new data files are generated locally and ignored by Git. A static build incl
 the publications available at build time; a static host must receive updated `data/`
 files to show subsequent releases. Serve `latest.json` and `status.json` without caching.
 
-Racing standings remain unavailable until the corrected racing pipeline is rerun.
+The total driver race-pace ranking is published; the car race-pace table is withheld
+because it did not pass the prediction and interval-coverage checks. Overall race-result
+and equal-car championship standings remain unavailable until the corrected racing
+pipeline is rerun.
 Portable skill is explicitly experimental. Historical validation files have no run
 manifest and are shown as recorded research, not as fresh acceptance of a new fit.
 
@@ -503,6 +506,21 @@ Commit the code, validation outputs and portable export together, then push to
 `main` to run the existing checked Pages deployment. Merely polling the website
 does not refit the models. The full race fit is a substantial GPU job; historical
 fits are reused on later runs when their training data have not changed.
+
+The first export contains 22 current driver estimates from 122,648 clean laps in
+139 dry races. All ten real-data fits passed the convergence checks with zero
+divergences (maximum R-hat 1.034). The three historical windows contain 29 test races:
+
+| Prediction target | RMSE | Baseline RMSE | 90% interval coverage | Ranking |
+| --- | ---: | ---: | ---: | --- |
+| Teammate driver pace gaps (262 comparisons) | 0.328s | 0.413s | 90.8% | Published |
+| Team-average pace (295 predictions) | 0.346s | 0.341s | 84.1% | Withheld |
+
+Errors are seconds per 90-second lap. Driver improvement is supported by the
+race-block bootstrap; car improvement is not. The car model also misses the
+85% minimum coverage requirement. Its computed estimates remain in the ignored
+research file, not the public ranking. These results are prediction checks, not
+proof that all differences in strategy, equipment or team priority have been separated.
 
 The corrected qualifying files can be regenerated without refitting the valid main fit:
 

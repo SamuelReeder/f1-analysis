@@ -34,6 +34,18 @@ export default function Health({
   release?: Release;
 }) {
   const d = data.meta.diagnostics;
+  const driverRace = Boolean(data.race_pace?.drivers.length);
+  const carRace = Boolean(data.race_pace?.cars.length);
+  const raceStatus =
+    driverRace && carRace
+      ? "Race pace published"
+      : driverRace
+        ? "Driver race pace published"
+        : carRace
+          ? "Car race pace published"
+          : data.race_pace
+            ? "Race pace unavailable"
+            : "Racing validation pending";
   const days = Math.max(
     0,
     Math.floor(
@@ -55,16 +67,8 @@ export default function Health({
           <h2>Qualifying publication checks passed</h2>
           <p>Source checksums matched · fit converged</p>
         </div>
-        <Badge
-          tone={
-            data.race_pace?.drivers.length && data.race_pace?.cars.length
-              ? "green"
-              : "amber"
-          }
-        >
-          {data.race_pace?.drivers.length && data.race_pace?.cars.length
-            ? "Race pace published"
-            : "Racing validation pending"}
+        <Badge tone={driverRace || carRace ? "green" : "amber"}>
+          {raceStatus}
         </Badge>
       </div>
       <div className="stat-grid four">
