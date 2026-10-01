@@ -268,7 +268,7 @@ export default function Trend({
                         cy={y(s.points[hover]!.median)}
                         r="5"
                         fill={s.color}
-                        stroke="white"
+                        stroke="var(--surface)"
                         strokeWidth="2"
                       />
                     ),
@@ -283,7 +283,7 @@ export default function Trend({
                   {events[hover].race_name} · {events[hover].season}
                 </strong>
                 {series.map((s) => (
-                  <span key={s.id} style={{ color: s.color }}>
+                  <span key={s.id}>
                     {shortName(s.name)}:{" "}
                     {s.points[hover]
                       ? `${signed(s.points[hover]!.median)}s`

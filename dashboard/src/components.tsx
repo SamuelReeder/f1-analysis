@@ -81,7 +81,7 @@ export function Band({
         cy="13"
         r="4.5"
         fill="currentColor"
-        stroke="white"
+        stroke="var(--surface)"
         strokeWidth="1.5"
       />
     </svg>

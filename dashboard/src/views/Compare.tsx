@@ -214,13 +214,13 @@ export default function Compare({
                                 p >= 0.9
                                   ? "#b80500"
                                   : p >= 0.75
-                                    ? "#f5aaa6"
+                                    ? "#6d1713"
                                     : p >= 0.5
-                                      ? "#ffe3e0"
+                                      ? "#331616"
                                       : p >= 0.25
-                                        ? "#f3f3f4"
-                                        : "#e0e0e4",
-                              color: p >= 0.9 ? "#fff" : "#15151e",
+                                        ? "#171717"
+                                        : "#252525",
+                              color: "#fff",
                             }}
                             title={`${r.name} ahead of ${c.name}: ${pct(p)}`}
                             aria-label={`${r.name} ahead of ${c.name}: ${pct(p)}`}
