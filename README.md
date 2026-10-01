@@ -28,6 +28,10 @@ driver race pace. Race pace reads a separate checked export from `outputs/race_t
 Its driver and car tables are gated independently; an absent or failed result is
 shown as pending or withheld. The existing qualifying tables and comparisons keep
 their own metric and data cutoff.
+Qualifying and race pace share the ranking table, filters, event line, export
+control and selected-entry card. Switching metrics retains the selected entry,
+search and team filter. Metric definitions, evidence counts and validation remain
+specific to the selected metric.
 
 It provides:
 

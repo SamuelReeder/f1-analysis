@@ -1,4 +1,12 @@
-import type { Car, Driver, Dataset, Metric } from "./types";
+import type {
+  Car,
+  Driver,
+  Dataset,
+  Metric,
+  RaceEntity,
+  RacePace,
+  RankingKind,
+} from "./types";
 
 // Current team colours from Formula 1's --f1-team-colour values (2026-09-30).
 // https://www.formula1.com/en/teams — keyed by the model's team lineages.
@@ -79,6 +87,53 @@ export function exportCsv(
     [headers, ...body]
       .map((r) =>
         r.map((v) => `"${String(v ?? "").replaceAll('"', '""')}"`).join(","),
+      )
+      .join("\n"),
+  );
+}
+
+export function exportRaceCsv(
+  rows: RaceEntity[],
+  kind: RankingKind,
+  data: RacePace,
+) {
+  const headers = [
+    "rank",
+    "name",
+    "team",
+    "metric",
+    "season",
+    "pace_seconds_per_90s",
+    "lower_90",
+    "upper_90",
+    "rank_low",
+    "rank_high",
+    "races",
+    "clean_laps",
+    "as_of_event",
+    "fit_id",
+  ];
+  const values = rows.map((r, i) => [
+    i + 1,
+    r.name,
+    r.team || r.name,
+    `total_race_pace_${kind}`,
+    data.season,
+    r.pace.median,
+    r.pace.q05,
+    r.pace.q95,
+    r.pace.rank_lo,
+    r.pace.rank_hi,
+    r.races,
+    r.laps,
+    data.data_as_of.event_id,
+    data.fit_id,
+  ]);
+  download(
+    `f1-race-${kind}-${data.data_as_of.event_id}.csv`,
+    [headers, ...values]
+      .map((row) =>
+        row.map((v) => `"${String(v ?? "").replaceAll('"', '""')}"`).join(","),
       )
       .join("\n"),
   );

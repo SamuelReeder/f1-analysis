@@ -11,12 +11,16 @@ import {
   Users,
 } from "lucide-react";
 import type {
-  Dataset, Discipline, Metric, Release, RunStatus, View,
+  Dataset,
+  Discipline,
+  Metric,
+  Release,
+  RunStatus,
+  View,
 } from "./types";
 import Rankings from "./views/Rankings";
 import Compare from "./views/Compare";
 import Health from "./views/Health";
-import RacePace from "./views/RacePace";
 
 const navigation = [
   { id: "drivers", name: "Drivers", icon: Users },
@@ -243,17 +247,14 @@ export default function App() {
                 </div>
               )}
               {view === "drivers" || view === "cars" ? (
-                discipline === "race" ? (
-                  <RacePace key={view} kind={view} data={data.race_pace} />
-                ) : (
-                  <Rankings
-                    key={view}
-                    data={data}
-                    car={view === "cars"}
-                    metric={metric}
-                    setMetric={setMetric}
-                  />
-                )
+                <Rankings
+                  key={view}
+                  data={data}
+                  car={view === "cars"}
+                  discipline={discipline}
+                  metric={metric}
+                  setMetric={setMetric}
+                />
               ) : view === "compare" ? (
                 <Compare data={data} metric={metric} setMetric={setMetric} />
               ) : (

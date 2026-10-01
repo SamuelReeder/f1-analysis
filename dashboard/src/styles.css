@@ -2500,44 +2500,8 @@ select {
   border-bottom-color: var(--accent);
   color: var(--ink);
 }
-.race-detail {
-  align-self: start;
-  padding: 24px;
-}
-.race-detail h2 {
-  margin: 22px 0 8px;
-  font-size: 24px;
-}
-.race-detail-pace {
-  margin-top: 28px;
-  font-size: 38px;
-  font-weight: 700;
-  letter-spacing: -1.5px;
-}
-.race-detail-pace small {
-  font-size: 18px;
-  margin-left: 4px;
-}
-.race-detail-values {
-  margin: 28px 0 0;
-  padding-top: 18px;
-  border-top: 1px solid var(--line);
-}
-.race-detail-values > div {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  margin: 15px 0;
-  font-size: 12px;
-}
-.race-detail-values dt,
 .race-validation-values dt {
   color: var(--muted);
-}
-.race-detail-values dd {
-  margin: 0;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
 }
 .race-validation,
 .race-method {
@@ -2584,5 +2548,57 @@ select {
   }
   .race-validation .panel-heading {
     align-items: flex-start;
+  }
+}
+
+/* Shared ranking geometry across qualifying and race pace. */
+.ranking-event .badge {
+  min-width: 85px;
+  justify-content: center;
+}
+.ranking-context {
+  display: flex;
+  align-items: center;
+  min-height: 37px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.rank-table {
+  table-layout: fixed;
+}
+.rank-table .position-column {
+  width: 7%;
+}
+.rank-table .name-column {
+  width: 32%;
+}
+.rank-table .pace-column {
+  width: 17%;
+}
+.rank-table col.range-col {
+  width: 26%;
+}
+.rank-table .rank-column {
+  width: 18%;
+}
+.evidence-grid {
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+}
+@media (max-width: 760px) {
+  .rank-table .position-column {
+    width: 9%;
+  }
+  .rank-table .name-column {
+    width: 43%;
+  }
+  .rank-table .pace-column {
+    width: 22%;
+  }
+  .rank-table .rank-column {
+    width: 26%;
   }
 }
