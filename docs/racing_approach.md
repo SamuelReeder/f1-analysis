@@ -1,5 +1,42 @@
 # Stage 2: racing ratings and an overall driver rating
 
+## Total race-pace dashboard model (2026-09-30)
+
+The dashboard extension uses a separate joint lap model, `race_total_model.py`,
+to estimate total driver and car pace. It does not reinterpret the older
+qualifying-adjusted `u` as total driver skill or use its historical gate results.
+The model and these decisions were fixed before inspecting the new validation:
+
+- Known-compound dry races from 2018 onward; the same clean-lap and incident-window
+  rules as the race-pace work. Race entries supply team lineage even when a driver
+  has no qualifying entry.
+- Driver = lasting contribution plus a season-specific form deviation. Car =
+  team-season package. Driver/car race-day deviations, race lap trend, compounds,
+  degradation and traffic remain in the joint lap likelihood. AR(1) Student-t errors
+  account for serial dependence and unusually slow laps.
+- No qualifying features or qualifying posterior point estimates enter this model.
+  The driver prior has scale 0.5 percentage points and the car-season prior 1.5;
+  season-form and race-day scales are estimated. These priors participate in the
+  separation when team-switch evidence is weak.
+- Headline is current-season pace at tyre age 10 laps, excluding temporary race-day
+  effects. It is neither a pure innate-skill claim nor an equal-car championship.
+- Train through 2024-10, 2025-10 and 2026-07; predict later dry races in the same
+  season. Refit full, no-driver and no-car variants on the same training laps.
+  Driver targets are Stage-A teammate gaps. Car targets are observed team means,
+  not observations with this model's driver estimate subtracted.
+- A table requires at least 12 held-out races, a race-bootstrap 95% interval for
+  the squared-error difference entirely below zero, 85–95% coverage of the 90%
+  predictive intervals, and sharper intervals than the corresponding ablation.
+  Calibration includes race-day variability and target measurement uncertainty;
+  the car target's cross-driver measurement covariance is approximated as zero.
+- Driver and car gates decide independently. Failed tables remain withheld, and
+  stale artifacts stop publication. These mid-season tests establish neither
+  transfer to an unseen team nor recovery of an exactly known causal skill.
+
+This is a narrower dashboard addition than the full sequential championship plan
+below. Degradation, consistency, starts, reliability, pit stops and overtaking do
+not enter the new headline. Their existing research paths remain separate.
+
 ## Review correction (2026-09-30)
 
 The build status and numerical gate results dated 2026-09-29 below are a historical

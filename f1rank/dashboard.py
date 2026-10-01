@@ -20,6 +20,7 @@ import numpy as np
 import pandas as pd
 
 from .artifacts import StaleArtifact, atomic_json, digest, require
+from .race_publication import load as load_race_pace
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "dashboard" / "public" / "data"
@@ -170,6 +171,7 @@ def build_payload():
                             .sort_values("name").to_dict("records")},
             "events": events.to_dict("records"), "history": history, "comparisons": pairs,
             "comparison_draws": comparison_draws, "racing": racing_health(),
+            "race_pace": load_race_pace(ROOT),
             "validation": validations, "snapshots": snapshots,
             "provenance": {"export_manifest": marker, "inputs": manifest["inputs"],
                            "outputs": manifest["outputs"]}}

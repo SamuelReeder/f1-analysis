@@ -6,6 +6,7 @@ import {
   Info,
   Layers3,
   ArrowDownToLine,
+  Activity,
 } from "lucide-react";
 import type { Dataset, RunStatus, Release } from "../types";
 import { date, pct, download, signed } from "../lib";
@@ -54,7 +55,17 @@ export default function Health({
           <h2>Qualifying publication checks passed</h2>
           <p>Source checksums matched · fit converged</p>
         </div>
-        <Badge tone="amber">Racing revalidation pending</Badge>
+        <Badge
+          tone={
+            data.race_pace?.drivers.length && data.race_pace?.cars.length
+              ? "green"
+              : "amber"
+          }
+        >
+          {data.race_pace?.drivers.length && data.race_pace?.cars.length
+            ? "Race pace published"
+            : "Racing validation pending"}
+        </Badge>
       </div>
       <div className="stat-grid four">
         <div className="stat-card">
@@ -119,6 +130,27 @@ export default function Health({
           </div>
         </div>
         <div className="readiness">
+          {data.race_pace &&
+            (["drivers", "cars"] as const).map((kind) => (
+              <div key={kind}>
+                <span
+                  className={`readiness-icon ${data.race_pace!.validation.metrics[kind].passed ? "good" : "caution"}`}
+                >
+                  <Activity size={17} />
+                </span>
+                <div>
+                  <strong>
+                    {kind === "drivers" ? "Driver" : "Car"} race pace
+                  </strong>
+                  <p>
+                    {data.race_pace!.validation.metrics[kind].passed
+                      ? "Prediction and uncertainty checks passed"
+                      : "Publication checks not passed"}
+                  </p>
+                </div>
+                <a href="#race">View race pace</a>
+              </div>
+            ))}
           <div>
             <span className="readiness-icon good">
               <Check size={17} />

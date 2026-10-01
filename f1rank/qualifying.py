@@ -75,7 +75,15 @@ def prepare(season: int) -> None:
                 return
         except (ValueError, RuntimeError, FileNotFoundError):
             pass
-    design = build_design(2010)
+    # Forecast only the season being tested. Keeping every later season adds
+    # unobserved car paths (and regulation resets) to NUTS, although none of those
+    # states is used by this fold. Marginalising those future paths does not alter
+    # the model for training or test-season observations.
+    events = build_design(2010).events
+    test_events = events.loc[events.season == season, "event_id"]
+    if test_events.empty:
+        raise ValueError(f"No events for qualifying forecast season {season}")
+    design = build_design(2010, end_event=str(test_events.max()))
     cutoff = int(design.events.loc[design.events.season < season, "event_idx"].max())
     design = design.with_cutoff(cutoff)
     check_cutoff(design, season)

@@ -147,3 +147,71 @@ def test_export_rejects_mismatched_portable_fit_identity(monkeypatch):
     monkeypatch.setattr(dashboard, "read_json", read)
     with pytest.raises(ValueError, match="portable fit metadata"):
         dashboard.build_payload()
+
+
+def test_race_ranks_preserve_covariance_and_use_seconds():
+    from f1rank.race_total import estimates
+    shared = np.linspace(-100, 100, 1600)
+    # A common shift cancels when the field is centred. A 1% gap is 0.9s / 90s.
+    rows = estimates(np.column_stack([shared + 1, shared]))
+    assert rows[0]["median"] == pytest.approx(.45)
+    assert rows[1]["median"] == pytest.approx(-.45)
+    assert rows[0]["q05"] == pytest.approx(rows[0]["q95"])
+    assert rows[0]["rank_lo"] == rows[0]["rank_hi"] == 1
+    assert rows[0]["p_fastest"] == 1
+
+
+@pytest.fixture
+def race_release():
+    from copy import deepcopy
+    d = dict(converged=True, rhat_max=1.01, n_draws=3200, divergences=0)
+    folds = ["2024-10", "2025-10", "2026-07"]
+    gate = dict(passed=True, n_races=24, mse_difference_ci95=[-.2, -.01],
+                coverage90=.9, mean_interval_width=.5, baseline_interval_width=1.)
+    estimate = dict(q05=-.1, median=0., q95=.1, rank_lo=1, rank_hi=1)
+    return dict(schema_version=1, model="total-dry-race-pace-v1", diagnostics=d,
+                validation=dict(folds=folds, metrics={k: deepcopy(gate) for k in ("drivers", "cars")},
+                                fits={f: {k: dict(data_as_of=f, diagnostics=deepcopy(d))
+                                      for k in ("full", "no_driver", "no_car")} for f in folds}),
+                drivers=[dict(id="a", pace=deepcopy(estimate))], cars=[dict(id="x", pace=deepcopy(estimate))])
+
+
+def test_race_ranking_requires_predictive_and_uncertainty_evidence(race_release):
+    from f1rank.race_publication import check
+    check(race_release)
+    race_release["validation"]["metrics"]["cars"]["mse_difference_ci95"][1] = .01
+    with pytest.raises(ValueError, match="gate disagrees"):
+        check(race_release)
+    race_release["validation"]["metrics"]["cars"]["passed"] = False
+    with pytest.raises(ValueError, match="Unsupported race pace ranking"):
+        check(race_release)
+    race_release["cars"] = []
+    check(race_release)  # The supported driver table can be published independently.
+
+
+def test_race_validation_cannot_use_future_data_or_failed_fit(race_release):
+    from f1rank.race_publication import check
+    fit = race_release["validation"]["fits"]["2024-10"]["no_driver"]
+    fit["data_as_of"] = "2024-11"
+    with pytest.raises(ValueError, match="validation fit"):
+        check(race_release)
+    fit["data_as_of"] = "2024-10"
+    fit["diagnostics"]["rhat_max"] = 1.2
+    with pytest.raises(ValueError, match="validation fit"):
+        check(race_release)
+
+
+def test_race_publication_rejects_changed_source(tmp_path, race_release):
+    from f1rank.race_publication import load
+    from f1rank.artifacts import record, StaleArtifact
+    directory = tmp_path / "outputs/race_total"
+    directory.mkdir(parents=True)
+    data = directory / "pace.json"
+    data.write_text(json.dumps(race_release))
+    source = tmp_path / "model.py"
+    source.write_text("version 1")
+    record(directory, [data], model="test", inputs=[source])
+    assert load(tmp_path)["drivers"]
+    source.write_text("version 2")
+    with pytest.raises(StaleArtifact):
+        load(tmp_path)

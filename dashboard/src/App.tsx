@@ -9,15 +9,18 @@ import {
   RefreshCw,
   TriangleAlert,
   Users,
+  Timer,
 } from "lucide-react";
 import type { Dataset, Metric, Release, RunStatus, View } from "./types";
 import Rankings from "./views/Rankings";
 import Compare from "./views/Compare";
 import Health from "./views/Health";
+import RacePace from "./views/RacePace";
 
 const navigation = [
   { id: "drivers", name: "Driver rankings", icon: Users },
   { id: "cars", name: "Car rankings", icon: Gauge },
+  { id: "race", name: "Race pace", icon: Timer },
   { id: "compare", name: "Head to head", icon: ArrowLeftRight },
   { id: "health", name: "Model health", icon: Activity },
 ] as const;
@@ -135,7 +138,7 @@ export default function App() {
         </nav>
         <div className="sidebar-foot">
           <span className="online-dot" />
-          Independent F1 analysis<span>Qualifying · 2010 onward</span>
+          Independent F1 analysis<span>Qualifying & race pace</span>
         </div>
       </aside>
       <div className="workspace">
@@ -212,6 +215,8 @@ export default function App() {
                   metric={metric}
                   setMetric={setMetric}
                 />
+              ) : view === "race" ? (
+                <RacePace data={data.race_pace} />
               ) : view === "compare" ? (
                 <Compare data={data} metric={metric} setMetric={setMetric} />
               ) : (

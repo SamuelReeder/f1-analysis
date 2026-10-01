@@ -21,6 +21,11 @@ white, with a dashed second series, to stay distinct even for teammates.
 The Methodology section in Model health describes the qualifying model, rating
 definitions, uncertainty, validation limits and publication process.
 
+The Race pace view reads a separate checked export from `outputs/race_total/`.
+Its driver and car tables are gated independently; an absent or failed result is
+shown as pending or withheld. The existing qualifying tables and comparisons keep
+their own metric and data cutoff.
+
 It provides:
 
 - Driver and car rankings, 90% pace and rank intervals, fastest/top-three
@@ -428,9 +433,57 @@ same data (results in `outputs/analysis/race_signal/`):
   `in_team_s` and `portable_skill_s`; `skill_s` remains a legacy alias for the latter.
   IDs are stored as strings and load without pickle. Export version 2 adds a new
   immutable snapshot without overwriting a version-1 publication.
-- **Scope:** exported racing `u` remains a lasting career-level effect beyond
-  qualifying, not current total race pace. The car table is qualifying performance.
-  The equal-car scenario and portable skill remain experimental.
+- **Scope:** the older `racemulti` export `u` remains a lasting career-level effect
+  beyond qualifying. The new `race_total_model` estimates total dry-race driver
+  and car pace independently of qualifying; its own validation decides whether
+  either table can publish. The equal-car scenario and portable skill remain experimental.
+
+### Total race-pace dashboard export
+
+`race_total_model.py` fits clean dry-race laps from 2018 onward in one likelihood.
+It uses known tyre compounds, age, lap number and traffic, with Student-t errors
+correlated within stints. Race entries come from the race classification rather
+than qualifying, so a driver without a qualifying time is retained.
+
+The driver estimate combines a lasting effect with current-season form. The car
+estimate is a team-season effect. Independent race-day deviations are integrated
+out of both tables. Ratings are at tyre age 10 laps and centred on the eligible
+current field; they update when new races are fitted but are season estimates,
+not a development trajectory or finishing-order model. At least two clean races
+in the current season are required for an entry in a table.
+
+The fixed validation windows end training at 2024 round 10, 2025 round 10 and
+2026 round 7. Later dry races of each season are excluded from fitting. The
+no-driver and no-car models are refitted with all context terms retained. Driver
+validation compares teammate gaps; car validation compares team-average observed
+pace, without using the fitted driver rating to construct its target. A table
+requires lower squared error (race-block bootstrap 95% interval below zero),
+85–95% coverage of 90% prediction intervals, and narrower intervals than its
+baseline. These prediction tests do not establish a causal separation of innate
+skill, strategy and machinery. Team-priority and fuel-load differences remain
+possible confounders; car-target measurement covariance is approximated.
+
+After refreshing the FastF1 race tables and event timeline, run:
+
+```bash
+.venv-gpu/bin/python -m f1rank.race_total --validate --export
+.venv-pages/bin/python -m f1rank.dashboard publish
+```
+
+This fits and checkpoints the full model and the three versions of each historical
+fold. Cache identities include all likelihood arrays, identifier ordering, model
+source and sampler settings. All sampled parameters, including nuisance terms,
+must pass convergence checks. A failed fit leaves the previous published files
+intact. The portable `pace.json` and its manifest contain the checked estimates,
+gate evidence and fit identities; the publisher and Pages build verify these
+without needing JAX or the ignored posterior caches. `research_estimates.json`
+holds values for investigation even when a table fails its publication gate and
+is never included in the dashboard payload.
+
+Commit the code, validation outputs and portable export together, then push to
+`main` to run the existing checked Pages deployment. Merely polling the website
+does not refit the models. The full race fit is a substantial GPU job; historical
+fits are reused on later runs when their training data have not changed.
 
 The corrected qualifying files can be regenerated without refitting the valid main fit:
 

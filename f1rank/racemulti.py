@@ -222,10 +222,11 @@ def fit(C: pd.DataFrame, warmup: int = 500, samples: int = 500, tries: int = 3) 
     post["_backend"] = jax.default_backend()
     post["_attempts"] = attempts
     post["_converged"] = checked["converged"]
+    post["_n_draws"] = checked["n_draws"]
     return post, drivers
 
 
-def checkpointed(C: pd.DataFrame, path) -> tuple[dict, list[str]]:
+def checkpointed(C: pd.DataFrame, path, **settings) -> tuple[dict, list[str]]:
     """fit(C), saved to path so an interrupted held-out run resumes where it stopped. A saved
     fit is reused only if its training laps (sha256 of the design columns) and MODEL_VERSION
     are identical."""
@@ -235,6 +236,7 @@ def checkpointed(C: pd.DataFrame, path) -> tuple[dict, list[str]]:
     # ordering. Hashing a hand-picked subset misses corrections to tyres or traffic.
     design, driver_ids = arrays(C)
     h = hashlib.sha256(MODEL_VERSION.encode() + json.dumps(driver_ids).encode())
+    h.update(json.dumps(settings, sort_keys=True).encode())
     h.update(Path(__file__).read_bytes())
     for name, value in sorted(design.items()):
         a = np.asarray(value)
@@ -247,7 +249,7 @@ def checkpointed(C: pd.DataFrame, path) -> tuple[dict, list[str]]:
             meta = json.loads(str(z["meta"]))
             print(f"  reusing {path.name}", flush=True)
             return {**{k: z[k] for k in z.files if k not in ("key", "meta", "drivers")}, **meta}, [str(x) for x in z["drivers"]]
-    post, drivers = fit(C)
+    post, drivers = fit(C, **settings)
     if not post["_converged"]:
         return post, drivers
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -362,7 +364,8 @@ def prefit(C: pd.DataFrame, seasons: list[int], sfx: str = "") -> None:
 
 def full(C: pd.DataFrame, sfx: str = "") -> None:
     C = with_qualifying(C)
-    post, drivers = fit(C, warmup=800, samples=800)
+    post, drivers = checkpointed(C, OUT / f"multi_full_cache{sfx}" / "full.npz",
+                                warmup=800, samples=800)
     if not post["_converged"]:
         raise RuntimeError(f"Full race fit failed diagnostics; existing outputs retained: {post['_attempts']}")
     q = lambda x: [round(float(v), 4) for v in np.percentile(x, [5, 50, 95])]  # noqa: E731
@@ -370,6 +373,8 @@ def full(C: pd.DataFrame, sfx: str = "") -> None:
                "seasons": [int(C.season.min()), int(C.season.max())], "n_drivers": len(drivers),
                "rhat_max": post["_rhat_max"], "divergences": post["_divergences"], "minutes": round(post["_minutes"], 1),
                "backend": post["_backend"], "attempts": post["_attempts"],
+               "n_draws": post["_n_draws"], "converged": post["_converged"],
+               "data_as_of": str(C.event_id.max()),
                **{f"{k}_q05_q50_q95": q(post[k]) for k in KEEP if k not in ("u", "v") and k in post},
                "laps_by_source": C.source.value_counts().to_dict(),
                "gates": f"in multi_heldout{sfx}.json"}
@@ -382,7 +387,9 @@ def full(C: pd.DataFrame, sfx: str = "") -> None:
                       "degradation_pct_per_lap_median": np.median(post["v"], 0),
                       "degradation_pct_per_lap_q05": np.percentile(post["v"], 5, 0),
                       "degradation_pct_per_lap_q95": np.percentile(post["v"], 95, 0),
-                      "clean_laps": laps.reindex(drivers).to_numpy(), "seasons": seasons.reindex(drivers).to_numpy()})
+                      "clean_laps": laps.reindex(drivers).to_numpy(), "seasons": seasons.reindex(drivers).to_numpy(),
+                      "races": C.groupby("driver_id").event_id.nunique().reindex(drivers).to_numpy(),
+                      "last_race": C.groupby("driver_id").event_id.max().reindex(drivers).to_numpy()})
     D.sort_values("race_specific_pct_median", ascending=False).to_csv(OUT / f"multi_drivers{sfx}.csv", index=False)
     np.savez_compressed(OUT / f"multi_driver_draws{sfx}.npz", drivers=np.array(drivers), u=post["u"].astype(np.float32),
                         v=post["v"].astype(np.float32))

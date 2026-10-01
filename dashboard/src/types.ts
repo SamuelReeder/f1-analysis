@@ -1,5 +1,5 @@
 export type Metric = "headline" | "portable";
-export type View = "drivers" | "cars" | "compare" | "health";
+export type View = "drivers" | "cars" | "race" | "compare" | "health";
 export interface Estimate {
   q05: number;
   q25?: number;
@@ -53,6 +53,52 @@ export interface Point {
 export interface Pair extends Estimate {
   p_ahead: number;
 }
+export interface RaceEntity {
+  id: string;
+  name: string;
+  team?: string;
+  lineage?: string;
+  code?: string;
+  pace: Estimate;
+  races: number;
+  laps: number;
+  last_race: string;
+}
+export interface RaceValidation {
+  passed: boolean;
+  improves: boolean;
+  calibrated: boolean;
+  sharper: boolean;
+  n_races: number;
+  n_predictions: number;
+  rmse: number;
+  baseline_rmse: number;
+  mse_difference: number;
+  mse_difference_ci95: number[];
+  coverage90: number;
+  mean_interval_width: number;
+  baseline_interval_width: number;
+}
+export interface RacePace {
+  model: string;
+  fit_id: string;
+  season: number;
+  data_as_of: Event;
+  first_event: string;
+  grid_as_of?: string;
+  n_laps: number;
+  n_races: number;
+  drivers: RaceEntity[];
+  cars: RaceEntity[];
+  unrated_drivers: string[];
+  unrated_cars: string[];
+  diagnostics: Dataset["meta"]["diagnostics"];
+  validation: {
+    folds: string[];
+    design: string;
+    metrics: { drivers: RaceValidation; cars: RaceValidation };
+  };
+}
 export interface Dataset {
   schema_version: number;
   meta: {
@@ -72,6 +118,7 @@ export interface Dataset {
   };
   drivers: Driver[];
   cars: Car[];
+  race_pace?: RacePace | null;
   events: Event[];
   catalog: {
     drivers: { id: string; name: string }[];

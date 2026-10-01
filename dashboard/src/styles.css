@@ -2480,3 +2480,93 @@ select {
 .sidebar nav a.active:hover {
   background: #b80500;
 }
+.race-tabs {
+  width: fit-content;
+  margin: 0 0 20px;
+}
+.race-detail {
+  align-self: start;
+  padding: 24px;
+}
+.race-detail h2 {
+  margin: 22px 0 8px;
+  font-size: 24px;
+}
+.race-detail-pace {
+  margin-top: 28px;
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: -1.5px;
+}
+.race-detail-pace small {
+  font-size: 18px;
+  margin-left: 4px;
+}
+.race-detail-values {
+  margin: 28px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.race-detail-values > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 15px 0;
+  font-size: 12px;
+}
+.race-detail-values dt,
+.race-validation-values dt {
+  color: var(--muted);
+}
+.race-detail-values dd {
+  margin: 0;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.race-validation,
+.race-method {
+  margin-top: 24px;
+}
+.race-validation-values {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 8px 24px 24px;
+}
+.race-validation-values dt {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.race-validation-values dd {
+  font-size: 24px;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+.race-validation-values small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 8px;
+}
+.race-method details {
+  padding: 24px;
+}
+.race-method summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.race-method p {
+  max-width: 90ch;
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 13px;
+  margin: 20px 0 0;
+}
+@media (max-width: 700px) {
+  .race-validation-values {
+    grid-template-columns: 1fr;
+  }
+  .race-validation .panel-heading {
+    align-items: flex-start;
+  }
+}
