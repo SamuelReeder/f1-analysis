@@ -1,6 +1,7 @@
 """Publish an atomic, versioned dashboard dataset, or serve the built dashboard.
 
-publish reads verified exports only; refresh runs fetch/build/fit/export then publish.
+publish reads verified exports only; refresh fetches, fits and publishes together.
+refresh --races also extracts race timing and rebuilds the race timeline.
 A failure preserves the last good release and records the failure in status.json.
 The frontend polls this small status file and pointer, never mixed CSV generations.
 """
@@ -207,7 +208,24 @@ def publication_lock(data_dir):
         yield
 
 
-def run(refresh=False, data_dir=DATA):
+def refresh_steps(with_races=False, race_python=None, extract_python=None):
+    """Keep both exports current when their shared entry/event inputs change."""
+    def module(name, *args, python=sys.executable):
+        return name, [python, "-m", f"f1rank.{name}", *args]
+    steps = [module("fetch"), module("build")]
+    if with_races:
+        steps += [("race timing", [extract_python or sys.executable,
+                                  str(ROOT / "extract/race_extract.py")]),
+                  module("racedata"), module("timeline")]
+    steps += [module("fit"), module("export")]
+    if with_races or (ROOT / "outputs/race_total/pace.json").exists():
+        steps += [module("race_total", "--validate", "--export", python=race_python or sys.executable)]
+    return steps
+
+
+def run(refresh=False, data_dir=DATA, *, with_races=False, race_python=None, extract_python=None):
+    if with_races and not refresh:
+        raise ValueError("Race extraction requires refresh")
     with publication_lock(data_dir):
         start = time.monotonic()
         status = {"state": "running", "started_at": now(), "stage": "checking exports"}
@@ -217,11 +235,11 @@ def run(refresh=False, data_dir=DATA):
         try:
             if refresh:
                 with (log_dir / "refresh.log").open("a") as log:
-                    for module in ("fetch", "build", "fit", "export"):
-                        status.update(stage=module, updated_at=now())
+                    for stage, command in refresh_steps(with_races, race_python, extract_python):
+                        status.update(stage=stage, updated_at=now())
                         atomic_json(data_dir / "status.json", status)
-                        log.write(f"\n{now()} {module}\n"); log.flush()
-                        subprocess.run([sys.executable, "-m", f"f1rank.{module}"], cwd=ROOT,
+                        log.write(f"\n{now()} {stage}\n"); log.flush()
+                        subprocess.run(command, cwd=ROOT,
                                        stdout=log, stderr=subprocess.STDOUT, check=True)
             status.update(stage="publishing", updated_at=now())
             atomic_json(data_dir / "status.json", status)
@@ -292,11 +310,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=["publish", "refresh", "serve"], nargs="?", default="publish")
     parser.add_argument("--port", type=int, default=4173)
+    parser.add_argument("--races", action="store_true", help="Refresh race timing, timeline and rankings too")
+    parser.add_argument("--race-python", help="Python environment for race fitting (for example .venv-gpu/bin/python)")
+    parser.add_argument("--extract-python", help="Python environment with FastF1 installed")
     args = parser.parse_args()
+    if args.command != "refresh" and (args.races or args.race_python or args.extract_python):
+        parser.error("Race refresh options require the refresh command")
     if args.command == "serve":
         serve(args.port)
     else:
-        print(json.dumps(run(refresh=args.command == "refresh"), indent=2))
+        print(json.dumps(run(refresh=args.command == "refresh", with_races=args.races,
+                             race_python=args.race_python, extract_python=args.extract_python), indent=2))
 
 
 if __name__ == "__main__":

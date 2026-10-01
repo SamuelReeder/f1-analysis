@@ -116,6 +116,44 @@ def test_refresh_runs_the_entire_pipeline_before_publishing(tmp_path, payload, m
     assert (tmp_path / "latest.json").exists()
 
 
+def test_race_refresh_orders_extraction_and_both_fits_before_publication(tmp_path, payload, monkeypatch):
+    monkeypatch.setattr(dashboard, "ROOT", tmp_path / "repo")
+    calls = []
+    def execute(command, **kwargs):
+        assert not (tmp_path / "latest.json").exists()
+        calls.append(command)
+    monkeypatch.setattr(dashboard.subprocess, "run", execute)
+    dashboard.run(refresh=True, with_races=True, race_python="gpu-python", extract_python="fastf1-python",
+                  data_dir=tmp_path)
+    assert [c[2] if c[1] == "-m" else "extract" for c in calls] == [
+        "f1rank.fetch", "f1rank.build", "extract", "f1rank.racedata", "f1rank.timeline",
+        "f1rank.fit", "f1rank.export", "f1rank.race_total"]
+    assert calls[2][0] == "fastf1-python"
+    assert calls[-1] == ["gpu-python", "-m", "f1rank.race_total", "--validate", "--export"]
+    assert (tmp_path / "latest.json").exists()
+
+
+def test_qualifying_refresh_keeps_existing_race_export_current_and_failure_preserves_release(tmp_path, payload, monkeypatch):
+    monkeypatch.setattr(dashboard, "ROOT", tmp_path / "repo")
+    race = dashboard.ROOT / "outputs/race_total/pace.json"
+    race.parent.mkdir(parents=True)
+    race.write_text('{}')
+    dashboard.run(data_dir=tmp_path)
+    before = (tmp_path / "latest.json").read_bytes()
+    calls = []
+    def execute(command, **kwargs):
+        calls.append(command)
+        if "f1rank.race_total" in command:
+            raise RuntimeError("Race fitting failed")
+    monkeypatch.setattr(dashboard.subprocess, "run", execute)
+    with pytest.raises(RuntimeError, match="Race fitting failed"):
+        dashboard.run(refresh=True, data_dir=tmp_path)
+    assert [c[2] for c in calls] == ["f1rank.fetch", "f1rank.build", "f1rank.fit", "f1rank.export", "f1rank.race_total"]
+    assert (tmp_path / "latest.json").read_bytes() == before
+    status = json.loads((tmp_path / "status.json").read_text())
+    assert status["state"] == "failed" and status["stage"] == "race_total"
+
+
 def test_checked_current_data_contract():
     if not (dashboard.RATINGS / "manifest.json").exists():
         pytest.skip("Integration check requires a local verified qualifying export")

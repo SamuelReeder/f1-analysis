@@ -61,13 +61,28 @@ tens of minutes for the fit):
 .venv/bin/python -m f1rank.dashboard refresh
 ```
 
-That command runs `fetch`, `build`, `fit`, `export`, then `publish`, with a process lock
-to prevent overlapping refreshes. Failed fits or stale exports cannot replace the
+That command runs `fetch`, `build`, `fit`, `export`, then `publish`. Once a race export
+exists, it also revalidates and exports race pace against the updated entry and event
+tables, reusing unchanged fits. Add `--race-python .venv-gpu/bin/python` to use the
+GPU environment for that stage. A process lock prevents overlapping refreshes.
+Failed fits or stale exports cannot replace the
 dashboard release. It records stage, elapsed time and errors in
 `dashboard/public/data/status.json`, a run history in `outputs/dashboard/runs.jsonl`,
 and fitting output in `outputs/dashboard/refresh.log`. The local server also detects
 a refresh process that exited without recording its final status. Refreshes are
 explicit; no model-refresh scheduler has been configured.
+
+After a race, include the new timing data and timeline in the same update:
+
+```bash
+.venv/bin/python -m f1rank.dashboard refresh --races \
+  --extract-python .venv-fastf1/bin/python --race-python .venv-gpu/bin/python
+```
+
+This extracts uncached race timing with FastF1, combines the tables, rebuilds the
+incident timeline, then fits and exports both qualifying and race pace before
+publishing. Omitting the environment options uses the current Python environment.
+Race fitting can take hours; completed, unchanged validation fits are checkpointed.
 
 Dashboard data uses a versioned JSON contract: `latest.json` points to an immutable,
 content-addressed file in `dashboard/public/data/releases/`. The pointer changes only
@@ -94,7 +109,7 @@ npm test -- --workers=2
 ```
 
 Browser tests cover interactions, exports, release adoption and failure handling,
-mobile overflow, browser errors, and automated accessibility checks on all four
+mobile overflow, browser errors, and automated accessibility checks on all five
 views. `PLAYWRIGHT_CHROMIUM_EXECUTABLE` optionally selects an existing Chromium
 binary. The Python checks cover publication atomicity, corruption, process locking,
 missing provenance, stale racing outputs and statistically correct comparisons.
@@ -119,9 +134,11 @@ GitHub's built-in deployment token is used; no personal token or hosting secret 
 needed. Versions of the official Actions are pinned to verified commit hashes.
 
 **New data and model fitting are separate from website deployment.** Run
-`python -m f1rank.dashboard refresh` on the fitting machine after a race weekend,
+`python -m f1rank.dashboard refresh --races` (with the Python environment options above)
+on the fitting machine after a race weekend,
 then commit the updated `data/processed/` model inputs, `outputs/ratings/` (including
-`manifest.json` and `fit_metadata.json`), and new `outputs/snapshots/` entries. Once
+`manifest.json` and `fit_metadata.json`), checked `outputs/race_total/` exports and
+validation files, and new `outputs/snapshots/` entries. Once
 those reach `main`, the workflow publishes the new rankings. A UI-only push reuses
 the existing verified rankings. Changes to model code or data require a matching
 export; a stale manifest deliberately blocks deployment.
