@@ -1,0 +1,295 @@
+{
+ "design": "Diagnostic recovery on the observed team-switch network, three independent truths.\n\npython -m analysis.race_total_recovery\n\nThe first and last four clean laps per driver-race keep this check manageable\nwhile retaining adjacent laps that identify the serial correlation. The\nmodel generates the nuisance effects; residuals follow its stated Student-t AR(1)\nlikelihood. This checks implementation and identifiability under the model, not\nwhether real F1 confounding follows that model. It is separate from the real-data\npublication gates fixed in race_total.py.\n",
+ "seeds": {
+  "0": {
+   "status": "incomplete",
+   "attempts": [
+    {
+     "rhat_max": 1.234445571899414,
+     "divergences": 0,
+     "n_draws": 2000,
+     "finite": true,
+     "converged": false,
+     "seconds": 365.1,
+     "worst_parameters": [
+      {
+       "parameter": "skill_raw",
+       "rhat": 1.234445571899414
+      },
+      {
+       "parameter": "package",
+       "rhat": 1.2123531103134155
+      },
+      {
+       "parameter": "skill",
+       "rhat": 1.2045689821243286
+      },
+      {
+       "parameter": "package_contrast",
+       "rhat": 1.184594750404358
+      },
+      {
+       "parameter": "driver_pace",
+       "rhat": 1.1636699438095093
+      }
+     ]
+    },
+    {
+     "rhat_max": 793.9613647460938,
+     "divergences": 0,
+     "n_draws": 4000,
+     "finite": true,
+     "converged": false,
+     "seconds": 1946.0,
+     "worst_parameters": [
+      {
+       "parameter": "nu",
+       "rhat": 793.9613647460938
+      },
+      {
+       "parameter": "sigma",
+       "rhat": 42.010032653808594
+      },
+      {
+       "parameter": "rho",
+       "rhat": 41.31826400756836
+      },
+      {
+       "parameter": "intercept",
+       "rhat": 30.525375366210938
+      },
+      {
+       "parameter": "trend",
+       "rhat": 30.136621475219727
+      }
+     ]
+    }
+   ],
+   "interrupted_attempt": 3,
+   "reason": "Stopped after more than one hour of total wall time, including two nonconverged attempts.",
+   "laps": 20920,
+   "generation_backend": "cpu"
+  },
+  "1": {
+   "status": "completed",
+   "drivers": {
+    "n": 22,
+    "rank_correlation": 0.9119141727837381,
+    "coverage90": 0.9090909090909091,
+    "rmse": 0.18959309859060083,
+    "mean_width90": 0.7401154095236986
+   },
+   "cars": {
+    "n": 11,
+    "rank_correlation": 1.0,
+    "coverage90": 0.9090909090909091,
+    "rmse": 0.21142859002844144,
+    "mean_width90": 0.8448656928740931
+   },
+   "diagnostics": {
+    "rhat_max": 1.013899803161621,
+    "divergences": 0,
+    "n_draws": 8000,
+    "finite": true,
+    "converged": true
+   },
+   "attempts": [
+    {
+     "rhat_max": 1.454034686088562,
+     "divergences": 0,
+     "n_draws": 2000,
+     "finite": true,
+     "converged": false,
+     "seconds": 211.1,
+     "worst_parameters": [
+      {
+       "parameter": "package_contrast",
+       "rhat": 1.454034686088562
+      },
+      {
+       "parameter": "package",
+       "rhat": 1.426696538925171
+      },
+      {
+       "parameter": "skill",
+       "rhat": 1.40422785282135
+      },
+      {
+       "parameter": "skill_raw",
+       "rhat": 1.3816070556640625
+      },
+      {
+       "parameter": "driver_pace",
+       "rhat": 1.2971839904785156
+      }
+     ]
+    },
+    {
+     "rhat_max": 1.0570591688156128,
+     "divergences": 0,
+     "n_draws": 4000,
+     "finite": true,
+     "converged": false,
+     "seconds": 347.7,
+     "worst_parameters": [
+      {
+       "parameter": "sd_day",
+       "rhat": 1.0570591688156128
+      },
+      {
+       "parameter": "package_contrast",
+       "rhat": 1.0342121124267578
+      },
+      {
+       "parameter": "package",
+       "rhat": 1.0311745405197144
+      },
+      {
+       "parameter": "skill_raw",
+       "rhat": 1.0280829668045044
+      },
+      {
+       "parameter": "driver_pace",
+       "rhat": 1.0238062143325806
+      }
+     ]
+    },
+    {
+     "rhat_max": 1.013899803161621,
+     "divergences": 0,
+     "n_draws": 8000,
+     "finite": true,
+     "converged": true,
+     "seconds": 571.7,
+     "worst_parameters": [
+      {
+       "parameter": "sd_day",
+       "rhat": 1.013899803161621
+      },
+      {
+       "parameter": "skill",
+       "rhat": 1.0133728981018066
+      },
+      {
+       "parameter": "package_contrast",
+       "rhat": 1.010879635810852
+      },
+      {
+       "parameter": "package",
+       "rhat": 1.0102547407150269
+      },
+      {
+       "parameter": "skill_raw",
+       "rhat": 1.0102128982543945
+      }
+     ]
+    }
+   ],
+   "fit_key": "f8e6650126f3d74afbdbdaf0afe2cc88beb84a855460fc0923d69bd53fff1e8a",
+   "laps": 20920,
+   "generation_backend": "cpu"
+  },
+  "2": {
+   "status": "completed",
+   "drivers": {
+    "n": 22,
+    "rank_correlation": 0.7504234895539245,
+    "coverage90": 0.9090909090909091,
+    "rmse": 0.2393103819374406,
+    "mean_width90": 0.8763419742114036
+   },
+   "cars": {
+    "n": 11,
+    "rank_correlation": 0.9636363636363637,
+    "coverage90": 0.8181818181818182,
+    "rmse": 0.28844495651271207,
+    "mean_width90": 0.8965918083806051
+   },
+   "diagnostics": {
+    "rhat_max": 1.029173731803894,
+    "divergences": 0,
+    "n_draws": 4000,
+    "finite": true,
+    "converged": true
+   },
+   "attempts": [
+    {
+     "rhat_max": 1.5129281282424927,
+     "divergences": 1,
+     "n_draws": 2000,
+     "finite": true,
+     "converged": false,
+     "seconds": 262.6,
+     "worst_parameters": [
+      {
+       "parameter": "package",
+       "rhat": 1.5129281282424927
+      },
+      {
+       "parameter": "skill_raw",
+       "rhat": 1.403182029724121
+      },
+      {
+       "parameter": "package_contrast",
+       "rhat": 1.4023736715316772
+      },
+      {
+       "parameter": "skill",
+       "rhat": 1.3909109830856323
+      },
+      {
+       "parameter": "driver_pace",
+       "rhat": 1.3838266134262085
+      }
+     ]
+    },
+    {
+     "rhat_max": 1.029173731803894,
+     "divergences": 0,
+     "n_draws": 4000,
+     "finite": true,
+     "converged": true,
+     "seconds": 371.7,
+     "worst_parameters": [
+      {
+       "parameter": "sd_car_day",
+       "rhat": 1.029173731803894
+      },
+      {
+       "parameter": "package",
+       "rhat": 1.028843641281128
+      },
+      {
+       "parameter": "package_contrast",
+       "rhat": 1.028131127357483
+      },
+      {
+       "parameter": "skill_raw",
+       "rhat": 1.0266516208648682
+      },
+      {
+       "parameter": "skill",
+       "rhat": 1.025364875793457
+      }
+     ]
+    }
+   ],
+   "fit_key": "3ba34dd2935b590747f8d0efcf8f9c1062b9a856d4c3324835cb93c599536028",
+   "laps": 20920,
+   "generation_backend": "cpu"
+  }
+ },
+ "status": "incomplete",
+ "completed_seeds": [
+  1,
+  2
+ ],
+ "planned_seeds": [
+  0,
+  1,
+  2
+ ],
+ "units": "percent of lap time",
+ "recorded_at": "2026-10-01T03:40:23.090742+00:00",
+ "limitation": "Two of three planned synthetic fits completed. Seed 0 was stopped during its third attempt after more than one hour total wall time; its first two attempts failed convergence. No recovery statistic is reported for that seed. These two completed cases are not evidence that the whole recovery experiment passed. This is separate from the real-data publication gates."
+}

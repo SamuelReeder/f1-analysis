@@ -522,6 +522,14 @@ race-block bootstrap; car improvement is not. The car model also misses the
 research file, not the public ranking. These results are prediction checks, not
 proof that all differences in strategy, equipment or team priority have been separated.
 
+The separate synthetic experiment (`analysis/race_total_recovery.py`) is incomplete.
+Two of three planned truths produced converged fits; driver rank correlations were
+0.91 and 0.75, and car correlations were 1.00 and 0.96. Seed 0 failed convergence
+twice and was stopped during its third attempt after over an hour of total runtime.
+`outputs/race_total/recovery.json` retains both completed cases and the incomplete
+case. These results do not establish that the full recovery experiment passed and
+do not override the real-data publication gates above.
+
 The corrected qualifying files can be regenerated without refitting the valid main fit:
 
 ```bash
