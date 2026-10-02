@@ -70,7 +70,10 @@ v1) plus the same k-step walk.
 Run once as registered: `python -m f1rank.race_car_state --validate` (GPU,
 `.venv-gpu`), commit 350b238 for the model and test code. Record:
 `outputs/race_car_state/validation.json`, per-team predictions in
-`car_predictions.csv`, manifest fit id `479140ac18b75a42a611`.
+`car_predictions.csv`, manifest fit id `479140ac18b75a42a611`. The manifest's
+hashes of this document, the model and the validation runner match commit
+350b238, so the run used the registered versions (this section was added after it,
+which is why the manifest now reports this file as changed).
 
 All three fold fits converged on the first attempt (4 × 800 draws): R-hat max
 1.022, 1.043 and 1.031, no divergences, 582 s, 683 s and 735 s. The baseline
