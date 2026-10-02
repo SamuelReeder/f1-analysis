@@ -16,7 +16,8 @@ Pairings at the same cutoff share a fit, so the interval is somewhat too narrow.
 `after_reset` subset is the first season after a regulation reset (2017, 2022, 2026),
 where the per-era variant starts every team-specific effect afresh.
 
-Writes outputs/validation/compare.json.
+Writes outputs/validation/compare.json, with the sprint qualifying test's gate applied
+(`sprint_qualifying_gate`).
 """
 
 import json
@@ -26,7 +27,7 @@ import pandas as pd
 
 from .evaluate import REPORTS, SEC_PER_PCT, evaluate_cutoff
 from .fit import FITS
-from .jobs import LFO_VARIANTS, lfo_design
+from .jobs import LFO_VARIANTS, SPRINT_CUTS, lfo_design
 from .lineage import REGULATION_RESETS
 
 N_BOOT = 2000
@@ -51,7 +52,8 @@ def paired(m: pd.DataFrame, rng) -> dict:
 
 def compare(variant: str, rng) -> dict | None:
     spec = LFO_VARIANTS[variant]
-    cuts = [c for c in spec["cuts"] if (FITS / f"{variant}_{c}.npz").exists()]
+    # a cutoff whose main or variant fit failed every attempt has nothing to compare
+    cuts = [c for c in spec["cuts"] if all((FITS / f"{n}_{c}.npz").exists() for n in (variant, "lfo"))]
     if not cuts:
         return None
     pairs, sessions = [], []
@@ -94,9 +96,26 @@ def compare(variant: str, rng) -> dict | None:
     return out
 
 
+def sprint_gate(r: dict | None) -> dict:
+    """The gate of docs/sprint_qualifying.md (all must hold), applied to compare("lfosprint")."""
+    if r is None or not r["pairings"].get("n"):
+        return {"checks": {"all_fits_converged": False}, "passed": False}
+    names = [f"{p}_{c}" for c in SPRINT_CUTS for p in ("lfo", "lfosprint")]
+    by_cut = r["by_cutoff"].values()
+    checks = {
+        "all_fits_converged": (list(r["cutoffs"]) == list(SPRINT_CUTS)
+                               and all(r["convergence"].get(n, {}).get("ok") for n in names)),
+        "pairing_mse_interval_below_zero": r["pairings"]["mse_diff_ci95"][1] < 0,
+        "lower_rmse_at_5_of_7_cutoffs": sum(b["rmse_variant_s"] < b["rmse_main_s"] for b in by_cut) >= 5,
+        "session_coverage_85_to_97": 0.85 <= r["sessions_var"]["cov90"] <= 0.97,
+        "session_crps_no_higher": r["sessions_var"]["crps_s"] <= r["sessions_main"]["crps_s"]}
+    return {"checks": checks, "passed": all(checks.values())}
+
+
 def main() -> None:
     rng = np.random.default_rng(0)
     out = {v: r for v in LFO_VARIANTS if (r := compare(v, rng)) is not None}
+    out["sprint_qualifying_gate"] = sprint_gate(out.get("lfosprint"))
     REPORTS.mkdir(parents=True, exist_ok=True)
     (REPORTS / "compare.json").write_text(json.dumps(out, indent=1))
     print(json.dumps(out, indent=1))

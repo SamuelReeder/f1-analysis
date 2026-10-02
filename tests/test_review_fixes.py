@@ -346,3 +346,35 @@ def test_racing_report_states_the_seasons_left_out_and_by_which_tests(monkeypatc
                          "championship entry test).\n")
     monkeypatch.setattr(racereport, "_load", lambda rel: None)
     assert racereport.excluded_seasons() == []
+
+
+def test_sprint_qualifying_gate_needs_every_part(monkeypatch):
+    """docs/sprint_qualifying.md: all 14 fits converge, the pairing interval is below 0, lower
+    RMSE at 5 of 7 cutoffs, session coverage 85-97%, CRPS no higher."""
+    from f1rank.compare import sprint_gate
+    from f1rank.jobs import SPRINT_CUTS
+    def result(**change):
+        r = {"cutoffs": list(SPRINT_CUTS),
+             "convergence": {f"{p}_{c}": {"ok": True} for c in SPRINT_CUTS for p in ("lfo", "lfosprint")},
+             "pairings": {"n": 500, "mse_diff_ci95": [-0.004, -0.001]},
+             "by_cutoff": {c: {"rmse_main_s": 0.20, "rmse_variant_s": 0.19 if i < 5 else 0.21}
+                           for i, c in enumerate(SPRINT_CUTS)},
+             "sessions_main": {"cov90": 0.93, "crps_s": 0.110}, "sessions_var": {"cov90": 0.93, "crps_s": 0.109}}
+        for k, v in change.items():
+            r[k] = v
+        return r
+    assert sprint_gate(result())["passed"]
+    failing = {
+        "all_fits_converged": result(cutoffs=list(SPRINT_CUTS)[:6]),
+        "pairing_mse_interval_below_zero": result(pairings={"n": 500, "mse_diff_ci95": [-0.004, 0.0001]}),
+        "lower_rmse_at_5_of_7_cutoffs": result(by_cutoff={c: {"rmse_main_s": 0.20, "rmse_variant_s": 0.19 if i < 4
+                                                              else 0.21} for i, c in enumerate(SPRINT_CUTS)}),
+        "session_coverage_85_to_97": result(sessions_var={"cov90": 0.975, "crps_s": 0.109}),
+        "session_crps_no_higher": result(sessions_var={"cov90": 0.93, "crps_s": 0.111})}
+    for check, r in failing.items():
+        g = sprint_gate(r)
+        assert not g["passed"] and [k for k, ok in g["checks"].items() if not ok] == [check]
+    unconverged = result()
+    unconverged["convergence"]["lfosprint_mid2026"]["ok"] = False
+    assert not sprint_gate(unconverged)["passed"]
+    assert not sprint_gate(None)["passed"]
