@@ -10,6 +10,9 @@ quali_times one row per driver per qualifying segment with a lap time (Q1/Q2/Q3)
             source: "jolpica", or "fastf1" for events Jolpica has no times for (filled by
             extract/quali_fill.py from FastF1 lap timing and checked against Jolpica)
 race        one row per driver per race: grid, finish position, status (for later stages)
+sprint_quali_times  one row per driver per sprint qualifying part (SQ1/SQ2/SQ3, 2023 onward),
+            from extract/sprint_quali.py; read only by the pre-registered sprint qualifying
+            test (docs/sprint_qualifying.md), not by the published model
 """
 
 import datetime as dt
@@ -25,6 +28,7 @@ ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw" / "jolpica"
 OUT = ROOT / "data" / "processed"
 SUPPLEMENT = ROOT / "data" / "supplements" / "quali_times_fastf1.json"
+SPRINT_QUALI = ROOT / "data" / "supplements" / "sprint_quali_times.json"
 
 # 2006-2009 Q3 was run with race fuel loads, so those times are not pace.
 RACE_FUEL_Q3_SEASONS = range(2006, 2010)
@@ -122,6 +126,9 @@ def build() -> dict[str, pd.DataFrame]:
         "entries": pd.DataFrame(entries).astype({"quali_position": "Int64"}),
         "quali_times": times,
         "race": pd.DataFrame(race),
+        "sprint_quali_times": (pd.DataFrame(json.loads(SPRINT_QUALI.read_text())["times"]).assign(source="fastf1")
+                               if SPRINT_QUALI.exists() else
+                               pd.DataFrame(columns=["event_id", "driver_id", "segment", "time_s", "source"])),
     }
 
     # A driver entered twice for one event would silently double-count.
@@ -153,6 +160,7 @@ def main() -> None:
     (OUT / "sources.json").write_text(json.dumps({
         "jolpica": sources,
         "supplement": str(SUPPLEMENT.relative_to(ROOT)) if SUPPLEMENT.exists() else None,
+        "sprint_quali_supplement": str(SPRINT_QUALI.relative_to(ROOT)) if SPRINT_QUALI.exists() else None,
     }, indent=1))
 
 
