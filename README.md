@@ -284,7 +284,7 @@ python3 -m venv .venv && .venv/bin/pip install numpy pandas scipy pyarrow reques
 .venv/bin/python -m f1rank.fit --warmup 1500 --samples 1500   # main fit (~40 min)
 .venv/bin/python -m f1rank.export               # dashboard-ready outputs in outputs/ratings/
 .venv/bin/python -m f1rank.jobs synth-source    # freeze the main fit as the synthetic-truth source
-.venv/bin/python -m f1rank.jobs all             # validation, sensitivity, placebo fits (~5 h)
+.venv/bin/python -m f1rank.jobs all             # validation, sensitivity, placebo fits (hours)
 .venv/bin/python -m f1rank.evaluate all         # scores in outputs/validation/
 .venv/bin/python -m f1rank.compare              # variants vs main model on identical forecasts
 .venv/bin/python -m f1rank.diagnostics          # residual checks on the main fit
@@ -303,9 +303,27 @@ After each qualifying session: `fetch`, `build`, `fit`, `export`.
   model inputs, its data date and training cutoff, and identifiers for every state.
   Draws are only ever matched to the design they were fitted on:
   - `export` refuses a main fit made on older data.
-  - `evaluate` scores each batch of validation fits on the data they were fitted on.
+  - `evaluate` scores each validation fit on the design its job builds from the
+    current data, so a stale fit is rejected.
   - `jobs all` reruns only fits that are missing or stale.
   - `jobs list` shows the status of each fit.
+- **Converged validation fits.** Every validation, sensitivity and synthetic fit uses a
+  fixed retry rule (`jobs.ATTEMPTS`, shared with the racing folds): 4 chains × (700
+  warm-up + 400 draws); if the fit fails the publication convergence checks (R-hat
+  below 1.05 for every parameter, at most one divergence per 1,000 draws), again with
+  longer chains and a new seed (1,400 + 800, then 2,100 + 1,600, then 2,100 + 1,600
+  with target acceptance 0.98). A job whose attempts all fail keeps no fit and is listed
+  as excluded in `lfo_summary.json`. Each leave-future-out design ends with its test
+  season. Before 2026-10 the fits used one attempt and kept every later season in the
+  design; 33 of the 34 earlier leave-future-out and sensitivity fits failed the main
+  fit's convergence check (`analysis/validation_convergence.py`, recorded in
+  `outputs/analysis/validation_convergence/before_retry_rule.json`). In the 24
+  leave-future-out fits the worst car R-hat was 2.37 for later seasons without data,
+  1.45 for the test season and 1.09 for the training period; driver states, which the
+  teammate forecasts use, reached 1.06.
+- **Shared fits.** The validation fit `lfo_end<year>` and the racing fold
+  `quali_fold<year+1>` have the same design and retry rule, so whichever is fitted
+  second is copied from the first after its fingerprint and retry history are checked.
 - **Snapshots.** Each export writes `outputs/snapshots/<event>_<model>_<fit id>_export2.json`
   once and never overwrites it, so what was published for each fit is kept.
 - **Failures.** A failed validation job makes `jobs` exit with status 1.

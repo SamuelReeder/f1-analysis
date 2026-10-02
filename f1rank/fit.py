@@ -179,6 +179,7 @@ def describe(design: Design, **extra) -> dict:
         "data_as_of": design.events.event_id.iloc[-1], "last_train_event": last_train_event(design),
         "created_utc": dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ"),
         "git_commit": _git_commit(), "git_dirty": _git_dirty(), **extra, "ids": design_ids(design),
+        **({"sprint_quali_until": design.sprint_quali_until} if design.sprint_quali_until else {}),
     }
 
 
@@ -231,7 +232,8 @@ def design_for(path: Path) -> Design:
     meta = load_meta(path)
     if meta is None:
         raise IncompatibleFit(f"{path.name}: no metadata ({meta_path(path).name}); refit it")
-    design = build_design(meta["start_season"], end_event=meta["data_as_of"])
+    design = build_design(meta["start_season"], end_event=meta["data_as_of"],
+                          sprint_quali_until=meta.get("sprint_quali_until"))
     if meta["last_train_event"]:
         ev = design.events.set_index("event_id").event_idx
         design = design.with_cutoff(int(ev[meta["last_train_event"]]))

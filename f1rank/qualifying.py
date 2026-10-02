@@ -89,15 +89,18 @@ def prepare(season: int) -> None:
     cutoff = int(design.events.loc[design.events.season < season, "event_idx"].max())
     design = design.with_cutoff(cutoff)
     check_cutoff(design, season)
-    # Fixed retry rule; failed attempts never overwrite the previous fit.
+    # Fixed retry rule (jobs.ATTEMPTS, shared with the qualifying validation); failed
+    # attempts never overwrite the previous fit.
+    from .jobs import ATTEMPTS, copy_identical
+    if copy_identical(path, FITS / f"lfo_end{season - 1}.npz", design):
+        features.cache_clear()
+        return
     attempts = []
-    for attempt in range(3):
-        settings = dict(warmup=700 * (attempt + 1), samples=400 * 2 ** attempt,
-                        chains=4, target_accept=0.9, seed=attempt)
+    for settings in ATTEMPTS:
         post, info = fit(design, **settings)
         checked = diagnostics(post, info["divergences"])
         attempts.append({"settings": settings, "diagnostics": checked})
-        print(f"{path.name}, attempt {attempt + 1}: {checked}", flush=True)
+        print(f"{path.name}, attempt {len(attempts)}: {checked}", flush=True)
         if checked["converged"]:
             save(path, post, info, design, job=path.stem, model_kw={}, settings=settings, attempts=attempts)
             break

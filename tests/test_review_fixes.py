@@ -210,3 +210,33 @@ def test_racing_folds_do_not_share_files_with_the_qualifying_validation():
     validation = {f"{name}.npz" for name in lfo_cutoffs(_base_design(2010))}
     folds = {qualifying.fit_path(S).name for S in range(2012, 2027)}
     assert not folds & validation
+
+
+def test_sprint_qualifying_variant_trains_on_it_only_up_to_the_cutoff():
+    """docs/sprint_qualifying.md: same forecast targets as the published model."""
+    from f1rank.evaluate import session_pairs
+    from f1rank.jobs import job_design
+    main, var = job_design("lfo_mid2024"), job_design("lfosprint_mid2024")
+    cut = main.obs.event_idx[main.train].max()
+    sq = var.sessions[var.sessions.segment.str.startswith("SQ")]
+    assert len(sq) and sq.event_idx.max() <= cut and not main.sessions.segment.str.startswith("SQ").any()
+    def after(d):
+        p = session_pairs(d)
+        return p[p.event_idx > cut][["event_idx", "driver_a", "driver_b", "gap"]].reset_index(drop=True)
+    pd.testing.assert_frame_equal(after(main), after(var))
+    assert var.obs.y[var.train].size > main.obs.y[main.train].size
+
+
+def test_cutoff_designs_end_with_their_test_season():
+    from f1rank.fit import fingerprint
+    from f1rank.jobs import lfo_design
+    design, cut = lfo_design("lfo_end2015")
+    assert design.events.event_id.iloc[cut].startswith("2015") and design.events.season.max() == 2016
+    mid, cut = lfo_design("lfo_mid2024")
+    assert mid.events.season.max() == 2024 and mid.events.event_id.iloc[cut] == "2024-08"
+    # the racing fold for 2016 is the same design: trained through 2015, ending with 2016
+    events = design.events
+    from f1rank.design import build_design
+    fold = build_design(2010, end_event=str(events[events.season == 2016].event_id.max()))
+    fold = fold.with_cutoff(int(fold.events.loc[fold.events.season < 2016, "event_idx"].max()))
+    assert fingerprint(fold) == fingerprint(design)

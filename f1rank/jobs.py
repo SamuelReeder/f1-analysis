@@ -16,6 +16,14 @@ synth_seed<k>     clean synthetic recovery, each with its own truth, noise and
 sens_*       sensitivity variants of the main model on all data
 placebo      the main model plus a placebo effect per half of a multi-season team stint
 
+Every job uses the fixed retry rule ATTEMPTS: a fit that fails the publication
+convergence checks (artifacts.diagnostics: R-hat < 1.05 for every parameter, at most one
+divergence per 1,000 draws) is repeated with longer chains and a new seed. A job whose
+attempts all fail keeps no fit (a stale one is removed) and writes <name>.failed.json;
+the evaluation lists it as excluded. Each leave-future-out design ends with its test
+season: later seasons have no data in the fit and are not forecast, and keeping them only
+added unobserved car paths that NUTS mixed poorly (car R-hat up to 2.4 before 2026-10).
+
 A fit is up to date when its metadata matches the design it would be fitted on now
 (see fit.py), so new data or a changed design makes the affected fits stale. Synthetic
 fits are up to date when they were made from the current synthetic source (a frozen copy
@@ -25,12 +33,14 @@ exit with status 1.
 """
 
 import argparse
+import json
 import shutil
 import subprocess
 import sys
 import time
 import traceback
 from functools import lru_cache, partial
+from pathlib import Path
 
 import numpy as np
 
@@ -38,7 +48,12 @@ from .design import build_design
 from .fit import FITS, IncompatibleFit, check, fingerprint, fit, load, load_meta, meta_path, save
 from .model import model
 
-VALID = dict(warmup=700, samples=400, chains=4, target_accept=0.9)
+# Fixed retry rule, shared with the racing folds (qualifying.prepare). The last attempt
+# raises target_accept against divergences (added 2026-10-01 after the 2014 racing fold
+# failed the first three on divergences).
+ATTEMPTS = (*(dict(warmup=700 * (k + 1), samples=400 * 2 ** k, chains=4, target_accept=0.9, seed=k)
+              for k in range(3)),
+            dict(warmup=2100, samples=1600, chains=4, target_accept=0.98, seed=3))
 MAIN = FITS / "main.npz"
 # hyperparameters for synthetic truth: a frozen copy of the main fit, so synthetic jobs
 # never read a main fit that is being rewritten
@@ -78,10 +93,14 @@ DIAGNOSTIC = {"placebo": dict(model_kw=dict(placebo=True))}
 # forecast the first season after a regulation reset.
 WINDOW_CUTS = ("end2016", "end2019", "end2022", "end2024", "end2025", "mid2025")
 TEAM_CUTS = ("end2016", "end2019", "end2021", "end2024", "end2025", "mid2025")
+# The pre-registered sprint qualifying test (docs/sprint_qualifying.md): every cutoff
+# after the first sprint qualifying session (2023-04).
+SPRINT_CUTS = ("mid2023", "end2023", "mid2024", "end2024", "mid2025", "end2025", "mid2026")
 LFO_VARIANTS = {
     "lfo2006": dict(start=2006, cuts=WINDOW_CUTS),
     "lfospell": dict(model_kw=dict(compat_unit="spell"), cuts=TEAM_CUTS),
     "lfoera": dict(model_kw=dict(compat_unit="era"), cuts=TEAM_CUTS),
+    "lfosprint": dict(sprint_quali=True, cuts=SPRINT_CUTS),
 }
 N_SYNTH_SEEDS = 8
 
@@ -111,7 +130,8 @@ def job_spec(name: str) -> dict:
         return dict(start=2010, model_kw={}, cutoff=name)
     if prefix in LFO_VARIANTS and cut in LFO_VARIANTS[prefix]["cuts"]:
         v = LFO_VARIANTS[prefix]
-        return dict(start=v.get("start", 2010), model_kw=v.get("model_kw", {}), cutoff="lfo_" + cut)
+        return dict(start=v.get("start", 2010), model_kw=v.get("model_kw", {}), cutoff="lfo_" + cut,
+                    sprint_quali=v.get("sprint_quali", False))
     spec = SENS.get(name) or DIAGNOSTIC.get(name)
     if spec is None:
         raise ValueError(f"unknown job {name!r}")
@@ -120,11 +140,24 @@ def job_spec(name: str) -> dict:
 
 def job_design(name: str):
     """The design a (non-synthetic) job is fitted on, from the current data."""
+    return lfo_design(name)[0]
+
+
+def lfo_design(name: str):
+    """(design, index of the last training event) of a job; the index is None without a
+    cutoff. A cutoff design ends with its test season: the rest of the cutoff's season
+    (lfo_mid*) or the next one (lfo_end*)."""
     spec = job_spec(name)
     design = _base_design(spec["start"])
     if spec["cutoff"] is None:
-        return design
-    return design.with_cutoff(lfo_cutoffs(design)[spec["cutoff"]])
+        return design, None
+    cut = lfo_cutoffs(design)[spec["cutoff"]]
+    ev = design.events
+    test_season = ev.season[cut] + (1 if spec["cutoff"].startswith("lfo_end") else 0)
+    last = str(ev.event_id.iloc[cut])
+    design = build_design(spec["start"], end_event=str(ev[ev.season == test_season].event_id.max()),
+                          sprint_quali_until=last if spec.get("sprint_quali") else None)
+    return design.with_cutoff(cut), cut
 
 
 def up_to_date(name: str) -> bool:
@@ -177,6 +210,46 @@ def synth_setup(name: str, design, main: dict) -> tuple[str, dict, np.ndarray, n
             dict(seed=k, draw=draw, hyper=hyper))
 
 
+def copy_identical(target: Path, source: Path, design) -> bool:
+    """Copy an existing converged fit of the same design made under ATTEMPTS instead of
+    refitting: the validation's lfo_end<Y> and the racing fold quali_fold<Y+1> (both the
+    main model, trained through Y, design ending with Y+1) are the same fit."""
+    if not source.exists():
+        return False
+    try:
+        meta = check(source, design)
+    except IncompatibleFit:
+        return False
+    tried = meta.get("attempts") or []
+    if (meta.get("model_kw") != {} or not tried or not tried[-1]["diagnostics"]["converged"]
+            or [a["settings"] for a in tried] != list(ATTEMPTS[:len(tried)])):
+        return False
+    shutil.copyfile(source, target)
+    meta_path(target).write_text(json.dumps({**meta, "job": target.stem, "copied_from": source.name}, indent=1))
+    print(f"{target.name}: copied from {source.name} (same design and retry rule)", flush=True)
+    return True
+
+
+def fit_with_retries(name: str, design, **kw) -> tuple[dict, dict, dict, list[dict]]:
+    """Fit under ATTEMPTS; returns the first converged fit, its settings and every attempt.
+    Raises RuntimeError (after recording <name>.failed.json) if none converges."""
+    from .artifacts import diagnostics
+    tried = []
+    for settings in ATTEMPTS:
+        post, info = fit(design, progress=False, **settings, **kw)
+        checked = diagnostics(post, info["divergences"])
+        tried.append({"settings": settings, "diagnostics": checked, "elapsed_s": info["elapsed_s"]})
+        print(f"{name}, attempt {len(tried)}: {checked}", flush=True)
+        if checked["converged"]:
+            (FITS / f"{name}.failed.json").unlink(missing_ok=True)
+            return post, info, settings, tried
+        post = None  # release the failed draws before the next attempt
+    for path in (FITS / f"{name}.npz", meta_path(FITS / f"{name}.npz")):
+        path.unlink(missing_ok=True)  # never leave a stale fit in its place
+    (FITS / f"{name}.failed.json").write_text(json.dumps({"job": name, "attempts": tried}, indent=1))
+    raise RuntimeError(f"{name}: no attempt passed the convergence checks")
+
+
 def run(name: str) -> None:
     out = FITS / f"{name}.npz"
     if name.startswith("synth_"):
@@ -189,16 +262,18 @@ def run(name: str) -> None:
         scenario, hyper, mu, truth_rng, noise_rng, setting = synth_setup(name, design, main)
         truth = draw_truth(design, hyper, mu, truth_rng)
         synth = synthetic_design(design, truth, scenario, hyper["nu"], noise_rng)
-        post, info = fit(synth, progress=False, **VALID)
+        post, info, settings, tried = fit_with_retries(name, synth)
         np.savez_compressed(FITS / f"{name}_truth.npz", **truth)
-        save(out, post, info, synth, job=name, scenario=scenario, settings=VALID, **setting,
+        save(out, post, info, synth, job=name, scenario=scenario, settings=settings, attempts=tried, **setting,
              source_fingerprint=source["fingerprint"], real_data_fingerprint=fingerprint(design))
     else:
         design = job_design(name)
         model_kw = job_spec(name)["model_kw"]
-        post, info = fit(design, progress=False, model_fn=partial(model, **model_kw), **VALID)
+        if name.startswith("lfo_end") and copy_identical(out, FITS / f"quali_fold{int(name[7:]) + 1}.npz", design):
+            return
+        post, info, settings, tried = fit_with_retries(name, design, model_fn=partial(model, **model_kw))
         save(out, post, info, design, job=name, model_kw={k: repr(v) for k, v in model_kw.items()},
-             settings=VALID)
+             settings=settings, attempts=tried)
     print(name, info, flush=True)
 
 

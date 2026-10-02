@@ -59,8 +59,8 @@ def md_table(df: pd.DataFrame) -> str:
     return "\n".join(lines)
 
 
-def convergence() -> tuple[dict, bool]:
-    post, info = load(FITS / "main.npz")
+def convergence(path: Path = FITS / "main.npz") -> tuple[dict, bool]:
+    post, info = load(path)
     worst = {}
     for k in ["skill", "compat", "car"]:
         s = summary({k: post[k]})[k]
