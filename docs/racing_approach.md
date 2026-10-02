@@ -575,3 +575,21 @@ cannot shape them:
 - **Overtaking and errors may not be measurable precisely enough.** The gates decide.
 - **The sequential model has many parts.** The early results benchmark keeps it honest:
   every added part must improve held-out results.
+
+## Amendment (2026-10-02, before the regenerated racing runs)
+
+The racing held-out tests take each test season's qualifying features from its fold,
+`quali_fold<S>`, fitted under the fixed retry rule (`jobs.ATTEMPTS`). The 2021 fold is
+the same fit as the qualifying validation's `lfo_end2020`, which failed all four
+attempts on 2026-10-02 (R-hat 1.106, 1.072, 1.066, 1.187; the check is 1.05), so it is
+not refitted with other settings and the fold has none. Nothing above said what a
+racing test does without its fold.
+
+Decided before any racing result under the corrected procedure: a test season whose
+fold failed every attempt (`quali_fold<S>.failed.json`, no fit) is left out of every
+racing held-out test that uses qualifying features (race-specific pace and degradation,
+wet pace, the results benchmark, the championship's race-stage check and its entry
+tests). Each output lists it under `excluded_unconverged_qualifying_folds`, and its
+manifest records the failure. The season's races still train later seasons' folds. The
+rule depends only on the qualifying fit, as the qualifying validation's exclusion of
+unconverged cutoffs (`lfo_summary.json`) does, and no gate changes.

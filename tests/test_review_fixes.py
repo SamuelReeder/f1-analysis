@@ -304,3 +304,31 @@ def test_a_racing_fold_reuses_the_validation_fits_failure(tmp_path, monkeypatch)
     with pytest.raises(RuntimeError, match="as lfo_end2020"):
         qualifying.prepare(2021)
     assert json.loads((tmp_path / "quali_fold2021.failed.json").read_text())["same_as"] == "lfo_end2020"
+
+
+def test_unconverged_racing_folds_are_listed_and_their_failure_is_the_dependency(tmp_path, monkeypatch):
+    monkeypatch.setattr(qualifying, "FITS", tmp_path)
+    monkeypatch.setattr(qualifying, "fit_path", lambda S: tmp_path / ("main.npz" if S is None else f"quali_fold{S}.npz"))
+    (tmp_path / "quali_fold2021.failed.json").write_text("{}")
+    (tmp_path / "quali_fold2019.failed.json").write_text("{}")  # an old failure; the fold converged later
+    (tmp_path / "quali_fold2019.npz").write_bytes(b"fit")
+    assert qualifying.unconverged_folds() == [2021]
+    assert [p.name for p in qualifying.dependencies([2019, 2021])] == [
+        "quali_fold2019.npz", "quali_fold2019.meta.json", "quali_fold2021.failed.json"]
+
+
+def test_wet_pace_test_leaves_out_seasons_whose_qualifying_fold_did_not_converge(monkeypatch):
+    from f1rank import wetpace
+    asked = []
+    def features(S):
+        asked.append(S)
+        return pd.DataFrame({"event_id": P.event_id, "driver_id": "a", "driver": 0.0}).drop_duplicates(), None
+    monkeypatch.setattr(qualifying, "features", features)
+    monkeypatch.setattr(qualifying, "unconverged_folds", lambda: [2021])
+    monkeypatch.setattr(wetpace, "fit", lambda train, drivers, wet_effects=True: {
+        "w": np.zeros((2, len(drivers))), "gamma": np.ones(2)})
+    P = pd.DataFrame({"season": [2018, 2019, 2020, 2021, 2022], "event_id": [f"{s}-01" for s in range(2018, 2023)],
+                      "a": "a", "b": "a", "wet_gap": 0.1})
+    out = wetpace.heldout(P, np.random.default_rng(0))
+    assert asked == [2020, 2022] and out["excluded_unconverged_qualifying_folds"] == [2021]
+    assert out["n_races"] == 2

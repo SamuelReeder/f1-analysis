@@ -288,9 +288,14 @@ def heldout(C: pd.DataFrame, sfx: str = "") -> dict:
     if "coast" in C:
         mc = C.groupby(["event_id", "driver_id"]).coast.mean()
     rng = np.random.default_rng(0)
+    from .qualifying import unconverged_folds
     rows, fits, effects = [], {}, {}
     first = FIRST_TEST_OLD if (C.source == "jolpica").any() else FIRST_TEST
+    excluded = [S for S in unconverged_folds() if first <= S <= int(C.season.max())]
     for S in range(first, int(C.season.max()) + 1):
+        if S in excluded:
+            print(f"held out {S}: left out, its qualifying fold did not converge", flush=True)
+            continue
         train = with_qualifying(C[C.season < S], S)
         post, drivers = checkpointed(train, OUT / f"multi_heldout_cache{sfx}" / f"{S}.npz")
         fits[S] = {k: post[k] for k in ("_rhat_max", "_divergences", "_minutes", "_backend", "_attempts", "_converged")}
@@ -326,6 +331,7 @@ def heldout(C: pd.DataFrame, sfx: str = "") -> dict:
     out = {"design": f"fit on every season before S (from {int(C.season.min())}); predict season S's teammate gaps "
                      "(pair-season means of stage A gaps, >= 4 races, both drivers seen in training)",
            "units": "percent of lap time; mse in percent squared",
+           "excluded_unconverged_qualifying_folds": excluded,
            "fits": fits,
            "race_specific_pace_vs_quali_link": paired(((ps.pace - ps.full) ** 2 - (ps.pace - ps.base) ** 2).to_numpy(), rng),
            "quali_link_vs_zero": paired(((ps.pace - ps.base) ** 2 - ps.pace ** 2).to_numpy(), rng),
@@ -345,7 +351,7 @@ def heldout(C: pd.DataFrame, sfx: str = "") -> dict:
     from .artifacts import input_files, record
     from .qualifying import POLICY, dependencies
     record(OUT, [OUT / f"multi_heldout{sfx}.json", OUT / f"multi_heldout_effects{sfx}.npz"],
-           model="race-joint-v3-heldout", inputs=input_files() + dependencies(list(fits))
+           model="race-joint-v3-heldout", inputs=input_files() + dependencies([*fits, *excluded])
            + [p for p in (OUT / "stage_a_pairs.csv", OUT / "stage_a_pairs_old.csv") if p.exists()],
            details={"qualifying_policy": POLICY, "training_before_seasons": list(fits)},
            name=f"multi_heldout{sfx}.manifest.json")
@@ -356,7 +362,11 @@ def heldout(C: pd.DataFrame, sfx: str = "") -> dict:
 def prefit(C: pd.DataFrame, seasons: list[int], sfx: str = "") -> None:
     """Fit and save the held-out training fits for these seasons only (parallel workers; a
     later --heldout run reuses them)."""
+    from .qualifying import unconverged_folds
     for S in seasons:
+        if S in unconverged_folds():
+            print(f"prefit {S}: left out, its qualifying fold did not converge", flush=True)
+            continue
         post, _ = checkpointed(with_qualifying(C[C.season < S], S), OUT / f"multi_heldout_cache{sfx}" / f"{S}.npz")
         print(f"prefit {S}: converged {post['_converged']}, {post['_attempts']}", flush=True)
         jax.clear_caches()

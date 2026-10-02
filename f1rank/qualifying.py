@@ -6,7 +6,8 @@ Held-out season S uses a fit trained through S-1 for BOTH training and test
 features. Test features are season-ahead forecasts conditional on the entered
 drivers and circuits, not estimates updated with that weekend's qualifying.
 Current/full-data racing fits may use the checked main fit. Never fall back to
-it when a historical fold is missing.
+it when a historical fold is missing. A season whose fold failed every attempt of the
+fixed retry rule is left out of the racing held-out tests (unconverged_folds).
 """
 
 import argparse
@@ -57,9 +58,26 @@ def features(season: int | None = None):
     return e, c.drop(columns="event_idx")
 
 
+def failure_path(season: int):
+    return FITS / f"quali_fold{season}.failed.json"
+
+
+def unconverged_folds() -> list[int]:
+    """Seasons whose racing fold has no fit because every attempt of the fixed retry rule
+    failed (quali_fold<season>.failed.json). The racing held-out tests leave these test
+    seasons out and list them, as the qualifying validation does with its cutoffs; the
+    rule depends only on the qualifying fit, not on any racing result."""
+    seasons = (int(f.name.removeprefix("quali_fold").removesuffix(".failed.json"))
+               for f in FITS.glob("quali_fold*.failed.json"))
+    return sorted(S for S in seasons if not fit_path(S).exists())
+
+
 def dependencies(seasons=()):
+    """A fold's fit and metadata, or for an unconverged fold its failure record."""
     from .fit import meta_path
-    return [p for S in seasons for p in (fit_path(S), meta_path(fit_path(S)))]
+    failed = set(unconverged_folds())
+    return [p for S in seasons
+            for p in ((failure_path(S),) if S in failed else (fit_path(S), meta_path(fit_path(S))))]
 
 
 def fold_design(season: int):
