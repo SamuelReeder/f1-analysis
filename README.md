@@ -272,6 +272,15 @@ CPU (JAX's CPU backend, four chains in parallel). Each run:
 It can also be started from the Actions tab (**Refresh after race weekends → Run
 workflow**), optionally with *force* to refit without a new race.
 
+The refresh does not refit the racing qualities (qualifying-adjusted race pace and tyre
+management, starts, consistency, reliability, pit stops, wet pace, overtaking) or the
+equal-car championship: their held-out fits take GPU hours. Their manifests hash every
+processed table and module, so after the first refresh that adds a race, Model health
+lists them as stale until the racing regeneration (see **Review fixes and
+regeneration**) is rerun on the fitting machine. None of them feeds a published
+ranking; the published race-pace tables come from the race model above, which the
+refresh does refit.
+
 One-time setup, from the fitting machine with the GitHub CLI signed in, seeds the
 cache so the first run does not download every season again:
 
