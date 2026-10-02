@@ -212,6 +212,22 @@ def test_racing_folds_do_not_share_files_with_the_qualifying_validation():
     assert not folds & validation
 
 
+def test_racing_fold_fits_use_the_shared_retry_rule(monkeypatch, tmp_path):
+    """A fold's failed draws are released before the next attempt (jobs.fit_with_retries);
+    holding them got the longer attempts killed by the memory cap."""
+    from f1rank import jobs
+    monkeypatch.setattr(qualifying, "FITS", tmp_path)
+    monkeypatch.setattr(qualifying, "fit_path", lambda S: tmp_path / f"quali_fold{S}.npz")
+    calls, saved = [], []
+    monkeypatch.setattr(jobs, "fit_with_retries",
+                        lambda name, design: calls.append(name) or ({}, {}, {"seed": 0}, [{"attempt": 1}]))
+    monkeypatch.setattr(qualifying, "save", lambda path, *a, **kw: saved.append((path.name, kw)))
+    qualifying.prepare(2015)
+    assert calls == ["quali_fold2015"]
+    assert saved == [("quali_fold2015.npz", dict(job="quali_fold2015", model_kw={}, settings={"seed": 0},
+                                                 attempts=[{"attempt": 1}]))]
+
+
 def test_sprint_qualifying_variant_trains_on_it_only_up_to_the_cutoff():
     """docs/sprint_qualifying.md: same forecast targets as the published model."""
     from f1rank.evaluate import session_pairs

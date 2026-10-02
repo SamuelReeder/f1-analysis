@@ -16,7 +16,7 @@ import numpy as np
 
 from .artifacts import diagnostics, require_convergence
 from .design import build_design
-from .fit import FITS, design_for, fit, load, load_meta, save
+from .fit import FITS, design_for, load, load_meta, save
 from .ratings import flat
 
 POLICY = "qualifying-trained-before-test-season-v1"
@@ -89,24 +89,14 @@ def prepare(season: int) -> None:
     cutoff = int(design.events.loc[design.events.season < season, "event_idx"].max())
     design = design.with_cutoff(cutoff)
     check_cutoff(design, season)
-    # Fixed retry rule (jobs.ATTEMPTS, shared with the qualifying validation); failed
-    # attempts never overwrite the previous fit.
-    from .jobs import ATTEMPTS, copy_identical
-    if copy_identical(path, FITS / f"lfo_end{season - 1}.npz", design):
-        features.cache_clear()
-        return
-    attempts = []
-    for settings in ATTEMPTS:
-        post, info = fit(design, **settings)
-        checked = diagnostics(post, info["divergences"])
-        attempts.append({"settings": settings, "diagnostics": checked})
-        print(f"{path.name}, attempt {len(attempts)}: {checked}", flush=True)
-        if checked["converged"]:
-            save(path, post, info, design, job=path.stem, model_kw={}, settings=settings, attempts=attempts)
-            break
-    else:
-        require_convergence(checked)
+    # Fixed retry rule shared with the qualifying validation (jobs.ATTEMPTS). If no
+    # attempt converges, the fold is removed and <name>.failed.json records the attempts.
+    from .jobs import copy_identical, fit_with_retries
     features.cache_clear()
+    if copy_identical(path, FITS / f"lfo_end{season - 1}.npz", design):
+        return
+    post, info, settings, attempts = fit_with_retries(path.stem, design)
+    save(path, post, info, design, job=path.stem, model_kw={}, settings=settings, attempts=attempts)
 
 
 def main():
