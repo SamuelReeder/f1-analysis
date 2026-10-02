@@ -404,16 +404,21 @@ export function FeatureTests({
           <thead>
             <tr>
               <th>Information</th>
+              <th>Result</th>
               <th className="numeric">Error</th>
               <th className="numeric">Error change, 95% interval</th>
               <th className="numeric">90% coverage</th>
-              <th>Result</th>
             </tr>
           </thead>
           <tbody>
             {rows.map(({ feature, v }) => (
               <tr key={feature}>
                 <td>{FEATURE_LABELS[feature]}</td>
+                <td>
+                  <Badge tone={v.passed ? "green" : "amber"}>
+                    {v.passed ? "Passed" : "Not established"}
+                  </Badge>
+                </td>
                 <td className="numeric">
                   {(v.rmse * 0.9).toFixed(3)}s{" "}
                   <small>vs {(v.baseline_rmse * 0.9).toFixed(3)}s</small>
@@ -423,11 +428,6 @@ export function FeatureTests({
                   {signed(v.mse_difference_ci95[1], 4)}
                 </td>
                 <td className="numeric">{pct(v.coverage90)}</td>
-                <td>
-                  <Badge tone={v.passed ? "green" : "amber"}>
-                    {v.passed ? "Passed" : "Not established"}
-                  </Badge>
-                </td>
               </tr>
             ))}
           </tbody>

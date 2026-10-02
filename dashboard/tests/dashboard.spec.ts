@@ -168,12 +168,24 @@ test("track record reports pooled forecast checks and the latest forecast", asyn
     hasText: "Teammate gap error",
   });
   await expect(card).toContainText(`${pooled.rmse.toFixed(3)}s`);
-  // the model is compared with the harder baseline too, and says when it is not better
+  // each baseline comparison is stated only as far as its interval allows
   await expect(card).toContainText(
     `${pooled.rmse_zero.toFixed(3)}s for no gap`,
   );
-  if (pooled.rmse >= pooled.rmse_zero) {
-    await expect(card).toContainText("no more accurate than predicting no gap");
+  const verdict = (d?: { ci95: [number, number] }) =>
+    !d
+      ? null
+      : d.ci95[1] < 0
+        ? "(model better)"
+        : d.ci95[0] > 0
+          ? "(model worse)"
+          : "(no clear difference)";
+  for (const [d, label] of [
+    [pooled.vs_naive, "for last season’s gap"],
+    [pooled.vs_zero, "for no gap"],
+  ] as const) {
+    const v = verdict(d);
+    if (v) await expect(card).toContainText(`${label} ${v}`);
   }
   await expect(
     page.locator(".chart-legend").filter({ hasText: "No gap" }),

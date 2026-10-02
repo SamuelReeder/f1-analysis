@@ -1,8 +1,18 @@
 import { useState } from "react";
 import { Check, X } from "lucide-react";
-import type { Dataset } from "../types";
+import type { BaselineDifference, Dataset } from "../types";
 import { PageHeading, Empty, Badge, useWidth } from "../components";
 import { circuitCode, date, niceTicks, pct, signed, SERIES } from "../lib";
+
+// A comparison with a baseline, stated only as far as its 95% interval allows.
+const versus = (d?: BaselineDifference) =>
+  !d
+    ? ""
+    : d.ci95[1] < 0
+      ? " (model better)"
+      : d.ci95[0] > 0
+        ? " (model worse)"
+        : " (no clear difference)";
 
 // Scored forecasts: each event is predicted by a fit that stops at the event before it.
 export default function Forecasts({ data }: { data: Dataset }) {
@@ -54,10 +64,9 @@ export default function Forecasts({ data }: { data: Dataset }) {
             <small>s</small>
           </div>
           <p className="stat-sub">
-            vs {p.rmse_naive.toFixed(3)}s for last season’s gap ·{" "}
-            {p.rmse_zero.toFixed(3)}s for no gap
-            {p.rmse >= p.rmse_zero &&
-              " · no more accurate than predicting no gap"}
+            vs {p.rmse_naive.toFixed(3)}s for last season’s gap
+            {versus(p.vs_naive)} · {p.rmse_zero.toFixed(3)}s for no gap
+            {versus(p.vs_zero)}
           </p>
         </div>
         <div className="stat-card">
@@ -435,12 +444,16 @@ export default function Forecasts({ data }: { data: Dataset }) {
           a new pairing it takes the difference between each driver’s mean gap
           to their teammates in their latest season. “No gap” predicts that
           teammates are equal; teammate gaps are small and noisy, so it is the
-          harder baseline to beat. Only pairs of drivers with at least 10
-          earlier qualifying sessions are scored. Coverage is the share of real
-          gaps inside the 90% predictive interval. Records for 2026 races before
-          October 2026 were computed retrospectively with the same code; later
-          records are added by the weekly refresh after each race. The longer
-          historical benchmark (25 cutoffs since 2013) is on Model health.
+          harder baseline to beat. “Model better” or “model worse” beside a
+          baseline means the 95% interval of the difference in mean squared
+          error, from resampling whole qualifying sessions 4,000 times, excludes
+          zero; otherwise there is no clear difference. Only pairs of drivers
+          with at least 10 earlier qualifying sessions are scored. Coverage is
+          the share of real gaps inside the 90% predictive interval. Records for
+          2026 races before October 2026 were computed retrospectively with the
+          same code; later records are added by the weekly refresh after each
+          race. The longer historical benchmark (25 cutoffs since 2013) is on
+          Model health.
         </p>
         <p>
           From October 2026 the refresh also publishes a forecast for the

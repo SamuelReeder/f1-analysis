@@ -223,6 +223,10 @@ export interface ForecastEvent {
   coverage90: number | null;
   order_spearman: number | null;
 }
+export interface BaselineDifference {
+  mse_difference: number;
+  ci95: [number, number];
+}
 export interface Asof {
   pooled: {
     n_events: number;
@@ -232,6 +236,9 @@ export interface Asof {
     rmse_zero: number;
     coverage90: number;
     order_spearman: number;
+    // model minus baseline mean squared error (s²), 95% interval over whole events
+    vs_zero?: BaselineDifference;
+    vs_naive?: BaselineDifference;
   } | null;
   events: ForecastEvent[];
   series: {
