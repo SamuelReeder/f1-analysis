@@ -164,8 +164,19 @@ adds one per race (`asof fit --latest`). The 2026 records before October 2026 we
 computed retrospectively with the same code; their fit ids are their creation times.
 `asof summary` pools established pairs (both drivers with at least 10 earlier
 qualifying sessions) into `summary.json`, compared with repeating each pair's gap
-from their latest season together and with a zero gap. The longer benchmark across
+from their latest season together and with a zero gap. Each comparison is the
+difference in mean squared error (model minus baseline) with a 95% interval from
+resampling whole events (4,000 resamples, seed 0). The longer benchmark across
 25 historical cutoffs remains the qualifying model's main validation.
+
+As of 2026-15, 14 races are scored (280 teammate gaps; 2026-15 has no record because
+both of its fits missed the convergence check). The model's teammate-gap error is
+0.476 s, against 0.512 s for last season's gap (difference −0.036 s², 95% interval
+−0.071 to −0.008: the model is better) and 0.479 s for no gap (−0.003 s², −0.022 to
++0.014: no clear difference). Its 90% intervals cover 95.7% of the gaps, slightly
+wide, and the predicted order has a mean rank correlation of 0.74 with each
+segment's actual order. Teammate gaps in a single session are mostly noise, so
+predicting them is hard to do better than predicting none.
 
 `python -m f1rank.forecast next` also publishes a forecast for the season's next race
 before its weekend (from October 2026, the first being 2026-16), from the published main
