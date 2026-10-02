@@ -652,6 +652,23 @@ model (MSE difference 95% CI −0.0118 to +0.0104 percent²) and its intervals w
 wider, so under the rule fixed beforehand the car table remains withheld. The
 dashboard shows that recorded result beside the v1 check.
 
+A second pre-registered follow-up, [`docs/race_features.md`](docs/race_features.md),
+tested information published before each race as additions to v1 on the same races
+and gate: race-fuel pace in practice (`longrun`, team and teammate), practice
+speed-trap speed (`traps`) and the number of performance upgrades declared to the FIA
+(`upgrades`, parsed from the FIA's Car Presentation Submissions by
+`extract/fia_upgrades.py`). Practice laps come from `extract/practice.py` and
+`python -m f1rank.race_features build`; each test runs with
+`.venv-gpu/bin/python -m f1rank.race_features validate FEATURE`. The practice
+definitions were amended before their fits, after their covariates showed values no
+car could produce; the amendment is dated in the document. All four tests failed:
+long-run pace came closest (team MSE difference −0.0024 percent², 95% CI −0.0075 to
++0.0032), speed traps made team predictions worse (+0.0044, CI +0.0001 to +0.0098),
+and upgrades and the teammate split changed nothing measurable. No feature is used;
+the dashboard lists the four results on the race views. Sector times were not tested:
+as a weekend covariate they would repeat the practice pace, and a straight-line versus
+cornering split needs a sector-level lap model.
+
 After refreshing the FastF1 race tables and event timeline, run:
 
 ```bash
