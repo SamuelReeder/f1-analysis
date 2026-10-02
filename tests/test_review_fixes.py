@@ -332,3 +332,17 @@ def test_wet_pace_test_leaves_out_seasons_whose_qualifying_fold_did_not_converge
     out = wetpace.heldout(P, np.random.default_rng(0))
     assert asked == [2020, 2022] and out["excluded_unconverged_qualifying_folds"] == [2021]
     assert out["n_races"] == 2
+
+
+def test_racing_report_states_the_seasons_left_out_and_by_which_tests(monkeypatch):
+    from f1rank import racereport
+    outputs = {"race/multi_heldout.json": {"excluded_unconverged_qualifying_folds": [2021]},
+               "wet/summary.json": {"heldout_wet_effects_vs_quali_link": {"excluded_unconverged_qualifying_folds": []}},
+               "championship/summary.json": {"heldout_race_stage": {"excluded_unconverged_qualifying_folds": [2021]},
+                                             "combined_validation": {"excluded_unconverged_qualifying_folds": [2021]}}}
+    monkeypatch.setattr(racereport, "_load", outputs.get)
+    [line] = racereport.excluded_seasons()
+    assert line.endswith("2021 (race-specific pace and degradation, championship race stage, "
+                         "championship entry test).\n")
+    monkeypatch.setattr(racereport, "_load", lambda rel: None)
+    assert racereport.excluded_seasons() == []
