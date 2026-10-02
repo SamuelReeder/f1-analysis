@@ -141,3 +141,39 @@ team-weekends in 90 weekends), the teammate split from −2.5% to +2.5% (sd 0.46
 `traps` from −2.0 to +1.3 per 10 km/h (sd 0.32, 989 team-weekends in 102 weekends).
 The rules were chosen to remove these failures, not to improve any result. The test,
 gate and decision rule are unchanged, and each feature is still run once.
+
+## Result (2026-10-02)
+
+All four tests fail; no feature becomes a candidate, the race model is unchanged and
+the car table stays withheld. Errors are in percent of race pace (the outcome is
+positive when faster), the MSE difference in percent² (variant − v1, negative favours
+the variant), on v1's 29 held-out races.
+
+| Feature | Rows | Predictions | RMSE, variant / v1 | MSE difference (95% CI) | 90% coverage | Gate |
+|---|---|---|---|---|---|---|
+| `upgrades` | team | 295 | 0.383 / 0.384 | −0.0007 (−0.0021 to +0.0008) | 84.4% | fails: interval includes 0; coverage below 85% |
+| `traps` | team | 295 | 0.390 / 0.384 | +0.0044 (+0.0001 to +0.0098) | 84.4% | fails: worse than v1; coverage below 85% |
+| `longrun` | team | 295 | 0.381 / 0.384 | −0.0024 (−0.0075 to +0.0032) | 86.8% | fails: interval includes 0 |
+| `longrun` | teammate | 262 | 0.364 / 0.364 | −0.0002 (−0.0008 to +0.0004) | 91.2% | fails: interval includes 0 |
+
+Coefficients, posterior mean (90% interval), for the folds ending 2024-10, 2025-10 and
+2026-07:
+
+- `upgrades`, per 10 components: −0.04 (−0.41 to 0.33), −0.00 (−0.13 to 0.13),
+  0.04 (−0.06 to 0.15).
+- `traps`, per 10 km/h: 0.20 (0.09 to 0.30), 0.15 (0.06 to 0.24), 0.12 (0.04 to 0.20).
+- `longrun` team, per percent of practice pace: 0.09 (0.04 to 0.14), 0.08 (0.04 to
+  0.12), 0.10 (0.06 to 0.13); teammate split: −0.01 (−0.06 to 0.05), −0.00 (−0.05 to
+  0.04), −0.01 (−0.04 to 0.03).
+
+Practice long-run pace and speed-trap speed are related to race pace in the training
+races (their coefficients are positive in every fold), but neither made later team
+predictions measurably more accurate than v1's team-season effect, and the speed
+traps made them worse. Long-run pace says nothing about the teammate gap beyond v1,
+and the count of declared upgrades says nothing about team pace. The four tests were
+not corrected for multiplicity; as none passes, a correction would change nothing.
+
+All nine variant fits converged on their first attempt (maximum R-hat 1.036, no
+divergences), 6–10 minutes each on the GPU (67 minutes in all); v1's cached fits were
+reused. Outputs: `outputs/race_features/<feature>/validation.json`, with per-row
+predictions and a manifest.
