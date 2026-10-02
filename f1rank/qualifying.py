@@ -62,6 +62,24 @@ def dependencies(seasons=()):
     return [p for S in seasons for p in (fit_path(S), meta_path(fit_path(S)))]
 
 
+def fold_design(season: int):
+    """The racing fold's design: trained through the season before `season`, ending with it.
+
+    Forecast only the season being tested. Keeping every later season adds unobserved car
+    paths (and regulation resets) to NUTS, although none of those states is used by this
+    fold. Marginalising those future paths does not alter the model for training or
+    test-season observations."""
+    events = build_design(2010).events
+    test_events = events.loc[events.season == season, "event_id"]
+    if test_events.empty:
+        raise ValueError(f"No events for qualifying forecast season {season}")
+    design = build_design(2010, end_event=str(test_events.max()))
+    cutoff = int(design.events.loc[design.events.season < season, "event_idx"].max())
+    design = design.with_cutoff(cutoff)
+    check_cutoff(design, season)
+    return design
+
+
 def prepare(season: int) -> None:
     path = fit_path(season)
     if path.exists():
@@ -77,24 +95,17 @@ def prepare(season: int) -> None:
                 return
         except (ValueError, RuntimeError, FileNotFoundError):
             pass
-    # Forecast only the season being tested. Keeping every later season adds
-    # unobserved car paths (and regulation resets) to NUTS, although none of those
-    # states is used by this fold. Marginalising those future paths does not alter
-    # the model for training or test-season observations.
-    events = build_design(2010).events
-    test_events = events.loc[events.season == season, "event_id"]
-    if test_events.empty:
-        raise ValueError(f"No events for qualifying forecast season {season}")
-    design = build_design(2010, end_event=str(test_events.max()))
-    cutoff = int(design.events.loc[design.events.season < season, "event_idx"].max())
-    design = design.with_cutoff(cutoff)
-    check_cutoff(design, season)
+    design = fold_design(season)
     # Fixed retry rule shared with the qualifying validation (jobs.ATTEMPTS). If no
-    # attempt converges, the fold is removed and <name>.failed.json records the attempts.
-    from .jobs import copy_identical, fit_with_retries
+    # attempt converges, the fold is removed and <name>.failed.json records the attempts;
+    # the validation's lfo_end<season-1> is the same fit, so its result is reused either way.
+    from .jobs import copy_failure, copy_identical, fit_with_retries, lfo_design
     features.cache_clear()
-    if copy_identical(path, FITS / f"lfo_end{season - 1}.npz", design):
+    source = FITS / f"lfo_end{season - 1}.npz"
+    if copy_identical(path, source, design):
         return
+    if copy_failure(path, source, design, lambda: lfo_design(source.stem)[0]):
+        raise RuntimeError(f"{path.name}: no attempt passed the convergence checks (as {source.stem})")
     post, info, settings, attempts = fit_with_retries(path.stem, design)
     save(path, post, info, design, job=path.stem, model_kw={}, settings=settings, attempts=attempts)
 

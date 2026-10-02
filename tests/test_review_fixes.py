@@ -267,3 +267,40 @@ def test_jobs_cli_takes_names_after_the_parallel_option(monkeypatch):
     with pytest.raises(SystemExit):  # the stub leaves both jobs out of date
         jobs.main(["all", "--parallel", "2", "lfo_end2013", "lfo_end2016"])
     assert seen == {"names": ["lfo_end2013", "lfo_end2016"], "parallel": 2}
+
+
+def test_a_fit_is_not_repeated_when_the_same_design_failed_every_attempt(tmp_path, monkeypatch):
+    """lfo_end<Y> and quali_fold<Y+1> are the same fit: with fixed seeds and settings, a
+    refit of a design that failed every attempt would repeat it (jobs.copy_failure)."""
+    from f1rank import jobs
+    monkeypatch.setattr(jobs, "fingerprint", lambda design: design)
+    source, target = tmp_path / "lfo_end2020.npz", tmp_path / "quali_fold2021.npz"
+    failed = tmp_path / "lfo_end2020.failed.json"
+    tried = [{"settings": s, "diagnostics": {"converged": False}} for s in jobs.ATTEMPTS]
+    failed.write_text(json.dumps({"job": "lfo_end2020", "attempts": tried[:3]}))
+    assert not jobs.copy_failure(target, source, "fold", lambda: "fold")  # not the whole rule
+    failed.write_text(json.dumps({"job": "lfo_end2020", "attempts": tried}))
+    assert not jobs.copy_failure(target, source, "fold", lambda: "another design")
+    assert not (tmp_path / "quali_fold2021.failed.json").exists()
+    target.write_bytes(b"stale")
+    assert jobs.copy_failure(target, source, "fold", lambda: "fold")
+    assert not target.exists()
+    assert json.loads((tmp_path / "quali_fold2021.failed.json").read_text()) == {
+        "job": "quali_fold2021", "same_as": "lfo_end2020", "attempts": tried}
+    source.write_bytes(b"a converged fit")  # copy_identical's case, not this one
+    assert not jobs.copy_failure(target, source, "fold", lambda: "fold")
+
+
+def test_a_racing_fold_reuses_the_validation_fits_failure(tmp_path, monkeypatch):
+    from f1rank import jobs
+    monkeypatch.setattr(qualifying, "FITS", tmp_path)
+    monkeypatch.setattr(qualifying, "fit_path", lambda S: tmp_path / f"quali_fold{S}.npz")
+    monkeypatch.setattr(qualifying, "fold_design", lambda S: "fold")
+    monkeypatch.setattr(jobs, "lfo_design", lambda name: ("fold", 0))
+    monkeypatch.setattr(jobs, "fingerprint", lambda design: design)
+    monkeypatch.setattr(jobs, "fit_with_retries", lambda *a, **kw: pytest.fail("refitted"))
+    tried = [{"settings": s, "diagnostics": {"converged": False}} for s in jobs.ATTEMPTS]
+    (tmp_path / "lfo_end2020.failed.json").write_text(json.dumps({"job": "lfo_end2020", "attempts": tried}))
+    with pytest.raises(RuntimeError, match="as lfo_end2020"):
+        qualifying.prepare(2021)
+    assert json.loads((tmp_path / "quali_fold2021.failed.json").read_text())["same_as"] == "lfo_end2020"

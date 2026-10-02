@@ -362,6 +362,8 @@ After each qualifying session: `fetch`, `build`, `fit`, `export`.
 - **Shared fits.** The validation fit `lfo_end<year>` and the racing fold
   `quali_fold<year+1>` have the same design and retry rule, so whichever is fitted
   second is copied from the first after its fingerprint and retry history are checked.
+  If the first failed every attempt, the second is recorded as failed too
+  (`<name>.failed.json` with `same_as`) instead of repeating the same seeds.
 - **Snapshots.** Each export writes `outputs/snapshots/<event>_<model>_<fit id>_export2.json`
   once and never overwrites it, so what was published for each fit is kept.
 - **Failures.** A failed validation job makes `jobs` exit with status 1.

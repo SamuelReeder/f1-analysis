@@ -232,6 +232,30 @@ def copy_identical(target: Path, source: Path, design) -> bool:
     return True
 
 
+def copy_failure(target: Path, source: Path, design, source_design) -> bool:
+    """Record `target` as failed without refitting when `source`, a fit of the same design
+    (fingerprint of `source_design()`), already failed every attempt of ATTEMPTS: the
+    attempts' seeds and settings are fixed, so a refit would repeat them. The failure
+    counterpart of copy_identical."""
+    failed = source.with_name(f"{source.stem}.failed.json")
+    if source.exists() or not failed.exists():
+        return False
+    tried = json.loads(failed.read_text()).get("attempts") or []
+    if [a["settings"] for a in tried] != list(ATTEMPTS):
+        return False
+    try:
+        if fingerprint(source_design()) != fingerprint(design):
+            return False
+    except (KeyError, ValueError):
+        return False
+    for path in (target, meta_path(target)):
+        path.unlink(missing_ok=True)  # never leave a stale fit in its place
+    target.with_name(f"{target.stem}.failed.json").write_text(
+        json.dumps({"job": target.stem, "same_as": source.stem, "attempts": tried}, indent=1))
+    print(f"{target.name}: not refitted; {source.stem}, the same design, failed every attempt", flush=True)
+    return True
+
+
 def fit_with_retries(name: str, design, **kw) -> tuple[dict, dict, dict, list[dict]]:
     """Fit under ATTEMPTS; returns the first converged fit, its settings and every attempt.
     Raises RuntimeError (after recording <name>.failed.json) if none converges."""
@@ -275,8 +299,14 @@ def run(name: str) -> None:
     else:
         design = job_design(name)
         model_kw = job_spec(name)["model_kw"]
-        if name.startswith("lfo_end") and copy_identical(out, FITS / f"quali_fold{int(name[7:]) + 1}.npz", design):
-            return
+        if name.startswith("lfo_end"):
+            from .qualifying import fold_design
+            season = int(name[7:]) + 1
+            fold = FITS / f"quali_fold{season}.npz"
+            if copy_identical(out, fold, design):
+                return
+            if copy_failure(out, fold, design, lambda: fold_design(season)):
+                raise RuntimeError(f"{name}: no attempt passed the convergence checks (as {fold.stem})")
         post, info, settings, tried = fit_with_retries(name, design, model_fn=partial(model, **model_kw))
         save(out, post, info, design, job=name, model_kw={k: repr(v) for k, v in model_kw.items()},
              settings=settings, attempts=tried)
