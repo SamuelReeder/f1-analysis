@@ -582,8 +582,10 @@ The racing held-out tests take each test season's qualifying features from its f
 `quali_fold<S>`, fitted under the fixed retry rule (`jobs.ATTEMPTS`). The 2021 fold is
 the same fit as the qualifying validation's `lfo_end2020`, which failed all four
 attempts on 2026-10-02 (R-hat 1.106, 1.072, 1.066, 1.187; the check is 1.05), so it is
-not refitted with other settings and the fold has none. Nothing above said what a
-racing test does without its fold.
+not refitted with other settings and the fold has none. The 2014 fold, the same fit as
+`lfo_end2013`, failed the same way later that day (R-hat 1.152, 1.197, 1.068, 1.077,
+with 74, 145, 230 and 46 divergences). Nothing above said what a racing test does
+without its fold.
 
 Decided before any racing result under the corrected procedure: a test season whose
 fold failed every attempt (`quali_fold<S>.failed.json`, no fit) is left out of every
