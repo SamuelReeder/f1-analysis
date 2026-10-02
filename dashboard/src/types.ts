@@ -131,6 +131,7 @@ export interface Dataset {
   asof?: Asof | null;
   forecast?: { next: NextForecast | null; scores: ForecastScores } | null;
   car_state?: CarState | null;
+  race_features?: FeatureTest[];
   refresh?: RefreshRecord | null;
   race_snapshots?: RaceSnapshot[];
   events: Event[];
@@ -306,6 +307,23 @@ export interface RaceSnapshot {
   drivers: RaceEntity[];
   cars: RaceEntity[];
 }
+// A pre-registered test of one piece of weekend information (docs/race_features.md).
+export interface FeatureTest {
+  feature: "longrun" | "traps" | "upgrades";
+  recorded_at: string;
+  metrics: {
+    cars: FeatureValidation;
+    drivers?: FeatureValidation;
+  };
+  document: string;
+}
+
+export type FeatureValidation = RaceValidation & {
+  mse_difference: number;
+  mse_difference_ci95: [number, number];
+  passed: boolean;
+};
+
 export interface CarState {
   model: string;
   recorded_at: string;

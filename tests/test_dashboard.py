@@ -315,3 +315,16 @@ def test_race_point_forecasts_exclude_future_random_noise():
     np.testing.assert_allclose(point_prediction(post, meta, entries), [1.4, 1.])
     # A refitted no-driver model predicts identical teammate means, exactly.
     np.testing.assert_array_equal(point_prediction({"package": post["package"]}, meta, entries), [1., 1.])
+
+
+def test_race_feature_results_are_the_recorded_tests_and_refuse_changed_outputs(monkeypatch):
+    from f1rank import dashboard
+    recorded = sorted(p.parent.name for p in (dashboard.ROOT / "outputs/race_features").glob("*/validation.json"))
+    results = dashboard.race_feature_results()
+    assert [r["feature"] for r in results] == recorded
+    for r in results:
+        assert r["metrics"]["cars"]["passed"] in (True, False) and r["document"] == "docs/race_features.md"
+    if recorded:
+        monkeypatch.setattr(dashboard, "digest", lambda path: "changed")
+        with pytest.raises(ValueError, match="Changed recorded output"):
+            dashboard.race_feature_results()

@@ -141,6 +141,26 @@ def car_state_result():
             "document": "docs/race_car_state.md"}
 
 
+def race_feature_results():
+    """The pre-registered weekend-information tests (docs/race_features.md), as recorded.
+
+    One-off research records like the car-state test: verified against their manifests
+    and shown with their own dates. A feature without a recorded result is left out.
+    """
+    out = []
+    for directory in sorted((ROOT / "outputs" / "race_features").glob("*/")):
+        if not (directory / "validation.json").exists():
+            continue
+        manifest = read_json(directory / "validation.manifest.json")
+        for file, expected in manifest["outputs"].items():
+            if digest(ROOT / file) != expected:
+                raise ValueError(f"Changed recorded output {file}")
+        summary = read_json(directory / "validation.json")
+        out.append({"feature": summary["feature"], "recorded_at": manifest["generated_at"],
+                    "metrics": summary["metrics"], "document": "docs/race_features.md"})
+    return out
+
+
 def asof_payload():
     """Ratings after each race and scored next-race forecasts (outputs/asof), if verified."""
     directory = ROOT / "outputs" / "asof"
@@ -270,7 +290,7 @@ def build_payload():
             "comparison_draws": comparison_draws, "racing": racing_health(),
             "race_pace": load_race_pace(ROOT), "breakdown": split, "asof": asof_payload(),
             "forecast": forecast_payload(),
-            "car_state": car_state_result(),
+            "car_state": car_state_result(), "race_features": race_feature_results(),
             "refresh": read_json(ROOT / "outputs/refresh/latest.json")
             if (ROOT / "outputs/refresh/latest.json").exists() else None,
             "validation": validations, "snapshots": snapshots, "race_snapshots": race_snapshots,

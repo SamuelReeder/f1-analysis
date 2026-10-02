@@ -621,6 +621,19 @@ test("a withheld car race ranking does not hide a supported driver table", async
         name: "Follow-up test: in-season car development",
       }),
     ).toBeVisible();
+  // every recorded weekend-information test has a team row on the car view
+  const features = current.race_features ?? [];
+  if (features.length)
+    await expect(
+      page
+        .locator("section")
+        .filter({
+          has: page.getByRole("heading", {
+            name: "Tests of weekend information",
+          }),
+        })
+        .locator("tbody tr"),
+    ).toHaveCount(features.length);
   await expect(
     page.getByRole("button", { name: "Export rankings" }),
   ).toBeDisabled();
