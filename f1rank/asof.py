@@ -38,6 +38,9 @@ OUT = ROOT / "outputs" / "asof"
 START = 2010
 # Cheaper than the main fit (1500/1500): these fits only need forecasts and one event's states.
 SETTINGS = dict(warmup=1000, samples=1000, chains=4, target_accept=0.9)
+# A fit that fails the convergence checks is repeated once with the main fit's chain
+# lengths and a new seed; if that also fails, the event gets no record.
+RETRY = dict(SETTINGS, warmup=1500, samples=1500, seed=1)
 SEC = 0.9  # seconds per percent of a 90 s lap
 
 
@@ -134,16 +137,21 @@ def event_design(event_id: str):
     return design.with_cutoff(k - 1), k
 
 
-def fit_event(event_id: str, settings: dict = SETTINGS) -> Path | None:
-    from .artifacts import diagnostics, require_convergence
+def fit_event(event_id: str, attempts: tuple[dict, ...] = (SETTINGS, RETRY)) -> Path | None:
+    from .artifacts import diagnostics
     from .fit import _git_commit, _git_dirty, fit, fingerprint
     design, k = event_design(event_id)
-    post, info = fit(design, progress=False, **settings)
-    checked = diagnostics(post, info["divergences"])
-    try:
-        require_convergence(checked)
-    except ValueError as exc:
-        print(f"{event_id}: no record, fit did not pass the convergence checks ({exc})", flush=True)
+    tried = []
+    for settings in attempts:
+        post, info = fit(design, progress=False, **settings)
+        checked = diagnostics(post, info["divergences"])
+        tried.append(dict(settings=settings, **info, **checked))
+        print(f"{event_id}: attempt {len(tried)} {checked}", flush=True)
+        if checked["converged"]:
+            break
+        del post
+    else:
+        print(f"{event_id}: no record, no attempt passed the convergence checks", flush=True)
         return None
     events = design.events.set_index("event_idx")
     fit_id = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -151,7 +159,8 @@ def fit_event(event_id: str, settings: dict = SETTINGS) -> Path | None:
         event={k_: str(events.loc[k, k_]) for k_ in ("event_id", "race_name", "date")},
         trained_through={k_: str(events.loc[k - 1, k_]) for k_ in ("event_id", "race_name", "date")},
         fit=dict(fit_id=fit_id, fingerprint=fingerprint(design), settings=settings,
-                 git_commit=_git_commit(), git_dirty=_git_dirty(), diagnostics={**info, **checked}),
+                 git_commit=_git_commit(), git_dirty=_git_dirty(), diagnostics={**info, **checked},
+                 **({"failed_attempts": tried[:-1]} if len(tried) > 1 else {})),
         ratings=ratings_at(design, post, k - 1),
         forecast=forecast(design, post, k, k - 1))
     path = OUT / f"{event_id}_{fit_id}.json"

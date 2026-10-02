@@ -153,7 +153,10 @@ validation), at 1,000 warm-up and 1,000 draws per chain. Each record,
   session noise), their 90% interval coverage, and the rank correlation between
   the predicted (car + circuit + driver) and actual order of each segment.
 
-Records are write-once and only written for converged fits. The scheduled refresh
+Records are write-once and only written for converged fits. A fit that fails the
+convergence checks is repeated once at the main fit's chain lengths (1,500 + 1,500)
+with a new seed; the record keeps the failed attempt's diagnostics. If the repeat
+also fails, the event has no record and the refresh continues. The scheduled refresh
 adds one per race (`asof fit --latest`). The 2026 records before October 2026 were
 computed retrospectively with the same code; their fit ids are their creation times.
 `asof summary` pools established pairs (both drivers with at least 10 earlier

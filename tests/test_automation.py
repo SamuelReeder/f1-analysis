@@ -61,3 +61,41 @@ def test_cache_archive_cannot_write_outside_its_paths(tmp_path):
         tar.add(tmp_path / "x", arcname="outputs/ratings/meta.json")
     with pytest.raises(ValueError, match="Unexpected paths"):
         cachestore.unpack(archive, tmp_path / "dst")
+
+
+def test_unconverged_asof_fit_is_retried_then_skipped(tmp_path, monkeypatch):
+    """A refresh must not fail (and lose the main refit) when one as-of fit does not converge."""
+    from f1rank import asof, fit
+    monkeypatch.setattr(asof, "OUT", tmp_path)
+    monkeypatch.setattr(asof, "event_design", lambda event_id: (object(), 1))
+    calls = []
+    def fake_fit(design, progress, **settings):
+        calls.append(settings)
+        return {}, {"divergences": 0}
+    monkeypatch.setattr(fit, "fit", fake_fit)
+    monkeypatch.setattr("f1rank.artifacts.diagnostics", lambda post, div: {"converged": False})
+    assert asof.fit_event("2026-15") is None
+    assert calls == [asof.SETTINGS, asof.RETRY]
+    assert asof.RETRY["samples"] > asof.SETTINGS["samples"] and asof.RETRY["seed"] != 0
+    assert not list(tmp_path.iterdir())
+
+
+def test_asof_record_keeps_the_failed_attempt(tmp_path, monkeypatch):
+    import json
+    from types import SimpleNamespace
+    from f1rank import asof, fit
+    events = pd.DataFrame({"event_idx": [0, 1], "event_id": ["2026-14", "2026-15"],
+                           "race_name": ["a", "b"], "date": ["2026-09-12", "2026-09-26"]})
+    monkeypatch.setattr(asof, "OUT", tmp_path)
+    monkeypatch.setattr(asof, "event_design", lambda event_id: (SimpleNamespace(events=events), 1))
+    monkeypatch.setattr(asof, "ratings_at", lambda *a: {})
+    monkeypatch.setattr(asof, "forecast", lambda *a: {"summary": {}})
+    monkeypatch.setattr(fit, "fingerprint", lambda design: "f")
+    monkeypatch.setattr(fit, "fit", lambda design, progress, **s: ({}, {"divergences": 0}))
+    outcomes = iter([False, True])
+    monkeypatch.setattr("f1rank.artifacts.diagnostics",
+                        lambda post, div: {"converged": next(outcomes)})
+    rec = json.loads(asof.fit_event("2026-15").read_text())
+    assert rec["fit"]["settings"] == asof.RETRY
+    assert [a["settings"] for a in rec["fit"]["failed_attempts"]] == [asof.SETTINGS]
+    assert rec["trained_through"]["event_id"] == "2026-14"
