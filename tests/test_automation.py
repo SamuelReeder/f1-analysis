@@ -71,9 +71,11 @@ def test_unconverged_asof_fit_is_retried_then_skipped(tmp_path, monkeypatch):
     calls = []
     def fake_fit(design, progress, **settings):
         calls.append(settings)
-        return {}, {"divergences": 0}
+        return {}, {"elapsed_s": 1.0, "divergences": 0, "mean_steps": 511.0}
     monkeypatch.setattr(fit, "fit", fake_fit)
-    monkeypatch.setattr("f1rank.artifacts.diagnostics", lambda post, div: {"converged": False})
+    # the keys artifacts.diagnostics returns (divergences is also in fit's info)
+    monkeypatch.setattr("f1rank.artifacts.diagnostics", lambda post, div: {
+        "rhat_max": 1.07, "divergences": div, "n_draws": 4000, "finite": True, "converged": False})
     assert asof.fit_event("2026-15") is None
     assert calls == [asof.SETTINGS, asof.RETRY]
     assert asof.RETRY["samples"] > asof.SETTINGS["samples"] and asof.RETRY["seed"] != 0
@@ -91,10 +93,11 @@ def test_asof_record_keeps_the_failed_attempt(tmp_path, monkeypatch):
     monkeypatch.setattr(asof, "ratings_at", lambda *a: {})
     monkeypatch.setattr(asof, "forecast", lambda *a: {"summary": {}})
     monkeypatch.setattr(fit, "fingerprint", lambda design: "f")
-    monkeypatch.setattr(fit, "fit", lambda design, progress, **s: ({}, {"divergences": 0}))
+    monkeypatch.setattr(fit, "fit", lambda design, progress, **s: (
+        {}, {"elapsed_s": 1.0, "divergences": 0, "mean_steps": 511.0}))
     outcomes = iter([False, True])
-    monkeypatch.setattr("f1rank.artifacts.diagnostics",
-                        lambda post, div: {"converged": next(outcomes)})
+    monkeypatch.setattr("f1rank.artifacts.diagnostics", lambda post, div: {
+        "rhat_max": 1.03, "divergences": div, "n_draws": 4000, "finite": True, "converged": next(outcomes)})
     rec = json.loads(asof.fit_event("2026-15").read_text())
     assert rec["fit"]["settings"] == asof.RETRY
     assert [a["settings"] for a in rec["fit"]["failed_attempts"]] == [asof.SETTINGS]

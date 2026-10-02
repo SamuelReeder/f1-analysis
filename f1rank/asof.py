@@ -145,11 +145,11 @@ def fit_event(event_id: str, attempts: tuple[dict, ...] = (SETTINGS, RETRY)) -> 
     for settings in attempts:
         post, info = fit(design, progress=False, **settings)
         checked = diagnostics(post, info["divergences"])
-        tried.append(dict(settings=settings, **info, **checked))
+        tried.append({"settings": settings, **info, **checked})
         print(f"{event_id}: attempt {len(tried)} {checked}", flush=True)
         if checked["converged"]:
             break
-        del post
+        post = None  # release the failed draws before the next attempt
     else:
         print(f"{event_id}: no record, no attempt passed the convergence checks", flush=True)
         return None
