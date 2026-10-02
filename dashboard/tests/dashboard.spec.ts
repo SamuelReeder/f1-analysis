@@ -116,6 +116,49 @@ test("driver charts split car and driver, and history can show estimates after e
   ).not.toContainText(["All seasons"]);
 });
 
+test("revised history can be shown as rank in each event's field", async ({
+  page,
+}) => {
+  const scale = page.getByLabel("Chart scale");
+  await scale.getByRole("button", { name: "Rank" }).click();
+  await expect(scale.getByRole("button", { name: "Rank" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  const panel = page.locator(".trend-panel").filter({ has: scale });
+  await expect(panel.getByText("RANK IN THE FIELD")).toBeVisible();
+  const point = panel.locator("rect[role='button']").last();
+  await expect(point).toHaveAttribute("aria-label", /P\d+ \(P\d+–P\d+\)/);
+  await point.focus();
+  await expect(panel.locator(".chart-readout")).toContainText(
+    /P\d+ \(P\d+–P\d+\)/,
+  );
+  await page.getByRole("button", { name: "After each race" }).click();
+  await expect(page.getByLabel("Chart scale")).toHaveCount(0);
+});
+
+test("track record shows the forecast published before the next race", async ({
+  page,
+}) => {
+  const upcoming = current.forecast?.next;
+  test.skip(!upcoming, "No forecast for an upcoming race in this release");
+  await page.getByRole("link", { name: "Track record", exact: true }).click();
+  const panel = page.locator("section").filter({
+    has: page.getByRole("heading", {
+      name: `Next race · ${upcoming!.event.race_name}`,
+    }),
+  });
+  await expect(panel).toBeVisible();
+  await expect(
+    panel.getByRole("region", { name: /teammate gaps/ }).locator("tbody tr"),
+  ).toHaveCount(upcoming!.pairs.length);
+  const cars = panel
+    .getByRole("region", { name: /car order/ })
+    .locator("tbody tr");
+  await expect(cars).toHaveCount(upcoming!.cars.length);
+  await expect(cars.first()).toContainText(upcoming!.cars[0].name);
+});
+
 test("track record reports pooled forecast checks and the latest forecast", async ({
   page,
 }) => {
