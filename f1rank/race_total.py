@@ -6,6 +6,10 @@ python -m f1rank.race_total --export
 The fixed outer tests train through rounds 10 of 2024/2025 and round 7 of
 2026, and predict the remaining dry races in that season. Each ablation is
 refitted on the same training laps. Qualifying data do not enter this model.
+
+The export also writes season-by-season estimates (revised with all data) and a
+write-once snapshot, outputs/snapshots/race/<event>_<model>_<fit id>.json, of the
+tables as published for each fit. Failed tables are withheld from both.
 """
 import argparse
 import json
@@ -14,10 +18,11 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from .artifacts import atomic_json, digest, record, require, require_convergence
+from .artifacts import atomic_json, digest, record, require, require_convergence, write_once
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "outputs" / "race_total"
+SNAPSHOTS = ROOT / "outputs" / "snapshots" / "race"
 FOLDS = ("2024-10", "2025-10", "2026-07")
 BOOTSTRAPS = 4000
 
@@ -166,6 +171,44 @@ def estimates(draws):
     return result
 
 
+def season_rows(C, post, meta, names, classification, grid=None):
+    """Estimates for one season's drivers and cars with at least two clean dry races.
+
+    A past season is centred on its own eligible field. The current season uses the
+    latest race's grid, exactly as the headline table does.
+    """
+    from .race_total_model import predict
+    season = int(C.season.iloc[0])
+    if grid is None:  # each driver with the team of their last clean race that season
+        grid = C.sort_values("event_id").groupby("driver_id").tail(1)[["event_id", "driver_id", "team"]]
+        grid = grid.merge(classification[["event_id", "driver_id", "team_name"]], on=["event_id", "driver_id"],
+                          how="left", validate="one_to_one").rename(columns={"team_name": "constructor_name"})
+        grid = grid.assign(event_id=C.event_id.max())  # predictions use the season's states
+    races = C.groupby("driver_id").event_id.nunique()
+    team_races = C.groupby("team").event_id.nunique()
+    drivers = grid[grid.driver_id.isin(races[races >= 2].index)].sort_values("driver_id")
+    cars = grid.drop_duplicates("team").sort_values("team")
+    cars = cars[cars.team.isin(team_races[team_races >= 2].index)]
+    out = {"drivers": [], "cars": []}
+    for kind, rows, keep in (("drivers", drivers, lambda k: k != "package"),
+                             ("cars", cars, lambda k: k not in ("skill", "form"))):
+        if not len(rows):
+            continue
+        draws = predict({k: v for k, v in post.items() if keep(k)}, meta, rows)
+        for r, estimate in zip(rows.itertuples(), estimates(draws)):
+            obs = C[C.driver_id == r.driver_id] if kind == "drivers" else C[C.team == r.team]
+            if kind == "drivers":
+                row = dict(id=r.driver_id, name=names.loc[r.driver_id, "name"],
+                           code=names.loc[r.driver_id, "code"], lineage=r.team)
+                row["team"] = r.constructor_name if isinstance(r.constructor_name, str) else r.team
+            else:
+                row = dict(id=r.team, name=r.constructor_name if isinstance(r.constructor_name, str) else r.team)
+            out[kind].append(dict(row, pace=estimate, races=int(obs.event_id.nunique()),
+                                  laps=int(len(obs)), last_race=str(obs.event_id.max())))
+        out[kind].sort(key=lambda row: -row["pace"]["median"])
+    return season, out
+
+
 def export():
     snapshot = source_snapshot()
     from .race_total_model import laps, fit, predict
@@ -187,34 +230,25 @@ def export():
     names = pd.read_parquet(ROOT / "data/processed/drivers.parquet").set_index("driver_id")
     current = C[C.season == int(grid_event[:4])]
     eligible = set(current.groupby("driver_id").event_id.nunique().loc[lambda x: x >= 2].index)
-    driver_grid = grid[grid.driver_id.isin(eligible)]
-    driver_draws = predict({k: v for k, v in post.items() if k != "package"}, meta, driver_grid)
-    driver_values = estimates(driver_draws) if len(driver_grid) else []
-    driver_rows = []
-    for r, estimate in zip(driver_grid.itertuples(), driver_values):
-        obs = current[current.driver_id == r.driver_id]
-        driver_rows.append(dict(id=r.driver_id, name=names.loc[r.driver_id, "name"],
-                                code=names.loc[r.driver_id, "code"], team=r.constructor_name,
-                                lineage=r.team, pace=estimate, races=obs.event_id.nunique(),
-                                laps=len(obs), last_race=str(obs.event_id.max())))
-    car_grid = grid.drop_duplicates("team").sort_values("team")
     eligible_cars = set(current.groupby("team").event_id.nunique().loc[lambda x: x >= 2].index)
-    car_grid = car_grid[car_grid.team.isin(eligible_cars)]
-    car_draws = predict({k: v for k, v in post.items() if k not in ("skill", "form")}, meta, car_grid)
-    car_values = estimates(car_draws) if len(car_grid) else []
-    car_rows = []
-    for r, estimate in zip(car_grid.itertuples(), car_values):
-        obs = current[current.team == r.team]
-        car_rows.append(dict(id=r.team, name=r.constructor_name, pace=estimate, races=obs.event_id.nunique(),
-                             laps=len(obs), last_race=str(obs.event_id.max())))
+    _, now = season_rows(current, post, meta, names, classification, grid)
+    driver_rows, car_rows = now["drivers"], now["cars"]
+    passed = {k: validation["metrics"][k]["passed"] for k in ("drivers", "cars")}
+    # Revised estimates for every season; a table that failed its gate is withheld here too.
+    seasons = []
+    for season, S in C.groupby("season"):
+        if season == int(grid_event[:4]):
+            rows = now
+        else:
+            _, rows = season_rows(S, post, meta, names, classification)
+        seasons.append(dict(season=int(season), **{k: rows[k] if passed[k] else [] for k in rows}))
     data = dict(schema_version=1, model=meta["model"], fit_id=meta["key"][:20],
                 data_as_of=as_of, grid_as_of=grid_event, first_event=meta["first_event"], season=int(grid_event[:4]),
                 n_laps=meta["n_laps"], n_races=meta["n_races"], diagnostics=meta["diagnostics"],
                 validation=validation, validation_fit_id=validation_manifest["fit_id"],
-                drivers=sorted(driver_rows, key=lambda r: -r["pace"]["median"])
-                    if validation["metrics"]["drivers"]["passed"] else [],
-                cars=sorted(car_rows, key=lambda r: -r["pace"]["median"])
-                    if validation["metrics"]["cars"]["passed"] else [],
+                drivers=driver_rows if passed["drivers"] else [],
+                cars=car_rows if passed["cars"] else [],
+                seasons=seasons,
                 unrated_drivers=grid.loc[~grid.driver_id.isin(eligible), "driver_id"].tolist(),
                 unrated_cars=grid.loc[~grid.team.isin(eligible_cars), "team"].drop_duplicates().tolist())
     check(data)
@@ -223,9 +257,15 @@ def export():
     atomic_json(OUT / "research_estimates.json", {"drivers": driver_rows, "cars": car_rows, "fit": meta})
     atomic_json(OUT / "pace.json", data)
     check_snapshot(snapshot)
-    record(OUT, [OUT / "pace.json"], model=meta["model"],
-           inputs=inputs() + [OUT / "validation.json", OUT / "validation.manifest.json"],
-           details={"posterior_key": meta["key"], "validation_fit_id": validation_manifest["fit_id"]})
+    manifest = record(OUT, [OUT / "pace.json"], model=meta["model"],
+                      inputs=inputs() + [OUT / "validation.json", OUT / "validation.manifest.json"],
+                      details={"posterior_key": meta["key"], "validation_fit_id": validation_manifest["fit_id"]})
+    snap = dict(model=data["model"], fit_id=data["fit_id"], data_as_of=data["data_as_of"],
+                grid_as_of=grid_event, generated_at=manifest["generated_at"],
+                validation_fit_id=data["validation_fit_id"], passed=passed,
+                drivers=data["drivers"], cars=data["cars"])
+    path = SNAPSHOTS / f"{grid_event}_{data['model']}_{data['fit_id']}.json"
+    print(("snapshot written: " if write_once(path, snap) else "snapshot already exists: ") + path.name)
     return data
 
 

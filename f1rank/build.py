@@ -4,7 +4,8 @@ Tables
 ------
 events      one row per Grand Prix: season, round, date, circuit
 drivers     one row per driver: name, code, date of birth
-entries     one row per driver per event: constructor, team lineage, quali position
+entries     one row per driver per event: constructor, team lineage, quali position (empty
+            for a driver who set no qualifying time and is known only from the race results)
 quali_times one row per driver per qualifying segment with a lap time (Q1/Q2/Q3), with its
             source: "jolpica", or "fastf1" for events Jolpica has no times for (filled by
             extract/quali_fill.py from FastF1 lap timing and checked against Jolpica)
@@ -72,11 +73,27 @@ def build() -> dict[str, pd.DataFrame]:
                         times.append({"event_id": event_id, "driver_id": d["driverId"],
                                       "segment": seg, "time_s": t})
 
+    entered = {(e["event_id"], e["driver_id"]) for e in entries}
+    event_ids = {e["event_id"] for e in events}
     for path in sorted(RAW.glob("*_results.json")):
         season = int(path.name[:4])
         for r in json.loads(path.read_text()):
             event_id = f"{season}-{int(r['round']):02d}"
             for res in r["Results"]:
+                d, c = res["Driver"], res["Constructor"]
+                # Jolpica omits a driver who set no qualifying time from the qualifying
+                # results; a race entry shows they were entered for the event.
+                if event_id in event_ids and (event_id, d["driverId"]) not in entered:
+                    drivers.setdefault(d["driverId"], {
+                        "driver_id": d["driverId"], "code": d.get("code"),
+                        "name": f"{d['givenName']} {d['familyName']}",
+                        "dob": d.get("dateOfBirth"), "nationality": d.get("nationality"),
+                    })
+                    entries.append({
+                        "event_id": event_id, "driver_id": d["driverId"],
+                        "constructor_id": c["constructorId"], "constructor_name": c["name"],
+                        "team": lineage_of(c["constructorId"]), "quali_position": None,
+                    })
                 race.append({
                     "event_id": event_id, "driver_id": res["Driver"]["driverId"],
                     "constructor_id": res["Constructor"]["constructorId"],
@@ -102,7 +119,7 @@ def build() -> dict[str, pd.DataFrame]:
     tables = {
         "events": pd.DataFrame(events).sort_values("event_id", ignore_index=True),
         "drivers": pd.DataFrame(drivers.values()).sort_values("driver_id", ignore_index=True),
-        "entries": pd.DataFrame(entries),
+        "entries": pd.DataFrame(entries).astype({"quali_position": "Int64"}),
         "quali_times": times,
         "race": pd.DataFrame(race),
     }

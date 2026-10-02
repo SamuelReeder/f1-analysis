@@ -1,0 +1,107 @@
+name: Refresh after race weekends
+
+# Fetches new results and timing, refits both models on CPU, verifies the exports,
+# commits them to main and starts the checked Pages deployment. A run without a
+# new race stops after the check. Failed fits or gates never reach main: the
+# refresh command only publishes verified exports, and the tests run before commit.
+
+on:
+  schedule:
+    # Monday and Tuesday 06:00 UTC. Races finish by Sunday evening UTC; the Tuesday
+    # run retries when Jolpica results or FastF1 timing are published late.
+    - cron: '0 6 * * 1'
+    - cron: '0 6 * * 2'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Refit and republish even without a new race
+        type: boolean
+        default: false
+
+permissions:
+  contents: write  # commit refreshed results; replace the cache release asset
+  actions: write   # start the Pages workflow; keep this schedule enabled
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+env:
+  CACHE_TAG: refresh-cache
+  CACHE_FILE: refresh-cache.tar.gz
+  GH_TOKEN: ${{ github.token }}
+  XLA_PYTHON_CLIENT_PREALLOCATE: 'false'
+
+jobs:
+  refresh:
+    name: Check, fit and commit
+    runs-on: ubuntu-latest
+    timeout-minutes: 345
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements/*.txt
+      - name: Install the fitting and FastF1 environments
+        run: |
+          python -m venv .venv && .venv/bin/pip install -q -r requirements/fitting.txt
+          python -m venv .venv-fastf1 && .venv-fastf1/bin/pip install -q -r requirements/fastf1.txt
+      - name: Restore raw data and checkpointed race fits
+        run: |
+          gh release download "$CACHE_TAG" --pattern "$CACHE_FILE" || {
+            echo "::error::No $CACHE_FILE in the $CACHE_TAG release. Seed it from the fitting machine (README: Scheduled refresh)."
+            exit 1; }
+          .venv/bin/python -m f1rank.cachestore unpack "$CACHE_FILE"
+      - name: Check for a new race
+        id: check
+        run: .venv/bin/python -m f1rank.schedule check ${{ inputs.force && '--force' || '' }}
+      - name: Fetch, fit, export and publish locally
+        if: steps.check.outputs.due == 'true'
+        run: .venv/bin/python -m f1rank.dashboard refresh --races --extract-python .venv-fastf1/bin/python
+      - name: Verify
+        if: steps.check.outputs.due == 'true'
+        run: .venv/bin/python -m pytest -q
+      - name: Commit refreshed results
+        id: commit
+        if: steps.check.outputs.due == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A data/processed outputs/ratings outputs/race_total outputs/snapshots outputs/timeline \
+            outputs/asof outputs/refresh
+          if git diff --cached --quiet; then echo "No changed results"; exit 0; fi
+          git commit -q -m "Refresh after the ${{ steps.check.outputs.race_name }} (${{ steps.check.outputs.event }})" \
+            -m "${{ steps.check.outputs.reason }}" \
+            -m "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          # Fails if main moved during the run: results must match the code they were fitted with.
+          git push origin HEAD:main
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+      - name: Store raw data and checkpointed fits for the next run
+        if: steps.check.outputs.due == 'true'
+        run: |
+          .venv/bin/python -m f1rank.cachestore pack "$CACHE_FILE"
+          gh release upload "$CACHE_TAG" "$CACHE_FILE" --clobber
+      - name: Deploy the dashboard
+        # Pushes made with the workflow token do not trigger other workflows.
+        if: steps.commit.outputs.pushed == 'true'
+        run: gh workflow run dashboard.yml --ref main
+      - name: Keep the schedule enabled
+        # GitHub disables schedules in public repositories after 60 days without
+        # activity, which the December-March break would exceed. Re-enabling through
+        # the API is the approach of the widely used keepalive-workflow action.
+        if: github.event_name == 'schedule'
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/refresh.yml/enable"
+      - name: Keep the refresh log
+        if: always() && steps.check.outputs.due == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: refresh-log-${{ github.run_id }}
+          path: |
+            outputs/dashboard/refresh.log
+            outputs/dashboard/runs.jsonl
+          if-no-files-found: ignore
+          retention-days: 30

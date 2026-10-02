@@ -12,6 +12,7 @@ import functools
 import hashlib
 import http.server
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -96,6 +97,53 @@ def racing_health():
     return rows
 
 
+def breakdown(ids, teams, in_team, car, lineage):
+    """Each driver's expected qualifying pace at an average circuit as car + driver.
+
+    Both parts are centred on the event's field, so the total is relative to an
+    average driver in an average car. The interval uses the joint draws.
+    """
+    column = {t: j for j, t in enumerate(teams)}
+    rows = []
+    for i, driver in enumerate(ids):
+        team = lineage[driver]
+        total = in_team[:, i] + car[:, column[team]]
+        lo, med, hi = np.quantile(total, [.05, .5, .95])
+        rows.append({"id": driver, "team": team, "car": round(float(np.median(car[:, column[team]])), 6),
+                     "driver": round(float(np.median(in_team[:, i])), 6),
+                     "total": {"q05": round(float(lo), 6), "median": round(float(med), 6),
+                               "q95": round(float(hi), 6)}})
+    return sorted(rows, key=lambda r: -r["total"]["median"])
+
+
+def asof_payload():
+    """Ratings after each race and scored next-race forecasts (outputs/asof), if verified."""
+    directory = ROOT / "outputs" / "asof"
+    if not (directory / "summary.json").exists():
+        return None
+    manifest = require(directory, required_outputs=[directory / "summary.json"])
+    summary = read_json(directory / "summary.json")
+    series = {"drivers": {}, "cars": {}}
+    latest = None
+    for row in summary["events"]:
+        if f"outputs/asof/{row['file']}" not in manifest["outputs"]:
+            raise ValueError(f"Unrecorded as-of record {row['file']}")
+        rec = read_json(directory / row["file"])
+        as_of = rec["trained_through"]["event_id"]
+        for d in rec["ratings"]["drivers"]:
+            series["drivers"].setdefault(d["id"], []).append(
+                {"event": as_of, "team": d["team"], "headline": d["headline"], "portable": d["portable"]})
+        for c in rec["ratings"]["cars"]:
+            series["cars"].setdefault(c["id"], []).append({"event": as_of, "team": c["name"], "pace": c["pace"]})
+        if latest is None or rec["event"]["event_id"] > latest["event"]["event_id"]:
+            latest = rec
+    return {"pooled": summary["pooled"], "events": summary["events"], "series": series,
+            "latest": None if latest is None else {"event": latest["event"],
+                                                  "trained_through": latest["trained_through"],
+                                                  "pairs": latest["forecast"]["pairs"],
+                                                  "order": latest["forecast"]["order"]}}
+
+
 def build_payload():
     manifest = require(RATINGS, required_outputs=[RATINGS / name for name in (
         "meta.json", "current_drivers.csv", "current_cars.csv", "driver_series.parquet",
@@ -136,6 +184,8 @@ def build_payload():
                      ("portable", "portable_skill_s", "pairwise_drivers_portable.csv"))}
         pairs["cars"] = comparisons(teams, z["car_s"])
         comparison_draws = len(z["car_s"])
+        split = breakdown(ids, teams, z["in_team_s"], z["car_s"],
+                          {i: str(latest.loc[i, "team"]) for i in ids})
     history = {"drivers": {}, "cars": {}}
     for id_, rows in ds.groupby("driver_id"):
         history["drivers"][id_] = [{"event": r.event_id, "team": r.constructor_name,
@@ -161,6 +211,7 @@ def build_payload():
         snapshots.append({"file": path.name, "fit_id": sm.get("fit_id"),
                           "generated_at": sm.get("generated_at"), "event": sm.get("data_as_of"),
                           "drivers": snap["drivers"], "cars": snap["cars"]})
+    race_snapshots = [read_json(path) for path in sorted((ROOT / "outputs" / "snapshots" / "race").glob("*.json"))]
     require(RATINGS)  # reject a concurrent export or source edit while assembling
     if digest(RATINGS / "manifest.json") != marker:
         raise ValueError("Export changed during publication; retry")
@@ -172,8 +223,10 @@ def build_payload():
                             .sort_values("name").to_dict("records")},
             "events": events.to_dict("records"), "history": history, "comparisons": pairs,
             "comparison_draws": comparison_draws, "racing": racing_health(),
-            "race_pace": load_race_pace(ROOT),
-            "validation": validations, "snapshots": snapshots,
+            "race_pace": load_race_pace(ROOT), "breakdown": split, "asof": asof_payload(),
+            "refresh": read_json(ROOT / "outputs/refresh/latest.json")
+            if (ROOT / "outputs/refresh/latest.json").exists() else None,
+            "validation": validations, "snapshots": snapshots, "race_snapshots": race_snapshots,
             "provenance": {"export_manifest": marker, "inputs": manifest["inputs"],
                            "outputs": manifest["outputs"]}}
 
@@ -208,19 +261,40 @@ def publication_lock(data_dir):
         yield
 
 
+# Sampler settings of the published main fit (outputs/ratings/fit_metadata.json). A
+# refresh refits with the same settings, so an update never quietly publishes fewer draws.
+FIT_SETTINGS = {"warmup": 1500, "samples": 1500, "chains": 4}
+
+
 def refresh_steps(with_races=False, race_python=None, extract_python=None):
     """Keep both exports current when their shared entry/event inputs change."""
     def module(name, *args, python=sys.executable):
         return name, [python, "-m", f"f1rank.{name}", *args]
     steps = [module("fetch"), module("build")]
     if with_races:
-        steps += [("race timing", [extract_python or sys.executable,
-                                  str(ROOT / "extract/race_extract.py")]),
+        extract = [extract_python or sys.executable, str(ROOT / "extract/race_extract.py")]
+        steps += [("race timing", extract), ("sprint timing", extract + ["--sprint"]),
                   module("racedata"), module("timeline")]
-    steps += [module("fit"), module("export")]
+    fit_args = [f"--{k}={v}" for k, v in FIT_SETTINGS.items()]
+    steps += [module("fit", *fit_args), module("export"),
+              module("asof", "fit", "--latest"), module("asof", "summary")]
     if with_races or (ROOT / "outputs/race_total/pace.json").exists():
         steps += [module("race_total", "--validate", "--export", python=race_python or sys.executable)]
     return steps
+
+
+def record_refresh(started_at, stages, with_races):
+    """Committed record of the last completed fitting run, shown on the dashboard."""
+    path = ROOT / "data" / "processed" / "events.parquet"
+    latest = pd.read_parquet(path).sort_values("event_id").iloc[-1] if path.exists() else None
+    run_url = None
+    if os.environ.get("GITHUB_RUN_ID"):
+        run_url = (f"{os.environ.get('GITHUB_SERVER_URL', 'https://github.com')}/"
+                   f"{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}")
+    atomic_json(ROOT / "outputs" / "refresh" / "latest.json", {
+        "started_at": started_at, "finished_at": now(), "races": with_races,
+        "event": None if latest is None else {k: str(latest[k]) for k in ("event_id", "race_name", "date")},
+        "trigger": os.environ.get("GITHUB_EVENT_NAME", "manual"), "run_url": run_url, "stages": stages})
 
 
 def run(refresh=False, data_dir=DATA, *, with_races=False, race_python=None, extract_python=None):
@@ -234,13 +308,17 @@ def run(refresh=False, data_dir=DATA, *, with_races=False, race_python=None, ext
         log_dir.mkdir(parents=True, exist_ok=True)
         try:
             if refresh:
+                stages = []
                 with (log_dir / "refresh.log").open("a") as log:
                     for stage, command in refresh_steps(with_races, race_python, extract_python):
                         status.update(stage=stage, updated_at=now())
                         atomic_json(data_dir / "status.json", status)
                         log.write(f"\n{now()} {stage}\n"); log.flush()
+                        began = time.monotonic()
                         subprocess.run(command, cwd=ROOT,
                                        stdout=log, stderr=subprocess.STDOUT, check=True)
+                        stages.append({"stage": stage, "seconds": round(time.monotonic() - began, 1)})
+                record_refresh(status["started_at"], stages, with_races)
             status.update(stage="publishing", updated_at=now())
             atomic_json(data_dir / "status.json", status)
             pointer = publish(data_dir)
