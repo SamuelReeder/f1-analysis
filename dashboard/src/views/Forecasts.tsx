@@ -321,12 +321,15 @@ export default function Forecasts({ data }: { data: Dataset }) {
         <p>
           The error is the root mean square difference between predicted and
           real teammate gaps, in seconds per 90-second lap. “Last season’s gap”
-          repeats each pairing’s mean gap from their latest season together (or
-          each driver’s gap to past teammates). Coverage is the share of real
-          gaps inside the 90% predictive interval. Records for 2026 races before
-          October 2026 were computed retrospectively with the same code; later
-          records are added by the weekly refresh after each race. The longer
-          historical benchmark (25 cutoffs since 2013) is on Model health.
+          repeats each pairing’s mean gap from their latest season together; for
+          a new pairing it takes the difference between each driver’s mean gap
+          to their teammates in their latest season. Only pairs of drivers with
+          at least 10 earlier qualifying sessions are scored. Coverage is the
+          share of real gaps inside the 90% predictive interval. Records for
+          2026 races before October 2026 were computed retrospectively with the
+          same code; later records are added by the weekly refresh after each
+          race. The longer historical benchmark (25 cutoffs since 2013) is on
+          Model health.
         </p>
       </details>
     </>

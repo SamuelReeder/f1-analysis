@@ -262,7 +262,7 @@ steps, with other fits running alongside), measured on 2026-10-01:
 |---|---|---|
 | Qualifying fit, 4 × (1,500 + 1,500) | 27.8 min sampling | over 3.1 GB (not captured at the end) |
 | Qualifying export | 11 s | — |
-| After-the-race fit, 4 × (1,000 + 1,000) | 20.7 min sampling | about 5 GB, briefly, when samples are gathered |
+| After-the-race fit, 4 × (1,000 + 1,000) | 15–21 min | 5.3 GB, briefly, when samples are gathered (2.1 GB while sampling) |
 | Race validation and export, all fits reused | 10 s | — |
 
 A week with a new race also refits the full race model; its cached fits took
