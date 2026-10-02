@@ -203,3 +203,10 @@ def test_export_headline_and_portable_draws_match_their_own_comparisons(tmp_path
     assert not np.allclose(head, portable)
     meta = json.loads((export.OUT / "meta.json").read_text())
     assert meta["pairwise_default"] == "in_team"
+
+
+def test_racing_folds_do_not_share_files_with_the_qualifying_validation():
+    from f1rank.jobs import _base_design, lfo_cutoffs
+    validation = {f"{name}.npz" for name in lfo_cutoffs(_base_design(2010))}
+    folds = {qualifying.fit_path(S).name for S in range(2012, 2027)}
+    assert not folds & validation

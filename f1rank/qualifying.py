@@ -23,7 +23,9 @@ POLICY = "qualifying-trained-before-test-season-v1"
 
 
 def fit_path(season: int | None):
-    return FITS / ("main.npz" if season is None else f"lfo_end{season - 1}.npz")
+    # Not lfo_end{season - 1}.npz: that is the qualifying validation fit (jobs.py), whose
+    # design keeps every later season, so sharing the name made each overwrite the other.
+    return FITS / ("main.npz" if season is None else f"quali_fold{season}.npz")
 
 
 def check_cutoff(design, season: int) -> None:

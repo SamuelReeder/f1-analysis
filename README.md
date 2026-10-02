@@ -434,7 +434,10 @@ Azerbaijan GP:
 
 Outputs for the dashboard are in `outputs/ratings/`, and `outputs/snapshots/` keeps what
 was published for each fit. Posterior draws (`outputs/fits/`, several GB) are not
-committed.
+committed. The qualifying validation's fits are `lfo_end<year>.npz` and
+`lfo_mid<year>.npz`; the racing folds' qualifying fits (trained through the season
+before the one they forecast, design ending with that season) are
+`quali_fold<season>.npz`, so regenerating either never replaces the other's inputs.
 
 ## Racing (stage 2)
 
