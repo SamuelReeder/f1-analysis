@@ -64,3 +64,30 @@ v1) plus the same k-step walk.
   run separately; this variant's driver terms are not published.
 - If the gate fails, the car table stays withheld and the result is reported here
   and on Model health in the same terms as the v1 result.
+
+## Result (2026-10-01)
+
+Run once as registered: `python -m f1rank.race_car_state --validate` (GPU,
+`.venv-gpu`), commit 350b238 for the model and test code. Record:
+`outputs/race_car_state/validation.json`, per-team predictions in
+`car_predictions.csv`, manifest fit id `479140ac18b75a42a611`.
+
+All three fold fits converged on the first attempt (4 × 800 draws): R-hat max
+1.022, 1.043 and 1.031, no divergences, 582 s, 683 s and 735 s. The baseline
+rows reproduce v1's exactly (baseline RMSE 0.37903 in both records).
+
+| Check (29 held-out races, 295 team results) | Car state | v1 | Gate |
+|---|---|---|---|
+| MSE difference vs driver-only, percent² | −0.0003 (95% CI −0.0118 to +0.0104) | +0.0040 (−0.0061 to +0.0133) | CI below 0: **fail** |
+| RMSE, percent of lap (baseline 0.379) | 0.378 | 0.384 | — |
+| 90% interval coverage | 88.5% | 84.1% | 85–95%: pass |
+| Mean interval width (baseline 1.115) | 1.146 | 1.074 | narrower: **fail** |
+
+**Decision: the gate fails, so the car race-pace table stays withheld.** The
+within-season state brought coverage into range and removed v1's small (not
+significant) excess error, but its forecasts of later races were no more accurate
+than the driver-only model's, and its intervals were wider. On these tests a
+separate car term, constant or evolving, does not predict later team pace better
+than the driver-season terms, which already absorb a constant car level. This
+does not show that cars do not develop during a season; the held-out windows
+cover 7–11 races at the end of three seasons.

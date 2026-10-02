@@ -12,7 +12,7 @@ import { Badge, Empty, Band, MetricControl } from "../components";
 import { color, signed, pct, date, exportCsv, exportRaceCsv } from "../lib";
 import Trend from "./Trend";
 import RankingHeader from "./RankingHeader";
-import { RaceMethodology, RaceValidation } from "./RaceNotes";
+import { CarStateTest, RaceMethodology, RaceValidation } from "./RaceNotes";
 import { PaceBreakdown, QualiVsRace, RaceHistory } from "./DriverCharts";
 
 interface RankingEntry {
@@ -383,6 +383,7 @@ export default function Rankings({
           {validation && (
             <RaceValidation validation={validation} driver={!car} />
           )}
+          {car && data.car_state && <CarStateTest result={data.car_state} />}
           {!car && selectedRow && (
             <>
               <QualiVsRace

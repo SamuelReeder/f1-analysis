@@ -561,6 +561,12 @@ test("a withheld car race ranking does not hide a supported driver table", async
     page.getByRole("heading", { name: "Car race-pace ranking withheld" }),
   ).toBeVisible();
   await expect(page.locator(".rank-table")).toHaveCount(0);
+  if (current.car_state)
+    await expect(
+      page.getByRole("heading", {
+        name: "Follow-up test: in-season car development",
+      }),
+    ).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Export rankings" }),
   ).toBeDisabled();

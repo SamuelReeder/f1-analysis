@@ -1,7 +1,8 @@
 import { Badge } from "../components";
-import { pct } from "../lib";
+import { date, pct } from "../lib";
 import { Equation, InlineMath, RatingMath } from "../ModelMath";
 import type {
+  CarState,
   RacePace as RaceData,
   RaceValidation as Validation,
 } from "../types";
@@ -11,18 +12,26 @@ const source = "https://github.com/SamuelReeder/f1-analysis/blob/main/";
 export function RaceValidation({
   validation,
   driver,
+  title = "Held-out prediction",
+  note,
 }: {
   validation: Validation;
   driver: boolean;
+  title?: string;
+  note?: React.ReactNode;
 }) {
   return (
     <section className="panel race-validation">
       <div className="panel-heading">
         <div>
-          <h2>Held-out prediction</h2>
+          <h2>{title}</h2>
           <p>
-            {validation.n_races} later races · refitted model without{" "}
-            {driver ? "driver" : "car"} ratings as the baseline
+            {note ?? (
+              <>
+                {validation.n_races} later races · refitted model without{" "}
+                {driver ? "driver" : "car"} ratings as the baseline
+              </>
+            )}
           </p>
         </div>
         <Badge tone={validation.passed ? "green" : "amber"}>
@@ -341,5 +350,24 @@ export function RaceMethodology({ data }: { data?: RaceData | null }) {
         </div>
       </details>
     </section>
+  );
+}
+
+// The pre-registered follow-up for the withheld car table (docs/race_car_state.md).
+export function CarStateTest({ result }: { result: CarState }) {
+  return (
+    <RaceValidation
+      validation={result.cars}
+      driver={false}
+      title="Follow-up test: in-season car development"
+      note={
+        <>
+          Pre-registered · recorded {date(result.recorded_at)} · same{" "}
+          {result.cars.n_races} races and driver-only baseline, with the car
+          allowed to change from race to race ·{" "}
+          <a href={`${source}${result.document}`}>decisions and result</a>
+        </>
+      }
+    />
   );
 }

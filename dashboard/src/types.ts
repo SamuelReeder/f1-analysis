@@ -129,6 +129,7 @@ export interface Dataset {
   race_pace?: RacePace | null;
   breakdown?: BreakdownRow[];
   asof?: Asof | null;
+  car_state?: CarState | null;
   refresh?: RefreshRecord | null;
   race_snapshots?: RaceSnapshot[];
   events: Event[];
@@ -260,4 +261,12 @@ export interface RaceSnapshot {
   passed: { drivers: boolean; cars: boolean };
   drivers: RaceEntity[];
   cars: RaceEntity[];
+}
+export interface CarState {
+  model: string;
+  recorded_at: string;
+  fit_id: string;
+  folds: string[];
+  cars: RaceValidation & { passed: boolean };
+  document: string;
 }

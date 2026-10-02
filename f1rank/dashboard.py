@@ -121,6 +121,25 @@ def breakdown(ids, teams, in_team, car, lineage, medians=None):
     return sorted(rows, key=lambda r: -r["total"]["median"])
 
 
+def car_state_result():
+    """The pre-registered within-season car test (docs/race_car_state.md), as recorded.
+
+    A one-off research record: its outputs must match their manifest, but later data
+    do not rerun it, so it is shown with its own date rather than as current evidence.
+    """
+    directory = ROOT / "outputs" / "race_car_state"
+    if not (directory / "validation.json").exists():
+        return None
+    manifest = read_json(directory / "validation.manifest.json")
+    for file, expected in manifest["outputs"].items():
+        if digest(ROOT / file) != expected:
+            raise ValueError(f"Changed recorded output {file}")
+    summary = read_json(directory / "validation.json")
+    return {"model": summary["model"], "recorded_at": manifest["generated_at"], "fit_id": manifest["fit_id"],
+            "folds": summary["folds"], "cars": summary["cars"],
+            "document": "docs/race_car_state.md"}
+
+
 def asof_payload():
     """Ratings after each race and scored next-race forecasts (outputs/asof), if verified."""
     directory = ROOT / "outputs" / "asof"
@@ -231,6 +250,7 @@ def build_payload():
             "events": events.to_dict("records"), "history": history, "comparisons": pairs,
             "comparison_draws": comparison_draws, "racing": racing_health(),
             "race_pace": load_race_pace(ROOT), "breakdown": split, "asof": asof_payload(),
+            "car_state": car_state_result(),
             "refresh": read_json(ROOT / "outputs/refresh/latest.json")
             if (ROOT / "outputs/refresh/latest.json").exists() else None,
             "validation": validations, "snapshots": snapshots, "race_snapshots": race_snapshots,
