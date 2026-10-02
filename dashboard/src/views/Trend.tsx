@@ -10,6 +10,18 @@ import {
 import { Empty, useWidth } from "../components";
 
 type Mode = "revised" | "asof";
+type Scale = "pace" | "rank";
+
+// Ranks are drawn as negative values so that, as for pace, higher is faster.
+const asRank = (e?: Estimate): Estimate | undefined =>
+  e &&
+  e.rank_median !== undefined &&
+  e.rank_lo !== undefined &&
+  e.rank_hi !== undefined
+    ? { ...e, median: -e.rank_median, q05: -e.rank_hi, q95: -e.rank_lo }
+    : undefined;
+const rankText = (e: Estimate) =>
+  `P${Math.round(-e.median)} (P${-e.q95}–P${-e.q05})`;
 
 export default function Trend({
   data,
@@ -34,6 +46,9 @@ export default function Trend({
   const [circuit, setCircuit] = useState(false);
   const asof = data.asof?.series[car ? "cars" : "drivers"];
   const [mode, setMode] = useState<Mode>("revised");
+  const [scale, setScale] = useState<Scale>("pace");
+  // Only the revised history carries a rank distribution at every event.
+  const ranked = scale === "rank" && mode === "revised";
   useEffect(() => {
     setA(initial);
     if (b === initial) setB(entities.find((e) => e.id !== initial)?.id || "");
@@ -58,7 +73,7 @@ export default function Trend({
     (e) => season === "all" || e.season === Number(season),
   );
   const key = car
-    ? circuit && mode === "revised"
+    ? circuit && mode === "revised" && !ranked
       ? "at_circuit"
       : "pace"
     : metric;
@@ -94,7 +109,10 @@ export default function Trend({
       name: entities.find((e) => e.id === id)?.name || id,
       color: i === 0 ? "var(--accent)" : "var(--ink)",
       dash: i === 0 ? undefined : "7 4",
-      points: points.map((p) => p?.[key] as Estimate | undefined),
+      points: points.map((p) => {
+        const e = p?.[key] as Estimate | undefined;
+        return ranked ? asRank(e) : e;
+      }),
       teams: points.map((p) => p?.team),
       changes,
     };
@@ -102,9 +120,15 @@ export default function Trend({
   const values = series.flatMap((s) =>
     s.points.filter((p): p is Estimate => !!p),
   );
-  const low = Math.min(0, ...values.map((v) => (bands ? v.q05 : v.median)));
-  const high = Math.max(0, ...values.map((v) => (bands ? v.q95 : v.median)));
-  const pad = Math.max((high - low) * 0.14, 0.05);
+  // Pace keeps zero (the field average) in view; ranks run from P1 down.
+  const low = Math.min(
+    ranked ? -1 : 0,
+    ...values.map((v) => (bands ? v.q05 : v.median)),
+  );
+  const high = ranked
+    ? -1
+    : Math.max(0, ...values.map((v) => (bands ? v.q95 : v.median)));
+  const pad = Math.max((high - low) * 0.14, ranked ? 0.5 : 0.05);
   const ymin = low - pad;
   const ymax = high + pad;
   const step = (W - 95) / Math.max(events.length - 1, 1);
@@ -137,6 +161,18 @@ export default function Trend({
           i: events.findIndex((e) => e.season === s),
         })).filter((r) => r.i > 0)
       : [];
+  const ticks = ranked
+    ? [
+        ...new Set([
+          -1,
+          ...niceTicks(ymin, ymax).filter((v) => Number.isInteger(v) && v < -1),
+        ]),
+      ]
+    : niceTicks(ymin, ymax);
+  const describe = (e: Estimate) =>
+    ranked
+      ? rankText(e)
+      : `${signed(e.median)}s (${signed(e.q05)} to ${signed(e.q95)})`;
   const switchMode = (next: Mode) => {
     setMode(next);
     setHover(null);
@@ -154,9 +190,32 @@ export default function Trend({
             {mode === "revised"
               ? "Revised estimates"
               : "Estimates after each race"}
+            {ranked ? " · rank in each event’s field" : ""}
           </p>
         </div>
         <div className="trend-heading-controls">
+          {mode === "revised" && (
+            <div className="segmented" aria-label="Chart scale">
+              <button
+                onClick={() => {
+                  setScale("pace");
+                  setHover(null);
+                }}
+                aria-pressed={scale === "pace"}
+              >
+                Pace
+              </button>
+              <button
+                onClick={() => {
+                  setScale("rank");
+                  setHover(null);
+                }}
+                aria-pressed={scale === "rank"}
+              >
+                Rank
+              </button>
+            </div>
+          )}
           {hasAsof && (
             <div className="segmented" aria-label="History type">
               <button
@@ -239,7 +298,7 @@ export default function Trend({
           />
           90% intervals
         </label>
-        {car && mode === "revised" && (
+        {car && mode === "revised" && !ranked && (
           <label className="checkbox">
             <input
               type="checkbox"
@@ -257,17 +316,18 @@ export default function Trend({
       ) : (
         <div className="chart-wrap">
           <div className="chart-unit">
-            SECONDS / 90s LAP <span>↑ Faster</span>
+            {ranked ? "RANK IN THE FIELD" : "SECONDS / 90s LAP"}{" "}
+            <span>↑ Faster</span>
           </div>
           <svg
             viewBox={`0 0 ${W} 312`}
             ref={ref}
             className="trend-chart"
             role="group"
-            aria-label={`${mode === "asof" ? "Estimates after each race" : "Revised pace"} for ${series.map((s) => s.name).join(" and ")}, ${season}. Higher is faster. Focus on an event to inspect values.`}
+            aria-label={`${mode === "asof" ? "Estimates after each race" : ranked ? "Revised rank" : "Revised pace"} for ${series.map((s) => s.name).join(" and ")}, ${season}. Higher is faster. Focus on an event to inspect values.`}
             onMouseLeave={() => setHover(null)}
           >
-            {niceTicks(ymin, ymax).map((v, i) => {
+            {ticks.map((v, i) => {
               return (
                 <g key={i}>
                   <line
@@ -278,18 +338,20 @@ export default function Trend({
                     stroke="var(--line)"
                   />
                   <text x="50" y={y(v) + 4} textAnchor="end">
-                    {signed(v, 2)}
+                    {ranked ? `P${-v}` : signed(v, 2)}
                   </text>
                 </g>
               );
             })}
-            <line
-              x1="65"
-              x2={W - 30}
-              y1={y(0)}
-              y2={y(0)}
-              stroke="var(--line-strong)"
-            />
+            {!ranked && (
+              <line
+                x1="65"
+                x2={W - 30}
+                y1={y(0)}
+                y2={y(0)}
+                stroke="var(--line-strong)"
+              />
+            )}
             {series.map((s) => (
               <g key={s.id}>
                 {segments(s.points).map((seg, j) => (
@@ -388,7 +450,7 @@ export default function Trend({
                   fill="transparent"
                   tabIndex={0}
                   role="button"
-                  aria-label={`${e.race_name} ${e.season}: ${series.map((s) => (s.points[i] ? `${s.name} ${signed(s.points[i]!.median)} seconds` : `${s.name} no estimate`)).join(", ")}`}
+                  aria-label={`${e.race_name} ${e.season}: ${series.map((s) => (s.points[i] ? `${s.name} ${ranked ? rankText(s.points[i]!) : `${signed(s.points[i]!.median)} seconds`}` : `${s.name} no estimate`)).join(", ")}`}
                   onFocus={() => setHover(i)}
                   onBlur={() => setHover(null)}
                   onMouseEnter={() => setHover(i)}
@@ -433,7 +495,7 @@ export default function Trend({
                     {shortName(s.name)}
                     {s.teams[hover] ? ` (${s.teams[hover]})` : ""}:{" "}
                     {s.points[hover]
-                      ? `${signed(s.points[hover]!.median)}s (${signed(s.points[hover]!.q05)} to ${signed(s.points[hover]!.q95)})`
+                      ? describe(s.points[hover]!)
                       : "no estimate"}
                   </span>
                 ))}
@@ -450,7 +512,9 @@ export default function Trend({
       <div className="panel-foot">
         <span>
           {mode === "revised"
-            ? "Relative to each event’s field, revised using later data."
+            ? ranked
+              ? "Median rank in each event’s field with its 90% range, revised using later data."
+              : "Relative to each event’s field, revised using later data."
             : "Each point uses only races up to that event, from a separate fit per round; the revised history also uses later races."}
         </span>
       </div>

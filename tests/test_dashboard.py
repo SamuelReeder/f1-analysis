@@ -112,7 +112,8 @@ def test_refresh_runs_the_entire_pipeline_before_publishing(tmp_path, payload, m
     calls = []
     monkeypatch.setattr(dashboard.subprocess, "run", lambda command, **kwargs: calls.append(command[2]))
     dashboard.run(refresh=True, data_dir=tmp_path)
-    assert calls == ["f1rank.fetch", "f1rank.build", "f1rank.fit", "f1rank.export", "f1rank.asof", "f1rank.asof"]
+    assert calls == ["f1rank.fetch", "f1rank.build", "f1rank.fit", "f1rank.export", "f1rank.forecast",
+                     "f1rank.forecast", "f1rank.asof", "f1rank.asof"]
     assert (tmp_path / "latest.json").exists()
 
 
@@ -137,7 +138,8 @@ def test_race_refresh_orders_extraction_and_both_fits_before_publication(tmp_pat
                   data_dir=tmp_path)
     assert [c[2] if c[1] == "-m" else "extract" for c in calls] == [
         "f1rank.fetch", "f1rank.build", "extract", "extract", "f1rank.racedata", "f1rank.timeline",
-        "f1rank.fit", "f1rank.export", "f1rank.asof", "f1rank.asof", "f1rank.race_total"]
+        "f1rank.fit", "f1rank.export", "f1rank.forecast", "f1rank.forecast", "f1rank.asof", "f1rank.asof",
+        "f1rank.race_total"]
     assert calls[2][0] == calls[3][0] == "fastf1-python"
     assert calls[3][-1] == "--sprint"
     assert calls[-1] == ["gpu-python", "-m", "f1rank.race_total", "--validate", "--export"]
@@ -160,7 +162,8 @@ def test_qualifying_refresh_keeps_existing_race_export_current_and_failure_prese
     with pytest.raises(RuntimeError, match="Race fitting failed"):
         dashboard.run(refresh=True, data_dir=tmp_path)
     assert [c[2] for c in calls] == ["f1rank.fetch", "f1rank.build", "f1rank.fit", "f1rank.export",
-                                     "f1rank.asof", "f1rank.asof", "f1rank.race_total"]
+                                     "f1rank.forecast", "f1rank.forecast", "f1rank.asof", "f1rank.asof",
+                                     "f1rank.race_total"]
     assert (tmp_path / "latest.json").read_bytes() == before
     status = json.loads((tmp_path / "status.json").read_text())
     assert status["state"] == "failed" and status["stage"] == "race_total"

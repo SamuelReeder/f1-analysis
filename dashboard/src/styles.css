@@ -2890,3 +2890,16 @@ select {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+.next-forecast {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+.forecast-table caption {
+  caption-side: top;
+  text-align: left;
+  font-weight: 600;
+  padding: 0 0 6px;
+  color: var(--ink);
+}

@@ -129,6 +129,7 @@ export interface Dataset {
   race_pace?: RacePace | null;
   breakdown?: BreakdownRow[];
   asof?: Asof | null;
+  forecast?: { next: NextForecast | null; scores: ForecastScores } | null;
   car_state?: CarState | null;
   refresh?: RefreshRecord | null;
   race_snapshots?: RaceSnapshot[];
@@ -241,6 +242,49 @@ export interface Asof {
     trained_through: { event_id: string; race_name: string; date: string };
     pairs: ForecastPair[];
     order: { segment: string; n: number; spearman: number }[];
+  } | null;
+}
+export interface NextForecast {
+  model: string;
+  file: string;
+  created_utc: string;
+  event: {
+    event_id: string;
+    race_name: string;
+    date: string;
+    circuit_id: string;
+  };
+  trained_through: { event_id: string; race_name: string; date: string };
+  lineup_from: string;
+  pairs: {
+    team: string;
+    a: string;
+    b: string;
+    predicted: number;
+    q05: number;
+    q95: number;
+  }[];
+  cars: (Estimate & { team: string; name: string })[];
+  drivers: (Estimate & { id: string; team: string })[];
+}
+export interface ForecastScores {
+  model: string;
+  events: {
+    file: string;
+    created_utc: string;
+    event: { event_id: string; race_name: string; date: string };
+    n_pairs: number;
+    rmse: number | null;
+    rmse_zero: number | null;
+    coverage90: number | null;
+    order_spearman: number | null;
+  }[];
+  pooled: {
+    n_events: number;
+    n_pairs: number;
+    rmse: number;
+    rmse_zero: number;
+    coverage90: number;
   } | null;
 }
 export interface RefreshRecord {

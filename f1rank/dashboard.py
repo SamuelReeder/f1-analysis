@@ -91,7 +91,8 @@ def racing_health():
                        else "Validation does not yet support a standalone ranking.")
         except (StaleArtifact, ValueError, OSError) as exc:
             if path.exists():
-                row.update(status="stale", reason="Saved results need regeneration after the methodology review.")
+                row.update(status="stale", reason="Data or code changed after these results were recorded; "
+                                                  "they need regeneration before they count as current.")
             row["detail"] = str(exc).replace(str(ROOT) + "/", "")
         rows.append(row)
     return rows
@@ -166,6 +167,24 @@ def asof_payload():
                                                   "trained_through": latest["trained_through"],
                                                   "pairs": latest["forecast"]["pairs"],
                                                   "order": latest["forecast"]["order"]}}
+
+
+def forecast_payload():
+    """The forecast for the next event, published before it, and the scores of earlier
+    ones (outputs/forecasts), if verified."""
+    directory = ROOT / "outputs" / "forecasts"
+    if not (directory / "scores.json").exists():
+        return None
+    manifest = require(directory, required_outputs=[directory / "scores.json"])
+    files = sorted(p for p in directory.glob("*_*.json"))
+    for path in files:
+        if f"outputs/forecasts/{path.name}" not in manifest["outputs"]:
+            raise ValueError(f"Unrecorded forecast {path.name}")
+    scores = read_json(directory / "scores.json")
+    scored = {s["file"] for s in scores["events"]}
+    upcoming = [read_json(p) | {"file": p.name} for p in files if p.name not in scored]
+    return {"next": max(upcoming, key=lambda r: (r["event"]["event_id"], r["created_utc"]), default=None),
+            "scores": scores}
 
 
 def build_payload():
@@ -250,6 +269,7 @@ def build_payload():
             "events": events.to_dict("records"), "history": history, "comparisons": pairs,
             "comparison_draws": comparison_draws, "racing": racing_health(),
             "race_pace": load_race_pace(ROOT), "breakdown": split, "asof": asof_payload(),
+            "forecast": forecast_payload(),
             "car_state": car_state_result(),
             "refresh": read_json(ROOT / "outputs/refresh/latest.json")
             if (ROOT / "outputs/refresh/latest.json").exists() else None,
@@ -304,6 +324,7 @@ def refresh_steps(with_races=False, race_python=None, extract_python=None):
                   module("racedata"), module("timeline")]
     fit_args = [f"--{k}={v}" for k, v in FIT_SETTINGS.items()]
     steps += [module("fit", *fit_args), module("export"),
+              module("forecast", "next"), module("forecast", "score"),
               module("asof", "fit", "--latest"), module("asof", "summary")]
     if with_races or (ROOT / "outputs/race_total/pace.json").exists():
         steps += [module("race_total", "--validate", "--export", python=race_python or sys.executable)]

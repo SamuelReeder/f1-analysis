@@ -40,14 +40,17 @@ It provides:
   probabilities, searchable tables, team filters, entry details and CSV downloads.
 - Driver and car history, including former drivers and team lineages, with season
   selection, uncertainty bands, circuit codes on the axis, marked team changes and
-  regulation resets, and optional circuit-adjusted car pace. A toggle switches
-  between revised history (fitted on all races) and estimates after each race
-  (each point fitted only on races up to that event; see below).
+  regulation resets, and optional circuit-adjusted car pace. The revised history
+  can also be shown as rank in each event's field (median and 90% range). A toggle
+  switches between revised history (fitted on all races) and estimates after each
+  race (each point fitted only on races up to that event; see below).
 - A car-and-driver chart splitting each driver's expected qualifying pace into
   their car's part and their own in-team part, and a qualifying-against-race-pace
   scatter. Driver race pace also has a season-by-season history since 2018.
 - A Track record page scoring forecasts: for each 2026 race, a fit that stops at
   the previous race predicts that race's qualifying teammate gaps and field order.
+  From October 2026 it also shows the forecast for the season's next race,
+  published before its weekend, and scores those forecasts afterwards.
 - Head-to-head pace differences and a field-wide probability matrix. Differences
   use joint posterior samples, preserving dependence between estimates.
 - Model health: data cutoff, publication and convergence checks, the latest
@@ -164,6 +167,19 @@ qualifying sessions) into `summary.json`, compared with repeating each pair's ga
 from their latest season together and with a zero gap. The longer benchmark across
 25 historical cutoffs remains the qualifying model's main validation.
 
+`python -m f1rank.forecast next` also publishes a forecast for the season's next race
+before its weekend (from October 2026, the first being 2026-16), from the published main
+fit: `outputs/forecasts/<event>_<fit id>.json`, written once, and only if the race is
+at least two days away. The fit has no states for that event, so it uses the latest
+event's states plus the model's one-race-ahead terms: a skill-walk step and a
+one-weekend form draw per driver, a within-season car step (Student-t), a one-event car
+variation and the next circuit's adjustment, the fitted lap noise for a new session,
+and the latest lineups. The experience and age trend's one-event change is left out.
+After a season's finale no forecast is made. `forecast score` scores each forecast
+against its qualifying once it has happened, with the after-the-race records' rules,
+into `outputs/forecasts/scores.json`; the Track record page shows the next forecast
+and these scores.
+
 The race-pace export also writes season-by-season estimates since 2018 (each season
 centred on its own rated drivers, revised with all data) and a write-once snapshot
 of the tables as published by each fit, `outputs/snapshots/race/`. A table that
@@ -230,7 +246,9 @@ CPU (JAX's CPU backend, four chains in parallel). Each run:
 3. runs `python -m f1rank.dashboard refresh --races`: fetch and build, FastF1 race
    and sprint timing, race tables and timeline, the qualifying fit with the
    published sampler settings (1,500 warm-up and 1,500 draws per chain, 4 chains),
-   export, an after-the-race record (`asof fit --latest`) and its summary, then race
+   export, a forecast of the season's next race (`forecast next`) and the scores of
+   earlier ones (`forecast score`), an after-the-race record (`asof fit --latest`) and
+   its summary, then race
    pace validation and export. Unchanged race validation fits are reused from the
    cache, so a normal week refits only the full race model;
 4. runs the Python tests, commits the changed results to `main` as

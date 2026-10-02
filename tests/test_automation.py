@@ -102,3 +102,38 @@ def test_asof_record_keeps_the_failed_attempt(tmp_path, monkeypatch):
     assert rec["fit"]["settings"] == asof.RETRY
     assert [a["settings"] for a in rec["fit"]["failed_attempts"]] == [asof.SETTINGS]
     assert rec["trained_through"]["event_id"] == "2026-14"
+
+
+def test_next_forecast_is_the_seasons_next_race_and_none_after_the_finale():
+    from f1rank.forecast import next_event
+    race = lambda season, rnd, date: {"season": str(season), "round": str(rnd), "raceName": f"R{rnd}",  # noqa: E731
+                                      "date": date, "Circuit": {"circuitId": f"c{rnd}"}}
+    schedule = [race(2026, 17, "2026-10-11"), race(2026, 16, "2026-10-04"), race(2026, 15, "2026-09-26")]
+    assert next_event(schedule, "2026-15")["event_id"] == "2026-16"
+    assert next_event(schedule, "2026-17") is None
+
+
+def test_forecast_scores_use_established_teammates_and_the_actual_order():
+    import numpy as np
+    from f1rank.design import build_design
+    from f1rank.evaluate import session_pairs
+    from f1rank.forecast import SEC, score_record
+    design = build_design(2010)
+    k = int(design.events.event_idx.max())
+    p = session_pairs(design)
+    p = p[p.event_idx == k]
+    first = p.groupby(["driver_a", "driver_b"]).gap.first() * SEC
+    pairs = [dict(a=a, b=b, predicted=round(float(g), 4), q05=round(float(g) - .1, 4), q95=round(float(g) + .1, 4))
+             for (a, b), g in first.items()]
+    e = design.entries.set_index("entry_idx").driver_id
+    o = design.obs[design.obs.event_idx == k]
+    q1 = o[o.session_idx == o.session_idx.min()]  # sessions are ordered Q1, Q2, Q3 within an event
+    expected = q1.set_index(q1.entry_idx.map(e)).y
+    rec = dict(event={"event_id": design.events.event_id.iloc[k]}, trained_through={"event_id": "x"},
+               created_utc="t", pairs=pairs, drivers=[dict(id=d, median=float(v)) for d, v in expected.items()])
+    s = score_record(design, rec)
+    assert s["n_pairs"] >= len(pairs) and s["rmse_zero"] > 0 and 0 < s["coverage90"] <= 1
+    assert all(r["segment"] in ("Q1", "Q2", "Q3") for r in s["pairs"])
+    assert s["order"][0] == dict(segment="Q1", n=len(q1), spearman=1.0)
+    future = dict(rec, event={"event_id": "2099-01"})
+    assert score_record(design, future) is None and np.isfinite(s["rmse"])

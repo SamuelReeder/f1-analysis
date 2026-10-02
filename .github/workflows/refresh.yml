@@ -72,7 +72,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A data/processed outputs/ratings outputs/race_total outputs/snapshots outputs/timeline \
-            outputs/asof outputs/refresh
+            outputs/asof outputs/forecasts outputs/refresh
           if git diff --cached --quiet; then echo "No changed results"; exit 0; fi
           git commit -q -m "Refresh after the ${{ steps.check.outputs.race_name }} (${{ steps.check.outputs.event }})" \
             -m "${{ steps.check.outputs.reason }}" \

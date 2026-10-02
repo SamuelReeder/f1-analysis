@@ -38,6 +38,9 @@ export default function Forecasts({ data }: { data: Dataset }) {
     events.map((e, i) => `${i ? "L" : "M"}${x(i)},${y(e[key]!)}`).join(" ");
   const latest = asof.latest;
   const pairs = (latest?.pairs || []).filter((r) => r.segment === "Q1");
+  const upcoming = data.forecast?.next;
+  const prospective = data.forecast?.scores.pooled;
+  const teamName = new Map(upcoming?.cars.map((c) => [c.team, c.name]));
   return (
     <>
       <PageHeading title="Track record">
@@ -77,6 +80,99 @@ export default function Forecasts({ data }: { data: Dataset }) {
           </p>
         </div>
       </div>
+      {upcoming && (
+        <section className="panel chart-panel" aria-labelledby="next-title">
+          <div className="panel-heading">
+            <div>
+              <h2 id="next-title">Next race · {upcoming.event.race_name}</h2>
+              <p>
+                Published {date(upcoming.created_utc.slice(0, 10))}, before the
+                weekend, from the ratings through{" "}
+                {upcoming.trained_through.race_name}; scored after its
+                qualifying
+              </p>
+            </div>
+          </div>
+          <div className="next-forecast">
+            <div
+              className="forecast-scroll"
+              tabIndex={0}
+              role="region"
+              aria-label="Predicted teammate gaps for the next race"
+            >
+              <table className="forecast-table">
+                <caption>Teammate gap in a qualifying segment</caption>
+                <thead>
+                  <tr>
+                    <th>Team</th>
+                    <th>Teammates</th>
+                    <th className="numeric">Predicted</th>
+                    <th className="numeric">90% interval</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {upcoming.pairs.map((r) => (
+                    <tr key={r.team}>
+                      <td>{teamName.get(r.team) || r.team}</td>
+                      <td>
+                        {label(r.a)} vs {label(r.b)}
+                      </td>
+                      <td className="numeric">{signed(r.predicted)}s</td>
+                      <td className="numeric">
+                        {signed(r.q05)} to {signed(r.q95)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div
+              className="forecast-scroll"
+              tabIndex={0}
+              role="region"
+              aria-label="Predicted car order for the next race"
+            >
+              <table className="forecast-table">
+                <caption>Car pace at this circuit</caption>
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Team</th>
+                    <th className="numeric">Predicted</th>
+                    <th className="numeric">90% interval</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {upcoming.cars.map((c) => (
+                    <tr key={c.team}>
+                      <td>
+                        {c.rank_lo === c.rank_hi
+                          ? c.rank_lo
+                          : `${c.rank_lo}–${c.rank_hi}`}
+                      </td>
+                      <td>{c.name}</td>
+                      <td className="numeric">{signed(c.median)}s</td>
+                      <td className="numeric">
+                        {signed(c.q05)} to {signed(c.q95)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="panel-foot">
+            <span>
+              Positive = first driver (or car) faster, seconds per 90s lap; cars
+              relative to the field average. Lineups are those of{" "}
+              {upcoming.trained_through.race_name}.{" "}
+              {prospective
+                ? `Forecasts published before the race so far: ${prospective.n_events} scored, teammate gap error ${prospective.rmse.toFixed(3)}s (no gap ${prospective.rmse_zero.toFixed(3)}s), coverage ${pct(prospective.coverage90)}.`
+                : "This is the first forecast published before its race; earlier records on this page were computed after the race from data that stopped before it."}
+            </span>
+          </div>
+        </section>
+      )}
       <section className="panel trend-panel" aria-labelledby="error-title">
         <div className="panel-heading">
           <div>
@@ -330,6 +426,15 @@ export default function Forecasts({ data }: { data: Dataset }) {
           same code; later records are added by the weekly refresh after each
           race. The longer historical benchmark (25 cutoffs since 2013) is on
           Model health.
+        </p>
+        <p>
+          From October 2026 the refresh also publishes a forecast for the
+          season’s next race before its weekend, from the published ratings:
+          each driver’s pace in the current car plus one race of skill change
+          and a one-weekend form draw, each car’s pace plus one race of
+          development, a one-event variation and the next circuit’s adjustment,
+          with the current lineups. It is written once, never revised, and
+          scored the same way after that qualifying.
         </p>
       </details>
     </>
