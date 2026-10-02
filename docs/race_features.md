@@ -34,10 +34,17 @@ does not build. The speed-trap feature below is the straight-line part.
 2. **Upgrades** (`extract/fia_upgrades.py`): the FIA's "Car Presentation Submissions"
    document for each event, published on the Thursday or Friday of the weekend before
    any running. The first is 2024 round 2; none was published before. Each team's
-   section is parsed (pdftotext, layout mode) into its declared components with their
-   primary reason; a component counts if its primary reason is "Performance" (not
-   "Circuit specific" or any other reason). `data/supplements/fia_upgrades.json` keeps
-   each document's URL and sha256 and every team's parsed components.
+   table is read with pdfplumber into its declared components with their primary
+   reason (a reason cell merged over several components applies to each); a component
+   counts if its primary reason is "Performance", including a Performance subcategory
+   written without the prefix ("Local Load", "Flow Conditioning", "Drag Reduction"), and
+   not "Circuit specific" or any other reason. `data/supplements/fia_upgrades.json`
+   keeps each document's URL and sha256, every team's parsed components, and the
+   extractor's count check (numbered rows with text against parsed components).
+   *Amended 2026-10-02, before any fit: this item first said the sections were parsed
+   with pdftotext in layout mode; that could not separate merged and wrapped table
+   cells, so the extractor reads the tables instead, and the subcategory rule was
+   written down when teams were found to use it.*
 
 ## Features
 
