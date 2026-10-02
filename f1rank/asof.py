@@ -185,6 +185,36 @@ def records() -> dict[str, dict]:
     return out
 
 
+BOOTSTRAPS = 4000
+
+
+def baseline_differences(recs: dict) -> dict:
+    """Model minus baseline mean squared error over every scored pair (s², negative =
+    the model is better), with a 95% interval from resampling whole events: pairs in
+    one session share its conditions, so they are not independent trials."""
+    events = []
+    for r in recs.values():
+        scored = [p for p in r["forecast"]["pairs"] if p["established"]]
+        if scored:
+            obs = np.array([p["observed"] for p in scored])
+            pred = np.array([p["predicted"] for p in scored])
+            naive = np.array([p["naive"] if p["naive"] is not None else 0. for p in scored])
+            events.append({"zero": ((obs - pred) ** 2 - obs ** 2).sum(),
+                           "naive": ((obs - pred) ** 2 - (obs - naive) ** 2).sum(), "n": len(scored)})
+    if not events:
+        return {}
+    n = np.array([e["n"] for e in events])
+    idx = np.random.default_rng(0).integers(len(events), size=(BOOTSTRAPS, len(events)))
+    out = {}
+    for key in ("zero", "naive"):
+        d = np.array([e[key] for e in events])
+        boot = d[idx].sum(1) / n[idx].sum(1)
+        lo, hi = np.quantile(boot, [.025, .975])
+        out[f"vs_{key}"] = dict(mse_difference=round(float(d.sum() / n.sum()), 5),
+                                ci95=[round(float(lo), 5), round(float(hi), 5)])
+    return out
+
+
 def summarise() -> dict:
     recs = records()
     rows = [dict(event=r["event"], trained_through=r["trained_through"]["event_id"],
@@ -198,6 +228,7 @@ def summarise() -> dict:
         rmse_zero=pooled("rmse_zero"),
         coverage90=round(sum(r["coverage90"] * r["n_pairs"] for r in scored) / n, 4),
         order_spearman=round(float(np.mean([r["order_spearman"] for r in scored if r["order_spearman"] is not None])), 4),
+        **baseline_differences(recs),
     ) if n else None)
     atomic_json(OUT / "summary.json", summary)
     files = [OUT / r["file"] for r in recs.values()]

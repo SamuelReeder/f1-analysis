@@ -2,6 +2,7 @@
 import datetime as dt
 
 import pandas as pd
+import pytest
 
 from f1rank.schedule import decide
 
@@ -153,3 +154,21 @@ def test_the_first_forecast_for_an_event_stands(tmp_path, monkeypatch):
     first.write_text("{}")
     assert forecast.write_next(schedule, dt.date(2098, 12, 1)) == first
     assert sorted(tmp_path.iterdir()) == [first]
+
+
+def test_asof_baseline_differences_resample_whole_events():
+    from f1rank import asof
+
+    def rec(pairs):
+        return {"forecast": {"pairs": [dict(observed=o, predicted=p, naive=n, established=e)
+                                       for o, p, n, e in pairs]}}
+    recs = {"2026-01": rec([(0.2, 0.2, 0.0, True), (-0.4, -0.4, None, True), (5.0, 0.0, 0.0, False)]),
+            "2026-02": rec([(0.1, 0.1, 0.3, True)])}
+    out = asof.baseline_differences(recs)
+    # a perfect model against no gap: -(0.2² + 0.4² + 0.1²) / 3; the unestablished pair is not scored
+    assert out["vs_zero"]["mse_difference"] == pytest.approx(-(0.04 + 0.16 + 0.01) / 3, abs=1e-5)
+    # a missing naive gap counts as no gap, as in the per-event summary
+    assert out["vs_naive"]["mse_difference"] == pytest.approx(-(0.04 + 0.16 + 0.04) / 3, abs=1e-5)
+    lo, hi = out["vs_zero"]["ci95"]
+    assert lo <= out["vs_zero"]["mse_difference"] <= hi < 0
+    assert asof.baseline_differences({}) == {}
