@@ -33,6 +33,7 @@ exit with status 1.
 """
 
 import argparse
+import gc
 import json
 import shutil
 import subprocess
@@ -42,6 +43,7 @@ import traceback
 from functools import lru_cache, partial
 from pathlib import Path
 
+import jax
 import numpy as np
 
 from .design import build_design
@@ -243,7 +245,11 @@ def fit_with_retries(name: str, design, **kw) -> tuple[dict, dict, dict, list[di
         if checked["converged"]:
             (FITS / f"{name}.failed.json").unlink(missing_ok=True)
             return post, info, settings, tried
-        post = None  # release the failed draws before the next attempt
+        # release the failed draws and the attempt's compiled programs before the next,
+        # longer attempt (results are unchanged: each attempt's seed and settings are fixed)
+        post = None
+        gc.collect()
+        jax.clear_caches()
     for path in (FITS / f"{name}.npz", meta_path(FITS / f"{name}.npz")):
         path.unlink(missing_ok=True)  # never leave a stale fit in its place
     (FITS / f"{name}.failed.json").write_text(json.dumps({"job": name, "attempts": tried}, indent=1))
