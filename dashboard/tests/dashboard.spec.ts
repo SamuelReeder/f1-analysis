@@ -80,6 +80,61 @@ test("season trends support absent entrants and car circuit adjustment", async (
   ).toBeVisible();
 });
 
+test("driver charts split car and driver, and history can show estimates after each race", async ({
+  page,
+}) => {
+  const top = current.breakdown![0];
+  const row = page.getByRole("button", {
+    name: new RegExp(
+      `^${current.drivers.find((d) => d.id === top.id)!.name}: car `,
+    ),
+  });
+  await row.focus();
+  await expect(
+    page
+      .locator("#breakdown-title")
+      .locator("xpath=../../..")
+      .locator(".chart-readout"),
+  ).toContainText("total");
+  await page.getByText("Show as table").first().click();
+  await expect(
+    page.locator(".table-view").first().locator("tbody tr"),
+  ).toHaveCount(current.breakdown!.length);
+  const before = await page
+    .locator(".trend-chart path")
+    .first()
+    .getAttribute("d");
+  await page.getByRole("button", { name: "After each race" }).click();
+  await expect(page.getByText("Estimates after each race")).toBeVisible();
+  const after = await page
+    .locator(".trend-chart path")
+    .first()
+    .getAttribute("d");
+  expect(after).not.toBe(before);
+  await expect(
+    page.getByLabel("Trend season").locator("option"),
+  ).not.toContainText(["All seasons"]);
+});
+
+test("track record reports pooled forecast checks and the latest forecast", async ({
+  page,
+}) => {
+  await page.getByRole("link", { name: "Track record", exact: true }).click();
+  const pooled = current.asof!.pooled!;
+  await expect(
+    page.locator(".stat-card").filter({ hasText: "Teammate gap error" }),
+  ).toContainText(`${pooled.rmse.toFixed(3)}s`);
+  await expect(
+    page.getByRole("heading", {
+      name: `Latest forecast · ${current.asof!.latest!.event.race_name}`,
+    }),
+  ).toBeVisible();
+  await page.getByText("Show as table").click();
+  await expect(page.locator(".table-view tbody tr")).toHaveCount(
+    current.asof!.events.filter((e) => e.n_pairs > 0).length,
+  );
+});
+
 test("comparisons reverse correctly and matrix cells select the actual pair", async ({
   page,
 }) => {
@@ -97,6 +152,11 @@ test("comparisons reverse correctly and matrix cells select the actual pair", as
     .click();
   await expect(page.getByLabel("FIRST DRIVER")).toHaveValue("norris");
   await expect(page.getByLabel("SECOND DRIVER")).toHaveValue("leclerc");
+  await expect(page.locator(".matrix button.teammate")).toHaveCount(
+    current.drivers.flatMap((d) =>
+      current.drivers.filter((o) => o.id !== d.id && o.lineage === d.lineage),
+    ).length,
+  );
   await page.getByRole("button", { name: "Cars", exact: true }).click();
   await expect(page.getByLabel("FIRST CAR")).toHaveValue(current.cars[0].id);
   await expect(page.locator(".matrix tbody tr")).toHaveCount(
@@ -122,9 +182,26 @@ test("health discloses unavailable racing, historical gates and snapshots", asyn
     Object.values(current.validation.gates?.data || {}).filter((v) => !v)
       .length,
   );
-  await expect(page.locator(".archive-top>div")).toHaveCount(5);
+  await expect(page.locator(".archive-top>div").first()).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Updates", exact: true }),
+  ).toBeVisible();
+  // Research models are grouped and collapsed below the published ones.
+  await expect(page.getByText("Status details").first()).toBeHidden();
+  await page.getByText(/^In research \(\d+\)/).click();
+  await expect(page.getByText("Status details").first()).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Methodology", exact: true }),
+  ).toHaveCount(0);
+});
+
+test("methodology has its own page with a reading guide and equations", async ({
+  page,
+}) => {
+  await page.getByRole("link", { name: "Methodology", exact: true }).click();
+  await expect(page).toHaveURL(/#methodology$/);
+  await expect(
+    page.getByRole("heading", { name: "How to read the ratings" }),
   ).toBeVisible();
   await expect(
     page.getByText("A time-varying Bayesian model estimates"),
@@ -282,7 +359,7 @@ test("ranking metrics support browser history, direct links and switching entity
   page,
 }) => {
   const mainNav = page.getByRole("navigation", { name: "Main navigation" });
-  await expect(mainNav.getByRole("link")).toHaveCount(4);
+  await expect(mainNav.getByRole("link")).toHaveCount(6);
   await expect(mainNav.getByRole("link", { name: "Race pace" })).toHaveCount(0);
   await page
     .getByRole("button", { name: "Portable skill Experimental" })
@@ -535,6 +612,8 @@ for (const view of [
   "cars",
   "cars/race",
   "compare",
+  "forecasts",
+  "methodology",
   "health",
 ]) {
   test(`${view} has no browser errors, no mobile overflow, and accessible controls`, async ({
@@ -550,7 +629,7 @@ for (const view of [
       .evaluateAll((details) =>
         details.forEach((detail) => detail.setAttribute("open", "")),
       );
-    if (view === "health" || view.endsWith("/race")) {
+    if (view === "methodology" || view.endsWith("/race")) {
       await expect(
         page.locator(".method-equation math").first(),
       ).toBeAttached();

@@ -1,5 +1,6 @@
 export type Metric = "headline" | "portable";
-export type View = "drivers" | "cars" | "compare" | "health";
+export type View =
+  "drivers" | "cars" | "compare" | "forecasts" | "methodology" | "health";
 export type RankingKind = "drivers" | "cars";
 export type Discipline = "qualifying" | "race";
 export interface Estimate {
@@ -43,6 +44,7 @@ export interface Event {
   round: number;
   date: string;
   race_name: string;
+  circuit_id?: string;
 }
 export interface Point {
   event: string;
@@ -92,6 +94,7 @@ export interface RacePace {
   n_races: number;
   drivers: RaceEntity[];
   cars: RaceEntity[];
+  seasons?: { season: number; drivers: RaceEntity[]; cars: RaceEntity[] }[];
   unrated_drivers: string[];
   unrated_cars: string[];
   diagnostics: Pick<
@@ -124,6 +127,10 @@ export interface Dataset {
   drivers: Driver[];
   cars: Car[];
   race_pace?: RacePace | null;
+  breakdown?: BreakdownRow[];
+  asof?: Asof | null;
+  refresh?: RefreshRecord | null;
+  race_snapshots?: RaceSnapshot[];
   events: Event[];
   catalog: {
     drivers: { id: string; name: string }[];
@@ -180,4 +187,77 @@ export interface Release {
   release: string;
   url: string;
   published_at: string;
+}
+export interface BreakdownRow {
+  id: string;
+  team: string;
+  car: number;
+  driver: number;
+  total: Estimate;
+}
+// Estimates after each race have the same shape as the revised history.
+export type AsofPoint = Point;
+export interface ForecastPair {
+  segment: string;
+  team: string;
+  a: string;
+  b: string;
+  predicted: number;
+  q05: number;
+  q95: number;
+  observed: number;
+  naive: number | null;
+  established: boolean;
+}
+export interface ForecastEvent {
+  event: { event_id: string; race_name: string; date: string };
+  trained_through: string;
+  fit_id: string;
+  n_pairs: number;
+  rmse: number | null;
+  rmse_naive: number | null;
+  rmse_zero: number | null;
+  coverage90: number | null;
+  order_spearman: number | null;
+}
+export interface Asof {
+  pooled: {
+    n_events: number;
+    n_pairs: number;
+    rmse: number;
+    rmse_naive: number;
+    rmse_zero: number;
+    coverage90: number;
+    order_spearman: number;
+  } | null;
+  events: ForecastEvent[];
+  series: {
+    drivers: Record<string, AsofPoint[]>;
+    cars: Record<string, AsofPoint[]>;
+  };
+  latest: {
+    event: { event_id: string; race_name: string; date: string };
+    trained_through: { event_id: string; race_name: string; date: string };
+    pairs: ForecastPair[];
+    order: { segment: string; n: number; spearman: number }[];
+  } | null;
+}
+export interface RefreshRecord {
+  started_at: string;
+  finished_at: string;
+  races: boolean;
+  event: { event_id: string; race_name: string; date: string } | null;
+  trigger: string;
+  run_url: string | null;
+  stages: { stage: string; seconds: number }[];
+}
+export interface RaceSnapshot {
+  model: string;
+  fit_id: string;
+  data_as_of: Event;
+  grid_as_of: string;
+  generated_at: string;
+  passed: { drivers: boolean; cars: boolean };
+  drivers: RaceEntity[];
+  cars: RaceEntity[];
 }

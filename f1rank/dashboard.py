@@ -97,20 +97,25 @@ def racing_health():
     return rows
 
 
-def breakdown(ids, teams, in_team, car, lineage):
+def breakdown(ids, teams, in_team, car, lineage, medians=None):
     """Each driver's expected qualifying pace at an average circuit as car + driver.
 
     Both parts are centred on the event's field, so the total is relative to an
-    average driver in an average car. The interval uses the joint draws.
+    average driver in an average car. The interval uses the joint draws. `medians`
+    ({"drivers": {id: s}, "cars": {team: s}}) supplies the parts' published full-
+    posterior medians, so they match the ranking tables rather than the thinned draws.
     """
     column = {t: j for j, t in enumerate(teams)}
+    medians = medians or {"drivers": {}, "cars": {}}
     rows = []
     for i, driver in enumerate(ids):
         team = lineage[driver]
         total = in_team[:, i] + car[:, column[team]]
         lo, med, hi = np.quantile(total, [.05, .5, .95])
-        rows.append({"id": driver, "team": team, "car": round(float(np.median(car[:, column[team]])), 6),
-                     "driver": round(float(np.median(in_team[:, i])), 6),
+        part_car = medians["cars"].get(team, np.median(car[:, column[team]]))
+        part_driver = medians["drivers"].get(driver, np.median(in_team[:, i]))
+        rows.append({"id": driver, "team": team, "car": round(float(part_car), 6),
+                     "driver": round(float(part_driver), 6),
                      "total": {"q05": round(float(lo), 6), "median": round(float(med), 6),
                                "q95": round(float(hi), 6)}})
     return sorted(rows, key=lambda r: -r["total"]["median"])
@@ -185,7 +190,9 @@ def build_payload():
         pairs["cars"] = comparisons(teams, z["car_s"])
         comparison_draws = len(z["car_s"])
         split = breakdown(ids, teams, z["in_team_s"], z["car_s"],
-                          {i: str(latest.loc[i, "team"]) for i in ids})
+                          {i: str(latest.loc[i, "team"]) for i in ids},
+                          {"drivers": {r["id"]: r["headline"]["median"] for r in drivers},
+                           "cars": {r["id"]: r["pace"]["median"] for r in cars}})
     history = {"drivers": {}, "cars": {}}
     for id_, rows in ds.groupby("driver_id"):
         history["drivers"][id_] = [{"event": r.event_id, "team": r.constructor_name,

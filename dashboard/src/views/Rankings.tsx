@@ -13,6 +13,7 @@ import { color, signed, pct, date, exportCsv, exportRaceCsv } from "../lib";
 import Trend from "./Trend";
 import RankingHeader from "./RankingHeader";
 import { RaceMethodology, RaceValidation } from "./RaceNotes";
+import { PaceBreakdown, QualiVsRace, RaceHistory } from "./DriverCharts";
 
 interface RankingEntry {
   id: string;
@@ -255,6 +256,7 @@ export default function Rankings({
                     <col className="name-column" />
                     <col className="pace-column" />
                     <col className="range-col" />
+                    <col className="top3-col" />
                     <col className="rank-column" />
                   </colgroup>
                   <thead>
@@ -263,6 +265,7 @@ export default function Rankings({
                       <th>{car ? "CONSTRUCTOR" : "DRIVER"}</th>
                       <th className="numeric">PACE / 90s</th>
                       <th className="range-col">90% PACE INTERVAL</th>
+                      <th className="numeric top3-col">TOP 3</th>
                       <th className="numeric">90% RANK RANGE</th>
                     </tr>
                   </thead>
@@ -321,6 +324,9 @@ export default function Rankings({
                           >
                             <Band value={v} domain={domain} compact />
                           </td>
+                          <td className="numeric top3-col">
+                            {v.p_top3 === undefined ? "—" : pct(v.p_top3)}
+                          </td>
                           <td className="numeric">
                             <span className="rank-range">
                               {v.rank_lo}–{v.rank_hi}
@@ -348,7 +354,10 @@ export default function Rankings({
                 Median <span className="legend-line" />
                 90% interval
               </span>
-              <span>Positive = faster · ranked by median</span>
+              <span>
+                Positive = faster · ordered by median · overlapping rank ranges
+                are not clearly separated
+              </span>
             </div>
           )}
         </section>
@@ -374,16 +383,46 @@ export default function Rankings({
           {validation && (
             <RaceValidation validation={validation} driver={!car} />
           )}
+          {!car && selectedRow && (
+            <>
+              <QualiVsRace
+                data={data}
+                selected={selectedRow.id}
+                onSelect={setSelected}
+              />
+              <RaceHistory
+                key={selectedRow.id}
+                data={data}
+                initial={selectedRow.id}
+              />
+            </>
+          )}
           <RaceMethodology data={raceData} />
         </>
       ) : (
         selectedRow && (
-          <Trend
-            data={data}
-            car={car}
-            metric={metric}
-            initial={selectedRow.id}
-          />
+          <>
+            {!car && metric === "headline" && (
+              <>
+                <PaceBreakdown
+                  data={data}
+                  selected={selectedRow.id}
+                  onSelect={setSelected}
+                />
+                <QualiVsRace
+                  data={data}
+                  selected={selectedRow.id}
+                  onSelect={setSelected}
+                />
+              </>
+            )}
+            <Trend
+              data={data}
+              car={car}
+              metric={metric}
+              initial={selectedRow.id}
+            />
+          </>
         )
       )}
     </>

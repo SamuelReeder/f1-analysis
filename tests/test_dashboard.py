@@ -209,6 +209,11 @@ def test_breakdown_adds_car_and_driver_draw_by_draw():
     b = rows[0]
     assert b["car"] == pytest.approx(.5) and b["driver"] == pytest.approx(-.1)
     assert b["total"]["q05"] == pytest.approx(.4) and b["total"]["q95"] == pytest.approx(.4)
+    # Published full-posterior medians replace the thinned draws' medians for the parts.
+    rows = dashboard.breakdown(["a", "b"], ["x", "y"], in_team, car, {"a": "y", "b": "x"},
+                               {"drivers": {"b": -.12}, "cars": {"x": .52}})
+    assert rows[0]["driver"] == -.12 and rows[0]["car"] == .52
+    assert rows[1]["driver"] == pytest.approx(.1)
 
 
 def test_race_ranks_preserve_covariance_and_use_seconds():
