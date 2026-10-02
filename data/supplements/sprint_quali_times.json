@@ -1,0 +1,6491 @@
+{
+ "source": "FastF1 lap timing (F1 live timing): best non-deleted lap per driver and sprint qualifying part (method of extract/quali_fill.py)",
+ "fastf1_version": "3.8.3",
+ "created_utc": "2026-10-02T02:14:09Z",
+ "events": [
+  "2023-04",
+  "2023-09",
+  "2023-12",
+  "2023-17",
+  "2023-18",
+  "2023-20",
+  "2024-05",
+  "2024-06",
+  "2024-11",
+  "2024-19",
+  "2024-21",
+  "2024-23",
+  "2025-02",
+  "2025-06",
+  "2025-13",
+  "2025-19",
+  "2025-21",
+  "2025-23",
+  "2026-02",
+  "2026-04",
+  "2026-05",
+  "2026-09",
+  "2026-12"
+ ],
+ "lap_deletions": {
+  "2023-04": {
+   "session": "Sprint Shootout",
+   "messages": [],
+   "excluded_only_by_message": []
+  },
+  "2023-09": {
+   "session": "Sprint Shootout",
+   "messages": [
+    {
+     "message": "CAR 24 (ZHO) LAP DELETED - TRACK LIMITS AT TURN 9 LAP 2 12:02:51",
+     "lap_is_a_kept_best": false
+    }
+   ],
+   "excluded_only_by_message": [
+    "SQ1 ZHO lap 2"
+   ]
+  },
+  "2023-12": {
+   "session": "Sprint Shootout",
+   "messages": [],
+   "excluded_only_by_message": []
+  },
+  "2023-17": {
+   "session": "Sprint Shootout",
+   "messages": [
+    {
+     "message": "CAR 24 (ZHO) LAP DELETED - TRACK LIMITS AT TURN 5 LAP 11 16:49:27",
+     "lap_is_a_kept_best": false
+    }
+   ],
+   "excluded_only_by_message": []
+  },
+  "2023-18": {
+   "session": "Sprint Shootout",
+   "messages": [],
+   "excluded_only_by_message": []
+  },
+  "2023-20": {
+   "session": "Sprint Shootout",
+   "messages": [],
+   "excluded_only_by_message": []
+  },
+  "2024-05": {
+   "session": "Sprint Qualifying",
+   "messages": [],
+   "excluded_only_by_message": []
+  },
+  "2024-06": {
+   "session": "Sprint Qualifying",
+   "messages": [
+    {
+     "message": "CAR 10 (GAS) LAP DELETED - TRACK LIMITS AT TURN 7 LAP 2 16:33:00",
+     "lap_is_a_kept_best": false
+    },
+    {
+     "message": "CAR 24 (ZHO) LAP DELETED - TRACK LIMITS AT TURN 15 LAP 7 16:40:22",
+     "lap_is_a_kept_best": false
+    }
+   ],
+   "excluded_only_by_message": [
+    "SQ1 GAS lap 2"
+   ]
+  },
+  "2024-11": {
+   "session": "Sprint Qualifying",
+   "messages": [
+    {
+     "message": "CAR 77 (BOT) LAP DELETED - TRACK LIMITS AT TURN 1 LAP 7 16:40:45",
+     "lap_is_a_kept_best": false
+    }
+   ],
+   "excluded_only_by_message": []
+  },
+  "2024-19": {
+   "session": "Sprint Qualifying",
+   "messages": [
+    {
+     "message": "CAR 20 (MAG) LAP DELETED - TRACK LIMITS AT TURN 19 LAP 12 17:00:00",
+     "lap_is_a_kept_best": false
+    },
+    {
+     "message": "CAR 43 (COL) LAP DELETED - TRACK LIMITS AT TURN 12 LAP 13 17:09:19 (PIT)",
+     "lap_is_a_kept_best": false
+    }
+   ],
+   "excluded_only_by_message": []
+  },
+  "2024-21": {
+   "session": "Sprint Qualifying",
+   "messages": [],
+   "excluded_only_by_message": []
+  },
+  "2024-23": {
+   "session": "Sprint Qualifying",
+   "messages": [],
+   "excluded_only_by_message": []
+  },
+  "2025-02": {
+   "session": "Sprint Qualifying",
+   "messages": [
+    {
+     "message": "CAR 23 (ALB) LAP DELETED - TRACK LIMITS AT TURN 2 LAP 2 15:32:34",
+     "lap_is_a_kept_best": false
+    },
+    {
+     "message": "CAR 23 (ALB) LAP DELETED - TRACK LIMITS AT TURN 1 LAP 2 15:32:33",
+     "lap_is_a_kept_best": false
+    },
+    {
+     "message": "CAR 5 (BOR) LAP DELETED - TRACK LIMITS AT TURN 2 LAP 4 15:33:56 (PIT)",
+     "lap_is_a_kept_best": false
+    },
+    {
+     "message": "CAR 27 (HUL) LAP DELETED - TRACK LIMITS AT TURN 1 LAP 2 15:33:13",
+     "lap_is_a_kept_best": false
+    },
+    {
+     "message": "CAR 5 (BOR) LAP DELETED - TRACK LIMITS AT TURN 1 LAP 4 15:33:55",
+     "lap_is_a_kept_best": false
+    },
+    {
+     "message": "CAR 30 (LAW) LAP DELETED - TRACK LIMITS AT TURN 9 LAP 6 15:40:42 (PIT)",
+     "lap_is_a_kept_best": false
+    },
+    {
+     "message": "CAR 7 (DOO) LAP DELETED - TRACK LIMITS AT TURN 1 LAP 7 15:40:29",
+     "lap_is_a_kept_best": false
+    },
+    {
+     "message": "CAR 4 (NOR) LAP DELETED - TRACK LIMITS AT TURN 14 LAP 14 16:13:16",
+     "lap_is_a_kept_best": false
+    }
+   ],
+   "excluded_only_by_message": [
+    "SQ1 HUL lap 2",
+    "SQ1 ALB lap 2"
+   ]
+  },
+  "2025-06": {
+   "session": "Sprint Qualifying",
+   "messages": [
+    {
+     "message": "CAR 44 (HAM) LAP DELETED - TRACK LIMITS AT TURN 17 LAP 7 16:42:44",
+     "lap_is_a_kept_best": false
+    },
+    {
+     "message": "CAR 55 (SAI) LAP DELETED - TRACK LIMITS AT TURN 15 LAP 9 16:59:28 (PIT)",
+     "lap_is_a_kept_best": false
+    }
+   ],
+   "excluded_only_by_message": []
+  },
+  "2025-13": {
+   "session": "Sprint Qualifying",
+   "messages": [],
+   "excluded_only_by_message": []
+  },
+  "2025-19": {
+   "session": "Sprint Qualifying",
+   "messages": [
+    {
+     "message": "CAR 18 (STR) LAP DELETED - TRACK LIMITS AT TURN 7 LAP 11 16:57:42",
+     "lap_is_a_kept_best": false
+    }
+   ],
+   "excluded_only_by_message": []
+  },
+  "2025-21": {
+   "session": "Sprint Qualifying",
+   "messages": [],
+   "excluded_only_by_message": []
+  },
+  "2025-23": {
+   "session": "Sprint Qualifying",
+   "messages": [
+    {
+     "message": "CAR 18 (STR) LAP DELETED - TRACK LIMITS AT TURN 1 LAP 8 20:42:07 (PIT)",
+     "lap_is_a_kept_best": false
+    },
+    {
+     "message": "CAR 4 (NOR) LAP DELETED - TRACK LIMITS AT TURN 2 LAP 13 20:57:43 (PIT)",
+     "lap_is_a_kept_best": false
+    }
+   ],
+   "excluded_only_by_message": []
+  },
+  "2026-02": {
+   "session": "Sprint Qualifying",
+   "messages": [],
+   "excluded_only_by_message": []
+  },
+  "2026-04": {
+   "session": "Sprint Qualifying",
+   "messages": [
+    {
+     "message": "CAR 27 (HUL) LAP DELETED - TRACK LIMITS AT TURN 5 LAP 2 16:33:47",
+     "lap_is_a_kept_best": false
+    },
+    {
+     "message": "CAR 41 (LIN) LAP DELETED - TRACK LIMITS AT TURN 17 LAP 4 16:37:09 (PIT)",
+     "lap_is_a_kept_best": false
+    },
+    {
+     "message": "CAR 14 (ALO) LAP DELETED - TRACK LIMITS AT TURN 11 LAP 7 16:41:59",
+     "lap_is_a_kept_best": false
+    }
+   ],
+   "excluded_only_by_message": [
+    "SQ1 HUL lap 2"
+   ]
+  },
+  "2026-05": {
+   "session": "Sprint Qualifying",
+   "messages": [
+    {
+     "message": "CAR 6 (HAD) LAP DELETED - TRACK LIMITS AT TURN 2 LAP 7 16:39:57 (PIT)",
+     "lap_is_a_kept_best": false
+    },
+    {
+     "message": "CAR 12 (ANT) LAP DELETED - TRACK LIMITS AT TURN 8 LAP 12 17:14:34",
+     "lap_is_a_kept_best": false
+    }
+   ],
+   "excluded_only_by_message": [
+    "SQ2 HAD lap 7",
+    "SQ3 ANT lap 12"
+   ]
+  },
+  "2026-09": {
+   "session": "Sprint Qualifying",
+   "messages": [],
+   "excluded_only_by_message": []
+  },
+  "2026-12": {
+   "session": "Sprint Qualifying",
+   "messages": [
+    {
+     "message": "CAR 12 (ANT) LAP DELETED - TRACK LIMITS AT TURN 13 LAP 4 16:34:32 (PIT)",
+     "lap_is_a_kept_best": false
+    },
+    {
+     "message": "CAR 23 (ALB) LAP DELETED - TRACK LIMITS AT TURN 3 LAP 13 16:58:12 (PIT)",
+     "lap_is_a_kept_best": false
+    }
+   ],
+   "excluded_only_by_message": []
+  }
+ },
+ "times": [
+  {
+   "event_id": "2023-04",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 103.987
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 103.789
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 105.352
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "de_vries",
+   "segment": "SQ1",
+   "time_s": 108.18
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 106.951
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 103.561
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 104.843
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 102.82
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ1",
+   "time_s": 104.101
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 103.938
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 104.433
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "perez",
+   "segment": "SQ1",
+   "time_s": 103.858
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 104.179
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 103.763
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 103.622
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "sargeant",
+   "segment": "SQ1",
+   "time_s": 104.042
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 103.879
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 105.436
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 103.288
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "zhou",
+   "segment": "SQ1",
+   "time_s": 105.177
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "albon",
+   "segment": "SQ2",
+   "time_s": 103.376
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "alonso",
+   "segment": "SQ2",
+   "time_s": 102.976
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 103.061
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 103.806
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 102.5
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ2",
+   "time_s": 104.332
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 103.395
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "ocon",
+   "segment": "SQ2",
+   "time_s": 104.088
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "perez",
+   "segment": "SQ2",
+   "time_s": 102.925
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 103.427
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 103.112
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 102.909
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "stroll",
+   "segment": "SQ2",
+   "time_s": 103.375
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 102.417
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "albon",
+   "segment": "SQ3",
+   "time_s": 102.846
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "alonso",
+   "segment": "SQ3",
+   "time_s": 103.01
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "hamilton",
+   "segment": "SQ3",
+   "time_s": 102.502
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 101.697
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "perez",
+   "segment": "SQ3",
+   "time_s": 101.844
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 102.252
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "sainz",
+   "segment": "SQ3",
+   "time_s": 102.287
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "stroll",
+   "segment": "SQ3",
+   "time_s": 103.064
+  },
+  {
+   "event_id": "2023-04",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 101.987
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 66.892
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 66.611
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 67.291
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "de_vries",
+   "segment": "SQ1",
+   "time_s": 66.704
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 66.873
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 67.282
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 66.548
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 67.061
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ1",
+   "time_s": 66.629
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 66.723
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 66.84
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "perez",
+   "segment": "SQ1",
+   "time_s": 66.924
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 67.106
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 66.653
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 66.187
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "sargeant",
+   "segment": "SQ1",
+   "time_s": 67.426
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 66.569
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 66.896
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 66.236
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "zhou",
+   "segment": "SQ1",
+   "time_s": 67.062
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "albon",
+   "segment": "SQ2",
+   "time_s": 66.152
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "alonso",
+   "segment": "SQ2",
+   "time_s": 65.759
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "de_vries",
+   "segment": "SQ2",
+   "time_s": 66.593
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 66.36
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 66.091
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 65.673
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ2",
+   "time_s": 65.73
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 65.699
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "ocon",
+   "segment": "SQ2",
+   "time_s": 65.604
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "perez",
+   "segment": "SQ2",
+   "time_s": 65.836
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 65.434
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "stroll",
+   "segment": "SQ2",
+   "time_s": 65.914
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "tsunoda",
+   "segment": "SQ2",
+   "time_s": 66.369
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 65.371
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "alonso",
+   "segment": "SQ3",
+   "time_s": 65.258
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "hulkenberg",
+   "segment": "SQ3",
+   "time_s": 65.084
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 65.245
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ3",
+   "time_s": 65.912
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 65.01
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "ocon",
+   "segment": "SQ3",
+   "time_s": 65.366
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "perez",
+   "segment": "SQ3",
+   "time_s": 64.933
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "sainz",
+   "segment": "SQ3",
+   "time_s": 65.136
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "stroll",
+   "segment": "SQ3",
+   "time_s": 65.347
+  },
+  {
+   "event_id": "2023-09",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 64.44
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 119.198
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 119.038
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 120.951
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 120.032
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 118.939
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 126.265
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 119.575
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ1",
+   "time_s": 121.079
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 120.436
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 119.884
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "perez",
+   "segment": "SQ1",
+   "time_s": 119.362
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 120.056
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "ricciardo",
+   "segment": "SQ1",
+   "time_s": 120.177
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 120.475
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 119.414
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "sargeant",
+   "segment": "SQ1",
+   "time_s": 120.031
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 120.46
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 120.568
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 118.135
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "zhou",
+   "segment": "SQ1",
+   "time_s": 121.43
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 116.137
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 115.823
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 116.265
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 116.828
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "ocon",
+   "segment": "SQ2",
+   "time_s": 117.051
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "perez",
+   "segment": "SQ2",
+   "time_s": 115.878
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 116.392
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "ricciardo",
+   "segment": "SQ2",
+   "time_s": 117.687
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 117.393
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 116.557
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 115.2
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "gasly",
+   "segment": "SQ3",
+   "time_s": 109.7
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "hamilton",
+   "segment": "SQ3",
+   "time_s": 109.9
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 109.251
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 109.389
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "ocon",
+   "segment": "SQ3",
+   "time_s": 110.494
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "perez",
+   "segment": "SQ3",
+   "time_s": 109.961
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 109.067
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 115.742
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "sainz",
+   "segment": "SQ3",
+   "time_s": 109.081
+  },
+  {
+   "event_id": "2023-12",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 109.056
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 86.862
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 85.936
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 86.449
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 85.829
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 86.424
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 86.45
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "lawson",
+   "segment": "SQ1",
+   "time_s": 86.202
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 86.266
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ1",
+   "time_s": 87.438
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 85.672
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 86.072
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "perez",
+   "segment": "SQ1",
+   "time_s": 86.123
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 85.979
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 85.413
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 85.872
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "sargeant",
+   "segment": "SQ1",
+   "time_s": 115.373
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 86.849
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 86.926
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 85.51
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "zhou",
+   "segment": "SQ1",
+   "time_s": 86.669
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "alonso",
+   "segment": "SQ2",
+   "time_s": 85.344
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "bottas",
+   "segment": "SQ2",
+   "time_s": 86.236
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 85.686
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 85.962
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 85.499
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "lawson",
+   "segment": "SQ2",
+   "time_s": 86.584
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 85.367
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 84.947
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "ocon",
+   "segment": "SQ2",
+   "time_s": 85.51
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "perez",
+   "segment": "SQ2",
+   "time_s": 85.143
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 85.496
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 85.027
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 85.433
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 85.199
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "zhou",
+   "segment": "SQ2",
+   "time_s": 111.399
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "hulkenberg",
+   "segment": "SQ3",
+   "time_s": 85.32
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 85.247
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 84.536
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "perez",
+   "segment": "SQ3",
+   "time_s": 85.382
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 84.454
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 84.841
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "sainz",
+   "segment": "SQ3",
+   "time_s": 85.155
+  },
+  {
+   "event_id": "2023-17",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 84.646
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 96.23
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 96.365
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 96.922
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 96.595
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 96.393
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 96.749
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 95.999
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ1",
+   "time_s": 96.922
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 96.499
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 96.372
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "perez",
+   "segment": "SQ1",
+   "time_s": 96.347
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 96.703
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "ricciardo",
+   "segment": "SQ1",
+   "time_s": 96.737
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 96.281
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 96.268
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "sargeant",
+   "segment": "SQ1",
+   "time_s": 97.186
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 96.575
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 96.945
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 95.997
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "zhou",
+   "segment": "SQ1",
+   "time_s": 96.554
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "albon",
+   "segment": "SQ2",
+   "time_s": 95.947
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "alonso",
+   "segment": "SQ2",
+   "time_s": 96.087
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 95.785
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 95.887
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 95.386
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 95.594
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "ocon",
+   "segment": "SQ2",
+   "time_s": 96.137
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "perez",
+   "segment": "SQ2",
+   "time_s": 95.718
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 95.753
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "ricciardo",
+   "segment": "SQ2",
+   "time_s": 95.978
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 95.847
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 95.542
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "stroll",
+   "segment": "SQ2",
+   "time_s": 96.181
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 95.181
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "zhou",
+   "segment": "SQ2",
+   "time_s": 96.182
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "albon",
+   "segment": "SQ3",
+   "time_s": 95.366
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "gasly",
+   "segment": "SQ3",
+   "time_s": 95.897
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "hamilton",
+   "segment": "SQ3",
+   "time_s": 94.607
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 94.593
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 94.639
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "perez",
+   "segment": "SQ3",
+   "time_s": 95.041
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 94.894
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 95.199
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "sainz",
+   "segment": "SQ3",
+   "time_s": 94.939
+  },
+  {
+   "event_id": "2023-18",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 94.538
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 72.525
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 72.224
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 72.303
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 72.229
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 71.87
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 72.136
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 72.107
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ1",
+   "time_s": 72.058
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 71.824
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 72.388
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "perez",
+   "segment": "SQ1",
+   "time_s": 72.218
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 72.356
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "ricciardo",
+   "segment": "SQ1",
+   "time_s": 72.175
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 71.976
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 71.796
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "sargeant",
+   "segment": "SQ1",
+   "time_s": 72.615
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 72.482
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 72.358
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 71.888
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "zhou",
+   "segment": "SQ1",
+   "time_s": 72.497
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "bottas",
+   "segment": "SQ2",
+   "time_s": 71.872
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 71.822
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 71.476
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 71.752
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 71.473
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ2",
+   "time_s": 71.727
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 71.221
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "perez",
+   "segment": "SQ2",
+   "time_s": 71.23
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 71.648
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "ricciardo",
+   "segment": "SQ2",
+   "time_s": 71.423
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 71.516
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 71.491
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "tsunoda",
+   "segment": "SQ2",
+   "time_s": 71.676
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 71.262
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "hamilton",
+   "segment": "SQ3",
+   "time_s": 70.94
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 71.077
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 70.622
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "perez",
+   "segment": "SQ3",
+   "time_s": 70.756
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 71.189
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "ricciardo",
+   "segment": "SQ3",
+   "time_s": 71.122
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 70.857
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "sainz",
+   "segment": "SQ3",
+   "time_s": 71.126
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "tsunoda",
+   "segment": "SQ3",
+   "time_s": 71.019
+  },
+  {
+   "event_id": "2023-20",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 70.683
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 97.812
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 96.883
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 97.112
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 97.632
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 97.181
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 96.924
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 96.537
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ1",
+   "time_s": 97.033
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 96.384
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 97.72
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "perez",
+   "segment": "SQ1",
+   "time_s": 96.11
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 96.542
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "ricciardo",
+   "segment": "SQ1",
+   "time_s": 97.321
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 97.31
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 96.719
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "sargeant",
+   "segment": "SQ1",
+   "time_s": 97.923
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 96.961
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 97.892
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 96.456
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "zhou",
+   "segment": "SQ1",
+   "time_s": 97.544
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "alonso",
+   "segment": "SQ2",
+   "time_s": 96.119
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "bottas",
+   "segment": "SQ2",
+   "time_s": 96.056
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 96.287
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 96.478
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 95.711
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ2",
+   "time_s": 96.473
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 96.047
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "perez",
+   "segment": "SQ2",
+   "time_s": 95.781
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 95.853
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "ricciardo",
+   "segment": "SQ2",
+   "time_s": 96.553
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 96.345
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 96.052
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "stroll",
+   "segment": "SQ2",
+   "time_s": 96.677
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 95.606
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "zhou",
+   "segment": "SQ2",
+   "time_s": 96.307
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "alonso",
+   "segment": "SQ3",
+   "time_s": 119.915
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "bottas",
+   "segment": "SQ3",
+   "time_s": 121.044
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "hamilton",
+   "segment": "SQ3",
+   "time_s": 119.201
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 120.566
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 117.94
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "perez",
+   "segment": "SQ3",
+   "time_s": 120.375
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 120.99
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "sainz",
+   "segment": "SQ3",
+   "time_s": 120.214
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 120.028
+  },
+  {
+   "event_id": "2024-05",
+   "driver_id": "zhou",
+   "segment": "SQ3",
+   "time_s": 123.537
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 89.858
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 88.192
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 89.36
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 89.185
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 88.736
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 89.04
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 88.537
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ1",
+   "time_s": 88.377
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 87.939
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 88.873
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "perez",
+   "segment": "SQ1",
+   "time_s": 88.681
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 88.056
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "ricciardo",
+   "segment": "SQ1",
+   "time_s": 88.7
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 88.387
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 88.435
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "sargeant",
+   "segment": "SQ1",
+   "time_s": 89.551
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 88.807
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 88.687
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 88.194
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "zhou",
+   "segment": "SQ1",
+   "time_s": 89.267
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "alonso",
+   "segment": "SQ2",
+   "time_s": 88.189
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 88.371
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 88.33
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 87.977
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ2",
+   "time_s": 88.614
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 87.597
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "ocon",
+   "segment": "SQ2",
+   "time_s": 88.379
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "perez",
+   "segment": "SQ2",
+   "time_s": 87.865
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 88.163
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "ricciardo",
+   "segment": "SQ2",
+   "time_s": 88.122
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 88.343
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 88.262
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "stroll",
+   "segment": "SQ2",
+   "time_s": 88.323
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "tsunoda",
+   "segment": "SQ2",
+   "time_s": 121.887
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 88.001
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "alonso",
+   "segment": "SQ3",
+   "time_s": 88.419
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "hulkenberg",
+   "segment": "SQ3",
+   "time_s": 88.476
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 87.749
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 88.472
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "perez",
+   "segment": "SQ3",
+   "time_s": 87.876
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 88.161
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "ricciardo",
+   "segment": "SQ3",
+   "time_s": 88.044
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "sainz",
+   "segment": "SQ3",
+   "time_s": 88.103
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "stroll",
+   "segment": "SQ3",
+   "time_s": 88.375
+  },
+  {
+   "event_id": "2024-06",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 87.641
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 66.754
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 66.487
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 66.725
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 66.465
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 66.504
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 66.583
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 66.149
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ1",
+   "time_s": 66.387
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 65.786
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 66.343
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "perez",
+   "segment": "SQ1",
+   "time_s": 66.256
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 66.081
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "ricciardo",
+   "segment": "SQ1",
+   "time_s": 66.581
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 65.764
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 65.781
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "sargeant",
+   "segment": "SQ1",
+   "time_s": 66.518
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 66.037
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 66.557
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 65.69
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "zhou",
+   "segment": "SQ1",
+   "time_s": 67.197
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "alonso",
+   "segment": "SQ2",
+   "time_s": 65.878
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 65.757
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 65.539
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 65.526
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ2",
+   "time_s": 65.806
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 65.561
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "ocon",
+   "segment": "SQ2",
+   "time_s": 65.686
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "perez",
+   "segment": "SQ2",
+   "time_s": 65.612
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 65.379
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 65.325
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 65.435
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "sargeant",
+   "segment": "SQ2",
+   "time_s": 92.486
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "stroll",
+   "segment": "SQ2",
+   "time_s": 65.847
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "tsunoda",
+   "segment": "SQ2",
+   "time_s": 65.96
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 65.186
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "gasly",
+   "segment": "SQ3",
+   "time_s": 66.624
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "hamilton",
+   "segment": "SQ3",
+   "time_s": 65.27
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 64.779
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "ocon",
+   "segment": "SQ3",
+   "time_s": 66.101
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "perez",
+   "segment": "SQ3",
+   "time_s": 66.008
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 64.987
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 65.054
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "sainz",
+   "segment": "SQ3",
+   "time_s": 65.126
+  },
+  {
+   "event_id": "2024-11",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 64.686
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 95.054
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 94.436
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 95.148
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "colapinto",
+   "segment": "SQ1",
+   "time_s": 94.606
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 94.865
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 93.84
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 94.825
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "lawson",
+   "segment": "SQ1",
+   "time_s": 94.617
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 93.647
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ1",
+   "time_s": 94.403
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 93.919
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 94.917
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "perez",
+   "segment": "SQ1",
+   "time_s": 94.333
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 94.881
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 94.125
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 94.109
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 94.324
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 94.646
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 93.908
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "zhou",
+   "segment": "SQ1",
+   "time_s": 96.472
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "alonso",
+   "segment": "SQ2",
+   "time_s": 130.919
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "colapinto",
+   "segment": "SQ2",
+   "time_s": 93.952
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 94.363
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 93.37
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 93.994
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "lawson",
+   "segment": "SQ2",
+   "time_s": 125.969
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 93.392
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ2",
+   "time_s": 93.788
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 93.566
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "perez",
+   "segment": "SQ2",
+   "time_s": 94.244
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 93.544
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 93.274
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "stroll",
+   "segment": "SQ2",
+   "time_s": 129.637
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "tsunoda",
+   "segment": "SQ2",
+   "time_s": 94.052
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 93.29
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "colapinto",
+   "segment": "SQ3",
+   "time_s": 94.406
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "hamilton",
+   "segment": "SQ3",
+   "time_s": 93.378
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "hulkenberg",
+   "segment": "SQ3",
+   "time_s": 93.183
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 93.059
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ3",
+   "time_s": 93.398
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 93.083
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 92.845
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "sainz",
+   "segment": "SQ3",
+   "time_s": 93.089
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "tsunoda",
+   "segment": "SQ3",
+   "time_s": 93.802
+  },
+  {
+   "event_id": "2024-19",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 92.833
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 70.366
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 70.978
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "bearman",
+   "segment": "SQ1",
+   "time_s": 70.442
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 70.861
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "colapinto",
+   "segment": "SQ1",
+   "time_s": 70.47
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 70.63
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 70.625
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 70.466
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "lawson",
+   "segment": "SQ1",
+   "time_s": 70.576
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 70.388
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 69.477
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 71.052
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "perez",
+   "segment": "SQ1",
+   "time_s": 70.392
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 70.265
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 70.479
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 70.503
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 71.28
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 71.121
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 70.409
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "zhou",
+   "segment": "SQ1",
+   "time_s": 72.978
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "albon",
+   "segment": "SQ2",
+   "time_s": 69.844
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "bearman",
+   "segment": "SQ2",
+   "time_s": 69.629
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "bottas",
+   "segment": "SQ2",
+   "time_s": 70.595
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "colapinto",
+   "segment": "SQ2",
+   "time_s": 70.275
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 69.61
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 69.941
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 69.964
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "lawson",
+   "segment": "SQ2",
+   "time_s": 69.827
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 69.248
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 69.063
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "perez",
+   "segment": "SQ2",
+   "time_s": 70.024
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 69.239
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 69.683
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 69.5
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 69.489
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "albon",
+   "segment": "SQ3",
+   "time_s": 70.078
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "bearman",
+   "segment": "SQ3",
+   "time_s": 105.747
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "gasly",
+   "segment": "SQ3",
+   "time_s": 69.622
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "lawson",
+   "segment": "SQ3",
+   "time_s": 69.941
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 69.153
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 68.928
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 68.899
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 69.443
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "sainz",
+   "segment": "SQ3",
+   "time_s": 69.257
+  },
+  {
+   "event_id": "2024-21",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 69.219
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 82.705
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 82.499
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 82.506
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "colapinto",
+   "segment": "SQ1",
+   "time_s": 83.423
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 82.586
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 82.151
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 82.569
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "lawson",
+   "segment": "SQ1",
+   "time_s": 82.705
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 82.156
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ1",
+   "time_s": 82.56
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 81.356
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 82.906
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "perez",
+   "segment": "SQ1",
+   "time_s": 82.718
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 82.218
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 82.021
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 81.838
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 82.522
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 82.722
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 82.033
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "zhou",
+   "segment": "SQ1",
+   "time_s": 82.948
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "albon",
+   "segment": "SQ2",
+   "time_s": 82.526
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "alonso",
+   "segment": "SQ2",
+   "time_s": 82.433
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "bottas",
+   "segment": "SQ2",
+   "time_s": 82.538
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 82.352
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 81.734
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 82.318
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "lawson",
+   "segment": "SQ2",
+   "time_s": 82.393
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 81.818
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "kevin_magnussen",
+   "segment": "SQ2",
+   "time_s": 82.738
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 81.231
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 81.548
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 81.488
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 81.809
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "stroll",
+   "segment": "SQ2",
+   "time_s": 82.599
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 81.784
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "gasly",
+   "segment": "SQ3",
+   "time_s": 81.978
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "hamilton",
+   "segment": "SQ3",
+   "time_s": 81.474
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "hulkenberg",
+   "segment": "SQ3",
+   "time_s": 82.088
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "lawson",
+   "segment": "SQ3",
+   "time_s": 82.577
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 81.308
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 81.012
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 81.171
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 81.075
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "sainz",
+   "segment": "SQ3",
+   "time_s": 81.281
+  },
+  {
+   "event_id": "2024-23",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 81.315
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 92.462
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 92.121
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "antonelli",
+   "segment": "SQ1",
+   "time_s": 91.999
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "bearman",
+   "segment": "SQ1",
+   "time_s": 92.269
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "bortoleto",
+   "segment": "SQ1",
+   "time_s": 92.539
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "doohan",
+   "segment": "SQ1",
+   "time_s": 92.575
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 92.64
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "hadjar",
+   "segment": "SQ1",
+   "time_s": 92.171
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 91.212
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 92.855
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "lawson",
+   "segment": "SQ1",
+   "time_s": 92.729
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 91.518
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 91.396
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 92.651
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 91.723
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 91.952
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 92.457
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 92.327
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 92.316
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 91.916
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "albon",
+   "segment": "SQ2",
+   "time_s": 91.539
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "alonso",
+   "segment": "SQ2",
+   "time_s": 91.815
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "antonelli",
+   "segment": "SQ2",
+   "time_s": 91.475
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "bearman",
+   "segment": "SQ2",
+   "time_s": 91.978
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "bortoleto",
+   "segment": "SQ2",
+   "time_s": 92.564
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "hadjar",
+   "segment": "SQ2",
+   "time_s": 124.173
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 91.384
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 91.561
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 91.174
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 91.362
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 91.346
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 92.325
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "stroll",
+   "segment": "SQ2",
+   "time_s": 91.742
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "tsunoda",
+   "segment": "SQ2",
+   "time_s": 91.794
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 91.521
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "albon",
+   "segment": "SQ3",
+   "time_s": 91.852
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "antonelli",
+   "segment": "SQ3",
+   "time_s": 91.738
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "hamilton",
+   "segment": "SQ3",
+   "time_s": 90.849
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 91.057
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 91.393
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 90.929
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 91.169
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "stroll",
+   "segment": "SQ3",
+   "time_s": 91.982
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "tsunoda",
+   "segment": "SQ3",
+   "time_s": 91.773
+  },
+  {
+   "event_id": "2025-02",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 90.867
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 87.859
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 88.455
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "antonelli",
+   "segment": "SQ1",
+   "time_s": 87.858
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "bearman",
+   "segment": "SQ1",
+   "time_s": 89.825
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "bortoleto",
+   "segment": "SQ1",
+   "time_s": 89.312
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "doohan",
+   "segment": "SQ1",
+   "time_s": 89.171
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 88.345
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "hadjar",
+   "segment": "SQ1",
+   "time_s": 88.394
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 88.231
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 88.542
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "lawson",
+   "segment": "SQ1",
+   "time_s": 88.914
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 88.325
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 87.89
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 88.303
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 87.951
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 87.688
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 87.899
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 89.028
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 89.246
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 87.953
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "albon",
+   "segment": "SQ2",
+   "time_s": 87.697
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "alonso",
+   "segment": "SQ2",
+   "time_s": 87.766
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "antonelli",
+   "segment": "SQ2",
+   "time_s": 87.384
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 88.167
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "hadjar",
+   "segment": "SQ2",
+   "time_s": 87.773
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 87.546
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 87.85
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "lawson",
+   "segment": "SQ2",
+   "time_s": 88.375
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 87.467
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 87.109
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "ocon",
+   "segment": "SQ2",
+   "time_s": 88.07
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 87.354
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 87.666
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 114.271
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 87.245
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "albon",
+   "segment": "SQ3",
+   "time_s": 87.193
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "alonso",
+   "segment": "SQ3",
+   "time_s": 87.79
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "antonelli",
+   "segment": "SQ3",
+   "time_s": 86.482
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "hadjar",
+   "segment": "SQ3",
+   "time_s": 87.543
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "hamilton",
+   "segment": "SQ3",
+   "time_s": 87.03
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 86.808
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 86.582
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 86.527
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 86.791
+  },
+  {
+   "event_id": "2025-06",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 86.737
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 103.212
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 102.427
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "antonelli",
+   "segment": "SQ1",
+   "time_s": 105.394
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "bearman",
+   "segment": "SQ1",
+   "time_s": 103.024
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "bortoleto",
+   "segment": "SQ1",
+   "time_s": 102.806
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "colapinto",
+   "segment": "SQ1",
+   "time_s": 103.587
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 103.171
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "hadjar",
+   "segment": "SQ1",
+   "time_s": 102.711
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 103.408
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 103.217
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "lawson",
+   "segment": "SQ1",
+   "time_s": 102.897
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 102.763
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 102.068
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 102.822
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 101.769
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 102.65
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 102.776
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 102.736
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 102.912
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 102.043
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "alonso",
+   "segment": "SQ2",
+   "time_s": 102.453
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "bearman",
+   "segment": "SQ2",
+   "time_s": 102.019
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "bortoleto",
+   "segment": "SQ2",
+   "time_s": 101.901
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 101.949
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "hadjar",
+   "segment": "SQ2",
+   "time_s": 102.088
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "lawson",
+   "segment": "SQ2",
+   "time_s": 102.169
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 101.786
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 101.412
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "ocon",
+   "segment": "SQ2",
+   "time_s": 101.801
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 102.128
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 102.33
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 102.051
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "stroll",
+   "segment": "SQ2",
+   "time_s": 102.832
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "tsunoda",
+   "segment": "SQ2",
+   "time_s": 102.184
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 101.583
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "bearman",
+   "segment": "SQ3",
+   "time_s": 101.857
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "bortoleto",
+   "segment": "SQ3",
+   "time_s": 102.176
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "gasly",
+   "segment": "SQ3",
+   "time_s": 101.959
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "hadjar",
+   "segment": "SQ3",
+   "time_s": 101.971
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 101.278
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 101.128
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "ocon",
+   "segment": "SQ3",
+   "time_s": 101.565
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 100.51
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "sainz",
+   "segment": "SQ3",
+   "time_s": 101.761
+  },
+  {
+   "event_id": "2025-13",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 100.987
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 94.472
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 94.737
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "antonelli",
+   "segment": "SQ1",
+   "time_s": 94.414
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "bearman",
+   "segment": "SQ1",
+   "time_s": 95.159
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "bortoleto",
+   "segment": "SQ1",
+   "time_s": 130.734
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "colapinto",
+   "segment": "SQ1",
+   "time_s": 95.246
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 95.144
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "hadjar",
+   "segment": "SQ1",
+   "time_s": 94.243
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 94.226
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 94.236
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "lawson",
+   "segment": "SQ1",
+   "time_s": 94.603
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 94.913
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 93.224
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 96.003
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 93.889
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 94.653
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 94.239
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 94.988
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 95.259
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 93.363
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "albon",
+   "segment": "SQ2",
+   "time_s": 93.831
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "alonso",
+   "segment": "SQ2",
+   "time_s": 93.951
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "antonelli",
+   "segment": "SQ2",
+   "time_s": 94.018
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 94.258
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "hadjar",
+   "segment": "SQ2",
+   "time_s": 94.241
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 94.012
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 93.577
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "lawson",
+   "segment": "SQ2",
+   "time_s": 124.406
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 93.938
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 93.033
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 93.371
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 93.462
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 93.652
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "stroll",
+   "segment": "SQ2",
+   "time_s": 94.394
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 93.163
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "albon",
+   "segment": "SQ3",
+   "time_s": 93.099
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "alonso",
+   "segment": "SQ3",
+   "time_s": 92.91
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "hamilton",
+   "segment": "SQ3",
+   "time_s": 93.035
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "hulkenberg",
+   "segment": "SQ3",
+   "time_s": 92.645
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 93.104
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 92.214
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 92.523
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 92.888
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "sainz",
+   "segment": "SQ3",
+   "time_s": 92.911
+  },
+  {
+   "event_id": "2025-19",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 92.143
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 70.275
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 70.011
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "antonelli",
+   "segment": "SQ1",
+   "time_s": 70.381
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "bearman",
+   "segment": "SQ1",
+   "time_s": 70.066
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "bortoleto",
+   "segment": "SQ1",
+   "time_s": 70.217
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "colapinto",
+   "segment": "SQ1",
+   "time_s": 70.441
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 70.097
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "hadjar",
+   "segment": "SQ1",
+   "time_s": 70.095
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 70.224
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 70.333
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "lawson",
+   "segment": "SQ1",
+   "time_s": 70.666
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 70.324
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 69.627
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 70.872
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 70.017
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 70.048
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 71.12
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 70.326
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 70.692
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 69.975
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "albon",
+   "segment": "SQ2",
+   "time_s": 69.813
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "alonso",
+   "segment": "SQ2",
+   "time_s": 69.33
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "antonelli",
+   "segment": "SQ2",
+   "time_s": 69.504
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "bearman",
+   "segment": "SQ2",
+   "time_s": 69.946
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "bortoleto",
+   "segment": "SQ2",
+   "time_s": 69.923
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 69.852
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "hadjar",
+   "segment": "SQ2",
+   "time_s": 69.608
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 69.811
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 69.735
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 69.732
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 69.373
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 69.416
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 69.384
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "stroll",
+   "segment": "SQ2",
+   "time_s": 69.647
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 69.707
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "alonso",
+   "segment": "SQ3",
+   "time_s": 69.496
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "antonelli",
+   "segment": "SQ3",
+   "time_s": 69.34
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "hadjar",
+   "segment": "SQ3",
+   "time_s": 69.775
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "hulkenberg",
+   "segment": "SQ3",
+   "time_s": 69.935
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 69.725
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 69.243
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 69.428
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 69.495
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "stroll",
+   "segment": "SQ3",
+   "time_s": 69.671
+  },
+  {
+   "event_id": "2025-21",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 69.58
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 81.721
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 81.276
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "antonelli",
+   "segment": "SQ1",
+   "time_s": 81.555
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "bearman",
+   "segment": "SQ1",
+   "time_s": 81.526
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "bortoleto",
+   "segment": "SQ1",
+   "time_s": 81.623
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "colapinto",
+   "segment": "SQ1",
+   "time_s": 82.364
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 82.112
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "hadjar",
+   "segment": "SQ1",
+   "time_s": 81.399
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 82.043
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 81.327
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "lawson",
+   "segment": "SQ1",
+   "time_s": 81.851
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 81.636
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 81.398
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 81.773
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 81.286
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 81.432
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 81.438
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 81.807
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 81.458
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 81.172
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "albon",
+   "segment": "SQ2",
+   "time_s": 81.212
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "alonso",
+   "segment": "SQ2",
+   "time_s": 81.272
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "antonelli",
+   "segment": "SQ2",
+   "time_s": 81.376
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "bearman",
+   "segment": "SQ2",
+   "time_s": 81.494
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "bortoleto",
+   "segment": "SQ2",
+   "time_s": 81.567
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "hadjar",
+   "segment": "SQ2",
+   "time_s": 81.433
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 81.631
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 81.19
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 80.956
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "ocon",
+   "segment": "SQ2",
+   "time_s": 81.666
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 81.005
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 81.136
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 81.172
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "tsunoda",
+   "segment": "SQ2",
+   "time_s": 81.152
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 81.036
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "albon",
+   "segment": "SQ3",
+   "time_s": 80.788
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "alonso",
+   "segment": "SQ3",
+   "time_s": 80.45
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "antonelli",
+   "segment": "SQ3",
+   "time_s": 80.532
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 80.622
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 80.285
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 80.055
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 80.087
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "sainz",
+   "segment": "SQ3",
+   "time_s": 80.542
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "tsunoda",
+   "segment": "SQ3",
+   "time_s": 80.519
+  },
+  {
+   "event_id": "2025-23",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 80.528
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 95.305
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 95.581
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "antonelli",
+   "segment": "SQ1",
+   "time_s": 93.455
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "bearman",
+   "segment": "SQ1",
+   "time_s": 94.28
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "bortoleto",
+   "segment": "SQ1",
+   "time_s": 94.291
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 97.378
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "colapinto",
+   "segment": "SQ1",
+   "time_s": 94.592
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 93.97
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "hadjar",
+   "segment": "SQ1",
+   "time_s": 94.447
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 93.148
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 93.997
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "lawson",
+   "segment": "SQ1",
+   "time_s": 94.11
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 93.194
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "arvid_lindblad",
+   "segment": "SQ1",
+   "time_s": 94.495
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 93.783
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 94.087
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 93.813
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 93.03
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 94.761
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 96.151
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 94.17
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "antonelli",
+   "segment": "SQ2",
+   "time_s": 92.291
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "bearman",
+   "segment": "SQ2",
+   "time_s": 93.501
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "bortoleto",
+   "segment": "SQ2",
+   "time_s": 93.774
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "colapinto",
+   "segment": "SQ2",
+   "time_s": 94.327
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 93.405
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "hadjar",
+   "segment": "SQ2",
+   "time_s": 93.62
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 93.042
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 93.635
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "lawson",
+   "segment": "SQ2",
+   "time_s": 93.714
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 92.602
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "arvid_lindblad",
+   "segment": "SQ2",
+   "time_s": 94.048
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 93.086
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "ocon",
+   "segment": "SQ2",
+   "time_s": 93.639
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 93.038
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 92.241
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 93.564
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "antonelli",
+   "segment": "SQ3",
+   "time_s": 91.809
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "bearman",
+   "segment": "SQ3",
+   "time_s": 93.409
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "gasly",
+   "segment": "SQ3",
+   "time_s": 92.888
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "hadjar",
+   "segment": "SQ3",
+   "time_s": 93.723
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "hamilton",
+   "segment": "SQ3",
+   "time_s": 92.161
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 92.528
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 92.141
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 92.224
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 91.52
+  },
+  {
+   "event_id": "2026-02",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 93.254
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 90.988
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 101.311
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "antonelli",
+   "segment": "SQ1",
+   "time_s": 89.312
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "bearman",
+   "segment": "SQ1",
+   "time_s": 90.614
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "bortoleto",
+   "segment": "SQ1",
+   "time_s": 90.561
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 91.826
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "colapinto",
+   "segment": "SQ1",
+   "time_s": 90.386
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 89.984
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "hadjar",
+   "segment": "SQ1",
+   "time_s": 90.352
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 89.255
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 90.27
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "lawson",
+   "segment": "SQ1",
+   "time_s": 91.043
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 88.733
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "arvid_lindblad",
+   "segment": "SQ1",
+   "time_s": 90.872
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 88.723
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 91.245
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "perez",
+   "segment": "SQ1",
+   "time_s": 91.255
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 89.169
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 89.659
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 90.987
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 121.708
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 89.801
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "albon",
+   "segment": "SQ2",
+   "time_s": 90.216
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "antonelli",
+   "segment": "SQ2",
+   "time_s": 89.209
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "bearman",
+   "segment": "SQ2",
+   "time_s": 90.116
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "bortoleto",
+   "segment": "SQ2",
+   "time_s": 89.994
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "colapinto",
+   "segment": "SQ2",
+   "time_s": 89.527
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 89.973
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "hadjar",
+   "segment": "SQ2",
+   "time_s": 89.75
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 88.841
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 90.019
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 88.333
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "arvid_lindblad",
+   "segment": "SQ2",
+   "time_s": 90.573
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 89.366
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 88.506
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 88.903
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 90.224
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 89.093
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "antonelli",
+   "segment": "SQ3",
+   "time_s": 88.091
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "colapinto",
+   "segment": "SQ3",
+   "time_s": 89.32
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "gasly",
+   "segment": "SQ3",
+   "time_s": 89.474
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "hadjar",
+   "segment": "SQ3",
+   "time_s": 89.422
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "hamilton",
+   "segment": "SQ3",
+   "time_s": 88.618
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 88.239
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 87.869
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 88.108
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 88.493
+  },
+  {
+   "event_id": "2026-04",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 88.461
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 75.76
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "antonelli",
+   "segment": "SQ1",
+   "time_s": 74.01
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "bearman",
+   "segment": "SQ1",
+   "time_s": 75.872
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "bortoleto",
+   "segment": "SQ1",
+   "time_s": 75.801
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 76.866
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "colapinto",
+   "segment": "SQ1",
+   "time_s": 75.484
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 76.642
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "hadjar",
+   "segment": "SQ1",
+   "time_s": 74.541
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 73.889
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 75.673
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 75.006
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "arvid_lindblad",
+   "segment": "SQ1",
+   "time_s": 74.517
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 74.265
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 75.76
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "perez",
+   "segment": "SQ1",
+   "time_s": 76.002
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 74.665
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 74.772
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 75.5
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 76.354
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 74.028
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "antonelli",
+   "segment": "SQ2",
+   "time_s": 73.551
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "bearman",
+   "segment": "SQ2",
+   "time_s": 75.197
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "bortoleto",
+   "segment": "SQ2",
+   "time_s": 74.627
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "colapinto",
+   "segment": "SQ2",
+   "time_s": 74.702
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "hadjar",
+   "segment": "SQ2",
+   "time_s": 74.239
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 73.465
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 74.595
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 73.554
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "arvid_lindblad",
+   "segment": "SQ2",
+   "time_s": 74.14
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 73.957
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "ocon",
+   "segment": "SQ2",
+   "time_s": 74.928
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 73.858
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 73.026
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 74.547
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 74.412
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "antonelli",
+   "segment": "SQ3",
+   "time_s": 73.033
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "hadjar",
+   "segment": "SQ3",
+   "time_s": 73.605
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "hamilton",
+   "segment": "SQ3",
+   "time_s": 73.326
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 73.41
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "arvid_lindblad",
+   "segment": "SQ3",
+   "time_s": 73.737
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 73.28
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 73.299
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 72.965
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "sainz",
+   "segment": "SQ3",
+   "time_s": 74.536
+  },
+  {
+   "event_id": "2026-05",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 73.504
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 90.779
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 92.91
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "antonelli",
+   "segment": "SQ1",
+   "time_s": 89.746
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "bearman",
+   "segment": "SQ1",
+   "time_s": 91.083
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "bortoleto",
+   "segment": "SQ1",
+   "time_s": 90.407
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 92.02
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "colapinto",
+   "segment": "SQ1",
+   "time_s": 90.894
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 90.444
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "hadjar",
+   "segment": "SQ1",
+   "time_s": 89.47
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 89.273
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 90.107
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "lawson",
+   "segment": "SQ1",
+   "time_s": 89.85
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 89.38
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "arvid_lindblad",
+   "segment": "SQ1",
+   "time_s": 90.453
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 90.142
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 91.714
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "perez",
+   "segment": "SQ1",
+   "time_s": 91.776
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 89.583
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 89.675
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 91.073
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 92.988
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 89.689
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "albon",
+   "segment": "SQ2",
+   "time_s": 90.65
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "antonelli",
+   "segment": "SQ2",
+   "time_s": 88.846
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "bortoleto",
+   "segment": "SQ2",
+   "time_s": 89.679
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "colapinto",
+   "segment": "SQ2",
+   "time_s": 89.983
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 89.482
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "hadjar",
+   "segment": "SQ2",
+   "time_s": 89.28
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 88.747
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 89.707
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "lawson",
+   "segment": "SQ2",
+   "time_s": 89.067
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 88.922
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "arvid_lindblad",
+   "segment": "SQ2",
+   "time_s": 89.33
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 89.401
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 89.12
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 89.246
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "sainz",
+   "segment": "SQ2",
+   "time_s": 90.197
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 89.242
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "antonelli",
+   "segment": "SQ3",
+   "time_s": 88.387
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "hadjar",
+   "segment": "SQ3",
+   "time_s": 88.835
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "hamilton",
+   "segment": "SQ3",
+   "time_s": 88.376
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "lawson",
+   "segment": "SQ3",
+   "time_s": 88.927
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 88.703
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "arvid_lindblad",
+   "segment": "SQ3",
+   "time_s": 89.367
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 88.74
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 88.772
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 88.733
+  },
+  {
+   "event_id": "2026-09",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 88.697
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "albon",
+   "segment": "SQ1",
+   "time_s": 74.596
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "alonso",
+   "segment": "SQ1",
+   "time_s": 76.014
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "antonelli",
+   "segment": "SQ1",
+   "time_s": 73.668
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "bearman",
+   "segment": "SQ1",
+   "time_s": 74.728
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "bortoleto",
+   "segment": "SQ1",
+   "time_s": 73.73
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "bottas",
+   "segment": "SQ1",
+   "time_s": 75.472
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "colapinto",
+   "segment": "SQ1",
+   "time_s": 74.618
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "gasly",
+   "segment": "SQ1",
+   "time_s": 73.977
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "hamilton",
+   "segment": "SQ1",
+   "time_s": 73.151
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "hulkenberg",
+   "segment": "SQ1",
+   "time_s": 74.284
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "lawson",
+   "segment": "SQ1",
+   "time_s": 73.42
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "leclerc",
+   "segment": "SQ1",
+   "time_s": 73.011
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "arvid_lindblad",
+   "segment": "SQ1",
+   "time_s": 74.057
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "norris",
+   "segment": "SQ1",
+   "time_s": 73.071
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "ocon",
+   "segment": "SQ1",
+   "time_s": 74.503
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "perez",
+   "segment": "SQ1",
+   "time_s": 75.545
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "piastri",
+   "segment": "SQ1",
+   "time_s": 73.126
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "russell",
+   "segment": "SQ1",
+   "time_s": 73.278
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "sainz",
+   "segment": "SQ1",
+   "time_s": 74.738
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "stroll",
+   "segment": "SQ1",
+   "time_s": 75.391
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "tsunoda",
+   "segment": "SQ1",
+   "time_s": 74.49
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "max_verstappen",
+   "segment": "SQ1",
+   "time_s": 73.585
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "albon",
+   "segment": "SQ2",
+   "time_s": 74.294
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "antonelli",
+   "segment": "SQ2",
+   "time_s": 72.511
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "bortoleto",
+   "segment": "SQ2",
+   "time_s": 72.786
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "colapinto",
+   "segment": "SQ2",
+   "time_s": 73.439
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "gasly",
+   "segment": "SQ2",
+   "time_s": 72.72
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "hamilton",
+   "segment": "SQ2",
+   "time_s": 72.445
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "hulkenberg",
+   "segment": "SQ2",
+   "time_s": 73.616
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "lawson",
+   "segment": "SQ2",
+   "time_s": 73.136
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "leclerc",
+   "segment": "SQ2",
+   "time_s": 72.19
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "arvid_lindblad",
+   "segment": "SQ2",
+   "time_s": 72.785
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "norris",
+   "segment": "SQ2",
+   "time_s": 72.189
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "ocon",
+   "segment": "SQ2",
+   "time_s": 73.893
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "piastri",
+   "segment": "SQ2",
+   "time_s": 72.026
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "russell",
+   "segment": "SQ2",
+   "time_s": 72.235
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "tsunoda",
+   "segment": "SQ2",
+   "time_s": 73.145
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "max_verstappen",
+   "segment": "SQ2",
+   "time_s": 72.771
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "antonelli",
+   "segment": "SQ3",
+   "time_s": 71.794
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "bortoleto",
+   "segment": "SQ3",
+   "time_s": 72.583
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "gasly",
+   "segment": "SQ3",
+   "time_s": 72.578
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "hamilton",
+   "segment": "SQ3",
+   "time_s": 72.191
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "leclerc",
+   "segment": "SQ3",
+   "time_s": 71.622
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "arvid_lindblad",
+   "segment": "SQ3",
+   "time_s": 72.737
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "norris",
+   "segment": "SQ3",
+   "time_s": 71.608
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "piastri",
+   "segment": "SQ3",
+   "time_s": 71.666
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "russell",
+   "segment": "SQ3",
+   "time_s": 71.567
+  },
+  {
+   "event_id": "2026-12",
+   "driver_id": "max_verstappen",
+   "segment": "SQ3",
+   "time_s": 72.094
+  }
+ ]
+}

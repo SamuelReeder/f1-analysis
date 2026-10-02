@@ -1,0 +1,240 @@
+{
+ "model": "total-dry-race-pace-carstate-v1",
+ "design": "Pre-registered in docs/race_car_state.md; v1 folds, targets, baseline and gate",
+ "folds": [
+  "2024-10",
+  "2025-10",
+  "2026-07"
+ ],
+ "fits": {
+  "2024-10": {
+   "full": {
+    "key": "1b9b979d2e6ba05e132a88b5b940dbf857913b7f7c761aa48a56fb240a3a94e3",
+    "diagnostics": {
+     "rhat_max": 1.0216971635818481,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "attempts": [
+     {
+      "rhat_max": 1.0216971635818481,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true,
+      "seconds": 581.5
+     }
+    ],
+    "data_as_of": "2024-08",
+    "n_laps": 85041,
+    "n_races": 98
+   },
+   "no_car": {
+    "key": "d5ad8f2d6790e87b65182c7e08868858b92f9be5a35c9a32a33122227b685908",
+    "diagnostics": {
+     "rhat_max": 1.0036437511444092,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "attempts": [
+     {
+      "rhat_max": 1.0036437511444092,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true,
+      "seconds": 1240.7,
+      "worst_parameters": [
+       {
+        "parameter": "form",
+        "rhat": 1.0036437511444092
+       },
+       {
+        "parameter": "form_z",
+        "rhat": 1.0036320686340332
+       },
+       {
+        "parameter": "skill",
+        "rhat": 1.0032949447631836
+       },
+       {
+        "parameter": "sd_day",
+        "rhat": 1.0028629302978516
+       },
+       {
+        "parameter": "wear_z",
+        "rhat": 1.0027097463607788
+       }
+      ]
+     }
+    ],
+    "data_as_of": "2024-08",
+    "n_laps": 85041,
+    "n_races": 98
+   }
+  },
+  "2025-10": {
+   "full": {
+    "key": "efa90d893f9499a7e2051b7a0d7cb2d76be2d14458cde8be5d7445cd1c917236",
+    "diagnostics": {
+     "rhat_max": 1.042819619178772,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "attempts": [
+     {
+      "rhat_max": 1.042819619178772,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true,
+      "seconds": 683.0
+     }
+    ],
+    "data_as_of": "2025-09",
+    "n_laps": 101785,
+    "n_races": 116
+   },
+   "no_car": {
+    "key": "3215a730417bba5adf9ca739a79a378df2dbc52b90a869e8116fe6ad9e763b3b",
+    "diagnostics": {
+     "rhat_max": 1.0077879428863525,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "attempts": [
+     {
+      "rhat_max": 1.0077879428863525,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true,
+      "seconds": 1609.2,
+      "worst_parameters": [
+       {
+        "parameter": "form",
+        "rhat": 1.0077879428863525
+       },
+       {
+        "parameter": "form_z",
+        "rhat": 1.0077358484268188
+       },
+       {
+        "parameter": "skill",
+        "rhat": 1.0074814558029175
+       },
+       {
+        "parameter": "skill_raw",
+        "rhat": 1.0064915418624878
+       },
+       {
+        "parameter": "sd_wear",
+        "rhat": 1.0045967102050781
+       }
+      ]
+     }
+    ],
+    "data_as_of": "2025-09",
+    "n_laps": 101785,
+    "n_races": 116
+   }
+  },
+  "2026-07": {
+   "full": {
+    "key": "1361222799d4c1bf1a1edcfcdc0df0985f60ad98868f97e8f107470c2e39ec1a",
+    "diagnostics": {
+     "rhat_max": 1.031288981437683,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "attempts": [
+     {
+      "rhat_max": 1.031288981437683,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true,
+      "seconds": 734.5
+     }
+    ],
+    "data_as_of": "2026-07",
+    "n_laps": 116521,
+    "n_races": 132
+   },
+   "no_car": {
+    "key": "2e71fdc7a4bc48097b2bddf6ff4cf20bd42f1016c710cc209fcc974a6684768b",
+    "diagnostics": {
+     "rhat_max": 1.0098693370819092,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "attempts": [
+     {
+      "rhat_max": 1.0098693370819092,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true,
+      "seconds": 1339.9,
+      "worst_parameters": [
+       {
+        "parameter": "form",
+        "rhat": 1.0098693370819092
+       },
+       {
+        "parameter": "form_z",
+        "rhat": 1.00979745388031
+       },
+       {
+        "parameter": "skill",
+        "rhat": 1.0097646713256836
+       },
+       {
+        "parameter": "skill_raw",
+        "rhat": 1.0089988708496094
+       },
+       {
+        "parameter": "wear_z",
+        "rhat": 1.0070430040359497
+       }
+      ]
+     }
+    ],
+    "data_as_of": "2026-07",
+    "n_laps": 116521,
+    "n_races": 132
+   }
+  }
+ },
+ "cars": {
+  "n_races": 29,
+  "n_predictions": 295,
+  "mse_difference": -0.0002663700881253829,
+  "mse_difference_ci95": [
+   -0.011758113767502408,
+   0.010398604973402194
+  ],
+  "improves": false,
+  "rmse": 0.37828157292119596,
+  "baseline_rmse": 0.37903240621496187,
+  "coverage90": 0.8847457627118644,
+  "mean_interval_width": 1.1459963928642705,
+  "baseline_interval_width": 1.1150088872067612,
+  "calibrated": true,
+  "sharper": false,
+  "passed": false
+ },
+ "units": "percent of lap time; MSE in percent squared"
+}

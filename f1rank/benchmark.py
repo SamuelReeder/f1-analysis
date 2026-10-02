@@ -153,11 +153,16 @@ def paired(d: np.ndarray, rng) -> dict:
 
 
 def main() -> None:
+    from .qualifying import unconverged_folds
     R = race_orders()
     drivers = sorted(R.driver_id.unique())
     rng = np.random.default_rng(0)
     rows = []
+    excluded = [S for S in unconverged_folds() if FIRST_TEST <= S <= R.season.max()]
     for S in range(FIRST_TEST, R.season.max() + 1):
+        if S in excluded:
+            print(f"held out {S}: left out, its qualifying fold did not converge", flush=True)
+            continue
         fold = race_orders(S)
         train, test = fold[fold.season < S], fold[fold.season == S]
         per = {}
@@ -171,6 +176,7 @@ def main() -> None:
     H = pd.concat(rows, ignore_index=True)
     W = H.pivot(index="event_id", columns="variant", values="log_lik")
     summary = {"races": int(W.shape[0]), "seasons_held_out": [FIRST_TEST, int(R.season.max())],
+               "excluded_unconverged_qualifying_folds": excluded,
                "per_variant": {v: {"mean_log_lik_per_race": float(H[H.variant == v].log_lik.mean()),
                                    "mean_spearman": float(H[H.variant == v].spearman.mean()),
                                    "teammate_h2h_accuracy": float(H[H.variant == v].h2h_correct.sum()

@@ -110,10 +110,21 @@ def test_legacy_racing_gate_is_never_advertised(tmp_path, monkeypatch):
 def test_refresh_runs_the_entire_pipeline_before_publishing(tmp_path, payload, monkeypatch):
     monkeypatch.setattr(dashboard, "ROOT", tmp_path / "repo")
     calls = []
-    monkeypatch.setattr(dashboard.subprocess, "run", lambda command, **kwargs: calls.append(command[-1]))
+    monkeypatch.setattr(dashboard.subprocess, "run", lambda command, **kwargs: calls.append(command[2]))
     dashboard.run(refresh=True, data_dir=tmp_path)
-    assert calls == ["f1rank.fetch", "f1rank.build", "f1rank.fit", "f1rank.export"]
+    assert calls == ["f1rank.fetch", "f1rank.build", "f1rank.fit", "f1rank.export", "f1rank.forecast",
+                     "f1rank.forecast", "f1rank.asof", "f1rank.asof"]
     assert (tmp_path / "latest.json").exists()
+
+
+def test_refresh_refits_with_the_published_sampler_settings():
+    fit = next(command for stage, command in dashboard.refresh_steps() if stage == "fit")
+    assert fit[3:] == ["--warmup=1500", "--samples=1500", "--chains=4"]
+    published = dashboard.RATINGS / "fit_metadata.json"
+    if not published.exists():
+        pytest.skip("Requires the committed qualifying export")
+    settings = json.loads(published.read_text())["settings"]
+    assert {k: settings[k] for k in dashboard.FIT_SETTINGS} == dashboard.FIT_SETTINGS
 
 
 def test_race_refresh_orders_extraction_and_both_fits_before_publication(tmp_path, payload, monkeypatch):
@@ -126,9 +137,11 @@ def test_race_refresh_orders_extraction_and_both_fits_before_publication(tmp_pat
     dashboard.run(refresh=True, with_races=True, race_python="gpu-python", extract_python="fastf1-python",
                   data_dir=tmp_path)
     assert [c[2] if c[1] == "-m" else "extract" for c in calls] == [
-        "f1rank.fetch", "f1rank.build", "extract", "f1rank.racedata", "f1rank.timeline",
-        "f1rank.fit", "f1rank.export", "f1rank.race_total"]
-    assert calls[2][0] == "fastf1-python"
+        "f1rank.fetch", "f1rank.build", "extract", "extract", "f1rank.racedata", "f1rank.timeline",
+        "f1rank.fit", "f1rank.export", "f1rank.forecast", "f1rank.forecast", "f1rank.asof", "f1rank.asof",
+        "f1rank.race_total"]
+    assert calls[2][0] == calls[3][0] == "fastf1-python"
+    assert calls[3][-1] == "--sprint"
     assert calls[-1] == ["gpu-python", "-m", "f1rank.race_total", "--validate", "--export"]
     assert (tmp_path / "latest.json").exists()
 
@@ -148,7 +161,9 @@ def test_qualifying_refresh_keeps_existing_race_export_current_and_failure_prese
     monkeypatch.setattr(dashboard.subprocess, "run", execute)
     with pytest.raises(RuntimeError, match="Race fitting failed"):
         dashboard.run(refresh=True, data_dir=tmp_path)
-    assert [c[2] for c in calls] == ["f1rank.fetch", "f1rank.build", "f1rank.fit", "f1rank.export", "f1rank.race_total"]
+    assert [c[2] for c in calls] == ["f1rank.fetch", "f1rank.build", "f1rank.fit", "f1rank.export",
+                                     "f1rank.forecast", "f1rank.forecast", "f1rank.asof", "f1rank.asof",
+                                     "f1rank.race_total"]
     assert (tmp_path / "latest.json").read_bytes() == before
     status = json.loads((tmp_path / "status.json").read_text())
     assert status["state"] == "failed" and status["stage"] == "race_total"
@@ -185,6 +200,23 @@ def test_export_rejects_mismatched_portable_fit_identity(monkeypatch):
     monkeypatch.setattr(dashboard, "read_json", read)
     with pytest.raises(ValueError, match="portable fit metadata"):
         dashboard.build_payload()
+
+
+def test_breakdown_adds_car_and_driver_draw_by_draw():
+    # Opposite shared draws cancel in the total, so its interval is tight.
+    shared = np.linspace(-1, 1, 401)
+    in_team = np.column_stack([.1 + shared, -.1 + shared])
+    car = np.column_stack([.5 - shared, -.5 - shared])
+    rows = dashboard.breakdown(["a", "b"], ["x", "y"], in_team, car, {"a": "y", "b": "x"})
+    assert [r["id"] for r in rows] == ["b", "a"]
+    b = rows[0]
+    assert b["car"] == pytest.approx(.5) and b["driver"] == pytest.approx(-.1)
+    assert b["total"]["q05"] == pytest.approx(.4) and b["total"]["q95"] == pytest.approx(.4)
+    # Published full-posterior medians replace the thinned draws' medians for the parts.
+    rows = dashboard.breakdown(["a", "b"], ["x", "y"], in_team, car, {"a": "y", "b": "x"},
+                               {"drivers": {"b": -.12}, "cars": {"x": .52}})
+    assert rows[0]["driver"] == -.12 and rows[0]["car"] == .52
+    assert rows[1]["driver"] == pytest.approx(.1)
 
 
 def test_race_ranks_preserve_covariance_and_use_seconds():
@@ -227,6 +259,25 @@ def test_race_ranking_requires_predictive_and_uncertainty_evidence(race_release)
     check(race_release)  # The supported driver table can be published independently.
 
 
+def test_race_season_history_follows_the_same_gates(race_release):
+    from copy import deepcopy
+    from f1rank.race_publication import check
+    season = dict(season=2025, drivers=deepcopy(race_release["drivers"]), cars=deepcopy(race_release["cars"]))
+    race_release["seasons"] = [season]
+    check(race_release)
+    season["cars"][0]["pace"]["rank_hi"] = 2  # one car cannot rank second of one
+    with pytest.raises(ValueError, match="intervals"):
+        check(race_release)
+    season["cars"][0]["pace"]["rank_hi"] = 1
+    gate = race_release["validation"]["metrics"]["cars"]
+    gate.update(passed=False, coverage90=.8)
+    race_release["cars"] = []
+    with pytest.raises(ValueError, match="Unsupported race pace ranking"):
+        check(race_release)  # a withheld table stays withheld in every season
+    season["cars"] = []
+    check(race_release)
+
+
 def test_race_validation_cannot_use_future_data_or_failed_fit(race_release):
     from f1rank.race_publication import check
     fit = race_release["validation"]["fits"]["2024-10"]["no_driver"]
@@ -264,3 +315,16 @@ def test_race_point_forecasts_exclude_future_random_noise():
     np.testing.assert_allclose(point_prediction(post, meta, entries), [1.4, 1.])
     # A refitted no-driver model predicts identical teammate means, exactly.
     np.testing.assert_array_equal(point_prediction({"package": post["package"]}, meta, entries), [1., 1.])
+
+
+def test_race_feature_results_are_the_recorded_tests_and_refuse_changed_outputs(monkeypatch):
+    from f1rank import dashboard
+    recorded = sorted(p.parent.name for p in (dashboard.ROOT / "outputs/race_features").glob("*/validation.json"))
+    results = dashboard.race_feature_results()
+    assert [r["feature"] for r in results] == recorded
+    for r in results:
+        assert r["metrics"]["cars"]["passed"] in (True, False) and r["document"] == "docs/race_features.md"
+    if recorded:
+        monkeypatch.setattr(dashboard, "digest", lambda path: "changed")
+        with pytest.raises(ValueError, match="Changed recorded output"):
+            dashboard.race_feature_results()

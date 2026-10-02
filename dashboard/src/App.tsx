@@ -3,7 +3,9 @@ import {
   Activity,
   ArrowLeftRight,
   ArrowRight,
+  BookOpen,
   ChevronRight,
+  Target,
   Gauge,
   LoaderCircle,
   RefreshCw,
@@ -21,11 +23,15 @@ import type {
 import Rankings from "./views/Rankings";
 import Compare from "./views/Compare";
 import Health from "./views/Health";
+import Forecasts from "./views/Forecasts";
+import MethodologyPage from "./views/MethodologyPage";
 
 const navigation = [
   { id: "drivers", name: "Drivers", icon: Users },
   { id: "cars", name: "Cars", icon: Gauge },
   { id: "compare", name: "Head to head", icon: ArrowLeftRight },
+  { id: "forecasts", name: "Track record", icon: Target },
+  { id: "methodology", name: "Methodology", icon: BookOpen },
   { id: "health", name: "Model health", icon: Activity },
 ] as const;
 function getRoute(): { view: View; discipline: Discipline } {
@@ -256,6 +262,10 @@ export default function App() {
                 />
               ) : view === "compare" ? (
                 <Compare data={data} metric={metric} setMetric={setMetric} />
+              ) : view === "forecasts" ? (
+                <Forecasts data={data} />
+              ) : view === "methodology" ? (
+                <MethodologyPage data={data} />
               ) : (
                 <Health data={data} run={run} release={release} />
               )}

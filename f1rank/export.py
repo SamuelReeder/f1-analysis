@@ -28,6 +28,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from .artifacts import write_once
 from .design import build_design
 from .fit import FITS, load, load_meta
 from .ratings import (SEC_PER_PCT, car_leaderboard, car_series, driver_leaderboard,
@@ -151,16 +152,6 @@ def pairwise(draws: np.ndarray) -> np.ndarray:
     """Probability of higher latent pace, sharing ties equally (including diagonal)."""
     a, b = draws[:, :, None], draws[:, None, :]
     return (a > b).mean(0) + 0.5 * (a == b).mean(0)
-
-
-def write_once(path: Path, obj: dict) -> bool:
-    """Write JSON to a new file; never overwrite. Returns False if the file exists."""
-    try:
-        with open(path, "x") as f:
-            json.dump(obj, f, indent=1, default=float)
-    except FileExistsError:
-        return False
-    return True
 
 
 if __name__ == "__main__":

@@ -11,7 +11,6 @@ import {
 import type { Dataset, RunStatus, Release } from "../types";
 import { date, pct, download, signed } from "../lib";
 import { Badge, Empty, PageHeading } from "../components";
-import Methodology from "./Methodology";
 
 const gateNames: Record<string, string> = {
   convergence: "Sampler convergence",
@@ -117,6 +116,7 @@ export default function Health({
           </p>
         </div>
       </div>
+      <Updates data={data} />
       {run?.error && (
         <div className="notice warning">
           <TriangleAlert size={18} />
@@ -175,31 +175,38 @@ export default function Health({
             </div>
             <Badge tone="amber">Experimental</Badge>
           </div>
-          {data.racing.map((r) => (
-            <div key={r.name}>
-              <span className="readiness-icon">
-                <Layers3 size={16} />
-              </span>
-              <div>
-                <strong>{r.name}</strong>
-                <details>
-                  <summary>Status details</summary>
-                  <p>{r.reason}</p>
-                  {r.detail && <code>{r.detail}</code>}
-                </details>
-              </div>
-              <Badge tone={r.status === "passed" ? "green" : ""}>
-                {r.status === "stale"
-                  ? "Needs regeneration"
-                  : r.status === "passed"
-                    ? "Checks passed"
-                    : r.status === "experimental"
-                      ? "Experimental"
-                      : "Unavailable"}
-              </Badge>
-            </div>
-          ))}
         </div>
+        <details className="research-group">
+          <summary>
+            In research ({data.racing.length}) · not published as ratings
+          </summary>
+          <div className="readiness">
+            {data.racing.map((r) => (
+              <div key={r.name}>
+                <span className="readiness-icon">
+                  <Layers3 size={16} />
+                </span>
+                <div>
+                  <strong>{r.name}</strong>
+                  <details>
+                    <summary>Status details</summary>
+                    <p>{r.reason}</p>
+                    {r.detail && <code>{r.detail}</code>}
+                  </details>
+                </div>
+                <Badge tone={r.status === "passed" ? "green" : ""}>
+                  {r.status === "stale"
+                    ? "Needs regeneration"
+                    : r.status === "passed"
+                      ? "Checks passed"
+                      : r.status === "experimental"
+                        ? "Experimental"
+                        : "Unavailable"}
+                </Badge>
+              </div>
+            ))}
+          </div>
+        </details>
       </section>
       <div className="health-columns">
         <section className="panel">
@@ -289,7 +296,6 @@ export default function Health({
           )}
         </section>
       </div>
-      <Methodology data={data} />
       <section className="panel">
         <div className="panel-heading">
           <div>
@@ -344,6 +350,7 @@ export default function Health({
             New qualifying publications will appear here.
           </Empty>
         )}
+        <RaceArchive data={data} />
       </section>
       <section className="panel">
         <div className="panel-heading">
@@ -412,5 +419,127 @@ export default function Health({
         </dl>
       </section>
     </>
+  );
+}
+
+function Updates({ data }: { data: Dataset }) {
+  const r = data.refresh;
+  const minutes = (s: number) =>
+    s >= 90 ? `${Math.round(s / 60)} min` : `${Math.round(s)} s`;
+  const total = r?.stages.reduce((t, s) => t + s.seconds, 0) || 0;
+  return (
+    <section className="panel" aria-labelledby="updates-title">
+      <div className="panel-heading">
+        <div>
+          <h2 id="updates-title">Updates</h2>
+          <p>
+            Checked every Monday and Tuesday at 06:00 UTC; a new race triggers a
+            full refit
+          </p>
+        </div>
+        {r?.run_url && (
+          <a className="button" href={r.run_url}>
+            Run log
+          </a>
+        )}
+      </div>
+      {r ? (
+        <dl className="release-details">
+          <div>
+            <dt>Latest refit</dt>
+            <dd>
+              {r.event ? `${r.event.race_name} (${r.event.event_id})` : "—"}
+            </dd>
+          </div>
+          <div>
+            <dt>Finished</dt>
+            <dd>
+              {new Date(r.finished_at).toLocaleString()} ·{" "}
+              {r.trigger === "schedule"
+                ? "scheduled"
+                : r.trigger === "workflow_dispatch"
+                  ? "started manually"
+                  : "fitting machine"}
+            </dd>
+          </div>
+          <div>
+            <dt>Duration</dt>
+            <dd>
+              {minutes(total)} ·{" "}
+              {r.stages
+                .filter((s) => s.seconds >= 60)
+                .map((s) => `${s.stage} ${minutes(s.seconds)}`)
+                .join(", ")}
+            </dd>
+          </div>
+          <div>
+            <dt>Race timing</dt>
+            <dd>
+              {r.races ? "Extracted and refitted" : "Not part of this run"}
+            </dd>
+          </div>
+        </dl>
+      ) : (
+        <Empty title="No recorded refit">
+          The first scheduled refresh will record its stages here.
+        </Empty>
+      )}
+    </section>
+  );
+}
+
+function RaceArchive({ data }: { data: Dataset }) {
+  const snaps = [...(data.race_snapshots || [])].reverse();
+  const [i, setI] = useState(0);
+  const snap = snaps[i];
+  if (!snap) return null;
+  return (
+    <div className="archive race-archive">
+      <label>
+        Race pace version
+        <select value={i} onChange={(e) => setI(Number(e.target.value))}>
+          {snaps.map((s, k) => (
+            <option key={`${s.grid_as_of}-${s.fit_id}`} value={k}>
+              {s.data_as_of.event_id} · {s.data_as_of.race_name} ·{" "}
+              {date(s.generated_at)}
+            </option>
+          ))}
+        </select>
+      </label>
+      {snap.passed.drivers ? (
+        <>
+          <div className="archive-top">
+            {snap.drivers.slice(0, 5).map((r, k) => (
+              <div key={r.id}>
+                <span>{k + 1}</span>
+                <strong>{r.name}</strong>
+                <b>{signed(r.pace.median)}s</b>
+              </div>
+            ))}
+          </div>
+          <p className="small-note">
+            Top 5 · dry-race pace
+            {snap.passed.cars ? "" : " · car table withheld in this version"}
+          </p>
+        </>
+      ) : (
+        <p className="small-note">
+          Both race tables were withheld in this version.
+        </p>
+      )}
+      <button
+        className="button"
+        onClick={() =>
+          download(
+            `race_${snap.grid_as_of}_${snap.fit_id}.json`,
+            JSON.stringify(snap, null, 2),
+            "application/json",
+          )
+        }
+      >
+        <ArrowDownToLine size={15} />
+        Race snapshot
+      </button>
+    </div>
   );
 }

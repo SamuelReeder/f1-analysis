@@ -57,6 +57,17 @@ def atomic_json(path: Path, value: dict) -> None:
         Path(name).unlink(missing_ok=True)
 
 
+def write_once(path: Path, obj: dict) -> bool:
+    """Write JSON to a new file; never overwrite. Returns False if the file exists."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        with open(path, "x") as f:
+            json.dump(obj, f, indent=1, default=float)
+    except FileExistsError:
+        return False
+    return True
+
+
 def record(directory: Path, outputs: list[Path], *, model: str, inputs=None,
            details=None, name="manifest.json") -> dict:
     inputs = input_files() if inputs is None else list(inputs)

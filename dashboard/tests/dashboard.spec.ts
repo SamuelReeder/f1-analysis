@@ -80,6 +80,127 @@ test("season trends support absent entrants and car circuit adjustment", async (
   ).toBeVisible();
 });
 
+test("driver charts split car and driver, and history can show estimates after each race", async ({
+  page,
+}) => {
+  const top = current.breakdown![0];
+  const row = page.getByRole("button", {
+    name: new RegExp(
+      `^${current.drivers.find((d) => d.id === top.id)!.name}: car `,
+    ),
+  });
+  await row.focus();
+  await expect(
+    page
+      .locator("#breakdown-title")
+      .locator("xpath=../../..")
+      .locator(".chart-readout"),
+  ).toContainText("total");
+  await page.getByText("Show as table").first().click();
+  await expect(
+    page.locator(".table-view").first().locator("tbody tr"),
+  ).toHaveCount(current.breakdown!.length);
+  const before = await page
+    .locator(".trend-chart path")
+    .first()
+    .getAttribute("d");
+  await page.getByRole("button", { name: "After each race" }).click();
+  await expect(page.getByText("Estimates after each race")).toBeVisible();
+  const after = await page
+    .locator(".trend-chart path")
+    .first()
+    .getAttribute("d");
+  expect(after).not.toBe(before);
+  await expect(
+    page.getByLabel("Trend season").locator("option"),
+  ).not.toContainText(["All seasons"]);
+});
+
+test("revised history can be shown as rank in each event's field", async ({
+  page,
+}) => {
+  const scale = page.getByLabel("Chart scale");
+  await scale.getByRole("button", { name: "Rank" }).click();
+  await expect(scale.getByRole("button", { name: "Rank" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  const panel = page.locator(".trend-panel").filter({ has: scale });
+  await expect(panel.getByText("RANK IN THE FIELD")).toBeVisible();
+  const point = panel.locator("rect[role='button']").last();
+  await expect(point).toHaveAttribute("aria-label", /P\d+ \(P\d+–P\d+\)/);
+  await point.focus();
+  await expect(panel.locator(".chart-readout")).toContainText(
+    /P\d+ \(P\d+–P\d+\)/,
+  );
+  await page.getByRole("button", { name: "After each race" }).click();
+  await expect(page.getByLabel("Chart scale")).toHaveCount(0);
+});
+
+test("track record shows the forecast published before the next race", async ({
+  page,
+}) => {
+  const upcoming = current.forecast?.next;
+  test.skip(!upcoming, "No forecast for an upcoming race in this release");
+  await page.getByRole("link", { name: "Track record", exact: true }).click();
+  const panel = page.locator("section").filter({
+    has: page.getByRole("heading", {
+      name: `Next race · ${upcoming!.event.race_name}`,
+    }),
+  });
+  await expect(panel).toBeVisible();
+  await expect(
+    panel.getByRole("region", { name: /teammate gaps/ }).locator("tbody tr"),
+  ).toHaveCount(upcoming!.pairs.length);
+  const cars = panel
+    .getByRole("region", { name: /car order/ })
+    .locator("tbody tr");
+  await expect(cars).toHaveCount(upcoming!.cars.length);
+  await expect(cars.first()).toContainText(upcoming!.cars[0].name);
+});
+
+test("track record reports pooled forecast checks and the latest forecast", async ({
+  page,
+}) => {
+  await page.getByRole("link", { name: "Track record", exact: true }).click();
+  const pooled = current.asof!.pooled!;
+  const card = page.locator(".stat-card").filter({
+    hasText: "Teammate gap error",
+  });
+  await expect(card).toContainText(`${pooled.rmse.toFixed(3)}s`);
+  // each baseline comparison is stated only as far as its interval allows
+  await expect(card).toContainText(
+    `${pooled.rmse_zero.toFixed(3)}s for no gap`,
+  );
+  const verdict = (d?: { ci95: [number, number] }) =>
+    !d
+      ? null
+      : d.ci95[1] < 0
+        ? "(model better)"
+        : d.ci95[0] > 0
+          ? "(model worse)"
+          : "(no clear difference)";
+  for (const [d, label] of [
+    [pooled.vs_naive, "for last season’s gap"],
+    [pooled.vs_zero, "for no gap"],
+  ] as const) {
+    const v = verdict(d);
+    if (v) await expect(card).toContainText(`${label} ${v}`);
+  }
+  await expect(
+    page.locator(".chart-legend").filter({ hasText: "No gap" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", {
+      name: `Latest forecast · ${current.asof!.latest!.event.race_name}`,
+    }),
+  ).toBeVisible();
+  await page.getByText("Show as table").click();
+  await expect(page.locator(".table-view tbody tr")).toHaveCount(
+    current.asof!.events.filter((e) => e.n_pairs > 0).length,
+  );
+});
+
 test("comparisons reverse correctly and matrix cells select the actual pair", async ({
   page,
 }) => {
@@ -97,6 +218,11 @@ test("comparisons reverse correctly and matrix cells select the actual pair", as
     .click();
   await expect(page.getByLabel("FIRST DRIVER")).toHaveValue("norris");
   await expect(page.getByLabel("SECOND DRIVER")).toHaveValue("leclerc");
+  await expect(page.locator(".matrix button.teammate")).toHaveCount(
+    current.drivers.flatMap((d) =>
+      current.drivers.filter((o) => o.id !== d.id && o.lineage === d.lineage),
+    ).length,
+  );
   await page.getByRole("button", { name: "Cars", exact: true }).click();
   await expect(page.getByLabel("FIRST CAR")).toHaveValue(current.cars[0].id);
   await expect(page.locator(".matrix tbody tr")).toHaveCount(
@@ -122,9 +248,26 @@ test("health discloses unavailable racing, historical gates and snapshots", asyn
     Object.values(current.validation.gates?.data || {}).filter((v) => !v)
       .length,
   );
-  await expect(page.locator(".archive-top>div")).toHaveCount(5);
+  await expect(page.locator(".archive-top>div").first()).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Updates", exact: true }),
+  ).toBeVisible();
+  // Research models are grouped and collapsed below the published ones.
+  await expect(page.getByText("Status details").first()).toBeHidden();
+  await page.getByText(/^In research \(\d+\)/).click();
+  await expect(page.getByText("Status details").first()).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Methodology", exact: true }),
+  ).toHaveCount(0);
+});
+
+test("methodology has its own page with a reading guide and equations", async ({
+  page,
+}) => {
+  await page.getByRole("link", { name: "Methodology", exact: true }).click();
+  await expect(page).toHaveURL(/#methodology$/);
+  await expect(
+    page.getByRole("heading", { name: "How to read the ratings" }),
   ).toBeVisible();
   await expect(
     page.getByText("A time-varying Bayesian model estimates"),
@@ -282,7 +425,7 @@ test("ranking metrics support browser history, direct links and switching entity
   page,
 }) => {
   const mainNav = page.getByRole("navigation", { name: "Main navigation" });
-  await expect(mainNav.getByRole("link")).toHaveCount(4);
+  await expect(mainNav.getByRole("link")).toHaveCount(6);
   await expect(mainNav.getByRole("link", { name: "Race pace" })).toHaveCount(0);
   await page
     .getByRole("button", { name: "Portable skill Experimental" })
@@ -484,6 +627,25 @@ test("a withheld car race ranking does not hide a supported driver table", async
     page.getByRole("heading", { name: "Car race-pace ranking withheld" }),
   ).toBeVisible();
   await expect(page.locator(".rank-table")).toHaveCount(0);
+  if (current.car_state)
+    await expect(
+      page.getByRole("heading", {
+        name: "Follow-up test: in-season car development",
+      }),
+    ).toBeVisible();
+  // every recorded weekend-information test has a team row on the car view
+  const features = current.race_features ?? [];
+  if (features.length)
+    await expect(
+      page
+        .locator("section")
+        .filter({
+          has: page.getByRole("heading", {
+            name: "Tests of weekend information",
+          }),
+        })
+        .locator("tbody tr"),
+    ).toHaveCount(features.length);
   await expect(
     page.getByRole("button", { name: "Export rankings" }),
   ).toBeDisabled();
@@ -535,6 +697,8 @@ for (const view of [
   "cars",
   "cars/race",
   "compare",
+  "forecasts",
+  "methodology",
   "health",
 ]) {
   test(`${view} has no browser errors, no mobile overflow, and accessible controls`, async ({
@@ -550,7 +714,7 @@ for (const view of [
       .evaluateAll((details) =>
         details.forEach((detail) => detail.setAttribute("open", "")),
       );
-    if (view === "health" || view.endsWith("/race")) {
+    if (view === "methodology" || view.endsWith("/race")) {
       await expect(
         page.locator(".method-equation math").first(),
       ).toBeAttached();

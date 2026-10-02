@@ -156,9 +156,14 @@ def fit(P, drivers, warmup=800, samples=800, **kw) -> dict:
 
 
 def heldout(P: pd.DataFrame, rng) -> dict:
-    from .qualifying import features
+    from .qualifying import features, unconverged_folds
     rows = []
-    for S in sorted(P.season.unique())[2:]:
+    seasons = sorted(P.season.unique())[2:]
+    excluded = [int(S) for S in seasons if S in unconverged_folds()]
+    for S in seasons:
+        if S in excluded:
+            print(f"held out {S}: left out, its qualifying fold did not converge", flush=True)
+            continue
         q = features(int(S))[0].set_index(["event_id", "driver_id"]).driver
         fold = P[P.season <= S].copy()
         fold["quali_gap"] = [q.get((e, a), np.nan) - q.get((e, b), np.nan)
@@ -182,7 +187,7 @@ def heldout(P: pd.DataFrame, rng) -> dict:
     boot = np.array([d[rng.integers(len(d), size=len(d))].mean() for _ in range(N_BOOT)])
     lo, hi = np.percentile(boot, [2.5, 97.5])
     return {"n_races": int(len(d)), "n_teammate_races": int(len(H)), "sq_err_diff_per_race": float(d.mean()),
-            "ci95": [float(lo), float(hi)]}
+            "ci95": [float(lo), float(hi)], "excluded_unconverged_qualifying_folds": excluded}
 
 
 def main() -> None:

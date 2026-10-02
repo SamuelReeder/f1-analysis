@@ -19,7 +19,7 @@ from scipy.stats import spearmanr
 
 from .design import Design, build_design
 from .fit import FITS, common_data_as_of, load, load_meta
-from .jobs import SENS, SYNTH_SOURCE, lfo_cutoffs
+from .jobs import SENS, SYNTH_SOURCE, lfo_cutoffs, lfo_design
 from .ratings import SEC_PER_PCT, driver_leaderboard, flat
 
 ROOT = FITS.parent
@@ -237,21 +237,29 @@ def evaluate_cutoff(design: Design, name: str, cutoff: int, rng, fit_file=None,
 
 
 def evaluate_lfo() -> dict:
-    names = sorted(f.stem for f in FITS.glob("lfo_*.npz") if not f.stem.endswith("_truth"))
-    design = build_design(2010, end_event=common_data_as_of([FITS / f"{n}.npz" for n in names]))
+    """Every leave-future-out cutoff with a converged fit; each fit is checked against the
+    design its job builds from the current data (jobs.lfo_design), so a stale fit fails."""
+    names = {f.stem for f in FITS.glob("lfo_*.npz")}
+    failed = sorted(f.name.removesuffix(".failed.json") for f in FITS.glob("lfo_*.failed.json"))
     rng = np.random.default_rng(0)
-    results = []
-    for name, cutoff in lfo_cutoffs(design).items():
-        if name in names:
-            r = evaluate_cutoff(design, name, cutoff, rng)
-            if r:
-                results.append(r)
+    results, convergence = [], {}
+    for name in lfo_cutoffs(build_design(2010)):
+        if name not in names:
+            continue
+        design, cutoff = lfo_design(name)
+        r = evaluate_cutoff(design, name, cutoff, rng)
+        attempts = load_meta(FITS / f"{name}.npz").get("attempts", [])
+        convergence[name] = attempts[-1]["diagnostics"] if attempts else None
+        if r:
+            results.append(r)
     pairs = pd.DataFrame([row for r in results for row in r["pairs"]])
     tm = pd.DataFrame([{"name": r["name"], **r["teammate"]} for r in results])
     pace = pd.DataFrame([{"name": r["name"], **r["pace"]} for r in results])
     w = tm.n_sessions
     summary = {
         "n_cutoffs": len(results),
+        "excluded_unconverged": failed,
+        "convergence": convergence,
         "teammate_session": {
             **{k: float(np.sqrt(np.average(tm[k] ** 2, weights=w)) * SEC_PER_PCT)
                for k in ("rmse_pred", "rmse_akm", "rmse_naive", "rmse_zero")},

@@ -18,8 +18,9 @@ Team markers use the current colours from [Formula 1’s team directory](https:/
 recorded on 2026-09-30 in `dashboard/src/lib.ts` and keyed by team lineage.
 Historical entries retain that lineage palette. Chart comparisons use red and
 white, with a dashed second series, to stay distinct even for teammates.
-The Methodology section in Model health describes the qualifying model, rating
-definitions, uncertainty, validation limits and publication process.
+The Methodology page opens with a short guide to reading the ratings, then
+describes the qualifying and race models, rating definitions, uncertainty,
+validation limits and publication process.
 
 The Drivers and Cars pages each switch between qualifying and race pace. Driver
 qualifying also offers the experimental portable-skill estimate. Metric links are
@@ -38,12 +39,24 @@ It provides:
 - Driver and car rankings, 90% pace and rank intervals, fastest/top-three
   probabilities, searchable tables, team filters, entry details and CSV downloads.
 - Driver and car history, including former drivers and team lineages, with season
-  selection, uncertainty bands and optional circuit-adjusted car pace.
+  selection, uncertainty bands, circuit codes on the axis, marked team changes and
+  regulation resets, and optional circuit-adjusted car pace. The revised history
+  can also be shown as rank in each event's field (median and 90% range). A toggle
+  switches between revised history (fitted on all races) and estimates after each
+  race (each point fitted only on races up to that event; see below).
+- A car-and-driver chart splitting each driver's expected qualifying pace into
+  their car's part and their own in-team part, and a qualifying-against-race-pace
+  scatter. Driver race pace also has a season-by-season history since 2018.
+- A Track record page scoring forecasts: for each 2026 race, a fit that stops at
+  the previous race predicts that race's qualifying teammate gaps and field order.
+  From October 2026 it also shows the forecast for the season's next race,
+  published before its weekend, and scores those forecasts afterwards.
 - Head-to-head pace differences and a field-wide probability matrix. Differences
   use joint posterior samples, preserving dependence between estimates.
-- Model health: data cutoff, publication and convergence checks, refresh status and
-  errors, per-quality readiness, clearly marked historical validation, source
-  fingerprints, and an archive of as-published estimates.
+- Model health: data cutoff, publication and convergence checks, the latest
+  refit and its stage timings, refresh status and errors, per-quality readiness
+  (research models collapsed), clearly marked historical validation, source
+  fingerprints, and archives of as-published qualifying and race estimates.
 
 Start it from the repository root (Node 18+ and the existing Python environment):
 
@@ -76,8 +89,9 @@ Failed fits or stale exports cannot replace the
 dashboard release. It records stage, elapsed time and errors in
 `dashboard/public/data/status.json`, a run history in `outputs/dashboard/runs.jsonl`,
 and fitting output in `outputs/dashboard/refresh.log`. The local server also detects
-a refresh process that exited without recording its final status. Refreshes are
-explicit; no model-refresh scheduler has been configured.
+a refresh process that exited without recording its final status. On GitHub, a
+scheduled workflow runs the same refresh after each race (see
+[Scheduled refresh after each race](#scheduled-refresh-after-each-race)).
 
 After a race, include the new timing data and timeline in the same update:
 
@@ -89,7 +103,9 @@ After a race, include the new timing data and timeline in the same update:
 This extracts uncached race timing with FastF1, combines the tables, rebuilds the
 incident timeline, then fits and exports both qualifying and race pace before
 publishing. Omitting the environment options uses the current Python environment.
-Race fitting can take hours; completed, unchanged validation fits are checkpointed.
+Race fitting takes about 15–27 minutes per fit (ten fits from scratch: the full model and
+three versions of each of three validation folds); completed, unchanged fits are
+checkpointed and reused, so a refresh with a new race normally refits only the full model.
 
 Dashboard data uses a versioned JSON contract: `latest.json` points to an immutable,
 content-addressed file in `dashboard/public/data/releases/`. The pointer changes only
@@ -119,10 +135,74 @@ npm test -- --workers=2
 ```
 
 Browser tests cover interactions, exports, release adoption and failure handling,
-mobile overflow, browser errors, and automated accessibility checks on all five
+mobile overflow, browser errors, and automated accessibility checks on all seven
 views. `PLAYWRIGHT_CHROMIUM_EXECUTABLE` optionally selects an existing Chromium
 binary. The Python checks cover publication atomicity, corruption, process locking,
 missing provenance, stale racing outputs and statistically correct comparisons.
+
+### Estimates after each race and the track record
+
+The revised history in `outputs/ratings/` is refitted on every race, so a point for
+round 5 also reflects rounds 6 onward. `python -m f1rank.asof` records what the
+data supported at the time instead. The fit for event k uses the same design with
+the likelihood cut after event k−1 (the same mechanism as the leave-future-out
+validation), at 1,000 warm-up and 1,000 draws per chain. Each record,
+`outputs/asof/<event>_<fit id>.json`, holds:
+
+- driver (in-team and portable) and car ratings after event k−1, with 90%
+  intervals and rank ranges, shown by the dashboard's *After each race* history;
+- a forecast of event k's qualifying from that fit, scored against what happened:
+  teammate gaps in each segment (with a fresh one-weekend form draw and the fitted
+  session noise), their 90% interval coverage, and the rank correlation between
+  the predicted (car + circuit + driver) and actual order of each segment.
+
+Records are write-once and only written for converged fits. A fit that fails the
+convergence checks is repeated once at the main fit's chain lengths (1,500 + 1,500)
+with a new seed; the record keeps the failed attempt's diagnostics. If the repeat
+also fails, the event has no record and the refresh continues. The scheduled refresh
+adds one per race (`asof fit --latest`). The 2026 records before October 2026 were
+computed retrospectively with the same code; their fit ids are their creation times.
+`asof summary` pools established pairs (both drivers with at least 10 earlier
+qualifying sessions) into `summary.json`, compared with repeating each pair's gap
+from their latest season together and with a zero gap. Each comparison is the
+difference in mean squared error (model minus baseline) with a 95% interval from
+resampling whole events (4,000 resamples, seed 0). The longer benchmark across
+25 historical cutoffs remains the qualifying model's main validation.
+
+As of 2026-15, 14 races are scored (280 teammate gaps; 2026-15 has no record because
+both of its fits missed the convergence check). The model's teammate-gap error is
+0.476 s, against 0.512 s for last season's gap (difference −0.036 s², 95% interval
+−0.071 to −0.008: the model is better) and 0.479 s for no gap (−0.003 s², −0.022 to
++0.014: no clear difference). Its 90% intervals cover 95.7% of the gaps, slightly
+wide, and the predicted order has a mean rank correlation of 0.74 with each
+segment's actual order. Teammate gaps in a single session are mostly noise, so
+predicting them is hard to do better than predicting none.
+
+`python -m f1rank.forecast next` also publishes a forecast for the season's next race
+before its weekend (from October 2026, the first being 2026-16), from the published main
+fit: `outputs/forecasts/<event>_<fit id>.json`, one per event (a later run, even after a
+refit, leaves the first as published), and only if the race is at least two days away. The fit has no states for that event, so it uses the latest
+event's states plus the model's one-race-ahead terms: a skill-walk step and a
+one-weekend form draw per driver, a within-season car step (Student-t), a one-event car
+variation and the next circuit's adjustment, the fitted lap noise for a new session,
+and the latest lineups. The experience and age trend's one-event change is left out.
+After a season's finale no forecast is made. `forecast score` scores each forecast
+against its qualifying once it has happened, with the after-the-race records' rules,
+into `outputs/forecasts/scores.json`; the Track record page shows the next forecast
+and these scores.
+
+The race-pace export also writes season-by-season estimates since 2018 (each season
+centred on its own rated drivers, revised with all data) and a write-once snapshot
+of the tables as published by each fit, `outputs/snapshots/race/`. A table that
+failed its gate is withheld from both.
+
+The qualifying entries table now also includes drivers who started a race but have
+no qualifying result in Jolpica (30 entries across 2011–2026, for example three
+2026-01 starters). Their `quali_position` is empty and they add no lap
+observation. As in the model's design for a driver without a valid lap, they keep
+a driver state at that event (carried forward by the skill walk), count towards
+experience, and are part of the field that ratings are relative to; previously
+their history had a gap at that event.
 
 ### Publish on push with GitHub Pages
 
@@ -143,7 +223,8 @@ is deployed. A failed build or check leaves the previous deployed site in place.
 GitHub's built-in deployment token is used; no personal token or hosting secret is
 needed. Versions of the official Actions are pinned to verified commit hashes.
 
-**New data and model fitting are separate from website deployment.** Run
+**New data and model fitting are separate from website deployment.** The scheduled
+refresh below does both after each race. To refresh by hand instead, run
 `python -m f1rank.dashboard refresh --races` (with the Python environment options above)
 on the fitting machine after a race weekend,
 then commit the updated `data/processed/` model inputs, `outputs/ratings/` (including
@@ -163,6 +244,74 @@ an unsuccessful deployment cannot update the already-live site's status panel.
 On a static host, publishing is a deployment. Browser checks still run every 30
 seconds, though GitHub Pages caching can delay visibility of a new release.
 
+### Scheduled refresh after each race
+
+`.github/workflows/refresh.yml` runs every Monday and Tuesday at 06:00 UTC on a
+standard GitHub-hosted runner. No GPU is needed: every model in the refresh runs on
+CPU (JAX's CPU backend, four chains in parallel). Each run:
+
+1. restores the raw-data and race-fit cache from the `refresh-cache` release asset;
+2. checks Jolpica for a race newer than the processed data
+   (`python -m f1rank.schedule check`). Without one, the run stops here. A race whose
+   FastF1 timing was not yet available is retried by later runs for up to 10 days;
+3. runs `python -m f1rank.dashboard refresh --races`: fetch and build, FastF1 race
+   and sprint timing, race tables and timeline, the qualifying fit with the
+   published sampler settings (1,500 warm-up and 1,500 draws per chain, 4 chains),
+   export, a forecast of the season's next race (`forecast next`) and the scores of
+   earlier ones (`forecast score`), an after-the-race record (`asof fit --latest`) and
+   its summary, then race
+   pace validation and export. Unchanged race validation fits are reused from the
+   cache, so a normal week refits only the full race model;
+4. runs the Python tests, commits the changed results to `main` as
+   `github-actions[bot]` and starts the Pages deployment. The push fails, and
+   nothing is published, if `main` changed during the run; a failed fit, gate or
+   test likewise stops before the commit;
+5. uploads the updated cache and keeps the refresh log as a run artifact for 30
+   days.
+
+It can also be started from the Actions tab (**Refresh after race weekends → Run
+workflow**), optionally with *force* to refit without a new race.
+
+The refresh does not refit the racing qualities (qualifying-adjusted race pace and tyre
+management, starts, consistency, reliability, pit stops, wet pace, overtaking) or the
+equal-car championship: their held-out fits take GPU hours. Their manifests hash every
+processed table and module, so after the first refresh that adds a race, Model health
+lists them as stale until the racing regeneration (see **Review fixes and
+regeneration**) is rerun on the fitting machine. None of them feeds a published
+ranking; the published race-pace tables come from the race model above, which the
+refresh does refit.
+
+One-time setup, from the fitting machine with the GitHub CLI signed in, seeds the
+cache so the first run does not download every season again:
+
+```bash
+.venv/bin/python -m f1rank.cachestore pack refresh-cache.tar.gz
+gh release create refresh-cache refresh-cache.tar.gz --prerelease --latest=false \
+  --title "Refresh cache" --notes "Raw data and race-fit checkpoints for the scheduled refresh"
+```
+
+The workflow pins its Python dependencies (`requirements/fitting.txt`,
+`requirements/fastf1.txt`) and requests only `contents: write` and `actions: write`.
+GitHub disables schedules in public repositories after 60 days without activity;
+scheduled runs re-enable the workflow through the API to cover the winter break.
+Runner time and memory for a full refit have not yet been measured on GitHub's
+runners; the first scheduled run will record them (Model health shows each stage's
+duration). On the fitting machine (WSL2, 16 cores, 19.5 GB, CPU only for these
+steps, with other fits running alongside), measured on 2026-10-01:
+
+| Step | Time | Peak memory |
+|---|---|---|
+| Qualifying fit, 4 × (1,500 + 1,500) | 27.8 min sampling | over 3.1 GB (not captured at the end) |
+| Qualifying export | 11 s | — |
+| After-the-race fit, 4 × (1,000 + 1,000) | 15–21 min | 5.3 GB, briefly, when samples are gathered (2.1 GB while sampling) |
+| Race validation and export, all fits reused | 10 s | — |
+
+A week with a new race also refits the full race model; its cached fits took
+15.0–26.8 min each on CPU or GPU (`outputs/race_total/cache/*.npz` metadata). A
+standard public-repository runner has 4 CPUs and 16 GB, so the sequential refresh
+should fit within the job's 345-minute limit, but this is an estimate until the
+first run.
+
 ## Pipeline
 
 ```bash
@@ -173,7 +322,7 @@ python3 -m venv .venv && .venv/bin/pip install numpy pandas scipy pyarrow reques
 .venv/bin/python -m f1rank.fit --warmup 1500 --samples 1500   # main fit (~40 min)
 .venv/bin/python -m f1rank.export               # dashboard-ready outputs in outputs/ratings/
 .venv/bin/python -m f1rank.jobs synth-source    # freeze the main fit as the synthetic-truth source
-.venv/bin/python -m f1rank.jobs all             # validation, sensitivity, placebo fits (~5 h)
+.venv/bin/python -m f1rank.jobs all             # validation, sensitivity, placebo fits (hours)
 .venv/bin/python -m f1rank.evaluate all         # scores in outputs/validation/
 .venv/bin/python -m f1rank.compare              # variants vs main model on identical forecasts
 .venv/bin/python -m f1rank.diagnostics          # residual checks on the main fit
@@ -192,9 +341,29 @@ After each qualifying session: `fetch`, `build`, `fit`, `export`.
   model inputs, its data date and training cutoff, and identifiers for every state.
   Draws are only ever matched to the design they were fitted on:
   - `export` refuses a main fit made on older data.
-  - `evaluate` scores each batch of validation fits on the data they were fitted on.
+  - `evaluate` scores each validation fit on the design its job builds from the
+    current data, so a stale fit is rejected.
   - `jobs all` reruns only fits that are missing or stale.
   - `jobs list` shows the status of each fit.
+- **Converged validation fits.** Every validation, sensitivity and synthetic fit uses a
+  fixed retry rule (`jobs.ATTEMPTS`, shared with the racing folds): 4 chains × (700
+  warm-up + 400 draws); if the fit fails the publication convergence checks (R-hat
+  below 1.05 for every parameter, at most one divergence per 1,000 draws), again with
+  longer chains and a new seed (1,400 + 800, then 2,100 + 1,600, then 2,100 + 1,600
+  with target acceptance 0.98). A job whose attempts all fail keeps no fit and is listed
+  as excluded in `lfo_summary.json`. Each leave-future-out design ends with its test
+  season. Before 2026-10 the fits used one attempt and kept every later season in the
+  design; 33 of the 34 earlier leave-future-out and sensitivity fits failed the main
+  fit's convergence check (`analysis/validation_convergence.py`, recorded in
+  `outputs/analysis/validation_convergence/before_retry_rule.json`). In the 24
+  leave-future-out fits the worst car R-hat was 2.37 for later seasons without data,
+  1.45 for the test season and 1.09 for the training period; driver states, which the
+  teammate forecasts use, reached 1.06.
+- **Shared fits.** The validation fit `lfo_end<year>` and the racing fold
+  `quali_fold<year+1>` have the same design and retry rule, so whichever is fitted
+  second is copied from the first after its fingerprint and retry history are checked.
+  If the first failed every attempt, the second is recorded as failed too
+  (`<name>.failed.json` with `same_as`) instead of repeating the same seeds.
 - **Snapshots.** Each export writes `outputs/snapshots/<event>_<model>_<fit id>_export2.json`
   once and never overwrites it, so what was published for each fit is kept.
 - **Failures.** A failed validation job makes `jobs` exit with status 1.
@@ -323,7 +492,10 @@ Azerbaijan GP:
 
 Outputs for the dashboard are in `outputs/ratings/`, and `outputs/snapshots/` keeps what
 was published for each fit. Posterior draws (`outputs/fits/`, several GB) are not
-committed.
+committed. The qualifying validation's fits are `lfo_end<year>.npz` and
+`lfo_mid<year>.npz`; the racing folds' qualifying fits (trained through the season
+before the one they forecast, design ending with that season) are
+`quali_fold<season>.npz`, so regenerating either never replaces the other's inputs.
 
 ## Racing (stage 2)
 
@@ -491,6 +663,33 @@ skill, strategy and machinery. Team-priority and fuel-load differences remain
 possible confounders. Test-race targets are regenerated from the clean laps and
 cached separately. Resampling whole bootstrap rows preserves their shared
 measurement uncertainty across drivers and teams.
+
+The car table failed that test (it predicted later team pace no better than the
+driver-only model, and its intervals under-covered). A pre-registered follow-up,
+[`docs/race_car_state.md`](docs/race_car_state.md), let each car's pace change from
+race to race within a season (`f1rank/race_car_state_model.py`, validated with
+`python -m f1rank.race_car_state --validate` on the same races, baseline and gate).
+It brought coverage to 88.5% but was again no more accurate than the driver-only
+model (MSE difference 95% CI −0.0118 to +0.0104 percent²) and its intervals were
+wider, so under the rule fixed beforehand the car table remains withheld. The
+dashboard shows that recorded result beside the v1 check.
+
+A second pre-registered follow-up, [`docs/race_features.md`](docs/race_features.md),
+tested information published before each race as additions to v1 on the same races
+and gate: race-fuel pace in practice (`longrun`, team and teammate), practice
+speed-trap speed (`traps`) and the number of performance upgrades declared to the FIA
+(`upgrades`, parsed from the FIA's Car Presentation Submissions by
+`extract/fia_upgrades.py`). Practice laps come from `extract/practice.py` and
+`python -m f1rank.race_features build`; each test runs with
+`.venv-gpu/bin/python -m f1rank.race_features validate FEATURE`. The practice
+definitions were amended before their fits, after their covariates showed values no
+car could produce; the amendment is dated in the document. All four tests failed:
+long-run pace came closest (team MSE difference −0.0024 percent², 95% CI −0.0075 to
++0.0032), speed traps made team predictions worse (+0.0044, CI +0.0001 to +0.0098),
+and upgrades and the teammate split changed nothing measurable. No feature is used;
+the dashboard lists the four results on the race views. Sector times were not tested:
+as a weekend covariate they would repeat the practice pace, and a straight-line versus
+cornering split needs a sector-level lap model.
 
 After refreshing the FastF1 race tables and event timeline, run:
 

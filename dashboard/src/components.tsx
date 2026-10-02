@@ -1,3 +1,4 @@
+import { useCallback, useRef, useState } from "react";
 import { Layers3 } from "lucide-react";
 import type { Estimate, Metric } from "./types";
 import { signed } from "./lib";
@@ -130,4 +131,22 @@ export function MetricControl({
       </button>
     </div>
   );
+}
+
+// The rendered width of a chart, so SVG text keeps its real size on any screen.
+export function useWidth(fallback = 900) {
+  const [width, setWidth] = useState(fallback);
+  const observer = useRef<ResizeObserver | null>(null);
+  const ref = useCallback((element: Element | null) => {
+    observer.current?.disconnect();
+    if (!element) return;
+    const update = () =>
+      setWidth(
+        Math.max(280, Math.round(element.getBoundingClientRect().width)),
+      );
+    update();
+    observer.current = new ResizeObserver(update);
+    observer.current.observe(element);
+  }, []);
+  return [ref, width] as const;
 }
