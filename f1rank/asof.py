@@ -139,6 +139,8 @@ def event_design(event_id: str):
 
 def fit_event(event_id: str, attempts: tuple[dict, ...] = (SETTINGS, RETRY)) -> Path | None:
     from .artifacts import diagnostics
+    import gc
+    import jax
     from .fit import _git_commit, _git_dirty, fit, fingerprint
     design, k = event_design(event_id)
     tried = []
@@ -149,7 +151,10 @@ def fit_event(event_id: str, attempts: tuple[dict, ...] = (SETTINGS, RETRY)) -> 
         print(f"{event_id}: attempt {len(tried)} {checked}", flush=True)
         if checked["converged"]:
             break
-        post = None  # release the failed draws before the next attempt
+        # release the failed draws and compiled programs before the longer retry
+        post = None
+        gc.collect()
+        jax.clear_caches()
     else:
         print(f"{event_id}: no record, no attempt passed the convergence checks", flush=True)
         return None
