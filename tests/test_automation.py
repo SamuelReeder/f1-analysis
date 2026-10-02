@@ -137,3 +137,19 @@ def test_forecast_scores_use_established_teammates_and_the_actual_order():
     assert s["order"][0] == dict(segment="Q1", n=len(q1), spearman=1.0)
     future = dict(rec, event={"event_id": "2099-01"})
     assert score_record(design, future) is None and np.isfinite(s["rmse"])
+
+
+def test_the_first_forecast_for_an_event_stands(tmp_path, monkeypatch):
+    import datetime as dt
+    import f1rank.fit
+    import f1rank.forecast as forecast
+    from f1rank.design import build_design
+    monkeypatch.setattr(forecast, "OUT", tmp_path)
+    monkeypatch.setattr(f1rank.fit, "load", lambda *a, **k: (_ for _ in ()).throw(AssertionError("refitted")))
+    season, rnd = (int(x) for x in build_design(2010).events.event_id.iloc[-1].split("-"))
+    schedule = [{"season": str(season), "round": str(rnd + 1), "raceName": "Next", "date": "2099-01-01",
+                 "Circuit": {"circuitId": "monza"}}]
+    first = tmp_path / f"{season}-{rnd + 1:02d}_20000101T000000Z.json"
+    first.write_text("{}")
+    assert forecast.write_next(schedule, dt.date(2098, 12, 1)) == first
+    assert sorted(tmp_path.iterdir()) == [first]

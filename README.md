@@ -169,8 +169,8 @@ from their latest season together and with a zero gap. The longer benchmark acro
 
 `python -m f1rank.forecast next` also publishes a forecast for the season's next race
 before its weekend (from October 2026, the first being 2026-16), from the published main
-fit: `outputs/forecasts/<event>_<fit id>.json`, written once, and only if the race is
-at least two days away. The fit has no states for that event, so it uses the latest
+fit: `outputs/forecasts/<event>_<fit id>.json`, one per event (a later run, even after a
+refit, leaves the first as published), and only if the race is at least two days away. The fit has no states for that event, so it uses the latest
 event's states plus the model's one-race-ahead terms: a skill-walk step and a
 one-weekend form draw per driver, a within-season car step (Student-t), a one-event car
 variation and the next circuit's adjustment, the fitted lap noise for a new session,

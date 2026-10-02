@@ -5,9 +5,10 @@
 
 `next` forecasts the next event of the current season (from Jolpica's schedule) with the
 published main fit (outputs/fits/main.npz, the fit behind outputs/ratings), and writes
-outputs/forecasts/<event>_<fit id>.json once. It refuses to write within two days of the
-race date, so a record exists only if it was made before that weekend's qualifying; the
-git history of the scheduled refresh shows when each was committed.
+outputs/forecasts/<event>_<fit id>.json. There is one forecast per event: a later run,
+even after a refit, leaves the first one as published. It refuses to write within two
+days of the race date, so a record exists only if it was made before that weekend's
+qualifying; the git history of the scheduled refresh shows when each was committed.
 
 The fit has no states for the next event, so they are the latest event's states plus
 the model's one-race-ahead terms, each drawn once per posterior draw:
@@ -123,13 +124,7 @@ def make_forecast(design, post: dict, target: dict, seed: int = 0) -> dict:
 
 def write_next(schedule: list[dict] | None = None, today: dt.date | None = None) -> Path | None:
     from .design import build_design
-    from .fit import FITS, load, load_meta
-    from .artifacts import diagnostics, require_convergence
     design = build_design(2010)
-    path = FITS / "main.npz"
-    post, info = load(path, design)  # refuses a fit made on other data
-    require_convergence(diagnostics(post, info["divergences"]))
-    meta = load_meta(path)
     last = design.events.iloc[-1]
     if schedule is None:
         from .fetch import BASE, _get
@@ -138,10 +133,21 @@ def write_next(schedule: list[dict] | None = None, today: dt.date | None = None)
     if target is None:
         print(f"no forecast: {last.event_id} is the last race of {last.season}")
         return None
+    published = sorted(OUT.glob(f"{target['event_id']}_*.json"))
+    if published:
+        # One forecast per event: the first one published stands, even after a refit.
+        print(f"forecast for {target['event_id']} already published, left unchanged: {published[0].name}")
+        return published[0]
     today = today or dt.datetime.now(dt.timezone.utc).date()
     if (dt.date.fromisoformat(target["date"]) - today).days < MIN_DAYS_BEFORE_RACE:
         print(f"no forecast: {target['event_id']} is on {target['date']}, too close to publish beforehand")
         return None
+    from .artifacts import diagnostics, require_convergence
+    from .fit import FITS, load, load_meta
+    path = FITS / "main.npz"
+    post, info = load(path, design)  # refuses a fit made on other data
+    require_convergence(diagnostics(post, info["divergences"]))
+    meta = load_meta(path)
     out = OUT / f"{target['event_id']}_{meta['created_utc']}.json"
     rec = dict(model=MODEL, event=target,
                trained_through={k: str(last[k]) for k in ("event_id", "race_name", "date")},
@@ -149,10 +155,8 @@ def write_next(schedule: list[dict] | None = None, today: dt.date | None = None)
                fit=dict(fit_id=meta["created_utc"], fingerprint=meta["fingerprint"]),
                created_utc=dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                **make_forecast(design, post, target))
-    if write_once(out, rec):
-        print(f"forecast written: {out.name}")
-    else:
-        print(f"forecast exists, left unchanged: {out.name}")
+    write_once(out, rec)
+    print(f"forecast written: {out.name}")
     return out
 
 
