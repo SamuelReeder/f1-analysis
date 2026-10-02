@@ -2708,6 +2708,11 @@ select {
   height: 8px;
   border-radius: 2px;
 }
+.chart-legend i.legend-dashed {
+  height: 0;
+  border-radius: 0;
+  border-top: 2px dashed var(--muted);
+}
 .chart-legend i.legend-total {
   height: 2px;
   background: var(--ink);

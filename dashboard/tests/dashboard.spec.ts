@@ -164,9 +164,20 @@ test("track record reports pooled forecast checks and the latest forecast", asyn
 }) => {
   await page.getByRole("link", { name: "Track record", exact: true }).click();
   const pooled = current.asof!.pooled!;
+  const card = page.locator(".stat-card").filter({
+    hasText: "Teammate gap error",
+  });
+  await expect(card).toContainText(`${pooled.rmse.toFixed(3)}s`);
+  // the model is compared with the harder baseline too, and says when it is not better
+  await expect(card).toContainText(
+    `${pooled.rmse_zero.toFixed(3)}s for no gap`,
+  );
+  if (pooled.rmse >= pooled.rmse_zero) {
+    await expect(card).toContainText("no more accurate than predicting no gap");
+  }
   await expect(
-    page.locator(".stat-card").filter({ hasText: "Teammate gap error" }),
-  ).toContainText(`${pooled.rmse.toFixed(3)}s`);
+    page.locator(".chart-legend").filter({ hasText: "No gap" }),
+  ).toBeVisible();
   await expect(
     page.getByRole("heading", {
       name: `Latest forecast · ${current.asof!.latest!.event.race_name}`,

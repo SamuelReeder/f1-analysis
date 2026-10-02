@@ -28,13 +28,13 @@ export default function Forecasts({ data }: { data: Dataset }) {
   const p = asof.pooled;
   const events = asof.events.filter((e) => e.n_pairs > 0);
   const circuitOf = new Map(data.events.map((e) => [e.event_id, e.circuit_id]));
-  const vals = events.flatMap((e) => [e.rmse!, e.rmse_naive!]);
+  const vals = events.flatMap((e) => [e.rmse!, e.rmse_naive!, e.rmse_zero!]);
   const hi = Math.max(...vals) * 1.15;
   const step = (W - 95) / Math.max(events.length - 1, 1);
   const x = (i: number) => 65 + i * step;
   const every = Math.max(1, Math.ceil(30 / step));
   const y = (v: number) => 230 - (v / hi) * 200;
-  const path = (key: "rmse" | "rmse_naive") =>
+  const path = (key: "rmse" | "rmse_naive" | "rmse_zero") =>
     events.map((e, i) => `${i ? "L" : "M"}${x(i)},${y(e[key]!)}`).join(" ");
   const latest = asof.latest;
   const pairs = (latest?.pairs || []).filter((r) => r.segment === "Q1");
@@ -56,6 +56,8 @@ export default function Forecasts({ data }: { data: Dataset }) {
           <p className="stat-sub">
             vs {p.rmse_naive.toFixed(3)}s for last season’s gap ·{" "}
             {p.rmse_zero.toFixed(3)}s for no gap
+            {p.rmse >= p.rmse_zero &&
+              " · no more accurate than predicting no gap"}
           </p>
         </div>
         <div className="stat-card">
@@ -191,6 +193,10 @@ export default function Forecasts({ data }: { data: Dataset }) {
               <i style={{ background: "var(--line-strong)" }} />
               Last season’s gap
             </span>
+            <span>
+              <i className="legend-dashed" />
+              No gap
+            </span>
           </div>
         </div>
         <div className="chart-wrap">
@@ -199,7 +205,7 @@ export default function Forecasts({ data }: { data: Dataset }) {
             ref={ref}
             className="trend-chart"
             role="group"
-            aria-label="Forecast error by race for the model and the last-season baseline. Focus a race for values."
+            aria-label="Forecast error by race for the model, the last-season baseline and a no-gap prediction. Focus a race for values."
             onMouseLeave={() => setHover(null)}
           >
             {niceTicks(0, hi).map((v) => (
@@ -216,6 +222,13 @@ export default function Forecasts({ data }: { data: Dataset }) {
                 </text>
               </g>
             ))}
+            <path
+              d={path("rmse_zero")}
+              fill="none"
+              stroke="var(--muted)"
+              strokeWidth="1.5"
+              strokeDasharray="5 4"
+            />
             <path
               d={path("rmse_naive")}
               fill="none"
@@ -269,7 +282,7 @@ export default function Forecasts({ data }: { data: Dataset }) {
                   fill="transparent"
                   tabIndex={0}
                   role="button"
-                  aria-label={`${e.event.race_name}: model ${e.rmse!.toFixed(3)} seconds, last season's gap ${e.rmse_naive!.toFixed(3)} seconds`}
+                  aria-label={`${e.event.race_name}: model ${e.rmse!.toFixed(3)} seconds, last season's gap ${e.rmse_naive!.toFixed(3)} seconds, no gap ${e.rmse_zero!.toFixed(3)} seconds`}
                   onMouseEnter={() => setHover(i)}
                   onFocus={() => setHover(i)}
                   onBlur={() => setHover(null)}
@@ -295,6 +308,7 @@ export default function Forecasts({ data }: { data: Dataset }) {
                 <span>
                   last season’s gap {events[hover].rmse_naive!.toFixed(3)}s
                 </span>
+                <span>no gap {events[hover].rmse_zero!.toFixed(3)}s</span>
                 <span>coverage {pct(events[hover].coverage90!)}</span>
                 <span>order {events[hover].order_spearman?.toFixed(2)}</span>
               </>
@@ -419,13 +433,14 @@ export default function Forecasts({ data }: { data: Dataset }) {
           real teammate gaps, in seconds per 90-second lap. “Last season’s gap”
           repeats each pairing’s mean gap from their latest season together; for
           a new pairing it takes the difference between each driver’s mean gap
-          to their teammates in their latest season. Only pairs of drivers with
-          at least 10 earlier qualifying sessions are scored. Coverage is the
-          share of real gaps inside the 90% predictive interval. Records for
-          2026 races before October 2026 were computed retrospectively with the
-          same code; later records are added by the weekly refresh after each
-          race. The longer historical benchmark (25 cutoffs since 2013) is on
-          Model health.
+          to their teammates in their latest season. “No gap” predicts that
+          teammates are equal; teammate gaps are small and noisy, so it is the
+          harder baseline to beat. Only pairs of drivers with at least 10
+          earlier qualifying sessions are scored. Coverage is the share of real
+          gaps inside the 90% predictive interval. Records for 2026 races before
+          October 2026 were computed retrospectively with the same code; later
+          records are added by the weekly refresh after each race. The longer
+          historical benchmark (25 cutoffs since 2013) is on Model health.
         </p>
         <p>
           From October 2026 the refresh also publishes a forecast for the
