@@ -66,14 +66,22 @@ def _centred(values: pd.Series) -> pd.Series:
     return values - values.groupby(level="event_id").transform("mean")
 
 
-def longrun(practice: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Race-fuel practice pace (docs/race_features.md): team values (centred) and the
-    teammate split, in percent (positive = faster)."""
+def clean_laps(practice: pd.DataFrame) -> pd.DataFrame:
+    """Timed laps by a race entrant that are not in- or out-laps, not deleted, marked
+    accurate and set under green on dry tyres."""
     p = practice.dropna(subset=["driver_id", "team", "lap_time", "stint"])
-    p = p[p.pit_in_time.isna() & p.pit_out_time.isna() & ~p.deleted.fillna(False).astype(bool)
-          & p.is_accurate.fillna(False).astype(bool) & (p.track_status.astype(str) == "1")
-          & p.compound.isin(DRY)]
-    p = p[p.lap_time <= 1.07 * p.groupby(["event_id", "driver_id", "stint"]).lap_time.transform("median")]
+    return p[p.pit_in_time.isna() & p.pit_out_time.isna() & ~p.deleted.fillna(False).astype(bool)
+             & p.is_accurate.fillna(False).astype(bool) & (p.track_status.astype(str) == "1")
+             & p.compound.isin(DRY)]
+
+
+def longrun(practice: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Race-fuel practice pace (docs/race_features.md, as amended): team values (centred)
+    and the teammate split, in percent (positive = faster)."""
+    p = clean_laps(practice)
+    # within 7% of the stint's fastest clean lap (the amendment: a stint median is itself
+    # a cool-down lap when cool-down laps are the majority)
+    p = p[p.lap_time <= 1.07 * p.groupby(["event_id", "driver_id", "stint"]).lap_time.transform("min")]
     runs = p.groupby(["event_id", "driver_id", "team", "stint", "compound"]).lap_time.agg(["size", "mean"])
     runs = runs[runs["size"] >= 5].reset_index()
     drivers_per = runs.groupby(["event_id", "compound"]).driver_id.transform("nunique")
@@ -92,12 +100,16 @@ def longrun(practice: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     return x_car[["longrun"]], x_drv[["longrun_split"]]
 
 
+TRAP_LAPS = 10
+
+
 def traps(practice: pd.DataFrame) -> pd.DataFrame:
-    """Straight-line speed in practice: the team's 90th percentile speed trap minus the
-    event's median team value, per 10 km/h."""
-    p = practice.dropna(subset=["team", "lap_time", "speed_st"])
-    p = p[p.pit_in_time.isna() & p.pit_out_time.isna()]
-    team = p.groupby(["event_id", "team"]).speed_st.quantile(.9)
+    """Straight-line speed in practice (as amended): the 90th percentile of the team's
+    speed-trap readings on clean laps, with at least TRAP_LAPS of them, minus the event's
+    median team value, per 10 km/h."""
+    p = clean_laps(practice).dropna(subset=["speed_st"])
+    g = p.groupby(["event_id", "team"]).speed_st
+    team = g.quantile(.9)[g.size() >= TRAP_LAPS]
     x = ((team - team.groupby(level="event_id").transform("median")) / 10).rename("traps").reset_index()
     x.index = x.event_id + "|" + x.team
     return x[["traps"]]

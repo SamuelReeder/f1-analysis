@@ -112,3 +112,32 @@ one, centred across the teams at the race, divided by 10. Car covariate only.
   includes every passing feature, and the scheduled refresh must then extract the
   feature's data for each new weekend.
 - A feature that fails is recorded here and in the README and is not used.
+
+## Amendment (2026-10-02, before the `longrun` and `traps` fits)
+
+Made after the practice laps were extracted and the two practice covariates computed,
+before any fit with either of them and without looking at any race result. The
+`upgrades` test had already run under the text above, which this amendment does not
+change for it.
+
+The covariates' distributions contained values no car could produce: a team 19.5%
+off the race-fuel median, and a team 60 km/h faster on the straight than the median
+team. The laps behind the most extreme values (no race results were looked at) showed
+two failures of the definitions above, not of the code:
+
+- `longrun`: when cool-down laps are the majority of a stint (push, cool, push,
+  cool), the stint's median is a cool-down lap, so the 7% rule kept them (2023-22,
+  Zhou: a "run" averaging 110 s from laps starting at 85 s). **Amended:** laps more
+  than 7% slower than the stint's *fastest* such lap are removed. Nothing else in the
+  feature changes.
+- `traps`: in a wet session teams set one or two laps on slicks (2024-04, second
+  practice), so a team's 90th percentile came from one or two readings. **Amended:**
+  the laps are the ones `longrun` uses before its run rule (timed, not in- or
+  out-laps, not deleted, marked accurate, under green, on SOFT, MEDIUM or HARD tyres),
+  and a team needs at least 10 of them for a value; otherwise its covariate is 0.
+
+After the amendment the `longrun` team values range from −3.5% to +2.9% (sd 0.82, 796
+team-weekends in 90 weekends), the teammate split from −2.5% to +2.5% (sd 0.46), and
+`traps` from −2.0 to +1.3 per 10 km/h (sd 0.32, 989 team-weekends in 102 weekends).
+The rules were chosen to remove these failures, not to improve any result. The test,
+gate and decision rule are unchanged, and each feature is still run once.

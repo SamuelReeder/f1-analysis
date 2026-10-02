@@ -46,14 +46,36 @@ def test_longrun_ignores_pit_laps_and_neutralised_laps():
     assert "2025-01|A" not in x_car.index  # 4 clean laps left: no run
 
 
+def test_longrun_ignores_a_stint_that_is_mostly_cool_down_laps():
+    # push, cool, push, cool, ...: the stint median is a cool-down lap, so only the
+    # fastest lap is a fair reference (docs/race_features.md, amendment)
+    alternating = [85.0, 120.0, 85.5, 121.0, 86.0, 119.0, 122.0, 118.0]
+    laps = practice_laps([("a1", "A", "SOFT", alternating), ("b1", "B", "SOFT", [88.0] * 6),
+                          ("c1", "C", "SOFT", [88.5] * 6), ("d1", "D", "SOFT", [89.0] * 6)])
+    x_car, _ = rf.longrun(laps)
+    assert "2025-01|A" not in x_car.index  # 3 push laps: no run
+    assert set(x_car.index) == {"2025-01|B", "2025-01|C", "2025-01|D"}
+
+
+def trap_laps(speeds: dict, track_status="1", compound="MEDIUM"):
+    rows = [dict(event_id="2025-01", driver_id=f"{team}1", team=team, stint=1.0, compound=compound,
+                 lap_time=90.0, pit_in_time=np.nan, pit_out_time=np.nan, deleted=False, is_accurate=True,
+                 track_status=track_status, speed_st=float(v)) for team, vs in speeds.items() for v in vs]
+    return pd.DataFrame(rows)
+
+
 def test_traps_are_the_teams_90th_percentile_against_the_median_team():
-    laps = pd.DataFrame(dict(event_id="2025-01", team=["A"] * 10 + ["B"] * 10 + ["C"] * 10,
-                             lap_time=90.0, pit_in_time=np.nan, pit_out_time=np.nan,
-                             speed_st=np.r_[np.arange(300, 310), np.arange(310, 320), np.arange(290, 300)]))
-    x = rf.traps(laps).traps
-    q = {t: np.quantile(v, .9) for t, v in (("A", np.arange(300, 310)), ("B", np.arange(310, 320)),
-                                            ("C", np.arange(290, 300)))}
+    speeds = {"A": np.arange(300, 310), "B": np.arange(310, 320), "C": np.arange(290, 300)}
+    x = rf.traps(trap_laps(speeds)).traps
+    q = {t: np.quantile(v, .9) for t, v in speeds.items()}
     assert x.to_dict() == pytest.approx({f"2025-01|{t}": (v - q["A"]) / 10 for t, v in q.items()})
+
+
+def test_traps_need_ten_clean_dry_laps_per_team():
+    speeds = {"A": np.arange(300, 310), "B": np.arange(310, 319), "C": np.arange(290, 300)}  # B: 9 laps
+    assert set(rf.traps(trap_laps(speeds)).index) == {"2025-01|A", "2025-01|C"}
+    assert rf.traps(trap_laps(speeds, compound="INTERMEDIATE")).empty
+    assert rf.traps(trap_laps(speeds, track_status="4")).empty
 
 
 def test_upgrades_accumulate_within_a_season_and_are_centred():
