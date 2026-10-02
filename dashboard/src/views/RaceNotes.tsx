@@ -399,7 +399,12 @@ export function FeatureTests({
           </p>
         </div>
       </div>
-      <div className="table-scroll">
+      <div
+        className="table-scroll"
+        tabIndex={0}
+        role="region"
+        aria-label="Tests of weekend information; scroll for all columns"
+      >
         <table className="forecast-table">
           <thead>
             <tr>
