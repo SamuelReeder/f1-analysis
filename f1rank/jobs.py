@@ -318,7 +318,7 @@ def main(argv: list[str] | None = None) -> None:
     p.add_argument("cmd", choices=["list", "synth-source", "run", "all"])
     p.add_argument("names", nargs="*")
     p.add_argument("--parallel", type=int, default=4)
-    args = p.parse_args(argv)
+    args = p.parse_intermixed_args(argv)  # names before or after --parallel
 
     if args.cmd == "list":
         for name in job_names():

@@ -256,3 +256,14 @@ def test_cutoff_designs_end_with_their_test_season():
     fold = build_design(2010, end_event=str(events[events.season == 2016].event_id.max()))
     fold = fold.with_cutoff(int(fold.events.loc[fold.events.season < 2016, "event_idx"].max()))
     assert fingerprint(fold) == fingerprint(design)
+
+
+def test_jobs_cli_takes_names_after_the_parallel_option(monkeypatch):
+    from f1rank import jobs
+    seen = {}
+    monkeypatch.setattr(jobs, "up_to_date", lambda name: False)
+    monkeypatch.setattr(jobs, "run_pool", lambda names, parallel: seen.update(names=names, parallel=parallel) or [])
+    monkeypatch.setattr(jobs, "load_meta", lambda path: {})
+    with pytest.raises(SystemExit):  # the stub leaves both jobs out of date
+        jobs.main(["all", "--parallel", "2", "lfo_end2013", "lfo_end2016"])
+    assert seen == {"names": ["lfo_end2013", "lfo_end2016"], "parallel": 2}
