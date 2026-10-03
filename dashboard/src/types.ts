@@ -2,7 +2,7 @@ export type Metric = "headline" | "portable";
 export type View =
   "drivers" | "cars" | "compare" | "forecasts" | "methodology" | "health";
 export type RankingKind = "drivers" | "cars";
-export type Discipline = "qualifying" | "race";
+export type Discipline = "qualifying" | "race" | "overall";
 export interface Estimate {
   q05: number;
   q25?: number;
@@ -127,6 +127,7 @@ export interface Dataset {
   drivers: Driver[];
   cars: Car[];
   race_pace?: RacePace | null;
+  overall?: OverallResult;
   breakdown?: BreakdownRow[];
   asof?: Asof | null;
   forecast?: { next: NextForecast | null; scores: ForecastScores } | null;
@@ -338,4 +339,30 @@ export interface CarState {
   folds: string[];
   cars: RaceValidation & { passed: boolean };
   document: string;
+}
+
+export interface OverallEvidence {
+  recorded_at: string;
+  fit_id: string;
+  data_as_of: string | null;
+  qualities_entered: string[];
+  qualities_selected: string[];
+  qualities_not_entered: string[];
+  quality_decisions: { quality: string; entered: boolean; tested: boolean; reason: string }[];
+  entry_tests: Record<string, { enters?: boolean; not_run?: string; ci95?: number[]; conditioned_on?: string[] }>;
+  excluded_test_seasons: { combined_validation: number[]; heldout_race_stage: number[] };
+  combined_validation: { gate?: boolean; status?: string };
+  heldout_race_stage: Record<string, unknown>;
+  simulated_seasons: number;
+  n_races_simulated: number;
+  driver_error_rates_used: boolean;
+}
+export interface OverallResult {
+  status: "established" | "not established" | "stale" | "unavailable";
+  reason: string;
+  detail?: string;
+  evidence: OverallEvidence | null;
+  standings: { driver_id: string; name: string; points_per_race: number; p_title: number;
+    rank_median: number; rank_lo: number; rank_hi: number }[];
+  contributions: { driver_id: string; name: string; points_per_race: number; losses: Record<string, number> }[];
 }

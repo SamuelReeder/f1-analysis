@@ -21,6 +21,7 @@ import type {
   View,
 } from "./types";
 import Rankings from "./views/Rankings";
+import Overall from "./views/Overall";
 import Compare from "./views/Compare";
 import Health from "./views/Health";
 import Forecasts from "./views/Forecasts";
@@ -45,7 +46,9 @@ function getRoute(): { view: View; discipline: Discipline } {
     discipline:
       (view === "drivers" || view === "cars") && metric === "race"
         ? "race"
-        : "qualifying",
+        : view === "drivers" && metric === "overall"
+          ? "overall"
+          : "qualifying",
   };
 }
 
@@ -169,7 +172,7 @@ export default function App() {
         <nav aria-label="Main navigation">
           {navigation.map((n) => (
             <a
-              href={`#${n.id}${(n.id === "drivers" || n.id === "cars") && discipline === "race" ? "/race" : ""}`}
+              href={`#${n.id}${n.id === "drivers" && discipline === "overall" ? "/overall" : (n.id === "drivers" || n.id === "cars") && discipline === "race" ? "/race" : ""}`}
               key={n.id}
               className={view === n.id ? "active" : ""}
               aria-current={view === n.id ? "page" : undefined}
@@ -251,7 +254,9 @@ export default function App() {
                   Refresh in progress: {run.stage}. Showing the last release.
                 </div>
               )}
-              {view === "drivers" || view === "cars" ? (
+              {view === "drivers" && discipline === "overall" ? (
+                <Overall result={data.overall} />
+              ) : view === "drivers" || view === "cars" ? (
                 <Rankings
                   key={view}
                   data={data}

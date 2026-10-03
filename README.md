@@ -34,6 +34,29 @@ control and selected-entry card. Switching metrics retains the selected entry,
 search and team filter. Metric definitions, evidence counts and validation remain
 specific to the selected metric.
 
+Drivers also offers **Overall (equal car)** (`#drivers/overall`), an experimental
+championship scenario with equal average machinery. It shows expected points per
+race, title probability, simulated season rank ranges, and a selected driver's
+contribution breakdown. The headline retains driver–team effects; it is not a
+universal transferable-skill ranking or a forecast of the actual championship.
+Contributions change each component to the field average separately and all at
+once; correlated contributions must not be added. Wet pace and pit operations
+are not separate driver components, and passing, traffic and strategy are not
+simulated lap by lap. Driver-specific own-error rates enter retirements only
+when their separate gate passes.
+
+The loader reads `outputs/championship/{summary.json,standings.csv,contributions.csv}`
+without fitting or simulating. It requires a current manifest covering every file
+and `summary.combined_validation.gate` to be exactly true, then rechecks provenance
+after reading. Missing, stale, historical or failed evidence never exposes a
+standings or contribution table. Current evidence also lists entered qualities,
+qualities tested but not admitted, tests not run, and the excluded qualifying-fold
+seasons for both combined selection and race-stage validation. Excluded seasons
+may still train later folds. These decisions and every displayed result value
+come from the verified outputs at publication time; they are not copied from the
+historical research notes. Older dashboard releases without this payload show an
+unavailable status until a new release is published.
+
 It provides:
 
 - Driver and car rankings, 90% pace and rank intervals, fastest/top-three
@@ -118,9 +141,10 @@ the publications available at build time; a static host must receive updated `da
 files to show subsequent releases. Serve `latest.json` and `status.json` without caching.
 
 The total driver race-pace ranking is published; the car race-pace table is withheld
-because it did not pass the prediction and interval-coverage checks. Overall race-result
-and equal-car championship standings remain unavailable until the corrected racing
-pipeline is rerun.
+because it did not pass the prediction and interval-coverage checks. Equal-car
+championship standings are withheld until the corrected racing outputs have
+current provenance and pass the combined validation gate. A regeneration alone
+does not establish the ranking.
 Portable skill is explicitly experimental. Historical validation files have no run
 manifest and are shown as recorded research, not as fresh acceptance of a new fit.
 
@@ -135,9 +159,9 @@ npm test -- --workers=2
 ```
 
 Browser tests cover interactions, exports, release adoption and failure handling,
-mobile overflow, browser errors, and automated accessibility checks on all seven
-views. `PLAYWRIGHT_CHROMIUM_EXECUTABLE` optionally selects an existing Chromium
-binary. The Python checks cover publication atomicity, corruption, process locking,
+mobile overflow, browser errors, and automated accessibility checks, including
+passed and not-established equal-car fixtures. `PLAYWRIGHT_CHROMIUM_EXECUTABLE`
+optionally selects an existing Chromium binary. The Python checks cover publication atomicity, corruption, process locking,
 missing provenance, stale racing outputs and statistically correct comparisons.
 
 ### Estimates after each race and the track record
