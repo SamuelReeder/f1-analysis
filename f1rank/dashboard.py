@@ -63,7 +63,7 @@ def comparisons(ids, draws, probabilities=None):
     return result
 
 
-def racing_health():
+def racing_health(overall=None):
     rows = []
     specs = [
         ("Qualifying-adjusted race pace & tyre management", "race/multi_heldout.json", "multi_heldout.manifest.json",
@@ -78,6 +78,12 @@ def racing_health():
         ("Equal-car championship", "championship/summary.json", "manifest.json", []),
     ]
     for label, file, manifest, gates in specs:
+        if file == "championship/summary.json":
+            result = overall if overall is not None else overall_result()
+            rows.append({"name": label, "source": f"outputs/{file}",
+                         "status": {"established": "passed", "not established": "experimental"}.get(
+                             result["status"], result["status"]), "reason": result["reason"]})
+            continue
         path = ROOT / "outputs" / file
         row = {"name": label, "source": f"outputs/{file}", "status": "unavailable",
                "reason": "No published result yet."}
@@ -96,6 +102,117 @@ def racing_health():
             row["detail"] = str(exc).replace(str(ROOT) + "/", "")
         rows.append(row)
     return rows
+
+
+def overall_result():
+    """Publish only a current, validated equal-car scenario; never fall back to legacy results.
+
+    No fitting or simulation happens here. The headline retains driver-team effects;
+    portable standings are deliberately not mixed with its contribution breakdown.
+    """
+    directory = ROOT / "outputs" / "championship"
+    paths = [directory / name for name in ("summary.json", "standings.csv", "contributions.csv")]
+    empty = {"standings": [], "contributions": [], "evidence": None}
+    try:
+        manifest = require(directory, required_outputs=paths)
+        marker = digest(directory / "manifest.json")
+        summary = read_json(paths[0])
+        combined = summary["combined_validation"]
+        entered, selected = summary["qualities_entered"], summary["qualities_selected"]
+        entry = summary["entry_tests"]
+        race_stage = summary["heldout_race_stage"]
+        if (not isinstance(combined, dict) or not isinstance(race_stage, dict)
+                or not isinstance(entry, dict) or any(not isinstance(v, dict) for v in entry.values())
+                or any(not isinstance(names, list) or any(not isinstance(n, str) or not n for n in names)
+                       or len(set(names)) != len(names) for names in (entered, selected))):
+            raise ValueError("Invalid championship validation summary")
+        passed = combined.get("gate") is True
+        if set(entered) != (set(selected) if passed else set()):
+            raise ValueError("Entered qualities disagree with the combined validation gate")
+        if not set(selected) <= entry.keys():
+            raise ValueError("Selected qualities have no entry tests")
+        excluded = {key: value.get("excluded_unconverged_qualifying_folds", [])
+                    for key, value in (("combined_validation", combined), ("heldout_race_stage", race_stage))}
+        if any(not isinstance(years, list) or any(type(y) is not int for y in years)
+               for years in excluded.values()):
+            raise ValueError("Invalid excluded test seasons")
+        decisions = []
+        for name, test in entry.items():
+            if name in entered:
+                reason = "Passed the conditional entry test and the combined held-out validation."
+            elif test.get("not_run"):
+                reason = f"Not tested: {test['not_run']}"
+            elif name in selected:
+                reason = "Selected by the conditional entry test, but the combined held-out validation did not pass."
+            else:
+                reason = "Did not establish an improvement when tested alongside the other candidate qualities."
+            decisions.append({"quality": name, "entered": name in entered,
+                              "tested": not bool(test.get("not_run")), "reason": reason})
+        evidence = {"recorded_at": manifest["generated_at"], "fit_id": manifest["fit_id"],
+                    "data_as_of": manifest.get("data_as_of"),
+                    "qualities_entered": entered, "qualities_selected": selected,
+                    "qualities_not_entered": [d["quality"] for d in decisions if d["tested"] and not d["entered"]],
+                    "quality_decisions": decisions, "entry_tests": entry,
+                    "excluded_test_seasons": excluded, "combined_validation": combined,
+                    "heldout_race_stage": race_stage,
+                    "simulated_seasons": summary["simulated_seasons"],
+                    "n_races_simulated": summary["n_races_simulated"],
+                    "driver_error_rates_used": summary["driver_error_rates_used"]}
+        if (any(type(evidence[k]) is not int or evidence[k] <= 0
+                for k in ("simulated_seasons", "n_races_simulated"))
+                or type(evidence["driver_error_rates_used"]) is not bool):
+            raise ValueError("Invalid championship simulation settings")
+        standings, contributions = [], []
+        if passed:
+            table = pd.read_csv(paths[1], dtype={"driver_id": str, "name": str})
+            columns = ["driver_id", "name", "points_per_race", "p_title", "rank_median", "rank_lo", "rank_hi"]
+            table = table.loc[table.version == "in_team", columns].copy()
+            numeric = columns[2:]
+            table[numeric] = table[numeric].apply(pd.to_numeric, errors="raise")
+            if (table.empty or table.driver_id.duplicated().any() or table[columns[:2]].isna().any().any()
+                    or not np.isfinite(table[numeric].to_numpy()).all()
+                    or not table.p_title.between(0, 1).all() or (table.points_per_race < 0).any()
+                    or (table.rank_lo < 1).any() or (table.rank_hi > len(table)).any()
+                    or (table.rank_lo > table.rank_median).any() or (table.rank_median > table.rank_hi).any()
+                    or ((table[["rank_lo", "rank_hi"]] % 1) != 0).any().any()):
+                raise ValueError("Invalid headline championship standings")
+            table = table.sort_values("points_per_race", ascending=False)
+            components = ["qualifying_pace", *entered, "all"]
+            losses = [f"loss_{name}_at_average" for name in components]
+            parts = pd.read_csv(paths[2], dtype={"driver_id": str, "name": str})[
+                ["driver_id", "name", "points_per_race", *losses]].copy()
+            parts[["points_per_race", *losses]] = parts[["points_per_race", *losses]].apply(pd.to_numeric, errors="raise")
+            if (parts.driver_id.duplicated().any() or parts[["driver_id", "name"]].isna().any().any()
+                    or set(parts.driver_id) != set(table.driver_id)
+                    or not np.isfinite(parts[["points_per_race", *losses]].to_numpy()).all()):
+                raise ValueError("Invalid championship contribution breakdown")
+            standings = table.to_dict("records")
+            parts = parts.set_index("driver_id").loc[table.driver_id].reset_index()
+            contributions = [{"driver_id": r["driver_id"], "name": r["name"],
+                              "points_per_race": r["points_per_race"],
+                              "losses": {name: r[column] for name, column in zip(components, losses)}}
+                             for r in parts.to_dict("records")]
+        # Also recheck failed-gate evidence. A regeneration can replace any file while
+        # it is being read, and its manifest is written last.
+        checked = require(directory, required_outputs=paths)
+        if checked != manifest or digest(directory / "manifest.json") != marker:
+            raise StaleArtifact("Championship outputs changed during publication; retry")
+        result = {"status": "established" if passed else "not established",
+                  "reason": "Combined held-out validation passed; this equal-car scenario remains experimental."
+                  if passed else "The combined held-out validation has not established an overall ranking.",
+                  "standings": standings, "contributions": contributions, "evidence": evidence}
+        json.dumps(result, allow_nan=False)
+        return result
+    except StaleArtifact as exc:
+        present = any(path.exists() for path in paths)
+        return {**empty, "status": "stale" if present else "unavailable",
+                "reason": "Championship provenance is missing or stale. Regeneration is required before a ranking can be shown."
+                if present else "No verified championship results are available yet.",
+                "detail": str(exc).replace(str(ROOT) + "/", "")}
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+        return {**empty, "status": "unavailable",
+                "reason": "The championship output is incomplete or invalid; no ranking can be shown.",
+                "detail": str(exc).replace(str(ROOT) + "/", "")}
 
 
 def breakdown(ids, teams, in_team, car, lineage, medians=None):
@@ -280,6 +397,7 @@ def build_payload():
     require(RATINGS)  # reject a concurrent export or source edit while assembling
     if digest(RATINGS / "manifest.json") != marker:
         raise ValueError("Export changed during publication; retry")
+    overall = overall_result()
     return {"schema_version": SCHEMA_VERSION, "meta": meta, "drivers": drivers, "cars": cars,
             "catalog": {"drivers": ds[["driver_id", "name"]].drop_duplicates("driver_id").rename(
                 columns={"driver_id": "id"}).sort_values("name").to_dict("records"),
@@ -287,7 +405,7 @@ def build_payload():
                             "team", "constructor_name"]].rename(columns={"team": "id", "constructor_name": "name"})
                             .sort_values("name").to_dict("records")},
             "events": events.to_dict("records"), "history": history, "comparisons": pairs,
-            "comparison_draws": comparison_draws, "racing": racing_health(),
+            "comparison_draws": comparison_draws, "racing": racing_health(overall), "overall": overall,
             "race_pace": load_race_pace(ROOT), "breakdown": split, "asof": asof_payload(),
             "forecast": forecast_payload(),
             "car_state": car_state_result(), "race_features": race_feature_results(),

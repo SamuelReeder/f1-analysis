@@ -1,6 +1,7 @@
 import type { Dataset } from "../types";
 import { PageHeading } from "../components";
 import Methodology from "./Methodology";
+import { OverallMethodology } from "./Overall";
 import { RaceMethodology } from "./RaceNotes";
 
 export default function MethodologyPage({ data }: { data: Dataset }) {
@@ -20,7 +21,7 @@ export default function MethodologyPage({ data }: { data: Dataset }) {
           <div>
             <dt>Pace in seconds</dt>
             <dd>
-              Every rating is seconds per 90-second lap against the average of
+              Pace ratings are seconds per 90-second lap against the average of
               the field at that event. +0.20 means two tenths faster than an
               average driver (or car); 0 is the field average.
             </dd>
@@ -53,6 +54,16 @@ export default function MethodologyPage({ data }: { data: Dataset }) {
             </dd>
           </div>
           <div>
+            <dt>Overall (equal car) · experimental</dt>
+            <dd>
+              The equal-car championship compares expected points per race,
+              title probabilities and simulated season rank ranges. It keeps
+              driver–team effects and only admits racing qualities supported by
+              its entry tests and combined held-out validation. Missing, stale
+              or failed evidence leaves the ranking withheld.
+            </dd>
+          </div>
+          <div>
             <dt>Revised and after each race</dt>
             <dd>
               Revised history uses every race, including later ones. “After each
@@ -76,6 +87,7 @@ export default function MethodologyPage({ data }: { data: Dataset }) {
       </section>
       <Methodology data={data} />
       <RaceMethodology data={data.race_pace} />
+      <OverallMethodology />
     </>
   );
 }

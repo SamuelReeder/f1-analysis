@@ -408,10 +408,12 @@ export default function Methodology({ data }: { data: Dataset }) {
             Portable skill failed the recorded ranking-recovery and sensitivity
             gates, so it remains experimental. The validation results above are
             historical research, not a fresh validation of this release.
-            Qualifying pace is only one part of driver performance: the
-            dashboard does not yet publish an overall racing-skill ranking or an
-            equal-car championship. Each racing quality’s current status appears
-            above.
+            Qualifying pace is only one part of driver performance. The
+            experimental Overall (equal car) view publishes simulated championship
+            outcomes only when its current provenance and combined validation
+            pass; otherwise it explains why the ranking is withheld. Its evidence
+            lists admitted qualities and excluded test seasons. Each racing
+            quality’s current status appears on Model health.
           </p>
           <a href={`${source}outputs/REPORT.md`}>
             Research report and acceptance gates
