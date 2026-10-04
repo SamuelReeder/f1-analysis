@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import {
   Activity,
+  ArrowLeft,
   ArrowLeftRight,
   ArrowRight,
   BookOpen,
+  LayoutDashboard,
   ChevronRight,
   Target,
   Gauge,
@@ -21,6 +23,7 @@ import type {
   View,
 } from "./types";
 import Rankings from "./views/Rankings";
+import Briefing, { BRIEFING_CHAPTERS } from "./views/Briefing";
 import Overall from "./views/Overall";
 import Compare from "./views/Compare";
 import Health from "./views/Health";
@@ -28,6 +31,7 @@ import Forecasts from "./views/Forecasts";
 import MethodologyPage from "./views/MethodologyPage";
 
 const navigation = [
+  { id: "briefing", name: "Briefing", icon: LayoutDashboard },
   { id: "drivers", name: "Drivers", icon: Users },
   { id: "cars", name: "Cars", icon: Gauge },
   { id: "compare", name: "Head to head", icon: ArrowLeftRight },
@@ -35,14 +39,15 @@ const navigation = [
   { id: "methodology", name: "Methodology", icon: BookOpen },
   { id: "health", name: "Model health", icon: Activity },
 ] as const;
-function getRoute(): { view: View; discipline: Discipline } {
+function getRoute(): { view: View; discipline: Discipline; chapter: string } {
   const [page, metric] = window.location.hash.slice(1).split("/");
-  if (page === "race") return { view: "drivers", discipline: "race" };
+  if (page === "race") return { view: "drivers", discipline: "race", chapter: "qualifying" };
   const view = navigation.some((n) => n.id === page)
     ? (page as View)
-    : "drivers";
+    : "briefing";
   return {
     view,
+    chapter: BRIEFING_CHAPTERS.some((c) => c.id === metric) ? metric : "qualifying",
     discipline:
       (view === "drivers" || view === "cars") && metric === "race"
         ? "race"
@@ -53,7 +58,7 @@ function getRoute(): { view: View; discipline: Discipline } {
 }
 
 export default function App() {
-  const [{ view, discipline }, setRoute] = useState(getRoute);
+  const [{ view, discipline, chapter }, setRoute] = useState(getRoute);
   const [data, setData] = useState<Dataset>();
   const [release, setRelease] = useState<Release>();
   const releaseRef = useRef("");
@@ -141,13 +146,17 @@ export default function App() {
     mounted.current = true;
     refresh();
     const timer = setInterval(refresh, 30000);
-    const nav = () => {
+    const nav = (event?: HashChangeEvent) => {
       if (window.location.hash === "#main") return;
       const route = getRoute();
       if (window.location.hash === "#race") {
         window.history.replaceState(null, "", "#drivers/race");
       }
       setRoute(route);
+      if (event) requestAnimationFrame(() => {
+        document.getElementById("main")?.focus({ preventScroll: true });
+        window.scrollTo({ top: 0 });
+      });
     };
     nav();
     window.addEventListener("hashchange", nav);
@@ -158,18 +167,21 @@ export default function App() {
     };
   }, [refresh]);
   const [metric, setMetric] = useState<Metric>("headline");
+  const returnChapter = view === "drivers" && discipline === "overall" ? "overall"
+    : (view === "drivers" || view === "cars") && discipline === "race" ? "race"
+    : view === "cars" || (view === "compare" && chapter === "cars") ? "cars"
+    : view === "forecasts" || view === "health" || view === "methodology" ? "evidence" : "qualifying";
   return (
     <div className="shell">
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <aside className="sidebar">
-        <a href="#drivers" className="brand" aria-label="F1 Analysis">
-          <span>
-            F1<span className="brand-light">Analysis</span>
-          </span>
+      <header className="site-header">
+        <a href="#briefing" className="site-brand" aria-label="F1 Analysis — briefing">
+          <span className="brand-mark" aria-hidden="true"><i /><i /><i /></span>
+          <span><strong>F1 <span>ANALYSIS</span></strong><small>Beyond the finishing order</small></span>
         </a>
-        <nav aria-label="Main navigation">
+        <nav className="site-navigation" aria-label="Main navigation">
           {navigation.map((n) => (
             <a
               href={`#${n.id}${n.id === "drivers" && discipline === "overall" ? "/overall" : (n.id === "drivers" || n.id === "cars") && discipline === "race" ? "/race" : ""}`}
@@ -177,17 +189,12 @@ export default function App() {
               className={view === n.id ? "active" : ""}
               aria-current={view === n.id ? "page" : undefined}
             >
-              <n.icon size={19} />
-              {n.name}
-              {view === n.id && <ChevronRight size={15} />}
+              <n.icon size={16} aria-hidden="true" />
+              <span>{n.name}</span>
             </a>
           ))}
         </nav>
-        <div className="sidebar-foot">
-          <span className="online-dot" />
-          Independent F1 analysis<span>Qualifying & race pace</span>
-        </div>
-      </aside>
+      </header>
       <div className="workspace">
         <header className="topbar">
           <span className="breadcrumb">
@@ -211,7 +218,7 @@ export default function App() {
             </button>
           </div>
         </header>
-        <main id="main">
+        <main id="main" tabIndex={-1}>
           {!data ? (
             <div className="loading panel">
               {error ? (
@@ -254,7 +261,15 @@ export default function App() {
                   Refresh in progress: {run.stage}. Showing the last release.
                 </div>
               )}
-              {view === "drivers" && discipline === "overall" ? (
+              {view !== "briefing" && (
+                <div className="explore-context">
+                  <a href={`#briefing/${returnChapter}`}><ArrowLeft size={15} aria-hidden="true" />Back to briefing</a>
+                  <span>Explore the full results</span>
+                </div>
+              )}
+              {view === "briefing" ? (
+                <Briefing data={data} chapter={chapter} />
+              ) : view === "drivers" && discipline === "overall" ? (
                 <Overall result={data.overall} />
               ) : view === "drivers" || view === "cars" ? (
                 <Rankings
@@ -266,7 +281,7 @@ export default function App() {
                   setMetric={setMetric}
                 />
               ) : view === "compare" ? (
-                <Compare data={data} metric={metric} setMetric={setMetric} />
+                <Compare key={chapter} data={data} car={chapter === "cars"} metric={metric} setMetric={setMetric} />
               ) : view === "forecasts" ? (
                 <Forecasts data={data} />
               ) : view === "methodology" ? (

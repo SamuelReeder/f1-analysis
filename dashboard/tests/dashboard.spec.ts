@@ -7,7 +7,7 @@ let current: Dataset;
 test.beforeEach(async ({ page, request }) => {
   const pointer = await (await request.get("data/latest.json")).json();
   current = await (await request.get(`data/${pointer.url}`)).json();
-  await page.goto("./");
+  await page.goto("./#drivers");
   await expect(page).toHaveTitle("F1 Analysis");
   await expect(
     page.getByRole("heading", { name: "Drivers", level: 1 }),
@@ -425,7 +425,7 @@ test("ranking metrics support browser history, direct links and switching entity
   page,
 }) => {
   const mainNav = page.getByRole("navigation", { name: "Main navigation" });
-  await expect(mainNav.getByRole("link")).toHaveCount(6);
+  await expect(mainNav.getByRole("link")).toHaveCount(7);
   await expect(mainNav.getByRole("link", { name: "Race pace" })).toHaveCount(0);
   await page
     .getByRole("button", { name: "Portable skill Experimental" })

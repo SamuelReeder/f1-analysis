@@ -12,8 +12,23 @@ championship; the approach is in `docs/racing_approach.md`.
 **F1 Analysis** is a local React/TypeScript dashboard in `dashboard/` using real
 published model estimates.
 
-The interface uses a pure black background (`#000000`), Formula 1 red (`#e10600`)
-and light text.
+The default **Briefing** is a guided presentation of the published results. Its
+shareable chapters (`#briefing/qualifying`, `#briefing/cars`, `#briefing/race`,
+`#briefing/overall`, `#briefing/evidence`) lead from driver estimates to machinery,
+race pace, the experimental equal-car scenario, and predictive evidence. Each
+chapter gives the main conclusion, a compact visual ranking or evidence summary,
+and enough context to read it accurately. Next/previous controls stay in view
+while reading. Chapter links also let readers set their own pace; nothing
+advances automatically.
+
+Every headline is derived from the loaded release. The briefing retains separate
+race driver/car gates and withholds unverified equal-car standings. Forecast
+improvement is stated only when its recorded comparison interval supports it.
+Full rankings, comparisons, histories, exports and methodology remain directly
+accessible, with a return link from each detailed view to the relevant chapter.
+
+The interface uses graphite surfaces, warm light briefing panels, red accents,
+and high-contrast text, with responsive navigation and reduced-motion support.
 Team markers use the current colours from [Formula 1’s team directory](https://www.formula1.com/en/teams),
 recorded on 2026-09-30 in `dashboard/src/lib.ts` and keyed by team lineage.
 Historical entries retain that lineage palette. Chart comparisons use red and

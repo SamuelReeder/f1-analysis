@@ -1,6 +1,6 @@
 export type Metric = "headline" | "portable";
 export type View =
-  "drivers" | "cars" | "compare" | "forecasts" | "methodology" | "health";
+  "briefing" | "drivers" | "cars" | "compare" | "forecasts" | "methodology" | "health";
 export type RankingKind = "drivers" | "cars";
 export type Discipline = "qualifying" | "race" | "overall";
 export interface Estimate {
