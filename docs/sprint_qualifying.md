@@ -80,3 +80,23 @@ forecast targets are exactly those of the published model.
   published with it.
 - If the gate fails, the published model is unchanged and the result is recorded here
   and in the README.
+
+## Result (2026-10-04): the gate failed; the published model is unchanged
+
+Source: `outputs/validation/compare.json`, `lfosprint` and `sprint_qualifying_gate`,
+produced by `f1rank.compare` after all 14 fits finished.
+
+| Gate item | Result | Holds |
+|---|---|---|
+| 1. All 14 fits converge | all converged under the retry rule | yes |
+| 2. Pairing MSE difference below 0 (95% interval) | +0.00061 s²; interval -0.00105 to +0.00218 (62 pairings) | no |
+| 3. Lower pairing RMSE at 5 or more of 7 cutoffs | lower at 4 of 7 (end2024, end2025, mid2023, mid2025) | no |
+| 4. Session 90% coverage within 85–97% | 95.2% (main model 95.0%) | yes |
+| 5. Session CRPS no higher | 0.23647 s against 0.23501 s | no |
+
+Pairing RMSE overall: 0.1620 s with sprint qualifying against 0.1601 s without. The
+variant was better at four cutoffs and worse at three, and the interval on the
+difference includes zero, so these data show no improvement from adding sprint
+qualifying. Per the decision rule above, the published model, the main fit and the
+2026 records are not regenerated for it, and nothing else about the design was changed
+after seeing these results.

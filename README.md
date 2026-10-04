@@ -404,7 +404,13 @@ After each qualifying session: `fetch`, `build`, `fit`, `export`.
   `outputs/analysis/validation_convergence/before_retry_rule.json`). In the 24
   leave-future-out fits the worst car R-hat was 2.37 for later seasons without data,
   1.45 for the test season and 1.09 for the training period; driver states, which the
-  teammate forecasts use, reached 1.06.
+  teammate forecasts use, reached 1.06. Under the retry rule, three leave-future-out
+  fits still failed every attempt (`lfo_end2013`, `lfo_end2020`, `lfo_mid2015`; recorded
+  in `outputs/fits/*.failed.json`): R-hat stayed above 1.05 on all four attempts of each,
+  and `lfo_end2013` also had 46–230 divergences per attempt. They are left out of the
+  forecasting scores, and the racing test seasons 2014 and 2021 share the first two
+  fits and are left out of the racing tests. All sensitivity, placebo, synthetic and
+  sprint-test fits converged.
 - **Shared fits.** The validation fit `lfo_end<year>` and the racing fold
   `quali_fold<year+1>` have the same design and retry rule, so whichever is fitted
   second is copied from the first after its fingerprint and retry history are checked.
@@ -510,26 +516,33 @@ circuits (Spa, Silverstone, Monza).
 Full results: `outputs/REPORT.md` (`python -m f1rank.report`). Summary as of the 2026
 Azerbaijan GP:
 
-- **Forecasting**, 25 leave-future-out cutoffs 2013–2026: the model beats a static
-  two-way model, raw teammate gaps and a zero baseline on every target. Teammate gap
-  per pairing: RMSE 0.188 s vs 0.245–0.264 s. New pairings: 0.243 s vs 0.264–0.425 s.
-  Session-level 90% intervals cover 94%.
+- **Forecasting**, 22 leave-future-out cutoffs 2013–2026 (three cutoffs, `lfo_end2013`,
+  `lfo_end2020` and `lfo_mid2015`, failed every attempt of the retry rule and are
+  excluded, so they are not scored): the model beats a static two-way model, raw
+  teammate gaps and a zero baseline on the pairing-level and segment-level targets.
+  Teammate gap per pairing: RMSE 0.192 s vs 0.234–0.265 s. New pairings: 0.265 s vs
+  0.266 s for the zero baseline (a margin of 0.001 s) and 0.406–0.458 s for the other
+  two. Session-level 90% intervals cover 94.2%.
+- **Sprint qualifying** (pre-registered test, `docs/sprint_qualifying.md`): the gate
+  failed, so the published model does not use sprint-qualifying sessions.
 - **Synthetic recovery** on the real F1 network, over 8 independent clean truths (each
   with its own hyperparameters from the posterior):
-  - Car ratings: correlation 0.99; 90% intervals cover 88% on average (79–92%).
-  - Driver skill: 90% intervals cover 90% on average (82–95%).
+  - Car ratings: correlation 0.99; 90% intervals cover 89% on average (87–92%).
+  - Driver skill: 90% intervals cover 89% on average (86–92%).
   - Misspecification scenarios (one shared truth): portable current-grid rank
     correlations stay within the spread between the clean truths.
 - **Pace in the current car (headline)** passes its own gates:
-  - Current-grid ranking recovered with rank correlation 0.83 on average (0.74–0.92).
-  - Rank correlation 0.92 or more against every sensitivity variant.
+  - Current-grid ranking recovered with rank correlation 0.83 on average (0.72–0.93).
+  - Rank correlation 0.95 or more against every sensitivity variant.
 - **Limits:**
   - **Portable ranking recovery.** The current-grid ranking by portable skill is
-    recovered with rank correlation 0.70 on average (0.51–0.89).
+    recovered with rank correlation 0.65 on average (0.53–0.84).
   - **Sensitivity.** The portable ranking moves with structural choices: whether the
     team-specific effect is modelled, the 2006 vs 2010 data window, and whether the
-    effect restarts at each regulation era. The windows and the variants forecast
-    about equally well (one effect per spell slightly better).
+    effect restarts at each regulation era (rank correlation with the main ranking as
+    low as 0.81, 0.85 and 0.88 for those variants). The windows and the variants forecast
+    about equally well: the effect per spell and per era have slightly lower pairing RMSE,
+    and the 95% interval of each MSE difference includes zero.
   - **Status.** Seven of the nine acceptance gates pass. The two that fail are portable
     skill's, so portable skill is experimental and pace in the current car is the
     headline.
