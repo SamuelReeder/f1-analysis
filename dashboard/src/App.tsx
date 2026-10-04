@@ -1,18 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import {
-  Activity,
   ArrowLeft,
-  ArrowLeftRight,
   ArrowRight,
-  BookOpen,
-  LayoutDashboard,
-  ChevronRight,
-  Target,
-  Gauge,
   LoaderCircle,
   RefreshCw,
   TriangleAlert,
-  Users,
 } from "lucide-react";
 import type {
   Dataset,
@@ -31,13 +23,13 @@ import Forecasts from "./views/Forecasts";
 import MethodologyPage from "./views/MethodologyPage";
 
 const navigation = [
-  { id: "briefing", name: "Briefing", icon: LayoutDashboard },
-  { id: "drivers", name: "Drivers", icon: Users },
-  { id: "cars", name: "Cars", icon: Gauge },
-  { id: "compare", name: "Head to head", icon: ArrowLeftRight },
-  { id: "forecasts", name: "Track record", icon: Target },
-  { id: "methodology", name: "Methodology", icon: BookOpen },
-  { id: "health", name: "Model health", icon: Activity },
+  { id: "briefing", name: "Briefing" },
+  { id: "drivers", name: "Drivers" },
+  { id: "cars", name: "Cars" },
+  { id: "compare", name: "Head to head" },
+  { id: "forecasts", name: "Track record" },
+  { id: "methodology", name: "Methodology" },
+  { id: "health", name: "Model health" },
 ] as const;
 function getRoute(): { view: View; discipline: Discipline; chapter: string } {
   const [page, metric] = window.location.hash.slice(1).split("/");
@@ -178,8 +170,7 @@ export default function App() {
       </a>
       <header className="site-header">
         <a href="#briefing" className="site-brand" aria-label="F1 Analysis — briefing">
-          <span className="brand-mark" aria-hidden="true"><i /><i /><i /></span>
-          <span><strong>F1 <span>ANALYSIS</span></strong><small>Beyond the finishing order</small></span>
+          <strong>F1 Analysis</strong>
         </a>
         <nav className="site-navigation" aria-label="Main navigation">
           {navigation.map((n) => (
@@ -189,35 +180,23 @@ export default function App() {
               className={view === n.id ? "active" : ""}
               aria-current={view === n.id ? "page" : undefined}
             >
-              <n.icon size={16} aria-hidden="true" />
               <span>{n.name}</span>
             </a>
           ))}
         </nav>
+        <div className="top-actions">
+          <button
+            className="icon-button"
+            title="Check for new published results"
+            aria-label="Check for updates"
+            onClick={refresh}
+            disabled={checking}
+          >
+            <RefreshCw size={17} className={checking ? "spin" : ""} />
+          </button>
+        </div>
       </header>
       <div className="workspace">
-        <header className="topbar">
-          <span className="breadcrumb">
-            F1 Analysis <ChevronRight size={14} />
-            <strong>{navigation.find((n) => n.id === view)?.name}</strong>
-          </span>
-          <div className="top-actions">
-            {data && (
-              <span className="season-pill">
-                {data.meta.data_as_of.event_id.slice(0, 4)} SEASON
-              </span>
-            )}
-            <button
-              className="icon-button"
-              title="Check for new published results"
-              aria-label="Check for updates"
-              onClick={refresh}
-              disabled={checking}
-            >
-              <RefreshCw size={17} className={checking ? "spin" : ""} />
-            </button>
-          </div>
-        </header>
         <main id="main" tabIndex={-1}>
           {!data ? (
             <div className="loading panel">
@@ -264,7 +243,6 @@ export default function App() {
               {view !== "briefing" && (
                 <div className="explore-context">
                   <a href={`#briefing/${returnChapter}`}><ArrowLeft size={15} aria-hidden="true" />Back to briefing</a>
-                  <span>Explore the full results</span>
                 </div>
               )}
               {view === "briefing" ? (

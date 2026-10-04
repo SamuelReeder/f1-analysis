@@ -12,23 +12,25 @@ championship; the approach is in `docs/racing_approach.md`.
 **F1 Analysis** is a local React/TypeScript dashboard in `dashboard/` using real
 published model estimates.
 
-The default **Briefing** is a guided presentation of the published results. Its
-shareable chapters (`#briefing/qualifying`, `#briefing/cars`, `#briefing/race`,
-`#briefing/overall`, `#briefing/evidence`) lead from driver estimates to machinery,
-race pace, the experimental equal-car scenario, and predictive evidence. Each
-chapter gives the main conclusion, a compact visual ranking or evidence summary,
-and enough context to read it accurately. Next/previous controls stay in view
-while reading. Chapter links also let readers set their own pace; nothing
-advances automatically.
+The default **Briefing** presents complete ranking tables and primary metrics on
+black backgrounds, with factual headings and source dates. Its linked sections
+(`#briefing/qualifying`, `#briefing/cars`, `#briefing/race`, `#briefing/overall`,
+`#briefing/evidence`) cover driver estimates, machinery, dry-race pace, the
+experimental equal-car scenario, and predictive evidence. Tables lead each
+section; concise conclusions and optional explanatory detail follow the data.
+Category links and ordinary next/previous links connect the sections without
+covering the results. Nothing advances automatically.
 
-Every headline is derived from the loaded release. The briefing retains separate
-race driver/car gates and withholds unverified equal-car standings. Forecast
-improvement is stated only when its recorded comparison interval supports it.
-Full rankings, comparisons, histories, exports and methodology remain directly
-accessible, with a return link from each detailed view to the relevant chapter.
+Every result and conclusion is derived from the loaded release. Race driver/car
+gates remain separate, unverified equal-car standings remain withheld, and
+forecast improvement claims use the recorded comparison interval. Full histories,
+comparisons, exports and methodology remain directly accessible, with a return
+link from each detailed view to the relevant section.
 
-The interface uses graphite surfaces, warm light briefing panels, red accents,
-and high-contrast text, with responsive navigation and reduced-motion support.
+The interface uses a pure black background (`#000000`), light text and red accents.
+There are no decorative hero sections or floating presentation controls. Phone
+layouts keep pace and rank ranges visible; full interval detail is available in
+the detailed ranking pages.
 Team markers use the current colours from [Formula 1’s team directory](https://www.formula1.com/en/teams),
 recorded on 2026-09-30 in `dashboard/src/lib.ts` and keyed by team lineage.
 Historical entries retain that lineage palette. Chart comparisons use red and

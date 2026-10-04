@@ -91,7 +91,10 @@ test("the default briefing leads with the runtime ranking and its uncertainty", 
     .toHaveAttribute("aria-current", "page");
   const ordered = [...current.drivers].sort((a, b) => b.headline.median - a.headline.median);
   const rows = view.locator(".briefing-ranking-row");
-  await expect(rows).toHaveCount(Math.min(5, ordered.length));
+  await expect(rows).toHaveCount(ordered.length);
+  await expect(view.getByRole("heading", { name: "Driver qualifying pace", exact: true })).toBeVisible();
+  await expect(view.getByRole("table")).toHaveCount(1);
+  await expect(rows.last()).toContainText(ordered[ordered.length - 1].name);
   await expect(rows.first()).toContainText(ordered[0].name);
   await expect(rows.first()).toContainText(Math.abs(ordered[0].headline.median).toFixed(3));
   await expect(view).toContainText(/current team/i);
@@ -112,7 +115,11 @@ test("chapters advance, survive reload, and respect browser back and forward", a
   await expect(page.locator("#main")).toBeFocused();
   await page.reload();
   await expect(chapterNav.getByRole("link", { name: "Cars", exact: true })).toHaveAttribute("aria-current", /^(step|page)$/);
-  await expect(page.locator(".briefing-ranking-row").first()).toContainText([...current.cars].sort((a, b) => b.pace.median - a.pace.median)[0].name);
+  const orderedCars = [...current.cars].sort((a, b) => b.pace.median - a.pace.median);
+  await expect(page.locator(".briefing-ranking-row")).toHaveCount(orderedCars.length);
+  await expect(page.locator(".briefing-ranking-row").first()).toContainText(orderedCars[0].name);
+  await expect(page.locator(".briefing-ranking-row").last()).toContainText(orderedCars[orderedCars.length - 1].name);
+  await expect(page.getByRole("heading", { name: "Car qualifying pace", exact: true })).toBeVisible();
   await expect(page.locator(".briefing-view")).toContainText(/track.neutral|circuit/i);
   await page.goBack();
   await expect(page).toHaveURL(/#briefing\/qualifying$/);
@@ -255,6 +262,7 @@ for (const [chapter] of chapters) {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto(`./#briefing/${chapter}`);
     await expect(page.locator(".briefing-view")).toBeVisible();
+    await expect(page.locator(".briefing-view")).not.toContainText(/THE GRID, EXPLAINED|A guided look at the evidence|Who stands out|The machinery\s+behind the pace|One lap is only|A different question|An estimate earns|EVIDENCE BEFORE ORDER|The rankings\. The context\. The confidence\./i);
     for (const width of [1440, 390, 320]) {
       await page.setViewportSize({ width, height: 1000 });
       await page.evaluate(() => document.fonts.ready);
@@ -268,17 +276,34 @@ for (const [chapter] of chapters) {
 }
 
 
-test("presentation controls stay in view while reading long chapters", async ({ page }) => {
-  await page.goto("./#briefing/qualifying");
-  const next = page.getByRole("navigation", { name: "Briefing controls" }).getByRole("link", { name: /Next: Cars$/ });
-  for (const width of [1440, 390, 320]) {
-    await page.setViewportSize({ width, height: 800 });
-    await page.evaluate(() => window.scrollTo(0, 0));
+for (const [chapter, title] of [["qualifying", "Driver qualifying pace"], ["cars", "Car qualifying pace"]] as const) {
+  test(`${chapter} puts the complete ranking first on a black page with controls in normal flow`, async ({ page }) => {
+    await page.goto(`./#briefing/${chapter}`);
+    const view = page.locator(".briefing-view");
+    const table = view.getByRole("table");
+    const rows = table.locator(".briefing-ranking-row");
+    const controls = page.getByRole("navigation", { name: "Briefing controls" });
+    const next = controls.getByRole("link", { name: chapter === "qualifying" ? /Next: Cars$/ : /Next: Race pace$/ });
+    await expect(view.getByRole("heading", { name: title, exact: true })).toBeVisible();
+    await expect(rows).toHaveCount(chapter === "qualifying" ? current.drivers.length : current.cars.length);
+    for (const [width, height] of [[1440, 900], [390, 844], [320, 800]]) {
+      await page.setViewportSize({ width, height });
+      await page.evaluate(() => document.fonts.ready);
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await expect(rows.first()).toBeInViewport();
+      expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toBe("rgb(0, 0, 0)");
+      expect(await controls.evaluate((element) => getComputedStyle(element).position)).not.toMatch(/fixed|sticky/);
+      const dataBounds = await table.boundingBox();
+      const contextBounds = await view.locator(".briefing-takeaway").boundingBox();
+      expect(dataBounds).not.toBeNull();
+      expect(contextBounds).not.toBeNull();
+      expect(dataBounds!.y + dataBounds!.height).toBeLessThanOrEqual(contextBounds!.y);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    }
+    await next.scrollIntoViewIfNeeded();
     await expect(next).toBeInViewport();
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight / 2));
-    await expect(next).toBeInViewport();
-  }
-  await next.click();
-  await expect(page).toHaveURL(/#briefing\/cars$/);
-  await expect(page.locator("#main")).toBeFocused();
-});
+    await next.click();
+    await expect(page).toHaveURL(chapter === "qualifying" ? /#briefing\/cars$/ : /#briefing\/race$/);
+    await expect(page.locator("#main")).toBeFocused();
+  });
+}
