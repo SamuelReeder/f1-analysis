@@ -12,8 +12,25 @@ championship; the approach is in `docs/racing_approach.md`.
 **F1 Analysis** is a local React/TypeScript dashboard in `dashboard/` using real
 published model estimates.
 
-The interface uses a pure black background (`#000000`), Formula 1 red (`#e10600`)
-and light text.
+The default **Briefing** presents complete ranking tables and primary metrics on
+black backgrounds, with factual headings and source dates. Its linked sections
+(`#briefing/qualifying`, `#briefing/cars`, `#briefing/race`, `#briefing/overall`,
+`#briefing/evidence`) cover driver estimates, machinery, dry-race pace, the
+experimental equal-car scenario, and predictive evidence. Tables lead each
+section; concise conclusions and optional explanatory detail follow the data.
+Category links and ordinary next/previous links connect the sections without
+covering the results. Nothing advances automatically.
+
+Every result and conclusion is derived from the loaded release. Race driver/car
+gates remain separate, unverified equal-car standings remain withheld, and
+forecast improvement claims use the recorded comparison interval. Full histories,
+comparisons, exports and methodology remain directly accessible, with a return
+link from each detailed view to the relevant section.
+
+The interface uses a pure black background (`#000000`), light text and red accents.
+There are no decorative hero sections or floating presentation controls. Phone
+layouts keep pace and rank ranges visible; full interval detail is available in
+the detailed ranking pages.
 Team markers use the current colours from [Formula 1’s team directory](https://www.formula1.com/en/teams),
 recorded on 2026-09-30 in `dashboard/src/lib.ts` and keyed by team lineage.
 Historical entries retain that lineage palette. Chart comparisons use red and
@@ -33,6 +50,29 @@ Qualifying and race pace share the ranking table, filters, event line, export
 control and selected-entry card. Switching metrics retains the selected entry,
 search and team filter. Metric definitions, evidence counts and validation remain
 specific to the selected metric.
+
+Drivers also offers **Overall (equal car)** (`#drivers/overall`), an experimental
+championship scenario with equal average machinery. It shows expected points per
+race, title probability, simulated season rank ranges, and a selected driver's
+contribution breakdown. The headline retains driver–team effects; it is not a
+universal transferable-skill ranking or a forecast of the actual championship.
+Contributions change each component to the field average separately and all at
+once; correlated contributions must not be added. Wet pace and pit operations
+are not separate driver components, and passing, traffic and strategy are not
+simulated lap by lap. Driver-specific own-error rates enter retirements only
+when their separate gate passes.
+
+The loader reads `outputs/championship/{summary.json,standings.csv,contributions.csv}`
+without fitting or simulating. It requires a current manifest covering every file
+and `summary.combined_validation.gate` to be exactly true, then rechecks provenance
+after reading. Missing, stale, historical or failed evidence never exposes a
+standings or contribution table. Current evidence also lists entered qualities,
+qualities tested but not admitted, tests not run, and the excluded qualifying-fold
+seasons for both combined selection and race-stage validation. Excluded seasons
+may still train later folds. These decisions and every displayed result value
+come from the verified outputs at publication time; they are not copied from the
+historical research notes. Older dashboard releases without this payload show an
+unavailable status until a new release is published.
 
 It provides:
 
@@ -118,9 +158,10 @@ the publications available at build time; a static host must receive updated `da
 files to show subsequent releases. Serve `latest.json` and `status.json` without caching.
 
 The total driver race-pace ranking is published; the car race-pace table is withheld
-because it did not pass the prediction and interval-coverage checks. Overall race-result
-and equal-car championship standings remain unavailable until the corrected racing
-pipeline is rerun.
+because it did not pass the prediction and interval-coverage checks. Equal-car
+championship standings are withheld until the corrected racing outputs have
+current provenance and pass the combined validation gate. A regeneration alone
+does not establish the ranking.
 Portable skill is explicitly experimental. Historical validation files have no run
 manifest and are shown as recorded research, not as fresh acceptance of a new fit.
 
@@ -135,9 +176,9 @@ npm test -- --workers=2
 ```
 
 Browser tests cover interactions, exports, release adoption and failure handling,
-mobile overflow, browser errors, and automated accessibility checks on all seven
-views. `PLAYWRIGHT_CHROMIUM_EXECUTABLE` optionally selects an existing Chromium
-binary. The Python checks cover publication atomicity, corruption, process locking,
+mobile overflow, browser errors, and automated accessibility checks, including
+passed and not-established equal-car fixtures. `PLAYWRIGHT_CHROMIUM_EXECUTABLE`
+optionally selects an existing Chromium binary. The Python checks cover publication atomicity, corruption, process locking,
 missing provenance, stale racing outputs and statistically correct comparisons.
 
 ### Estimates after each race and the track record
@@ -207,13 +248,18 @@ their history had a gap at that event.
 ### Publish on push with GitHub Pages
 
 `.github/workflows/dashboard.yml` checks and deploys the dashboard when relevant
-changes reach `main`. Pull requests to `main` run the same checks without publishing.
+changes reach `main` or a pull request targets `main` or `automated-refresh`.
+Passing pull requests from branches in this repository also publish to the same
+public Pages URL, replacing its previous deployment. Fork pull requests run the
+checks without publishing. Deployments are serialized across branches.
 The workflow can also be started manually from the Actions tab on `main`.
 
 One-time setup in [repository Pages settings](https://github.com/SamuelReeder/f1-analysis/settings/pages):
-choose **GitHub Actions** under **Build and deployment → Source**. Then merge or push
-the dashboard, workflow, checked ratings and supporting files to `main`. The expected
-site address is **https://samuelreeder.github.io/f1-analysis/**. Preparing the workflow
+choose **GitHub Actions** under **Build and deployment → Source**. In the
+`github-pages` environment, allow deployment branches `main` and
+`refs/pull/*/merge`. Then push the dashboard, workflow, checked ratings and
+supporting files to `main` or a same-repository pull request branch. The site
+address is **https://samuelreeder.github.io/f1-analysis/**. Preparing the workflow
 locally does not enable Pages or publish the uncommitted dashboard.
 
 Each deployment verifies the committed export manifest, builds a browser dataset,

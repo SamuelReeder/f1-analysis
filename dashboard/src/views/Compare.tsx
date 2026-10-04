@@ -6,17 +6,18 @@ import { PageHeading, MetricControl, Badge, Band } from "../components";
 
 export default function Compare({
   data,
+  car = false,
   metric,
   setMetric,
 }: {
   data: Dataset;
+  car?: boolean;
   metric: Metric;
   setMetric: (m: Metric) => void;
 }) {
-  const [car, setCar] = useState(false);
   const entities = car ? data.cars : data.drivers;
-  const [a, setA] = useState(data.drivers[0].id);
-  const [b, setB] = useState(data.drivers[1].id);
+  const [a, setA] = useState(entities[0].id);
+  const [b, setB] = useState(entities[1].id);
   const first = entities.find((r) => r.id === a) || entities[0];
   const second =
     entities.find((r) => r.id === b && r.id !== first.id) ||
@@ -39,9 +40,7 @@ export default function Compare({
           <button
             aria-pressed={!car}
             onClick={() => {
-              setCar(false);
-              setA(data.drivers[0].id);
-              setB(data.drivers[1].id);
+              window.location.hash = "#compare";
             }}
           >
             Drivers
@@ -49,9 +48,7 @@ export default function Compare({
           <button
             aria-pressed={car}
             onClick={() => {
-              setCar(true);
-              setA(data.cars[0].id);
-              setB(data.cars[1].id);
+              window.location.hash = "#compare/cars";
             }}
           >
             Cars

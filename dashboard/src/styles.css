@@ -2912,3 +2912,118 @@ select {
   padding: 0 23px 6px;
   color: var(--ink);
 }
+
+/* Equal-car outcomes use points and probabilities, not the pace-table columns. */
+.ranking-metrics {
+  flex-wrap: wrap;
+  column-gap: 24px;
+  row-gap: 0;
+}
+.overall-table {
+  white-space: normal;
+}
+.overall-table .overall-driver {
+  width: 40%;
+}
+.overall-table th:first-child,
+.overall-table td:first-child {
+  width: auto;
+}
+.overall-table .entity-button {
+  white-space: normal;
+  text-align: left;
+  overflow-wrap: anywhere;
+  min-height: 44px;
+}
+.overall-caption,
+.overall-notes,
+.overall-contributions {
+  padding: 20px 24px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.overall-notes {
+  margin-top: 24px;
+}
+.overall-notes h2,
+.overall-contributions h2 {
+  font-size: 17px;
+  color: var(--ink);
+}
+.overall-notes h3,
+.overall-contributions h3 {
+  color: var(--ink);
+  margin-top: 18px;
+  font-size: 15px;
+}
+.overall-notes p,
+.overall-contributions p {
+  margin-top: 12px;
+}
+.overall-contributions dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 14px;
+}
+.overall-contributions dd {
+  margin: 0;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.overall-decisions > div {
+  margin-top: 18px;
+}
+.overall-decisions dt {
+  color: var(--ink);
+  font-weight: 600;
+}
+.overall-decisions dd {
+  margin: 4px 0 0;
+}
+@media (max-width: 760px) {
+  .ranking-metrics {
+    column-gap: 16px;
+  }
+  .ranking-metrics a {
+    font-size: 12px;
+  }
+  .overall-table th,
+  .overall-table td {
+    padding: 12px 5px;
+  }
+  .overall-table th:first-child,
+  .overall-table td:first-child {
+    padding-left: 12px;
+  }
+  .overall-table th:last-child,
+  .overall-table td:last-child {
+    padding-right: 12px;
+  }
+  .overall-table .entity-button strong {
+    white-space: normal;
+  }
+  .overall-notes,
+  .overall-contributions,
+  .overall-caption {
+    padding: 18px;
+  }
+}
+.overall-layout .panel-heading p {
+  white-space: normal;
+}
+@media (max-width: 360px) {
+  .sidebar {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+  .sidebar nav {
+    flex: 1 0 100%;
+    justify-content: space-between;
+  }
+  .sidebar nav a {
+    padding: 12px;
+  }
+}
