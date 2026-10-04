@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { Badge, Empty } from "../components";
 import { date, pct, signed } from "../lib";
 import type { OverallResult } from "../types";
 import RankingHeader from "./RankingHeader";
+import { performanceScale, PerformanceKey } from "../performance";
 
 const labels: Record<string, string> = {
   qualifying_pace: "Qualifying pace",
@@ -59,6 +60,7 @@ export default function Overall({ result }: { result?: OverallResult }) {
   const established = result?.status === "established" &&
     evidence?.combined_validation.gate === true && result.standings.length > 0;
   const rows = established ? result.standings : [];
+  const scale = performanceScale(rows.map((row) => row.points_per_race));
   const driver = rows.find((r) => r.driver_id === selected) || rows[0];
   const contribution = established
     ? result.contributions.find((r) => r.driver_id === driver?.driver_id)
@@ -98,18 +100,19 @@ export default function Overall({ result }: { result?: OverallResult }) {
                     <th scope="col" className="numeric">Rank range</th>
                   </tr></thead>
                   <tbody>{rows.map((row) => (
-                    <tr key={row.driver_id} className={row.driver_id === driver?.driver_id ? "selected-row" : ""}>
+                    <tr key={row.driver_id} style={{ "--performance-color": scale(row.points_per_race) } as CSSProperties} className={row.driver_id === driver?.driver_id ? "selected-row" : ""}>
                       <td><button className="entity-button" onClick={() => setSelected(row.driver_id)}
                         aria-label={`Inspect ${row.name} contributions`} aria-pressed={row.driver_id === driver?.driver_id}>
                         <strong>{row.name}</strong>
                       </button></td>
-                      <td className="numeric">{row.points_per_race.toFixed(2)}</td>
+                      <td className="numeric performance-value">{row.points_per_race.toFixed(2)}</td>
                       <td className="numeric">{pct(row.p_title)}</td>
                       <td className="numeric"><span className="rank-range">{row.rank_lo}–{row.rank_hi}</span></td>
                     </tr>
                   ))}</tbody>
                 </table>
               </div>
+              <PerformanceKey points />
               <p className="overall-caption">
                 {evidence.simulated_seasons.toLocaleString()} simulated seasons · {evidence.n_races_simulated} races per season.
                 Select a driver to inspect their contributions. Overlapping rank ranges leave positions uncertain.

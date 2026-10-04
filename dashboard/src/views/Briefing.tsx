@@ -1,7 +1,8 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { date, pct, signed } from "../lib";
 import type { Dataset, Estimate, RaceValidation } from "../types";
+import { performanceScale, PerformanceKey } from "../performance";
 import "./Briefing.css";
 
 export const BRIEFING_CHAPTERS = [
@@ -39,11 +40,12 @@ function PaceTable({ rows, label, cars = false, compact = false }: {
   rows: PaceEntry[]; label: string; cars?: boolean; compact?: boolean;
 }) {
   const ordered = [...rows].sort((a, b) => b.pace.median - a.pace.median);
+  const scale = performanceScale(rows.map((row) => row.pace.median));
   const lo = Math.min(0, ...ordered.map((row) => row.pace.q05));
   const hi = Math.max(0, ...ordered.map((row) => row.pace.q95));
   const x = (value: number) => 6 + (value - lo) / (hi - lo || 1) * 228;
   if (!ordered.length) return <p className="briefing-empty">No estimates are available in this release.</p>;
-  return <table className={`briefing-ranking briefing-pace-table${compact ? " briefing-compact-table" : ""}`} aria-label={label}>
+  return <><table className={`briefing-ranking briefing-pace-table${compact ? " briefing-compact-table" : ""}`} aria-label={label}>
     <thead><tr>
       <th scope="col">{cars ? "Car" : "Driver"}</th>
       <th scope="col" className="numeric">Pace <span className="briefing-th-unit">s / 90s</span></th>
@@ -51,16 +53,16 @@ function PaceTable({ rows, label, cars = false, compact = false }: {
       <th scope="col" className="numeric">90% rank range</th>
       {!compact && <th scope="col" className="numeric briefing-probability-column">Chance fastest</th>}
     </tr></thead>
-    <tbody>{ordered.map((row) => <tr className="briefing-ranking-row" key={row.id}>
+    <tbody>{ordered.map((row) => <tr className="briefing-ranking-row" key={row.id} style={{ "--performance-color": scale(row.pace.median) } as CSSProperties}>
       <th scope="row"><strong>{row.name}</strong>{row.team && <small>{row.team}</small>}{row.carried && <small className="briefing-carried">Carried forward · no timed lap</small>}</th>
-      <td className="numeric briefing-pace-value">{signed(row.pace.median)}</td>
+      <td className="numeric briefing-pace-value performance-value">{signed(row.pace.median)}</td>
       <td className="briefing-interval-column">
         <div className="briefing-interval-cell">
           <span>{signed(row.pace.q05)}</span>
           <svg viewBox="0 0 240 24" aria-hidden="true">
             <line x1={x(0)} x2={x(0)} y1="1" y2="23" stroke="#777" strokeDasharray="2 3" />
-            <line x1={x(row.pace.q05)} x2={x(row.pace.q95)} y1="12" y2="12" stroke="#aaa" strokeWidth="2" />
-            <circle cx={x(row.pace.median)} cy="12" r="3.5" fill="#fff" />
+            <line className="briefing-interval-line" x1={x(row.pace.q05)} x2={x(row.pace.q95)} y1="12" y2="12" stroke="var(--performance-color)" strokeWidth="3" strokeLinecap="round" />
+            <circle className="briefing-interval-point" cx={x(row.pace.median)} cy="12" r="4" fill="var(--performance-color)" stroke="#000" strokeWidth="1.5" />
           </svg>
           <span>{signed(row.pace.q95)}</span>
         </div>
@@ -68,7 +70,7 @@ function PaceTable({ rows, label, cars = false, compact = false }: {
       <td className="numeric">{rankRange(row.pace)}</td>
       {!compact && <td className="numeric briefing-probability-column">{row.pace.p_fastest == null ? "—" : pct(row.pace.p_fastest)}</td>}
     </tr>)}</tbody>
-  </table>;
+  </table><PerformanceKey /></>;
 }
 
 function QualifyingChapter({ data, cars = false }: { data: Dataset; cars?: boolean }) {
@@ -128,6 +130,7 @@ function OverallChapter({ data }: { data: Dataset }) {
   const evidence = result?.status === "established" || result?.status === "not established" ? result.evidence : null;
   const established = result?.status === "established" && evidence?.combined_validation.gate === true && result.standings.length > 0;
   const rows = established ? [...result.standings].sort((a, b) => b.points_per_race - a.points_per_race) : [];
+  const scale = performanceScale(rows.map((row) => row.points_per_race));
   const state = result?.status === "established" && !established ? "not established" : result?.status || "unavailable";
   const reason = result?.status === "established" && !established ? "This release does not contain a validated overall ranking." : result?.reason || "No verified championship results are available in this release yet.";
   return <Chapter title="Overall (equal car)"
@@ -136,11 +139,12 @@ function OverallChapter({ data }: { data: Dataset }) {
     {established ? <>
       <table className="briefing-ranking briefing-overall-table" aria-label="Equal-car championship summary">
         <thead><tr><th scope="col">Driver</th><th scope="col" className="numeric">Points per race</th><th scope="col" className="numeric">Title probability</th><th scope="col" className="numeric">Rank range</th></tr></thead>
-        <tbody>{rows.map((row) => <tr className="briefing-ranking-row" key={row.driver_id}>
-          <th scope="row">{row.name}</th><td className="numeric">{row.points_per_race.toFixed(2)}</td>
+        <tbody>{rows.map((row) => <tr className="briefing-ranking-row" key={row.driver_id} style={{ "--performance-color": scale(row.points_per_race) } as CSSProperties}>
+          <th scope="row">{row.name}</th><td className="numeric performance-value">{row.points_per_race.toFixed(2)}</td>
           <td className="numeric">{pct(row.p_title)}</td><td className="numeric">{row.rank_lo}–{row.rank_hi}</td>
         </tr>)}</tbody>
       </table>
+      <PerformanceKey points />
       <p className="briefing-units">{evidence.simulated_seasons.toLocaleString()} simulated seasons · {evidence.n_races_simulated} races per season. Title probability is the share won; rank ranges describe simulated season outcomes.</p>
       <p className="briefing-takeaway"><strong>{rows[0].name}</strong> has the most expected points per race in this equal-car simulation.</p>
     </> : <div className="briefing-withheld"><h2>Overall ranking {state}</h2><p>{reason}</p></div>}

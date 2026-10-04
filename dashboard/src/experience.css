@@ -62,3 +62,15 @@ main:focus { outline: none; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+/* Performance cues stay on the measured value and its uncertainty graphic. */
+.rank-table .performance-value, .briefing-ranking .performance-value {
+  color: var(--performance-color);
+  background: color-mix(in srgb, var(--performance-color) 7%, #000);
+  font-weight: 600;
+}
+.rank-table tr.selected-row { background: #141414; }
+.performance-key { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin-top: 12px; color: var(--muted); font-size: 11px; line-height: 1.6; }
+.performance-key-scale { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.performance-key-scale > span { display: inline-block; width: 64px; height: 4px; border-radius: 2px; }
+.ranking-panel > .performance-key { margin: 14px 22px 0; }
