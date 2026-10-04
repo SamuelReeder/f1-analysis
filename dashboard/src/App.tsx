@@ -1,16 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import {
-  Activity,
-  ArrowLeftRight,
+  ArrowLeft,
   ArrowRight,
-  BookOpen,
-  ChevronRight,
-  Target,
-  Gauge,
   LoaderCircle,
   RefreshCw,
   TriangleAlert,
-  Users,
 } from "lucide-react";
 import type {
   Dataset,
@@ -21,36 +15,42 @@ import type {
   View,
 } from "./types";
 import Rankings from "./views/Rankings";
+import Briefing, { BRIEFING_CHAPTERS } from "./views/Briefing";
+import Overall from "./views/Overall";
 import Compare from "./views/Compare";
 import Health from "./views/Health";
 import Forecasts from "./views/Forecasts";
 import MethodologyPage from "./views/MethodologyPage";
 
 const navigation = [
-  { id: "drivers", name: "Drivers", icon: Users },
-  { id: "cars", name: "Cars", icon: Gauge },
-  { id: "compare", name: "Head to head", icon: ArrowLeftRight },
-  { id: "forecasts", name: "Track record", icon: Target },
-  { id: "methodology", name: "Methodology", icon: BookOpen },
-  { id: "health", name: "Model health", icon: Activity },
+  { id: "briefing", name: "Briefing" },
+  { id: "drivers", name: "Drivers" },
+  { id: "cars", name: "Cars" },
+  { id: "compare", name: "Head to head" },
+  { id: "forecasts", name: "Track record" },
+  { id: "methodology", name: "Methodology" },
+  { id: "health", name: "Model health" },
 ] as const;
-function getRoute(): { view: View; discipline: Discipline } {
+function getRoute(): { view: View; discipline: Discipline; chapter: string } {
   const [page, metric] = window.location.hash.slice(1).split("/");
-  if (page === "race") return { view: "drivers", discipline: "race" };
+  if (page === "race") return { view: "drivers", discipline: "race", chapter: "qualifying" };
   const view = navigation.some((n) => n.id === page)
     ? (page as View)
-    : "drivers";
+    : "briefing";
   return {
     view,
+    chapter: BRIEFING_CHAPTERS.some((c) => c.id === metric) ? metric : "qualifying",
     discipline:
       (view === "drivers" || view === "cars") && metric === "race"
         ? "race"
-        : "qualifying",
+        : view === "drivers" && metric === "overall"
+          ? "overall"
+          : "qualifying",
   };
 }
 
 export default function App() {
-  const [{ view, discipline }, setRoute] = useState(getRoute);
+  const [{ view, discipline, chapter }, setRoute] = useState(getRoute);
   const [data, setData] = useState<Dataset>();
   const [release, setRelease] = useState<Release>();
   const releaseRef = useRef("");
@@ -138,13 +138,17 @@ export default function App() {
     mounted.current = true;
     refresh();
     const timer = setInterval(refresh, 30000);
-    const nav = () => {
+    const nav = (event?: HashChangeEvent) => {
       if (window.location.hash === "#main") return;
       const route = getRoute();
       if (window.location.hash === "#race") {
         window.history.replaceState(null, "", "#drivers/race");
       }
       setRoute(route);
+      if (event) requestAnimationFrame(() => {
+        document.getElementById("main")?.focus({ preventScroll: true });
+        window.scrollTo({ top: 0 });
+      });
     };
     nav();
     window.addEventListener("hashchange", nav);
@@ -155,60 +159,45 @@ export default function App() {
     };
   }, [refresh]);
   const [metric, setMetric] = useState<Metric>("headline");
+  const returnChapter = view === "drivers" && discipline === "overall" ? "overall"
+    : (view === "drivers" || view === "cars") && discipline === "race" ? "race"
+    : view === "cars" || (view === "compare" && chapter === "cars") ? "cars"
+    : view === "forecasts" || view === "health" || view === "methodology" ? "evidence" : "qualifying";
   return (
     <div className="shell">
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <aside className="sidebar">
-        <a href="#drivers" className="brand" aria-label="F1 Analysis">
-          <span>
-            F1<span className="brand-light">Analysis</span>
-          </span>
+      <header className="site-header">
+        <a href="#briefing" className="site-brand" aria-label="F1 Analysis — briefing">
+          <strong>F1 Analysis</strong>
         </a>
-        <nav aria-label="Main navigation">
+        <nav className="site-navigation" aria-label="Main navigation">
           {navigation.map((n) => (
             <a
-              href={`#${n.id}${(n.id === "drivers" || n.id === "cars") && discipline === "race" ? "/race" : ""}`}
+              href={`#${n.id}${n.id === "drivers" && discipline === "overall" ? "/overall" : (n.id === "drivers" || n.id === "cars") && discipline === "race" ? "/race" : ""}`}
               key={n.id}
               className={view === n.id ? "active" : ""}
               aria-current={view === n.id ? "page" : undefined}
             >
-              <n.icon size={19} />
-              {n.name}
-              {view === n.id && <ChevronRight size={15} />}
+              <span>{n.name}</span>
             </a>
           ))}
         </nav>
-        <div className="sidebar-foot">
-          <span className="online-dot" />
-          Independent F1 analysis<span>Qualifying & race pace</span>
+        <div className="top-actions">
+          <button
+            className="icon-button"
+            title="Check for new published results"
+            aria-label="Check for updates"
+            onClick={refresh}
+            disabled={checking}
+          >
+            <RefreshCw size={17} className={checking ? "spin" : ""} />
+          </button>
         </div>
-      </aside>
+      </header>
       <div className="workspace">
-        <header className="topbar">
-          <span className="breadcrumb">
-            F1 Analysis <ChevronRight size={14} />
-            <strong>{navigation.find((n) => n.id === view)?.name}</strong>
-          </span>
-          <div className="top-actions">
-            {data && (
-              <span className="season-pill">
-                {data.meta.data_as_of.event_id.slice(0, 4)} SEASON
-              </span>
-            )}
-            <button
-              className="icon-button"
-              title="Check for new published results"
-              aria-label="Check for updates"
-              onClick={refresh}
-              disabled={checking}
-            >
-              <RefreshCw size={17} className={checking ? "spin" : ""} />
-            </button>
-          </div>
-        </header>
-        <main id="main">
+        <main id="main" tabIndex={-1}>
           {!data ? (
             <div className="loading panel">
               {error ? (
@@ -251,7 +240,16 @@ export default function App() {
                   Refresh in progress: {run.stage}. Showing the last release.
                 </div>
               )}
-              {view === "drivers" || view === "cars" ? (
+              {view !== "briefing" && (
+                <div className="explore-context">
+                  <a href={`#briefing/${returnChapter}`}><ArrowLeft size={15} aria-hidden="true" />Back to briefing</a>
+                </div>
+              )}
+              {view === "briefing" ? (
+                <Briefing data={data} chapter={chapter} />
+              ) : view === "drivers" && discipline === "overall" ? (
+                <Overall result={data.overall} />
+              ) : view === "drivers" || view === "cars" ? (
                 <Rankings
                   key={view}
                   data={data}
@@ -261,7 +259,7 @@ export default function App() {
                   setMetric={setMetric}
                 />
               ) : view === "compare" ? (
-                <Compare data={data} metric={metric} setMetric={setMetric} />
+                <Compare key={chapter} data={data} car={chapter === "cars"} metric={metric} setMetric={setMetric} />
               ) : view === "forecasts" ? (
                 <Forecasts data={data} />
               ) : view === "methodology" ? (

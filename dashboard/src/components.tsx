@@ -36,10 +36,12 @@ export function Band({
   value,
   domain,
   compact = false,
+  spectrum = false,
 }: {
   value: Estimate;
   domain: number[];
   compact?: boolean;
+  spectrum?: boolean;
 }) {
   const pos = (v: number) =>
     8 + ((v - domain[0]) / (domain[1] - domain[0])) * 184;
@@ -65,7 +67,7 @@ export function Band({
         y2="13"
         stroke="currentColor"
         strokeWidth="3"
-        opacity=".28"
+        opacity={spectrum ? .8 : .28}
       />
       <line
         x1={pos(value.q25 ?? value.q05)}
@@ -75,7 +77,7 @@ export function Band({
         stroke="currentColor"
         strokeWidth="6"
         strokeLinecap="round"
-        opacity=".65"
+        opacity={spectrum ? 1 : .65}
       />
       <circle
         cx={pos(value.median)}

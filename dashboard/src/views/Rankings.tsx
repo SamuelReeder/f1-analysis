@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { ArrowDownToLine, ArrowRight, Info, Search, X } from "lucide-react";
 import type {
   Dataset,
@@ -10,6 +10,7 @@ import type {
 } from "../types";
 import { Badge, Empty, Band, MetricControl } from "../components";
 import { color, signed, pct, date, exportCsv, exportRaceCsv } from "../lib";
+import { performanceScale, PerformanceKey } from "../performance";
 import Trend from "./Trend";
 import RankingHeader from "./RankingHeader";
 import {
@@ -117,6 +118,7 @@ export default function Rankings({
       `${r.name} ${r.team}`.toLowerCase().includes(search.toLowerCase()) &&
       (team === "all" || r.teamKey === team),
   );
+  const scale = performanceScale(rows.map((r) => r.pace.median));
   const domain = [
     Math.min(0, ...rows.map((r) => r.pace.q05)),
     Math.max(0, ...rows.map((r) => r.pace.q95)),
@@ -281,6 +283,7 @@ export default function Rankings({
                       return (
                         <tr
                           key={r.id}
+                          style={{ "--performance-color": scale(v.median) } as CSSProperties}
                           className={
                             r.id === selectedRow?.id ? "selected-row" : ""
                           }
@@ -313,21 +316,16 @@ export default function Rankings({
                             </button>
                           </td>
                           <td
-                            className={`numeric pace-number ${v.median > 0 ? "positive" : ""}`}
+                            className="numeric pace-number performance-value"
                           >
                             {signed(v.median)}
                             <small>s</small>
                           </td>
                           <td
                             className="range-col"
-                            style={{
-                              color:
-                                r.id === selectedRow?.id
-                                  ? "var(--accent)"
-                                  : "var(--muted)",
-                            }}
+                            style={{ color: "var(--performance-color)" }}
                           >
-                            <Band value={v} domain={domain} compact />
+                            <Band value={v} domain={domain} compact spectrum />
                           </td>
                           <td className="numeric top3-col">
                             {v.p_top3 === undefined ? "—" : pct(v.p_top3)}
@@ -343,6 +341,7 @@ export default function Rankings({
                   </tbody>
                 </table>
               </div>
+              <PerformanceKey />
               {!filtered.length && (
                 <Empty title="No matching entries">
                   Try a different name or team.
