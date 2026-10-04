@@ -145,13 +145,17 @@ def levels(S: pd.DataFrame) -> dict:
 
 
 def fit(S, lev, warmup=500, samples=500, **kw) -> dict:
-    from .artifacts import diagnostics, require_convergence
-    mcmc = MCMC(NUTS(partial(model, **kw), target_accept_prob=0.9), num_warmup=warmup, num_samples=samples,
-                num_chains=4, chain_method="parallel", progress_bar=False)
-    mcmc.run(jax.random.PRNGKey(0), codes(S, lev), extra_fields=("diverging",))
-    require_convergence(diagnostics(
-        {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k not in ("lp", "mu")},
-        int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())))
+    from .artifacts import diagnostics, fit_until_converged
+
+    def run(w, s, accept, seed):
+        mcmc = MCMC(NUTS(partial(model, **kw), target_accept_prob=accept or 0.9), num_warmup=w, num_samples=s,
+                    num_chains=4, chain_method="parallel", progress_bar=False)
+        mcmc.run(jax.random.PRNGKey(seed), codes(S, lev), extra_fields=("diverging",))
+        return mcmc, diagnostics(
+            {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k not in ("lp", "mu")},
+            int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum()))
+
+    mcmc = fit_until_converged(run, warmup, samples)
     post = {k: np.asarray(v) for k, v in mcmc.get_samples().items() if k not in ("lp", "mu")}
     post["_divergences"] = int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())
     return post
@@ -253,6 +257,8 @@ def main() -> None:
     dr.sort_values("gained_per_start_median", ascending=False).to_csv(OUT / "drivers.csv", index=False)
     np.savez_compressed(OUT / "heldout_effects.npz", **effects)
     np.savez_compressed(OUT / "driver_draws.npz", drivers=np.array(drivers), driver=post["driver"].astype(np.float32))
+    from .artifacts import fit_record
+    summary["fit_attempts"] = fit_record()
     (OUT / "summary.json").write_text(json.dumps(summary, indent=1))
     from .artifacts import record
     record(OUT, [OUT / f for f in ("summary.json", "drivers.csv", "heldout_effects.npz", "driver_draws.npz")],

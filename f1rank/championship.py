@@ -123,13 +123,17 @@ def race_model(d, variant="grid_ratings"):
 
 
 def fit_race(R, variant="grid_ratings", warmup=500, samples=500) -> dict:
-    from .artifacts import diagnostics, require_convergence
-    mcmc = MCMC(NUTS(partial(race_model, variant=variant)), num_warmup=warmup, num_samples=samples,
-                num_chains=4, chain_method="parallel", progress_bar=False)
-    mcmc.run(jax.random.PRNGKey(0), arrays(R), extra_fields=("diverging",))
-    require_convergence(diagnostics(
-        {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k != "ll_race"},
-        int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())))
+    from .artifacts import diagnostics, fit_until_converged
+
+    def run(w, s, accept, seed):
+        mcmc = MCMC(NUTS(partial(race_model, variant=variant), target_accept_prob=accept or 0.8), num_warmup=w,
+                    num_samples=s, num_chains=4, chain_method="parallel", progress_bar=False)
+        mcmc.run(jax.random.PRNGKey(seed), arrays(R), extra_fields=("diverging",))
+        return mcmc, diagnostics(
+            {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k != "ll_race"},
+            int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum()))
+
+    mcmc = fit_until_converged(run, warmup, samples)
     return {k: np.asarray(v) for k, v in mcmc.get_samples().items() if k != "ll_race"}
 
 
@@ -512,6 +516,8 @@ def main() -> None:
     pd.DataFrame(summary.pop("contribution_breakdown")).to_csv(OUT / "contributions.csv", index=False)
     table = pd.DataFrame(out_rows).sort_values(["version", "points_per_race"], ascending=[True, False])
     table.to_csv(OUT / "standings.csv", index=False)
+    from .artifacts import fit_record
+    summary["fit_attempts"] = fit_record()
     (OUT / "summary.json").write_text(json.dumps(summary, indent=1))
     dependency_paths = [ROOT / "outputs" / "reliability" / f for f in ("summary.json", "drivers.csv", "manifest.json")]
     for n in effects:

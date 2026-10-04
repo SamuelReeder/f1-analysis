@@ -165,13 +165,17 @@ def arrays(R: pd.DataFrame, drivers, team_seasons, weight=None) -> dict:
 
 def fit(R: pd.DataFrame, drivers, team_seasons, weight=None, warmup=500, samples=500, **kw) -> dict:
     from functools import partial
-    from .artifacts import diagnostics, require_convergence
-    mcmc = MCMC(NUTS(partial(model, **kw), target_accept_prob=0.9), num_warmup=warmup, num_samples=samples,
-                num_chains=4, chain_method="parallel", progress_bar=False)
-    mcmc.run(jax.random.PRNGKey(0), arrays(R, drivers, team_seasons, weight), extra_fields=("diverging",))
-    require_convergence(diagnostics(
-        {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k != "ll_i"},
-        int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())))
+    from .artifacts import diagnostics, fit_until_converged
+
+    def run(w, s, accept, seed):
+        mcmc = MCMC(NUTS(partial(model, **kw), target_accept_prob=accept or 0.9), num_warmup=w, num_samples=s,
+                    num_chains=4, chain_method="parallel", progress_bar=False)
+        mcmc.run(jax.random.PRNGKey(seed), arrays(R, drivers, team_seasons, weight), extra_fields=("diverging",))
+        return mcmc, diagnostics(
+            {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k != "ll_i"},
+            int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum()))
+
+    mcmc = fit_until_converged(run, warmup, samples)
     post = {k: np.asarray(v) for k, v in mcmc.get_samples().items() if k != "ll_i"}
     post["divergences"] = int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())
     return post
@@ -276,6 +280,8 @@ def main() -> None:
                   "mechanical_rate_multiplier_median": np.exp(np.median(post["supplier"], 0)),
                   "q05": np.exp(np.percentile(post["supplier"], 5, 0)),
                   "q95": np.exp(np.percentile(post["supplier"], 95, 0))}).to_csv(OUT / "supplier_seasons.csv", index=False)
+    from .artifacts import fit_record
+    summary["fit_attempts"] = fit_record()
     (OUT / "summary.json").write_text(json.dumps(summary, indent=1))
     from .artifacts import record
     record(OUT, [OUT / f for f in ("summary.json", "drivers.csv", "team_seasons.csv", "supplier_seasons.csv")],

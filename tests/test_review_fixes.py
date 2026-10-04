@@ -378,3 +378,42 @@ def test_sprint_qualifying_gate_needs_every_part(monkeypatch):
     unconverged["convergence"]["lfosprint_mid2026"]["ok"] = False
     assert not sprint_gate(unconverged)["passed"]
     assert not sprint_gate(None)["passed"]
+
+
+def test_racing_quality_fits_retry_on_the_fixed_ladder():
+    from f1rank import artifacts
+
+    artifacts._FITS.clear()
+    calls = []
+
+    def run(warmup, samples, accept, seed):
+        calls.append((warmup, samples, accept, seed))
+        return f"mcmc{len(calls)}", {"converged": len(calls) == 3, "rhat_max": 1.1, "divergences": 0}
+
+    assert artifacts.fit_until_converged(run, 1000, 1000, seed=5) == "mcmc3"
+    assert calls == [(1000, 1000, None, 5), (2000, 2000, None, 6), (3000, 4000, None, 7)]
+    record = artifacts.fit_record()
+    assert record["fits"] == 1 and len(record["retried"]) == 1
+    assert [a["samples"] for a in record["retried"][0]] == [1000, 2000, 4000]
+
+    # a fit that converges on its first attempt is the unchanged fit and records no retry
+    artifacts.fit_until_converged(lambda *a: ("m", {"converged": True}), 800, 800)
+    assert artifacts.fit_record()["fits"] == 2 and len(artifacts.fit_record()["retried"]) == 1
+    artifacts._FITS.clear()
+
+
+def test_racing_quality_fit_fails_after_the_last_attempt():
+    from f1rank import artifacts
+
+    artifacts._FITS.clear()
+    calls = []
+
+    def run(warmup, samples, accept, seed):
+        calls.append((warmup, samples, accept, seed))
+        return "m", {"converged": False, "rhat_max": 1.06, "divergences": 0}
+
+    with pytest.raises(RuntimeError, match="after 4 attempts"):
+        artifacts.fit_until_converged(run, 500, 500)
+    assert calls[-1] == (1500, 2000, 0.98, 3) and len(calls) == 4
+    assert len(artifacts.fit_record()["retried"][0]) == 4
+    artifacts._FITS.clear()

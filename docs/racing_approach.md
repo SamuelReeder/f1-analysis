@@ -595,3 +595,41 @@ tests). Each output lists it under `excluded_unconverged_qualifying_folds`, and 
 manifest records the failure. The season's races still train later seasons' folds. The
 rule depends only on the qualifying fit, as the qualifying validation's exclusion of
 unconverged cutoffs (`lfo_summary.json`) does, and no gate changes.
+
+## Amendment (2026-10-04, before any score of the regenerated racing run was inspected)
+
+The regenerated racing run (2026-10-04, 10:06 to 14:30) ended with one fit failing the
+publication convergence check: the full fit in `firstlap` (R-hat 1.067 against the check
+of 1.05, no divergences, 4,000 draws). The racing-quality fits make a single attempt
+with a fixed seed. Unlike the qualifying fits, which use the retry rule `jobs.ATTEMPTS`
+fixed before their runs, nothing above said what a racing-quality fit does when its one
+attempt does not converge. The equal-car championship needs the draws of every quality
+that enters, so `firstlap`'s failure stopped it (`outputs/firstlap/manifest.json` was
+never written).
+
+The only information used here is the failure message in the run's log. No racing score
+from that run was read, and no output of that run is used: every racing output is
+regenerated after the code change below, because the change alters the code hash that
+each manifest records.
+
+Decided before any racing score under the corrected procedure: every MCMC fit in the
+racing-quality modules (`firstlap`, `consistency`, `reliability`, `pitstops`, `wetpace`,
+`benchmark`, `overtaking` and the championship's race stage) that fails the publication
+check is retried under one fixed ladder, `artifacts.RETRY`, relative to that fit's own
+settings. The ratios are those of `jobs.ATTEMPTS` (700+400, 1,400+800, 2,100+1,600,
+2,100+1,600 at target acceptance 0.98):
+
+| attempt | warm-up | draws per chain | target acceptance | seed |
+|---|---|---|---|---|
+| 1 | as before | as before | as before | as before |
+| 2 | 2 x | 2 x | as before | +1 |
+| 3 | 3 x | 4 x | as before | +2 |
+| 4 | 3 x | 4 x | 0.98 | +3 |
+
+The first attempt is the fit made before this amendment, so a fit that already
+converged is unchanged. The check, its thresholds, the models, the data, the gates and
+the entry tests do not change. If all four attempts fail, the fit fails as before: that
+quality is not published and nothing is retuned. The race-pace model (`racemulti`) is
+not covered: every one of its fits converged in the run above. Each summary records the
+number of fits and the attempts of any fit that needed more than one, with its
+diagnostics (`fit_attempts`); attempts are also printed to the run's log.
