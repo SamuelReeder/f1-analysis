@@ -231,13 +231,18 @@ their history had a gap at that event.
 ### Publish on push with GitHub Pages
 
 `.github/workflows/dashboard.yml` checks and deploys the dashboard when relevant
-changes reach `main`. Pull requests to `main` run the same checks without publishing.
+changes reach `main` or a pull request targets `main` or `automated-refresh`.
+Passing pull requests from branches in this repository also publish to the same
+public Pages URL, replacing its previous deployment. Fork pull requests run the
+checks without publishing. Deployments are serialized across branches.
 The workflow can also be started manually from the Actions tab on `main`.
 
 One-time setup in [repository Pages settings](https://github.com/SamuelReeder/f1-analysis/settings/pages):
-choose **GitHub Actions** under **Build and deployment → Source**. Then merge or push
-the dashboard, workflow, checked ratings and supporting files to `main`. The expected
-site address is **https://samuelreeder.github.io/f1-analysis/**. Preparing the workflow
+choose **GitHub Actions** under **Build and deployment → Source**. In the
+`github-pages` environment, allow deployment branches `main` and
+`refs/pull/*/merge`. Then push the dashboard, workflow, checked ratings and
+supporting files to `main` or a same-repository pull request branch. The site
+address is **https://samuelreeder.github.io/f1-analysis/**. Preparing the workflow
 locally does not enable Pages or publish the uncommitted dashboard.
 
 Each deployment verifies the committed export manifest, builds a browser dataset,
