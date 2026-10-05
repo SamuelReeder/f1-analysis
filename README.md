@@ -635,10 +635,12 @@ mechanical risk are equalised.
 The [championship diagnosis and follow-up](docs/championship_followup.md) records an
 exact replay and a simpler candidate using race-specific pace alone. Its positive
 historical comparison is exploratory and does not change the failed publication
-decision. A prospective evaluation awaits future outcomes, and a separately
-[registered archive study](docs/championship_archive.md) tests earlier race outcomes
-excluded from the recorded championship benchmark. Both results remain pending;
-the Overall ranking remains withheld.
+decision. A prospective evaluation awaits future outcomes. The separately
+[registered archive study](docs/championship_archive.md), using earlier race
+outcomes excluded from the recorded championship benchmark, stopped before
+predictive scoring: its race-pace fit exhausted the registered convergence
+attempts. [The recorded failure and diagnostics](docs/championship_followup.md#archive-study-outcome)
+leave the simpler candidate unvalidated; the Overall ranking remains withheld.
 
 The qualifying folds for **2014 and 2021** failed every prescribed attempt, so
 those seasons are excluded wherever season-ahead qualifying features are needed.

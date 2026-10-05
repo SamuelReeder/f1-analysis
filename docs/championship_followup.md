@@ -129,8 +129,9 @@ even when their results have not yet been downloaded.
 This is a substantial timing limit: **the prospective experiment cannot establish
 improvement now**. The separately registered archive study provides a potential
 earlier validation route using race outcomes excluded from the recorded benchmark.
-Its result is pending, and its earlier-era scope must remain explicit. The original
-failure and this future registration remain immutable.
+That study has now stopped on an exhausted convergence ladder before predictive
+scoring, as recorded below. The original failure and this future registration
+remain immutable.
 
 Run the evaluator as a memory-capped systemd user service when the horizon and
 inputs are ready. Its command is:
@@ -151,3 +152,83 @@ started no fits. The full Python suite passed 157 tests. The portable dashboard
 publication still verifies. Sources:
 `outputs/analysis/championship_followup/{status,verification}.json`. No model source,
 canonical racing output, or published ranking was changed by this follow-up.
+
+## Archive study outcome
+
+The separate archive study ended on 2026-10-05 with
+`kind: exhausted_registered_fit`, `gate: false`, and
+`publication_authorized: false`. Its terminal evidence is committed in `4d8eb23`:
+`outputs/analysis/championship_archive/{failure,execution}.json`,
+`execution.log`, `preparation.json`, and `failure.manifest.json`.
+The frozen registration and its source/input hashes still match. The prepared lap
+and weather hashes were verified after failure, and the canonical dashboard
+publication still verifies. No model code or canonical racing result was changed.
+
+The first test fold, 2007, exhausted the original race-pace retry ladder. Its
+qualifying fit had passed on its final registered attempt:
+
+| Qualifying attempt | R-hat maximum | Divergences | Draws | Converged |
+|---|---:|---:|---:|---|
+| 1 | 1.097074 | 7 | 1,600 | No |
+| 2 | 1.051602 | 3 | 3,200 | No |
+| 3 | 1.041013 | 235 | 6,400 | No |
+| 4 | 1.018885 | 2 | 6,400 | Yes |
+
+| Race-pace attempt | R-hat maximum | Divergences | Draws | Converged |
+|---|---:|---:|---:|---|
+| 1 | 1.026081 | 4 | 2,000 | No |
+| 2 | 1.020425 | 3 | 2,000 | No |
+| 3 | 1.036766 | 6 | 2,000 | No |
+
+All race-pace R-hat values passed the unchanged threshold, but each attempt
+exceeded the permitted divergence count of 2 for 2,000 draws. The registered
+implementation is `f1rank/racemulti.py:fit`, which uses its original retry ladder;
+it was explicitly frozen separately from the racing-quality `artifacts.RETRY`
+ladder. Changing its settings now would not complete the registered experiment.
+
+The process recorded 1,369.451 seconds elapsed. It made no race-stage fits and
+completed no predictive folds. Thus there is no archive predictive interval to
+interpret: this is a computational failure, not evidence that the candidate's
+predictive effect is negative. The failed draws were not checkpointed for reuse.
+No season was removed and no sampler setting, model, or acceptance criterion was
+changed after the failure.
+
+The archive plan and registration remain unchanged. The prospective study still
+awaits its registered future evidence. Neither study currently establishes the
+simpler model, and the original combined prediction test remains failed. A new
+methodological study would need a justified specification and separately
+registered evaluation; it cannot be presented as a passing rerun of this study.
+The current evidence does not authorize an Overall ranking.
+
+### Concrete next-study proposal, awaiting authorization
+
+The standing instruction says to record an exhausted fit and not rerun it with
+different settings. Accordingly, no further archive fits have been launched.
+The following is a proposal for a separate computational study, not an amendment
+to the completed archive registration and not an active experiment:
+
+- Keep the fixed race-pace candidate, likelihood, priors, archive seasons, input
+  rules, baselines, convergence thresholds, and predictive decision rule unchanged.
+- Before any new fit, commit a separate registration, source hashes, output
+  directory, and cache namespace. Preserve the failed study and its diagnostics.
+- Apply the same conservative sampler recipe to every archive race-pace fold:
+  1,500 warm-up iterations, 2,000 draws per chain, four chains, target acceptance
+  0.98, and seed 3. These settings are the final stage of the already committed
+  `artifacts.RETRY` ladder applied to the original `racemulti.fit` defaults. There
+  would be one attempt under this recipe, with no additional retries or seed search.
+- Keep qualifying and race-stage fitting under their existing registered rules.
+  Verify all qualifying and race-pace fits before computing predictive scores.
+  Require every archive fold to converge; any exhausted fit terminates the new
+  study without dropping its season. Evaluate the full predictive comparison only
+  once, without inspecting partial scores to change the study.
+- Implement the sampler wrapper in a separate analysis module so the frozen model
+  sources, original registrations, canonical outputs, and dashboard remain intact.
+  Verify that the wrapper uses exactly the existing likelihood and priors.
+- Record a pass, failure, or inconclusive interval and retain the earlier-era scope.
+  A successful calculation would still require the publication review described
+  in the archive plan; it would not itself switch on the Overall table.
+
+This proposal changes computation after observing a convergence failure. It needs
+explicit authorization to depart from the standing stop rule. The existing
+prospective study can instead remain the next evaluation route; its fixed horizon
+and settings are already registered. No passing outcome is promised by either route.
