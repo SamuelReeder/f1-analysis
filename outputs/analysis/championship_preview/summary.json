@@ -1,0 +1,100 @@
+{
+ "status": "exploratory preview; validation not established",
+ "gate": false,
+ "production_publication_authorized": false,
+ "fixed_candidate": [
+  "race_specific_pace"
+ ],
+ "data_as_of": "2026-15",
+ "source_revision": "92dc1121973264c89c9257a37189ed93900776e4",
+ "original_combined_validation": {
+  "n_races": 207,
+  "seasons": [
+   2016,
+   2026
+  ],
+  "mean_diff_per_race": 0.12543388956410872,
+  "ci95": [
+   -0.02981124744889914,
+   0.2934394047178071
+  ],
+  "selected_by_outer_season": {
+   "2016": [
+    "first_lap"
+   ],
+   "2017": [
+    "degradation",
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "2018": [
+    "degradation",
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "2019": [
+    "degradation",
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "2020": [
+    "race_specific_pace"
+   ],
+   "2022": [
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "2023": [
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "2024": [
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "2025": [
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "2026": [
+    "race_specific_pace"
+   ]
+  },
+  "gate": false,
+  "design": "season-ahead qualifying; backward conditional ablations on inner seasons only; outer test of the selection procedure; season-block bootstrap",
+  "excluded_unconverged_qualifying_folds": [
+   2014,
+   2021
+  ]
+ },
+ "archive_failures": {
+  "championship_archive": {
+   "kind": "exhausted_registered_fit",
+   "exception": "Archive race pace failed convergence for 2007",
+   "gate": false
+  },
+  "championship_archive_conservative": {
+   "kind": "exhausted_registered_fit",
+   "exception": "Conservative archive pace failed convergence for 2007",
+   "gate": false
+  }
+ },
+ "full_pace_diagnostics": {
+  "rhat_max": 1.0093920230865479,
+  "divergences": 0,
+  "n_draws": 3200,
+  "converged": true
+ },
+ "full_race_stage_fit_attempts": {
+  "fits": 1,
+  "retried": []
+ },
+ "simulated_seasons": 2000,
+ "n_races_simulated": 24,
+ "driver_error_rates_used": false,
+ "p_retire_common": 0.14981558992562205,
+ "rng_seed": 0,
+ "headline": "Expected points; current driver-team compatibility retained",
+ "scope": "Current qualifying and career race pace beyond qualifying; conditional equal-car simulation",
+ "elapsed_seconds": 23.712269985000603
+}
