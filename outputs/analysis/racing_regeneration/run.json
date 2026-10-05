@@ -1,0 +1,836 @@
+{
+  "run_date": "2026-10-04",
+  "timezone": "America/Toronto",
+  "cpu_quota_percent": 800,
+  "cpu_weight": 10,
+  "nice": 19,
+  "memory_admission_budget": "13G",
+  "lanes": {
+    "rgpu1": {
+      "exit_status": 0,
+      "log_sha256": "bc8967041e6e31aeec6ca90f6d33858d6cfc56f87cb034a3180111f5aaacfd3d"
+    },
+    "rgpu2": {
+      "exit_status": 0,
+      "log_sha256": "e69476c273a58ce89a9cb0bfb79b9f7fce43a41f81ff68f79a3cd842b6c32c2e"
+    },
+    "rgpufinal": {
+      "exit_status": 0,
+      "log_sha256": "8d625933457b1fe28db54489c6f42058bd6624544b94cac284d1c11154af7ac1"
+    },
+    "rcpu": {
+      "exit_status": 0,
+      "log_sha256": "aaf58ae8890861f921363d31c019cdefb100a8b91e21ffaa1ec82cce39d300d4"
+    },
+    "rfinal": {
+      "exit_status": 0,
+      "log_sha256": "319939fc6e8909fc6ee75ed93c3c69ab84fdf56d6f9d3c3a3b760d0caa68671f"
+    }
+  },
+  "stages": [
+    {
+      "lane": "rgpu1",
+      "stage": "racemulti 2026",
+      "started_at": "2026-10-04T19:44:37-04:00",
+      "status": "done",
+      "elapsed_seconds": 11
+    },
+    {
+      "lane": "rgpu1",
+      "stage": "racemulti 2024",
+      "started_at": "2026-10-04T19:44:48-04:00",
+      "status": "done",
+      "elapsed_seconds": 9
+    },
+    {
+      "lane": "rgpu1",
+      "stage": "racemulti 2022",
+      "started_at": "2026-10-04T19:44:57-04:00",
+      "status": "done",
+      "elapsed_seconds": 7
+    },
+    {
+      "lane": "rgpu1",
+      "stage": "racemulti 2020",
+      "started_at": "2026-10-04T19:45:04-04:00",
+      "status": "done",
+      "elapsed_seconds": 9
+    },
+    {
+      "lane": "rgpu1",
+      "stage": "racemulti 2018",
+      "started_at": "2026-10-04T19:45:13-04:00",
+      "status": "done",
+      "elapsed_seconds": 9
+    },
+    {
+      "lane": "rgpu1",
+      "stage": "racemulti 2016",
+      "started_at": "2026-10-04T19:45:22-04:00",
+      "status": "done",
+      "elapsed_seconds": 5
+    },
+    {
+      "lane": "rgpu1",
+      "stage": "racemulti 2014",
+      "started_at": "2026-10-04T19:45:27-04:00",
+      "status": "done",
+      "elapsed_seconds": 6
+    },
+    {
+      "lane": "rgpu1",
+      "stage": "racemulti 2012",
+      "started_at": "2026-10-04T19:45:33-04:00",
+      "status": "done",
+      "elapsed_seconds": 7
+    },
+    {
+      "lane": "rgpu2",
+      "stage": "racemulti 2025",
+      "started_at": "2026-10-04T19:44:37-04:00",
+      "status": "done",
+      "elapsed_seconds": 11
+    },
+    {
+      "lane": "rgpu2",
+      "stage": "racemulti 2023",
+      "started_at": "2026-10-04T19:44:48-04:00",
+      "status": "done",
+      "elapsed_seconds": 11
+    },
+    {
+      "lane": "rgpu2",
+      "stage": "racemulti 2021",
+      "started_at": "2026-10-04T19:44:59-04:00",
+      "status": "done",
+      "elapsed_seconds": 4
+    },
+    {
+      "lane": "rgpu2",
+      "stage": "racemulti 2019",
+      "started_at": "2026-10-04T19:45:03-04:00",
+      "status": "done",
+      "elapsed_seconds": 6
+    },
+    {
+      "lane": "rgpu2",
+      "stage": "racemulti 2017",
+      "started_at": "2026-10-04T19:45:09-04:00",
+      "status": "done",
+      "elapsed_seconds": 8
+    },
+    {
+      "lane": "rgpu2",
+      "stage": "racemulti 2015",
+      "started_at": "2026-10-04T19:45:17-04:00",
+      "status": "done",
+      "elapsed_seconds": 8
+    },
+    {
+      "lane": "rgpu2",
+      "stage": "racemulti 2013",
+      "started_at": "2026-10-04T19:45:25-04:00",
+      "status": "done",
+      "elapsed_seconds": 6
+    },
+    {
+      "lane": "rgpufinal",
+      "stage": "racemulti heldout",
+      "started_at": "2026-10-04T19:46:30-04:00",
+      "status": "done",
+      "elapsed_seconds": 48
+    },
+    {
+      "lane": "rgpufinal",
+      "stage": "racemulti full",
+      "started_at": "2026-10-04T19:47:18-04:00",
+      "status": "done",
+      "elapsed_seconds": 12
+    },
+    {
+      "lane": "rcpu",
+      "stage": "firstlap",
+      "started_at": "2026-10-04T19:45:33-04:00",
+      "status": "done",
+      "elapsed_seconds": 1007
+    },
+    {
+      "lane": "rcpu",
+      "stage": "consistency",
+      "started_at": "2026-10-04T20:02:20-04:00",
+      "status": "done",
+      "elapsed_seconds": 38
+    },
+    {
+      "lane": "rcpu",
+      "stage": "reliability",
+      "started_at": "2026-10-04T20:02:58-04:00",
+      "status": "done",
+      "elapsed_seconds": 1067
+    },
+    {
+      "lane": "rcpu",
+      "stage": "pitstops",
+      "started_at": "2026-10-04T20:20:45-04:00",
+      "status": "done",
+      "elapsed_seconds": 192
+    },
+    {
+      "lane": "rcpu",
+      "stage": "battles episodes",
+      "started_at": "2026-10-04T20:23:57-04:00",
+      "status": "done",
+      "elapsed_seconds": 66
+    },
+    {
+      "lane": "rcpu",
+      "stage": "battles feasibility",
+      "started_at": "2026-10-04T20:25:03-04:00",
+      "status": "done",
+      "elapsed_seconds": 1396
+    },
+    {
+      "lane": "rcpu",
+      "stage": "battles fit",
+      "started_at": "2026-10-04T20:48:19-04:00",
+      "status": "done",
+      "elapsed_seconds": 192
+    },
+    {
+      "lane": "rcpu",
+      "stage": "wetpace",
+      "started_at": "2026-10-04T20:51:31-04:00",
+      "status": "done",
+      "elapsed_seconds": 43
+    },
+    {
+      "lane": "rcpu",
+      "stage": "benchmark",
+      "started_at": "2026-10-04T20:52:14-04:00",
+      "status": "done",
+      "elapsed_seconds": 305
+    },
+    {
+      "lane": "rfinal",
+      "stage": "championship",
+      "started_at": "2026-10-04T20:58:11-04:00",
+      "status": "done",
+      "elapsed_seconds": 965
+    },
+    {
+      "lane": "rfinal",
+      "stage": "report",
+      "started_at": "2026-10-04T21:14:16-04:00",
+      "status": "done",
+      "elapsed_seconds": 25
+    }
+  ],
+  "retries": [
+    {
+      "module": "firstlap",
+      "fit": "full model with lasting team",
+      "attempts": [
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 1.0669660568237305,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 2000,
+          "samples": 2000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.0124074220657349,
+          "divergences": 0,
+          "n_draws": 8000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "firstlap",
+      "fit": "held-out 2013: no driver effects, lasting_team=False",
+      "attempts": [
+        {
+          "warmup": 500,
+          "samples": 500,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 1.0607967376708984,
+          "divergences": 0,
+          "n_draws": 2000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.014540672302246,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "firstlap",
+      "fit": "held-out 2017: driver effects, lasting_team=True",
+      "attempts": [
+        {
+          "warmup": 500,
+          "samples": 500,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 14012.1298828125,
+          "divergences": 0,
+          "n_draws": 2000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.0082982778549194,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "firstlap",
+      "fit": "held-out 2017: no driver effects, lasting_team=True",
+      "attempts": [
+        {
+          "warmup": 500,
+          "samples": 500,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 1.069296956062317,
+          "divergences": 0,
+          "n_draws": 2000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.0108120441436768,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "firstlap",
+      "fit": "held-out 2020: driver effects, lasting_team=True",
+      "attempts": [
+        {
+          "warmup": 500,
+          "samples": 500,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 2621.858642578125,
+          "divergences": 0,
+          "n_draws": 2000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.017642855644226,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "firstlap",
+      "fit": "held-out 2020: no driver effects, lasting_team=True",
+      "attempts": [
+        {
+          "warmup": 500,
+          "samples": 500,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 1.0524017810821533,
+          "divergences": 0,
+          "n_draws": 2000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.022515892982483,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "firstlap",
+      "fit": "held-out 2021: no driver effects, lasting_team=True",
+      "attempts": [
+        {
+          "warmup": 500,
+          "samples": 500,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 1.0517889261245728,
+          "divergences": 0,
+          "n_draws": 2000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.028609037399292,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "firstlap",
+      "fit": "held-out 2022: driver effects, lasting_team=True",
+      "attempts": [
+        {
+          "warmup": 500,
+          "samples": 500,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 43047.05078125,
+          "divergences": 0,
+          "n_draws": 2000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.0061990022659302,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "firstlap",
+      "fit": "held-out 2024: driver effects, lasting_team=True",
+      "attempts": [
+        {
+          "warmup": 500,
+          "samples": 500,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 36699.66796875,
+          "divergences": 0,
+          "n_draws": 2000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.0102962255477905,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "firstlap",
+      "fit": "held-out 2024: no driver effects, lasting_team=True",
+      "attempts": [
+        {
+          "warmup": 500,
+          "samples": 500,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 116100.8046875,
+          "divergences": 0,
+          "n_draws": 2000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.0252981185913086,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "firstlap",
+      "fit": "held-out 2025: driver effects, lasting_team=True",
+      "attempts": [
+        {
+          "warmup": 500,
+          "samples": 500,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 1.0575199127197266,
+          "divergences": 0,
+          "n_draws": 2000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.0178425312042236,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "firstlap",
+      "fit": "held-out 2013: no driver effects, lasting_team=False",
+      "attempts": [
+        {
+          "warmup": 500,
+          "samples": 500,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 1.0607967376708984,
+          "divergences": 0,
+          "n_draws": 2000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.014540672302246,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "firstlap",
+      "fit": "held-out 2017: no driver effects, lasting_team=True",
+      "attempts": [
+        {
+          "warmup": 500,
+          "samples": 500,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 1.069296956062317,
+          "divergences": 0,
+          "n_draws": 2000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.0108120441436768,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "firstlap",
+      "fit": "held-out 2020: no driver effects, lasting_team=True",
+      "attempts": [
+        {
+          "warmup": 500,
+          "samples": 500,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 1.0524017810821533,
+          "divergences": 0,
+          "n_draws": 2000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.022515892982483,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "firstlap",
+      "fit": "held-out 2021: no driver effects, lasting_team=True",
+      "attempts": [
+        {
+          "warmup": 500,
+          "samples": 500,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 1.0517889261245728,
+          "divergences": 0,
+          "n_draws": 2000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.028609037399292,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "firstlap",
+      "fit": "held-out 2023: driver effects, lasting_team=False",
+      "attempts": [
+        {
+          "warmup": 500,
+          "samples": 500,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 149410.671875,
+          "divergences": 0,
+          "n_draws": 2000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.0083730220794678,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "firstlap",
+      "fit": "held-out 2024: no driver effects, lasting_team=True",
+      "attempts": [
+        {
+          "warmup": 500,
+          "samples": 500,
+          "target_accept": null,
+          "seed": 0,
+          "rhat_max": 116100.8046875,
+          "divergences": 0,
+          "n_draws": 2000,
+          "finite": true,
+          "converged": false
+        },
+        {
+          "warmup": 1000,
+          "samples": 1000,
+          "target_accept": null,
+          "seed": 1,
+          "rhat_max": 1.0252981185913086,
+          "divergences": 0,
+          "n_draws": 4000,
+          "finite": true,
+          "converged": true
+        }
+      ]
+    },
+    {
+      "module": "racemulti",
+      "fit": "held-out 2013 (reused checked cache)",
+      "attempts": [
+        {
+          "seed": 0,
+          "warmup": 500,
+          "rhat_max": 1.0509014129638672,
+          "divergences": 1,
+          "minutes": 13.6
+        },
+        {
+          "seed": 1,
+          "warmup": 1000,
+          "rhat_max": 1.0275001525878906,
+          "divergences": 2,
+          "minutes": 13.3
+        }
+      ]
+    },
+    {
+      "module": "racemulti",
+      "fit": "held-out 2015 (reused checked cache)",
+      "attempts": [
+        {
+          "seed": 0,
+          "warmup": 500,
+          "rhat_max": 302043.6875,
+          "divergences": 0,
+          "minutes": 41.4
+        },
+        {
+          "seed": 1,
+          "warmup": 1000,
+          "rhat_max": 1.0328054428100586,
+          "divergences": 2,
+          "minutes": 15.4
+        }
+      ]
+    },
+    {
+      "module": "racemulti",
+      "fit": "held-out 2023 (reused checked cache)",
+      "attempts": [
+        {
+          "seed": 0,
+          "warmup": 500,
+          "rhat_max": 1.0755085945129395,
+          "divergences": 0,
+          "minutes": 23.9
+        },
+        {
+          "seed": 1,
+          "warmup": 1000,
+          "rhat_max": 1.0177892446517944,
+          "divergences": 0,
+          "minutes": 35.9
+        }
+      ]
+    }
+  ],
+  "other_racing_fit_attempts": {
+    "consistency": {
+      "fits": 18,
+      "retried": []
+    },
+    "reliability": {
+      "fits": 66,
+      "retried": []
+    },
+    "pitstops": {
+      "fits": 17,
+      "retried": []
+    },
+    "wet": {
+      "fits": 9,
+      "retried": []
+    },
+    "benchmark": {
+      "fits": 45,
+      "retried": []
+    },
+    "battles": {
+      "fits": 1,
+      "retried": []
+    },
+    "championship": {
+      "fits": 180,
+      "retried": []
+    }
+  },
+  "checks": {
+    "python_after_export_refresh": {
+      "passed": 144,
+      "failed": 0,
+      "elapsed_seconds": 44.48
+    },
+    "initial_python_failure": "race_total manifest fingerprinted the previous artifacts.py; fixed by race_total --validate --export, reusing checked fits",
+    "dashboard_release": "f58a383f81c6d10b7b09",
+    "overall_status": "not established",
+    "standings_rows": 0,
+    "contributions_rows": 0,
+    "python_final": {
+      "passed": 148,
+      "failed": 0,
+      "elapsed_seconds": 41.48
+    },
+    "local_build": "passed",
+    "local_browser": {
+      "passed": 67,
+      "failed": 0,
+      "reported_duration": "1.6m",
+      "workers": 2
+    },
+    "clean_clone": {
+      "python": "3.12.3",
+      "node": "22.20.0",
+      "dashboard_python_passed": 49,
+      "dashboard_python_elapsed_seconds": 1.22,
+      "browser_passed": 67,
+      "browser_reported_duration": "1.2m",
+      "build": "passed with /f1-analysis/ base",
+      "publication_receipt": "passed",
+      "racing_rows_current": true,
+      "overall_status": "not established",
+      "posterior_caches_present": false,
+      "log_sha256": "12ca099585a44c4067953dff8b4c8c770cda0275cb0ce341d8e757f905866f6d",
+      "environment_note": "Fresh virtual environment and npm ci; host browser libraries already available. GitHub runner time, memory and deployment remain unverified."
+    },
+    "publication_tooling": "CI verifies the committed payload and portable source receipt; scheduled refresh records and commits the new publication."
+  }
+}

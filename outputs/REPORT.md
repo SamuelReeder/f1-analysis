@@ -306,9 +306,11 @@ Same model fitted from 2006 (adding 2006–09 Q1/Q2 low-fuel times) vs from 2010
 
 ## Racing (stage 2)
 
-**Racing validation needs regeneration.** Outputs without current provenance are excluded from this report and cannot enter the championship. Earlier pass/fail results and equal-car standings are historical results, not validated results of the corrected pipeline. See README, Review fixes and regeneration.
-
-Affected files: `battles/summary.json`, `benchmark/summary.json`, `championship/summary.json`, `consistency/summary.json`, `firstlap/summary.json`, `pitstops/summary.json`, `race/multi_heldout.json`, `race/multi_summary.json`, `reliability/summary.json`, `wet/summary.json`.
+**Canonical racing results regenerated.** The current gates and championship
+validation below use their regenerated provenance. Three older secondary race-pace
+sensitivity comparisons remain stale and are excluded: `race/multi_heldout_fastf1only.json`,
+`race/multi_heldout_fastf1only_coast.json`, `race/multi_heldout_fastf1only_telemetry.json`.
+They do not determine the canonical gates.
 
 Every racing quality has a standalone test on held-out data and, where it has held-out draws, the equal-car championship's entry test. Racing outcomes run from 2010; lap-level evidence from 2018 (FastF1), and from 2010 through Jolpica's lap data with a weaker observation model.
 
@@ -318,7 +320,19 @@ Every racing quality has a standalone test on held-out data and, where it has he
 
 | quality | kind | own gate | overall rating |
 |---|---|---|---|
+| race-specific pace (beyond the qualifying link) | driver | pass | does not enter (+0.199, +0.064 to +0.338) |
+| tyre degradation | driver | fail | does not enter (+0.001, -0.015 to +0.017) |
+| consistency (lap-time spread) | driver | fail | does not enter (-0.030, -0.061 to -0.004) |
+| wet-weather pace | driver | fail | not tested (the championship simulates dry races) |
+| error rate (own-error retirements) | driver | fail | does not enter (its own held-out test is the incident stage's entry test) |
+| first-lap performance | driver | pass | does not enter (+0.007, -0.030 to +0.037) |
 | overtaking and defending | driver | not feasible | not tested (no held-out test) |
+| unexplained results effect | driver | fail | does not enter (its own test is on held-out finishing orders) |
+| mechanical reliability (team-season) | team | fail | equalised |
+| mechanical reliability (power-unit supplier) | team | fail | equalised |
+| pit stops (team operations) | team | pass | equalised |
+
+Left out of the held-out tests that use season-ahead qualifying features, because the season's qualifying fold failed every attempt of the fixed retry rule (rule fixed before these runs: docs/racing_approach.md, amendment of 2026-10-02): 2014 (race-specific pace and degradation, results benchmark, championship race stage, championship entry test); 2021 (race-specific pace and degradation, wet pace, results benchmark, championship race stage, championship entry test).
 
 ### Racing data
 
@@ -336,6 +350,151 @@ Every racing quality has a standalone test on held-out data and, where it has he
 - **Retirement causes.** 1214 retirements: 939 from a coded status, 228 inferred from race evidence, 47 from class base rates (uncoded, no race evidence). Jolpica codes causes through 2022 but records almost every later retirement only as "Retired"; those get probabilities from a model of the cause class given race-control and lap evidence, fitted on 315 coded retirements. Held out a season at a time, its log loss is 0.761 against 0.879 for base rates (accuracy 0.65 vs 0.43): informative, far from certain.
 - **Who caused an incident** is split by stated assumptions (the audit lists them), not estimates.
 
+### Race pace and tyre degradation
+
+One joint lap-level model across seasons (racemulti.py): lap = race trend + compounds + degradation + dirty air + car (team x race) + gamma x qualifying pace (stage 1) + race-specific driver pace (lasting, per season, per race) + driver degradation, with AR(1) Student-t errors within stints. Laps before 2018 have unknown compounds: a stint offset replaces the compound terms, with their own noise scale.
+
+Full fit: 238,073 clean laps in 259 dry races (fastf1 122,648, jolpica 115,425), 2010–2026; gamma 0.98 (90% interval 0.88–1.08); SD of lasting race-specific pace 0.080 (90% interval 0.058–0.103)% of lap time; max R-hat 1.009, 0 divergences.
+
+Held out (fit on every season before S (from 2010); predict season S's teammate gaps (pair-season means of stage A gaps, >= 4 races, both drivers seen in training); 13 training fits, max R-hat 1.049, 3 of them (2013, 2015, 2023) on the second attempt of the fixed retry rule (new seed, doubled warmup); squared error in %², negative = better, bootstrap interval over pair-seasons):
+
+| test | result |
+|---|---|
+| qualifying link vs zero | -0.0329 (95% interval -0.0575 to -0.0128; 113 pair-seasons) |
+| + race-specific pace vs qualifying link | -0.0051 (95% interval -0.0115 to -2.2e-04; 113 pair-seasons) |
+| degradation effects vs zero | -2.6e-05 (95% interval -5.7e-05 to +6.7e-08; 113 pair-seasons) |
+
+- **Race-specific pace** **passes** its gate (interval below zero).
+- **Degradation** **does not pass** its gate.
+
+The same held-out predictions split by era (descriptive, added after the gate result; the gates are the pooled intervals above):
+
+| held out | race-specific pace vs qualifying link | degradation vs zero |
+|---|---|---|
+| held out 2012-2017 (Jolpica targets) | -0.0033 (95% interval -0.0067 to +2.9e-05; 42 pair-seasons) | -7.2e-05 (95% interval -1.4e-04 to -9.7e-06; 42 pair-seasons) |
+| held out 2018 on (FastF1 targets) | -0.0061 (95% interval -0.0158 to +0.0011; 71 pair-seasons) | +1.0e-06 (95% interval -1.9e-05 to +2.0e-05; 71 pair-seasons) |
+
+The eras disagree on at least one result (table above).
+
+Top 15 by race-specific pace (full fit, 2010–2026; lasting race pace beyond the qualifying link, % of lap time (positive = faster; 0.1% is about 0.09 s on a 90 s lap); identified only from differences between teammates, linked across teams by drivers who move; all 83 drivers in `outputs/race/multi_drivers.csv`; ordered by median, and most intervals overlap):
+
+| driver | median | 90% interval | seasons | clean laps |
+|---|---|---|---|---|
+| Max Verstappen | +0.1549 | +0.0810 to +0.2332 | 12 | 8266 |
+| Sergio Pérez | +0.1281 | +0.0595 to +0.1934 | 15 | 10015 |
+| Daniel Ricciardo | +0.1140 | +0.0482 to +0.1835 | 14 | 8656 |
+| Lance Stroll | +0.1119 | +0.0420 to +0.1864 | 10 | 6316 |
+| Sebastian Vettel | +0.0882 | +0.0175 to +0.1617 | 13 | 8794 |
+| Jean-Éric Vergne | +0.0864 | -0.0180 to +0.2030 | 3 | 1748 |
+| Nicholas Latifi | +0.0853 | -0.0085 to +0.1874 | 3 | 1867 |
+| Charles Pic | +0.0699 | -0.0383 to +0.1923 | 2 | 1282 |
+| Kimi Räikkönen | +0.0588 | -0.0190 to +0.1349 | 10 | 6757 |
+| Logan Sargeant | +0.0570 | -0.0435 to +0.1751 | 2 | 1160 |
+| Guanyu Zhou | +0.0546 | -0.0384 to +0.1487 | 3 | 2258 |
+| Pascal Wehrlein | +0.0506 | -0.0561 to +0.1632 | 2 | 1360 |
+| Charles Leclerc | +0.0473 | -0.0225 to +0.1215 | 9 | 6116 |
+| Michael Schumacher | +0.0473 | -0.0545 to +0.1599 | 3 | 1642 |
+| Jenson Button | +0.0440 | -0.0321 to +0.1237 | 8 | 4796 |
+
+The earlier two-stage shortcut (per-race estimates, then a model across races) was not accepted by the joint-model check on 2024 (rule: at least 90% of drivers within a quarter of a posterior SD, for both quantities); its driver numbers are not published and this joint model replaces it.
+
+### Reliability and driver errors (2010 onward)
+
+Competing risks per lap (7,188 starts, 1,214 retirements); uncertain causes count fractionally. Mechanical risk has era, power-unit supplier-season and team-season terms; own-error risk has team-season, traffic and driver terms; every cause has wet-race terms (48 FastF1 wet races, 36 proxy-wet races before 2018). Traffic: 1.75 (90% interval 1.18–2.27) on the log own-error rate per unit share of laps in traffic; wet races (FastF1) 0.16 (90% interval -0.17–0.46) own error, 0.17 (90% interval -0.29–0.59) caused by another driver.
+
+Held-out seasons, paired log predictive density per race:
+
+- **Driver own-error effects** (baseline keeps every other term): +0.003 (95% interval -0.002 to +0.010): **does not pass**.
+- **Team-season mechanical effects** (second half of each season from its first half, supplier terms kept): -0.003 (95% interval -0.024 to +0.019): **does not pass**.
+- **Power-unit supplier-season effects** (team-season terms kept): -0.015 (95% interval -0.055 to +0.023): **does not pass**.
+
+### Pit stops (team operations)
+
+Pit-lane time relative to the race's median stop (11,864 stops, 323 races, 2011–2026; jolpica 5,953, fastf1 5,911); excluded: relative time outside [-5.0, 20.0] s, or red flag on the in-lap. Lasting team SD 0.66 (90% interval 0.49–0.96) s, team-season SD 0.21 (90% interval 0.19–0.23) s; Student-t with very heavy tails (nu 0.97: slow stops). Held out (second half of each season from its first half): team terms +1.609 (95% interval +0.860 to +2.307): **passes**.
+
+2026, seconds per stop relative to the race median (negative = faster):
+
+| team | rel_s_median | rel_s_q05 | rel_s_q95 | stops | share_slow_3s |
+|---|---|---|---|---|---|
+| brackley | -0.695 | -1.047 | -0.348 | 46 | 0.065 |
+| mclaren | -0.497 | -0.864 | -0.153 | 45 | 0.156 |
+| ferrari | -0.496 | -0.853 | -0.147 | 49 | 0.102 |
+| red_bull | -0.447 | -0.806 | -0.102 | 46 | 0.087 |
+| silverstone | -0.324 | -0.711 | 0.051 | 40 | 0.200 |
+| williams | -0.320 | -0.675 | 0.023 | 58 | 0.172 |
+| faenza | -0.287 | -0.648 | 0.066 | 40 | 0.050 |
+| enstone | -0.265 | -0.609 | 0.083 | 44 | 0.045 |
+| hinwil | -0.212 | -0.589 | 0.134 | 47 | 0.128 |
+| haas | 0.207 | -0.138 | 0.554 | 46 | 0.174 |
+| cadillac | 0.574 | 0.160 | 1.016 | 47 | 0.149 |
+
+### Consistency
+
+Each driver's robust spread of clean-lap residuals in the stage-A regression, compared with the teammate's (2,323 teammate races in 259 races; median spread 0.45% of lap time). Driver SD on the log scale 0.043 (90% interval 0.029–0.060); split-half correlation of driver means 0.28. Held out against no driver effect: -2.2e-04 (95% interval -0.0027 to +0.0024; 128 pair-seasons): **does not pass**.
+
+### Wet-weather pace (experimental)
+
+Laps on intermediates or wets, each compared with the field on the same lap (121 teammate races in 15 wet races, 2018 onward). Wet gaps follow qualifying gaps with gamma 1.64 (90% interval 1.20–2.07) (larger than in the dry). A driver-specific wet effect, held out against the qualifying link: squared error -0.019 per race (95% interval -0.115 to +0.075; 11 races): **does not pass**.
+
+### First-lap performance
+
+Positions gained from the grid slot to the end of lap 1 (7,537 starts: 343 races from 2010, 29 sprint races). Slot, side of the grid, start tyre, sprint, a lasting team term, team-season car and driver effects. Driver SD 0.36 (90% interval 0.28–0.46) places, lasting team SD 0.79 (90% interval 0.56–1.16), team-season SD 0.34 (90% interval 0.28–0.41).
+
+Held-out seasons (paired log predictive density per race or sprint):
+
+| model | driver effects, all | drivers who changed team | drivers who stayed |
+|---|---|---|---|
+| with lasting team term (final) | +0.106 (95% interval +0.050 to +0.161) | -0.014 (95% interval -0.044 to +0.016); 1275 starts | +0.118 (95% interval +0.064 to +0.172) |
+| without it (first build's structure) | +0.335 (95% interval +0.243 to +0.425) | +0.021 (95% interval -0.020 to +0.062) | +0.317 (95% interval +0.233 to +0.414) |
+
+The lasting team term itself (no driver effects in either model): +0.538 (95% interval +0.403 to +0.674). 90% predictive intervals cover 92%.
+
+- **Standalone ranking gate** (overall interval above zero, interval for drivers in a new team not entirely below zero; the second condition was written down after the first build's result): **passes**. The lasting team term was added after the first build failed; the decision rests on the final run with 2010-2017 starts, fixed in advance (docs/racing_approach.md, decisions fixed before the final runs).
+
 ### Overtaking and defending
 
+16,967 battle episodes and 6,432 passes (by source: fastf1 8,891 episodes, jolpica 7,237 episodes, sprint 839 episodes).
 Synthetic feasibility at the estimated effect sizes (at the estimated size, mean over 3 truths: corr >= 0.7 and 90% coverage 85-97%, for both attacker and defender effects): attacker correlation 0.68, coverage 87%; defender correlation 0.50, coverage 87%: **not feasible**.
+Not rated: reported as opportunity counts (`outputs/battles/drivers.csv`).
+
+### Results benchmark
+
+Rank-ordered logit on full classifications, held-out seasons 2014–2026 (226 races):
+
+| model | log_lik_per_race | spearman | teammate_h2h |
+|---|---|---|---|
+| ratings | -41.956 | 0.523 | 0.590 |
+| ratings_results | -41.843 | 0.499 | 0.581 |
+| grid | -40.444 | 0.619 | 0.652 |
+| grid_ratings | -40.428 | 0.637 | 0.654 |
+
+- A driver results effect over the stage-1 ratings (the unexplained contribution): +0.113 (95% interval -0.022 to +0.237).
+- Grid + ratings vs grid alone: +0.016 (95% interval -0.089 to +0.123).
+
+### Equal-car championship
+
+2,000 simulated 24-race seasons with equal cars, each from one posterior draw: qualifying (stage 1, pace in the current car, with weekend form and session noise) -> grid -> race given the grid (ranking model fitted on real finishing orders) -> retirements (reliability model, equal mechanical risk, driver error rates at the average) -> points. Race stage on held-out finishing orders: vs grid alone +0.209 (95% interval -0.206 to +0.614); vs ratings alone +2.665 (95% interval +2.368 to +2.932).
+
+Conditional entry tests: the combined model with each quality removed in turn; backward removal retests the remaining qualities. Qualifying features are frozen before each held-out season. The entire selection procedure also has an outer test; its gate must pass before any quality enters.
+
+| quality | held-out seasons | held-out races | result | enters |
+|---|---|---|---|---|
+| consistency | 2012–2026 | 265 | -0.030 (95% interval -0.061 to -0.004) | no |
+| degradation | 2012–2026 | 265 | +0.001 (95% interval -0.015 to +0.017) | no |
+| first_lap | 2012–2026 | 265 | +0.007 (95% interval -0.030 to +0.037) | no |
+| race_specific_pace | 2012–2026 | 265 | +0.199 (95% interval +0.064 to +0.338) | yes |
+| overtaking_attack |  |  | no held-out draws (outputs/battles/heldout_effects.npz) | no |
+| overtaking_defend |  |  | no held-out draws (outputs/battles/heldout_effects.npz) | no |
+
+Outer validation of selection vs no racing qualities: +0.125 (95% interval -0.030 to +0.293); **does not pass**.
+
+Qualities in the simulation: qualifying pace only (no racing quality entered).
+
+**Overall ranking withheld.** The combined validation gate failed. No experimental
+equal-car standings or contribution table is published here or in the dashboard.
+`outputs/championship/standings.csv` and `contributions.csv` retain the simulated
+research outputs for audit; they do not establish a best-driver ranking.
+
+Publication review (2026-10-05): the canonical scores are generated by
+`f1rank.report`; this publication copy scopes its stale-output warning to the named
+secondary files and withholds the research tables under the recorded failed gate.
