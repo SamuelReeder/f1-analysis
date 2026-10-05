@@ -237,3 +237,44 @@ This proposal changes computation after observing a convergence failure. It need
 explicit authorization to depart from the standing stop rule. The existing
 prospective study can instead remain the next evaluation route; its fixed horizon
 and settings are already registered. No passing outcome is promised by either route.
+
+## Authorized computational follow-up outcome
+
+The user approved the separate conservative sampler study. Its implementation was
+committed in `71661e6` and its immutable registration in `3539740`, before fitting.
+The Python suite passed 162 tests in 46.98 seconds. The run used a 6 GiB memory cap,
+with the existing shared CPU quota unchanged. Sources:
+`outputs/analysis/championship_archive_conservative/verification.json` and
+`docs/championship_archive_conservative_protocol.json`.
+
+The study failed its first archive race-pace training fit. Its fixed attempt used
+the registered seed 3, 1,500 warm-up iterations, 2,000 samples per chain, four
+chains, and target acceptance 0.98. The maximum R-hat was 564,716.4375, with zero
+divergences across 8,000 draws. Zero divergences did not establish convergence:
+the extreme between-chain disagreement fails the unchanged R-hat requirement.
+The process recorded 2,885.949 seconds elapsed; the pace attempt itself recorded
+2,884.917 seconds. It reused the already accepted qualifying checkpoint, so the
+qualifying attempt history in its summary is not a new set of qualifying fits.
+
+No race-stage fit or predictive fold was completed. The failure and its frozen
+evidence are committed in `0cee335`:
+`outputs/analysis/championship_archive_conservative/{failure,execution}.json`,
+`failure.manifest.json`, `execution.log`, and `preparation.json`. Registered
+sources, inputs, and copied qualifying checkpoints still match. The original
+dashboard publication also still verifies. This is another computational failure;
+there is no predictive interval from this study to interpret or publish.
+
+The wrapper calls the existing race-pace data adapter, likelihood, priors, and
+prior-median initialization directly; its sampler settings match the authorized
+registration. Source review has not established an implementation error that would
+justify replacing the result. The saved failure contains the worst R-hat but not
+the individual failed chain states, so it does not identify which parameter caused
+the disagreement. A separate initialization diagnostic checks the frozen seed's
+starting values and gradients without taking warm-up or posterior transitions.
+It cannot produce a replacement passing fit or a ranking.
+
+The initialization diagnostic in `outputs/analysis/championship_sampler_initialization/`
+found finite initial parameters and gradients in every registered chain. It made
+no sampling transitions. This does not explain the later chain disagreement or
+establish that sampling was reliable; no concrete implementation defect has been
+demonstrated by this check. The failed studies remain terminal.
