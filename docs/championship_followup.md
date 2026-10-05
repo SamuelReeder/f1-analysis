@@ -99,10 +99,14 @@ coefficients are positive. The recorded diagnostics do not indicate a convergenc
 failure to repair. There is evidence for simplifying selection, but no demonstrated
 software error whose correction would reverse the completed gate.
 
-The independent-data inventory is
-`outputs/analysis/championship_evidence_inventory.json`. Earlier race results are
-present, but matching earlier lap inputs are absent, and no deliberately reserved
-test set has been established. The archive alone is not a confirmation dataset.
+The initial processed-data inventory is
+`outputs/analysis/championship_evidence_inventory.json`. It did not find earlier lap
+inputs in the processed tables. A subsequent raw-archive audit in commit `9f347e6`
+found complete lap-event coverage in the already downloaded dump and verified that
+the recorded championship benchmark excluded those earlier race outcomes. The
+separate study is registered in [`championship_archive.md`](championship_archive.md).
+Its scope is earlier-era validation; the audit cannot establish what humans may
+have inspected outside the repository.
 The risk from repeatedly choosing models using the same validation outcomes is
 also described by [Cawley and Talbot](https://www.jmlr.org/beta/papers/v11/cawley10a.html).
 
@@ -123,9 +127,10 @@ horizon after seeing a result. Races completed before registration are excluded,
 even when their results have not yet been downloaded.
 
 This is a substantial timing limit: **the prospective experiment cannot establish
-improvement now**. A demonstrably untouched historical dataset with suitable inputs
-could support a separate preregistered study sooner, but no such dataset has been
-established. The original failure and this future registration remain immutable.
+improvement now**. The separately registered archive study provides a potential
+earlier validation route using race outcomes excluded from the recorded benchmark.
+Its result is pending, and its earlier-era scope must remain explicit. The original
+failure and this future registration remain immutable.
 
 Run the evaluator as a memory-capped systemd user service when the horizon and
 inputs are ready. Its command is:
