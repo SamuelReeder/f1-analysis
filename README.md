@@ -632,6 +632,12 @@ enters**, driver error rates are averaged, and the experimental equal-car standi
 are withheld. Wet pace is not tested in the dry-race scenario; team operations and
 mechanical risk are equalised.
 
+The [championship diagnosis and follow-up](docs/championship_followup.md) records an
+exact replay and a simpler candidate using race-specific pace alone. Its positive
+historical comparison is exploratory and does not change the failed publication
+decision. A separate prospective evaluation is registered and awaits independent
+outcomes; the Overall ranking remains withheld.
+
 The qualifying folds for **2014 and 2021** failed every prescribed attempt, so
 those seasons are excluded wherever season-ahead qualifying features are needed.
 They can still train later folds. Wet pace excludes 2021; its test has no 2014 races.

@@ -105,3 +105,44 @@ present, but matching earlier lap inputs are absent, and no deliberately reserve
 test set has been established. The archive alone is not a confirmation dataset.
 The risk from repeatedly choosing models using the same validation outcomes is
 also described by [Cawley and Talbot](https://www.jmlr.org/beta/papers/v11/cawley10a.html).
+
+## Registered follow-up and current limit
+
+`docs/championship_followup_protocol.json`, committed in `c265e40`, freezes the
+race-specific-pace-only candidate and the evaluator's source hashes. It keeps the
+existing race likelihood, priors, season-ahead inputs, sampling defaults, retry
+ladder, and season-block uncertainty calculation. There is no backward selection
+or search over seeds. Grid-only and ratings-only comparisons are secondary and
+cannot rescue a failed primary comparison with grid plus qualifying ratings.
+
+The registration accepts only outcomes dated after 2026-10-05. Its fixed horizon
+covers the remaining eligible races in 2026 and the seasons 2027 and 2028, with a
+decision after 2028-12-31. This retains the existing minimum of three converged
+season blocks. It does not repeatedly test intermediate scores or extend the
+horizon after seeing a result. Races completed before registration are excluded,
+even when their results have not yet been downloaded.
+
+This is a substantial timing limit: **the prospective experiment cannot establish
+improvement now**. A demonstrably untouched historical dataset with suitable inputs
+could support a separate preregistered study sooner, but no such dataset has been
+established. The original failure and this future registration remain immutable.
+
+Run the evaluator as a memory-capped systemd user service when the horizon and
+inputs are ready. Its command is:
+
+```bash
+.venv/bin/python -m analysis.championship_followup evaluate
+```
+
+It checks the original committed registration, frozen model code, complete race
+coverage against freshly retrieved completed-season results, pre-season training
+cutoffs, convergence, and unchanged input hashes during evaluation. Its research
+outputs stay under `outputs/analysis/championship_followup/`; it cannot write the
+canonical championship result or dashboard data. A passing future result would
+still require integration, regeneration, and publication review.
+
+The current preflight returned `awaiting_future_evidence`, with `gate: false`, and
+started no fits. The full Python suite passed 157 tests. The portable dashboard
+publication still verifies. Sources:
+`outputs/analysis/championship_followup/{status,verification}.json`. No model source,
+canonical racing output, or published ranking was changed by this follow-up.

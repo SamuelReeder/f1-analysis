@@ -763,3 +763,12 @@ repository URL prefix, and 67 browser tests. It had no posterior caches and
 preserved current racing rows and the not-established Overall status. Host browser
 libraries were already available; this does not measure a GitHub runner or deploy
 the site.
+
+## Championship diagnosis and prospective follow-up
+
+The completed combined failure is preserved. The exact replay, season-level
+diagnosis, and fixed race-specific-pace follow-up are documented in
+[`championship_followup.md`](championship_followup.md). The candidate's positive
+historical comparison is exploratory. Its separately committed prospective
+registration does not amend the completed experiment or authorize a ranking;
+independent validation remains pending.
