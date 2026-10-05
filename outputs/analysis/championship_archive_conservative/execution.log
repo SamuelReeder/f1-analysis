@@ -1,0 +1,21 @@
+gate: champconservative starts at 2026-10-05 15:55:56 (0 bytes in use)
+An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not installed. Falling back to cpu.
+== conservative training 2007 start
+  conservative pace diagnostics: {'warmup': 1500, 'samples': 2000, 'chains': 4, 'target_accept': 0.98, 'seed': 3, 'protocol_sha256': '13b86216d25ffabb684e288acc658e12041d0d14e88d15ca39c1ca4370f06c27', 'rhat_max': 564716.4375, 'divergences': 0, 'n_draws': 8000, 'finite': True, 'converged': False, 'elapsed_seconds': 2884.917052031029}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/sreeder/f1-analysis/analysis/championship_archive_conservative.py", line 236, in <module>
+    main()
+  File "/home/sreeder/f1-analysis/analysis/championship_archive_conservative.py", line 232, in main
+    register() if parser.parse_args().action == "register" else run()
+                                                                ^^^^^
+  File "/home/sreeder/f1-analysis/analysis/championship_archive_conservative.py", line 195, in run
+    records = run_folds(protocol, train, score)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sreeder/f1-analysis/analysis/championship_archive_conservative.py", line 123, in run_folds
+    trained = [(s, train_fold(s)) for s in seasons]
+                   ^^^^^^^^^^^^^
+  File "/home/sreeder/f1-analysis/analysis/championship_archive_conservative.py", line 168, in train
+    raise archive.ExhaustedFit(f"Conservative archive pace failed convergence for {season}")
+analysis.championship_archive.ExhaustedFit: Conservative archive pace failed convergence for 2007
