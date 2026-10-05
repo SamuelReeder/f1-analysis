@@ -153,21 +153,26 @@ after the complete release has been written. The underlying qualifying export ha
 manifest covering its inputs, model/export code, fit metadata and every consumed
 output. Partial exports and changed inputs are rejected. The full posterior fit is
 checked by `export`, while the browser only receives summaries and pairwise contrasts.
-The new data files are generated locally and ignored by Git. A static build includes
-the publications available at build time; a static host must receive updated `data/`
-files to show subsequent releases. Serve `latest.json` and `status.json` without caching.
+The current publication, pointer and portable receipt are committed. After publishing,
+run `.venv/bin/python dashboard/verify_publication.py record` on the fitting machine.
+This compares the payload with the fully checked exporter and records source hashes.
+CI verifies that receipt and immutable payload with
+`python dashboard/verify_publication.py`, then builds the site without ignored
+posterior caches. Changed inputs, gate evidence or publication content stop the build.
+The scheduled refresh records and commits the new receipt and current publication.
+A static host must receive updated `data/` files to show subsequent releases. Serve `latest.json` and `status.json` without caching.
 
 The total driver race-pace ranking is published; the car race-pace table is withheld
 because it did not pass the prediction and interval-coverage checks. Equal-car
-championship standings are withheld until the corrected racing outputs have
-current provenance and pass the combined validation gate. A regeneration alone
-does not establish the ranking.
+championship standings remain withheld after regeneration: the combined validation
+gate failed. The Overall view shows the current evidence and reason without a ranking.
 Portable skill is explicitly experimental. Historical validation files have no run
 manifest and are shown as recorded research, not as fresh acceptance of a new fit.
 
 Verification:
 
 ```bash
+.venv/bin/python dashboard/verify_publication.py
 .venv/bin/python -m pytest -q
 npm --prefix dashboard run build
 cd dashboard
@@ -558,12 +563,11 @@ before the one they forecast, design ending with that season) are
 
 ## Racing (stage 2)
 
-**2026-09-30 review update:** the recorded racing results below describe the earlier
-pipeline. Its qualifying features used later qualifying data, and its championship
-entry tests tested qualities individually. Those validation results and equal-car
-standings need regeneration under the corrected procedure. They are not evidence that
-the new gates pass. The qualifying headline remains available; its exports have been
-updated. See **Review fixes and regeneration** below.
+**2026-10-05 regeneration update:** the canonical racing outputs now use qualifying
+features frozen before each test season, nested conditional entry tests, current
+provenance and the fixed convergence retry rules. The equal-car championship ran,
+but its combined validation gate failed, so an overall best-driver ranking cannot
+be published. These results replace the earlier racing gate claims below.
 
 Approach, decisions fixed before the final runs, and build status:
 `docs/racing_approach.md`. Results and gates: `outputs/REPORT.md` (Racing). Race outcomes
@@ -593,25 +597,58 @@ tyre compounds, speed traps or track status), from 2010 (Jolpica).
    entry test), whether or not it has its own ranking. `benchmark.py` is the simple results
    benchmark.
 
-**What the earlier gates said** (historical results, pending regeneration):
-- **Pit stops** pass as a team operations rating.
-- **Reliability** (driver error rates, team-season and power-unit supplier-season
-  mechanical effects), **consistency** and **wet pace** do not improve held-out prediction.
-- **First-lap performance:** with a lasting team term (the model fixed in advance), the
-  driver effects do not improve held-out prediction; the team term does. No first-lap
-  driver ranking.
-- **Overtaking and defending** cannot be rated: attacker and defender effects are not
-  recovered at real sample sizes in the synthetic check, so overtaking is reported as
-  counts only.
-- **Race-specific pace and degradation** both pass (held out 2012-2026): race pace beyond
-  what qualifying predicts, and the lasting change in pace with tyre age, improve held-out
-  teammate gaps. Split by era (descriptive, after the gate), degradation's improvement comes
-  from 2012-2017, when compounds are unknown, and race-specific pace's from 2018 on.
-- **Entry into the overall rating** (race stage with vs without the quality, held out
-  2012-2026): race-specific pace enters (+0.246 log predictive density per race; 95% interval
-  +0.156 to +0.341) and so does first-lap performance (+0.049; +0.017 to +0.086), although
-  its standalone ranking fails. Degradation (-0.002; -0.009 to +0.005) and consistency
-  (+0.030; -0.002 to +0.062) do not enter; overtaking has no held-out draws.
+**Regenerated standalone gates** (sources: the corresponding summaries in
+`outputs/`, and `outputs/race/multi_heldout.json`; intervals are 95%):
+
+- **Race-specific pace** passes: teammate-gap MSE difference −0.00505 percent²
+  (−0.01151 to −0.00022; 113 pair-seasons). **Degradation** fails: −0.0000262
+  (−0.0000566 to +0.000000067). The descriptive era splits do not replace these gates.
+- **First-lap performance** passes with the lasting team term fixed in advance:
+  driver log predictive density improves by +0.106 per race or sprint (+0.050 to
+  +0.161). The transfer interval is −0.044 to +0.016, satisfying the fixed rule
+  that it must not be entirely below zero. The lasting team term improves by +0.538
+  (+0.403 to +0.674).
+- **Pit stops** pass as team operations: +1.609 log predictive density per race
+  (+0.860 to +2.307).
+- **Reliability** fails for driver errors (+0.003; −0.002 to +0.010), team-season
+  mechanical effects (−0.003; −0.024 to +0.019), and supplier-season effects
+  (−0.015; −0.055 to +0.023), in log predictive density per race.
+- **Consistency** fails: MSE difference −0.000221 (−0.002717 to +0.002377) on the
+  log ratio of teammate lap-time spreads. **Wet pace** fails: squared-error
+  difference −0.01856 per race (−0.11546 to +0.07501; 11 wet races).
+- **Overtaking and defending** fail synthetic feasibility: attacker recovery
+  correlation 0.68 and defender correlation 0.50; both have 87% interval coverage.
+  They remain opportunity counts, with no held-out draws or championship entry test.
+- **Results benchmark:** the unexplained driver effect does not establish an
+  improvement (+0.113; −0.022 to +0.237 log predictive density per race).
+
+**Entry into the overall rating** (`outputs/championship/summary.json`): conditional
+backward removal selects race-specific pace (+0.199; +0.064 to +0.338 per race),
+but excludes first-lap performance (+0.007; −0.030 to +0.037), degradation
+(+0.001; −0.015 to +0.017), and consistency (−0.030; −0.061 to −0.004).
+The outer test of the complete selection procedure fails: +0.125 per race,
+interval −0.030 to +0.293, across 207 races. Consequently **no racing quality
+enters**, driver error rates are averaged, and the experimental equal-car standings
+are withheld. Wet pace is not tested in the dry-race scenario; team operations and
+mechanical risk are equalised.
+
+The qualifying folds for **2014 and 2021** failed every prescribed attempt, so
+those seasons are excluded wherever season-ahead qualifying features are needed.
+They can still train later folds. Wet pace excludes 2021; its test has no 2014 races.
+The dated amendments in `docs/racing_approach.md` fixed this exclusion rule and the
+racing retry rule before scores were inspected.
+
+All racing lanes completed. First-lap fits needed 17 retries among 92 fits, each
+converging on the second attempt with zero divergences. The reused race-pace fits
+for 2013, 2015 and 2023 also retain their earlier second attempts. No other racing
+quality or championship fit needed a retry. Every retried fit's diagnostics and
+the stage runtimes are recorded in `outputs/analysis/racing_regeneration/run.json`
+and the dated completion note in `docs/racing_approach.md`.
+
+The three older FastF1-only race-pace sensitivity outputs remain stale and are
+excluded from `outputs/REPORT.md`. Its stale-output note names those files;
+the canonical results above and their championship provenance are current. Those
+secondary comparisons provide no evidence for these decisions.
 
 FastF1 requires pandas < 3, so extraction runs in its own environment; the lap-level
 race-pace model runs on a GPU (`.venv-gpu`, JAX with CUDA) and falls back to CPU (slow).
@@ -679,7 +716,11 @@ same data (results in `outputs/analysis/race_signal/`):
 - **Publication diagnostics:** all posterior parameters supplied by a fit must have
   finite draws and R-hat < 1.05 (structurally constant coordinates excluded), with at
   most one divergence per 1,000 draws. Failed fits cannot publish. The qualifying-fold
-  preparer and joint race fitter have fixed retries; other failures stop for investigation.
+  preparer and joint race fitter have fixed retries. Racing-quality fits use the
+  fixed `artifacts.RETRY` ladder from the 2026-10-04 amendment: the original fit,
+  then doubled warm-up and draws, then triple warm-up and quadruple draws, then
+  those lengths at target acceptance 0.98; each retry uses a new seed. Exhausting
+  the ladder stops publication without retuning.
 - **Racing provenance:** generated manifests identify the run, input data and code,
   output hashes, and the data cutoff. Downstream models and the racing report reject
   missing, changed or partially written artifacts. Legacy results remain on disk for
