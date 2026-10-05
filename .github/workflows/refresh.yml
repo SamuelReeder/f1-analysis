@@ -64,7 +64,9 @@ jobs:
         run: .venv/bin/python -m f1rank.dashboard refresh --races --extract-python .venv-fastf1/bin/python
       - name: Verify
         if: steps.check.outputs.due == 'true'
-        run: .venv/bin/python -m pytest -q
+        run: |
+          .venv/bin/python dashboard/verify_publication.py record
+          .venv/bin/python -m pytest -q
       - name: Commit refreshed results
         id: commit
         if: steps.check.outputs.due == 'true'
@@ -73,6 +75,9 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A data/processed outputs/ratings outputs/race_total outputs/snapshots outputs/timeline \
             outputs/asof outputs/forecasts outputs/refresh
+          publication_url=$(.venv/bin/python -c 'import json; print(json.load(open("dashboard/public/data/latest.json"))["url"])')
+          git add -f dashboard/public/data/latest.json dashboard/public/data/status.json \
+            dashboard/public/data/publication.json "dashboard/public/data/$publication_url"
           if git diff --cached --quiet; then echo "No changed results"; exit 0; fi
           git commit -q -m "Refresh after the ${{ steps.check.outputs.race_name }} (${{ steps.check.outputs.event }})" \
             -m "${{ steps.check.outputs.reason }}" \

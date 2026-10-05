@@ -49,10 +49,10 @@ jobs:
           cache-dependency-path: dashboard/package-lock.json
       - name: Install publishing dependencies
         run: python -m pip install -r dashboard/requirements.txt
-      - name: Verify exports and assemble the publication
+      - name: Verify the committed publication
         run: |
-          python -m f1rank.dashboard publish
-          python -m pytest tests/test_dashboard.py -q
+          python dashboard/verify_publication.py
+          python -m pytest tests/test_dashboard.py tests/test_portable_publication.py -q
       - name: Install dashboard dependencies
         run: npm ci --prefix dashboard
       - name: Build for the repository URL
