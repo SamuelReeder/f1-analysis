@@ -278,3 +278,29 @@ found finite initial parameters and gradients in every registered chain. It made
 no sampling transitions. This does not explain the later chain disagreement or
 establish that sampling was reliable; no concrete implementation defect has been
 demonstrated by this check. The failed studies remain terminal.
+
+## Provisional result requested by the user
+
+After the user said the first result need not be perfect, a separate local
+research preview was prepared in `outputs/analysis/championship_preview/`, committed
+in `bfcf012`. It uses the already fixed qualifying-plus-race-pace candidate and the
+existing equal-car simulation assumptions. The output prominently states that
+validation is not established. Neither the production dashboard nor the original
+championship result was replaced, and no failed gate was changed.
+
+The existing full race-pace fit has R-hat 1.009392 and zero divergences across
+3,200 draws. The preview's full race-stage coefficient fit passed on its first
+attempt, with recorded maximum R-hat 1.0 and zero divergences across 3,200 draws.
+The preview computation recorded 23.712 seconds elapsed. It uses 2,000 simulated
+seasons of 24 races, with data through 2026-15. These are conditional exploratory
+estimates, with current driver-team compatibility retained; they are not evidence
+of reliable predictive improvement. Sources: the preview's `summary.json`,
+`execution.log`, and `standings.csv`.
+
+The Python suite passed 163 tests in 45.18 seconds. Browser checks confirmed all
+headline rows, agreement between the leading HTML row and the CSV, visible
+unvalidated status, and no page overflow at the tested mobile viewport. The
+preview's provenance and the unchanged canonical publication both verify.
+`verification.json` and `preview-desktop.png` record these checks. The outstanding
+scientific goal remains unresolved; this preview is an explicitly provisional
+result, not a substitute passing test.

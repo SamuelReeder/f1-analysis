@@ -646,6 +646,14 @@ using the existing conservative sampler recipe with the same model and predictio
 gate. It also stopped before predictive scoring because the race-pace chains did
 not converge. Both failures are preserved; no improvement has yet been established.
 
+For the requested provisional result, a separate
+[exploratory equal-car preview](outputs/analysis/championship_preview/preview.html)
+uses the converged current-data qualifying and race-pace fits. Its
+[estimates](outputs/analysis/championship_preview/standings.csv) are explicitly
+unvalidated, retain current driver-team compatibility, and do not enable the
+production Overall view. This preview does not complete the unresolved validation
+goal or change any failed gate.
+
 The qualifying folds for **2014 and 2021** failed every prescribed attempt, so
 those seasons are excluded wherever season-ahead qualifying features are needed.
 They can still train later folds. Wet pace excludes 2021; its test has no 2014 races.
