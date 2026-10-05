@@ -1,0 +1,2299 @@
+{
+ "provenance": {
+  "source_revision": "dfd4088e73d2cf819403798fd1f5c0a3775d7375",
+  "started_at": "2026-10-05T18:10:00.711419+00:00",
+  "championship_manifest_sha256": "a25fb62a6924de4ee8461fbccc1bd26dcc01d7839408c4f5ed2bae6e20c6c5ec",
+  "analysis_sha256": "05c306b7386ddc4d142165808f2ef1686e057ae965e7f1eef24be5067360c618",
+  "plan_sha256": "a40f64d37bfb3c002553ec6ba33d981557f3cd6d8f31e9963c43ea63d15430ad",
+  "input_hashes": {
+   "data/overrides/timeline_overrides.csv": "a1e2095256a90e732a638e53aba2801f25c54e56e80104b2979a2f19c3580ffa",
+   "data/processed/drivers.parquet": "0cd1efedc831515d51cce8217a6f6968f1d355be92a91175ef12f52b36c700db",
+   "data/processed/entries.parquet": "b3b39c63dcf372b945a027a639c6d587f961593e1fe391db7fef6a802c580673",
+   "data/processed/events.parquet": "8ee0985bd11b0962168ac02353b6dee1361ad0526f2a9d4933f901f32016a2f8",
+   "data/processed/jolpica_laps.parquet": "73d6f6160909571cb12ed132bd4102260778b9cf7a45a9620dfd4f592d8308f1",
+   "data/processed/jolpica_pitstops.parquet": "536857ead72e8b72ca4c9ea07f55d53edb0e2d3df7c5b18908f27620eae4f165",
+   "data/processed/practice_laps.parquet": "cdb4b8b7778c7222ffc1f354cb42ad3651275e103fce62826cbe391742cc5654",
+   "data/processed/practice_sources.json": "e648314c88a8ecfcf1b17b50b46cf9c04ba6a7148653589d17c5c27a79436e7a",
+   "data/processed/quali_times.parquet": "4ca966349ce047fce097c9aae0f71dc411f95998408554bf94e6db01c938b1e6",
+   "data/processed/race.parquet": "150a0ade6f32c82e54d648a2c1d72a382e2c831e3736691c94e9ef6905f9b0f3",
+   "data/processed/race_classification.parquet": "3600e360c706c06fb38a5391be106e79b6170d30bcdda8d7c38f01d34c28bc11",
+   "data/processed/race_conditions.parquet": "e2315a59214eb3abf01d2bc3c308776c67f5cd25baa40c64e71617e9ad8f33d6",
+   "data/processed/race_laps.parquet": "ec207fe6188a5d664b8554bd7f171f2ed30425ed2a5216dc701e67c20ce44d96",
+   "data/processed/race_messages.parquet": "9f0ef318e780673f14c926010411aa89ddb5477c1308eede4c4bee403b1c93a7",
+   "data/processed/race_sources.json": "9a54f3fae3164bbd7bdb261fefe5a7c5ddf5df70215bad7d0c2ae08c629eae87",
+   "data/processed/race_telemetry.parquet": "5ae7126b2ae9055d2201013967ab8e884f7b3357813056d11520675b6c17e47a",
+   "data/processed/race_track_status.parquet": "56aa14c2687ca4cc4b748ccc68dbdbd742a8ffddd6f5ef6ff776e921a54fac3c",
+   "data/processed/race_traffic.parquet": "fa4a62607d5f3d6d9d4750f4d8d8140828600c46cc59a9f98b1adac70cba7223",
+   "data/processed/race_weather.parquet": "ee5609b61f3a9020c29f6fff9cd68fc05dd21e2607127819e97150c3e63445b5",
+   "data/processed/sources.json": "3b3b9f2a2b4b8abe813f9ab5a2629d4259e0066e21385447213471095d6d1874",
+   "data/processed/sprint_classification.parquet": "08661b23f557e821e6c1472e4dfee2e3468ac5744c63ab6c21b3b3622da13f08",
+   "data/processed/sprint_laps.parquet": "4aff0c47a1d57a69162abc83224e99c18ae244bcb97af8092ae89b2f5dfd1dd2",
+   "data/processed/sprint_messages.parquet": "e5d32739cfb09744b718fdd58300273fa08c03b001bca64a7969dd2d30535984",
+   "data/processed/sprint_quali_times.parquet": "02b27aa7051978a28160b6f66febd092d1e41da3ffb6014d793930a310b3f835",
+   "data/processed/sprint_track_status.parquet": "57c5c6fbbd276fcc0a0c237dca34d0942b7ebf08e4109ccbf579e55da2da1cc0",
+   "data/processed/sprint_weather.parquet": "734109b97d441b4d3fa207362aef2f7df95d80628d228c94dddc2e725a996cd8",
+   "data/processed/timeline.parquet": "7a723d269bbd09036b2e307d3aa6494c0f587f3fa0086bc40abc1d7ba764b7d1",
+   "data/reference/power_units.csv": "87f275b3297c8c31816af13b3a3a404eb3e0dd749146006d125bc5c265ac7a2d",
+   "extract/ff1.py": "3ce08b71898de765d3396b4705dd09b12a0ab15160ab1f57dbc1bb0f47122c03",
+   "extract/fia_upgrades.py": "6e144de9135af010fc3c8832bfec1a3f222700cc58f1578c597f12883d3f6c5c",
+   "extract/practice.py": "11ab9c2e599561df932d6f2b5d4a20016e93da35f25fcfb309c15affc02a85de",
+   "extract/quali_fill.py": "2adf172a7e729c0dfe65014fccb6530fb8f26a2d8ce3edb77b5c07c9a8e39599",
+   "extract/race_extract.py": "ddda8d10e69cf8c4ad5fb9b6fdaa68b95e10b4afa32161ca033ed4fde347f3a9",
+   "extract/sprint_quali.py": "4f9f233b28c08fb7c2930701ed285567f8ca56f0e91972e2520e141933266fce",
+   "extract/telemetry.py": "83cb9d4add64a0bb73525630e82e9bc61b12548f377a438637e8c345b8b71a84",
+   "f1rank/__init__.py": "84303a24ebe90e99229b279aa91da3ec7d60e47260b03992b41eb0853e996706",
+   "f1rank/artifacts.py": "2e9b0b2171d3fb2db3fecea14c944ed3b2d4865ea87c853535bc80e245ee9bbb",
+   "f1rank/asof.py": "f6836ba9f14c9133585628881987a1b73068716feb2caa536a6cee2fdb5757ef",
+   "f1rank/battles.py": "6ba7c2bcd4cfe9a242c6b19e61b3b81de8f3fafd4d44f2e856dbfa122120df7e",
+   "f1rank/benchmark.py": "1e00429cf1a6d1b739a4196ade7ae4a90f26309f1b08d1e840ebff5edd236cf3",
+   "f1rank/build.py": "4c3effd14d47f5fab600c7739bb2302ac93bc5275869eb4aff430cfdcf950933",
+   "f1rank/cachestore.py": "20bc51b35d2a3c652f64af1d3194ab1e233fc90ce64743669194870c6c955e57",
+   "f1rank/championship.py": "e1799e4cb86fcd46d2f85cd8d8c23f363310da7c19fc3e8425412f4846425aba",
+   "f1rank/compare.py": "b7f0dd96cc78d22dce01c8fe72ba41f951904c8262e7201c6a14cceaec88e8f6",
+   "f1rank/conditions.py": "8f1ffc8a9821343f7ed73c84005c732a6ed6aeda0ad1f88b5515be9b9ede7d77",
+   "f1rank/consistency.py": "86e6f11ce63aebc301e19690a12993a7ef4dcc1f3720036ae293922bb76c03d4",
+   "f1rank/dashboard.py": "d4b50f7d11f5a7a8d4b085cde98c20fd82f50029b0dad911a42fda2236a2fbfb",
+   "f1rank/design.py": "2ad04c1267364acbd76dba29e85acb354e3c2b27f0c4070b24872b72589f1fc1",
+   "f1rank/diagnostics.py": "322a588c2cfa039f1bd1e1a26074285e7f37f1e155e3c21070b1cd19cdd5da92",
+   "f1rank/evaluate.py": "48ebc51279679369650b3630695b45b2902300ababff060e5aaaebb6858ba26c",
+   "f1rank/export.py": "54446ffe9138dd085d786b45a2cd962040b965b7f66399cd2251b9e075470935",
+   "f1rank/fetch.py": "154675dbc857662df7bedb738bc418b0b1abc813b256d519e8eceba47ae0df1b",
+   "f1rank/firstlap.py": "d2e80b4d5a9a35c5b8b715d5c08be3ffea7592534a50367c865123fc6ed6fe20",
+   "f1rank/fit.py": "e655df046123f62a13e9d0001c091d46c97b0551b3506ffec2f8db701fbcb6b1",
+   "f1rank/forecast.py": "75a9e2b237b87369c4bba4cf0d54ecee20e06281d25a2a8a6ec3e86dc9396598",
+   "f1rank/jobs.py": "14e0347c9c677c77227c9d14ec6eafc29ab97afbb1788ac99631a6b76b706fc5",
+   "f1rank/lineage.py": "17a6af0cd00fd1f171aac23766d79c2337f0905a8e39289b279dbf4f27fc634a",
+   "f1rank/model.py": "a92d3c965fa80cc57213b8aa607d232d4196aab2ea76f55e4f4e28e363341d2b",
+   "f1rank/oldlaps.py": "217f88169adc9703e41b62483bf00b0e30c558728176b027df80500c455ad351",
+   "f1rank/overtaking.py": "cebd56d09cd73a0168ac195d495e3143f971dba3f3ee9cff79569d1c5b591946",
+   "f1rank/pitstops.py": "96fd98e3edcc76a7ffb30851e679288c009fa5fb3294690af470d9ca8e19bc78",
+   "f1rank/powerunits.py": "2970acc21a2385224632c93c0647e33c4aecab8671fb0c1693653911d8ca499b",
+   "f1rank/qualifying.py": "16a59d96dcfebaf0eab1c2575279bc3fe0a7f2a0a72f955609d66d8701b90668",
+   "f1rank/race_car_state.py": "c976ba15efabc5f1ecd29c167e1dda8b0b5b89e86a3546e9b12ddeb441050144",
+   "f1rank/race_car_state_model.py": "7e632d5ff740e8f1d6e5d9b11ad2783bf13e77206082d600e2dbe2b5749af188",
+   "f1rank/race_features.py": "e480cc54d2ace37fca797e641e4eae78010f9c4f154151ddfdf89c1aeeba69f6",
+   "f1rank/race_features_model.py": "e0009d794f8b9ade64ffcd05edb51320f4ead2f1420cc192a80233b5812deb83",
+   "f1rank/race_publication.py": "e3bd070bd5fc97e56a0a1d782b88c05791fcdc26c27775bebe7cc871819c4383",
+   "f1rank/race_targets.py": "ececa920bb14982330e9f89584d144aa4573d39a9bb4b1203900f4c042edc9f9",
+   "f1rank/race_total.py": "5eda2ea367dc42eea8b20ba8634c607e648c7dc8d8d40d5f7f594fb679d2e204",
+   "f1rank/race_total_model.py": "d5ac8de128f21a4ba54cd10b30dfd44b388c32f60434b8df673614f318f11179",
+   "f1rank/racedata.py": "3a7e3c2762785f59cb940775559bbfa7f13d6838218327ff226451fd36268666",
+   "f1rank/racejoint.py": "1217939d988a481cea795e5d7d8c69b7ce3ed5a637dd278f918eb458d5e13cdb",
+   "f1rank/racemodel.py": "68bf3bab039820ee5a8671f76505ba5572394754aa951ffa7b617a4eda66f8d0",
+   "f1rank/racemulti.py": "4b6e8d48ca746f456739d40e20a75cf3e9989b01e20e166d24a25244dd7fb1d4",
+   "f1rank/racepace.py": "2acd02207e5f58aab73752e8f7cec36d1ba31f289313b0cf0b152fd8d6fd8e0c",
+   "f1rank/racereport.py": "4c791bc12ec52dfb661803d28db518cf0ad10408d06cff79a81f0020d50cfc6a",
+   "f1rank/ratings.py": "a144bc468d6d1f2100fc3d16cee8b4f5c7d6fcd679878417b79cff547e02057f",
+   "f1rank/reliability.py": "0e9b90f8c58464bcd73a8e8544a55295aef714f2131aa353b2cdc6a33a11085d",
+   "f1rank/report.py": "4df3973c0d43f99b12d0eb224406aa27fd63529d8513a9a89f86a97ddcc85abb",
+   "f1rank/schedule.py": "d98661b0fa61b80b6f4bb9b5d268631a8e6dc49df579b357970f16c69e9d5c72",
+   "f1rank/simulate.py": "ddd37b455d6bf396a0d2c4e234de68d2fdbe3392767e98cd69916bc1735616d4",
+   "f1rank/timeline.py": "f04ea2e10cc13cc20c01a404e4dba72eaa755af80990af8236f288e5a792d62d",
+   "f1rank/wetpace.py": "cbfabe0e372941857ca497473cc19b627108db7d40fe3ee5f1a12beb4bc16703",
+   "outputs/consistency/driver_draws.npz": "139bcdde68a8a58201e00fc12e7a2710f2fa3aef17518d0dffdec9cb0be26d6a",
+   "outputs/consistency/heldout_effects.npz": "65c7e39c85df3336b465b93d7e4fc8ae705e0cda70d242de63c3abd2888c8ac1",
+   "outputs/firstlap/driver_draws.npz": "095c3bd8f8862c145f20d8e02456d419935b28f9cf0bd71db95696e07ec0f10a",
+   "outputs/firstlap/heldout_effects.npz": "5f4e7b170e44138bb5c1c1af488fa080e2a978d14359cd93ab1dc6d42be17855",
+   "outputs/firstlap/manifest.json": "c28695a9cabd848a07c71b3d16f60aaa89bc6f9668cd65c58490add6d418321e",
+   "outputs/fits/main.meta.json": "f7b21b1a486f643c29e7d8f714b065a5a1d9f30ebd803762011ce48c5142508e",
+   "outputs/fits/main.npz": "b05a68620c36a8ccfe76cbf40000adddb0bdb47d69a5297c7412697948ea205f",
+   "outputs/fits/quali_fold2012.meta.json": "b220899bcf1c5e59667095ddc420d2e4b344e7d0dea1ceaf88ca889cdd619673",
+   "outputs/fits/quali_fold2012.npz": "5edadca0e848a0d0e1fb2453d44c55e7ec77120860962bf9d7718696ac669ec2",
+   "outputs/fits/quali_fold2013.meta.json": "27ba29a158556be038f6ea200c50c56959102835538752b975597fb06efd9274",
+   "outputs/fits/quali_fold2013.npz": "16718431473eeeca97cd932303e2174cc2accd15a4dcae27d40f7a5a92359d0f",
+   "outputs/fits/quali_fold2014.failed.json": "ac6d6d0fabc45897f20240ff845360317d9d7b9c1ffe83a70bf33447fc0eaabc",
+   "outputs/fits/quali_fold2015.meta.json": "d6738a5562d2ca844e0b1bf88d65e42dfc9f9761a21149fedb388418d98f59b4",
+   "outputs/fits/quali_fold2015.npz": "012d542cdbddfdbf6f9677bbebc0c862123d3c42fcf82bd0f9a6d361efb02a1b",
+   "outputs/fits/quali_fold2016.meta.json": "68fa4ee1401509bebd2e3aeee7864e769067316148b46c320f8cb14c918e5390",
+   "outputs/fits/quali_fold2016.npz": "d18ec90dbc29782235945eb6661875d8e1d74581e9c75d5887de4ae01ec1b49b",
+   "outputs/fits/quali_fold2017.meta.json": "bc1a549c3c4fbd3512830f6ad694bde58c7c27701493ce45066afaade45db5e8",
+   "outputs/fits/quali_fold2017.npz": "0738b6ae82b74f0647ea95cca49a7c32b5cf849b3da7580eb520bf5aaf79cb67",
+   "outputs/fits/quali_fold2018.meta.json": "ce4b2731269a2d69213061f2fc0ea3c87d18c18c198d430a8b9e419f5c4ddfc5",
+   "outputs/fits/quali_fold2018.npz": "0028ae14a2e55b722246e69d33fff8a373447dfae602a756b3576c0adfa62a1b",
+   "outputs/fits/quali_fold2019.meta.json": "b0f911089c1a9977a0581a67c2272c493a795b0934f64a4b357ae3b8b66f9167",
+   "outputs/fits/quali_fold2019.npz": "594240c0982ba78a1ba9d5b0747a956300673948c499de510268a5a347f0618b",
+   "outputs/fits/quali_fold2020.meta.json": "3b8c9009eba839228d9776f5514e48a4302f25a6ba36d16bfd3e066a5ae03074",
+   "outputs/fits/quali_fold2020.npz": "9abf088ea71d6cdd1abc8e32b38c6acbb85c3fed5c7b140b577bbd741623e2f7",
+   "outputs/fits/quali_fold2021.failed.json": "1b3da6ea64b6127587869c9b766138be89e6ca7102ba5dd00bb25ac416c4f9fa",
+   "outputs/fits/quali_fold2022.meta.json": "da4d7c44ade71310a0edfac2f23efc77095d2f8f6b97bb686286195f6268ea73",
+   "outputs/fits/quali_fold2022.npz": "415ab7d38fae69eabb090af19e43309482c6e4709a5212a29267ec774c05f1e4",
+   "outputs/fits/quali_fold2023.meta.json": "c5ed13ca24dd4460a1d6d5a34b6741a37b092b3f892a333974a42e383e0575a9",
+   "outputs/fits/quali_fold2023.npz": "1ea11ab5b7ae8c5c3acf9079738267dd64a3e822400889d85039412728cab034",
+   "outputs/fits/quali_fold2024.meta.json": "963874d8da021ebaf6d7100e0c92aebe3eaef60c4dbb17959d7d4edd8f2e0575",
+   "outputs/fits/quali_fold2024.npz": "4d7f8ded807b4b5795f52e0e1c109e06284310c84ed7c22789b6394903927334",
+   "outputs/fits/quali_fold2025.meta.json": "2b7194478458a990df11d9a3c9ab5e08e81b45fa285daddf4d53cdf4e09a7fb0",
+   "outputs/fits/quali_fold2025.npz": "5d3aa4d0b535ed5487cb6a92c9311c2feed322457412de4464808429164c206f",
+   "outputs/fits/quali_fold2026.meta.json": "763b0879dd7b0ad082e23366feaf433442a8bcdd0a8f7bd4ad6e92941f603df9",
+   "outputs/fits/quali_fold2026.npz": "708a45b10d7cbe01bb2f59205245b6fc29ca0ea9daa905dd966e6b4c49e53ed8",
+   "outputs/race/multi_driver_draws.npz": "9c5f87293f3e25c84ca1f97cfb7e1c27eef62ae3a16c28bba764a1fc16c10171",
+   "outputs/race/multi_heldout_effects.npz": "81f0f9ac581dfbbb46ee2d4f4450c4967ae46358b71359b541fd442642f745a4",
+   "outputs/reliability/drivers.csv": "c28ebe27312aea9d0407e5fa16213d97033a45b8b516b312c83c18518349b2b0",
+   "outputs/reliability/manifest.json": "b7407f8b86dad53262a94d8275d415a53ccc32289825558e45ad37b175333504",
+   "outputs/reliability/summary.json": "9f2871bc91a1dd3fef328fac355ece7eb24acc29f47d7e8727a5eba818525252"
+  },
+  "rtol": 1e-06,
+  "atol": 1e-06,
+  "evidence": "exploratory diagnosis of an already completed experiment"
+ },
+ "replay_matches_reference": true,
+ "elapsed_seconds": 848.62973159994,
+ "completed_at": "2026-10-05T18:23:09.305184+00:00",
+ "qualities_selected": [
+  "race_specific_pace"
+ ],
+ "entry_tests": {
+  "consistency": {
+   "n_races": 265,
+   "seasons": [
+    2012,
+    2026
+   ],
+   "mean_diff_per_race": -0.02958658326346919,
+   "ci95": [
+    -0.0605277419090271,
+    -0.0036195581475662766
+   ],
+   "enters": false,
+   "conditioned_on": [
+    "degradation",
+    "first_lap",
+    "race_specific_pace"
+   ]
+  },
+  "degradation": {
+   "n_races": 265,
+   "seasons": [
+    2012,
+    2026
+   ],
+   "mean_diff_per_race": 0.0008858446804982311,
+   "ci95": [
+    -0.015107786114993822,
+    0.01713026009982237
+   ],
+   "enters": false,
+   "conditioned_on": [
+    "first_lap",
+    "race_specific_pace"
+   ]
+  },
+  "first_lap": {
+   "n_races": 265,
+   "seasons": [
+    2012,
+    2026
+   ],
+   "mean_diff_per_race": 0.0067693422425468015,
+   "ci95": [
+    -0.030400061985712264,
+    0.03652362504744911
+   ],
+   "enters": false,
+   "conditioned_on": [
+    "race_specific_pace"
+   ]
+  },
+  "race_specific_pace": {
+   "n_races": 265,
+   "seasons": [
+    2012,
+    2026
+   ],
+   "mean_diff_per_race": 0.19877967114718456,
+   "ci95": [
+    0.06410267540353785,
+    0.3376866802279873
+   ],
+   "enters": true,
+   "conditioned_on": []
+  }
+ },
+ "combined_validation": {
+  "n_races": 207,
+  "seasons": [
+   2016,
+   2026
+  ],
+  "mean_diff_per_race": 0.12543388956410872,
+  "ci95": [
+   -0.02981124744889914,
+   0.2934394047178071
+  ],
+  "selected_by_outer_season": {
+   "2016": [
+    "first_lap"
+   ],
+   "2017": [
+    "degradation",
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "2018": [
+    "degradation",
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "2019": [
+    "degradation",
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "2020": [
+    "race_specific_pace"
+   ],
+   "2022": [
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "2023": [
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "2024": [
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "2025": [
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "2026": [
+    "race_specific_pace"
+   ]
+  },
+  "gate": false,
+  "design": "season-ahead qualifying; backward conditional ablations on inner seasons only; outer test of the selection procedure; season-block bootstrap",
+  "excluded_unconverged_qualifying_folds": [
+   2014,
+   2021
+  ]
+ },
+ "fit_attempts": {
+  "fits": 146,
+  "retried": []
+ },
+ "coverage": {
+  "2012": {
+   "train_races": 38,
+   "test_races": 20,
+   "train_finishers": 712,
+   "test_finishers": 389,
+   "qualities": {
+    "first_lap": {
+     "train": {
+      "drivers": 33,
+      "known_rows": 712,
+      "total_rows": 712,
+      "nonzero_mean_rows": 712,
+      "posterior_mean_spread_across_rows": 0.12508638203144073,
+      "average_posterior_sd": 0.2812802493572235
+     },
+     "test": {
+      "drivers": 25,
+      "known_rows": 389,
+      "total_rows": 389,
+      "nonzero_mean_rows": 389,
+      "posterior_mean_spread_across_rows": 0.12688513100147247,
+      "average_posterior_sd": 0.29064255952835083
+     }
+    },
+    "race_specific_pace": {
+     "train": {
+      "drivers": 33,
+      "known_rows": 712,
+      "total_rows": 712,
+      "nonzero_mean_rows": 712,
+      "posterior_mean_spread_across_rows": 0.020304501056671143,
+      "average_posterior_sd": 0.06974530220031738
+     },
+     "test": {
+      "drivers": 25,
+      "known_rows": 326,
+      "total_rows": 389,
+      "nonzero_mean_rows": 326,
+      "posterior_mean_spread_across_rows": 0.020619625225663185,
+      "average_posterior_sd": 0.07112908363342285
+     }
+    },
+    "degradation": {
+     "train": {
+      "drivers": 33,
+      "known_rows": 712,
+      "total_rows": 712,
+      "nonzero_mean_rows": 712,
+      "posterior_mean_spread_across_rows": 0.004431291949003935,
+      "average_posterior_sd": 0.0051308260299265385
+     },
+     "test": {
+      "drivers": 25,
+      "known_rows": 326,
+      "total_rows": 389,
+      "nonzero_mean_rows": 326,
+      "posterior_mean_spread_across_rows": 0.003921050112694502,
+      "average_posterior_sd": 0.005262549500912428
+     }
+    },
+    "consistency": {
+     "train": {
+      "drivers": 33,
+      "known_rows": 712,
+      "total_rows": 712,
+      "nonzero_mean_rows": 712,
+      "posterior_mean_spread_across_rows": 0.05456693470478058,
+      "average_posterior_sd": 0.08183006197214127
+     },
+     "test": {
+      "drivers": 25,
+      "known_rows": 326,
+      "total_rows": 389,
+      "nonzero_mean_rows": 326,
+      "posterior_mean_spread_across_rows": 0.04924299940466881,
+      "average_posterior_sd": 0.08319555222988129
+     }
+    }
+   }
+  },
+  "2013": {
+   "train_races": 58,
+   "test_races": 19,
+   "train_finishers": 1101,
+   "test_finishers": 354,
+   "qualities": {
+    "first_lap": {
+     "train": {
+      "drivers": 37,
+      "known_rows": 1101,
+      "total_rows": 1101,
+      "nonzero_mean_rows": 1101,
+      "posterior_mean_spread_across_rows": 0.10605122148990631,
+      "average_posterior_sd": 0.23539403080940247
+     },
+     "test": {
+      "drivers": 23,
+      "known_rows": 354,
+      "total_rows": 354,
+      "nonzero_mean_rows": 354,
+      "posterior_mean_spread_across_rows": 0.08781908452510834,
+      "average_posterior_sd": 0.24413256347179413
+     }
+    },
+    "race_specific_pace": {
+     "train": {
+      "drivers": 37,
+      "known_rows": 1101,
+      "total_rows": 1101,
+      "nonzero_mean_rows": 1101,
+      "posterior_mean_spread_across_rows": 0.014558997005224228,
+      "average_posterior_sd": 0.05135669931769371
+     },
+     "test": {
+      "drivers": 23,
+      "known_rows": 271,
+      "total_rows": 354,
+      "nonzero_mean_rows": 271,
+      "posterior_mean_spread_across_rows": 0.014136641286313534,
+      "average_posterior_sd": 0.052590448409318924
+     }
+    },
+    "degradation": {
+     "train": {
+      "drivers": 37,
+      "known_rows": 1101,
+      "total_rows": 1101,
+      "nonzero_mean_rows": 1101,
+      "posterior_mean_spread_across_rows": 0.004159598145633936,
+      "average_posterior_sd": 0.004603041801601648
+     },
+     "test": {
+      "drivers": 23,
+      "known_rows": 271,
+      "total_rows": 354,
+      "nonzero_mean_rows": 271,
+      "posterior_mean_spread_across_rows": 0.0037745030131191015,
+      "average_posterior_sd": 0.004665845073759556
+     }
+    },
+    "consistency": {
+     "train": {
+      "drivers": 37,
+      "known_rows": 1101,
+      "total_rows": 1101,
+      "nonzero_mean_rows": 1101,
+      "posterior_mean_spread_across_rows": 0.049985725432634354,
+      "average_posterior_sd": 0.07217563688755035
+     },
+     "test": {
+      "drivers": 23,
+      "known_rows": 271,
+      "total_rows": 354,
+      "nonzero_mean_rows": 271,
+      "posterior_mean_spread_across_rows": 0.04959065094590187,
+      "average_posterior_sd": 0.07376181334257126
+     }
+    }
+   }
+  },
+  "2015": {
+   "train_races": 96,
+   "test_races": 19,
+   "train_finishers": 1776,
+   "test_finishers": 297,
+   "qualities": {
+    "first_lap": {
+     "train": {
+      "drivers": 46,
+      "known_rows": 1776,
+      "total_rows": 1776,
+      "nonzero_mean_rows": 1776,
+      "posterior_mean_spread_across_rows": 0.22517070174217224,
+      "average_posterior_sd": 0.2673460841178894
+     },
+     "test": {
+      "drivers": 21,
+      "known_rows": 297,
+      "total_rows": 297,
+      "nonzero_mean_rows": 297,
+      "posterior_mean_spread_across_rows": 0.18688827753067017,
+      "average_posterior_sd": 0.2882762849330902
+     }
+    },
+    "race_specific_pace": {
+     "train": {
+      "drivers": 46,
+      "known_rows": 1776,
+      "total_rows": 1776,
+      "nonzero_mean_rows": 1776,
+      "posterior_mean_spread_across_rows": 0.026938019320368767,
+      "average_posterior_sd": 0.052797429263591766
+     },
+     "test": {
+      "drivers": 21,
+      "known_rows": 238,
+      "total_rows": 297,
+      "nonzero_mean_rows": 238,
+      "posterior_mean_spread_across_rows": 0.024326585233211517,
+      "average_posterior_sd": 0.0532042421400547
+     }
+    },
+    "degradation": {
+     "train": {
+      "drivers": 46,
+      "known_rows": 1776,
+      "total_rows": 1776,
+      "nonzero_mean_rows": 1776,
+      "posterior_mean_spread_across_rows": 0.006471778731793165,
+      "average_posterior_sd": 0.005068041384220123
+     },
+     "test": {
+      "drivers": 21,
+      "known_rows": 238,
+      "total_rows": 297,
+      "nonzero_mean_rows": 238,
+      "posterior_mean_spread_across_rows": 0.005250689573585987,
+      "average_posterior_sd": 0.005195627920329571
+     }
+    },
+    "consistency": {
+     "train": {
+      "drivers": 46,
+      "known_rows": 1776,
+      "total_rows": 1776,
+      "nonzero_mean_rows": 1776,
+      "posterior_mean_spread_across_rows": 0.023720335215330124,
+      "average_posterior_sd": 0.04253525659441948
+     },
+     "test": {
+      "drivers": 21,
+      "known_rows": 238,
+      "total_rows": 297,
+      "nonzero_mean_rows": 238,
+      "posterior_mean_spread_across_rows": 0.02049933187663555,
+      "average_posterior_sd": 0.042403750121593475
+     }
+    }
+   }
+  },
+  "2016": {
+   "train_races": 115,
+   "test_races": 21,
+   "train_finishers": 2073,
+   "test_finishers": 378,
+   "qualities": {
+    "first_lap": {
+     "train": {
+      "drivers": 51,
+      "known_rows": 2073,
+      "total_rows": 2073,
+      "nonzero_mean_rows": 2073,
+      "posterior_mean_spread_across_rows": 0.22311335802078247,
+      "average_posterior_sd": 0.24697163701057434
+     },
+     "test": {
+      "drivers": 24,
+      "known_rows": 378,
+      "total_rows": 378,
+      "nonzero_mean_rows": 378,
+      "posterior_mean_spread_across_rows": 0.1697033941745758,
+      "average_posterior_sd": 0.2593957781791687
+     }
+    },
+    "race_specific_pace": {
+     "train": {
+      "drivers": 51,
+      "known_rows": 2073,
+      "total_rows": 2073,
+      "nonzero_mean_rows": 2073,
+      "posterior_mean_spread_across_rows": 0.029194358736276627,
+      "average_posterior_sd": 0.0506330169737339
+     },
+     "test": {
+      "drivers": 24,
+      "known_rows": 328,
+      "total_rows": 378,
+      "nonzero_mean_rows": 328,
+      "posterior_mean_spread_across_rows": 0.027592366561293602,
+      "average_posterior_sd": 0.05049304664134979
+     }
+    },
+    "degradation": {
+     "train": {
+      "drivers": 51,
+      "known_rows": 2073,
+      "total_rows": 2073,
+      "nonzero_mean_rows": 2073,
+      "posterior_mean_spread_across_rows": 0.00643242709338665,
+      "average_posterior_sd": 0.0047120265662670135
+     },
+     "test": {
+      "drivers": 24,
+      "known_rows": 328,
+      "total_rows": 378,
+      "nonzero_mean_rows": 328,
+      "posterior_mean_spread_across_rows": 0.005801746156066656,
+      "average_posterior_sd": 0.0047531817108392715
+     }
+    },
+    "consistency": {
+     "train": {
+      "drivers": 51,
+      "known_rows": 2073,
+      "total_rows": 2073,
+      "nonzero_mean_rows": 2073,
+      "posterior_mean_spread_across_rows": 0.029583774507045746,
+      "average_posterior_sd": 0.043826874345541
+     },
+     "test": {
+      "drivers": 24,
+      "known_rows": 328,
+      "total_rows": 378,
+      "nonzero_mean_rows": 328,
+      "posterior_mean_spread_across_rows": 0.027913784608244896,
+      "average_posterior_sd": 0.04404865950345993
+     }
+    }
+   }
+  },
+  "2017": {
+   "train_races": 136,
+   "test_races": 20,
+   "train_finishers": 2451,
+   "test_finishers": 305,
+   "qualities": {
+    "first_lap": {
+     "train": {
+      "drivers": 56,
+      "known_rows": 2451,
+      "total_rows": 2451,
+      "nonzero_mean_rows": 2451,
+      "posterior_mean_spread_across_rows": 0.22968168556690216,
+      "average_posterior_sd": 0.23908334970474243
+     },
+     "test": {
+      "drivers": 23,
+      "known_rows": 305,
+      "total_rows": 305,
+      "nonzero_mean_rows": 305,
+      "posterior_mean_spread_across_rows": 0.17925383150577545,
+      "average_posterior_sd": 0.256447970867157
+     }
+    },
+    "race_specific_pace": {
+     "train": {
+      "drivers": 56,
+      "known_rows": 2451,
+      "total_rows": 2451,
+      "nonzero_mean_rows": 2451,
+      "posterior_mean_spread_across_rows": 0.02077002264559269,
+      "average_posterior_sd": 0.04242551699280739
+     },
+     "test": {
+      "drivers": 23,
+      "known_rows": 282,
+      "total_rows": 305,
+      "nonzero_mean_rows": 282,
+      "posterior_mean_spread_across_rows": 0.019288841634988785,
+      "average_posterior_sd": 0.04275768995285034
+     }
+    },
+    "degradation": {
+     "train": {
+      "drivers": 56,
+      "known_rows": 2451,
+      "total_rows": 2451,
+      "nonzero_mean_rows": 2451,
+      "posterior_mean_spread_across_rows": 0.005876009818166494,
+      "average_posterior_sd": 0.00451641296967864
+     },
+     "test": {
+      "drivers": 23,
+      "known_rows": 282,
+      "total_rows": 305,
+      "nonzero_mean_rows": 282,
+      "posterior_mean_spread_across_rows": 0.00458587845787406,
+      "average_posterior_sd": 0.004677234683185816
+     }
+    },
+    "consistency": {
+     "train": {
+      "drivers": 56,
+      "known_rows": 2450,
+      "total_rows": 2451,
+      "nonzero_mean_rows": 2450,
+      "posterior_mean_spread_across_rows": 0.02648652158677578,
+      "average_posterior_sd": 0.03932972997426987
+     },
+     "test": {
+      "drivers": 23,
+      "known_rows": 268,
+      "total_rows": 305,
+      "nonzero_mean_rows": 268,
+      "posterior_mean_spread_across_rows": 0.025972656905651093,
+      "average_posterior_sd": 0.039482489228248596
+     }
+    }
+   }
+  },
+  "2018": {
+   "train_races": 156,
+   "test_races": 21,
+   "train_finishers": 2756,
+   "test_finishers": 335,
+   "qualities": {
+    "first_lap": {
+     "train": {
+      "drivers": 60,
+      "known_rows": 2756,
+      "total_rows": 2756,
+      "nonzero_mean_rows": 2756,
+      "posterior_mean_spread_across_rows": 0.22165405750274658,
+      "average_posterior_sd": 0.22997815907001495
+     },
+     "test": {
+      "drivers": 20,
+      "known_rows": 335,
+      "total_rows": 335,
+      "nonzero_mean_rows": 335,
+      "posterior_mean_spread_across_rows": 0.17338858544826508,
+      "average_posterior_sd": 0.24754653871059418
+     }
+    },
+    "race_specific_pace": {
+     "train": {
+      "drivers": 60,
+      "known_rows": 2756,
+      "total_rows": 2756,
+      "nonzero_mean_rows": 2756,
+      "posterior_mean_spread_across_rows": 0.022140907123684883,
+      "average_posterior_sd": 0.04202709719538689
+     },
+     "test": {
+      "drivers": 20,
+      "known_rows": 302,
+      "total_rows": 335,
+      "nonzero_mean_rows": 302,
+      "posterior_mean_spread_across_rows": 0.018673546612262726,
+      "average_posterior_sd": 0.04239506646990776
+     }
+    },
+    "degradation": {
+     "train": {
+      "drivers": 60,
+      "known_rows": 2756,
+      "total_rows": 2756,
+      "nonzero_mean_rows": 2756,
+      "posterior_mean_spread_across_rows": 0.005845813080668449,
+      "average_posterior_sd": 0.004182013217359781
+     },
+     "test": {
+      "drivers": 20,
+      "known_rows": 302,
+      "total_rows": 335,
+      "nonzero_mean_rows": 302,
+      "posterior_mean_spread_across_rows": 0.003924725577235222,
+      "average_posterior_sd": 0.004371859598904848
+     }
+    },
+    "consistency": {
+     "train": {
+      "drivers": 60,
+      "known_rows": 2756,
+      "total_rows": 2756,
+      "nonzero_mean_rows": 2756,
+      "posterior_mean_spread_across_rows": 0.029549874365329742,
+      "average_posterior_sd": 0.0404948927462101
+     },
+     "test": {
+      "drivers": 20,
+      "known_rows": 302,
+      "total_rows": 335,
+      "nonzero_mean_rows": 302,
+      "posterior_mean_spread_across_rows": 0.031995225697755814,
+      "average_posterior_sd": 0.04215165227651596
+     }
+    }
+   }
+  },
+  "2019": {
+   "train_races": 177,
+   "test_races": 21,
+   "train_finishers": 3091,
+   "test_finishers": 360,
+   "qualities": {
+    "first_lap": {
+     "train": {
+      "drivers": 62,
+      "known_rows": 3091,
+      "total_rows": 3091,
+      "nonzero_mean_rows": 3091,
+      "posterior_mean_spread_across_rows": 0.2732338607311249,
+      "average_posterior_sd": 0.23998099565505981
+     },
+     "test": {
+      "drivers": 20,
+      "known_rows": 360,
+      "total_rows": 360,
+      "nonzero_mean_rows": 360,
+      "posterior_mean_spread_across_rows": 0.20717403292655945,
+      "average_posterior_sd": 0.27487918734550476
+     }
+    },
+    "race_specific_pace": {
+     "train": {
+      "drivers": 62,
+      "known_rows": 3091,
+      "total_rows": 3091,
+      "nonzero_mean_rows": 3091,
+      "posterior_mean_spread_across_rows": 0.020895851776003838,
+      "average_posterior_sd": 0.040846239775419235
+     },
+     "test": {
+      "drivers": 20,
+      "known_rows": 306,
+      "total_rows": 360,
+      "nonzero_mean_rows": 306,
+      "posterior_mean_spread_across_rows": 0.016199737787246704,
+      "average_posterior_sd": 0.04150765389204025
+     }
+    },
+    "degradation": {
+     "train": {
+      "drivers": 62,
+      "known_rows": 3091,
+      "total_rows": 3091,
+      "nonzero_mean_rows": 3091,
+      "posterior_mean_spread_across_rows": 0.005248202010989189,
+      "average_posterior_sd": 0.004031432792544365
+     },
+     "test": {
+      "drivers": 20,
+      "known_rows": 306,
+      "total_rows": 360,
+      "nonzero_mean_rows": 306,
+      "posterior_mean_spread_across_rows": 0.002781738294288516,
+      "average_posterior_sd": 0.004178022034466267
+     }
+    },
+    "consistency": {
+     "train": {
+      "drivers": 62,
+      "known_rows": 3091,
+      "total_rows": 3091,
+      "nonzero_mean_rows": 3091,
+      "posterior_mean_spread_across_rows": 0.026275167241692543,
+      "average_posterior_sd": 0.0375044010579586
+     },
+     "test": {
+      "drivers": 20,
+      "known_rows": 306,
+      "total_rows": 360,
+      "nonzero_mean_rows": 306,
+      "posterior_mean_spread_across_rows": 0.026854466646909714,
+      "average_posterior_sd": 0.038780611008405685
+     }
+    }
+   }
+  },
+  "2020": {
+   "train_races": 198,
+   "test_races": 17,
+   "train_finishers": 3451,
+   "test_finishers": 283,
+   "qualities": {
+    "first_lap": {
+     "train": {
+      "drivers": 65,
+      "known_rows": 3451,
+      "total_rows": 3451,
+      "nonzero_mean_rows": 3451,
+      "posterior_mean_spread_across_rows": 0.2923226058483124,
+      "average_posterior_sd": 0.233986958861351
+     },
+     "test": {
+      "drivers": 23,
+      "known_rows": 283,
+      "total_rows": 283,
+      "nonzero_mean_rows": 283,
+      "posterior_mean_spread_across_rows": 0.28471118211746216,
+      "average_posterior_sd": 0.24805709719657898
+     }
+    },
+    "race_specific_pace": {
+     "train": {
+      "drivers": 65,
+      "known_rows": 3451,
+      "total_rows": 3451,
+      "nonzero_mean_rows": 3451,
+      "posterior_mean_spread_across_rows": 0.017596682533621788,
+      "average_posterior_sd": 0.03675563633441925
+     },
+     "test": {
+      "drivers": 23,
+      "known_rows": 266,
+      "total_rows": 283,
+      "nonzero_mean_rows": 266,
+      "posterior_mean_spread_across_rows": 0.016397489234805107,
+      "average_posterior_sd": 0.03617626428604126
+     }
+    },
+    "degradation": {
+     "train": {
+      "drivers": 65,
+      "known_rows": 3451,
+      "total_rows": 3451,
+      "nonzero_mean_rows": 3451,
+      "posterior_mean_spread_across_rows": 0.004919823724776506,
+      "average_posterior_sd": 0.0038045409601181746
+     },
+     "test": {
+      "drivers": 23,
+      "known_rows": 266,
+      "total_rows": 283,
+      "nonzero_mean_rows": 266,
+      "posterior_mean_spread_across_rows": 0.0025521486531943083,
+      "average_posterior_sd": 0.0038332436233758926
+     }
+    },
+    "consistency": {
+     "train": {
+      "drivers": 65,
+      "known_rows": 3451,
+      "total_rows": 3451,
+      "nonzero_mean_rows": 3451,
+      "posterior_mean_spread_across_rows": 0.024273501709103584,
+      "average_posterior_sd": 0.03475102409720421
+     },
+     "test": {
+      "drivers": 23,
+      "known_rows": 266,
+      "total_rows": 283,
+      "nonzero_mean_rows": 266,
+      "posterior_mean_spread_across_rows": 0.023563263937830925,
+      "average_posterior_sd": 0.03529975563287735
+     }
+    }
+   }
+  },
+  "2022": {
+   "train_races": 237,
+   "test_races": 22,
+   "train_finishers": 4115,
+   "test_finishers": 366,
+   "qualities": {
+    "first_lap": {
+     "train": {
+      "drivers": 71,
+      "known_rows": 4115,
+      "total_rows": 4115,
+      "nonzero_mean_rows": 4115,
+      "posterior_mean_spread_across_rows": 0.33336469531059265,
+      "average_posterior_sd": 0.2319687008857727
+     },
+     "test": {
+      "drivers": 22,
+      "known_rows": 366,
+      "total_rows": 366,
+      "nonzero_mean_rows": 366,
+      "posterior_mean_spread_across_rows": 0.36854174733161926,
+      "average_posterior_sd": 0.24605846405029297
+     }
+    },
+    "race_specific_pace": {
+     "train": {
+      "drivers": 71,
+      "known_rows": 4115,
+      "total_rows": 4115,
+      "nonzero_mean_rows": 4115,
+      "posterior_mean_spread_across_rows": 0.03741876408457756,
+      "average_posterior_sd": 0.04912791773676872
+     },
+     "test": {
+      "drivers": 22,
+      "known_rows": 348,
+      "total_rows": 366,
+      "nonzero_mean_rows": 348,
+      "posterior_mean_spread_across_rows": 0.03979160636663437,
+      "average_posterior_sd": 0.049424488097429276
+     }
+    },
+    "degradation": {
+     "train": {
+      "drivers": 71,
+      "known_rows": 4115,
+      "total_rows": 4115,
+      "nonzero_mean_rows": 4115,
+      "posterior_mean_spread_across_rows": 0.004887680057436228,
+      "average_posterior_sd": 0.0036865058355033398
+     },
+     "test": {
+      "drivers": 22,
+      "known_rows": 348,
+      "total_rows": 366,
+      "nonzero_mean_rows": 348,
+      "posterior_mean_spread_across_rows": 0.004317845217883587,
+      "average_posterior_sd": 0.0037119861226528883
+     }
+    },
+    "consistency": {
+     "train": {
+      "drivers": 71,
+      "known_rows": 4115,
+      "total_rows": 4115,
+      "nonzero_mean_rows": 4115,
+      "posterior_mean_spread_across_rows": 0.02132006548345089,
+      "average_posterior_sd": 0.03176497295498848
+     },
+     "test": {
+      "drivers": 22,
+      "known_rows": 348,
+      "total_rows": 366,
+      "nonzero_mean_rows": 348,
+      "posterior_mean_spread_across_rows": 0.02099168673157692,
+      "average_posterior_sd": 0.03225737065076828
+     }
+    }
+   }
+  },
+  "2023": {
+   "train_races": 259,
+   "test_races": 22,
+   "train_finishers": 4481,
+   "test_finishers": 374,
+   "qualities": {
+    "first_lap": {
+     "train": {
+      "drivers": 73,
+      "known_rows": 4481,
+      "total_rows": 4481,
+      "nonzero_mean_rows": 4481,
+      "posterior_mean_spread_across_rows": 0.3401437997817993,
+      "average_posterior_sd": 0.2218647450208664
+     },
+     "test": {
+      "drivers": 22,
+      "known_rows": 374,
+      "total_rows": 374,
+      "nonzero_mean_rows": 374,
+      "posterior_mean_spread_across_rows": 0.32094863057136536,
+      "average_posterior_sd": 0.24164026975631714
+     }
+    },
+    "race_specific_pace": {
+     "train": {
+      "drivers": 73,
+      "known_rows": 4481,
+      "total_rows": 4481,
+      "nonzero_mean_rows": 4481,
+      "posterior_mean_spread_across_rows": 0.02915027365088463,
+      "average_posterior_sd": 0.04283515736460686
+     },
+     "test": {
+      "drivers": 22,
+      "known_rows": 335,
+      "total_rows": 374,
+      "nonzero_mean_rows": 335,
+      "posterior_mean_spread_across_rows": 0.02599705010652542,
+      "average_posterior_sd": 0.041699912399053574
+     }
+    },
+    "degradation": {
+     "train": {
+      "drivers": 73,
+      "known_rows": 4481,
+      "total_rows": 4481,
+      "nonzero_mean_rows": 4481,
+      "posterior_mean_spread_across_rows": 0.0047911680303514,
+      "average_posterior_sd": 0.003554999129846692
+     },
+     "test": {
+      "drivers": 22,
+      "known_rows": 335,
+      "total_rows": 374,
+      "nonzero_mean_rows": 335,
+      "posterior_mean_spread_across_rows": 0.0042698923498392105,
+      "average_posterior_sd": 0.0035110516473650932
+     }
+    },
+    "consistency": {
+     "train": {
+      "drivers": 73,
+      "known_rows": 4481,
+      "total_rows": 4481,
+      "nonzero_mean_rows": 4481,
+      "posterior_mean_spread_across_rows": 0.022154364734888077,
+      "average_posterior_sd": 0.03142989054322243
+     },
+     "test": {
+      "drivers": 22,
+      "known_rows": 335,
+      "total_rows": 374,
+      "nonzero_mean_rows": 335,
+      "posterior_mean_spread_across_rows": 0.02333887852728367,
+      "average_posterior_sd": 0.031577739864587784
+     }
+    }
+   }
+  },
+  "2024": {
+   "train_races": 281,
+   "test_races": 24,
+   "train_finishers": 4855,
+   "test_finishers": 425,
+   "qualities": {
+    "first_lap": {
+     "train": {
+      "drivers": 76,
+      "known_rows": 4855,
+      "total_rows": 4855,
+      "nonzero_mean_rows": 4855,
+      "posterior_mean_spread_across_rows": 0.3455544710159302,
+      "average_posterior_sd": 0.21204794943332672
+     },
+     "test": {
+      "drivers": 24,
+      "known_rows": 425,
+      "total_rows": 425,
+      "nonzero_mean_rows": 425,
+      "posterior_mean_spread_across_rows": 0.3252992630004883,
+      "average_posterior_sd": 0.21046404540538788
+     }
+    },
+    "race_specific_pace": {
+     "train": {
+      "drivers": 76,
+      "known_rows": 4855,
+      "total_rows": 4855,
+      "nonzero_mean_rows": 4855,
+      "posterior_mean_spread_across_rows": 0.03579069674015045,
+      "average_posterior_sd": 0.044313132762908936
+     },
+     "test": {
+      "drivers": 24,
+      "known_rows": 415,
+      "total_rows": 425,
+      "nonzero_mean_rows": 415,
+      "posterior_mean_spread_across_rows": 0.035072676837444305,
+      "average_posterior_sd": 0.043334536254405975
+     }
+    },
+    "degradation": {
+     "train": {
+      "drivers": 76,
+      "known_rows": 4855,
+      "total_rows": 4855,
+      "nonzero_mean_rows": 4855,
+      "posterior_mean_spread_across_rows": 0.004323454108089209,
+      "average_posterior_sd": 0.003371419617906213
+     },
+     "test": {
+      "drivers": 24,
+      "known_rows": 415,
+      "total_rows": 425,
+      "nonzero_mean_rows": 415,
+      "posterior_mean_spread_across_rows": 0.0037120648194104433,
+      "average_posterior_sd": 0.00329476036131382
+     }
+    },
+    "consistency": {
+     "train": {
+      "drivers": 76,
+      "known_rows": 4855,
+      "total_rows": 4855,
+      "nonzero_mean_rows": 4855,
+      "posterior_mean_spread_across_rows": 0.02410350739955902,
+      "average_posterior_sd": 0.031010674312710762
+     },
+     "test": {
+      "drivers": 24,
+      "known_rows": 415,
+      "total_rows": 425,
+      "nonzero_mean_rows": 415,
+      "posterior_mean_spread_across_rows": 0.025030145421624184,
+      "average_posterior_sd": 0.030673645436763763
+     }
+    }
+   }
+  },
+  "2025": {
+   "train_races": 305,
+   "test_races": 24,
+   "train_finishers": 5280,
+   "test_finishers": 419,
+   "qualities": {
+    "first_lap": {
+     "train": {
+      "drivers": 79,
+      "known_rows": 5280,
+      "total_rows": 5280,
+      "nonzero_mean_rows": 5280,
+      "posterior_mean_spread_across_rows": 0.35352975130081177,
+      "average_posterior_sd": 0.20439186692237854
+     },
+     "test": {
+      "drivers": 21,
+      "known_rows": 419,
+      "total_rows": 419,
+      "nonzero_mean_rows": 419,
+      "posterior_mean_spread_across_rows": 0.30006861686706543,
+      "average_posterior_sd": 0.2474246472120285
+     }
+    },
+    "race_specific_pace": {
+     "train": {
+      "drivers": 79,
+      "known_rows": 5280,
+      "total_rows": 5280,
+      "nonzero_mean_rows": 5280,
+      "posterior_mean_spread_across_rows": 0.04869323596358299,
+      "average_posterior_sd": 0.045927222818136215
+     },
+     "test": {
+      "drivers": 21,
+      "known_rows": 359,
+      "total_rows": 419,
+      "nonzero_mean_rows": 359,
+      "posterior_mean_spread_across_rows": 0.03549135848879814,
+      "average_posterior_sd": 0.046271294355392456
+     }
+    },
+    "degradation": {
+     "train": {
+      "drivers": 79,
+      "known_rows": 5280,
+      "total_rows": 5280,
+      "nonzero_mean_rows": 5280,
+      "posterior_mean_spread_across_rows": 0.004326480440795422,
+      "average_posterior_sd": 0.0031895183492451906
+     },
+     "test": {
+      "drivers": 21,
+      "known_rows": 359,
+      "total_rows": 419,
+      "nonzero_mean_rows": 359,
+      "posterior_mean_spread_across_rows": 0.003184202592819929,
+      "average_posterior_sd": 0.0033145754132419825
+     }
+    },
+    "consistency": {
+     "train": {
+      "drivers": 79,
+      "known_rows": 5280,
+      "total_rows": 5280,
+      "nonzero_mean_rows": 5280,
+      "posterior_mean_spread_across_rows": 0.027199754491448402,
+      "average_posterior_sd": 0.031417518854141235
+     },
+     "test": {
+      "drivers": 21,
+      "known_rows": 359,
+      "total_rows": 419,
+      "nonzero_mean_rows": 359,
+      "posterior_mean_spread_across_rows": 0.027127539739012718,
+      "average_posterior_sd": 0.03269122913479805
+     }
+    }
+   }
+  },
+  "2026": {
+   "train_races": 329,
+   "test_races": 15,
+   "train_finishers": 5699,
+   "test_finishers": 259,
+   "qualities": {
+    "first_lap": {
+     "train": {
+      "drivers": 82,
+      "known_rows": 5699,
+      "total_rows": 5699,
+      "nonzero_mean_rows": 5699,
+      "posterior_mean_spread_across_rows": 0.30626335740089417,
+      "average_posterior_sd": 0.18584772944450378
+     },
+     "test": {
+      "drivers": 23,
+      "known_rows": 259,
+      "total_rows": 259,
+      "nonzero_mean_rows": 259,
+      "posterior_mean_spread_across_rows": 0.2643611431121826,
+      "average_posterior_sd": 0.2007008194923401
+     }
+    },
+    "race_specific_pace": {
+     "train": {
+      "drivers": 82,
+      "known_rows": 5699,
+      "total_rows": 5699,
+      "nonzero_mean_rows": 5699,
+      "posterior_mean_spread_across_rows": 0.055409498512744904,
+      "average_posterior_sd": 0.047620102763175964
+     },
+     "test": {
+      "drivers": 23,
+      "known_rows": 245,
+      "total_rows": 259,
+      "nonzero_mean_rows": 245,
+      "posterior_mean_spread_across_rows": 0.04622925445437431,
+      "average_posterior_sd": 0.048586826771497726
+     }
+    },
+    "degradation": {
+     "train": {
+      "drivers": 82,
+      "known_rows": 5699,
+      "total_rows": 5699,
+      "nonzero_mean_rows": 5699,
+      "posterior_mean_spread_across_rows": 0.004167100414633751,
+      "average_posterior_sd": 0.0031175175681710243
+     },
+     "test": {
+      "drivers": 23,
+      "known_rows": 245,
+      "total_rows": 259,
+      "nonzero_mean_rows": 245,
+      "posterior_mean_spread_across_rows": 0.0033165649510920048,
+      "average_posterior_sd": 0.003277682699263096
+     }
+    },
+    "consistency": {
+     "train": {
+      "drivers": 82,
+      "known_rows": 5699,
+      "total_rows": 5699,
+      "nonzero_mean_rows": 5699,
+      "posterior_mean_spread_across_rows": 0.027321984991431236,
+      "average_posterior_sd": 0.031062250956892967
+     },
+     "test": {
+      "drivers": 23,
+      "known_rows": 245,
+      "total_rows": 259,
+      "nonzero_mean_rows": 245,
+      "posterior_mean_spread_across_rows": 0.028824036940932274,
+      "average_posterior_sd": 0.03231806308031082
+     }
+    }
+   }
+  }
+ },
+ "comparisons": {
+  "original_selection": {
+   "descriptive_interval": {
+    "n_races": 207,
+    "seasons": [
+     2016,
+     2026
+    ],
+    "mean_diff_per_race": 0.12543388956410872,
+    "ci95": [
+     -0.02981124744889914,
+     0.2934394047178071
+    ],
+    "enters": false
+   },
+   "leave_one_season_out_descriptive_only": {
+    "2016": {
+     "n_races": 186,
+     "seasons": [
+      2017,
+      2026
+     ],
+     "mean_diff_per_race": 0.13056436149022912,
+     "ci95": [
+      -0.03054999738780375,
+      0.3186655062724023
+     ],
+     "enters": false
+    },
+    "2017": {
+     "n_races": 187,
+     "seasons": [
+      2016,
+      2026
+     ],
+     "mean_diff_per_race": 0.12834876361377737,
+     "ci95": [
+      -0.0307950598950848,
+      0.3133965217644877
+     ],
+     "enters": false
+    },
+    "2018": {
+     "n_races": 186,
+     "seasons": [
+      2016,
+      2026
+     ],
+     "mean_diff_per_race": 0.1409077593075332,
+     "ci95": [
+      -0.017675235870100857,
+      0.3245482447966016
+     ],
+     "enters": false
+    },
+    "2019": {
+     "n_races": 186,
+     "seasons": [
+      2016,
+      2026
+     ],
+     "mean_diff_per_race": 0.1082409171647923,
+     "ci95": [
+      -0.04547189498307741,
+      0.297508558181565
+     ],
+     "enters": false
+    },
+    "2020": {
+     "n_races": 190,
+     "seasons": [
+      2016,
+      2026
+     ],
+     "mean_diff_per_race": 0.09117762916966489,
+     "ci95": [
+      -0.04881538526999518,
+      0.2614080018145785
+     ],
+     "enters": false
+    },
+    "2022": {
+     "n_races": 185,
+     "seasons": [
+      2016,
+      2026
+     ],
+     "mean_diff_per_race": 0.14668551264582452,
+     "ci95": [
+      -0.018047837308284524,
+      0.32728142636327184
+     ],
+     "enters": false
+    },
+    "2023": {
+     "n_races": 185,
+     "seasons": [
+      2016,
+      2026
+     ],
+     "mean_diff_per_race": 0.06957456743395006,
+     "ci95": [
+      -0.05928515798316851,
+      0.2135841673341529
+     ],
+     "enters": false
+    },
+    "2024": {
+     "n_races": 183,
+     "seasons": [
+      2016,
+      2026
+     ],
+     "mean_diff_per_race": 0.1316266190158865,
+     "ci95": [
+      -0.038307781118564505,
+      0.30864080126774923
+     ],
+     "enters": false
+    },
+    "2025": {
+     "n_races": 183,
+     "seasons": [
+      2016,
+      2026
+     ],
+     "mean_diff_per_race": 0.1818754686032488,
+     "ci95": [
+      0.054823511226634,
+      0.3288827093736808
+     ],
+     "enters": true
+    },
+    "2026": {
+     "n_races": 192,
+     "seasons": [
+      2016,
+      2025
+     ],
+     "mean_diff_per_race": 0.12683715422948202,
+     "ci95": [
+      -0.04226385499952602,
+      0.3020192360872502
+     ],
+     "enters": false
+    }
+   }
+  },
+  "fixed_race_specific_pace_exploratory": {
+   "descriptive_interval": {
+    "n_races": 207,
+    "seasons": [
+     2016,
+     2026
+    ],
+    "mean_diff_per_race": 0.15730315130113978,
+    "ci95": [
+     0.018980861135862493,
+     0.3073084258648111
+    ],
+    "enters": true
+   },
+   "leave_one_season_out_descriptive_only": {
+    "2016": {
+     "n_races": 186,
+     "seasons": [
+      2017,
+      2026
+     ],
+     "mean_diff_per_race": 0.14289871338875063,
+     "ci95": [
+      0.0049623295968892625,
+      0.31620937810183514
+     ],
+     "enters": true
+    },
+    "2017": {
+     "n_races": 187,
+     "seasons": [
+      2016,
+      2026
+     ],
+     "mean_diff_per_race": 0.16879914023659445,
+     "ci95": [
+      0.02821789220221957,
+      0.33583162633707986
+     ],
+     "enters": true
+    },
+    "2018": {
+     "n_races": 186,
+     "seasons": [
+      2016,
+      2026
+     ],
+     "mean_diff_per_race": 0.17267772715578797,
+     "ci95": [
+      0.03244871585192304,
+      0.3386742869624465
+     ],
+     "enters": true
+    },
+    "2019": {
+     "n_races": 186,
+     "seasons": [
+      2016,
+      2026
+     ],
+     "mean_diff_per_race": 0.14393447547830562,
+     "ci95": [
+      0.00851190915474525,
+      0.3177727401458213
+     ],
+     "enters": true
+    },
+    "2020": {
+     "n_races": 190,
+     "seasons": [
+      2016,
+      2026
+     ],
+     "mean_diff_per_race": 0.12589835116737766,
+     "ci95": [
+      0.0037637089238022315,
+      0.2832443030975958
+     ],
+     "enters": true
+    },
+    "2022": {
+     "n_races": 185,
+     "seasons": [
+      2016,
+      2026
+     ],
+     "mean_diff_per_race": 0.1858121717298353,
+     "ci95": [
+      0.0461871306188814,
+      0.34990742141941095
+     ],
+     "enters": true
+    },
+    "2023": {
+     "n_races": 185,
+     "seasons": [
+      2016,
+      2026
+     ],
+     "mean_diff_per_race": 0.10677792317158467,
+     "ci95": [
+      -0.0070057075620893776,
+      0.23677842565204785
+     ],
+     "enters": false
+    },
+    "2024": {
+     "n_races": 183,
+     "seasons": [
+      2016,
+      2026
+     ],
+     "mean_diff_per_race": 0.1676474295027269,
+     "ci95": [
+      0.017508320983400123,
+      0.3352483358426331
+     ],
+     "enters": true
+    },
+    "2025": {
+     "n_races": 183,
+     "seasons": [
+      2016,
+      2026
+     ],
+     "mean_diff_per_race": 0.19859176385598104,
+     "ci95": [
+      0.06905854121266797,
+      0.3446539061797542
+     ],
+     "enters": true
+    },
+    "2026": {
+     "n_races": 192,
+     "seasons": [
+      2016,
+      2025
+     ],
+     "mean_diff_per_race": 0.16119619210561117,
+     "ci95": [
+      0.01650247623203009,
+      0.32124092927139797
+     ],
+     "enters": true
+    }
+   }
+  }
+ },
+ "by_season": [
+  {
+   "comparison": "original_selection",
+   "season": 2016,
+   "qualities": [
+    "first_lap"
+   ],
+   "n_races": 21,
+   "sum_diff": 1.6798419952392578,
+   "mean_diff_per_race": 0.07999247312545776,
+   "races_improved": 13,
+   "race_differences": {
+    "2016-01": -0.01747894287109375,
+    "2016-02": -0.08746719360351562,
+    "2016-03": 0.3085517883300781,
+    "2016-04": 0.13704490661621094,
+    "2016-05": 0.19175148010253906,
+    "2016-06": 0.3922595977783203,
+    "2016-07": 0.3276557922363281,
+    "2016-08": -0.06298446655273438,
+    "2016-09": 0.06823539733886719,
+    "2016-10": 0.13405990600585938,
+    "2016-11": -0.13320541381835938,
+    "2016-12": 0.07765960693359375,
+    "2016-13": 0.0052890777587890625,
+    "2016-14": -0.0724029541015625,
+    "2016-15": -0.21004295349121094,
+    "2016-16": -0.08737945556640625,
+    "2016-17": -0.012470245361328125,
+    "2016-18": 0.3312702178955078,
+    "2016-19": 0.08430099487304688,
+    "2016-20": 0.2334880828857422,
+    "2016-21": 0.07170677185058594
+   }
+  },
+  {
+   "comparison": "original_selection",
+   "season": 2017,
+   "qualities": [
+    "degradation",
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "n_races": 20,
+   "sum_diff": 1.9635944366455078,
+   "mean_diff_per_race": 0.09817972034215927,
+   "races_improved": 11,
+   "race_differences": {
+    "2017-01": 0.09586334228515625,
+    "2017-02": 0.1919116973876953,
+    "2017-03": 0.24840164184570312,
+    "2017-04": -0.12141036987304688,
+    "2017-05": 0.0318756103515625,
+    "2017-06": -0.3090648651123047,
+    "2017-07": -0.21460723876953125,
+    "2017-08": 0.8748054504394531,
+    "2017-09": -0.10208511352539062,
+    "2017-10": -0.28330421447753906,
+    "2017-11": 0.041316986083984375,
+    "2017-12": 0.033721923828125,
+    "2017-13": -0.08933448791503906,
+    "2017-14": -0.1604175567626953,
+    "2017-15": -0.1807842254638672,
+    "2017-16": -0.03579521179199219,
+    "2017-17": 0.43463706970214844,
+    "2017-18": 1.1102123260498047,
+    "2017-19": 0.3144073486328125,
+    "2017-20": 0.08324432373046875
+   }
+  },
+  {
+   "comparison": "original_selection",
+   "season": 2018,
+   "qualities": [
+    "degradation",
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "n_races": 21,
+   "sum_diff": -0.24402904510498047,
+   "mean_diff_per_race": -0.011620430275797844,
+   "races_improved": 8,
+   "race_differences": {
+    "2018-01": 0.4373950958251953,
+    "2018-02": -0.20589637756347656,
+    "2018-03": 0.4255847930908203,
+    "2018-04": -0.17507362365722656,
+    "2018-05": -0.35773468017578125,
+    "2018-06": -0.023473739624023438,
+    "2018-07": -0.10614013671875,
+    "2018-08": 0.3261890411376953,
+    "2018-09": -0.08797645568847656,
+    "2018-10": 0.10509395599365234,
+    "2018-11": -0.172821044921875,
+    "2018-12": -0.06797218322753906,
+    "2018-13": 0.38384056091308594,
+    "2018-14": -0.20813751220703125,
+    "2018-15": -0.2180633544921875,
+    "2018-16": -0.14389801025390625,
+    "2018-17": -0.381561279296875,
+    "2018-18": 0.2345867156982422,
+    "2018-19": 0.9161643981933594,
+    "2018-20": -0.9970188140869141,
+    "2018-21": 0.07288360595703125
+   }
+  },
+  {
+   "comparison": "original_selection",
+   "season": 2019,
+   "qualities": [
+    "degradation",
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "n_races": 21,
+   "sum_diff": 5.832002639770508,
+   "mean_diff_per_race": 0.27771440148353577,
+   "races_improved": 13,
+   "race_differences": {
+    "2019-01": -0.2729663848876953,
+    "2019-02": -0.45575714111328125,
+    "2019-03": 0.14208984375,
+    "2019-04": -0.04889106750488281,
+    "2019-05": -0.2440814971923828,
+    "2019-06": -0.018762588500976562,
+    "2019-07": 0.20503807067871094,
+    "2019-08": -0.030527114868164062,
+    "2019-09": 0.6461868286132812,
+    "2019-10": 0.075714111328125,
+    "2019-11": 2.0072288513183594,
+    "2019-12": 0.3954753875732422,
+    "2019-13": 0.23366165161132812,
+    "2019-14": 0.7633094787597656,
+    "2019-15": 0.24042320251464844,
+    "2019-16": -0.043224334716796875,
+    "2019-17": 0.1871051788330078,
+    "2019-18": 0.4706745147705078,
+    "2019-19": 0.48499298095703125,
+    "2019-20": 1.2374763488769531,
+    "2019-21": -0.14316368103027344
+   }
+  },
+  {
+   "comparison": "original_selection",
+   "season": 2020,
+   "qualities": [
+    "race_specific_pace"
+   ],
+   "n_races": 17,
+   "sum_diff": 8.641063690185547,
+   "mean_diff_per_race": 0.508297860622406,
+   "races_improved": 14,
+   "race_differences": {
+    "2020-01": -0.6022682189941406,
+    "2020-02": 0.4272613525390625,
+    "2020-03": 1.056711196899414,
+    "2020-04": 1.1612606048583984,
+    "2020-05": -0.5781135559082031,
+    "2020-06": 0.6843681335449219,
+    "2020-07": 0.5628814697265625,
+    "2020-08": 1.8105430603027344,
+    "2020-09": 0.9618473052978516,
+    "2020-10": -0.12441444396972656,
+    "2020-11": 0.1040802001953125,
+    "2020-12": 0.21712493896484375,
+    "2020-13": 1.0215930938720703,
+    "2020-14": 0.22892189025878906,
+    "2020-15": 0.2785606384277344,
+    "2020-16": 1.0510597229003906,
+    "2020-17": 0.37964630126953125
+   }
+  },
+  {
+   "comparison": "original_selection",
+   "season": 2022,
+   "qualities": [
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "n_races": 22,
+   "sum_diff": -1.1720046997070312,
+   "mean_diff_per_race": -0.05327294021844864,
+   "races_improved": 8,
+   "race_differences": {
+    "2022-01": -0.25530052185058594,
+    "2022-02": -0.14144515991210938,
+    "2022-03": -0.7690620422363281,
+    "2022-04": -1.3531723022460938,
+    "2022-05": -0.47855567932128906,
+    "2022-06": -0.028684616088867188,
+    "2022-07": 0.4163074493408203,
+    "2022-08": 0.3651256561279297,
+    "2022-09": -0.19538497924804688,
+    "2022-10": -0.6404972076416016,
+    "2022-11": -0.4434165954589844,
+    "2022-12": 0.41892433166503906,
+    "2022-13": 0.4658546447753906,
+    "2022-14": -0.5647563934326172,
+    "2022-15": -0.7912025451660156,
+    "2022-16": 0.2567729949951172,
+    "2022-17": 1.3850898742675781,
+    "2022-18": 1.361846923828125,
+    "2022-19": -0.10641098022460938,
+    "2022-20": -0.24197769165039062,
+    "2022-21": -0.31494140625,
+    "2022-22": 0.4828815460205078
+   }
+  },
+  {
+   "comparison": "original_selection",
+   "season": 2023,
+   "qualities": [
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "n_races": 22,
+   "sum_diff": 13.09351921081543,
+   "mean_diff_per_race": 0.5951599478721619,
+   "races_improved": 17,
+   "race_differences": {
+    "2023-01": 0.8215618133544922,
+    "2023-02": 1.1104469299316406,
+    "2023-03": 0.692718505859375,
+    "2023-04": 1.3205604553222656,
+    "2023-05": 0.48900794982910156,
+    "2023-06": -0.5532493591308594,
+    "2023-07": 1.0851631164550781,
+    "2023-08": 0.6196155548095703,
+    "2023-09": 0.8178062438964844,
+    "2023-10": -0.20612144470214844,
+    "2023-11": 0.5253696441650391,
+    "2023-12": 0.014966964721679688,
+    "2023-13": 3.6126747131347656,
+    "2023-14": 0.13433265686035156,
+    "2023-15": -0.7918701171875,
+    "2023-16": 0.18884849548339844,
+    "2023-17": -0.07798194885253906,
+    "2023-18": -0.25456809997558594,
+    "2023-19": 0.8166770935058594,
+    "2023-20": 0.1331157684326172,
+    "2023-21": 1.6660747528076172,
+    "2023-22": 0.9283695220947266
+   }
+  },
+  {
+   "comparison": "original_selection",
+   "season": 2024,
+   "qualities": [
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "n_races": 24,
+   "sum_diff": 1.8771419525146484,
+   "mean_diff_per_race": 0.07821425050497055,
+   "races_improved": 16,
+   "race_differences": {
+    "2024-01": 0.6163387298583984,
+    "2024-02": 0.19033050537109375,
+    "2024-03": 0.7304344177246094,
+    "2024-04": 0.3884239196777344,
+    "2024-05": -0.19950485229492188,
+    "2024-06": 0.5440750122070312,
+    "2024-07": 0.044158935546875,
+    "2024-08": -0.6884193420410156,
+    "2024-09": 0.41825294494628906,
+    "2024-10": 0.33725929260253906,
+    "2024-11": 0.06166839599609375,
+    "2024-12": -0.38091278076171875,
+    "2024-13": 0.023797988891601562,
+    "2024-14": 0.17267608642578125,
+    "2024-15": 0.7110195159912109,
+    "2024-16": -0.6329231262207031,
+    "2024-17": -0.02574920654296875,
+    "2024-18": -0.5953426361083984,
+    "2024-19": 0.16997146606445312,
+    "2024-20": -0.9745807647705078,
+    "2024-21": -0.2587757110595703,
+    "2024-22": 0.5102500915527344,
+    "2024-23": 0.6836738586425781,
+    "2024-24": 0.031019210815429688
+   }
+  },
+  {
+   "comparison": "original_selection",
+   "season": 2025,
+   "qualities": [
+    "first_lap",
+    "race_specific_pace"
+   ],
+   "n_races": 24,
+   "sum_diff": -7.318397521972656,
+   "mean_diff_per_race": -0.30493322014808655,
+   "races_improved": 6,
+   "race_differences": {
+    "2025-01": 0.3839149475097656,
+    "2025-02": -0.13269424438476562,
+    "2025-03": -0.627105712890625,
+    "2025-04": -0.8574333190917969,
+    "2025-05": -0.27358436584472656,
+    "2025-06": -1.4334640502929688,
+    "2025-07": -0.04553794860839844,
+    "2025-08": 0.25909423828125,
+    "2025-09": -1.2225227355957031,
+    "2025-10": -0.5105571746826172,
+    "2025-11": -0.041290283203125,
+    "2025-12": -0.8931789398193359,
+    "2025-13": -0.084075927734375,
+    "2025-14": -0.6701622009277344,
+    "2025-15": -0.10870552062988281,
+    "2025-16": -0.5425567626953125,
+    "2025-17": -0.71722412109375,
+    "2025-18": -0.1800994873046875,
+    "2025-19": 0.24945449829101562,
+    "2025-20": 0.11358451843261719,
+    "2025-21": -0.068115234375,
+    "2025-22": -0.24695396423339844,
+    "2025-23": 0.11974143981933594,
+    "2025-24": 0.2110748291015625
+   }
+  },
+  {
+   "comparison": "original_selection",
+   "season": 2026,
+   "qualities": [
+    "race_specific_pace"
+   ],
+   "n_races": 15,
+   "sum_diff": 1.612081527709961,
+   "mean_diff_per_race": 0.10747209936380386,
+   "races_improved": 8,
+   "race_differences": {
+    "2026-01": -0.7353134155273438,
+    "2026-02": -0.4004650115966797,
+    "2026-03": 0.22039794921875,
+    "2026-04": -0.5141677856445312,
+    "2026-05": 0.7455520629882812,
+    "2026-06": -0.2708091735839844,
+    "2026-07": -0.039920806884765625,
+    "2026-08": -0.10307693481445312,
+    "2026-09": 1.018585205078125,
+    "2026-10": 0.25321006774902344,
+    "2026-11": 0.3173542022705078,
+    "2026-12": -0.2517681121826172,
+    "2026-13": 0.2887840270996094,
+    "2026-14": 0.6697864532470703,
+    "2026-15": 0.41393280029296875
+   }
+  },
+  {
+   "comparison": "fixed_race_specific_pace_exploratory",
+   "season": 2016,
+   "qualities": [
+    "race_specific_pace"
+   ],
+   "n_races": 21,
+   "sum_diff": 5.98259162902832,
+   "mean_diff_per_race": 0.28488531708717346,
+   "races_improved": 15,
+   "race_differences": {
+    "2016-01": -0.6488227844238281,
+    "2016-02": -0.454498291015625,
+    "2016-03": 0.26563262939453125,
+    "2016-04": -0.1922016143798828,
+    "2016-05": 0.21683692932128906,
+    "2016-06": 1.4444351196289062,
+    "2016-07": 0.5577926635742188,
+    "2016-08": 0.020978927612304688,
+    "2016-09": -0.05690574645996094,
+    "2016-10": 0.7107067108154297,
+    "2016-11": 0.4755210876464844,
+    "2016-12": 0.3401050567626953,
+    "2016-13": 0.39936065673828125,
+    "2016-14": 0.01955413818359375,
+    "2016-15": 0.22353172302246094,
+    "2016-16": 1.093973159790039,
+    "2016-17": 0.22104263305664062,
+    "2016-18": 0.7944965362548828,
+    "2016-19": 0.7463493347167969,
+    "2016-20": -0.1769237518310547,
+    "2016-21": -0.018373489379882812
+   }
+  },
+  {
+   "comparison": "fixed_race_specific_pace_exploratory",
+   "season": 2017,
+   "qualities": [
+    "race_specific_pace"
+   ],
+   "n_races": 20,
+   "sum_diff": 0.996312141418457,
+   "mean_diff_per_race": 0.04981560632586479,
+   "races_improved": 9,
+   "race_differences": {
+    "2017-01": -0.025869369506835938,
+    "2017-02": 0.3218059539794922,
+    "2017-03": 0.08199691772460938,
+    "2017-04": -0.15662765502929688,
+    "2017-05": 0.14646530151367188,
+    "2017-06": -0.38009071350097656,
+    "2017-07": -0.08754730224609375,
+    "2017-08": 0.7312297821044922,
+    "2017-09": -0.040424346923828125,
+    "2017-10": -0.20208358764648438,
+    "2017-11": -0.14340782165527344,
+    "2017-12": -0.141845703125,
+    "2017-13": -0.04507255554199219,
+    "2017-14": 0.03193378448486328,
+    "2017-15": -0.05548667907714844,
+    "2017-16": 0.003444671630859375,
+    "2017-17": 0.08433151245117188,
+    "2017-18": 0.8797874450683594,
+    "2017-19": 0.07818603515625,
+    "2017-20": -0.08441352844238281
+   }
+  },
+  {
+   "comparison": "fixed_race_specific_pace_exploratory",
+   "season": 2018,
+   "qualities": [
+    "race_specific_pace"
+   ],
+   "n_races": 21,
+   "sum_diff": 0.443695068359375,
+   "mean_diff_per_race": 0.02112833596765995,
+   "races_improved": 12,
+   "race_differences": {
+    "2018-01": 0.36426734924316406,
+    "2018-02": -0.2490386962890625,
+    "2018-03": 0.2262248992919922,
+    "2018-04": -0.1614532470703125,
+    "2018-05": -0.32706737518310547,
+    "2018-06": 0.012798309326171875,
+    "2018-07": -0.15233612060546875,
+    "2018-08": 0.2120342254638672,
+    "2018-09": 0.2371044158935547,
+    "2018-10": -0.03366374969482422,
+    "2018-11": 0.04959869384765625,
+    "2018-12": 0.04714202880859375,
+    "2018-13": 0.37448692321777344,
+    "2018-14": -0.20151329040527344,
+    "2018-15": -0.37758445739746094,
+    "2018-16": 0.13982582092285156,
+    "2018-17": -0.08365631103515625,
+    "2018-18": 0.1312732696533203,
+    "2018-19": 0.7064323425292969,
+    "2018-20": -0.5234527587890625,
+    "2018-21": 0.052272796630859375
+   }
+  },
+  {
+   "comparison": "fixed_race_specific_pace_exploratory",
+   "season": 2019,
+   "qualities": [
+    "race_specific_pace"
+   ],
+   "n_races": 21,
+   "sum_diff": 5.789939880371094,
+   "mean_diff_per_race": 0.27571141719818115,
+   "races_improved": 13,
+   "race_differences": {
+    "2019-01": -0.2522468566894531,
+    "2019-02": -0.30156707763671875,
+    "2019-03": 0.22416305541992188,
+    "2019-04": -0.044513702392578125,
+    "2019-05": -0.2798442840576172,
+    "2019-06": -0.05934715270996094,
+    "2019-07": 0.204986572265625,
+    "2019-08": -0.06417655944824219,
+    "2019-09": 0.609771728515625,
+    "2019-10": 0.23381423950195312,
+    "2019-11": 1.9438285827636719,
+    "2019-12": 0.2980060577392578,
+    "2019-13": 0.2445545196533203,
+    "2019-14": 1.0212993621826172,
+    "2019-15": 0.2708396911621094,
+    "2019-16": -0.12749862670898438,
+    "2019-17": 0.113525390625,
+    "2019-18": 0.4402427673339844,
+    "2019-19": 0.3087959289550781,
+    "2019-20": 1.0942344665527344,
+    "2019-21": -0.08892822265625
+   }
+  },
+  {
+   "comparison": "fixed_race_specific_pace_exploratory",
+   "season": 2020,
+   "qualities": [
+    "race_specific_pace"
+   ],
+   "n_races": 17,
+   "sum_diff": 8.641063690185547,
+   "mean_diff_per_race": 0.508297860622406,
+   "races_improved": 14,
+   "race_differences": {
+    "2020-01": -0.6022682189941406,
+    "2020-02": 0.4272613525390625,
+    "2020-03": 1.056711196899414,
+    "2020-04": 1.1612606048583984,
+    "2020-05": -0.5781135559082031,
+    "2020-06": 0.6843681335449219,
+    "2020-07": 0.5628814697265625,
+    "2020-08": 1.8105430603027344,
+    "2020-09": 0.9618473052978516,
+    "2020-10": -0.12441444396972656,
+    "2020-11": 0.1040802001953125,
+    "2020-12": 0.21712493896484375,
+    "2020-13": 1.0215930938720703,
+    "2020-14": 0.22892189025878906,
+    "2020-15": 0.2785606384277344,
+    "2020-16": 1.0510597229003906,
+    "2020-17": 0.37964630126953125
+   }
+  },
+  {
+   "comparison": "fixed_race_specific_pace_exploratory",
+   "season": 2022,
+   "qualities": [
+    "race_specific_pace"
+   ],
+   "n_races": 22,
+   "sum_diff": -1.813497543334961,
+   "mean_diff_per_race": -0.08243170380592346,
+   "races_improved": 9,
+   "race_differences": {
+    "2022-01": -0.3798789978027344,
+    "2022-02": -0.1594409942626953,
+    "2022-03": -0.5253200531005859,
+    "2022-04": -1.2853813171386719,
+    "2022-05": -0.5374927520751953,
+    "2022-06": 0.0938720703125,
+    "2022-07": 0.45395851135253906,
+    "2022-08": 0.23480606079101562,
+    "2022-09": -0.0660400390625,
+    "2022-10": -0.6767654418945312,
+    "2022-11": -0.2910118103027344,
+    "2022-12": 0.4410972595214844,
+    "2022-13": 0.3976726531982422,
+    "2022-14": -0.8587284088134766,
+    "2022-15": -0.8888568878173828,
+    "2022-16": 0.2099151611328125,
+    "2022-17": 0.8181476593017578,
+    "2022-18": 1.4505023956298828,
+    "2022-19": -0.26949310302734375,
+    "2022-20": -0.36794281005859375,
+    "2022-21": -0.1758136749267578,
+    "2022-22": 0.5686969757080078
+   }
+  },
+  {
+   "comparison": "fixed_race_specific_pace_exploratory",
+   "season": 2023,
+   "qualities": [
+    "race_specific_pace"
+   ],
+   "n_races": 22,
+   "sum_diff": 12.80783462524414,
+   "mean_diff_per_race": 0.5821743011474609,
+   "races_improved": 18,
+   "race_differences": {
+    "2023-01": 0.50506591796875,
+    "2023-02": 0.9566268920898438,
+    "2023-03": 0.6900482177734375,
+    "2023-04": 1.2982349395751953,
+    "2023-05": 0.3789253234863281,
+    "2023-06": -0.4764747619628906,
+    "2023-07": 0.9430923461914062,
+    "2023-08": 0.4834613800048828,
+    "2023-09": 1.0846710205078125,
+    "2023-10": 0.07081222534179688,
+    "2023-11": 0.6517238616943359,
+    "2023-12": 0.03721046447753906,
+    "2023-13": 2.7950515747070312,
+    "2023-14": 0.4322509765625,
+    "2023-15": -0.5796318054199219,
+    "2023-16": 0.38532447814941406,
+    "2023-17": 0.059661865234375,
+    "2023-18": -0.3084449768066406,
+    "2023-19": 0.8894481658935547,
+    "2023-20": -0.030530929565429688,
+    "2023-21": 1.5006828308105469,
+    "2023-22": 1.0406246185302734
+   }
+  },
+  {
+   "comparison": "fixed_race_specific_pace_exploratory",
+   "season": 2024,
+   "qualities": [
+    "race_specific_pace"
+   ],
+   "n_races": 24,
+   "sum_diff": 1.8822708129882812,
+   "mean_diff_per_race": 0.07842794805765152,
+   "races_improved": 16,
+   "race_differences": {
+    "2024-01": 0.5603752136230469,
+    "2024-02": 0.000980377197265625,
+    "2024-03": 0.6907062530517578,
+    "2024-04": 0.36456871032714844,
+    "2024-05": -0.027273178100585938,
+    "2024-06": 0.7593364715576172,
+    "2024-07": 0.04337310791015625,
+    "2024-08": -0.7304325103759766,
+    "2024-09": 0.3538379669189453,
+    "2024-10": 0.3771705627441406,
+    "2024-11": 0.18590545654296875,
+    "2024-12": -0.4665336608886719,
+    "2024-13": 0.021625518798828125,
+    "2024-14": 0.09881210327148438,
+    "2024-15": 0.6218776702880859,
+    "2024-16": -0.5733013153076172,
+    "2024-17": -0.01374053955078125,
+    "2024-18": -0.59228515625,
+    "2024-19": 0.21491241455078125,
+    "2024-20": -0.9818534851074219,
+    "2024-21": -0.3982505798339844,
+    "2024-22": 0.6257591247558594,
+    "2024-23": 0.36990928649902344,
+    "2024-24": 0.37679100036621094
+   }
+  },
+  {
+   "comparison": "fixed_race_specific_pace_exploratory",
+   "season": 2025,
+   "qualities": [
+    "race_specific_pace"
+   ],
+   "n_races": 24,
+   "sum_diff": -3.7805404663085938,
+   "mean_diff_per_race": -0.157522514462471,
+   "races_improved": 10,
+   "race_differences": {
+    "2025-01": 0.5206260681152344,
+    "2025-02": 0.012228012084960938,
+    "2025-03": -0.3607940673828125,
+    "2025-04": -0.6152381896972656,
+    "2025-05": -0.14737319946289062,
+    "2025-06": -1.1055622100830078,
+    "2025-07": 0.04966926574707031,
+    "2025-08": 0.2871055603027344,
+    "2025-09": -1.080362319946289,
+    "2025-10": -0.36995887756347656,
+    "2025-11": 0.089691162109375,
+    "2025-12": -0.6589565277099609,
+    "2025-13": -0.027881622314453125,
+    "2025-14": -0.45258331298828125,
+    "2025-15": -0.028474807739257812,
+    "2025-16": -0.30599212646484375,
+    "2025-17": -0.5416584014892578,
+    "2025-18": -0.014995574951171875,
+    "2025-19": 0.3064556121826172,
+    "2025-20": 0.13706588745117188,
+    "2025-21": 0.10395431518554688,
+    "2025-22": -0.030321121215820312,
+    "2025-23": 0.19669723510742188,
+    "2025-24": 0.2561187744140625
+   }
+  },
+  {
+   "comparison": "fixed_race_specific_pace_exploratory",
+   "season": 2026,
+   "qualities": [
+    "race_specific_pace"
+   ],
+   "n_races": 15,
+   "sum_diff": 1.612081527709961,
+   "mean_diff_per_race": 0.10747209936380386,
+   "races_improved": 8,
+   "race_differences": {
+    "2026-01": -0.7353134155273438,
+    "2026-02": -0.4004650115966797,
+    "2026-03": 0.22039794921875,
+    "2026-04": -0.5141677856445312,
+    "2026-05": 0.7455520629882812,
+    "2026-06": -0.2708091735839844,
+    "2026-07": -0.039920806884765625,
+    "2026-08": -0.10307693481445312,
+    "2026-09": 1.018585205078125,
+    "2026-10": 0.25321006774902344,
+    "2026-11": 0.3173542022705078,
+    "2026-12": -0.2517681121826172,
+    "2026-13": 0.2887840270996094,
+    "2026-14": 0.6697864532470703,
+    "2026-15": 0.41393280029296875
+   }
+  }
+ ]
+}
