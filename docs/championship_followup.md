@@ -202,6 +202,11 @@ The current evidence does not authorize an Overall ranking.
 
 ### Concrete next-study proposal, awaiting authorization
 
+**Status update:** the user has now authorized this proposal. Its separate frozen
+plan is [`championship_archive_conservative.md`](championship_archive_conservative.md).
+The text below records the proposal that was approved; the failed study remains
+unchanged.
+
 The standing instruction says to record an exhausted fit and not rerun it with
 different settings. Accordingly, no further archive fits have been launched.
 The following is a proposal for a separate computational study, not an amendment
