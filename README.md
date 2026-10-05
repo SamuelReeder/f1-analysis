@@ -641,6 +641,9 @@ outcomes excluded from the recorded championship benchmark, stopped before
 predictive scoring: its race-pace fit exhausted the registered convergence
 attempts. [The recorded failure and diagnostics](docs/championship_followup.md#archive-study-outcome)
 leave the simpler candidate unvalidated; the Overall ranking remains withheld.
+The user authorized a [separate computational follow-up](docs/championship_archive_conservative.md)
+using the existing conservative sampler recipe with the same model and prediction
+gate. That registered run is now in progress; no improvement has yet been established.
 
 The qualifying folds for **2014 and 2021** failed every prescribed attempt, so
 those seasons are excluded wherever season-ahead qualifying features are needed.
