@@ -57,3 +57,51 @@ is not yet available, report that limitation and keep the Overall ranking withhe
 The intended eventual claim is an experimental equal-car championship with stated
 assumptions and uncertainty. Predictive improvement alone does not establish a
 universal or causal best-driver ranking.
+
+## Completed diagnostic replay
+
+The replay in commit `f1f8e33` reproduced the reference choices, entry tests, and
+combined result. Its source revision was `dfd4088`. It took 848.630 seconds and
+made 146 fits, with no retries. The Python suite passed 150 tests. Sources:
+`outputs/analysis/championship_diagnosis/{summary,verification}.json`;
+`evaluations.jsonl` preserves every evaluated subset's scores and diagnostics.
+
+The original selection procedure remains failed: mean improvement +0.125434 per
+race, season-block interval [-0.029811, +0.293439]. The predeclared descriptive
+race-pace-only comparison on the same 207 outer races gives +0.157303, with interval
+[+0.018981, +0.307308]. This candidate was chosen after the original experiment;
+this positive historical interval is development evidence, not a new gate pass.
+
+| Test season | Original selection: improvement per race | Fixed race pace: improvement per race |
+|---|---:|---:|
+| 2016 | +0.079992 | +0.284885 |
+| 2017 | +0.098180 | +0.049816 |
+| 2018 | -0.011620 | +0.021128 |
+| 2019 | +0.277714 | +0.275711 |
+| 2020 | +0.508298 | +0.508298 |
+| 2022 | -0.053273 | -0.082432 |
+| 2023 | +0.595160 | +0.582174 |
+| 2024 | +0.078214 | +0.078428 |
+| 2025 | -0.304933 | -0.157523 |
+| 2026 | +0.107472 | +0.107472 |
+
+The fixed candidate improves the early choice in 2016 and reduces the loss in
+2025, when the original procedure also selected first-lap performance. It does
+not remove all weak seasons: both procedures lose in 2022 and 2025. Omitting 2025
+would make the original interval positive, but that is not a permitted exclusion.
+Omitting 2023 makes the fixed candidate's interval [-0.007006, +0.236778], so the
+apparent improvement is sensitive to the strongest season. These leave-one-season
+calculations diagnose influence; they do not change either experiment's data.
+
+Coefficient signs are consistent with the input definitions: race pace and
+qualifying pace are positive for faster drivers, and their fitted race-strength
+coefficients are positive. The recorded diagnostics do not indicate a convergence
+failure to repair. There is evidence for simplifying selection, but no demonstrated
+software error whose correction would reverse the completed gate.
+
+The independent-data inventory is
+`outputs/analysis/championship_evidence_inventory.json`. Earlier race results are
+present, but matching earlier lap inputs are absent, and no deliberately reserved
+test set has been established. The archive alone is not a confirmation dataset.
+The risk from repeatedly choosing models using the same validation outcomes is
+also described by [Cawley and Talbot](https://www.jmlr.org/beta/papers/v11/cawley10a.html).
