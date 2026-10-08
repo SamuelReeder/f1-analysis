@@ -659,6 +659,12 @@ position to qualifying and current-team effects, compares the independent
 current-season race estimates, and documents uncertainty and simulation limitations.
 It preserves the original model, preview and failed publication gate.
 
+The [Overall model plan](docs/overall_model_plan.md) sets the next development
+direction: replace the canonical Overall pipeline with one coherent current-driver
+model, and use qualifying and race metrics to explain its result. It specifies
+the weaknesses to address, implementation sequence, validation requirements and
+refresh integration. It is a roadmap; the replacement model has not yet been fitted.
+
 The qualifying folds for **2014 and 2021** failed every prescribed attempt, so
 those seasons are excluded wherever season-ahead qualifying features are needed.
 They can still train later folds. Wet pace excludes 2021; its test has no 2014 races.

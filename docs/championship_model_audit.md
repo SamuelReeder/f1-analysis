@@ -206,9 +206,11 @@ Source: audit summary and `championship_preview.py`'s rank calculation.
 
 1. Define the intended estimate explicitly: current race ability, current-team
    performance, or transferable equal-car ability. Preserve all existing results.
-2. Develop a separate successor that combines qualifying-derived grids with
-   current-season race pace and propagates their dependence and uncertainty.
-   Address grid-noise and tiebreak consistency in that separate implementation.
+2. Replace the canonical Overall model in a new registered version that combines
+   qualifying-derived grids with current-season race pace and propagates their
+   dependence and uncertainty. Address grid-noise and tiebreak consistency in that
+   implementation. Preserve previous experiments as evidence rather than creating
+   competing public rankings; see the [Overall model plan](overall_model_plan.md).
 3. Audit predictions by driver experience, team switches, circuit and season;
    examine calibration and driver/car separation. Do not filter out inconvenient
    races or select thresholds after inspecting these diagnostics.
