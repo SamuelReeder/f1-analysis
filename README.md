@@ -654,6 +654,11 @@ unvalidated, retain current driver-team compatibility, and do not enable the
 production Overall view. This preview does not complete the unresolved validation
 goal or change any failed gate.
 
+The subsequent [model audit](docs/championship_model_audit.md) traces Hadjar's
+position to qualifying and current-team effects, compares the independent
+current-season race estimates, and documents uncertainty and simulation limitations.
+It preserves the original model, preview and failed publication gate.
+
 The qualifying folds for **2014 and 2021** failed every prescribed attempt, so
 those seasons are excluded wherever season-ahead qualifying features are needed.
 They can still train later folds. Wet pace excludes 2021; its test has no 2014 races.
