@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { ArrowDownToLine, ArrowRight, Info, Search, X } from "lucide-react";
 import type {
   Dataset,
@@ -10,9 +10,16 @@ import type {
 } from "../types";
 import { Badge, Empty, Band, MetricControl } from "../components";
 import { color, signed, pct, date, exportCsv, exportRaceCsv } from "../lib";
+import { performanceScale, PerformanceKey } from "../performance";
 import Trend from "./Trend";
 import RankingHeader from "./RankingHeader";
-import { RaceMethodology, RaceValidation } from "./RaceNotes";
+import {
+  CarStateTest,
+  FeatureTests,
+  RaceMethodology,
+  RaceValidation,
+} from "./RaceNotes";
+import { PaceBreakdown, QualiVsRace, RaceHistory } from "./DriverCharts";
 
 interface RankingEntry {
   id: string;
@@ -111,6 +118,7 @@ export default function Rankings({
       `${r.name} ${r.team}`.toLowerCase().includes(search.toLowerCase()) &&
       (team === "all" || r.teamKey === team),
   );
+  const scale = performanceScale(rows.map((r) => r.pace.median));
   const domain = [
     Math.min(0, ...rows.map((r) => r.pace.q05)),
     Math.max(0, ...rows.map((r) => r.pace.q95)),
@@ -255,6 +263,7 @@ export default function Rankings({
                     <col className="name-column" />
                     <col className="pace-column" />
                     <col className="range-col" />
+                    <col className="top3-col" />
                     <col className="rank-column" />
                   </colgroup>
                   <thead>
@@ -263,6 +272,7 @@ export default function Rankings({
                       <th>{car ? "CONSTRUCTOR" : "DRIVER"}</th>
                       <th className="numeric">PACE / 90s</th>
                       <th className="range-col">90% PACE INTERVAL</th>
+                      <th className="numeric top3-col">TOP 3</th>
                       <th className="numeric">90% RANK RANGE</th>
                     </tr>
                   </thead>
@@ -273,6 +283,7 @@ export default function Rankings({
                       return (
                         <tr
                           key={r.id}
+                          style={{ "--performance-color": scale(v.median) } as CSSProperties}
                           className={
                             r.id === selectedRow?.id ? "selected-row" : ""
                           }
@@ -305,21 +316,19 @@ export default function Rankings({
                             </button>
                           </td>
                           <td
-                            className={`numeric pace-number ${v.median > 0 ? "positive" : ""}`}
+                            className="numeric pace-number performance-value"
                           >
                             {signed(v.median)}
                             <small>s</small>
                           </td>
                           <td
                             className="range-col"
-                            style={{
-                              color:
-                                r.id === selectedRow?.id
-                                  ? "var(--accent)"
-                                  : "var(--muted)",
-                            }}
+                            style={{ color: "var(--performance-color)" }}
                           >
-                            <Band value={v} domain={domain} compact />
+                            <Band value={v} domain={domain} compact spectrum />
+                          </td>
+                          <td className="numeric top3-col">
+                            {v.p_top3 === undefined ? "—" : pct(v.p_top3)}
                           </td>
                           <td className="numeric">
                             <span className="rank-range">
@@ -332,6 +341,7 @@ export default function Rankings({
                   </tbody>
                 </table>
               </div>
+              <PerformanceKey />
               {!filtered.length && (
                 <Empty title="No matching entries">
                   Try a different name or team.
@@ -348,7 +358,10 @@ export default function Rankings({
                 Median <span className="legend-line" />
                 90% interval
               </span>
-              <span>Positive = faster · ranked by median</span>
+              <span>
+                Positive = faster · ordered by median · overlapping rank ranges
+                are not clearly separated
+              </span>
             </div>
           )}
         </section>
@@ -374,16 +387,50 @@ export default function Rankings({
           {validation && (
             <RaceValidation validation={validation} driver={!car} />
           )}
+          {car && data.car_state && <CarStateTest result={data.car_state} />}
+          {!!data.race_features?.length && (
+            <FeatureTests results={data.race_features} driver={!car} />
+          )}
+          {!car && selectedRow && (
+            <>
+              <QualiVsRace
+                data={data}
+                selected={selectedRow.id}
+                onSelect={setSelected}
+              />
+              <RaceHistory
+                key={selectedRow.id}
+                data={data}
+                initial={selectedRow.id}
+              />
+            </>
+          )}
           <RaceMethodology data={raceData} />
         </>
       ) : (
         selectedRow && (
-          <Trend
-            data={data}
-            car={car}
-            metric={metric}
-            initial={selectedRow.id}
-          />
+          <>
+            {!car && metric === "headline" && (
+              <>
+                <PaceBreakdown
+                  data={data}
+                  selected={selectedRow.id}
+                  onSelect={setSelected}
+                />
+                <QualiVsRace
+                  data={data}
+                  selected={selectedRow.id}
+                  onSelect={setSelected}
+                />
+              </>
+            )}
+            <Trend
+              data={data}
+              car={car}
+              metric={metric}
+              initial={selectedRow.id}
+            />
+          </>
         )
       )}
     </>

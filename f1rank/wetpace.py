@@ -140,25 +140,33 @@ def model(d, wet_effects=True):
 
 def fit(P, drivers, warmup=800, samples=800, **kw) -> dict:
     from functools import partial
-    from .artifacts import diagnostics, require_convergence
+    from .artifacts import diagnostics, fit_until_converged
     idx = {x: i for i, x in enumerate(drivers)}
     d = {"n": len(drivers), "a": jnp.asarray(P.a.map(idx).to_numpy()), "b": jnp.asarray(P.b.map(idx).to_numpy()),
          "dq": jnp.asarray(P.quali_gap.to_numpy()), "se": jnp.asarray(P.se.to_numpy()),
          "y": jnp.asarray(P.wet_gap.to_numpy())}
-    mcmc = MCMC(NUTS(partial(model, **kw), target_accept_prob=0.9), num_warmup=warmup, num_samples=samples,
-                num_chains=4, chain_method="parallel", progress_bar=False)
-    mcmc.run(jax.random.PRNGKey(0), d, extra_fields=("diverging",))
-    require_convergence(diagnostics(mcmc.get_samples(group_by_chain=True),
-                                   int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())))
+    def run(w, s, accept, seed):
+        mcmc = MCMC(NUTS(partial(model, **kw), target_accept_prob=accept or 0.9), num_warmup=w, num_samples=s,
+                    num_chains=4, chain_method="parallel", progress_bar=False)
+        mcmc.run(jax.random.PRNGKey(seed), d, extra_fields=("diverging",))
+        return mcmc, diagnostics(mcmc.get_samples(group_by_chain=True),
+                                 int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum()))
+
+    mcmc = fit_until_converged(run, warmup, samples)
     post = {k: np.asarray(v) for k, v in mcmc.get_samples().items()}
     post["_divergences"] = int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())
     return post
 
 
 def heldout(P: pd.DataFrame, rng) -> dict:
-    from .qualifying import features
+    from .qualifying import features, unconverged_folds
     rows = []
-    for S in sorted(P.season.unique())[2:]:
+    seasons = sorted(P.season.unique())[2:]
+    excluded = [int(S) for S in seasons if S in unconverged_folds()]
+    for S in seasons:
+        if S in excluded:
+            print(f"held out {S}: left out, its qualifying fold did not converge", flush=True)
+            continue
         q = features(int(S))[0].set_index(["event_id", "driver_id"]).driver
         fold = P[P.season <= S].copy()
         fold["quali_gap"] = [q.get((e, a), np.nan) - q.get((e, b), np.nan)
@@ -182,7 +190,7 @@ def heldout(P: pd.DataFrame, rng) -> dict:
     boot = np.array([d[rng.integers(len(d), size=len(d))].mean() for _ in range(N_BOOT)])
     lo, hi = np.percentile(boot, [2.5, 97.5])
     return {"n_races": int(len(d)), "n_teammate_races": int(len(H)), "sq_err_diff_per_race": float(d.mean()),
-            "ci95": [float(lo), float(hi)]}
+            "ci95": [float(lo), float(hi)], "excluded_unconverged_qualifying_folds": excluded}
 
 
 def main() -> None:
@@ -205,6 +213,8 @@ def main() -> None:
                   "wet_teammate_races": races.reindex(drivers).to_numpy()}
                  ).sort_values("wet_specific_pct_median", ascending=False).to_csv(OUT / "drivers.csv", index=False)
     P.to_csv(OUT / "pairs.csv", index=False)
+    from .artifacts import fit_record
+    summary["fit_attempts"] = fit_record()
     (OUT / "summary.json").write_text(json.dumps(summary, indent=1))
     from .artifacts import input_files, record
     from .qualifying import POLICY, dependencies

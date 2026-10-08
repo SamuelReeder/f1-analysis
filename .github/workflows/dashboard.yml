@@ -11,7 +11,7 @@ on:
       - 'tests/test_dashboard.py'
       - '.github/workflows/dashboard.yml'
   pull_request:
-    branches: [main]
+    branches: [main, automated-refresh]
     paths:
       - 'dashboard/**'
       - 'f1rank/**'
@@ -49,10 +49,10 @@ jobs:
           cache-dependency-path: dashboard/package-lock.json
       - name: Install publishing dependencies
         run: python -m pip install -r dashboard/requirements.txt
-      - name: Verify exports and assemble the publication
+      - name: Verify the committed publication
         run: |
-          python -m f1rank.dashboard publish
-          python -m pytest tests/test_dashboard.py -q
+          python dashboard/verify_publication.py
+          python -m pytest tests/test_dashboard.py tests/test_portable_publication.py -q
       - name: Install dashboard dependencies
         run: npm ci --prefix dashboard
       - name: Build for the repository URL
@@ -66,15 +66,18 @@ jobs:
           DASHBOARD_TEST_URL: http://127.0.0.1:4180/f1-analysis/
         run: npm test -- --workers=2
       - name: Upload checked website
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: dashboard/dist
 
   deploy:
     name: Publish to GitHub Pages
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
     needs: build
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

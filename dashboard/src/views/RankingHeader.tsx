@@ -32,6 +32,11 @@ export default function RankingHeader({
         >
           Race pace
         </a>
+        {kind === "drivers" && (
+          <a href="#drivers/overall" aria-current={discipline === "overall" ? "page" : undefined}>
+            Overall (equal car)
+          </a>
+        )}
       </nav>
     </>
   );

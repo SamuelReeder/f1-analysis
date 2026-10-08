@@ -129,13 +129,17 @@ def model(d, driver_effects=True, defender_effects=True):
 
 
 def fit(E, lev, y=None, warmup=500, samples=500, seed=0, **kw) -> dict:
-    from .artifacts import diagnostics, require_convergence
-    mcmc = MCMC(NUTS(partial(model, **kw), target_accept_prob=0.85), num_warmup=warmup, num_samples=samples,
-                num_chains=4, chain_method="parallel", progress_bar=False)
-    mcmc.run(jax.random.PRNGKey(seed), data(E, lev, y), extra_fields=("diverging",))
-    require_convergence(diagnostics(
-        {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k not in ("lp", "eta")},
-        int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())))
+    from .artifacts import diagnostics, fit_until_converged
+
+    def run(w, s, accept, seed):
+        mcmc = MCMC(NUTS(partial(model, **kw), target_accept_prob=accept or 0.85), num_warmup=w, num_samples=s,
+                    num_chains=4, chain_method="parallel", progress_bar=False)
+        mcmc.run(jax.random.PRNGKey(seed), data(E, lev, y), extra_fields=("diverging",))
+        return mcmc, diagnostics(
+            {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k not in ("lp", "eta")},
+            int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum()))
+
+    mcmc = fit_until_converged(run, warmup, samples, seed=seed)
     post = {k: np.asarray(v) for k, v in mcmc.get_samples().items() if k not in ("lp", "eta")}
     post["_divergences"] = int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())
     return post
@@ -190,6 +194,8 @@ def feasibility() -> dict:
            "at_estimated_size": {s: {k: mean(s, k) for k in ("corr", "cov90")} for s in ("attack", "defend")},
            "runs": results, "feasible": bool(feasible)}
     OUT.mkdir(parents=True, exist_ok=True)
+    from .artifacts import fit_record
+    out["fit_attempts"] = fit_record()
     (OUT / "feasibility.json").write_text(json.dumps(out, indent=1))
     print(json.dumps({k: v for k, v in out.items() if k != "runs"}, indent=1))
     return out
@@ -295,6 +301,8 @@ def fit_and_test() -> dict:
                        "defend_q05": np.percentile(post["defend"], 5, 0), "defend_q95": np.percentile(post["defend"], 95, 0)})
     dr = dr.merge(counts, left_on="driver_id", right_index=True, how="left")
     dr.to_csv(OUT / "drivers.csv", index=False)
+    from .artifacts import fit_record
+    summary["fit_attempts"] = fit_record()
     (OUT / "summary.json").write_text(json.dumps(summary, indent=1))
     from .artifacts import input_files, record
     files = [OUT / "summary.json", OUT / "drivers.csv"]

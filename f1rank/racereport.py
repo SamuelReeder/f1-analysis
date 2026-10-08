@@ -500,14 +500,37 @@ def championship() -> list[str]:
     return L
 
 
+def excluded_seasons() -> list[str]:
+    """Test seasons left out because their qualifying fold failed every attempt of the retry
+    rule (docs/racing_approach.md, amendment of 2026-10-02), from each test's own output."""
+    sources = {"race-specific pace and degradation": ("race/multi_heldout.json", ()),
+               "wet pace": ("wet/summary.json", ("heldout_wet_effects_vs_quali_link",)),
+               "results benchmark": ("benchmark/summary.json", ()),
+               "championship race stage": ("championship/summary.json", ("heldout_race_stage",)),
+               "championship entry test": ("championship/summary.json", ("combined_validation",))}
+    found = {}
+    for label, (rel, keys) in sources.items():
+        r = _load(rel)
+        for k in keys:
+            r = (r or {}).get(k)
+        for S in (r or {}).get("excluded_unconverged_qualifying_folds", []):
+            found.setdefault(int(S), []).append(label)
+    if not found:
+        return []
+    return ["Left out of the held-out tests that use season-ahead qualifying features, because the season's "
+            "qualifying fold failed every attempt of the fixed retry rule (rule fixed before these runs: "
+            "docs/racing_approach.md, amendment of 2026-10-02): "
+            + "; ".join(f"{S} ({', '.join(v)})" for S, v in sorted(found.items())) + ".\n"]
+
+
 def section() -> list[str]:
     STALE.clear()
     L = ["## Racing (stage 2)\n",
          "Every racing quality has a standalone test on held-out data and, where it has held-out draws, the "
          "equal-car championship's entry test. Racing outcomes run from 2010; lap-level evidence from 2018 "
          "(FastF1), and from 2010 through Jolpica's lap data with a weaker observation model.\n"]
-    for part in (summary_table, data_sources, timeline, race_pace, reliability, pit_stops, consistency, wet, first_lap,
-                 overtaking, benchmark, championship):
+    for part in (summary_table, excluded_seasons, data_sources, timeline, race_pace, reliability, pit_stops,
+                 consistency, wet, first_lap, overtaking, benchmark, championship):
         L += part()
     if STALE:
         L.insert(1, "**Racing validation needs regeneration.** Outputs without current provenance are excluded "

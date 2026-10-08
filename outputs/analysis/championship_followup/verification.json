@@ -1,0 +1,21 @@
+{
+  "source_revision": "c265e4046f84bd9b8c3a523fce24cbf853321584",
+  "python_suite": {
+    "command": "systemd-run --user --scope -q -p MemoryMax=3G -p CPUQuota=200% -- .venv/bin/python -m pytest -q",
+    "exit_status": 0,
+    "passed": 157,
+    "pytest_elapsed_seconds": 44.75
+  },
+  "preflight": {
+    "command": "systemd-run --user --scope -q -p MemoryMax=3G -p CPUQuota=200% -- .venv/bin/python -m analysis.championship_followup evaluate",
+    "exit_status": 0,
+    "fit_started": false,
+    "gate": false
+  },
+  "portable_publication": {
+    "command": "python3 dashboard/verify_publication.py",
+    "exit_status": 0
+  },
+  "model_source_modified": false,
+  "push_performed": false
+}

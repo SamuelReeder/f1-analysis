@@ -1,7 +1,8 @@
 export type Metric = "headline" | "portable";
-export type View = "drivers" | "cars" | "compare" | "health";
+export type View =
+  "briefing" | "drivers" | "cars" | "compare" | "forecasts" | "methodology" | "health";
 export type RankingKind = "drivers" | "cars";
-export type Discipline = "qualifying" | "race";
+export type Discipline = "qualifying" | "race" | "overall";
 export interface Estimate {
   q05: number;
   q25?: number;
@@ -43,6 +44,7 @@ export interface Event {
   round: number;
   date: string;
   race_name: string;
+  circuit_id?: string;
 }
 export interface Point {
   event: string;
@@ -92,6 +94,7 @@ export interface RacePace {
   n_races: number;
   drivers: RaceEntity[];
   cars: RaceEntity[];
+  seasons?: { season: number; drivers: RaceEntity[]; cars: RaceEntity[] }[];
   unrated_drivers: string[];
   unrated_cars: string[];
   diagnostics: Pick<
@@ -124,6 +127,14 @@ export interface Dataset {
   drivers: Driver[];
   cars: Car[];
   race_pace?: RacePace | null;
+  overall?: OverallResult;
+  breakdown?: BreakdownRow[];
+  asof?: Asof | null;
+  forecast?: { next: NextForecast | null; scores: ForecastScores } | null;
+  car_state?: CarState | null;
+  race_features?: FeatureTest[];
+  refresh?: RefreshRecord | null;
+  race_snapshots?: RaceSnapshot[];
   events: Event[];
   catalog: {
     drivers: { id: string; name: string }[];
@@ -180,4 +191,178 @@ export interface Release {
   release: string;
   url: string;
   published_at: string;
+}
+export interface BreakdownRow {
+  id: string;
+  team: string;
+  car: number;
+  driver: number;
+  total: Estimate;
+}
+// Estimates after each race have the same shape as the revised history.
+export type AsofPoint = Point;
+export interface ForecastPair {
+  segment: string;
+  team: string;
+  a: string;
+  b: string;
+  predicted: number;
+  q05: number;
+  q95: number;
+  observed: number;
+  naive: number | null;
+  established: boolean;
+}
+export interface ForecastEvent {
+  event: { event_id: string; race_name: string; date: string };
+  trained_through: string;
+  fit_id: string;
+  n_pairs: number;
+  rmse: number | null;
+  rmse_naive: number | null;
+  rmse_zero: number | null;
+  coverage90: number | null;
+  order_spearman: number | null;
+}
+export interface BaselineDifference {
+  mse_difference: number;
+  ci95: [number, number];
+}
+export interface Asof {
+  pooled: {
+    n_events: number;
+    n_pairs: number;
+    rmse: number;
+    rmse_naive: number;
+    rmse_zero: number;
+    coverage90: number;
+    order_spearman: number;
+    // model minus baseline mean squared error (s²), 95% interval over whole events
+    vs_zero?: BaselineDifference;
+    vs_naive?: BaselineDifference;
+  } | null;
+  events: ForecastEvent[];
+  series: {
+    drivers: Record<string, AsofPoint[]>;
+    cars: Record<string, AsofPoint[]>;
+  };
+  latest: {
+    event: { event_id: string; race_name: string; date: string };
+    trained_through: { event_id: string; race_name: string; date: string };
+    pairs: ForecastPair[];
+    order: { segment: string; n: number; spearman: number }[];
+  } | null;
+}
+export interface NextForecast {
+  model: string;
+  file: string;
+  created_utc: string;
+  event: {
+    event_id: string;
+    race_name: string;
+    date: string;
+    circuit_id: string;
+  };
+  trained_through: { event_id: string; race_name: string; date: string };
+  lineup_from: string;
+  pairs: {
+    team: string;
+    a: string;
+    b: string;
+    predicted: number;
+    q05: number;
+    q95: number;
+  }[];
+  cars: (Estimate & { team: string; name: string })[];
+  drivers: (Estimate & { id: string; team: string })[];
+}
+export interface ForecastScores {
+  model: string;
+  events: {
+    file: string;
+    created_utc: string;
+    event: { event_id: string; race_name: string; date: string };
+    n_pairs: number;
+    rmse: number | null;
+    rmse_zero: number | null;
+    coverage90: number | null;
+    order_spearman: number | null;
+  }[];
+  pooled: {
+    n_events: number;
+    n_pairs: number;
+    rmse: number;
+    rmse_zero: number;
+    coverage90: number;
+  } | null;
+}
+export interface RefreshRecord {
+  started_at: string;
+  finished_at: string;
+  races: boolean;
+  event: { event_id: string; race_name: string; date: string } | null;
+  trigger: string;
+  run_url: string | null;
+  stages: { stage: string; seconds: number }[];
+}
+export interface RaceSnapshot {
+  model: string;
+  fit_id: string;
+  data_as_of: Event;
+  grid_as_of: string;
+  generated_at: string;
+  passed: { drivers: boolean; cars: boolean };
+  drivers: RaceEntity[];
+  cars: RaceEntity[];
+}
+// A pre-registered test of one piece of weekend information (docs/race_features.md).
+export interface FeatureTest {
+  feature: "longrun" | "traps" | "upgrades";
+  recorded_at: string;
+  metrics: {
+    cars: FeatureValidation;
+    drivers?: FeatureValidation;
+  };
+  document: string;
+}
+
+export type FeatureValidation = RaceValidation & {
+  mse_difference: number;
+  mse_difference_ci95: [number, number];
+  passed: boolean;
+};
+
+export interface CarState {
+  model: string;
+  recorded_at: string;
+  fit_id: string;
+  folds: string[];
+  cars: RaceValidation & { passed: boolean };
+  document: string;
+}
+
+export interface OverallEvidence {
+  recorded_at: string;
+  fit_id: string;
+  data_as_of: string | null;
+  qualities_entered: string[];
+  qualities_selected: string[];
+  qualities_not_entered: string[];
+  quality_decisions: { quality: string; entered: boolean; tested: boolean; reason: string }[];
+  entry_tests: Record<string, { enters?: boolean; not_run?: string; ci95?: number[]; conditioned_on?: string[] }>;
+  excluded_test_seasons: { combined_validation: number[]; heldout_race_stage: number[] };
+  combined_validation: { gate?: boolean; status?: string };
+  heldout_race_stage: Record<string, unknown>;
+  simulated_seasons: number;
+  n_races_simulated: number;
+  driver_error_rates_used: boolean;
+}
+export interface OverallResult {
+  status: "established" | "not established" | "stale" | "unavailable";
+  reason: string;
+  detail?: string;
+  evidence: OverallEvidence | null;
+  standings: { driver_id: string; name: string; points_per_race: number; p_title: number;
+    rank_median: number; rank_lo: number; rank_hi: number }[];
+  contributions: { driver_id: string; name: string; points_per_race: number; losses: Record<string, number> }[];
 }

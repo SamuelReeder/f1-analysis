@@ -59,8 +59,8 @@ def md_table(df: pd.DataFrame) -> str:
     return "\n".join(lines)
 
 
-def convergence() -> tuple[dict, bool]:
-    post, info = load(FITS / "main.npz")
+def convergence(path: Path = FITS / "main.npz") -> tuple[dict, bool]:
+    post, info = load(path)
     worst = {}
     for k in ["skill", "compat", "car"]:
         s = summary({k: post[k]})[k]
@@ -340,6 +340,25 @@ def main() -> None:
                   "too narrow as noted). The main model keeps one effect per lineage in this version; switching "
                   "is a change for the next model version, with its own refit and validation.\n") if better else
                  "Neither variant forecasts clearly better than one effect per lineage.\n")
+
+    if "sprint_qualifying_gate" in compare:
+        g, sq = compare["sprint_qualifying_gate"], compare.get("lfosprint", {})
+        L.append("### Sprint qualifying (pre-registered test)\n")
+        L.append("Sprint qualifying added to the training data up to each cutoff, against the main model on the "
+                 f"same forecast targets at {len(sq.get('cutoffs', []))} of 7 cutoffs "
+                 "(`docs/sprint_qualifying.md`).\n")
+        if sq.get("pairings"):
+            L.append(md_table(pd.DataFrame([_paired_row("all pairings", sq["pairings"])])))
+            L.append("")
+            L.append(md_table(pd.DataFrame([{"fit": k.removeprefix("sessions_").replace("var", "variant"),
+                                             **{m: v[m] for m in ("rmse_s", "crps_s", "cov90")}}
+                                            for k, v in sq.items() if k.startswith("sessions_")])))
+            L.append("")
+        L.append("Gate: " + "; ".join(f"{k.replace('_', ' ')}: {'yes' if ok else 'no'}"
+                                      for k, ok in g["checks"].items())
+                 + (". **Passed**: sprint qualifying becomes part of the next model version, which is "
+                    "regenerated and validated before it is published.\n" if g["passed"] else
+                    ". Not passed: the published model is unchanged.\n"))
 
     L.append("### Sensitivity of the current driver ranking\n")
     L.append(md_table(pd.DataFrame([{"variant": k, "in_team_spearman": v["in_team_spearman"],

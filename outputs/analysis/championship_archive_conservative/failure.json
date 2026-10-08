@@ -1,0 +1,115 @@
+{
+ "gate": false,
+ "publication_authorized": false,
+ "exception": "Conservative archive pace failed convergence for 2007",
+ "kind": "exhausted_registered_fit",
+ "qualifying_attempts": {
+  "2007": [
+   {
+    "settings": {
+     "warmup": 700,
+     "samples": 400,
+     "chains": 4,
+     "target_accept": 0.9,
+     "seed": 0
+    },
+    "diagnostics": {
+     "rhat_max": 1.0970743894577026,
+     "divergences": 7,
+     "n_draws": 1600,
+     "finite": true,
+     "converged": false
+    },
+    "elapsed_s": 26.773273944854736
+   },
+   {
+    "settings": {
+     "warmup": 1400,
+     "samples": 800,
+     "chains": 4,
+     "target_accept": 0.9,
+     "seed": 1
+    },
+    "diagnostics": {
+     "rhat_max": 1.0516018867492676,
+     "divergences": 3,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": false
+    },
+    "elapsed_s": 43.20615482330322
+   },
+   {
+    "settings": {
+     "warmup": 2100,
+     "samples": 1600,
+     "chains": 4,
+     "target_accept": 0.9,
+     "seed": 2
+    },
+    "diagnostics": {
+     "rhat_max": 1.0410130023956299,
+     "divergences": 235,
+     "n_draws": 6400,
+     "finite": true,
+     "converged": false
+    },
+    "elapsed_s": 69.79851579666138
+   },
+   {
+    "settings": {
+     "warmup": 2100,
+     "samples": 1600,
+     "chains": 4,
+     "target_accept": 0.98,
+     "seed": 3
+    },
+    "diagnostics": {
+     "rhat_max": 1.0188846588134766,
+     "divergences": 2,
+     "n_draws": 6400,
+     "finite": true,
+     "converged": true
+    },
+    "elapsed_s": 92.37670159339905
+   }
+  ]
+ },
+ "race_pace_fits": {
+  "2007": {
+   "_rhat_max": 564716.4375,
+   "_divergences": 0,
+   "_n_draws": 8000,
+   "_converged": false,
+   "_attempts": [
+    {
+     "warmup": 1500,
+     "samples": 2000,
+     "chains": 4,
+     "target_accept": 0.98,
+     "seed": 3,
+     "protocol_sha256": "13b86216d25ffabb684e288acc658e12041d0d14e88d15ca39c1ca4370f06c27",
+     "rhat_max": 564716.4375,
+     "divergences": 0,
+     "n_draws": 8000,
+     "finite": true,
+     "converged": false,
+     "elapsed_seconds": 2884.917052031029
+    }
+   ],
+   "_minutes": 48.081950867183814,
+   "_backend": "cpu"
+  }
+ },
+ "qualifying_failures": {},
+ "race_stage_fit_attempts": {
+  "fits": 0,
+  "retried": []
+ },
+ "used_cache_hashes": {
+  "outputs/fits/championship_archive_conservative/quali_2007.npz": "ade75f1414285cab8ac7606f6fafabbeff583fe5e90bd1cd446640e86af935c6",
+  "outputs/fits/championship_archive_conservative/quali_2007.meta.json": "0bba5c053e6b5f9df1051d6f4e7571e3957aacc264f6cf82bcec81f99deabbab"
+ },
+ "elapsed_seconds": 2885.949357200996,
+ "protocol_sha256": "13b86216d25ffabb684e288acc658e12041d0d14e88d15ca39c1ca4370f06c27"
+}

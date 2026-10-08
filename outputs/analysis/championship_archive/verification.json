@@ -1,0 +1,25 @@
+{
+  "source_revision": "cfa6464391760cc034de57de90b5224380145555",
+  "python_suite": {
+    "command": "systemd-run --user --scope -q -p MemoryMax=3G -p CPUQuota=200% -- .venv/bin/python -m pytest -q",
+    "passed": 159,
+    "pytest_elapsed_seconds": 44.58,
+    "exit_status": 0
+  },
+  "portable_publication": {
+    "command": "python3 dashboard/verify_publication.py",
+    "exit_status": 0
+  },
+  "systemd_properties": {
+    "f1-champarchive": {
+      "Slice": "f1.slice",
+      "MemoryMax": "6442450944",
+      "MemorySwapMax": "1073741824",
+      "Nice": "19"
+    },
+    "f1.slice": {
+      "CPUWeight": "10",
+      "CPUQuotaPerSecUSec": "8s"
+    }
+  }
+}

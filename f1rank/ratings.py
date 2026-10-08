@@ -36,24 +36,39 @@ def summarise(draws: np.ndarray, prefix: str = "") -> pd.DataFrame:
     return pd.DataFrame({prefix + k: q[i] for i, k in enumerate(QUANTILES)})
 
 
+def event_ranks(draws: np.ndarray, event_idx: np.ndarray, prefix: str = "") -> pd.DataFrame:
+    """Rank median and 90% range (1 = fastest) within each event's field, one row per
+    column of `draws`, from the joint draws."""
+    keep = [prefix + k for k in ("rank_median", "rank_lo", "rank_hi")]
+    parts = [rank_summary(draws[:, cols], prefix)[keep].set_index(cols)
+             for cols in (np.flatnonzero(event_idx == ev) for ev in np.unique(event_idx))]
+    return pd.concat(parts).sort_index()
+
+
 def driver_series(design: Design, post: dict) -> pd.DataFrame:
     """One row per driver per event: portable skill relative to the field at that
-    event, and (if modelled) pace in that team including the team-specific effect."""
+    event, and (if modelled) pace in that team including the team-specific effect, each
+    with its rank range in that event's field."""
     e = design.entries
+    events = e.event_idx.to_numpy()
     out = e[["driver_id", "event_id", "event_idx", "season", "team", "constructor_name", "has_time"]]
-    out = out.reset_index(drop=True).join(summarise(flat(post, "skill")))
+    skill = flat(post, "skill")
+    out = out.reset_index(drop=True).join(summarise(skill)).join(event_ranks(skill, events))
     if "compat" in post:
-        out = out.join(summarise(flat(post, "skill") + flat(post, "compat"), "in_team_"))
+        in_team = skill + flat(post, "compat")
+        out = out.join(summarise(in_team, "in_team_")).join(event_ranks(in_team, events, "in_team_"))
     return out.merge(design.drivers[["driver_id", "name", "code"]], on="driver_id")
 
 
 def car_series(design: Design, post: dict) -> pd.DataFrame:
-    """One row per team per event: track-neutral car pace and pace at that circuit."""
+    """One row per team per event: track-neutral car pace (with its rank range in that
+    event's field) and pace at that circuit."""
     c = design.cars
     base = flat(post, "car")
     at_track = base + flat(post, "car_track") if "car_track" in post else base
     out = c[["team", "constructor_name", "event_idx", "season"]].reset_index(drop=True)
-    out = out.join(summarise(base)).join(summarise(at_track, "at_circuit_"))
+    out = (out.join(summarise(base)).join(event_ranks(base, c.event_idx.to_numpy()))
+           .join(summarise(at_track, "at_circuit_")))
     return out.merge(design.events[["event_idx", "event_id", "race_name"]], on="event_idx")
 
 
@@ -77,8 +92,9 @@ def rank_summary(draws: np.ndarray, prefix: str = "") -> pd.DataFrame:
     """Rank distribution (1 = fastest) from joint draws of shape (S, n)."""
     ranks = (-draws).argsort(axis=1).argsort(axis=1) + 1
     lo, med, hi = np.percentile(ranks, [5, 50, 95], axis=0)
+    # outward rounding: a percentile between two ranks must not narrow the range
     return pd.DataFrame({
-        "rank_median": med, "rank_lo": lo.astype(int), "rank_hi": hi.astype(int),
+        "rank_median": med, "rank_lo": np.floor(lo).astype(int), "rank_hi": np.ceil(hi).astype(int),
         "p_fastest": (ranks == 1).mean(0), "p_top3": (ranks <= 3).mean(0),
     }).add_prefix(prefix)
 

@@ -25,6 +25,54 @@ const colors: Record<string, string> = {
   cadillac: "#aaaaad",
 };
 export const color = (id: string) => colors[id] || "#606066";
+
+// Short circuit codes for chart axes; the full race name is in the readout.
+const circuits: Record<string, string> = {
+  albert_park: "MEL",
+  americas: "USA",
+  bahrain: "BHR",
+  baku: "BAK",
+  buddh: "IND",
+  catalunya: "BCN",
+  fuji: "FUJ",
+  hockenheimring: "HOC",
+  hungaroring: "HUN",
+  imola: "IMO",
+  indianapolis: "IMS",
+  interlagos: "SAO",
+  istanbul: "IST",
+  jeddah: "JED",
+  losail: "QAT",
+  madring: "MAD",
+  magny_cours: "MAG",
+  marina_bay: "SIN",
+  miami: "MIA",
+  monaco: "MON",
+  monza: "MZA",
+  mugello: "MUG",
+  nurburgring: "NUR",
+  portimao: "POR",
+  red_bull_ring: "AUT",
+  ricard: "FRA",
+  rodriguez: "MEX",
+  sepang: "MAL",
+  shanghai: "CHN",
+  silverstone: "GBR",
+  sochi: "RUS",
+  spa: "BEL",
+  suzuka: "JPN",
+  valencia: "VAL",
+  vegas: "LVG",
+  villeneuve: "CAN",
+  yas_marina: "ABU",
+  yeongam: "KOR",
+  zandvoort: "NED",
+};
+export const circuitCode = (id?: string) => (id && circuits[id]) || "";
+// Seasons that began under new technical regulations.
+export const REGULATION_RESETS = [2014, 2017, 2022, 2026];
+// Chart series colours, validated for colour-vision deficiency on the black surface.
+export const SERIES = { car: "#3987e5", driver: "#e10600" };
 export const signed = (n: number, digits = 3) =>
   `${n > 0 ? "+" : n < 0 ? "−" : ""}${Math.abs(n).toFixed(digits)}`;
 export const pct = (n: number = 0) => `${(n * 100).toFixed(1)}%`;
@@ -137,4 +185,17 @@ export function exportRaceCsv(
       )
       .join("\n"),
   );
+}
+
+// Round axis ticks (steps of 1, 2, 2.5 or 5 x 10^k) inside [lo, hi].
+export function niceTicks(lo: number, hi: number, count = 5) {
+  const raw = (hi - lo) / Math.max(count - 1, 1);
+  const power = 10 ** Math.floor(Math.log10(raw));
+  const step =
+    [1, 2, 2.5, 5, 10].map((m) => m * power).find((m) => m >= raw) ||
+    10 * power;
+  const ticks = [];
+  for (let v = Math.ceil(lo / step) * step; v <= hi + step * 1e-9; v += step)
+    ticks.push(Math.abs(v) < step * 1e-9 ? 0 : v);
+  return ticks;
 }

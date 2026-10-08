@@ -1,0 +1,297 @@
+{
+ "feature": "longrun",
+ "design": "Pre-registered in docs/race_features.md; v1 folds, targets and rows; baseline: v1's full model",
+ "folds": [
+  "2024-10",
+  "2025-10",
+  "2026-07"
+ ],
+ "fits": {
+  "2024-10": {
+   "full": {
+    "key": "60e7641fc04989471d3a5afac2965c3adc363ae2a087281e1f77dd6d45e72c8f",
+    "diagnostics": {
+     "rhat_max": 1.014392614364624,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "data_as_of": "2024-08",
+    "n_laps": 85041,
+    "n_races": 98,
+    "attempts": [
+     {
+      "rhat_max": 1.014392614364624,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true,
+      "seconds": 348.1
+     }
+    ],
+    "beta": {
+     "longrun": {
+      "mean": 0.08743364363908768,
+      "q05": 0.03857913613319397,
+      "q95": 0.13674812018871307
+     },
+     "longrun_split": {
+      "mean": -0.005133601371198893,
+      "q05": -0.055686887353658676,
+      "q95": 0.0457521490752697
+     }
+    }
+   },
+   "v1": {
+    "key": "9eec2876d10666a3829929e2b730c61ad7c9ccacb689e26a04be5d48e4ec8234",
+    "diagnostics": {
+     "rhat_max": 1.0094311237335205,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "data_as_of": "2024-08",
+    "n_laps": 85041,
+    "n_races": 98,
+    "attempts": [
+     {
+      "rhat_max": 1.0094311237335205,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true,
+      "seconds": 1050.4,
+      "worst_parameters": [
+       {
+        "parameter": "skill_raw",
+        "rhat": 1.0094311237335205
+       },
+       {
+        "parameter": "package",
+        "rhat": 1.0085253715515137
+       },
+       {
+        "parameter": "package_contrast",
+        "rhat": 1.0082494020462036
+       },
+       {
+        "parameter": "skill",
+        "rhat": 1.00802481174469
+       },
+       {
+        "parameter": "driver_pace",
+        "rhat": 1.0063811540603638
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "2025-10": {
+   "full": {
+    "key": "df39e1b98b68a7bbbc7e2be5d761268d5e8873b7dbdc785f16f0cb7524b94a3c",
+    "diagnostics": {
+     "rhat_max": 1.013865351676941,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "data_as_of": "2025-09",
+    "n_laps": 101785,
+    "n_races": 116,
+    "attempts": [
+     {
+      "rhat_max": 1.013865351676941,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true,
+      "seconds": 427.6
+     }
+    ],
+    "beta": {
+     "longrun": {
+      "mean": 0.0786592960357666,
+      "q05": 0.037624478340148926,
+      "q95": 0.1178823933005333
+     },
+     "longrun_split": {
+      "mean": -0.0024745003320276737,
+      "q05": -0.044718947261571884,
+      "q95": 0.03938226029276848
+     }
+    }
+   },
+   "v1": {
+    "key": "c692b78af1c8108accda4f99d342c24d8239b360664ab263c908193224f32206",
+    "diagnostics": {
+     "rhat_max": 1.0228403806686401,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "data_as_of": "2025-09",
+    "n_laps": 101785,
+    "n_races": 116,
+    "attempts": [
+     {
+      "rhat_max": 1.0228403806686401,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true,
+      "seconds": 1051.7,
+      "worst_parameters": [
+       {
+        "parameter": "package_contrast",
+        "rhat": 1.0228403806686401
+       },
+       {
+        "parameter": "package",
+        "rhat": 1.0216665267944336
+       },
+       {
+        "parameter": "driver_pace",
+        "rhat": 1.0214078426361084
+       },
+       {
+        "parameter": "skill",
+        "rhat": 1.021081805229187
+       },
+       {
+        "parameter": "skill_raw",
+        "rhat": 1.020674228668213
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "2026-07": {
+   "full": {
+    "key": "622f46f428eea3dfd8bc7536992da856bbdc09c99db4c426f6919532c6c950ec",
+    "diagnostics": {
+     "rhat_max": 1.0198078155517578,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "data_as_of": "2026-07",
+    "n_laps": 116521,
+    "n_races": 132,
+    "attempts": [
+     {
+      "rhat_max": 1.0198078155517578,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true,
+      "seconds": 516.0
+     }
+    ],
+    "beta": {
+     "longrun": {
+      "mean": 0.09760797768831253,
+      "q05": 0.06396081298589706,
+      "q95": 0.13020206987857819
+     },
+     "longrun_split": {
+      "mean": -0.006664744578301907,
+      "q05": -0.04047243297100067,
+      "q95": 0.027442824095487595
+     }
+    }
+   },
+   "v1": {
+    "key": "395dd05e2962eceb43d859c10c66c17b8945c7a408dc97b3b93c528fb52b52a1",
+    "diagnostics": {
+     "rhat_max": 1.0339809656143188,
+     "divergences": 0,
+     "n_draws": 3200,
+     "finite": true,
+     "converged": true
+    },
+    "data_as_of": "2026-07",
+    "n_laps": 116521,
+    "n_races": 132,
+    "attempts": [
+     {
+      "rhat_max": 1.0339809656143188,
+      "divergences": 0,
+      "n_draws": 3200,
+      "finite": true,
+      "converged": true,
+      "seconds": 1598.8,
+      "worst_parameters": [
+       {
+        "parameter": "skill_raw",
+        "rhat": 1.0339809656143188
+       },
+       {
+        "parameter": "skill",
+        "rhat": 1.0306905508041382
+       },
+       {
+        "parameter": "package_contrast",
+        "rhat": 1.0253688097000122
+       },
+       {
+        "parameter": "driver_pace",
+        "rhat": 1.0247454643249512
+       },
+       {
+        "parameter": "package",
+        "rhat": 1.0242594480514526
+       }
+      ]
+     }
+    ]
+   }
+  }
+ },
+ "metrics": {
+  "cars": {
+   "n_races": 29,
+   "n_predictions": 295,
+   "mse_difference": -0.0024002960864787652,
+   "mse_difference_ci95": [
+    -0.007481175225670448,
+    0.003219083110813068
+   ],
+   "improves": false,
+   "rmse": 0.3807903527416399,
+   "baseline_rmse": 0.3839069280720676,
+   "coverage90": 0.8677966101694915,
+   "mean_interval_width": 1.0638191333778557,
+   "baseline_interval_width": 1.07368719814789,
+   "calibrated": true,
+   "sharper": true,
+   "passed": false
+  },
+  "drivers": {
+   "n_races": 29,
+   "n_predictions": 262,
+   "mse_difference": -0.0002387400575573559,
+   "mse_difference_ci95": [
+    -0.000849481544020969,
+    0.00035085248732495136
+   ],
+   "improves": false,
+   "rmse": 0.3641424968361416,
+   "baseline_rmse": 0.3644788250961879,
+   "coverage90": 0.9122137404580153,
+   "mean_interval_width": 1.1908292612343718,
+   "baseline_interval_width": 1.1892505530586601,
+   "calibrated": true,
+   "sharper": false,
+   "passed": false
+  }
+ },
+ "gate": "n_races >= 12, MSE difference (variant - v1) 95% CI below 0, coverage 85-95%",
+ "units": "percent of lap time; MSE in percent squared"
+}

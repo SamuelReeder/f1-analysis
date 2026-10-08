@@ -123,13 +123,17 @@ def race_model(d, variant="grid_ratings"):
 
 
 def fit_race(R, variant="grid_ratings", warmup=500, samples=500) -> dict:
-    from .artifacts import diagnostics, require_convergence
-    mcmc = MCMC(NUTS(partial(race_model, variant=variant)), num_warmup=warmup, num_samples=samples,
-                num_chains=4, chain_method="parallel", progress_bar=False)
-    mcmc.run(jax.random.PRNGKey(0), arrays(R), extra_fields=("diverging",))
-    require_convergence(diagnostics(
-        {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k != "ll_race"},
-        int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())))
+    from .artifacts import diagnostics, fit_until_converged
+
+    def run(w, s, accept, seed):
+        mcmc = MCMC(NUTS(partial(race_model, variant=variant), target_accept_prob=accept or 0.8), num_warmup=w,
+                    num_samples=s, num_chains=4, chain_method="parallel", progress_bar=False)
+        mcmc.run(jax.random.PRNGKey(seed), arrays(R), extra_fields=("diverging",))
+        return mcmc, diagnostics(
+            {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k != "ll_race"},
+            int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum()))
+
+    mcmc = fit_until_converged(run, warmup, samples)
     return {k: np.asarray(v) for k, v in mcmc.get_samples().items() if k != "ll_race"}
 
 
@@ -142,15 +146,20 @@ def log_pred(post, R, variant="grid_ratings") -> np.ndarray:
 
 def heldout(F: pd.DataFrame, rng) -> dict:
     """Finishing orders of held-out seasons: grid + ratings vs grid only and vs ratings only."""
+    from .qualifying import unconverged_folds
     lp = {v: [] for v in ("grid_ratings", "grid", "ratings")}
+    excluded = [S for S in unconverged_folds() if FIRST_TEST <= S <= F.season.max()]
     for S in range(FIRST_TEST, F.season.max() + 1):
+        if S in excluded:
+            print(f"held out {S}: left out, its qualifying fold did not converge", flush=True)
+            continue
         fold = finishers(race_orders(S))
         train, test = fold[fold.season < S], fold[fold.season == S]
         for v in lp:
             lp[v].append(log_pred(fit_race(train, v), test, v))
         print(f"held out {S}", flush=True)
     lp = {v: np.concatenate(x) for v, x in lp.items()}
-    out = {}
+    out = {"excluded_unconverged_qualifying_folds": excluded}
     for other in ("grid", "ratings"):
         d = lp["grid_ratings"] - lp[other]
         boot = np.array([d[rng.integers(len(d), size=len(d))].mean() for _ in range(N_BOOT)])
@@ -298,11 +307,14 @@ def quality_log_pred(post, test, names, effects, season, n_draws=1000):
 def combined_entry_tests(effects, last_season):
     """Evaluate the entire selection procedure on outer held-out seasons."""
     from functools import lru_cache
+
+    from .qualifying import unconverged_folds
     candidates = sorted(effects)
     if not candidates:
         return [], {}, {"status": "no candidate qualities", "gate": False}
     seasons = sorted(set.intersection(*(set(effects[n]) for n in candidates)))
-    seasons = [S for S in seasons if S <= last_season]
+    excluded = [S for S in unconverged_folds() if S <= last_season]
+    seasons = [S for S in seasons if S <= last_season and S not in excluded]
     folds = {}
 
     @lru_cache(maxsize=None)
@@ -325,7 +337,9 @@ def combined_entry_tests(effects, last_season):
         jax.clear_caches()
         return result
 
-    return nested_selection(candidates, seasons, score)
+    chosen, entry, result = nested_selection(candidates, seasons, score)
+    result["excluded_unconverged_qualifying_folds"] = excluded
+    return chosen, entry, result
 
 
 BREAKDOWN_SEED = 12345
@@ -383,7 +397,7 @@ def simulate(Q: np.ndarray, form_sd: np.ndarray, noise_sd: np.ndarray, b_driver:
 
 def main() -> None:
     from .artifacts import input_files, record, require
-    from .qualifying import POLICY, dependencies, features
+    from .qualifying import POLICY, dependencies, features, unconverged_folds
     rng = np.random.default_rng(0)
     # Preflight every dependency before starting expensive validation. Legacy files
     # without provenance must be regenerated, never quietly treated as current.
@@ -406,7 +420,8 @@ def main() -> None:
     F = finishers(R)
     all_seasons = sorted(set().union(*(set(v) for v in effects.values())))
     for S in all_seasons:
-        features(S)
+        if S not in unconverged_folds():
+            features(S)
     test = heldout(F, rng)
     selected, entry, combined = combined_entry_tests(effects, int(F.season.max()))
     entry.update(missing)
@@ -501,6 +516,8 @@ def main() -> None:
     pd.DataFrame(summary.pop("contribution_breakdown")).to_csv(OUT / "contributions.csv", index=False)
     table = pd.DataFrame(out_rows).sort_values(["version", "points_per_race"], ascending=[True, False])
     table.to_csv(OUT / "standings.csv", index=False)
+    from .artifacts import fit_record
+    summary["fit_attempts"] = fit_record()
     (OUT / "summary.json").write_text(json.dumps(summary, indent=1))
     dependency_paths = [ROOT / "outputs" / "reliability" / f for f in ("summary.json", "drivers.csv", "manifest.json")]
     for n in effects:

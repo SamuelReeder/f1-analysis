@@ -4,11 +4,15 @@ Tables
 ------
 events      one row per Grand Prix: season, round, date, circuit
 drivers     one row per driver: name, code, date of birth
-entries     one row per driver per event: constructor, team lineage, quali position
+entries     one row per driver per event: constructor, team lineage, quali position (empty
+            for a driver who set no qualifying time and is known only from the race results)
 quali_times one row per driver per qualifying segment with a lap time (Q1/Q2/Q3), with its
             source: "jolpica", or "fastf1" for events Jolpica has no times for (filled by
             extract/quali_fill.py from FastF1 lap timing and checked against Jolpica)
 race        one row per driver per race: grid, finish position, status (for later stages)
+sprint_quali_times  one row per driver per sprint qualifying part (SQ1/SQ2/SQ3, 2023 onward),
+            from extract/sprint_quali.py; read only by the pre-registered sprint qualifying
+            test (docs/sprint_qualifying.md), not by the published model
 """
 
 import datetime as dt
@@ -24,6 +28,7 @@ ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw" / "jolpica"
 OUT = ROOT / "data" / "processed"
 SUPPLEMENT = ROOT / "data" / "supplements" / "quali_times_fastf1.json"
+SPRINT_QUALI = ROOT / "data" / "supplements" / "sprint_quali_times.json"
 
 # 2006-2009 Q3 was run with race fuel loads, so those times are not pace.
 RACE_FUEL_Q3_SEASONS = range(2006, 2010)
@@ -72,11 +77,27 @@ def build() -> dict[str, pd.DataFrame]:
                         times.append({"event_id": event_id, "driver_id": d["driverId"],
                                       "segment": seg, "time_s": t})
 
+    entered = {(e["event_id"], e["driver_id"]) for e in entries}
+    event_ids = {e["event_id"] for e in events}
     for path in sorted(RAW.glob("*_results.json")):
         season = int(path.name[:4])
         for r in json.loads(path.read_text()):
             event_id = f"{season}-{int(r['round']):02d}"
             for res in r["Results"]:
+                d, c = res["Driver"], res["Constructor"]
+                # Jolpica omits a driver who set no qualifying time from the qualifying
+                # results; a race entry shows they were entered for the event.
+                if event_id in event_ids and (event_id, d["driverId"]) not in entered:
+                    drivers.setdefault(d["driverId"], {
+                        "driver_id": d["driverId"], "code": d.get("code"),
+                        "name": f"{d['givenName']} {d['familyName']}",
+                        "dob": d.get("dateOfBirth"), "nationality": d.get("nationality"),
+                    })
+                    entries.append({
+                        "event_id": event_id, "driver_id": d["driverId"],
+                        "constructor_id": c["constructorId"], "constructor_name": c["name"],
+                        "team": lineage_of(c["constructorId"]), "quali_position": None,
+                    })
                 race.append({
                     "event_id": event_id, "driver_id": res["Driver"]["driverId"],
                     "constructor_id": res["Constructor"]["constructorId"],
@@ -102,9 +123,12 @@ def build() -> dict[str, pd.DataFrame]:
     tables = {
         "events": pd.DataFrame(events).sort_values("event_id", ignore_index=True),
         "drivers": pd.DataFrame(drivers.values()).sort_values("driver_id", ignore_index=True),
-        "entries": pd.DataFrame(entries),
+        "entries": pd.DataFrame(entries).astype({"quali_position": "Int64"}),
         "quali_times": times,
         "race": pd.DataFrame(race),
+        "sprint_quali_times": (pd.DataFrame(json.loads(SPRINT_QUALI.read_text())["times"]).assign(source="fastf1")
+                               if SPRINT_QUALI.exists() else
+                               pd.DataFrame(columns=["event_id", "driver_id", "segment", "time_s", "source"])),
     }
 
     # A driver entered twice for one event would silently double-count.
@@ -136,6 +160,7 @@ def main() -> None:
     (OUT / "sources.json").write_text(json.dumps({
         "jolpica": sources,
         "supplement": str(SUPPLEMENT.relative_to(ROOT)) if SUPPLEMENT.exists() else None,
+        "sprint_quali_supplement": str(SPRINT_QUALI.relative_to(ROOT)) if SPRINT_QUALI.exists() else None,
     }, indent=1))
 
 

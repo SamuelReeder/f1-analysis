@@ -99,15 +99,18 @@ def model(d):
 
 
 def fit(P: pd.DataFrame, drivers: list[str], warmup=800, samples=800) -> dict:
-    from .artifacts import diagnostics, require_convergence
+    from .artifacts import diagnostics, fit_until_converged
     idx = {x: i for i, x in enumerate(drivers)}
     d = {"n": len(drivers), "a": jnp.asarray(P.a.map(idx).to_numpy()), "b": jnp.asarray(P.b.map(idx).to_numpy()),
          "se": jnp.asarray(P.se.to_numpy()), "y": jnp.asarray(P.gap.to_numpy())}
-    mcmc = MCMC(NUTS(model, target_accept_prob=0.9), num_warmup=warmup, num_samples=samples, num_chains=4,
-                chain_method="parallel", progress_bar=False)
-    mcmc.run(jax.random.PRNGKey(0), d, extra_fields=("diverging",))
-    require_convergence(diagnostics(mcmc.get_samples(group_by_chain=True),
-                                   int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())))
+    def run(w, s, accept, seed):
+        mcmc = MCMC(NUTS(model, target_accept_prob=accept or 0.9), num_warmup=w, num_samples=s, num_chains=4,
+                    chain_method="parallel", progress_bar=False)
+        mcmc.run(jax.random.PRNGKey(seed), d, extra_fields=("diverging",))
+        return mcmc, diagnostics(mcmc.get_samples(group_by_chain=True),
+                                 int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum()))
+
+    mcmc = fit_until_converged(run, warmup, samples)
     post = {k: np.asarray(v) for k, v in mcmc.get_samples().items()}
     post["_divergences"] = int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())
     return post
@@ -162,6 +165,8 @@ def main() -> None:
                  ).sort_values("log_spread_effect_median").to_csv(OUT / "drivers.csv", index=False)
     np.savez_compressed(OUT / "driver_draws.npz", drivers=np.array(drivers), c=post["c"].astype(np.float32))
     P.to_csv(OUT / "pairs.csv", index=False)
+    from .artifacts import fit_record
+    summary["fit_attempts"] = fit_record()
     (OUT / "summary.json").write_text(json.dumps(summary, indent=1))
     from .artifacts import input_files, record
     record(OUT, [OUT / f for f in ("summary.json", "drivers.csv", "pairs.csv", "heldout_effects.npz", "driver_draws.npz")],

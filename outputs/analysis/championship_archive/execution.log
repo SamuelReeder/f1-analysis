@@ -1,0 +1,21 @@
+gate: champarchive starts at 2026-10-05 15:14:03 (0 bytes in use)
+An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not installed. Falling back to cpu.
+== archive 2007 start
+quali_2007, attempt 1: {'rhat_max': 1.0970743894577026, 'divergences': 7, 'n_draws': 1600, 'finite': True, 'converged': False}
+quali_2007, attempt 2: {'rhat_max': 1.0516018867492676, 'divergences': 3, 'n_draws': 3200, 'finite': True, 'converged': False}
+quali_2007, attempt 3: {'rhat_max': 1.0410130023956299, 'divergences': 235, 'n_draws': 6400, 'finite': True, 'converged': False}
+quali_2007, attempt 4: {'rhat_max': 1.0188846588134766, 'divergences': 2, 'n_draws': 6400, 'finite': True, 'converged': True}
+  fit attempt 0: {'seed': 0, 'warmup': 500, 'rhat_max': 1.026080846786499, 'divergences': 4, 'minutes': 4.3}
+  fit attempt 1: {'seed': 1, 'warmup': 1000, 'rhat_max': 1.0204248428344727, 'divergences': 3, 'minutes': 5.5}
+  fit attempt 2: {'seed': 2, 'warmup': 1500, 'rhat_max': 1.0367658138275146, 'divergences': 6, 'minutes': 6.0}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/sreeder/f1-analysis/analysis/championship_archive.py", line 315, in <module>
+    main()
+  File "/home/sreeder/f1-analysis/analysis/championship_archive.py", line 311, in main
+    register() if action == "register" else run()
+                                            ^^^^^
+  File "/home/sreeder/f1-analysis/analysis/championship_archive.py", line 253, in run
+    raise ExhaustedFit(f"Archive race pace failed convergence for {season}")
+ExhaustedFit: Archive race pace failed convergence for 2007

@@ -6,17 +6,18 @@ import { PageHeading, MetricControl, Badge, Band } from "../components";
 
 export default function Compare({
   data,
+  car = false,
   metric,
   setMetric,
 }: {
   data: Dataset;
+  car?: boolean;
   metric: Metric;
   setMetric: (m: Metric) => void;
 }) {
-  const [car, setCar] = useState(false);
   const entities = car ? data.cars : data.drivers;
-  const [a, setA] = useState(data.drivers[0].id);
-  const [b, setB] = useState(data.drivers[1].id);
+  const [a, setA] = useState(entities[0].id);
+  const [b, setB] = useState(entities[1].id);
   const first = entities.find((r) => r.id === a) || entities[0];
   const second =
     entities.find((r) => r.id === b && r.id !== first.id) ||
@@ -39,9 +40,7 @@ export default function Compare({
           <button
             aria-pressed={!car}
             onClick={() => {
-              setCar(false);
-              setA(data.drivers[0].id);
-              setB(data.drivers[1].id);
+              window.location.hash = "#compare";
             }}
           >
             Drivers
@@ -49,9 +48,7 @@ export default function Compare({
           <button
             aria-pressed={car}
             onClick={() => {
-              setCar(true);
-              setA(data.cars[0].id);
-              setB(data.cars[1].id);
+              window.location.hash = "#compare/cars";
             }}
           >
             Cars
@@ -173,8 +170,15 @@ export default function Compare({
             <h2>Pairwise probabilities</h2>
             <p>Probability row is faster than column (%)</p>
           </div>
-          <div className="matrix-key">
-            Less likely <span /> More likely
+          <div className="matrix-legend">
+            <div className="matrix-key">
+              Less likely <span /> More likely
+            </div>
+            {!car && (
+              <div className="matrix-key">
+                <i className="teammate-swatch" /> Teammates
+              </div>
+            )}
           </div>
         </div>
         <div className="matrix-scroll">
@@ -203,6 +207,9 @@ export default function Compare({
                     const p =
                       data.comparisons[car ? "cars" : metric][`${r.id}|${c.id}`]
                         .p_ahead;
+                    const mates =
+                      !car && (r as Driver).lineage === (c as Driver).lineage;
+                    const text = `${r.name} ahead of ${c.name}${mates ? " (teammates)" : ""}: ${pct(p)}`;
                     return (
                       <td key={c.id}>
                         {r.id === c.id ? (
@@ -222,8 +229,9 @@ export default function Compare({
                                         : "#252525",
                               color: "#fff",
                             }}
-                            title={`${r.name} ahead of ${c.name}: ${pct(p)}`}
-                            aria-label={`${r.name} ahead of ${c.name}: ${pct(p)}`}
+                            className={mates ? "teammate" : undefined}
+                            title={text}
+                            aria-label={text}
                             onClick={() => {
                               setA(r.id);
                               setB(c.id);

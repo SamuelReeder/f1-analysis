@@ -203,3 +203,217 @@ def test_export_headline_and_portable_draws_match_their_own_comparisons(tmp_path
     assert not np.allclose(head, portable)
     meta = json.loads((export.OUT / "meta.json").read_text())
     assert meta["pairwise_default"] == "in_team"
+
+
+def test_racing_folds_do_not_share_files_with_the_qualifying_validation():
+    from f1rank.jobs import _base_design, lfo_cutoffs
+    validation = {f"{name}.npz" for name in lfo_cutoffs(_base_design(2010))}
+    folds = {qualifying.fit_path(S).name for S in range(2012, 2027)}
+    assert not folds & validation
+
+
+def test_racing_fold_fits_use_the_shared_retry_rule(monkeypatch, tmp_path):
+    """A fold's failed draws are released before the next attempt (jobs.fit_with_retries);
+    holding them got the longer attempts killed by the memory cap."""
+    from f1rank import jobs
+    monkeypatch.setattr(qualifying, "FITS", tmp_path)
+    monkeypatch.setattr(qualifying, "fit_path", lambda S: tmp_path / f"quali_fold{S}.npz")
+    calls, saved = [], []
+    monkeypatch.setattr(jobs, "fit_with_retries",
+                        lambda name, design: calls.append(name) or ({}, {}, {"seed": 0}, [{"attempt": 1}]))
+    monkeypatch.setattr(qualifying, "save", lambda path, *a, **kw: saved.append((path.name, kw)))
+    qualifying.prepare(2015)
+    assert calls == ["quali_fold2015"]
+    assert saved == [("quali_fold2015.npz", dict(job="quali_fold2015", model_kw={}, settings={"seed": 0},
+                                                 attempts=[{"attempt": 1}]))]
+
+
+def test_sprint_qualifying_variant_trains_on_it_only_up_to_the_cutoff():
+    """docs/sprint_qualifying.md: same forecast targets as the published model."""
+    from f1rank.evaluate import session_pairs
+    from f1rank.jobs import job_design
+    main, var = job_design("lfo_mid2024"), job_design("lfosprint_mid2024")
+    cut = main.obs.event_idx[main.train].max()
+    sq = var.sessions[var.sessions.segment.str.startswith("SQ")]
+    assert len(sq) and sq.event_idx.max() <= cut and not main.sessions.segment.str.startswith("SQ").any()
+    def after(d):
+        p = session_pairs(d)
+        return p[p.event_idx > cut][["event_idx", "driver_a", "driver_b", "gap"]].reset_index(drop=True)
+    pd.testing.assert_frame_equal(after(main), after(var))
+    assert var.obs.y[var.train].size > main.obs.y[main.train].size
+
+
+def test_cutoff_designs_end_with_their_test_season():
+    from f1rank.fit import fingerprint
+    from f1rank.jobs import lfo_design
+    design, cut = lfo_design("lfo_end2015")
+    assert design.events.event_id.iloc[cut].startswith("2015") and design.events.season.max() == 2016
+    mid, cut = lfo_design("lfo_mid2024")
+    assert mid.events.season.max() == 2024 and mid.events.event_id.iloc[cut] == "2024-08"
+    # the racing fold for 2016 is the same design: trained through 2015, ending with 2016
+    events = design.events
+    from f1rank.design import build_design
+    fold = build_design(2010, end_event=str(events[events.season == 2016].event_id.max()))
+    fold = fold.with_cutoff(int(fold.events.loc[fold.events.season < 2016, "event_idx"].max()))
+    assert fingerprint(fold) == fingerprint(design)
+
+
+def test_jobs_cli_takes_names_after_the_parallel_option(monkeypatch):
+    from f1rank import jobs
+    seen = {}
+    monkeypatch.setattr(jobs, "up_to_date", lambda name: False)
+    monkeypatch.setattr(jobs, "run_pool", lambda names, parallel: seen.update(names=names, parallel=parallel) or [])
+    monkeypatch.setattr(jobs, "load_meta", lambda path: {})
+    with pytest.raises(SystemExit):  # the stub leaves both jobs out of date
+        jobs.main(["all", "--parallel", "2", "lfo_end2013", "lfo_end2016"])
+    assert seen == {"names": ["lfo_end2013", "lfo_end2016"], "parallel": 2}
+
+
+def test_a_fit_is_not_repeated_when_the_same_design_failed_every_attempt(tmp_path, monkeypatch):
+    """lfo_end<Y> and quali_fold<Y+1> are the same fit: with fixed seeds and settings, a
+    refit of a design that failed every attempt would repeat it (jobs.copy_failure)."""
+    from f1rank import jobs
+    monkeypatch.setattr(jobs, "fingerprint", lambda design: design)
+    source, target = tmp_path / "lfo_end2020.npz", tmp_path / "quali_fold2021.npz"
+    failed = tmp_path / "lfo_end2020.failed.json"
+    tried = [{"settings": s, "diagnostics": {"converged": False}} for s in jobs.ATTEMPTS]
+    failed.write_text(json.dumps({"job": "lfo_end2020", "attempts": tried[:3]}))
+    assert not jobs.copy_failure(target, source, "fold", lambda: "fold")  # not the whole rule
+    failed.write_text(json.dumps({"job": "lfo_end2020", "attempts": tried}))
+    assert not jobs.copy_failure(target, source, "fold", lambda: "another design")
+    assert not (tmp_path / "quali_fold2021.failed.json").exists()
+    target.write_bytes(b"stale")
+    assert jobs.copy_failure(target, source, "fold", lambda: "fold")
+    assert not target.exists()
+    assert json.loads((tmp_path / "quali_fold2021.failed.json").read_text()) == {
+        "job": "quali_fold2021", "same_as": "lfo_end2020", "attempts": tried}
+    source.write_bytes(b"a converged fit")  # copy_identical's case, not this one
+    assert not jobs.copy_failure(target, source, "fold", lambda: "fold")
+
+
+def test_a_racing_fold_reuses_the_validation_fits_failure(tmp_path, monkeypatch):
+    from f1rank import jobs
+    monkeypatch.setattr(qualifying, "FITS", tmp_path)
+    monkeypatch.setattr(qualifying, "fit_path", lambda S: tmp_path / f"quali_fold{S}.npz")
+    monkeypatch.setattr(qualifying, "fold_design", lambda S: "fold")
+    monkeypatch.setattr(jobs, "lfo_design", lambda name: ("fold", 0))
+    monkeypatch.setattr(jobs, "fingerprint", lambda design: design)
+    monkeypatch.setattr(jobs, "fit_with_retries", lambda *a, **kw: pytest.fail("refitted"))
+    tried = [{"settings": s, "diagnostics": {"converged": False}} for s in jobs.ATTEMPTS]
+    (tmp_path / "lfo_end2020.failed.json").write_text(json.dumps({"job": "lfo_end2020", "attempts": tried}))
+    with pytest.raises(RuntimeError, match="as lfo_end2020"):
+        qualifying.prepare(2021)
+    assert json.loads((tmp_path / "quali_fold2021.failed.json").read_text())["same_as"] == "lfo_end2020"
+
+
+def test_unconverged_racing_folds_are_listed_and_their_failure_is_the_dependency(tmp_path, monkeypatch):
+    monkeypatch.setattr(qualifying, "FITS", tmp_path)
+    monkeypatch.setattr(qualifying, "fit_path", lambda S: tmp_path / ("main.npz" if S is None else f"quali_fold{S}.npz"))
+    (tmp_path / "quali_fold2021.failed.json").write_text("{}")
+    (tmp_path / "quali_fold2019.failed.json").write_text("{}")  # an old failure; the fold converged later
+    (tmp_path / "quali_fold2019.npz").write_bytes(b"fit")
+    assert qualifying.unconverged_folds() == [2021]
+    assert [p.name for p in qualifying.dependencies([2019, 2021])] == [
+        "quali_fold2019.npz", "quali_fold2019.meta.json", "quali_fold2021.failed.json"]
+
+
+def test_wet_pace_test_leaves_out_seasons_whose_qualifying_fold_did_not_converge(monkeypatch):
+    from f1rank import wetpace
+    asked = []
+    def features(S):
+        asked.append(S)
+        return pd.DataFrame({"event_id": P.event_id, "driver_id": "a", "driver": 0.0}).drop_duplicates(), None
+    monkeypatch.setattr(qualifying, "features", features)
+    monkeypatch.setattr(qualifying, "unconverged_folds", lambda: [2021])
+    monkeypatch.setattr(wetpace, "fit", lambda train, drivers, wet_effects=True: {
+        "w": np.zeros((2, len(drivers))), "gamma": np.ones(2)})
+    P = pd.DataFrame({"season": [2018, 2019, 2020, 2021, 2022], "event_id": [f"{s}-01" for s in range(2018, 2023)],
+                      "a": "a", "b": "a", "wet_gap": 0.1})
+    out = wetpace.heldout(P, np.random.default_rng(0))
+    assert asked == [2020, 2022] and out["excluded_unconverged_qualifying_folds"] == [2021]
+    assert out["n_races"] == 2
+
+
+def test_racing_report_states_the_seasons_left_out_and_by_which_tests(monkeypatch):
+    from f1rank import racereport
+    outputs = {"race/multi_heldout.json": {"excluded_unconverged_qualifying_folds": [2021]},
+               "wet/summary.json": {"heldout_wet_effects_vs_quali_link": {"excluded_unconverged_qualifying_folds": []}},
+               "championship/summary.json": {"heldout_race_stage": {"excluded_unconverged_qualifying_folds": [2021]},
+                                             "combined_validation": {"excluded_unconverged_qualifying_folds": [2021]}}}
+    monkeypatch.setattr(racereport, "_load", outputs.get)
+    [line] = racereport.excluded_seasons()
+    assert line.endswith("2021 (race-specific pace and degradation, championship race stage, "
+                         "championship entry test).\n")
+    monkeypatch.setattr(racereport, "_load", lambda rel: None)
+    assert racereport.excluded_seasons() == []
+
+
+def test_sprint_qualifying_gate_needs_every_part(monkeypatch):
+    """docs/sprint_qualifying.md: all 14 fits converge, the pairing interval is below 0, lower
+    RMSE at 5 of 7 cutoffs, session coverage 85-97%, CRPS no higher."""
+    from f1rank.compare import sprint_gate
+    from f1rank.jobs import SPRINT_CUTS
+    def result(**change):
+        r = {"cutoffs": list(SPRINT_CUTS),
+             "convergence": {f"{p}_{c}": {"ok": True} for c in SPRINT_CUTS for p in ("lfo", "lfosprint")},
+             "pairings": {"n": 500, "mse_diff_ci95": [-0.004, -0.001]},
+             "by_cutoff": {c: {"rmse_main_s": 0.20, "rmse_variant_s": 0.19 if i < 5 else 0.21}
+                           for i, c in enumerate(SPRINT_CUTS)},
+             "sessions_main": {"cov90": 0.93, "crps_s": 0.110}, "sessions_var": {"cov90": 0.93, "crps_s": 0.109}}
+        for k, v in change.items():
+            r[k] = v
+        return r
+    assert sprint_gate(result())["passed"]
+    failing = {
+        "all_fits_converged": result(cutoffs=list(SPRINT_CUTS)[:6]),
+        "pairing_mse_interval_below_zero": result(pairings={"n": 500, "mse_diff_ci95": [-0.004, 0.0001]}),
+        "lower_rmse_at_5_of_7_cutoffs": result(by_cutoff={c: {"rmse_main_s": 0.20, "rmse_variant_s": 0.19 if i < 4
+                                                              else 0.21} for i, c in enumerate(SPRINT_CUTS)}),
+        "session_coverage_85_to_97": result(sessions_var={"cov90": 0.975, "crps_s": 0.109}),
+        "session_crps_no_higher": result(sessions_var={"cov90": 0.93, "crps_s": 0.111})}
+    for check, r in failing.items():
+        g = sprint_gate(r)
+        assert not g["passed"] and [k for k, ok in g["checks"].items() if not ok] == [check]
+    unconverged = result()
+    unconverged["convergence"]["lfosprint_mid2026"]["ok"] = False
+    assert not sprint_gate(unconverged)["passed"]
+    assert not sprint_gate(None)["passed"]
+
+
+def test_racing_quality_fits_retry_on_the_fixed_ladder():
+    from f1rank import artifacts
+
+    artifacts._FITS.clear()
+    calls = []
+
+    def run(warmup, samples, accept, seed):
+        calls.append((warmup, samples, accept, seed))
+        return f"mcmc{len(calls)}", {"converged": len(calls) == 3, "rhat_max": 1.1, "divergences": 0}
+
+    assert artifacts.fit_until_converged(run, 1000, 1000, seed=5) == "mcmc3"
+    assert calls == [(1000, 1000, None, 5), (2000, 2000, None, 6), (3000, 4000, None, 7)]
+    record = artifacts.fit_record()
+    assert record["fits"] == 1 and len(record["retried"]) == 1
+    assert [a["samples"] for a in record["retried"][0]] == [1000, 2000, 4000]
+
+    # a fit that converges on its first attempt is the unchanged fit and records no retry
+    artifacts.fit_until_converged(lambda *a: ("m", {"converged": True}), 800, 800)
+    assert artifacts.fit_record()["fits"] == 2 and len(artifacts.fit_record()["retried"]) == 1
+    artifacts._FITS.clear()
+
+
+def test_racing_quality_fit_fails_after_the_last_attempt():
+    from f1rank import artifacts
+
+    artifacts._FITS.clear()
+    calls = []
+
+    def run(warmup, samples, accept, seed):
+        calls.append((warmup, samples, accept, seed))
+        return "m", {"converged": False, "rhat_max": 1.06, "divergences": 0}
+
+    with pytest.raises(RuntimeError, match="after 4 attempts"):
+        artifacts.fit_until_converged(run, 500, 500)
+    assert calls[-1] == (1500, 2000, 0.98, 3) and len(calls) == 4
+    assert len(artifacts.fit_record()["retried"][0]) == 4
+    artifacts._FITS.clear()

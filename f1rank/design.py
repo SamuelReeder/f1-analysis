@@ -39,6 +39,7 @@ class Design:
     teams: list[str]
     train: np.ndarray = field(default=None)  # bool per obs: included in the likelihood
     circuit_factor: np.ndarray = field(default=None)  # per circuit, from training data
+    sprint_quali_until: str | None = field(default=None)  # see build_design
 
     def arrays(self) -> dict[str, np.ndarray]:
         e, c, o, s = self.entries, self.cars, self.obs, self.sessions
@@ -150,7 +151,13 @@ def load_tables() -> dict[str, pd.DataFrame]:
 
 
 def build_design(start_season: int = 2010, end_event: str | None = None,
-                 tables: dict[str, pd.DataFrame] | None = None) -> Design:
+                 tables: dict[str, pd.DataFrame] | None = None,
+                 sprint_quali_until: str | None = None) -> Design:
+    """sprint_quali_until: for the pre-registered sprint qualifying test
+    (docs/sprint_qualifying.md), add the sprint qualifying parts (SQ1/SQ2/SQ3) of events up
+    to and including this one as further one-lap segments of their weekend. Later sprint
+    qualifying is left out entirely, so forecasts of later events have the same targets as
+    the published model's. None (the default, and the published model) uses Q1-Q3 only."""
     t = tables or load_tables()
     events = t["events"].query("season >= @start_season").copy()
     if end_event:
@@ -173,7 +180,12 @@ def build_design(start_season: int = 2010, end_event: str | None = None,
     all_entries["experience"] = all_entries.n_prior + all_entries.driver_id.map(pre_data)
 
     # ---- lap times -> pace, with outlier and thin-segment filtering
-    q = t["quali_times"][t["quali_times"].event_id.isin(ev.index)].copy()
+    q = t["quali_times"]
+    if sprint_quali_until is not None:
+        sq = t["sprint_quali_times"] if "sprint_quali_times" in t else pd.read_parquet(
+            PROCESSED / "sprint_quali_times.parquet")
+        q = pd.concat([q, sq[sq.event_id <= sprint_quali_until]], ignore_index=True)
+    q = q[q.event_id.isin(ev.index)].copy()
     q["median"] = q.groupby(["event_id", "segment"]).time_s.transform("median")
     q["y"] = -100 * np.log(q.time_s / q["median"])
     q = q[q.y >= -MAX_GAP_PCT]
@@ -247,7 +259,8 @@ def build_design(start_season: int = 2010, end_event: str | None = None,
     drv["driver_idx"] = np.arange(len(drv))
 
     design = Design(start_season=start_season, events=events, sessions=sessions,
-                    entries=ent, cars=cars, obs=obs, drivers=drv, teams=teams)
+                    entries=ent, cars=cars, obs=obs, drivers=drv, teams=teams,
+                    sprint_quali_until=sprint_quali_until)
     design.circuit_factor = circuit_factors(design)
     return design
 

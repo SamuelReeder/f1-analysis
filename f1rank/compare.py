@@ -6,6 +6,8 @@ Variants (jobs.LFO_VARIANTS), each fitted at some of the leave-future-out cutoff
   lfo2006   the data window starting in 2006 instead of 2010
   lfospell  one team-specific effect per spell with a team, instead of per lineage
   lfoera    one team-specific effect per regulation era with a team
+  lfosprint sprint qualifying (SQ1-SQ3, 2023 onward) added to the training data up to each
+            cutoff; the pre-registered test in docs/sprint_qualifying.md
 
 At each cutoff the main model's lfo_* fit and the variant forecast the same teammate
 pairings and segments. The difference in squared error per matched pairing (variant
@@ -14,7 +16,8 @@ Pairings at the same cutoff share a fit, so the interval is somewhat too narrow.
 `after_reset` subset is the first season after a regulation reset (2017, 2022, 2026),
 where the per-era variant starts every team-specific effect afresh.
 
-Writes outputs/validation/compare.json.
+Writes outputs/validation/compare.json, with the sprint qualifying test's gate applied
+(`sprint_qualifying_gate`).
 """
 
 import json
@@ -22,10 +25,9 @@ import json
 import numpy as np
 import pandas as pd
 
-from .design import build_design
 from .evaluate import REPORTS, SEC_PER_PCT, evaluate_cutoff
-from .fit import FITS, common_data_as_of
-from .jobs import LFO_VARIANTS, lfo_cutoffs
+from .fit import FITS
+from .jobs import LFO_VARIANTS, SPRINT_CUTS, lfo_design
 from .lineage import REGULATION_RESETS
 
 N_BOOT = 2000
@@ -50,16 +52,16 @@ def paired(m: pd.DataFrame, rng) -> dict:
 
 def compare(variant: str, rng) -> dict | None:
     spec = LFO_VARIANTS[variant]
-    cuts = [c for c in spec["cuts"] if (FITS / f"{variant}_{c}.npz").exists()]
+    # a cutoff whose main or variant fit failed every attempt has nothing to compare
+    cuts = [c for c in spec["cuts"] if all((FITS / f"{n}_{c}.npz").exists() for n in (variant, "lfo"))]
     if not cuts:
         return None
-    as_of = common_data_as_of([FITS / f"{w}_{c}.npz" for c in cuts for w in ("lfo", variant)])
-    d_main = build_design(2010, end_event=as_of)
-    d_var = build_design(spec.get("start", 2010), end_event=as_of)
     pairs, sessions = [], []
     for c in cuts:
-        for label, design, fit_name in (("main", d_main, f"lfo_{c}"), ("var", d_var, f"{variant}_{c}")):
-            r = evaluate_cutoff(design, f"lfo_{c}", lfo_cutoffs(design)[f"lfo_{c}"], np.random.default_rng(0),
+        for label, fit_name in (("main", f"lfo_{c}"), ("var", f"{variant}_{c}")):
+            # each fit on the design its job builds from the current data (a stale fit fails)
+            design, cutoff = lfo_design(fit_name)
+            r = evaluate_cutoff(design, f"lfo_{c}", cutoff, np.random.default_rng(0),
                                 fit_file=FITS / f"{fit_name}.npz")
             pairs += [{**p, "fit": label, "cut": c, "test_season": r["test_season"]} for p in r["pairs"]]
             sessions.append({"fit": label, "cut": c, **r["teammate"],
@@ -69,9 +71,22 @@ def compare(variant: str, rng) -> dict | None:
     m = p[p.fit == "main"].merge(p[p.fit == "var"][key + ["pred", "in90"]], on=key, suffixes=("_main", "_var"))
     s = pd.DataFrame(sessions)
     out = {"cutoffs": cuts, "model_kw": {k: repr(v) for k, v in spec.get("model_kw", {}).items()},
-           "start": spec.get("start", 2010),
+           "start": spec.get("start", 2010), "sprint_quali": spec.get("sprint_quali", False),
            "pairings": paired(m, rng), "pairings_new": paired(m[m.new_pair], rng),
-           "pairings_after_reset": paired(m[m.test_season.isin(REGULATION_RESETS)], rng)}
+           "pairings_after_reset": paired(m[m.test_season.isin(REGULATION_RESETS)], rng),
+           "by_cutoff": {c: {"n": int(len(g)), "rmse_main_s": _rmse(g.gap, g.pred_main),
+                             "rmse_variant_s": _rmse(g.gap, g.pred_var)} for c, g in m.groupby("cut")}}
+    if spec.get("sprint_quali"):
+        # the pre-registered test also requires every fit on both sides to pass the main
+        # fit's convergence check (report.convergence)
+        from .report import convergence
+        out["convergence"] = {}
+        for c in cuts:
+            for name in (f"lfo_{c}", f"{variant}_{c}"):
+                worst, ok = convergence(FITS / f"{name}.npz")
+                out["convergence"][name] = {"ok": ok, "divergences": worst["info"]["divergences"],
+                                            **{k: worst[k]["rhat_max"] for k in ("skill", "compat", "car")},
+                                            "hyper": worst["hyper_rhat_max"]}
     for label in ("main", "var"):
         g = s[s.fit == label]
         out[f"sessions_{label}"] = {"rmse_s": float(g.rmse_pred.mean() * SEC_PER_PCT),
@@ -81,9 +96,26 @@ def compare(variant: str, rng) -> dict | None:
     return out
 
 
+def sprint_gate(r: dict | None) -> dict:
+    """The gate of docs/sprint_qualifying.md (all must hold), applied to compare("lfosprint")."""
+    if r is None or not r["pairings"].get("n"):
+        return {"checks": {"all_fits_converged": False}, "passed": False}
+    names = [f"{p}_{c}" for c in SPRINT_CUTS for p in ("lfo", "lfosprint")]
+    by_cut = r["by_cutoff"].values()
+    checks = {
+        "all_fits_converged": (list(r["cutoffs"]) == list(SPRINT_CUTS)
+                               and all(r["convergence"].get(n, {}).get("ok") for n in names)),
+        "pairing_mse_interval_below_zero": r["pairings"]["mse_diff_ci95"][1] < 0,
+        "lower_rmse_at_5_of_7_cutoffs": sum(b["rmse_variant_s"] < b["rmse_main_s"] for b in by_cut) >= 5,
+        "session_coverage_85_to_97": 0.85 <= r["sessions_var"]["cov90"] <= 0.97,
+        "session_crps_no_higher": r["sessions_var"]["crps_s"] <= r["sessions_main"]["crps_s"]}
+    return {"checks": checks, "passed": all(checks.values())}
+
+
 def main() -> None:
     rng = np.random.default_rng(0)
     out = {v: r for v in LFO_VARIANTS if (r := compare(v, rng)) is not None}
+    out["sprint_qualifying_gate"] = sprint_gate(out.get("lfosprint"))
     REPORTS.mkdir(parents=True, exist_ok=True)
     (REPORTS / "compare.json").write_text(json.dumps(out, indent=1))
     print(json.dumps(out, indent=1))

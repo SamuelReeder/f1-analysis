@@ -112,13 +112,17 @@ def model(d, variant="ratings"):
 
 
 def fit(R, drivers, variant, warmup=400, samples=400) -> dict:
-    from .artifacts import diagnostics, require_convergence
-    mcmc = MCMC(NUTS(partial(model, variant=variant)), num_warmup=warmup, num_samples=samples, num_chains=4,
-                chain_method="parallel", progress_bar=False)
-    mcmc.run(jax.random.PRNGKey(0), arrays(R, drivers), extra_fields=("diverging",))
-    require_convergence(diagnostics(
-        {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k not in ("ll_race", "strength")},
-        int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum())))
+    from .artifacts import diagnostics, fit_until_converged
+
+    def run(w, s, accept, seed):
+        mcmc = MCMC(NUTS(partial(model, variant=variant), target_accept_prob=accept or 0.8), num_warmup=w,
+                    num_samples=s, num_chains=4, chain_method="parallel", progress_bar=False)
+        mcmc.run(jax.random.PRNGKey(seed), arrays(R, drivers), extra_fields=("diverging",))
+        return mcmc, diagnostics(
+            {k: v for k, v in mcmc.get_samples(group_by_chain=True).items() if k not in ("ll_race", "strength")},
+            int(np.asarray(mcmc.get_extra_fields()["diverging"]).sum()))
+
+    mcmc = fit_until_converged(run, warmup, samples)
     return {k: np.asarray(v) for k, v in mcmc.get_samples().items() if k not in ("ll_race", "strength")}
 
 
@@ -153,11 +157,16 @@ def paired(d: np.ndarray, rng) -> dict:
 
 
 def main() -> None:
+    from .qualifying import unconverged_folds
     R = race_orders()
     drivers = sorted(R.driver_id.unique())
     rng = np.random.default_rng(0)
     rows = []
+    excluded = [S for S in unconverged_folds() if FIRST_TEST <= S <= R.season.max()]
     for S in range(FIRST_TEST, R.season.max() + 1):
+        if S in excluded:
+            print(f"held out {S}: left out, its qualifying fold did not converge", flush=True)
+            continue
         fold = race_orders(S)
         train, test = fold[fold.season < S], fold[fold.season == S]
         per = {}
@@ -171,6 +180,7 @@ def main() -> None:
     H = pd.concat(rows, ignore_index=True)
     W = H.pivot(index="event_id", columns="variant", values="log_lik")
     summary = {"races": int(W.shape[0]), "seasons_held_out": [FIRST_TEST, int(R.season.max())],
+               "excluded_unconverged_qualifying_folds": excluded,
                "per_variant": {v: {"mean_log_lik_per_race": float(H[H.variant == v].log_lik.mean()),
                                    "mean_spearman": float(H[H.variant == v].spearman.mean()),
                                    "teammate_h2h_accuracy": float(H[H.variant == v].h2h_correct.sum()
@@ -184,6 +194,8 @@ def main() -> None:
                            for k in ("a", "b", "sd_u")}
     OUT.mkdir(parents=True, exist_ok=True)
     H.to_csv(OUT / "heldout_races.csv", index=False)
+    from .artifacts import fit_record
+    summary["fit_attempts"] = fit_record()
     (OUT / "summary.json").write_text(json.dumps(summary, indent=1))
     from .artifacts import input_files, record
     from .qualifying import POLICY, dependencies

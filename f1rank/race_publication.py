@@ -32,14 +32,16 @@ def check(data):
                   and gate["mean_interval_width"] < gate["baseline_interval_width"])
         if bool(gate["passed"]) != passed:
             raise ValueError("Race pace gate disagrees with its evidence")
-        if data[kind] and not passed:
-            raise ValueError("Unsupported race pace ranking")
-        for row in data[kind]:
-            e = row["pace"]
-            if not all(math.isfinite(e[q]) for q in ("q05", "median", "q95")):
-                raise ValueError("Nonfinite race pace")
-            if not (e["q05"] <= e["median"] <= e["q95"] and 1 <= e["rank_lo"] <= e["rank_hi"] <= len(data[kind])):
-                raise ValueError("Invalid race pace intervals")
+        tables = [data[kind]] + [season[kind] for season in data.get("seasons", [])]
+        for rows in tables:
+            if rows and not passed:
+                raise ValueError("Unsupported race pace ranking")
+            for row in rows:
+                e = row["pace"]
+                if not all(math.isfinite(e[q]) for q in ("q05", "median", "q95")):
+                    raise ValueError("Nonfinite race pace")
+                if not (e["q05"] <= e["median"] <= e["q95"] and 1 <= e["rank_lo"] <= e["rank_hi"] <= len(rows)):
+                    raise ValueError("Invalid race pace intervals")
     return data
 
 

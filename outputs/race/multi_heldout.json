@@ -1,335 +1,314 @@
 {
  "design": "fit on every season before S (from 2010); predict season S's teammate gaps (pair-season means of stage A gaps, >= 4 races, both drivers seen in training)",
  "units": "percent of lap time; mse in percent squared",
+ "excluded_unconverged_qualifying_folds": [
+  2014,
+  2021
+ ],
  "fits": {
   "2012": {
-   "_rhat_max": 1.0186684131622314,
+   "_rhat_max": 1.032581090927124,
    "_divergences": 1,
-   "_minutes": 7.1,
+   "_minutes": 11.1,
    "_backend": "gpu",
    "_attempts": [
     {
      "seed": 0,
      "warmup": 500,
-     "rhat_max": 1.0186684131622314,
+     "rhat_max": 1.032581090927124,
      "divergences": 1,
-     "minutes": 7.1
+     "minutes": 11.1
     }
    ],
    "_converged": true
   },
   "2013": {
-   "_rhat_max": 1.0298547744750977,
+   "_rhat_max": 1.0275001525878906,
    "_divergences": 2,
-   "_minutes": 12.7,
-   "_backend": "gpu",
-   "_attempts": [
-    {
-     "seed": 0,
-     "warmup": 500,
-     "rhat_max": 1.0298547744750977,
-     "divergences": 2,
-     "minutes": 12.7
-    }
-   ],
-   "_converged": true
-  },
-  "2014": {
-   "_rhat_max": 1.031848430633545,
-   "_divergences": 0,
-   "_minutes": 18.2,
-   "_backend": "gpu",
-   "_attempts": [
-    {
-     "seed": 0,
-     "warmup": 500,
-     "rhat_max": 1.031848430633545,
-     "divergences": 0,
-     "minutes": 18.2
-    }
-   ],
-   "_converged": true
-  },
-  "2015": {
-   "_rhat_max": 1.0367423295974731,
-   "_divergences": 2,
-   "_minutes": 71.9,
-   "_backend": "gpu",
-   "_attempts": [
-    {
-     "seed": 0,
-     "warmup": 500,
-     "rhat_max": 135351.4375,
-     "divergences": 0,
-     "minutes": 60.0
-    },
-    {
-     "seed": 1,
-     "warmup": 1000,
-     "rhat_max": 1.0367423295974731,
-     "divergences": 2,
-     "minutes": 11.9
-    }
-   ],
-   "_converged": true
-  },
-  "2016": {
-   "_rhat_max": 1.039858341217041,
-   "_divergences": 0,
-   "_minutes": 15.0,
-   "_backend": "gpu",
-   "_attempts": [
-    {
-     "seed": 0,
-     "warmup": 500,
-     "rhat_max": 1.039858341217041,
-     "divergences": 0,
-     "minutes": 15.0
-    }
-   ],
-   "_converged": true
-  },
-  "2017": {
-   "_rhat_max": 1.0315403938293457,
-   "_divergences": 0,
    "_minutes": 26.9,
    "_backend": "gpu",
    "_attempts": [
     {
      "seed": 0,
      "warmup": 500,
-     "rhat_max": 1.0315403938293457,
+     "rhat_max": 1.0509014129638672,
+     "divergences": 1,
+     "minutes": 13.6
+    },
+    {
+     "seed": 1,
+     "warmup": 1000,
+     "rhat_max": 1.0275001525878906,
+     "divergences": 2,
+     "minutes": 13.3
+    }
+   ],
+   "_converged": true
+  },
+  "2015": {
+   "_rhat_max": 1.0328054428100586,
+   "_divergences": 2,
+   "_minutes": 56.8,
+   "_backend": "gpu",
+   "_attempts": [
+    {
+     "seed": 0,
+     "warmup": 500,
+     "rhat_max": 302043.6875,
      "divergences": 0,
-     "minutes": 26.9
+     "minutes": 41.4
+    },
+    {
+     "seed": 1,
+     "warmup": 1000,
+     "rhat_max": 1.0328054428100586,
+     "divergences": 2,
+     "minutes": 15.4
+    }
+   ],
+   "_converged": true
+  },
+  "2016": {
+   "_rhat_max": 1.049433946609497,
+   "_divergences": 0,
+   "_minutes": 17.0,
+   "_backend": "gpu",
+   "_attempts": [
+    {
+     "seed": 0,
+     "warmup": 500,
+     "rhat_max": 1.049433946609497,
+     "divergences": 0,
+     "minutes": 17.0
+    }
+   ],
+   "_converged": true
+  },
+  "2017": {
+   "_rhat_max": 1.014208436012268,
+   "_divergences": 1,
+   "_minutes": 22.3,
+   "_backend": "gpu",
+   "_attempts": [
+    {
+     "seed": 0,
+     "warmup": 500,
+     "rhat_max": 1.014208436012268,
+     "divergences": 1,
+     "minutes": 22.3
     }
    ],
    "_converged": true
   },
   "2018": {
-   "_rhat_max": 1.018640398979187,
+   "_rhat_max": 1.023084282875061,
    "_divergences": 0,
-   "_minutes": 30.0,
+   "_minutes": 22.9,
    "_backend": "gpu",
    "_attempts": [
     {
      "seed": 0,
      "warmup": 500,
-     "rhat_max": 1.018640398979187,
+     "rhat_max": 1.023084282875061,
      "divergences": 0,
-     "minutes": 30.0
+     "minutes": 22.9
     }
    ],
    "_converged": true
   },
   "2019": {
-   "_rhat_max": 1.0362671613693237,
+   "_rhat_max": 1.0340943336486816,
    "_divergences": 0,
-   "_minutes": 63.4,
+   "_minutes": 25.3,
    "_backend": "gpu",
    "_attempts": [
     {
      "seed": 0,
      "warmup": 500,
-     "rhat_max": 1.0512046813964844,
+     "rhat_max": 1.0340943336486816,
      "divergences": 0,
-     "minutes": 27.4
-    },
-    {
-     "seed": 1,
-     "warmup": 1000,
-     "rhat_max": 1.0362671613693237,
-     "divergences": 0,
-     "minutes": 36.0
+     "minutes": 25.3
     }
    ],
    "_converged": true
   },
   "2020": {
-   "_rhat_max": 1.0275721549987793,
+   "_rhat_max": 1.0226558446884155,
    "_divergences": 0,
-   "_minutes": 30.6,
+   "_minutes": 25.8,
    "_backend": "gpu",
    "_attempts": [
     {
      "seed": 0,
      "warmup": 500,
-     "rhat_max": 1.0275721549987793,
+     "rhat_max": 1.0226558446884155,
      "divergences": 0,
-     "minutes": 30.6
-    }
-   ],
-   "_converged": true
-  },
-  "2021": {
-   "_rhat_max": 1.037174105644226,
-   "_divergences": 3,
-   "_minutes": 37.9,
-   "_backend": "gpu",
-   "_attempts": [
-    {
-     "seed": 0,
-     "warmup": 500,
-     "rhat_max": 1.037174105644226,
-     "divergences": 3,
-     "minutes": 37.9
+     "minutes": 25.8
     }
    ],
    "_converged": true
   },
   "2022": {
-   "_rhat_max": 1.0219045877456665,
+   "_rhat_max": 1.0212668180465698,
    "_divergences": 0,
-   "_minutes": 58.3,
+   "_minutes": 28.1,
    "_backend": "gpu",
    "_attempts": [
     {
      "seed": 0,
      "warmup": 500,
-     "rhat_max": 1.0219045877456665,
+     "rhat_max": 1.0212668180465698,
      "divergences": 0,
-     "minutes": 58.3
+     "minutes": 28.1
     }
    ],
    "_converged": true
   },
   "2023": {
-   "_rhat_max": 1.0255850553512573,
+   "_rhat_max": 1.0177892446517944,
    "_divergences": 0,
-   "_minutes": 43.0,
+   "_minutes": 59.8,
    "_backend": "gpu",
    "_attempts": [
     {
      "seed": 0,
      "warmup": 500,
-     "rhat_max": 1.0255850553512573,
+     "rhat_max": 1.0755085945129395,
      "divergences": 0,
-     "minutes": 43.0
+     "minutes": 23.9
+    },
+    {
+     "seed": 1,
+     "warmup": 1000,
+     "rhat_max": 1.0177892446517944,
+     "divergences": 0,
+     "minutes": 35.9
     }
    ],
    "_converged": true
   },
   "2024": {
-   "_rhat_max": 1.0248873233795166,
+   "_rhat_max": 1.0211169719696045,
    "_divergences": 0,
-   "_minutes": 66.0,
+   "_minutes": 25.4,
    "_backend": "gpu",
    "_attempts": [
     {
      "seed": 0,
      "warmup": 500,
-     "rhat_max": 1.0248873233795166,
+     "rhat_max": 1.0211169719696045,
      "divergences": 0,
-     "minutes": 66.0
+     "minutes": 25.4
     }
    ],
    "_converged": true
   },
   "2025": {
-   "_rhat_max": 1.025477647781372,
+   "_rhat_max": 1.0214356184005737,
    "_divergences": 0,
-   "_minutes": 47.6,
+   "_minutes": 25.6,
    "_backend": "gpu",
    "_attempts": [
     {
      "seed": 0,
      "warmup": 500,
-     "rhat_max": 1.025477647781372,
+     "rhat_max": 1.0214356184005737,
      "divergences": 0,
-     "minutes": 47.6
+     "minutes": 25.6
     }
    ],
    "_converged": true
   },
   "2026": {
-   "_rhat_max": 1.012203335762024,
+   "_rhat_max": 1.0208766460418701,
    "_divergences": 0,
-   "_minutes": 53.3,
+   "_minutes": 30.9,
    "_backend": "gpu",
    "_attempts": [
     {
      "seed": 0,
      "warmup": 500,
-     "rhat_max": 1.012203335762024,
+     "rhat_max": 1.0208766460418701,
      "divergences": 0,
-     "minutes": 53.3
+     "minutes": 30.9
     }
    ],
    "_converged": true
   }
  },
  "race_specific_pace_vs_quali_link": {
-  "n_pair_seasons": 129,
-  "mse_diff": -0.005487618300221884,
+  "n_pair_seasons": 113,
+  "mse_diff": -0.005051709628904338,
   "mse_diff_ci95": [
-   -0.01003777230316288,
-   -0.0016607910630699275
+   -0.011507298776757999,
+   -0.00022072723337989458
   ],
   "improves": true
  },
  "quali_link_vs_zero": {
-  "n_pair_seasons": 129,
-  "mse_diff": -0.04439178561577541,
+  "n_pair_seasons": 113,
+  "mse_diff": -0.03294298458308965,
   "mse_diff_ci95": [
-   -0.06936653276914606,
-   -0.023525170788967403
+   -0.05754987524227174,
+   -0.012751553129735312
   ],
   "improves": true
  },
  "degradation_vs_zero": {
-  "n_pair_seasons": 129,
-  "mse_diff": -2.6558554820736685e-05,
+  "n_pair_seasons": 113,
+  "mse_diff": -2.6227032201142155e-05,
   "mse_diff_ci95": [
-   -5.4930318616465965e-05,
-   -1.7667115140127335e-06
+   -5.6589048792203035e-05,
+   6.668055833380077e-08
   ],
-  "improves": true
+  "improves": false
  },
  "gate_race_specific_pace": true,
- "gate_degradation": true,
+ "gate_degradation": false,
  "by_era_descriptive": {
   "held out 2012-2017 (Jolpica targets)": {
    "race_specific_pace_vs_quali_link": {
-    "n_pair_seasons": 50,
-    "mse_diff": -0.0017489717946544525,
+    "n_pair_seasons": 42,
+    "mse_diff": -0.00328620066587683,
     "mse_diff_ci95": [
-     -0.004203188632013176,
-     0.0005065069692193407
+     -0.006709067799714369,
+     2.9379024508222848e-05
     ],
     "improves": false
    },
    "degradation_vs_zero": {
-    "n_pair_seasons": 50,
-    "mse_diff": -5.779872625145608e-05,
+    "n_pair_seasons": 42,
+    "mse_diff": -7.233632640173606e-05,
     "mse_diff_ci95": [
-     -0.00012100418495802852,
-     -8.829487948831545e-07
+     -0.00014454605358588238,
+     -9.709500870090071e-06
     ],
     "improves": true
    }
   },
   "held out 2018 on (FastF1 targets)": {
    "race_specific_pace_vs_quali_link": {
-    "n_pair_seasons": 79,
-    "mse_diff": -0.007853850265770892,
+    "n_pair_seasons": 71,
+    "mse_diff": -0.006096095212667089,
     "mse_diff_ci95": [
-     -0.015360708749018329,
-     -0.001591916009074297
+     -0.015829992445010127,
+     0.0011173567193720779
     ],
-    "improves": true
+    "improves": false
    },
    "degradation_vs_zero": {
-    "n_pair_seasons": 79,
-    "mse_diff": -6.786294421547191e-06,
+    "n_pair_seasons": 71,
+    "mse_diff": 1.0488883118852283e-06,
     "mse_diff_ci95": [
-     -2.5853320582933566e-05,
-     1.2018388953858476e-05
+     -1.8726531420580646e-05,
+     1.9680716734503776e-05
     ],
     "improves": false
    }
   }
  },
  "laps_by_source": {
-  "fastf1": 122325,
-  "jolpica": 114730
+  "fastf1": 122648,
+  "jolpica": 115425
  }
 }

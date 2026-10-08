@@ -1,0 +1,871 @@
+{
+ "event": {
+  "event_id": "2026-11",
+  "race_name": "Hungarian Grand Prix",
+  "date": "2026-07-26"
+ },
+ "trained_through": {
+  "event_id": "2026-10",
+  "race_name": "Belgian Grand Prix",
+  "date": "2026-07-19"
+ },
+ "fit": {
+  "fit_id": "20261002T011541Z",
+  "fingerprint": "4726a6244aeb26f2",
+  "settings": {
+   "warmup": 1000,
+   "samples": 1000,
+   "chains": 4,
+   "target_accept": 0.9
+  },
+  "git_commit": "705ca61",
+  "git_dirty": false,
+  "diagnostics": {
+   "elapsed_s": 1067.3948287963867,
+   "divergences": 0,
+   "mean_steps": 511.0,
+   "rhat_max": 1.032684564590454,
+   "n_draws": 4000,
+   "finite": true,
+   "converged": true
+  }
+ },
+ "ratings": {
+  "drivers": [
+   {
+    "id": "max_verstappen",
+    "name": "Max Verstappen",
+    "team": "Red Bull",
+    "headline": {
+     "q05": 0.1741,
+     "median": 0.3314,
+     "q95": 0.4995,
+     "rank_lo": 1,
+     "rank_hi": 4
+    },
+    "portable": {
+     "q05": -0.0013,
+     "median": 0.2134,
+     "q95": 0.4299,
+     "rank_lo": 1,
+     "rank_hi": 12
+    }
+   },
+   {
+    "id": "hadjar",
+    "name": "Isack Hadjar",
+    "team": "Red Bull",
+    "headline": {
+     "q05": 0.0138,
+     "median": 0.1932,
+     "q95": 0.3767,
+     "rank_lo": 2,
+     "rank_hi": 11
+    },
+    "portable": {
+     "q05": -0.1007,
+     "median": 0.0454,
+     "q95": 0.223,
+     "rank_lo": 2,
+     "rank_hi": 17
+    }
+   },
+   {
+    "id": "sainz",
+    "name": "Carlos Sainz",
+    "team": "Williams",
+    "headline": {
+     "q05": -0.0529,
+     "median": 0.1236,
+     "q95": 0.3071,
+     "rank_lo": 1,
+     "rank_hi": 14
+    },
+    "portable": {
+     "q05": -0.0261,
+     "median": 0.149,
+     "q95": 0.348,
+     "rank_lo": 1,
+     "rank_hi": 13
+    }
+   },
+   {
+    "id": "leclerc",
+    "name": "Charles Leclerc",
+    "team": "Ferrari",
+    "headline": {
+     "q05": -0.0887,
+     "median": 0.1018,
+     "q95": 0.2865,
+     "rank_lo": 2,
+     "rank_hi": 15
+    },
+    "portable": {
+     "q05": -0.1665,
+     "median": 0.0604,
+     "q95": 0.2834,
+     "rank_lo": 1,
+     "rank_hi": 20
+    }
+   },
+   {
+    "id": "norris",
+    "name": "Lando Norris",
+    "team": "McLaren",
+    "headline": {
+     "q05": -0.1042,
+     "median": 0.0963,
+     "q95": 0.3076,
+     "rank_lo": 2,
+     "rank_hi": 16
+    },
+    "portable": {
+     "q05": -0.1901,
+     "median": 0.0298,
+     "q95": 0.2563,
+     "rank_lo": 1,
+     "rank_hi": 21
+    }
+   },
+   {
+    "id": "antonelli",
+    "name": "Andrea Kimi Antonelli",
+    "team": "Mercedes",
+    "headline": {
+     "q05": -0.1268,
+     "median": 0.0541,
+     "q95": 0.2388,
+     "rank_lo": 2,
+     "rank_hi": 18
+    },
+    "portable": {
+     "q05": -0.1105,
+     "median": 0.0466,
+     "q95": 0.211,
+     "rank_lo": 2,
+     "rank_hi": 18
+    }
+   },
+   {
+    "id": "piastri",
+    "name": "Oscar Piastri",
+    "team": "McLaren",
+    "headline": {
+     "q05": -0.1631,
+     "median": 0.0406,
+     "q95": 0.2472,
+     "rank_lo": 3,
+     "rank_hi": 19
+    },
+    "portable": {
+     "q05": -0.1792,
+     "median": -0.0034,
+     "q95": 0.1863,
+     "rank_lo": 3,
+     "rank_hi": 20
+    }
+   },
+   {
+    "id": "bearman",
+    "name": "Oliver Bearman",
+    "team": "Haas F1 Team",
+    "headline": {
+     "q05": -0.1867,
+     "median": 0.0231,
+     "q95": 0.227,
+     "rank_lo": 2,
+     "rank_hi": 19
+    },
+    "portable": {
+     "q05": -0.1932,
+     "median": -0.0095,
+     "q95": 0.1699,
+     "rank_lo": 3,
+     "rank_hi": 20
+    }
+   },
+   {
+    "id": "alonso",
+    "name": "Fernando Alonso",
+    "team": "Aston Martin",
+    "headline": {
+     "q05": -0.1886,
+     "median": 0.0153,
+     "q95": 0.2213,
+     "rank_lo": 2,
+     "rank_hi": 19
+    },
+    "portable": {
+     "q05": -0.1912,
+     "median": 0.0265,
+     "q95": 0.2447,
+     "rank_lo": 1,
+     "rank_hi": 20
+    }
+   },
+   {
+    "id": "bortoleto",
+    "name": "Gabriel Bortoleto",
+    "team": "Audi",
+    "headline": {
+     "q05": -0.1845,
+     "median": 0.013,
+     "q95": 0.2047,
+     "rank_lo": 3,
+     "rank_hi": 19
+    },
+    "portable": {
+     "q05": -0.1855,
+     "median": -0.0274,
+     "q95": 0.1441,
+     "rank_lo": 4,
+     "rank_hi": 20
+    }
+   },
+   {
+    "id": "hamilton",
+    "name": "Lewis Hamilton",
+    "team": "Ferrari",
+    "headline": {
+     "q05": -0.1753,
+     "median": 0.0103,
+     "q95": 0.1994,
+     "rank_lo": 4,
+     "rank_hi": 20
+    },
+    "portable": {
+     "q05": -0.1941,
+     "median": 0.0033,
+     "q95": 0.2066,
+     "rank_lo": 2,
+     "rank_hi": 21
+    }
+   },
+   {
+    "id": "perez",
+    "name": "Sergio P\u00e9rez",
+    "team": "Cadillac F1 Team",
+    "headline": {
+     "q05": -0.2422,
+     "median": -0.0093,
+     "q95": 0.2417,
+     "rank_lo": 2,
+     "rank_hi": 21
+    },
+    "portable": {
+     "q05": -0.1851,
+     "median": 0.0159,
+     "q95": 0.2208,
+     "rank_lo": 2,
+     "rank_hi": 20
+    }
+   },
+   {
+    "id": "gasly",
+    "name": "Pierre Gasly",
+    "team": "Alpine F1 Team",
+    "headline": {
+     "q05": -0.1887,
+     "median": -0.0166,
+     "q95": 0.1505,
+     "rank_lo": 4,
+     "rank_hi": 19
+    },
+    "portable": {
+     "q05": -0.1857,
+     "median": 0.0101,
+     "q95": 0.2183,
+     "rank_lo": 2,
+     "rank_hi": 20
+    }
+   },
+   {
+    "id": "russell",
+    "name": "George Russell",
+    "team": "Mercedes",
+    "headline": {
+     "q05": -0.1974,
+     "median": -0.0172,
+     "q95": 0.1628,
+     "rank_lo": 4,
+     "rank_hi": 20
+    },
+    "portable": {
+     "q05": -0.2047,
+     "median": 0.0098,
+     "q95": 0.2133,
+     "rank_lo": 2,
+     "rank_hi": 21
+    }
+   },
+   {
+    "id": "albon",
+    "name": "Alexander Albon",
+    "team": "Williams",
+    "headline": {
+     "q05": -0.1958,
+     "median": -0.0181,
+     "q95": 0.1474,
+     "rank_lo": 5,
+     "rank_hi": 20
+    },
+    "portable": {
+     "q05": -0.2533,
+     "median": -0.0421,
+     "q95": 0.1613,
+     "rank_lo": 3,
+     "rank_hi": 22
+    }
+   },
+   {
+    "id": "bottas",
+    "name": "Valtteri Bottas",
+    "team": "Cadillac F1 Team",
+    "headline": {
+     "q05": -0.3026,
+     "median": -0.0494,
+     "q95": 0.1978,
+     "rank_lo": 3,
+     "rank_hi": 22
+    },
+    "portable": {
+     "q05": -0.1717,
+     "median": 0.0451,
+     "q95": 0.259,
+     "rank_lo": 1,
+     "rank_hi": 20
+    }
+   },
+   {
+    "id": "arvid_lindblad",
+    "name": "Arvid Lindblad",
+    "team": "RB F1 Team",
+    "headline": {
+     "q05": -0.2377,
+     "median": -0.051,
+     "q95": 0.1269,
+     "rank_lo": 5,
+     "rank_hi": 20
+    },
+    "portable": {
+     "q05": -0.2588,
+     "median": -0.1207,
+     "q95": 0.0481,
+     "rank_lo": 8,
+     "rank_hi": 22
+    }
+   },
+   {
+    "id": "hulkenberg",
+    "name": "Nico H\u00fclkenberg",
+    "team": "Audi",
+    "headline": {
+     "q05": -0.2791,
+     "median": -0.0839,
+     "q95": 0.1136,
+     "rank_lo": 6,
+     "rank_hi": 21
+    },
+    "portable": {
+     "q05": -0.2563,
+     "median": -0.058,
+     "q95": 0.1397,
+     "rank_lo": 4,
+     "rank_hi": 22
+    }
+   },
+   {
+    "id": "lawson",
+    "name": "Liam Lawson",
+    "team": "RB F1 Team",
+    "headline": {
+     "q05": -0.3128,
+     "median": -0.149,
+     "q95": 0.0048,
+     "rank_lo": 11,
+     "rank_hi": 22
+    },
+    "portable": {
+     "q05": -0.3243,
+     "median": -0.1248,
+     "q95": 0.0533,
+     "rank_lo": 8,
+     "rank_hi": 22
+    }
+   },
+   {
+    "id": "ocon",
+    "name": "Esteban Ocon",
+    "team": "Haas F1 Team",
+    "headline": {
+     "q05": -0.3784,
+     "median": -0.1637,
+     "q95": 0.0422,
+     "rank_lo": 9,
+     "rank_hi": 22
+    },
+    "portable": {
+     "q05": -0.2859,
+     "median": -0.0824,
+     "q95": 0.1192,
+     "rank_lo": 4,
+     "rank_hi": 22
+    }
+   },
+   {
+    "id": "colapinto",
+    "name": "Franco Colapinto",
+    "team": "Alpine F1 Team",
+    "headline": {
+     "q05": -0.3531,
+     "median": -0.1795,
+     "q95": -0.0041,
+     "rank_lo": 11,
+     "rank_hi": 22
+    },
+    "portable": {
+     "q05": -0.1977,
+     "median": -0.0333,
+     "q95": 0.1246,
+     "rank_lo": 5,
+     "rank_hi": 21
+    }
+   },
+   {
+    "id": "stroll",
+    "name": "Lance Stroll",
+    "team": "Aston Martin",
+    "headline": {
+     "q05": -0.4718,
+     "median": -0.2679,
+     "q95": -0.064,
+     "rank_lo": 14,
+     "rank_hi": 22
+    },
+    "portable": {
+     "q05": -0.4268,
+     "median": -0.1709,
+     "q95": 0.0803,
+     "rank_lo": 6,
+     "rank_hi": 22
+    }
+   }
+  ],
+  "cars": [
+   {
+    "id": "brackley",
+    "name": "Mercedes",
+    "pace": {
+     "q05": 0.7556,
+     "median": 0.9935,
+     "q95": 1.2302,
+     "rank_lo": 1,
+     "rank_hi": 3
+    }
+   },
+   {
+    "id": "ferrari",
+    "name": "Ferrari",
+    "pace": {
+     "q05": 0.6358,
+     "median": 0.8679,
+     "q95": 1.1035,
+     "rank_lo": 1,
+     "rank_hi": 3
+    }
+   },
+   {
+    "id": "mclaren",
+    "name": "McLaren",
+    "pace": {
+     "q05": 0.4355,
+     "median": 0.6877,
+     "q95": 0.9376,
+     "rank_lo": 2,
+     "rank_hi": 5
+    }
+   },
+   {
+    "id": "red_bull",
+    "name": "Red Bull",
+    "pace": {
+     "q05": 0.3199,
+     "median": 0.5405,
+     "q95": 0.7686,
+     "rank_lo": 3,
+     "rank_hi": 5
+    }
+   },
+   {
+    "id": "faenza",
+    "name": "RB F1 Team",
+    "pace": {
+     "q05": 0.1801,
+     "median": 0.4107,
+     "q95": 0.6406,
+     "rank_lo": 3,
+     "rank_hi": 6
+    }
+   },
+   {
+    "id": "hinwil",
+    "name": "Audi",
+    "pace": {
+     "q05": -0.1,
+     "median": 0.1444,
+     "q95": 0.3909,
+     "rank_lo": 5,
+     "rank_hi": 8
+    }
+   },
+   {
+    "id": "enstone",
+    "name": "Alpine F1 Team",
+    "pace": {
+     "q05": -0.0987,
+     "median": 0.1359,
+     "q95": 0.3664,
+     "rank_lo": 5,
+     "rank_hi": 8
+    }
+   },
+   {
+    "id": "haas",
+    "name": "Haas F1 Team",
+    "pace": {
+     "q05": -0.4193,
+     "median": -0.1641,
+     "q95": 0.106,
+     "rank_lo": 7,
+     "rank_hi": 9
+    }
+   },
+   {
+    "id": "williams",
+    "name": "Williams",
+    "pace": {
+     "q05": -0.5942,
+     "median": -0.3508,
+     "q95": -0.1036,
+     "rank_lo": 8,
+     "rank_hi": 9
+    }
+   },
+   {
+    "id": "cadillac",
+    "name": "Cadillac F1 Team",
+    "pace": {
+     "q05": -1.3842,
+     "median": -1.0748,
+     "q95": -0.7581,
+     "rank_lo": 10,
+     "rank_hi": 10
+    }
+   },
+   {
+    "id": "silverstone",
+    "name": "Aston Martin",
+    "pace": {
+     "q05": -2.5523,
+     "median": -2.1955,
+     "q95": -1.8393,
+     "rank_lo": 11,
+     "rank_hi": 11
+    }
+   }
+  ]
+ },
+ "forecast": {
+  "pairs": [
+   {
+    "segment": "Q1",
+    "team": "williams",
+    "a": "albon",
+    "b": "sainz",
+    "predicted": -0.1444,
+    "q05": -0.9595,
+    "q95": 0.6972,
+    "observed": -0.0413,
+    "naive": -0.2975,
+    "established": true
+   },
+   {
+    "segment": "Q1",
+    "team": "silverstone",
+    "a": "alonso",
+    "b": "stroll",
+    "predicted": 0.2813,
+    "q05": -0.5443,
+    "q95": 1.092,
+    "observed": 0.5967,
+    "naive": 0.3969,
+    "established": true
+   },
+   {
+    "segment": "Q1",
+    "team": "brackley",
+    "a": "antonelli",
+    "b": "russell",
+    "predicted": 0.0671,
+    "q05": -0.7394,
+    "q95": 0.9181,
+    "observed": 0.1485,
+    "naive": 0.1637,
+    "established": true
+   },
+   {
+    "segment": "Q1",
+    "team": "faenza",
+    "a": "arvid_lindblad",
+    "b": "lawson",
+    "predicted": 0.1093,
+    "q05": -0.7264,
+    "q95": 1.0036,
+    "observed": -0.0818,
+    "naive": -0.0397,
+    "established": true
+   },
+   {
+    "segment": "Q1",
+    "team": "haas",
+    "a": "bearman",
+    "b": "ocon",
+    "predicted": 0.1898,
+    "q05": -0.6964,
+    "q95": 0.9673,
+    "observed": -0.2505,
+    "naive": 0.218,
+    "established": true
+   },
+   {
+    "segment": "Q1",
+    "team": "hinwil",
+    "a": "bortoleto",
+    "b": "hulkenberg",
+    "predicted": 0.0985,
+    "q05": -0.7218,
+    "q95": 0.8948,
+    "observed": -0.3113,
+    "naive": -0.2346,
+    "established": true
+   },
+   {
+    "segment": "Q1",
+    "team": "cadillac",
+    "a": "bottas",
+    "b": "perez",
+    "predicted": -0.0474,
+    "q05": -0.844,
+    "q95": 0.7971,
+    "observed": 0.4838,
+    "naive": -0.0763,
+    "established": true
+   },
+   {
+    "segment": "Q1",
+    "team": "enstone",
+    "a": "colapinto",
+    "b": "gasly",
+    "predicted": -0.1595,
+    "q05": -0.9847,
+    "q95": 0.6493,
+    "observed": -0.0339,
+    "naive": -0.1779,
+    "established": true
+   },
+   {
+    "segment": "Q1",
+    "team": "red_bull",
+    "a": "hadjar",
+    "b": "max_verstappen",
+    "predicted": -0.1392,
+    "q05": -0.9903,
+    "q95": 0.6266,
+    "observed": -0.1121,
+    "naive": -0.0766,
+    "established": true
+   },
+   {
+    "segment": "Q1",
+    "team": "ferrari",
+    "a": "hamilton",
+    "b": "leclerc",
+    "predicted": -0.0894,
+    "q05": -0.9196,
+    "q95": 0.6956,
+    "observed": 0.2899,
+    "naive": -0.0826,
+    "established": true
+   },
+   {
+    "segment": "Q1",
+    "team": "mclaren",
+    "a": "norris",
+    "b": "piastri",
+    "predicted": 0.0541,
+    "q05": -0.7692,
+    "q95": 0.8741,
+    "observed": 0.7032,
+    "naive": 0.0325,
+    "established": true
+   },
+   {
+    "segment": "Q2",
+    "team": "brackley",
+    "a": "antonelli",
+    "b": "russell",
+    "predicted": 0.0671,
+    "q05": -0.7657,
+    "q95": 0.912,
+    "observed": 0.0597,
+    "naive": 0.1637,
+    "established": true
+   },
+   {
+    "segment": "Q2",
+    "team": "faenza",
+    "a": "arvid_lindblad",
+    "b": "lawson",
+    "predicted": 0.1093,
+    "q05": -0.7024,
+    "q95": 0.9452,
+    "observed": 0.464,
+    "naive": -0.0397,
+    "established": true
+   },
+   {
+    "segment": "Q2",
+    "team": "hinwil",
+    "a": "bortoleto",
+    "b": "hulkenberg",
+    "predicted": 0.0985,
+    "q05": -0.7329,
+    "q95": 0.8724,
+    "observed": -0.5317,
+    "naive": -0.2346,
+    "established": true
+   },
+   {
+    "segment": "Q2",
+    "team": "enstone",
+    "a": "colapinto",
+    "b": "gasly",
+    "predicted": -0.1595,
+    "q05": -0.9743,
+    "q95": 0.6863,
+    "observed": -0.2087,
+    "naive": -0.1779,
+    "established": true
+   },
+   {
+    "segment": "Q2",
+    "team": "red_bull",
+    "a": "hadjar",
+    "b": "max_verstappen",
+    "predicted": -0.1392,
+    "q05": -0.9994,
+    "q95": 0.6508,
+    "observed": 0.4347,
+    "naive": -0.0766,
+    "established": true
+   },
+   {
+    "segment": "Q2",
+    "team": "ferrari",
+    "a": "hamilton",
+    "b": "leclerc",
+    "predicted": -0.0894,
+    "q05": -0.9148,
+    "q95": 0.7224,
+    "observed": -0.205,
+    "naive": -0.0826,
+    "established": true
+   },
+   {
+    "segment": "Q2",
+    "team": "mclaren",
+    "a": "norris",
+    "b": "piastri",
+    "predicted": 0.0541,
+    "q05": -0.8164,
+    "q95": 0.8782,
+    "observed": 0.5468,
+    "naive": 0.0325,
+    "established": true
+   },
+   {
+    "segment": "Q3",
+    "team": "brackley",
+    "a": "antonelli",
+    "b": "russell",
+    "predicted": 0.0671,
+    "q05": -0.7478,
+    "q95": 0.8716,
+    "observed": 0.3258,
+    "naive": 0.1637,
+    "established": true
+   },
+   {
+    "segment": "Q3",
+    "team": "red_bull",
+    "a": "hadjar",
+    "b": "max_verstappen",
+    "predicted": -0.1392,
+    "q05": -0.9274,
+    "q95": 0.7342,
+    "observed": -0.1516,
+    "naive": -0.0766,
+    "established": true
+   },
+   {
+    "segment": "Q3",
+    "team": "ferrari",
+    "a": "hamilton",
+    "b": "leclerc",
+    "predicted": -0.0894,
+    "q05": -0.9212,
+    "q95": 0.7368,
+    "observed": 0.263,
+    "naive": -0.0826,
+    "established": true
+   },
+   {
+    "segment": "Q3",
+    "team": "mclaren",
+    "a": "norris",
+    "b": "piastri",
+    "predicted": 0.0541,
+    "q05": -0.7481,
+    "q95": 0.9166,
+    "observed": 0.5543,
+    "naive": 0.0325,
+    "established": true
+   }
+  ],
+  "order": [
+   {
+    "segment": "Q1",
+    "n": 22,
+    "spearman": 0.878
+   },
+   {
+    "segment": "Q2",
+    "n": 16,
+    "spearman": 0.7529
+   },
+   {
+    "segment": "Q3",
+    "n": 10,
+    "spearman": 0.5515
+   }
+  ],
+  "summary": {
+   "n_pairs": 22,
+   "rmse": 0.365,
+   "rmse_naive": 0.3422,
+   "rmse_zero": 0.3664,
+   "coverage90": 1.0,
+   "order_spearman": 0.7275
+  }
+ }
+}

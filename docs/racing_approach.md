@@ -575,3 +575,200 @@ cannot shape them:
 - **Overtaking and errors may not be measurable precisely enough.** The gates decide.
 - **The sequential model has many parts.** The early results benchmark keeps it honest:
   every added part must improve held-out results.
+
+## Amendment (2026-10-02, before the regenerated racing runs)
+
+The racing held-out tests take each test season's qualifying features from its fold,
+`quali_fold<S>`, fitted under the fixed retry rule (`jobs.ATTEMPTS`). The 2021 fold is
+the same fit as the qualifying validation's `lfo_end2020`, which failed all four
+attempts on 2026-10-02 (R-hat 1.106, 1.072, 1.066, 1.187; the check is 1.05), so it is
+not refitted with other settings and the fold has none. The 2014 fold, the same fit as
+`lfo_end2013`, failed the same way later that day (R-hat 1.152, 1.197, 1.068, 1.077,
+with 74, 145, 230 and 46 divergences). Nothing above said what a racing test does
+without its fold.
+
+Decided before any racing result under the corrected procedure: a test season whose
+fold failed every attempt (`quali_fold<S>.failed.json`, no fit) is left out of every
+racing held-out test that uses qualifying features (race-specific pace and degradation,
+wet pace, the results benchmark, the championship's race-stage check and its entry
+tests). Each output lists it under `excluded_unconverged_qualifying_folds`, and its
+manifest records the failure. The season's races still train later seasons' folds. The
+rule depends only on the qualifying fit, as the qualifying validation's exclusion of
+unconverged cutoffs (`lfo_summary.json`) does, and no gate changes.
+
+## Amendment (2026-10-04, before any score of the regenerated racing run was inspected)
+
+The regenerated racing run (2026-10-04, 10:06 to 14:30) ended with one fit failing the
+publication convergence check: the full fit in `firstlap` (R-hat 1.067 against the check
+of 1.05, no divergences, 4,000 draws). The racing-quality fits make a single attempt
+with a fixed seed. Unlike the qualifying fits, which use the retry rule `jobs.ATTEMPTS`
+fixed before their runs, nothing above said what a racing-quality fit does when its one
+attempt does not converge. The equal-car championship needs the draws of every quality
+that enters, so `firstlap`'s failure stopped it (`outputs/firstlap/manifest.json` was
+never written).
+
+The only information used here is the failure message in the run's log. No racing score
+from that run was read, and no output of that run is used: every racing output is
+regenerated after the code change below, because the change alters the code hash that
+each manifest records.
+
+Decided before any racing score under the corrected procedure: every MCMC fit in the
+racing-quality modules (`firstlap`, `consistency`, `reliability`, `pitstops`, `wetpace`,
+`benchmark`, `overtaking` and the championship's race stage) that fails the publication
+check is retried under one fixed ladder, `artifacts.RETRY`, relative to that fit's own
+settings. The ratios are those of `jobs.ATTEMPTS` (700+400, 1,400+800, 2,100+1,600,
+2,100+1,600 at target acceptance 0.98):
+
+| attempt | warm-up | draws per chain | target acceptance | seed |
+|---|---|---|---|---|
+| 1 | as before | as before | as before | as before |
+| 2 | 2 x | 2 x | as before | +1 |
+| 3 | 3 x | 4 x | as before | +2 |
+| 4 | 3 x | 4 x | 0.98 | +3 |
+
+The first attempt is the fit made before this amendment, so a fit that already
+converged is unchanged. The check, its thresholds, the models, the data, the gates and
+the entry tests do not change. If all four attempts fail, the fit fails as before: that
+quality is not published and nothing is retuned. The race-pace model (`racemulti`) is
+not covered: every one of its fits converged in the run above. Each summary records the
+number of fits and the attempts of any fit that needed more than one, with its
+diagnostics (`fit_attempts`); attempts are also printed to the run's log.
+
+## Regeneration completed (2026-10-05; results from the 2026-10-04 run)
+
+This is an outcome record, not a change to the procedure. The canonical racing
+outputs and championship manifests are current. All lanes finished with exit status
+zero. Standalone gates pass for race-specific pace, first-lap performance and pit
+operations; degradation, consistency, wet pace, reliability and results effects fail.
+Overtaking and defending fail feasibility. The conditional entry test selects
+race-specific pace, but the outer selection test fails (+0.125 log predictive density
+per race; 95% interval −0.030 to +0.293, 207 races). No racing quality enters, and
+the Overall dashboard withholds its experimental equal-car ranking. Sources:
+`outputs/championship/summary.json` and the quality summaries listed in the README.
+
+The amendments dated 2026-10-02 and 2026-10-04 remain unchanged: failed qualifying
+folds exclude test seasons 2014 and 2021 where their features are required, and
+racing-quality fits retry on the fixed ladder. None of the results caused retuning.
+The three older FastF1-only race-pace sensitivity outputs remain stale and excluded
+from the generated report; the report's stale-file note refers to those
+secondary outputs.
+
+### Runtime record
+
+Source: `outputs/analysis/racing_regeneration/run.json`, transcribed from the lane
+logs with their hashes. Elapsed seconds are wrapper wall times, including cache
+loading and output work; reused fits' earlier sampling times are separate in the
+model summaries. The f1 slice used CPUQuota=800%, CPUWeight=10 and Nice=19, with
+a 13G memory admission budget. These are local measurements. CI runner time and
+memory remain unverified, as does the cause of the earlier WSL OOM.
+
+| Lane | Stage | Elapsed seconds |
+|---|---|---:|
+| rgpu1 | racemulti 2026 | 11 |
+| rgpu1 | racemulti 2024 | 9 |
+| rgpu1 | racemulti 2022 | 7 |
+| rgpu1 | racemulti 2020 | 9 |
+| rgpu1 | racemulti 2018 | 9 |
+| rgpu1 | racemulti 2016 | 5 |
+| rgpu1 | racemulti 2014 | 6 |
+| rgpu1 | racemulti 2012 | 7 |
+| rgpu2 | racemulti 2025 | 11 |
+| rgpu2 | racemulti 2023 | 11 |
+| rgpu2 | racemulti 2021 | 4 |
+| rgpu2 | racemulti 2019 | 6 |
+| rgpu2 | racemulti 2017 | 8 |
+| rgpu2 | racemulti 2015 | 8 |
+| rgpu2 | racemulti 2013 | 6 |
+| rgpufinal | racemulti heldout | 48 |
+| rgpufinal | racemulti full | 12 |
+| rcpu | firstlap | 1007 |
+| rcpu | consistency | 38 |
+| rcpu | reliability | 1067 |
+| rcpu | pitstops | 192 |
+| rcpu | battles episodes | 66 |
+| rcpu | battles feasibility | 1396 |
+| rcpu | battles fit | 192 |
+| rcpu | wetpace | 43 |
+| rcpu | benchmark | 305 |
+| rfinal | championship | 965 |
+| rfinal | report | 25 |
+
+### Every racing fit that needed a retry
+
+Source: `fit_attempts.retried` in `outputs/firstlap/summary.json`, and `_attempts`
+in `outputs/race/multi_heldout.json`; the complete records and fit labels are in
+`outputs/analysis/racing_regeneration/run.json`. First-lap labels follow the call
+order in `f1rank/firstlap.py` and the logged attempts. Repeated comparisons are
+separate fit calls, retained here rather than deduplicated. All listed fits passed
+on their second attempt. The first-lap full fit doubled per-chain warm-up and draws
+from 1,000 to 2,000; its other retries doubled 500 to 1,000. Seeds changed from
+0 to 1. Their divergences were zero on both attempts. Race-pace retries reused the
+existing checked caches and doubled warm-up from 500 to 1,000.
+
+| Module and fit | First R-hat | Retry R-hat | Divergences, first → retry |
+|---|---:|---:|---:|
+| firstlap: full model with lasting team | 1.066966 | 1.012407 | 0 → 0 |
+| firstlap: held-out 2013: no driver effects, lasting_team=False | 1.060797 | 1.014541 | 0 → 0 |
+| firstlap: held-out 2017: driver effects, lasting_team=True | 14012.129883 | 1.008298 | 0 → 0 |
+| firstlap: held-out 2017: no driver effects, lasting_team=True | 1.069297 | 1.010812 | 0 → 0 |
+| firstlap: held-out 2020: driver effects, lasting_team=True | 2621.858643 | 1.017643 | 0 → 0 |
+| firstlap: held-out 2020: no driver effects, lasting_team=True | 1.052402 | 1.022516 | 0 → 0 |
+| firstlap: held-out 2021: no driver effects, lasting_team=True | 1.051789 | 1.028609 | 0 → 0 |
+| firstlap: held-out 2022: driver effects, lasting_team=True | 43047.050781 | 1.006199 | 0 → 0 |
+| firstlap: held-out 2024: driver effects, lasting_team=True | 36699.667969 | 1.010296 | 0 → 0 |
+| firstlap: held-out 2024: no driver effects, lasting_team=True | 116100.804688 | 1.025298 | 0 → 0 |
+| firstlap: held-out 2025: driver effects, lasting_team=True | 1.057520 | 1.017843 | 0 → 0 |
+| firstlap: held-out 2013: no driver effects, lasting_team=False | 1.060797 | 1.014541 | 0 → 0 |
+| firstlap: held-out 2017: no driver effects, lasting_team=True | 1.069297 | 1.010812 | 0 → 0 |
+| firstlap: held-out 2020: no driver effects, lasting_team=True | 1.052402 | 1.022516 | 0 → 0 |
+| firstlap: held-out 2021: no driver effects, lasting_team=True | 1.051789 | 1.028609 | 0 → 0 |
+| firstlap: held-out 2023: driver effects, lasting_team=False | 149410.671875 | 1.008373 | 0 → 0 |
+| firstlap: held-out 2024: no driver effects, lasting_team=True | 116100.804688 | 1.025298 | 0 → 0 |
+| racemulti: held-out 2013 (reused checked cache) | 1.050901 | 1.027500 | 1 → 2 |
+| racemulti: held-out 2015 (reused checked cache) | 302043.687500 | 1.032805 | 0 → 2 |
+| racemulti: held-out 2023 (reused checked cache) | 1.075509 | 1.017789 | 0 → 0 |
+
+No retries were needed by consistency, reliability, pit operations, wet pace,
+benchmark, battles fit or championship. The battles feasibility record remains
+separate from the quality-fit summary. The canonical race full fit needed one
+attempt. The results remain as of 2026-15; the scheduled refresh has not run on
+GitHub and still needs the approved merge and cache-release setup.
+
+The first Python check failed because the separate total-race-pace export still
+fingerprinted the previous `artifacts.py`. Running its prescribed validation and
+export command reused every checked posterior fit, regenerated the manifests and
+preserved its gate decisions. The rerun passed all Python checks. This did not
+change model settings, code or the canonical racing manifests.
+
+The clean-clone check also exposed a publication problem: rerunning the exporter
+without ignored posterior files relabelled current racing evidence as stale. The
+dashboard workflow now verifies the committed immutable publication and its portable
+receipt instead. The receipt is recorded on the fitting machine only after comparison
+with the fully checked exporter, and binds the payload to the current source inventory
+and hashes. The scheduled refresh records and commits its new receipt. This changes
+publication tooling and workflows, with no change to model code, fits or gates.
+
+The published `outputs/REPORT.md` received an editorial review: its stale warning
+is scoped to the secondary files, and the simulated research standings and
+contributions are withheld under the failed combined gate. The raw CSVs remain
+committed for audit. Regenerating the Markdown with the unchanged report generator
+requires applying this publication review again before publishing that document.
+
+Final local verification is recorded in
+`outputs/analysis/racing_regeneration/run.json`: the Python suite passed 148 tests,
+and the local browser run passed 67. A fresh clone with Python 3.12.3 and Node
+22.20.0, a new Python environment and `npm ci`, passed the portable-publication
+check, 49 dashboard/publication Python checks, the production build with the
+repository URL prefix, and 67 browser tests. It had no posterior caches and
+preserved current racing rows and the not-established Overall status. Host browser
+libraries were already available; this does not measure a GitHub runner or deploy
+the site.
+
+## Championship diagnosis and prospective follow-up
+
+The completed combined failure is preserved. The exact replay, season-level
+diagnosis, and fixed race-specific-pace follow-up are documented in
+[`championship_followup.md`](championship_followup.md). The candidate's positive
+historical comparison is exploratory. Its separately committed prospective
+registration does not amend the completed experiment or authorize a ranking;
+independent validation remains pending.

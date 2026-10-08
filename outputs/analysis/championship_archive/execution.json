@@ -1,0 +1,19 @@
+{
+ "recorded_at": "2026-10-05T19:37:41.073965+00:00",
+ "source_revision": "041054f24d6b804d9b787f3da7f24a844eba20a8",
+ "service": "f1-champarchive.service",
+ "exit_status": 1,
+ "outcome": "exhausted_registered_fit",
+ "frozen_registration_and_inputs_verified_after_failure": true,
+ "prepared_laps_and_weather_verified_after_failure": true,
+ "completed_predictive_folds": [],
+ "portable_publication": {
+  "exit_status": 0,
+  "output": "Checked portable dashboard publication"
+ },
+ "journal": [
+  "Oct 05 15:14:03 DESKTOP-M9I22TH systemd[263]: Started f1-champarchive.service - /usr/bin/sh -c \"outputs/logs/gate.sh champarchive .venv/bin/python -u -m analysis.championship_archive run > outputs/logs/champarchive.log 2>&1 ; echo \\$? > outputs/logs/champarchive.status\".",
+  "Oct 05 15:35:24 DESKTOP-M9I22TH systemd[263]: f1-champarchive.service: Consumed 1h 15min 4.432s CPU time, 7.6M memory peak, 0B memory swap peak."
+ ],
+ "manifest_scope": "Post-failure capture of frozen inputs, remaining caches and terminal evidence; no claim of successful validation"
+}

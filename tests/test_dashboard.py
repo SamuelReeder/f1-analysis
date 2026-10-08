@@ -110,10 +110,21 @@ def test_legacy_racing_gate_is_never_advertised(tmp_path, monkeypatch):
 def test_refresh_runs_the_entire_pipeline_before_publishing(tmp_path, payload, monkeypatch):
     monkeypatch.setattr(dashboard, "ROOT", tmp_path / "repo")
     calls = []
-    monkeypatch.setattr(dashboard.subprocess, "run", lambda command, **kwargs: calls.append(command[-1]))
+    monkeypatch.setattr(dashboard.subprocess, "run", lambda command, **kwargs: calls.append(command[2]))
     dashboard.run(refresh=True, data_dir=tmp_path)
-    assert calls == ["f1rank.fetch", "f1rank.build", "f1rank.fit", "f1rank.export"]
+    assert calls == ["f1rank.fetch", "f1rank.build", "f1rank.fit", "f1rank.export", "f1rank.forecast",
+                     "f1rank.forecast", "f1rank.asof", "f1rank.asof"]
     assert (tmp_path / "latest.json").exists()
+
+
+def test_refresh_refits_with_the_published_sampler_settings():
+    fit = next(command for stage, command in dashboard.refresh_steps() if stage == "fit")
+    assert fit[3:] == ["--warmup=1500", "--samples=1500", "--chains=4"]
+    published = dashboard.RATINGS / "fit_metadata.json"
+    if not published.exists():
+        pytest.skip("Requires the committed qualifying export")
+    settings = json.loads(published.read_text())["settings"]
+    assert {k: settings[k] for k in dashboard.FIT_SETTINGS} == dashboard.FIT_SETTINGS
 
 
 def test_race_refresh_orders_extraction_and_both_fits_before_publication(tmp_path, payload, monkeypatch):
@@ -126,9 +137,11 @@ def test_race_refresh_orders_extraction_and_both_fits_before_publication(tmp_pat
     dashboard.run(refresh=True, with_races=True, race_python="gpu-python", extract_python="fastf1-python",
                   data_dir=tmp_path)
     assert [c[2] if c[1] == "-m" else "extract" for c in calls] == [
-        "f1rank.fetch", "f1rank.build", "extract", "f1rank.racedata", "f1rank.timeline",
-        "f1rank.fit", "f1rank.export", "f1rank.race_total"]
-    assert calls[2][0] == "fastf1-python"
+        "f1rank.fetch", "f1rank.build", "extract", "extract", "f1rank.racedata", "f1rank.timeline",
+        "f1rank.fit", "f1rank.export", "f1rank.forecast", "f1rank.forecast", "f1rank.asof", "f1rank.asof",
+        "f1rank.race_total"]
+    assert calls[2][0] == calls[3][0] == "fastf1-python"
+    assert calls[3][-1] == "--sprint"
     assert calls[-1] == ["gpu-python", "-m", "f1rank.race_total", "--validate", "--export"]
     assert (tmp_path / "latest.json").exists()
 
@@ -148,7 +161,9 @@ def test_qualifying_refresh_keeps_existing_race_export_current_and_failure_prese
     monkeypatch.setattr(dashboard.subprocess, "run", execute)
     with pytest.raises(RuntimeError, match="Race fitting failed"):
         dashboard.run(refresh=True, data_dir=tmp_path)
-    assert [c[2] for c in calls] == ["f1rank.fetch", "f1rank.build", "f1rank.fit", "f1rank.export", "f1rank.race_total"]
+    assert [c[2] for c in calls] == ["f1rank.fetch", "f1rank.build", "f1rank.fit", "f1rank.export",
+                                     "f1rank.forecast", "f1rank.forecast", "f1rank.asof", "f1rank.asof",
+                                     "f1rank.race_total"]
     assert (tmp_path / "latest.json").read_bytes() == before
     status = json.loads((tmp_path / "status.json").read_text())
     assert status["state"] == "failed" and status["stage"] == "race_total"
@@ -185,6 +200,23 @@ def test_export_rejects_mismatched_portable_fit_identity(monkeypatch):
     monkeypatch.setattr(dashboard, "read_json", read)
     with pytest.raises(ValueError, match="portable fit metadata"):
         dashboard.build_payload()
+
+
+def test_breakdown_adds_car_and_driver_draw_by_draw():
+    # Opposite shared draws cancel in the total, so its interval is tight.
+    shared = np.linspace(-1, 1, 401)
+    in_team = np.column_stack([.1 + shared, -.1 + shared])
+    car = np.column_stack([.5 - shared, -.5 - shared])
+    rows = dashboard.breakdown(["a", "b"], ["x", "y"], in_team, car, {"a": "y", "b": "x"})
+    assert [r["id"] for r in rows] == ["b", "a"]
+    b = rows[0]
+    assert b["car"] == pytest.approx(.5) and b["driver"] == pytest.approx(-.1)
+    assert b["total"]["q05"] == pytest.approx(.4) and b["total"]["q95"] == pytest.approx(.4)
+    # Published full-posterior medians replace the thinned draws' medians for the parts.
+    rows = dashboard.breakdown(["a", "b"], ["x", "y"], in_team, car, {"a": "y", "b": "x"},
+                               {"drivers": {"b": -.12}, "cars": {"x": .52}})
+    assert rows[0]["driver"] == -.12 and rows[0]["car"] == .52
+    assert rows[1]["driver"] == pytest.approx(.1)
 
 
 def test_race_ranks_preserve_covariance_and_use_seconds():
@@ -227,6 +259,25 @@ def test_race_ranking_requires_predictive_and_uncertainty_evidence(race_release)
     check(race_release)  # The supported driver table can be published independently.
 
 
+def test_race_season_history_follows_the_same_gates(race_release):
+    from copy import deepcopy
+    from f1rank.race_publication import check
+    season = dict(season=2025, drivers=deepcopy(race_release["drivers"]), cars=deepcopy(race_release["cars"]))
+    race_release["seasons"] = [season]
+    check(race_release)
+    season["cars"][0]["pace"]["rank_hi"] = 2  # one car cannot rank second of one
+    with pytest.raises(ValueError, match="intervals"):
+        check(race_release)
+    season["cars"][0]["pace"]["rank_hi"] = 1
+    gate = race_release["validation"]["metrics"]["cars"]
+    gate.update(passed=False, coverage90=.8)
+    race_release["cars"] = []
+    with pytest.raises(ValueError, match="Unsupported race pace ranking"):
+        check(race_release)  # a withheld table stays withheld in every season
+    season["cars"] = []
+    check(race_release)
+
+
 def test_race_validation_cannot_use_future_data_or_failed_fit(race_release):
     from f1rank.race_publication import check
     fit = race_release["validation"]["fits"]["2024-10"]["no_driver"]
@@ -264,3 +315,217 @@ def test_race_point_forecasts_exclude_future_random_noise():
     np.testing.assert_allclose(point_prediction(post, meta, entries), [1.4, 1.])
     # A refitted no-driver model predicts identical teammate means, exactly.
     np.testing.assert_array_equal(point_prediction({"package": post["package"]}, meta, entries), [1., 1.])
+
+
+def test_race_feature_results_are_the_recorded_tests_and_refuse_changed_outputs(monkeypatch):
+    from f1rank import dashboard
+    recorded = sorted(p.parent.name for p in (dashboard.ROOT / "outputs/race_features").glob("*/validation.json"))
+    results = dashboard.race_feature_results()
+    assert [r["feature"] for r in results] == recorded
+    for r in results:
+        assert r["metrics"]["cars"]["passed"] in (True, False) and r["document"] == "docs/race_features.md"
+    if recorded:
+        monkeypatch.setattr(dashboard, "digest", lambda path: "changed")
+        with pytest.raises(ValueError, match="Changed recorded output"):
+            dashboard.race_feature_results()
+
+
+@pytest.fixture
+def championship_release(tmp_path, monkeypatch):
+    """Synthetic results only: no fits and no historical championship values."""
+    import pandas as pd
+    from f1rank import artifacts
+
+    monkeypatch.setattr(dashboard, "ROOT", tmp_path)
+    monkeypatch.setattr(artifacts, "ROOT", tmp_path)
+    directory = tmp_path / "outputs/championship"
+    directory.mkdir(parents=True)
+    source = tmp_path / "source.py"
+    source.write_text("# synthetic input\n")
+    summary = {
+        "combined_validation": {"gate": True, "excluded_unconverged_qualifying_folds": [2001]},
+        "heldout_race_stage": {"excluded_unconverged_qualifying_folds": [2001, 2002]},
+        "qualities_entered": ["first_lap"], "qualities_selected": ["first_lap"],
+        "entry_tests": {"first_lap": {"enters": True, "ci95": [.01, .05]},
+                        "consistency": {"enters": False, "ci95": [-.02, .01]},
+                        "overtaking_attack": {"not_run": "no held-out draws"}},
+        "simulated_seasons": 40, "n_races_simulated": 5, "driver_error_rates_used": False,
+    }
+    pd.DataFrame([
+        dict(version="in_team", driver_id="b", name="Driver B", points_per_race=6., p_title=.25,
+             rank_median=2., rank_lo=1, rank_hi=2),
+        dict(version="portable", driver_id="a", name="Driver A", points_per_race=15., p_title=.9,
+             rank_median=1., rank_lo=1, rank_hi=2),
+        dict(version="in_team", driver_id="a", name="Driver A", points_per_race=8., p_title=.75,
+             rank_median=1., rank_lo=1, rank_hi=2),
+    ]).to_csv(directory / "standings.csv", index=False)
+    pd.DataFrame([
+        dict(driver_id=d, name=f"Driver {d.upper()}", points_per_race=p,
+             loss_qualifying_pace_at_average=q, loss_first_lap_at_average=f, loss_all_at_average=a)
+        for d, p, q, f, a in [("b", 6., -.2, .1, -.05), ("a", 8., .3, .2, .4)]
+    ]).to_csv(directory / "contributions.csv", index=False)
+
+    def record():
+        (directory / "summary.json").write_text(json.dumps(summary))
+        return artifacts.record(directory, [directory / name for name in
+                                ("summary.json", "standings.csv", "contributions.csv")],
+                                model="championship-v2", inputs=[source])
+
+    record()
+    return directory, summary, record, source
+
+
+def test_overall_publishes_only_verified_headline_and_its_evidence(championship_release, monkeypatch):
+    directory, summary, _, _ = championship_release
+    checked = []
+    require = dashboard.require
+
+    def verify(path, **kwargs):
+        checked.append(set(p.name for p in kwargs["required_outputs"]))
+        return require(path, **kwargs)
+
+    monkeypatch.setattr(dashboard, "require", verify)
+    result = dashboard.overall_result()
+    assert result["status"] == "established"
+    assert checked == [{"summary.json", "standings.csv", "contributions.csv"}] * 2
+    assert [r["driver_id"] for r in result["standings"]] == ["a", "b"]
+    assert [r["points_per_race"] for r in result["standings"]] == [8., 6.]
+    assert result["standings"][0]["p_title"] == .75
+    assert result["standings"][0]["rank_lo"] == 1
+    assert result["standings"][0]["rank_hi"] == 2
+    assert result["contributions"][0]["losses"] == {"qualifying_pace": .3, "first_lap": .2, "all": .4}
+    assert result["contributions"][1]["losses"]["qualifying_pace"] == -.2
+    e = result["evidence"]
+    assert e["qualities_entered"] == summary["qualities_entered"]
+    assert e["qualities_not_entered"] == ["consistency"]
+    assert e["entry_tests"] == summary["entry_tests"]
+    assert e["excluded_test_seasons"] == {"combined_validation": [2001], "heldout_race_stage": [2001, 2002]}
+    assert e["simulated_seasons"] == summary["simulated_seasons"]
+    assert e["quality_decisions"][-1] == {
+        "quality": "overtaking_attack", "entered": False, "tested": False,
+        "reason": "Not tested: no held-out draws"}
+    assert e["fit_id"] == json.loads((directory / "manifest.json").read_text())["fit_id"]
+    health = next(r for r in dashboard.racing_health(result) if r["name"] == "Equal-car championship")
+    assert health["status"] == "passed" and health["reason"] == result["reason"]
+
+
+@pytest.mark.parametrize("gate", [False, None, 1, "true"])
+def test_overall_withholds_ranking_unless_gate_is_exactly_true(championship_release, gate):
+    _, summary, record, _ = championship_release
+    summary["combined_validation"]["gate"] = gate
+    summary["qualities_entered"] = []
+    record()
+    result = dashboard.overall_result()
+    assert result["status"] == "not established"
+    assert result["standings"] == result["contributions"] == []
+    assert result["evidence"]["qualities_selected"] == ["first_lap"]
+    assert result["evidence"]["qualities_not_entered"] == ["first_lap", "consistency"]
+    assert "combined held-out validation did not pass" in result["evidence"]["quality_decisions"][0]["reason"]
+
+
+@pytest.mark.parametrize("file", ["summary.json", "standings.csv", "contributions.csv", "source.py"])
+def test_overall_refuses_stale_outputs_or_inputs(championship_release, file):
+    directory, _, _, source = championship_release
+    path = source if file == source.name else directory / file
+    path.write_text(path.read_text() + "\n")
+    result = dashboard.overall_result()
+    assert result["status"] == "stale"
+    assert result["standings"] == result["contributions"] == []
+    assert result["evidence"] is None
+
+
+@pytest.mark.parametrize("file", ["manifest.json", "summary.json", "standings.csv", "contributions.csv"])
+def test_overall_refuses_missing_provenance_or_outputs(championship_release, file):
+    directory, _, _, _ = championship_release
+    (directory / file).unlink()
+    result = dashboard.overall_result()
+    assert result["status"] == "stale"
+    assert result["standings"] == result["contributions"] == []
+    assert result["evidence"] is None
+
+
+def test_overall_refuses_an_unrecorded_contribution_file(championship_release):
+    directory, _, _, _ = championship_release
+    path = directory / "manifest.json"
+    manifest = json.loads(path.read_text())
+    del manifest["outputs"]["outputs/championship/contributions.csv"]
+    path.write_text(json.dumps(manifest))
+    assert dashboard.overall_result()["status"] == "stale"
+
+
+def test_overall_does_not_publish_historical_summary_without_manifest(championship_release):
+    directory, summary, _, _ = championship_release
+    del summary["combined_validation"]  # old summary shape, with apparent individual successes
+    (directory / "summary.json").write_text(json.dumps(summary))
+    (directory / "manifest.json").unlink()
+    result = dashboard.overall_result()
+    assert result["status"] == "stale"
+    assert result["evidence"] is None
+    assert result["standings"] == result["contributions"] == []
+
+
+def test_overall_is_unavailable_before_any_result(tmp_path, monkeypatch):
+    monkeypatch.setattr(dashboard, "ROOT", tmp_path)
+    result = dashboard.overall_result()
+    assert result["status"] == "unavailable"
+    assert result["standings"] == result["contributions"] == []
+
+
+@pytest.mark.parametrize("invalid", ["summary", "nonfinite", "contribution", "range"])
+def test_overall_refuses_invalid_but_recorded_results(championship_release, invalid):
+    directory, summary, record, _ = championship_release
+    if invalid == "summary":
+        del summary["qualities_selected"]
+    else:
+        path = directory / ("contributions.csv" if invalid == "contribution" else "standings.csv")
+        table = dashboard.pd.read_csv(path)
+        if invalid == "contribution":
+            table = table.drop(columns="loss_first_lap_at_average")
+        elif invalid == "nonfinite":
+            table.loc[0, "points_per_race"] = float("inf")
+        else:
+            table.loc[0, "rank_hi"] = 0
+        table.to_csv(path, index=False)
+    record()
+    result = dashboard.overall_result()
+    assert result["status"] == "unavailable"
+    assert result["standings"] == result["contributions"] == []
+    assert result["evidence"] is None
+
+
+def test_overall_refuses_replacement_during_read(championship_release, monkeypatch):
+    _, summary, record, _ = championship_release
+    read = dashboard.read_json
+
+    def replace(path):
+        old = read(path)
+        summary["simulated_seasons"] += 1
+        record()
+        return old
+
+    monkeypatch.setattr(dashboard, "read_json", replace)
+    result = dashboard.overall_result()
+    assert result["status"] == "stale"
+    assert result["standings"] == result["contributions"] == []
+    assert result["evidence"] is None
+
+
+def test_overall_refuses_a_new_manifest_after_initial_verification(championship_release, monkeypatch):
+    _, summary, record, _ = championship_release
+    require = dashboard.require
+    calls = 0
+
+    def replace_after_verification(path, **kwargs):
+        nonlocal calls
+        verified = require(path, **kwargs)
+        calls += 1
+        if calls == 1:
+            summary["simulated_seasons"] += 1
+            record()
+        return verified
+
+    monkeypatch.setattr(dashboard, "require", replace_after_verification)
+    result = dashboard.overall_result()
+    assert result["status"] == "stale"
+    assert result["standings"] == result["contributions"] == []
+    assert result["evidence"] is None

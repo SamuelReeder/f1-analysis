@@ -1,7 +1,9 @@
 import { Badge } from "../components";
-import { pct } from "../lib";
+import { date, pct, signed } from "../lib";
 import { Equation, InlineMath, RatingMath } from "../ModelMath";
 import type {
+  CarState,
+  FeatureTest,
   RacePace as RaceData,
   RaceValidation as Validation,
 } from "../types";
@@ -11,18 +13,26 @@ const source = "https://github.com/SamuelReeder/f1-analysis/blob/main/";
 export function RaceValidation({
   validation,
   driver,
+  title = "Held-out prediction",
+  note,
 }: {
   validation: Validation;
   driver: boolean;
+  title?: string;
+  note?: React.ReactNode;
 }) {
   return (
     <section className="panel race-validation">
       <div className="panel-heading">
         <div>
-          <h2>Held-out prediction</h2>
+          <h2>{title}</h2>
           <p>
-            {validation.n_races} later races · refitted model without{" "}
-            {driver ? "driver" : "car"} ratings as the baseline
+            {note ?? (
+              <>
+                {validation.n_races} later races · refitted model without{" "}
+                {driver ? "driver" : "car"} ratings as the baseline
+              </>
+            )}
           </p>
         </div>
         <Badge tone={validation.passed ? "green" : "amber"}>
@@ -341,5 +351,122 @@ export function RaceMethodology({ data }: { data?: RaceData | null }) {
         </div>
       </details>
     </section>
+  );
+}
+
+const FEATURE_LABELS: Record<FeatureTest["feature"], string> = {
+  longrun: "Race-fuel pace in practice",
+  traps: "Speed traps in practice",
+  upgrades: "Upgrades declared to the FIA",
+};
+const FEATURE_ORDER: FeatureTest["feature"][] = [
+  "longrun",
+  "traps",
+  "upgrades",
+];
+
+// The pre-registered weekend-information tests (docs/race_features.md): team rows on the
+// car view, the teammate row on the driver view.
+export function FeatureTests({
+  results,
+  driver,
+}: {
+  results: FeatureTest[];
+  driver: boolean;
+}) {
+  const rows = FEATURE_ORDER.flatMap((feature) => {
+    const result = results.find((r) => r.feature === feature);
+    const v = result?.metrics[driver ? "drivers" : "cars"];
+    return result && v ? [{ feature, result, v }] : [];
+  });
+  if (!rows.length) return null;
+  const dates = [...new Set(rows.map((r) => date(r.result.recorded_at)))];
+  return (
+    <section
+      className="panel race-validation"
+      aria-labelledby="feature-tests-title"
+    >
+      <div className="panel-heading">
+        <div>
+          <h2 id="feature-tests-title">Tests of weekend information</h2>
+          <p>
+            Pre-registered · recorded {dates.join(", ")} · the race model plus
+            one piece of information known before each race, on the same{" "}
+            {rows[0].v.n_races} later races, against the model without it ·{" "}
+            <a href={`${source}${rows[0].result.document}`}>
+              decisions and results
+            </a>
+          </p>
+        </div>
+      </div>
+      <div
+        className="table-scroll"
+        tabIndex={0}
+        role="region"
+        aria-label="Tests of weekend information; scroll for all columns"
+      >
+        <table className="forecast-table">
+          <thead>
+            <tr>
+              <th>Information</th>
+              <th>Result</th>
+              <th className="numeric">Error</th>
+              <th className="numeric">Error change, 95% interval</th>
+              <th className="numeric">90% coverage</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(({ feature, v }) => (
+              <tr key={feature}>
+                <td>{FEATURE_LABELS[feature]}</td>
+                <td>
+                  <Badge tone={v.passed ? "green" : "amber"}>
+                    {v.passed ? "Passed" : "Not established"}
+                  </Badge>
+                </td>
+                <td className="numeric">
+                  {(v.rmse * 0.9).toFixed(3)}s{" "}
+                  <small>vs {(v.baseline_rmse * 0.9).toFixed(3)}s</small>
+                </td>
+                <td className="numeric">
+                  {signed(v.mse_difference_ci95[0], 4)} to{" "}
+                  {signed(v.mse_difference_ci95[1], 4)}
+                </td>
+                <td className="numeric">{pct(v.coverage90)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="table-foot">
+        <span>
+          Error in seconds per 90-second lap, vs the model without the
+          information. The error change is the race-level difference in squared
+          error (percent²); a test passes when its whole interval is below zero
+          and coverage is 85–95%. Each test is run once, with no correction for
+          running several; a pass would make the information a candidate for a
+          new, separately tested model, not change these tables.
+        </span>
+      </div>
+    </section>
+  );
+}
+
+// The pre-registered follow-up for the withheld car table (docs/race_car_state.md).
+export function CarStateTest({ result }: { result: CarState }) {
+  return (
+    <RaceValidation
+      validation={result.cars}
+      driver={false}
+      title="Follow-up test: in-season car development"
+      note={
+        <>
+          Pre-registered · recorded {date(result.recorded_at)} · same{" "}
+          {result.cars.n_races} races and driver-only baseline, with the car
+          allowed to change from race to race ·{" "}
+          <a href={`${source}${result.document}`}>decisions and result</a>
+        </>
+      }
+    />
   );
 }

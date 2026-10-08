@@ -1,0 +1,20 @@
+{
+  "source_revision": "dfd4088",
+  "python_suite": {
+    "command": "systemd-run --user --scope -q -p MemoryMax=3G -p CPUQuota=200% -- .venv/bin/python -m pytest -q",
+    "exit_status": 0,
+    "passed": 150,
+    "pytest_elapsed_seconds": 53.43
+  },
+  "targeted_checks": {
+    "command": "systemd-run --user --scope -q -p MemoryMax=3G -p CPUQuota=200% -- .venv/bin/python -m pytest -q tests/test_championship_diagnosis.py tests/test_racing.py",
+    "exit_status": 0,
+    "passed": 8,
+    "pytest_elapsed_seconds": 2.15
+  },
+  "portable_publication": {
+    "command": "python3 dashboard/verify_publication.py",
+    "exit_status": 0
+  },
+  "model_source_modified": false
+}

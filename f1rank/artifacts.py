@@ -57,6 +57,17 @@ def atomic_json(path: Path, value: dict) -> None:
         Path(name).unlink(missing_ok=True)
 
 
+def write_once(path: Path, obj: dict) -> bool:
+    """Write JSON to a new file; never overwrite. Returns False if the file exists."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        with open(path, "x") as f:
+            json.dump(obj, f, indent=1, default=float)
+    except FileExistsError:
+        return False
+    return True
+
+
 def record(directory: Path, outputs: list[Path], *, model: str, inputs=None,
            details=None, name="manifest.json") -> dict:
     inputs = input_files() if inputs is None else list(inputs)
@@ -129,3 +140,34 @@ def diagnostics(grouped: dict, divergences: int) -> dict:
 def require_convergence(result: dict) -> None:
     if not result.get("converged", False):
         raise RuntimeError(f"Fit failed publication diagnostics: {result}")
+
+
+# Retry ladder for the racing-quality MCMC fits (docs/racing_approach.md, amendment of
+# 2026-10-04): (warm-up multiple, draws multiple, target acceptance; None = the fit's own).
+# The first attempt is the fit as it was made before the amendment. The ratios are those
+# of jobs.ATTEMPTS (700+400, 1,400+800, 2,100+1,600, 2,100+1,600 at 0.98).
+RETRY = ((1, 1, None), (2, 2, None), (3, 4, None), (3, 4, 0.98))
+_FITS: list[list[dict]] = []
+
+
+def fit_until_converged(run, warmup: int, samples: int, seed: int = 0):
+    """Run `run(warmup, samples, target_accept, seed) -> (mcmc, diagnostics)` under RETRY
+    until the publication check passes; return the converged sampler. When every attempt
+    fails, raise as require_convergence does. Each attempt is printed and recorded."""
+    attempts = []
+    for k, (w, s, accept) in enumerate(RETRY):
+        settings = {"warmup": warmup * w, "samples": samples * s, "target_accept": accept, "seed": seed + k}
+        mcmc, result = run(settings["warmup"], settings["samples"], accept, settings["seed"])
+        attempts.append({**settings, **result})
+        print(f"fit attempt {k + 1}: {result}", flush=True)
+        if result.get("converged", False):
+            _FITS.append(attempts)
+            return mcmc
+    _FITS.append(attempts)
+    raise RuntimeError(f"Fit failed publication diagnostics after {len(attempts)} attempts: {attempts[-1]}")
+
+
+def fit_record() -> dict:
+    """The fits made by this process and the attempts of any that needed more than one,
+    for the summary file (`fit_attempts`)."""
+    return {"fits": len(_FITS), "retried": [a for a in _FITS if len(a) > 1]}

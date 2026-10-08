@@ -1,13 +1,13 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import fs from "node:fs/promises";
-import type { Dataset, RacePace } from "../src/types";
+import type { Dataset, RacePace, OverallResult } from "../src/types";
 let current: Dataset;
 
 test.beforeEach(async ({ page, request }) => {
   const pointer = await (await request.get("data/latest.json")).json();
   current = await (await request.get(`data/${pointer.url}`)).json();
-  await page.goto("./");
+  await page.goto("./#drivers");
   await expect(page).toHaveTitle("F1 Analysis");
   await expect(
     page.getByRole("heading", { name: "Drivers", level: 1 }),
@@ -80,6 +80,127 @@ test("season trends support absent entrants and car circuit adjustment", async (
   ).toBeVisible();
 });
 
+test("driver charts split car and driver, and history can show estimates after each race", async ({
+  page,
+}) => {
+  const top = current.breakdown![0];
+  const row = page.getByRole("button", {
+    name: new RegExp(
+      `^${current.drivers.find((d) => d.id === top.id)!.name}: car `,
+    ),
+  });
+  await row.focus();
+  await expect(
+    page
+      .locator("#breakdown-title")
+      .locator("xpath=../../..")
+      .locator(".chart-readout"),
+  ).toContainText("total");
+  await page.getByText("Show as table").first().click();
+  await expect(
+    page.locator(".table-view").first().locator("tbody tr"),
+  ).toHaveCount(current.breakdown!.length);
+  const before = await page
+    .locator(".trend-chart path")
+    .first()
+    .getAttribute("d");
+  await page.getByRole("button", { name: "After each race" }).click();
+  await expect(page.getByText("Estimates after each race")).toBeVisible();
+  const after = await page
+    .locator(".trend-chart path")
+    .first()
+    .getAttribute("d");
+  expect(after).not.toBe(before);
+  await expect(
+    page.getByLabel("Trend season").locator("option"),
+  ).not.toContainText(["All seasons"]);
+});
+
+test("revised history can be shown as rank in each event's field", async ({
+  page,
+}) => {
+  const scale = page.getByLabel("Chart scale");
+  await scale.getByRole("button", { name: "Rank" }).click();
+  await expect(scale.getByRole("button", { name: "Rank" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  const panel = page.locator(".trend-panel").filter({ has: scale });
+  await expect(panel.getByText("RANK IN THE FIELD")).toBeVisible();
+  const point = panel.locator("rect[role='button']").last();
+  await expect(point).toHaveAttribute("aria-label", /P\d+ \(P\d+–P\d+\)/);
+  await point.focus();
+  await expect(panel.locator(".chart-readout")).toContainText(
+    /P\d+ \(P\d+–P\d+\)/,
+  );
+  await page.getByRole("button", { name: "After each race" }).click();
+  await expect(page.getByLabel("Chart scale")).toHaveCount(0);
+});
+
+test("track record shows the forecast published before the next race", async ({
+  page,
+}) => {
+  const upcoming = current.forecast?.next;
+  test.skip(!upcoming, "No forecast for an upcoming race in this release");
+  await page.getByRole("link", { name: "Track record", exact: true }).click();
+  const panel = page.locator("section").filter({
+    has: page.getByRole("heading", {
+      name: `Next race · ${upcoming!.event.race_name}`,
+    }),
+  });
+  await expect(panel).toBeVisible();
+  await expect(
+    panel.getByRole("region", { name: /teammate gaps/ }).locator("tbody tr"),
+  ).toHaveCount(upcoming!.pairs.length);
+  const cars = panel
+    .getByRole("region", { name: /car order/ })
+    .locator("tbody tr");
+  await expect(cars).toHaveCount(upcoming!.cars.length);
+  await expect(cars.first()).toContainText(upcoming!.cars[0].name);
+});
+
+test("track record reports pooled forecast checks and the latest forecast", async ({
+  page,
+}) => {
+  await page.getByRole("link", { name: "Track record", exact: true }).click();
+  const pooled = current.asof!.pooled!;
+  const card = page.locator(".stat-card").filter({
+    hasText: "Teammate gap error",
+  });
+  await expect(card).toContainText(`${pooled.rmse.toFixed(3)}s`);
+  // each baseline comparison is stated only as far as its interval allows
+  await expect(card).toContainText(
+    `${pooled.rmse_zero.toFixed(3)}s for no gap`,
+  );
+  const verdict = (d?: { ci95: [number, number] }) =>
+    !d
+      ? null
+      : d.ci95[1] < 0
+        ? "(model better)"
+        : d.ci95[0] > 0
+          ? "(model worse)"
+          : "(no clear difference)";
+  for (const [d, label] of [
+    [pooled.vs_naive, "for last season’s gap"],
+    [pooled.vs_zero, "for no gap"],
+  ] as const) {
+    const v = verdict(d);
+    if (v) await expect(card).toContainText(`${label} ${v}`);
+  }
+  await expect(
+    page.locator(".chart-legend").filter({ hasText: "No gap" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", {
+      name: `Latest forecast · ${current.asof!.latest!.event.race_name}`,
+    }),
+  ).toBeVisible();
+  await page.getByText("Show as table").click();
+  await expect(page.locator(".table-view tbody tr")).toHaveCount(
+    current.asof!.events.filter((e) => e.n_pairs > 0).length,
+  );
+});
+
 test("comparisons reverse correctly and matrix cells select the actual pair", async ({
   page,
 }) => {
@@ -97,6 +218,11 @@ test("comparisons reverse correctly and matrix cells select the actual pair", as
     .click();
   await expect(page.getByLabel("FIRST DRIVER")).toHaveValue("norris");
   await expect(page.getByLabel("SECOND DRIVER")).toHaveValue("leclerc");
+  await expect(page.locator(".matrix button.teammate")).toHaveCount(
+    current.drivers.flatMap((d) =>
+      current.drivers.filter((o) => o.id !== d.id && o.lineage === d.lineage),
+    ).length,
+  );
   await page.getByRole("button", { name: "Cars", exact: true }).click();
   await expect(page.getByLabel("FIRST CAR")).toHaveValue(current.cars[0].id);
   await expect(page.locator(".matrix tbody tr")).toHaveCount(
@@ -122,9 +248,26 @@ test("health discloses unavailable racing, historical gates and snapshots", asyn
     Object.values(current.validation.gates?.data || {}).filter((v) => !v)
       .length,
   );
-  await expect(page.locator(".archive-top>div")).toHaveCount(5);
+  await expect(page.locator(".archive-top>div").first()).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Updates", exact: true }),
+  ).toBeVisible();
+  // Research models are grouped and collapsed below the published ones.
+  await expect(page.getByText("Status details").first()).toBeHidden();
+  await page.getByText(/^In research \(\d+\)/).click();
+  await expect(page.getByText("Status details").first()).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Methodology", exact: true }),
+  ).toHaveCount(0);
+});
+
+test("methodology has its own page with a reading guide and equations", async ({
+  page,
+}) => {
+  await page.getByRole("link", { name: "Methodology", exact: true }).click();
+  await expect(page).toHaveURL(/#methodology$/);
+  await expect(
+    page.getByRole("heading", { name: "How to read the ratings" }),
   ).toBeVisible();
   await expect(
     page.getByText("A time-varying Bayesian model estimates"),
@@ -282,7 +425,7 @@ test("ranking metrics support browser history, direct links and switching entity
   page,
 }) => {
   const mainNav = page.getByRole("navigation", { name: "Main navigation" });
-  await expect(mainNav.getByRole("link")).toHaveCount(4);
+  await expect(mainNav.getByRole("link")).toHaveCount(7);
   await expect(mainNav.getByRole("link", { name: "Race pace" })).toHaveCount(0);
   await page
     .getByRole("button", { name: "Portable skill Experimental" })
@@ -484,6 +627,25 @@ test("a withheld car race ranking does not hide a supported driver table", async
     page.getByRole("heading", { name: "Car race-pace ranking withheld" }),
   ).toBeVisible();
   await expect(page.locator(".rank-table")).toHaveCount(0);
+  if (current.car_state)
+    await expect(
+      page.getByRole("heading", {
+        name: "Follow-up test: in-season car development",
+      }),
+    ).toBeVisible();
+  // every recorded weekend-information test has a team row on the car view
+  const features = current.race_features ?? [];
+  if (features.length)
+    await expect(
+      page
+        .locator("section")
+        .filter({
+          has: page.getByRole("heading", {
+            name: "Tests of weekend information",
+          }),
+        })
+        .locator("tbody tr"),
+    ).toHaveCount(features.length);
   await expect(
     page.getByRole("button", { name: "Export rankings" }),
   ).toBeDisabled();
@@ -532,9 +694,12 @@ test("an unsupported race ranking cannot replace the previous release", async ({
 for (const view of [
   "drivers",
   "drivers/race",
+  "drivers/overall",
   "cars",
   "cars/race",
   "compare",
+  "forecasts",
+  "methodology",
   "health",
 ]) {
   test(`${view} has no browser errors, no mobile overflow, and accessible controls`, async ({
@@ -550,7 +715,7 @@ for (const view of [
       .evaluateAll((details) =>
         details.forEach((detail) => detail.setAttribute("open", "")),
       );
-    if (view === "health" || view.endsWith("/race")) {
+    if (view === "methodology" || view.endsWith("/race")) {
       await expect(
         page.locator(".method-equation math").first(),
       ).toBeAttached();
@@ -591,3 +756,132 @@ for (const view of [
     expect(errors).toEqual([]);
   });
 }
+
+// Entirely synthetic equal-car outcomes; historical championship files are never fixtures.
+function overallFixture(passed = true): OverallResult {
+  return {
+    status: passed ? "established" : "not established",
+    reason: passed
+      ? "Combined held-out validation passed; this equal-car scenario remains experimental."
+      : "The combined held-out validation has not established an overall ranking.",
+    standings: passed ? [
+      { driver_id: "alpha", name: "Fixture Driver Alpha", points_per_race: 8.25, p_title: .75, rank_median: 1, rank_lo: 1, rank_hi: 2 },
+      { driver_id: "beta", name: "Fixture Driver Beta", points_per_race: 6.5, p_title: .25, rank_median: 2, rank_lo: 1, rank_hi: 2 },
+    ] : [],
+    contributions: passed ? [
+      { driver_id: "alpha", name: "Fixture Driver Alpha", points_per_race: 8.2,
+        losses: { qualifying_pace: .35, first_lap: .2, all: .45 } },
+      { driver_id: "beta", name: "Fixture Driver Beta", points_per_race: 6.4,
+        losses: { qualifying_pace: -.2, first_lap: .05, all: -.1 } },
+    ] : [],
+    evidence: {
+      recorded_at: "2004-01-01T00:00:00Z", fit_id: "synthetic-overall-fixture", data_as_of: "2003-05",
+      qualities_entered: passed ? ["first_lap"] : [], qualities_selected: ["first_lap"],
+      qualities_not_entered: passed ? ["consistency"] : ["first_lap", "consistency"],
+      quality_decisions: [
+        { quality: "first_lap", entered: passed, tested: true, reason: passed
+          ? "Passed the conditional entry test and the combined held-out validation."
+          : "Selected by the conditional entry test, but the combined held-out validation did not pass." },
+        { quality: "consistency", entered: false, tested: true,
+          reason: "Did not establish an improvement when tested alongside the other candidate qualities." },
+        { quality: "overtaking_attack", entered: false, tested: false, reason: "Not tested: no held-out draws" },
+      ],
+      entry_tests: { first_lap: { enters: true }, consistency: { enters: false }, overtaking_attack: { not_run: "no held-out draws" } },
+      excluded_test_seasons: { combined_validation: [2001], heldout_race_stage: [2001, 2002] },
+      combined_validation: { gate: passed }, heldout_race_stage: {},
+      simulated_seasons: 40, n_races_simulated: 5, driver_error_rates_used: false,
+    },
+  };
+}
+
+for (const passed of [true, false]) {
+  test(`equal-car ${passed ? "passed" : "not-established"} fixture is accessible and fits phone widths`, async ({ page }) => {
+    const fixture = overallFixture(passed);
+    const errors: string[] = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    await page.route("**/data/releases/*.json", (route) => route.fulfill({ json: { ...current, overall: fixture } }));
+    await page.goto("./#drivers/overall");
+    await page.reload();
+    const link = page.getByRole("link", { name: "Overall (equal car)", exact: true });
+    await expect(link).toHaveAttribute("aria-current", "page");
+    await expect(page.getByText("Experimental · equal car", { exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Which racing qualities entered?" })).toBeVisible();
+    await expect(page.getByText("Consistency · Not entered", { exact: true })).toBeVisible();
+    await expect(page.getByText("Not tested: no held-out draws", { exact: true })).toBeVisible();
+    await expect(page.getByText("2001, 2002", { exact: true })).toBeVisible();
+    await expect(page.getByText("2001", { exact: true })).toBeVisible();
+    const table = page.getByRole("table", { name: "Equal-car championship standings" });
+    if (passed) {
+      await expect(table.locator("tbody tr")).toHaveCount(fixture.standings.length);
+      await expect(table.locator("tbody tr").first()).toContainText(["Fixture Driver Alpha", "8.25", "75.0%", "1–2"].join(""));
+      const panel = page.getByRole("region", { name: "Contribution breakdown" });
+      await expect(panel.getByRole("heading", { name: "Fixture Driver Alpha" })).toBeVisible();
+      await expect(panel.getByText("+0.35", { exact: true })).toBeVisible();
+      await page.getByRole("button", { name: "Inspect Fixture Driver Beta contributions" }).click();
+      await expect(panel.getByRole("heading", { name: "Fixture Driver Beta" })).toBeVisible();
+      await expect(panel.getByText("−0.20", { exact: true })).toBeVisible();
+      await expect(page.getByText("40 simulated seasons · 5 races per season.", { exact: false })).toBeVisible();
+    } else {
+      await expect(page.getByRole("heading", { name: "Overall ranking not established" })).toBeVisible();
+      await expect(page.getByText(fixture.reason, { exact: true })).toBeVisible();
+      await expect(page.getByText(/Selected by the conditional entry test, but/)).toBeVisible();
+      await expect(page.getByRole("table")).toHaveCount(0);
+      await expect(page.getByRole("region", { name: "Contribution breakdown" })).toHaveCount(0);
+    }
+    for (const width of [1440, 390, 320]) {
+      await page.setViewportSize({ width, height: 900 });
+      const layout = await page.evaluate(() => ({
+        width: window.innerWidth,
+        pageWidth: document.documentElement.scrollWidth,
+        outside: [...document.querySelectorAll("body *")].filter((element) =>
+          element.getBoundingClientRect().right > window.innerWidth).map((element) =>
+          ({ tag: element.tagName, className: element.className, right: element.getBoundingClientRect().right })),
+      }));
+      expect(layout.pageWidth, JSON.stringify(layout)).toBeLessThanOrEqual(width);
+      const audit = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+      expect(audit.violations.map((v) => ({ id: v.id, targets: v.nodes.map((n) => n.target) }))).toEqual([]);
+      if (passed) await expect(table.getByRole("columnheader", { name: "Rank range" })).toBeVisible();
+    }
+    await page.screenshot({ path: `test-results/overall-${passed ? "passed" : "withheld"}-mobile.png`, fullPage: true });
+    expect(errors).toEqual([]);
+  });
+}
+
+test("equal-car direct links and browser history stay under Drivers", async ({ page }) => {
+  await page.getByRole("link", { name: "Overall (equal car)", exact: true }).click();
+  await expect(page).toHaveURL(/#drivers\/overall$/);
+  await expect(page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Drivers", exact: true }))
+    .toHaveAttribute("aria-current", "page");
+  await page.reload();
+  await expect(page.getByRole("link", { name: "Overall (equal car)", exact: true })).toHaveAttribute("aria-current", "page");
+  await page.getByRole("link", { name: "Race pace", exact: true }).click();
+  await expect(page).toHaveURL(/#drivers\/race$/);
+  await page.goBack();
+  await expect(page.getByRole("link", { name: "Overall (equal car)", exact: true })).toHaveAttribute("aria-current", "page");
+  await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Cars", exact: true }).click();
+  await expect(page.getByRole("link", { name: "Overall (equal car)", exact: true })).toHaveCount(0);
+});
+
+for (const state of ["stale", "unavailable", "legacy"] as const) {
+  test(`equal-car ${state} release never falls back to a ranking`, async ({ page }) => {
+    const fixture = { ...overallFixture(), status: state === "legacy" ? "unavailable" : state, evidence: null };
+    await page.route("**/data/releases/*.json", (route) => route.fulfill({ json: { ...current, overall: state === "legacy" ? undefined : fixture } }));
+    await page.goto("./#drivers/overall");
+    await page.reload();
+    await expect(page.getByRole("heading", { name: `Overall ranking ${state === "legacy" ? "unavailable" : state}` })).toBeVisible();
+    await expect(page.getByRole("table")).toHaveCount(0);
+    await expect(page.getByRole("region", { name: "Contribution breakdown" })).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Which racing qualities entered?" })).toHaveCount(0);
+  });
+}
+
+test("a failed overall gate hides even accidentally supplied standings", async ({ page }) => {
+  const fixture = overallFixture();
+  fixture.evidence!.combined_validation.gate = false;
+  await page.route("**/data/releases/*.json", (route) => route.fulfill({ json: { ...current, overall: fixture } }));
+  await page.goto("./#drivers/overall");
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "Overall ranking not established" })).toBeVisible();
+  await expect(page.getByRole("table")).toHaveCount(0);
+  await expect(page.getByRole("region", { name: "Contribution breakdown" })).toHaveCount(0);
+});

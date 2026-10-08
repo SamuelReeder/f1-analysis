@@ -1,0 +1,31 @@
+{
+  "source_revision": "71661e62395cd9ef4212bba82b13b5ef771d412c",
+  "registration_revision": "3539740",
+  "python_suite": {
+    "command": "systemd-run --user --scope -q -p MemoryMax=3G -p CPUQuota=200% -- .venv/bin/python -m pytest -q",
+    "passed": 162,
+    "pytest_elapsed_seconds": 46.98,
+    "exit_status": 0
+  },
+  "portable_publication": {
+    "command": "python3 dashboard/verify_publication.py",
+    "exit_status": 0
+  },
+  "service": {
+    "name": "f1-champconservative.service",
+    "invocation_id": "44b7d83bd4cb4e57b7cd55b423ae4886",
+    "active_at_launch": true,
+    "Slice": "f1.slice",
+    "MemoryMax": 6442450944,
+    "MemorySwapMax": 1073741824,
+    "Nice": 19
+  },
+  "shared_slice": {
+    "CPUQuotaPerSecUSec": "8s",
+    "CPUWeight": 10
+  },
+  "monitoring": {
+    "interval_seconds": 1200,
+    "single_waiter": true
+  }
+}

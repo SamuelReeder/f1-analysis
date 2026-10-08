@@ -1,3 +1,4 @@
+import { useCallback, useRef, useState } from "react";
 import { Layers3 } from "lucide-react";
 import type { Estimate, Metric } from "./types";
 import { signed } from "./lib";
@@ -35,10 +36,12 @@ export function Band({
   value,
   domain,
   compact = false,
+  spectrum = false,
 }: {
   value: Estimate;
   domain: number[];
   compact?: boolean;
+  spectrum?: boolean;
 }) {
   const pos = (v: number) =>
     8 + ((v - domain[0]) / (domain[1] - domain[0])) * 184;
@@ -64,7 +67,7 @@ export function Band({
         y2="13"
         stroke="currentColor"
         strokeWidth="3"
-        opacity=".28"
+        opacity={spectrum ? .8 : .28}
       />
       <line
         x1={pos(value.q25 ?? value.q05)}
@@ -74,7 +77,7 @@ export function Band({
         stroke="currentColor"
         strokeWidth="6"
         strokeLinecap="round"
-        opacity=".65"
+        opacity={spectrum ? 1 : .65}
       />
       <circle
         cx={pos(value.median)}
@@ -130,4 +133,22 @@ export function MetricControl({
       </button>
     </div>
   );
+}
+
+// The rendered width of a chart, so SVG text keeps its real size on any screen.
+export function useWidth(fallback = 900) {
+  const [width, setWidth] = useState(fallback);
+  const observer = useRef<ResizeObserver | null>(null);
+  const ref = useCallback((element: Element | null) => {
+    observer.current?.disconnect();
+    if (!element) return;
+    const update = () =>
+      setWidth(
+        Math.max(280, Math.round(element.getBoundingClientRect().width)),
+      );
+    update();
+    observer.current = new ResizeObserver(update);
+    observer.current.observe(element);
+  }, []);
+  return [ref, width] as const;
 }
