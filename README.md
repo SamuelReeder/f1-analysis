@@ -665,6 +665,13 @@ model, and use qualifying and race metrics to explain its result. It specifies
 the weaknesses to address, implementation sequence, validation requirements and
 refresh integration. It is a roadmap; the replacement model has not yet been fitted.
 
+The [successor implementation contract](docs/overall_candidate.md) documents the
+joint qualifying/lap/finish likelihood, current race states, common-team
+counterfactual, retirement scoring, countback and separate uncertainty measures
+now implemented under `f1rank/overall/`. Synthetic interface tests and a real-data
+preflight exercise the code. Recovery, full fitting, predictive calibration and
+production integration remain unfinished; this code does not publish a new order.
+
 The qualifying folds for **2014 and 2021** failed every prescribed attempt, so
 those seasons are excluded wherever season-ahead qualifying features are needed.
 They can still train later folds. Wet pace excludes 2021; its test has no 2014 races.

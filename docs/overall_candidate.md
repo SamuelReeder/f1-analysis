@@ -1,0 +1,172 @@
+# Overall successor: implementation contract
+
+Status: development implementation, not an accepted model or a new published
+ranking. This implements the common-state and simulation foundations in the
+[Overall plan](overall_model_plan.md). Its source and this contract are hashed
+together by `f1rank.overall.provenance`; nested modules are included. Historical
+fits, previews, gate results and their registrations remain unchanged.
+
+## Target and current boundary
+
+The target is **current performance under equal machinery, team support and
+mechanical opportunity**, summarized by expected Grand Prix points under a common
+reference scenario. Qualifying and race measurements belong to the same model.
+No current-team effect contributes to the counterfactual driver score. This is
+conditional performance; observational driver/car separation is still uncertain.
+
+The code presently supplies a joint likelihood, bounded data design, joint-draw
+interface, weekend simulation, numerical checks and provenance. It is not wired
+into the public producer. Real-data preflight only builds inputs; it never fits,
+scores drivers or sets an acceptance flag. There is no alternative dashboard
+ranking. The old failed combined gate cannot authorize this candidate.
+
+Before real-data fitting or scoring, complete and commit the recovery protocol,
+frozen reference-calendar artifact, outcome calibration tests, chronological
+cutoffs/baselines and new prospective protocol described below. This document
+does not pretend those pending scientific decisions are already registered.
+
+## Shared probability model
+
+The executable specification is [model.py](../f1rank/overall/model.py). All
+observations enter one NumPyro model; they share the same latent states. Related
+fits are never combined by pairing independently shuffled draws.
+
+Let `q[i]` be current portable qualifying skill at a driver-event. The existing
+qualifying likelihood in `f1rank.model.model` is included directly, with
+`compat_unit="era"`: persistent driver and car walks, experience/age terms,
+team-by-regulation-era effects, circuit loading, transient driver/car effects,
+car-segment effects, segment intercepts and Student-t observation noise. Its
+existing priors and centering constraints are inherited verbatim. This is a
+starting likelihood, not a claim that every existing structural choice is proven.
+
+Total current race ability is `r[i] = centre(a*q[i] + u[i])`. The coefficient `a`
+has a Normal prior centered on unity. The residual `u` has a partially pooled
+driver level and a random walk with separate within-season and between-season
+innovation scales. Thus race performance can depart from qualifying and change
+over time. No legacy career residual or additional direct qualifying coefficient
+is added again to race strength. All prior scales are specified in the executable
+model before fitting; they must not be selected using a desired driver's order.
+
+The observed race state adds a team-by-era nuisance, car package and transient
+weekend effects. Team nuisance combines a learned loading on qualifying's
+team effect and its own partially pooled residual. Car nuisance combines a
+learned loading on qualifying's persistent car/circuit state, a sum-to-zero
+team-season residual and a race-day car effect. Driver weekend form combines a
+learned loading on the qualifying weekend deviation and an independent race-day
+deviation. Driver and team terms are centered by event; car terms by event's car
+field. Car-season residuals use the existing orthonormal contrasts.
+
+Dry race laps measure that total observed state after controlling for event
+intercept, lap trend, compound, tyre age, transient wear, traffic and serial
+correlation. These controls retain the existing total-race model's priors and
+Student-t innovation construction. That construction is an AR approximation: its
+first-lap scale is inherited from the existing model, not an exact stationary
+Student-t marginal. Permanent driver tyre/wet/racecraft/error components are not
+silently enabled by this implementation.
+
+Finishing strength is `pace[context]*total_race_state - grid[context]*log(slot)`.
+The conditional order of running finishers uses a Plackett–Luce likelihood.
+Grid and pace coefficients are positive and partially pooled by circuit, with
+wet and neutralisation effects. This is an outcome-level approximation to
+strategy, traffic and conditions; it is not a physical strategy simulator.
+Conditional independence between clean laps and finish order, given the shared
+states, remains an assumption requiring calibration.
+
+Completion uses a circuit/condition geometric per-lap hazard, with finishers
+right-censored. It is currently a **common all-cause hazard**. The code does not
+separate causal mechanical risk, driver mistakes or correlated incidents. That
+limitation must be addressed or explicitly accepted and validated under the
+final target before publication. It cannot be described as a validated model of
+individual driver reliability.
+
+## Data boundaries
+
+[design.py](../f1rank/overall/design.py) filters raw tables at the cutoff before
+constructing any statistics, factors or identifiers. Qualifying uses the existing
+window and robust-lap rules. Dry laps and context-dependent outcomes use the
+declared FastF1-era window, avoiding the incomplete tyre archive. Missing weather
+excludes that event from the outcome likelihood and is recorded, rather than
+being labeled dry. Race entrants absent from qualifying receive latent states
+and uncertainty. Team identity conflicts and missing driver metadata fail.
+
+The latest race's entrants define the field. Non-starts, disqualifications and
+excluded results do not enter the completion/order likelihood; those exclusions
+are recorded. Retirement rows enter completion exposure; only running finishers
+enter conditional finishing order. This selection is explicit and requires
+separate retirement calibration. The data design's injectable cleaned-lap argument
+is for synthetic fixtures; the real preflight always uses raw cutoff-first
+cleaning. No old failed qualifying fold is silently declared fixed here: the
+new joint model needs a separate, complete fold inventory.
+
+## Counterfactual weekend and scoring
+
+[simulation.py](../f1rank/overall/simulation.py) flattens one checked joint
+posterior's chain/draw axes consistently across driver states and coefficients.
+Missing states or mismatched axes fail. The same current states apply throughout
+the reference calendar; future career development is not simulated.
+
+Qualifying draws shared session scales, heavy-tailed segment observations and
+driver weekend form, then applies elimination. Equal car, car-segment and session
+intercept terms cancel in within-session comparisons; no independent car noise
+is assigned to drivers. Race weekend deviations share the fitted qualifying
+form component. Qualifying affects race outcomes through the generated grid.
+
+The simulator orders cars by completed laps, then their last line-crossing
+order. A retired car can remain classified and receive points. It does not yet
+model lapped running cars or correlated retirements. It requires a full-distance
+finisher; shortened races fail explicitly rather than receiving full points.
+The final scenario must declare its distance, elimination format and condition
+mix. It must not be selected by inspecting driver standings.
+
+Scoring uses the GP points array and classification fraction committed in the
+simulator. Championship ties use race-position countback, then qualifying-position
+countback. Residual exact ties retain a rank interval and share title probability.
+Continuous race-order draws exclude exact race dead heats; that is a simulation
+assumption, not a replacement sporting rule. Sources are FIA
+[General Provisions, championship and scoring articles](https://www.fia.com/system/files/documents/fia_2026_f1_regulations_-_section_a_general_provisions_-_iss_03_-_2026-06-25.pdf)
+and [Sporting Regulations, race classification](https://www.fia.com/system/files/documents/fia_2026_f1_regulations_-_section_b_sporting_-_iss_09_-_2026-10-01.pdf).
+
+Driver identities determine the attachment of random draws, independently of
+input row order. An alphabetic identity is never a championship sporting
+tiebreak. Replicate seasons within each posterior draw distinguish expected
+performance uncertainty from season variability. Conditional Monte Carlo error
+is reported separately. Expected-performance intervals are withheld when their
+simulation precision check fails. Reported simulation MCSE is conditional on
+the posterior sample; MCMC integration error is a separate check.
+
+## Numerical contract
+
+The new checks in [diagnostics.py](../f1rank/overall/diagnostics.py) use
+rank-normalized R-hat, bulk and tail effective sample sizes and mean Monte Carlo
+error relative to posterior standard deviation. Thresholds and minimum chain
+requirements are explicit constants. Constant stochastic coordinates fail;
+structurally constant deterministic coordinates are reported separately. The
+legacy diagnostics and previous accepted/failed runs are not reclassified.
+
+The existing fixed `artifacts.RETRY` ladder remains the only permitted retry
+policy for a future candidate fitter. Do not weaken a threshold after seeing
+results. A code correction changes the source fingerprint and requires a new
+run, preserving the failure and amendment. No fitter or real-data fit is claimed
+by the current interface implementation.
+
+## Remaining acceptance work
+
+- Complete synthetic recovery and simulation-based calibration, including the
+  real teammate-transfer network, sparse rookies, regulation changes and
+  intentionally confounded driver/car states. Finite gradients are necessary
+  but do not demonstrate recovery or convergence.
+- Set the immutable reference calendar and its forecast-time condition policy;
+  complete the lapping/shortened-event and reliability assumptions. Resolve
+  whether the common all-cause hazard meets the stated target.
+- Implement the checked fitter, fixed retries, caches and immutable run receipts;
+  measure actual fitting runtime and memory before choosing a refresh schedule.
+- Freeze chronological development replay, comparison arms and calibration
+  requirements. Register new future predictions before claiming independent
+  evidence of improvement. The old candidate's registration cannot be reused.
+- Integrate the accepted producer, version-aware canonical export, refresh/cache
+  workflow and rollback only after those dependencies are met. Complete software
+  and intended-runner checks before requesting deployment approval.
+
+This implementation addresses structural causes of the surprising preview,
+without choosing a desired Hadjar position. It does not establish any driver's
+new rank and must not change the live ranking on the strength of unit tests.

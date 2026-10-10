@@ -3,6 +3,12 @@
 Prepared 2026-10-08. This is an implementation roadmap, not a fitted model,
 completed statistical registration, or permission to publish a failed result.
 
+Implementation progress is recorded separately in the
+[successor contract](overall_candidate.md). The shared likelihood, data interfaces
+and simulation now have code and synthetic checks. The scientific acceptance and
+production checklist below remains open; implementation is not evidence of a
+successful real-data fit or predictive improvement.
+
 The product goal is a single canonical Overall ranking. Improve and eventually
 replace the existing championship pipeline in place. Qualifying, race pace and
 other measurements explain that ranking; they are not alternative answers to
