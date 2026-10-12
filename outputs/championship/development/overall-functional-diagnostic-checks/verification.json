@@ -1,0 +1,210 @@
+{
+  "recorded_at": "2026-10-12T19:12:42.265854+00:00",
+  "evidence_commit": "f597c7ca453354f43775d9ddc0903a28dca55449",
+  "purpose": "grouped_moment_software_checks_and_fixed_synthetic_diagnostic_audit",
+  "reports": {
+    "connected": {
+      "source_commit": "924bf821d21e818b4568cf9d13dd01071f33c745",
+      "xml": "connected.xml",
+      "xml_sha256": "e99f7b980d08a5ec6c06821d9cfde5c502843b2404d366a17ec5f4c12ad9dd7b",
+      "output": "connected.txt",
+      "output_sha256": "48917d0854f0be6e151cf75190fb9d094006acebcdb31ec95cf5968e44a79866",
+      "tests": 136,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "reported_seconds": 10.847
+    },
+    "postwrite": {
+      "source_commit": "61a1b794389227a71becfe1229991f0df7867224",
+      "xml": "postwrite.xml",
+      "xml_sha256": "cf7427404796ff78dc9a2920afa35dc69a2a14399ffb75322e62a863c07d719d",
+      "output": "postwrite.txt",
+      "output_sha256": "45ec6775197fbcc2566fcadaee5cccedd4f287953c8c2bc79e4d6687dafc1d87",
+      "tests": 138,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "reported_seconds": 10.98
+    }
+  },
+  "focused_suites_overlap": true,
+  "full_repository_suite_rerun": false,
+  "test_scope": {
+    "memory_max": "3G",
+    "cpu_quota": "200%",
+    "slice": "f1.slice",
+    "nice": 19
+  },
+  "audit": {
+    "file": "noise-audit/audit.json",
+    "sha256": "6dce9eaf0d3d319ef6d13cacab69229109e9f20bacb2503145bd165a3e3565fa",
+    "source_commit": "924bf821d21e818b4568cf9d13dd01071f33c745",
+    "trace_file": "noise-audit/constructed_traces.npz",
+    "trace_sha256": "68f211fb8c2127a44d3f59d675a57ec3fb116bf890ace7e64504f20276c57f8b",
+    "cases": {
+      "separated_chain": {
+        "exact_diagnostics": {
+          "converged": false,
+          "failures": [
+            "expected_points: convergence/precision threshold failed"
+          ],
+          "parameters": [
+            {
+              "parameter": "expected_points",
+              "passed": false,
+              "rhat_max": 2.8419822413857196,
+              "bulk_ess_min": 4.638101109680227,
+              "tail_ess_min": 28.294034459882816,
+              "mcse_sd_max": 0.4933761751798557,
+              "constant_coordinates": 0
+            }
+          ],
+          "constants": [],
+          "empty_sites": [],
+          "n_draws": 3200,
+          "n_chains": 4,
+          "divergences": 0
+        },
+        "noisy_diagnostics": {
+          "converged": true,
+          "failures": [],
+          "parameters": [
+            {
+              "parameter": "expected_points",
+              "passed": true,
+              "rhat_max": 0.9995310149777734,
+              "bulk_ess_min": 3209.775328426475,
+              "tail_ess_min": 3087.645761268973,
+              "mcse_sd_max": 0.017637155157653444,
+              "constant_coordinates": 0
+            }
+          ],
+          "constants": [],
+          "empty_sites": [],
+          "n_draws": 3200,
+          "n_chains": 4,
+          "divergences": 0
+        },
+        "inherited_conditional_precision_passed": true,
+        "diagnostic_failure_masked": true
+      },
+      "mixed_control": {
+        "exact_diagnostics": {
+          "converged": true,
+          "failures": [],
+          "parameters": [
+            {
+              "parameter": "expected_points",
+              "passed": true,
+              "rhat_max": 0.9996837150910345,
+              "bulk_ess_min": 3235.256381047647,
+              "tail_ess_min": 2864.9037304637545,
+              "mcse_sd_max": 0.017572089717943464,
+              "constant_coordinates": 0
+            }
+          ],
+          "constants": [],
+          "empty_sites": [],
+          "n_draws": 3200,
+          "n_chains": 4,
+          "divergences": 0
+        },
+        "noisy_diagnostics": {
+          "converged": true,
+          "failures": [],
+          "parameters": [
+            {
+              "parameter": "expected_points",
+              "passed": true,
+              "rhat_max": 1.0004580004318497,
+              "bulk_ess_min": 3142.7526299066503,
+              "tail_ess_min": 2975.1333452037484,
+              "mcse_sd_max": 0.017845915573341097,
+              "constant_coordinates": 0
+            }
+          ],
+          "constants": [],
+          "empty_sites": [],
+          "n_draws": 3200,
+          "n_chains": 4,
+          "divergences": 0
+        },
+        "inherited_conditional_precision_passed": true,
+        "diagnostic_failure_masked": false
+      }
+    },
+    "limits": {
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r4114ae20ad6f42608bd9330d88c42eb7.scope",
+      "memory_max": "3221225472",
+      "cpu_max": "200000 100000"
+    }
+  },
+  "storage": {
+    "file": "storage/resources.json",
+    "sha256": "9b6754f8ed837af82e9abb80aebcbd27f2b4ce668ad536ec030d4b39bf13adf0",
+    "source_commit": "8bf6cea8644e61357a196eebd2fb10d4e6aed285",
+    "posterior_shape": [
+      4,
+      3200
+    ],
+    "field_size": 22,
+    "replicates": 250000,
+    "array_bytes": 65433600,
+    "archive_bytes": 32879325,
+    "construction_seconds": 0.08869529102230445,
+    "write_seconds": 0.9976296660024673,
+    "read_seconds": 0.34831425099400803,
+    "total_monotonic_seconds": 1.5917543719988316,
+    "process_max_rss_kib": 470680,
+    "checked_round_trip_exact": true,
+    "loaded_arrays_read_only": true,
+    "temporary_fixture_removed": true,
+    "self_supplied_format_fixture_metadata": true,
+    "limits": {
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-radb55def66f0492fa8ba408a23265fd6.scope",
+      "memory_max": "3221225472",
+      "cpu_max": "200000 100000"
+    }
+  },
+  "storage_helper_and_summary_unchanged_since_measurement": true,
+  "postwrite_controller_guard_source": "61a1b794389227a71becfe1229991f0df7867224",
+  "protected_sources_unchanged_since": "063c36318424764a29f514ceed1b171f53c5aafe",
+  "protected_paths": [
+    "f1rank",
+    "extract",
+    "data",
+    "docs/overall_rotation_profile_proposal.json"
+  ],
+  "package_versions_observed_after_runs": {
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "arviz-stats": "1.3.3"
+  },
+  "original_failure_unchanged": true,
+  "pending_experiment_approval_unchanged": true,
+  "mcmc_run": false,
+  "real_driver_ranking_produced": false,
+  "full_posterior_workload_executed": false,
+  "mcmc_precision_verified": false,
+  "rank_precision_established": false,
+  "scientific_evidence_verified": false,
+  "publication_allowed": false,
+  "full_goal_complete": false,
+  "checks": [
+    "Grouped moments agree with direct covariance and paired-loss arithmetic while retaining chain/draw axes",
+    "Archive reader rejects changed files, identities, axes, counts, members, invalid covariance and unsupported acceptance flags",
+    "A protocol change during companion writing leaves a failed receipt and no completed summary",
+    "Exact constructed separated-chain means fail the unchanged checker while their noisy estimates pass; the mixed control passes both",
+    "Largest existing retry-shape storage fixture round trips exactly under recorded local caps; no fit metadata is authenticated by that fixture"
+  ],
+  "limitations": [
+    "The fixed constructed-trace audit is neither sampler output nor evidence about a real driver",
+    "Passing diagnostics on noisy conditional means do not establish latent functional convergence or rank precision",
+    "The storage fixture supplies placeholder fit identities and its own format metadata; it measures local I/O, not a full canonical workload",
+    "The postwrite controller guard was added after storage measurement; the measured reader/writer and summary are unchanged",
+    "Diagnostic-library package versions were observed after the runs; original reports did not capture them before execution",
+    "Recorded monotonic durations and UTC intervals differ; no cause or full-run runtime is established",
+    "No scientific gate, numerical threshold, seed, model or pending proposal was changed; separate functional-precision registration and validation remain open"
+  ]
+}

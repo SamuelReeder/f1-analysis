@@ -136,6 +136,34 @@ scientific protocols, calibrated scenario, full-workload measurement, accepted
 export and refresh integration remain required. It produced no real-driver
 ranking, MCMC fit or publication and did not change the pending numerical study.
 
+The [grouped diagnostic verification](../outputs/championship/development/overall-functional-diagnostic-checks/verification.json)
+adds a checked companion containing per-chain, per-draw point means, conditional
+covariances and paired explanation-loss moments. It retains the complete
+replicate inventory and rejects changed artifacts, invalid covariance and
+unsupported acceptance flags. Inputs are checked again after the companion is
+written; a change during writing leaves a failed receipt without a completed
+summary. The final focused suite passed 138 checks. It overlaps the earlier
+suite and is not a new full-repository or browser run.
+
+The separately frozen synthetic audit reproduced a diagnostic limitation:
+the constructed separated-chain exact means failed the existing checker, while
+their finite-simulation estimates passed it. The mixed control passed both.
+This is evidence about that constructed trace and its added simulation noise,
+not about any driver's fit. No threshold, seed or model was changed. Passing a
+checker on noisy conditional means cannot by itself establish functional MCMC
+precision or reliable near-tie ranks; the registered procedure and its validation
+remain open. The [definition](overall_functional_diagnostics.md) preserves that
+acceptance boundary.
+
+The fixed [storage fixture](overall_moment_resources.md) exercised the largest
+existing retry draw shape under the local caps, with exact read-only array
+round trips and removal of its temporary archive. Its self-supplied placeholder
+fit metadata checks format consistency only. It does not authenticate a fit,
+measure the full nested simulation or establish intended-runner resources.
+The storage reader/writer was unchanged by the later controller input guard.
+The original failed profile, pending coordinate-study approval, public payload
+and scientific acceptance flags remain unchanged.
+
 Interface verification is recorded under
 [`overall-interface-checks`](../outputs/championship/development/overall-interface-checks/verification.json).
 The final run installed dependencies from the lockfile, built for the repository
