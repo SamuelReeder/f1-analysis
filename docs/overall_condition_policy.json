@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "id": "historical_joint_circuit_conditions_v1",
+  "status": "development_specification_before_condition_evaluation",
+  "states": ["dry_green", "dry_neutralised", "wet_green", "wet_neutralised"],
+  "prior_alpha": [0.5, 0.5, 0.5, 0.5],
+  "history": "One context per event in the bounded shared design risk inventory, using the existing outcome window and observed wet/neutralisation definitions. Preserve exclusions; do not infer context from absent records.",
+  "likelihood": "Categorical joint wet/neutralisation state, independent events conditional on a circuit probability vector.",
+  "posterior": "Independent per-circuit Dirichlet(prior_alpha + event_counts). No pooling, decay, month effects or fitted hyperparameters.",
+  "unseen_circuit": "Use the unchanged prior when the circuit has no eligible context history.",
+  "dependence": "Share each circuit probability vector across its future visits within a posterior trajectory; draw a single event condition shared by all entrants. Separate circuit vectors are independent.",
+  "race_parameters": "Condition frequencies have independent priors and factor from the existing outcome posterior conditional on observed historical contexts. Sample on the same chain/draw axes in a separate identity-keyed random namespace.",
+  "single_event_scoring": "Analytically integrate condition-frequency uncertainty with its posterior mean, sum condition-specific joint target/panel masses within each paired race-parameter draw, then normalize over both conditions and draws. Do not average context-specific conditional scores using unadjusted weights.",
+  "season_simulation": "Use shared sampled circuit probabilities, not independent posterior-mean condition draws for repeated visits.",
+  "forecast_source": "Training history only; observed test-event conditions and later data are forbidden.",
+  "scope": "An explicit historical approximation for development. No weather nowcast, source-vintage verification, seasonality, nonstationarity, incident causality, qualifying-weather response or accepted scoring registration is established.",
+  "tuning": "Preserve this version and all results. Revisions require a separately declared version, never adjustment after seeing a favorable or unfavorable score.",
+  "scientific_acceptance_established": false,
+  "independent_evidence_established": false,
+  "publication_allowed": false
+}
