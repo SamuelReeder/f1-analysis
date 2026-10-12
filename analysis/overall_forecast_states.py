@@ -14,14 +14,14 @@ import numpy as np
 from analysis.overall_forecast_catalog import build_catalog, _time
 from f1rank.model import CAR_FIRST_SD, CAR_STEP_DF
 from f1rank.lineage import REGULATION_RESETS
-from f1rank.overall.fitting import arrays_digest
 
 # The fixed scale of overall_car_contrast in f1rank.overall.model.model.
 # Its trace prior is checked against this value in the equivalence fixture.
 RACE_CAR_SD = 1.5
+DEFAULT_DRAW_BATCH = 128
 
 
-def _parameters(design, posterior):
+def _parameters(design, posterior, *, validate_values=True):
     q = design.qualifying.arrays()
     scalar = ("sd_level", "sd_skill_race", "sd_skill_season", "exp_gain", "exp_scale", "age_slope",
         "overall_sd_level", "overall_sd_drift_race", "overall_sd_drift_season", "overall_qualifying_link",
@@ -43,13 +43,40 @@ def _parameters(design, posterior):
         raise ValueError("Grouped chain and draw axes are required")
     for name, value in p.items():
         expected = shape + ((vectors[name],) if name in vectors else ())
-        if value.dtype.kind not in "fiu" or value.shape != expected or not np.isfinite(value).all():
+        if value.dtype.kind not in "fiu" or value.shape != expected:
             raise ValueError(f"Invalid joint axes or values for {name}")
-        if (name.startswith("sd_") or name.startswith("overall_sd_")) and (value < 0).any():
-            raise ValueError(f"Negative scale for {name}")
-    if (p["exp_scale"] <= 0).any() or any(((p[k] < 0) | (p[k] > 1)).any() for k in ("rho", "rho_reset")):
-        raise ValueError("Invalid experience scale or car carryover")
+        if validate_values:
+            _valid_values(name, value)
     return p, q
+
+
+def _valid_values(name, value):
+    if not np.isfinite(value).all():
+        raise ValueError(f"Nonfinite values for {name}")
+    if (name.startswith("sd_") or name.startswith("overall_sd_")) and (value < 0).any():
+        raise ValueError(f"Negative scale for {name}")
+    if name == "exp_scale" and (value <= 0).any():
+        raise ValueError("Invalid experience scale")
+    if name in ("rho", "rho_reset") and ((value < 0) | (value > 1)).any():
+        raise ValueError("Invalid car carryover")
+
+
+def _checked_parameter_digest(parameters, batch_size):
+    """Same identity as arrays_digest, without a full array's bytes/boolean copy.
+
+    Validate every draw before yielding anything, so a bad final batch cannot
+    silently leave a usable partial forecast. C-order bytes preserve the existing
+    identity even for noncontiguous arrays and memory-mapped archive members.
+    """
+    digest = hashlib.sha256()
+    for name, value in sorted(parameters.items()):
+        digest.update(f"parameters:{name}:{value.dtype.str}:{value.shape}".encode())
+        for chain in range(value.shape[0]):
+            for start in range(0, value.shape[1], batch_size):
+                part = value[chain, start:start + batch_size]
+                _valid_values(name, part)
+                digest.update(np.ascontiguousarray(part).tobytes())
+    return digest.hexdigest()
 
 
 def _walk(first, increments, carry=None):
@@ -101,32 +128,28 @@ def reconstruct_history(design, posterior):
 
 class _Noise:
     """Streams attach to state identities, independently of field row ordering."""
-    def __init__(self, seed, shape):
+    def __init__(self, seed, shape, draw_slice=None):
         if type(seed) is not int or seed < 0:
             raise ValueError("An explicit nonnegative integer forecast seed is required")
-        self.seed, self.shape = seed, shape
+        self.seed, self.shape, self.draw_slice = seed, shape, draw_slice
 
     def draw(self, site, identity, *, student=False):
         key = json.dumps([self.seed, site, identity], separators=(",", ":"), allow_nan=False).encode()
         rng = np.random.default_rng(int.from_bytes(hashlib.sha256(key).digest(), "big"))
-        return rng.standard_t(CAR_STEP_DF, size=self.shape) if student else rng.normal(size=self.shape)
+        value = rng.standard_t(CAR_STEP_DF, size=self.shape) if student else rng.normal(size=self.shape)
+        # Replay the original short chain/draw stream before taking the batch.
+        # Skipping Normal/Student-t outputs by raw RNG steps would be incorrect:
+        # their algorithms can consume a variable number of underlying values.
+        return value if self.draw_slice is None else value[:, self.draw_slice].copy()
 
 
 def _centre(value):
     return value - value.mean(axis=-1, keepdims=True)
 
 
-def forecast_states(design, snapshots, posterior, *, seed, training_arrays_key):
-    """Propagate a complete announced path at one information origin.
-
-    Supply one snapshot for EVERY intervening event, with cumulative calendars
-    and participation counts. A snapshot contains no outcomes. The future path
-    is conditional on its announced fields; unknown lineup/schedule changes are
-    not inferred here. A verified source and condition policy are still required.
-    """
+def _catalogs(design, snapshots, training_arrays_key):
     if not isinstance(snapshots, (list, tuple)) or not snapshots:
         raise ValueError("A complete future field path is required")
-    p, q = _parameters(design, posterior)
     catalogs = [build_catalog(design, s) for s in snapshots]
     if any(c["training_arrays_key"] != training_arrays_key for c in catalogs):
         raise ValueError("Joint posterior and forecast training arrays do not match")
@@ -148,12 +171,49 @@ def forecast_states(design, snapshots, posterior, *, seed, training_arrays_key):
             if driver in metadata and declared != metadata[driver]:
                 raise ValueError("Driver metadata changed along a single-origin forecast path")
             metadata[driver] = declared
-    history = _history(design, p, q)
-    noise = _Noise(seed, p["sd_level"].shape)
-    driver_state, car_state, stints, loads, race_cars = {}, {}, {}, {}, {}
-    for row in design.qualifying.entries.itertuples():
-        driver_state[row.driver_id] = (row.event_idx, row.season,
-            history["qualifying_walk"][..., row.entry_idx], history["race_residual"][..., row.entry_idx])
+    return catalogs
+
+
+def _terminal_history(design, p, q):
+    """Only latest walks are needed; never allocate draw x historical-entry states."""
+    e, c = design.qualifying.entries, design.qualifying.cars
+    if not np.array_equal(e.entry_idx, np.arange(len(e))) or not np.array_equal(c.car_idx, np.arange(len(c))):
+        raise ValueError("Training states are not in their declared index order")
+    drivers, cars = {}, {}
+    for row in e.itertuples():
+        i = row.entry_idx
+        if q["entry_first"][i]:
+            # Match the array recurrence's promotion from the floating gap array.
+            qw = (p["sd_level"] * p["level_z"][..., row.driver_idx]).astype(float)
+            rr = (p["overall_sd_level"] * p["overall_level_z"][..., row.driver_idx]).astype(float)
+        else:
+            _, _, qw, rr = drivers[row.driver_id]
+            same = q["entry_same_season"][i]
+            gap = np.sqrt(q["entry_event_gap"][i] if same else max(q["entry_season_gap"][i], 1))
+            qw = qw + p["sd_skill_race" if same else "sd_skill_season"] * gap * p["skill_z"][..., i]
+            rr = rr + p["overall_sd_drift_race" if same else "overall_sd_drift_season"] * gap * p["overall_walk_z"][..., i]
+        drivers[row.driver_id] = (row.event_idx, row.season, qw, rr)
+    for row in c.itertuples():
+        i = row.car_idx
+        first, start, reset = q["car_first"][i], q["car_season_start"][i], q["car_reset"][i]
+        if first or start:
+            jump = np.where(first, CAR_FIRST_SD,
+                np.where(reset, p["sd_car_reset"], p["sd_car_season"]))
+            car = jump * p["car_jump_z"][..., i]
+        else:
+            car = p["sd_car_race"] * p["car_step_z"][..., i]
+        if not first:
+            carry = p["rho_reset" if reset else "rho"] if start else 1.
+            car = car + carry * cars[row.team][1]
+        cars[row.team] = (row.season, car)
+    return drivers, cars
+
+
+def _forecast_batch(design, catalogs, p, q, noise):
+    driver_state, car_state = _terminal_history(design, p, q)
+    stints, loads, race_cars = {}, {}, {}
+    season_contrast = p["overall_car_contrast"] @ np.asarray(design.outcomes["car_basis"]).T
+    for row in design.qualifying.entries.drop_duplicates("era_stint_idx").itertuples():
         key = (row.driver_id, row.team, row.era)
         stints[key] = (p["sd_compat"] * p["compat_z"][..., row.era_stint_idx],
             p["overall_sd_team"] * p["overall_team_z"][..., row.era_stint_idx])
@@ -167,9 +227,7 @@ def forecast_states(design, snapshots, posterior, *, seed, training_arrays_key):
         # Simply combining zero-sum old contrasts with an independent new team
         # would understate the newcomer's relative uncertainty.
         mean = RACE_CAR_SD / np.sqrt(counts[row.season]) * noise.draw("race_car_mean", int(row.season))
-        race_cars[key] = history["car_season_contrast"][..., index] + mean
-    for row in design.qualifying.cars.itertuples():
-        car_state[row.team] = (row.season, history["car_persistent"][..., row.car_idx])
+        race_cars[key] = season_contrast[..., index] + mean
 
     events = []
     for catalog in catalogs:
@@ -239,9 +297,56 @@ def forecast_states(design, snapshots, posterior, *, seed, training_arrays_key):
         events.append(dict(event_id=event, drivers=drivers, cars=teams, entry_car=entry_car,
             states=states, catalog=catalog, circuit_factor=factor,
             circuit_factor_policy="training factor; unseen circuit uses the existing no-adjustment convention"))
-    return dict(purpose="development_state_forecast", axes=["chain", "draw", "driver_or_car"],
-        events=events, training_arrays_key=training_arrays_key, seed=seed,
-        implementation_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-        consumed_posterior_key=arrays_digest({"parameters": p}),
-        latent_states_propagated=True, convergence_verified=False, source_availability_verified=False,
-        outcome_prediction_available=False, independent_evidence_established=False, publication_allowed=False)
+    return events
+
+
+def iter_forecast_states(design, snapshots, posterior, *, seed, training_arrays_key,
+                         draw_batch_size=DEFAULT_DRAW_BATCH):
+    """Yield a complete announced path for each contiguous batch of joint draws.
+
+    All chains stay together. The caller must account for every draw_range;
+    stopping the iterator early does not constitute a complete prediction.
+    Input posterior arrays may be read-only memory maps. This is not a loader or
+    fit checker, and callers must still verify archive/source/convergence.
+    """
+    if type(draw_batch_size) is not int or draw_batch_size < 1:
+        raise ValueError("Draw batch size must be a positive integer")
+    p, q = _parameters(design, posterior, validate_values=False)
+    shape = p["sd_level"].shape
+    _Noise(seed, shape)  # fail before scanning arrays for an invalid seed
+    catalogs = _catalogs(design, snapshots, training_arrays_key)
+    key = _checked_parameter_digest(p, draw_batch_size)
+    implementation = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    for start in range(0, shape[1], draw_batch_size):
+        stop = min(start + draw_batch_size, shape[1])
+        part = {name:value[:, start:stop] for name, value in p.items()}
+        events = _forecast_batch(design, catalogs, part, q, _Noise(seed, shape, slice(start, stop)))
+        yield dict(purpose="development_state_forecast", axes=["chain", "draw", "driver_or_car"],
+            events=events, training_arrays_key=training_arrays_key, seed=seed,
+            implementation_sha256=implementation, consumed_posterior_key=key,
+            posterior_shape=list(shape), draw_range=[start, stop],
+            latent_states_propagated=True, convergence_verified=False, source_availability_verified=False,
+            outcome_prediction_available=False, independent_evidence_established=False, publication_allowed=False)
+
+
+def forecast_states(design, snapshots, posterior, *, seed, training_arrays_key,
+                    draw_batch_size=DEFAULT_DRAW_BATCH):
+    """Collect the complete forecast; use the iterator for bounded output memory.
+
+    Supply a snapshot for every intervening event at one information origin.
+    This convenience wrapper retains every forecast state but reconstructs only
+    a batch of terminal history at once. Batching does not change the draw set.
+    """
+    result = None
+    for batch in iter_forecast_states(design, snapshots, posterior, seed=seed,
+            training_arrays_key=training_arrays_key, draw_batch_size=draw_batch_size):
+        start, stop = batch["draw_range"]
+        if result is None:
+            result = {k:v for k, v in batch.items() if k not in ("events", "draw_range")}
+            shape = tuple(batch["posterior_shape"])
+            result["events"] = [dict(event, states={name:np.empty(shape + value.shape[2:], dtype=value.dtype)
+                for name, value in event["states"].items()}) for event in batch["events"]]
+        for output, event in zip(result["events"], batch["events"]):
+            for name, value in event["states"].items():
+                output["states"][name][:, start:stop] = value
+    return result

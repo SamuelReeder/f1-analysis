@@ -73,8 +73,45 @@ counterfactual also still needs its accepted producer and common scenario.
 No fit is loaded or certified here. Every result leaves convergence, source
 verification, independent evidence and publication flags false. It records the
 training arrays, consumed parameter arrays, implementation hash and supplied
-seed. Full-archive memory/runtime and efficient batching remain to be measured
-and addressed before production use; the current checks use synthetic arrays.
+seed. Production archive loading and intended-runner memory/runtime remain to be
+verified; the current checks use synthetic parameter arrays.
+
+## Bounded processing
+
+`iter_forecast_states` processes contiguous draw batches while retaining the
+common chain axis. It validates and hashes all consumed parameters in bounded
+chunks before yielding any forecast. A corrupt final draw therefore fails before
+a caller receives an apparently usable partial result. The digest remains
+compatible with the original array identity, including for strided inputs and
+read-only memory maps.
+
+Only the latest driver and car walks are reconstructed in each batch. The
+forecast no longer needs an array of every historical state for every draw.
+The separate `reconstruct_history` diagnostic helper still materializes that
+history and should only receive deliberately small inputs.
+
+Each batch replays the original identity-keyed random stream and takes its draw
+slice. This avoids treating a variable-length Normal or Student-t random-number
+algorithm as though raw generator steps corresponded to returned samples. The
+working stream contains only the chain and draw axes, without a historical-state
+axis. Batching preserves the innovations and the model; it does not reduce the
+draw count. Small floating-point differences from matrix arithmetic are covered
+by the numerical equivalence checks.
+
+The iterator labels every draw range and the full posterior shape. Consumers
+must account for all ranges and release processed outputs to keep output memory
+bounded. `forecast_states` remains a convenience wrapper that collects the whole
+forecast; its retained output memory grows with the forecast horizon. Neither
+interface verifies or loads a compressed fitted archive. A later integration
+must preserve the fitter's source, checksum and convergence checks.
+
+[`overall_forecast_resources.py`](../analysis/overall_forecast_resources.py)
+measures a synthetic workload at the committed training-data shape and the
+largest draw count in the existing fixed retry ladder. It requires the user's
+memory and CPU caps, uses temporary uncompressed memory maps, checks complete
+draw coverage, and retains no driver-state table. It runs no fit or predictive
+evaluation. Local resource evidence cannot establish readiness on the intended
+CI runner or the memory required by compressed-archive loading.
 
 ## Verification
 
