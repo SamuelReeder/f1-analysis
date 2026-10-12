@@ -357,7 +357,8 @@ export interface OverallEvidence {
   n_races_simulated: number;
   driver_error_rates_used: boolean;
 }
-export interface OverallResult {
+export interface LegacyOverallResult {
+  schema_version?: 1;
   status: "established" | "not established" | "stale" | "unavailable";
   reason: string;
   detail?: string;
@@ -366,3 +367,34 @@ export interface OverallResult {
     rank_median: number; rank_lo: number; rank_hi: number }[];
   contributions: { driver_id: string; name: string; points_per_race: number; losses: Record<string, number> }[];
 }
+
+export interface CurrentOverallEvidence {
+  recorded_at: string;
+  data_as_of: string;
+  fit_id: string;
+  field: string[];
+  scenario: { id: string; label: string; races: number };
+  posterior_draws: number;
+  replicates_per_draw: number;
+  checks: Record<string, { passed: boolean; source: string; reason: string }>;
+}
+export interface CurrentOverallStanding {
+  driver_id: string;
+  name: string;
+  expected_points: { mean: number; q05: number; q95: number; posterior_sd: number;
+    mcse: number; max_conditional_mcse: number };
+  p_title: number;
+  season_rank: { q05: number; median: number; q95: number };
+}
+export interface CurrentOverallResult {
+  schema_version: 2;
+  model_version: "overall-joint-v1";
+  target: "current_equal_machinery_and_team";
+  status: "established" | "not established" | "stale" | "unavailable";
+  reason: string;
+  evidence: CurrentOverallEvidence | null;
+  standings: CurrentOverallStanding[];
+  contributions: { driver_id: string; fit_id: string; scenario_id: string; losses: Record<string, number> }[];
+  limitations: string[];
+}
+export type OverallResult = LegacyOverallResult | CurrentOverallResult;

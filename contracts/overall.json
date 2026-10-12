@@ -1,0 +1,21 @@
+{
+  "schema_version": 2,
+  "model_version": "overall-joint-v1",
+  "target": "current_equal_machinery_and_team",
+  "interval_probability": 0.9,
+  "points": [25, 18, 15, 12, 10, 8, 6, 4, 2, 1],
+  "max_conditional_points_mcse": 0.05,
+  "title_probability_sum_tolerance": 0.000001,
+  "required_checks": [
+    "provenance",
+    "convergence",
+    "recovery",
+    "chronological_prediction",
+    "grid_calibration",
+    "race_calibration",
+    "retirement_calibration",
+    "prospective_prediction",
+    "simulation_precision"
+  ],
+  "required_explanations": ["qualifying_pace", "total_race_pace", "all"]
+}

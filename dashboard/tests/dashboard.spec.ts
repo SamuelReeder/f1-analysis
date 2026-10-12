@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import fs from "node:fs/promises";
-import type { Dataset, RacePace, OverallResult } from "../src/types";
+import type { Dataset, RacePace, LegacyOverallResult } from "../src/types";
 let current: Dataset;
 
 test.beforeEach(async ({ page, request }) => {
@@ -758,7 +758,7 @@ for (const view of [
 }
 
 // Entirely synthetic equal-car outcomes; historical championship files are never fixtures.
-function overallFixture(passed = true): OverallResult {
+function overallFixture(passed = true): LegacyOverallResult {
   return {
     status: passed ? "established" : "not established",
     reason: passed

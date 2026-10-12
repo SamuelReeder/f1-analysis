@@ -3,6 +3,8 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { date, pct, signed } from "../lib";
 import type { Dataset, Estimate, RaceValidation } from "../types";
 import { performanceScale, PerformanceKey } from "../performance";
+import { isCurrentOverall, isSupportedOverall } from "../overall";
+import { CurrentOverallSummary } from "./CurrentOverall";
 import "./Briefing.css";
 
 export const BRIEFING_CHAPTERS = [
@@ -127,6 +129,15 @@ function RaceChapter({ data }: { data: Dataset }) {
 
 function OverallChapter({ data }: { data: Dataset }) {
   const result = data.overall;
+  if (isCurrentOverall(result)) return <Chapter title="Overall (equal car)"
+    source="Current driver performance" description="The same comparison as the full Overall view">
+    <CurrentOverallSummary result={result} />
+  </Chapter>;
+  if (!isSupportedOverall(result)) return <Chapter title="Overall (equal car)"
+    source="No verified Overall release" description="Experimental equal-car comparison">
+    <div className="briefing-withheld"><h2>Overall ranking unavailable</h2>
+      <p>This release uses an unsupported Overall format.</p></div>
+  </Chapter>;
   const evidence = result?.status === "established" || result?.status === "not established" ? result.evidence : null;
   const established = result?.status === "established" && evidence?.combined_validation.gate === true && result.standings.length > 0;
   const rows = established ? [...result.standings].sort((a, b) => b.points_per_race - a.points_per_race) : [];

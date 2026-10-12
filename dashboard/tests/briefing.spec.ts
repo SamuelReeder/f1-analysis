@@ -1,6 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import type { Dataset, OverallResult, RacePace } from "../src/types";
+import type { Dataset, LegacyOverallResult, RacePace } from "../src/types";
 
 let current: Dataset;
 let pointer: { schema_version: number; release: string; url: string; published_at: string };
@@ -16,7 +16,7 @@ async function supply(page: Page, data: Dataset) {
   await page.route("**/data/releases/*.json", (route) => route.fulfill({ json: data }));
 }
 
-function overallFixture(): OverallResult {
+function overallFixture(): LegacyOverallResult {
   return {
     status: "established",
     reason: "The synthetic combined held-out validation passed.",

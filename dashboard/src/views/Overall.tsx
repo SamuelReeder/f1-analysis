@@ -1,7 +1,9 @@
 import { useState, type CSSProperties } from "react";
 import { Badge, Empty } from "../components";
 import { date, pct, signed } from "../lib";
-import type { OverallResult } from "../types";
+import type { LegacyOverallResult, OverallResult } from "../types";
+import { isCurrentOverall, isSupportedOverall } from "../overall";
+import CurrentOverall, { CurrentOverallMethodology } from "./CurrentOverall";
 import RankingHeader from "./RankingHeader";
 import { performanceScale, PerformanceKey } from "../performance";
 
@@ -17,7 +19,8 @@ const labels: Record<string, string> = {
 };
 const qualityName = (name: string) => labels[name] || name.replaceAll("_", " ");
 
-export function OverallMethodology() {
+export function OverallMethodology({ result }: { result?: OverallResult }) {
+  if (isCurrentOverall(result)) return <CurrentOverallMethodology />;
   return (
     <section className="panel overall-notes" aria-labelledby="overall-method-title">
       <h2 id="overall-method-title">About the equal-car championship</h2>
@@ -54,6 +57,15 @@ export function OverallMethodology() {
 }
 
 export default function Overall({ result }: { result?: OverallResult }) {
+  if (isCurrentOverall(result)) return <CurrentOverall result={result} />;
+  if (!isSupportedOverall(result)) return <>
+    <RankingHeader kind="drivers" discipline="overall" />
+    <Empty title="Overall ranking unavailable">This release uses an unsupported Overall format.</Empty>
+  </>;
+  return <LegacyOverall result={result} />;
+}
+
+function LegacyOverall({ result }: { result?: LegacyOverallResult }) {
   const [selected, setSelected] = useState("");
   const evidence = result?.status === "established" || result?.status === "not established"
     ? result.evidence : undefined;

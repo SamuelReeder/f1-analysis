@@ -3,6 +3,7 @@ import { PageHeading } from "../components";
 import Methodology from "./Methodology";
 import { OverallMethodology } from "./Overall";
 import { RaceMethodology } from "./RaceNotes";
+import { isCurrentOverall } from "../overall";
 
 export default function MethodologyPage({ data }: { data: Dataset }) {
   const refresh = data.refresh;
@@ -56,11 +57,17 @@ export default function MethodologyPage({ data }: { data: Dataset }) {
           <div>
             <dt>Overall (equal car) · experimental</dt>
             <dd>
-              The equal-car championship compares expected points per race,
+              {isCurrentOverall(data.overall) ? <>
+                The equal-car comparison estimates current qualifying and race
+                performance together under equal machinery and team support.
+                Expected-points ranges describe uncertainty about performance;
+                season finish ranges also include racing variation. Missing,
+                stale or failed evidence leaves the ranking withheld.
+              </> : <>The equal-car championship compares expected points per race,
               title probabilities and simulated season rank ranges. It keeps
               driver–team effects and only admits racing qualities supported by
               its entry tests and combined held-out validation. Missing, stale
-              or failed evidence leaves the ranking withheld.
+              or failed evidence leaves the ranking withheld.</>}
             </dd>
           </div>
           <div>
@@ -87,7 +94,7 @@ export default function MethodologyPage({ data }: { data: Dataset }) {
       </section>
       <Methodology data={data} />
       <RaceMethodology data={data.race_pace} />
-      <OverallMethodology />
+      <OverallMethodology result={data.overall} />
     </>
   );
 }

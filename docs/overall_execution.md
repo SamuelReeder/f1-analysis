@@ -17,7 +17,7 @@ open until the full acceptance checklist has direct evidence.
 | Ability/outcome/numerical uncertainty | Nested simulation, MCSE and rank/ESS diagnostics | Check ranking functionals under converged posteriors and fixed simulation precision |
 | Chronological development comparison | Plan defines information horizons and baseline roles | Freeze all folds, arms, primary metrics, calibration and stopping rules; run every fold |
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
-| Canonical producer and explanations | Old failed gate still withholds a ranking | Version-aware producer/export and matching component explanations from accepted draws |
+| Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence, common field and matching explanation draws/scenario | Producer/export, pairwise comparisons, and matching component explanations from accepted draws; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
 | Software and runner readiness | Earlier interface verification; new tests accompany each fit-engine change | Full Python, build/browser, clean-environment and intended-runner checks on final source |
 | Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
@@ -43,3 +43,11 @@ scenario, not a forecast of a future calendar or a claim about shortened-event
 scoring. Missing reference inputs stop construction instead of dropping an event.
 It is not yet connected to the posterior simulator; its remaining assumptions
 are explicit in the artifact.
+
+The successor frontend uses `contracts/overall.json` and the same canonical
+Overall route as the legacy release. It cannot accept the legacy combined gate
+as evidence for the new model. Its table and briefing distinguish uncertainty
+about expected points from simulated season outcomes, and explanations identify
+their posterior and common scenario. Synthetic browser fixtures are interface
+checks only. The producer has not yet emitted an accepted successor artifact;
+the public payload remains unchanged.
