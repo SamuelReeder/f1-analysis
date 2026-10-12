@@ -1,0 +1,752 @@
+{
+  "purpose": "Unchanged existing total-race-pace regeneration after timeline correction",
+  "launch_receipt": "race-pace-run.json",
+  "review_source_commit": "742e279054520276d29e6c8e7001115b6f7457d1",
+  "exit_status": 0,
+  "waiter_completed": true,
+  "unit": "f1-race-total-track-v1.service",
+  "unit_collected_before_final_accounting": true,
+  "systemd_journal_entries_available": false,
+  "observed_start_utc": "2026-10-12T13:48:13+00:00",
+  "completion_status_file_mtime_utc": "2026-10-12T15:30:02.301842+00:00",
+  "elapsed_to_status_file_seconds": 6109.301842,
+  "runtime_measurement_note": "Wall-clock interval from launch receipt timestamp to exit-status file modification; not a retained monotonic service runtime",
+  "recorded_validation_fit_seconds": 5780.0,
+  "recorded_full_fit_seconds": 844.0,
+  "peak_memory_bytes": null,
+  "cpu_time_seconds": null,
+  "resource_accounting_note": "Transient unit was collected and no matching journal entries were available; launch limits are recorded, not measured peak usage",
+  "launch_limits": {
+    "MainPID": "668050",
+    "ExecMainStartTimestamp": "Mon 2026-10-12 09:48:13 EDT",
+    "Slice": "f1.slice",
+    "MemoryMax": "10737418240",
+    "MemorySwapMax": "1073741824",
+    "Nice": "19",
+    "ActiveState": "active",
+    "SubState": "running",
+    "InvocationID": "1ff2906e06ce408d9d89f3c90ffb5826"
+  },
+  "slice_limits": {
+    "CPUWeight": "10",
+    "CPUQuotaPerSecUSec": "8s"
+  },
+  "input_hashes": {
+    "f1rank/race_total_model.py": "d5ac8de128f21a4ba54cd10b30dfd44b388c32f60434b8df673614f318f11179",
+    "f1rank/race_total.py": "5eda2ea367dc42eea8b20ba8634c607e648c7dc8d8d40d5f7f594fb679d2e204",
+    "f1rank/race_publication.py": "e3bd070bd5fc97e56a0a1d782b88c05791fcdc26c27775bebe7cc871819c4383",
+    "f1rank/race_targets.py": "ececa920bb14982330e9f89584d144aa4573d39a9bb4b1203900f4c042edc9f9",
+    "f1rank/racepace.py": "2acd02207e5f58aab73752e8f7cec36d1ba31f289313b0cf0b152fd8d6fd8e0c",
+    "f1rank/artifacts.py": "2e9b0b2171d3fb2db3fecea14c944ed3b2d4865ea87c853535bc80e245ee9bbb",
+    "data/processed/race_laps.parquet": "ec207fe6188a5d664b8554bd7f171f2ed30425ed2a5216dc701e67c20ce44d96",
+    "data/processed/race_weather.parquet": "ee5609b61f3a9020c29f6fff9cd68fc05dd21e2607127819e97150c3e63445b5",
+    "data/processed/timeline.parquet": "b6cb2b15a59c2f5fc90ff2648a21cc2adc9351a8f093b1c26333519a49e48922",
+    "data/processed/entries.parquet": "b3b39c63dcf372b945a027a639c6d587f961593e1fe391db7fef6a802c580673",
+    "data/processed/race.parquet": "150a0ade6f32c82e54d648a2c1d72a382e2c831e3736691c94e9ef6905f9b0f3",
+    "data/processed/race_classification.parquet": "3600e360c706c06fb38a5391be106e79b6170d30bcdda8d7c38f01d34c28bc11",
+    "data/processed/events.parquet": "8ee0985bd11b0962168ac02353b6dee1361ad0526f2a9d4933f901f32016a2f8",
+    "data/processed/drivers.parquet": "0cd1efedc831515d51cce8217a6f6968f1d355be92a91175ef12f52b36c700db"
+  },
+  "launch_input_hashes_still_match": true,
+  "fit_inventory": [
+    "2024-10_full",
+    "2024-10_no_driver",
+    "2024-10_no_car",
+    "2025-10_full",
+    "2025-10_no_driver",
+    "2025-10_no_car",
+    "2026-07_full",
+    "2026-07_no_driver",
+    "2026-07_no_car",
+    "full"
+  ],
+  "fits": {
+    "2024-10_full": {
+      "model": "total-dry-race-pace-v1",
+      "key": "14f9d8cffb1a9b697a12c5f3e8d424e6fe6d885dfe910d8d012dcf09371dba12",
+      "settings": {
+        "driver": true,
+        "car": true,
+        "warmup": 800,
+        "samples": 800,
+        "tries": 3
+      },
+      "diagnostics": {
+        "rhat_max": 1.0121550559997559,
+        "divergences": 0,
+        "n_draws": 3200,
+        "finite": true,
+        "converged": true
+      },
+      "attempts": [
+        {
+          "rhat_max": 1.0121550559997559,
+          "divergences": 0,
+          "n_draws": 3200,
+          "finite": true,
+          "converged": true,
+          "seconds": 392.1,
+          "worst_parameters": [
+            {
+              "parameter": "package",
+              "rhat": 1.0121550559997559
+            },
+            {
+              "parameter": "package_contrast",
+              "rhat": 1.011881709098816
+            },
+            {
+              "parameter": "skill",
+              "rhat": 1.0088311433792114
+            },
+            {
+              "parameter": "driver_pace",
+              "rhat": 1.008457899093628
+            },
+            {
+              "parameter": "skill_raw",
+              "rhat": 1.0069024562835693
+            }
+          ]
+        }
+      ],
+      "backend": "gpu",
+      "jax_version": "0.11.2",
+      "numpyro_version": "0.22.0",
+      "n_laps": 84964,
+      "n_races": 98,
+      "data_as_of": "2024-08",
+      "first_event": "2018-02",
+      "cache_sha256": "22992663aed2687110bfbcff39d389ca8e3b2f06c7f568d3c9f9af46c7534f56",
+      "recorded_fit_seconds": 392.1
+    },
+    "2024-10_no_driver": {
+      "model": "total-dry-race-pace-v1",
+      "key": "bd7c7ef14d7f240a775f6f0b6eef85f1ea1d6c6b9846a4a5ca00a57f52f4dc26",
+      "settings": {
+        "driver": false,
+        "car": true,
+        "warmup": 800,
+        "samples": 800,
+        "tries": 3
+      },
+      "diagnostics": {
+        "rhat_max": 1.0041046142578125,
+        "divergences": 0,
+        "n_draws": 3200,
+        "finite": true,
+        "converged": true
+      },
+      "attempts": [
+        {
+          "rhat_max": 1.0041046142578125,
+          "divergences": 0,
+          "n_draws": 3200,
+          "finite": true,
+          "converged": true,
+          "seconds": 399.5,
+          "worst_parameters": [
+            {
+              "parameter": "package_contrast",
+              "rhat": 1.0041046142578125
+            },
+            {
+              "parameter": "wear_z",
+              "rhat": 1.0037344694137573
+            },
+            {
+              "parameter": "car_day",
+              "rhat": 1.0036025047302246
+            },
+            {
+              "parameter": "day_z",
+              "rhat": 1.003127098083496
+            },
+            {
+              "parameter": "car_day_z",
+              "rhat": 1.0030854940414429
+            }
+          ]
+        }
+      ],
+      "backend": "gpu",
+      "jax_version": "0.11.2",
+      "numpyro_version": "0.22.0",
+      "n_laps": 84964,
+      "n_races": 98,
+      "data_as_of": "2024-08",
+      "first_event": "2018-02",
+      "cache_sha256": "0ce33d5047187eb9c108f3fc2329f0d3d17ed5c1be105a4268f6d7817fa6b1fa",
+      "recorded_fit_seconds": 399.5
+    },
+    "2024-10_no_car": {
+      "model": "total-dry-race-pace-v1",
+      "key": "bbaf72d5c9ff37f57a28375cd1bb485415244aea6460c1f33387032eba4c2b7a",
+      "settings": {
+        "driver": true,
+        "car": false,
+        "warmup": 800,
+        "samples": 800,
+        "tries": 3
+      },
+      "diagnostics": {
+        "rhat_max": 1.0037391185760498,
+        "divergences": 0,
+        "n_draws": 3200,
+        "finite": true,
+        "converged": true
+      },
+      "attempts": [
+        {
+          "rhat_max": 1.0037391185760498,
+          "divergences": 0,
+          "n_draws": 3200,
+          "finite": true,
+          "converged": true,
+          "seconds": 519.2,
+          "worst_parameters": [
+            {
+              "parameter": "form_z",
+              "rhat": 1.0037391185760498
+            },
+            {
+              "parameter": "sd_car_day",
+              "rhat": 1.0034509897232056
+            },
+            {
+              "parameter": "wear_z",
+              "rhat": 1.0031583309173584
+            },
+            {
+              "parameter": "skill",
+              "rhat": 1.0031152963638306
+            },
+            {
+              "parameter": "form",
+              "rhat": 1.0030806064605713
+            }
+          ]
+        }
+      ],
+      "backend": "gpu",
+      "jax_version": "0.11.2",
+      "numpyro_version": "0.22.0",
+      "n_laps": 84964,
+      "n_races": 98,
+      "data_as_of": "2024-08",
+      "first_event": "2018-02",
+      "cache_sha256": "7175db8c0e4dcc4a8c95de123b7cca5c4a0ff064c49639c222e0fb85ac162ce4",
+      "recorded_fit_seconds": 519.2
+    },
+    "2025-10_full": {
+      "model": "total-dry-race-pace-v1",
+      "key": "75aeb5bcb92cf018ceee6fcfe76b44110b0f7633571c455fcf095e674095e9bd",
+      "settings": {
+        "driver": true,
+        "car": true,
+        "warmup": 800,
+        "samples": 800,
+        "tries": 3
+      },
+      "diagnostics": {
+        "rhat_max": 1.0156326293945312,
+        "divergences": 0,
+        "n_draws": 3200,
+        "finite": true,
+        "converged": true
+      },
+      "attempts": [
+        {
+          "rhat_max": 1.0156326293945312,
+          "divergences": 0,
+          "n_draws": 3200,
+          "finite": true,
+          "converged": true,
+          "seconds": 542.1,
+          "worst_parameters": [
+            {
+              "parameter": "skill",
+              "rhat": 1.0156326293945312
+            },
+            {
+              "parameter": "skill_raw",
+              "rhat": 1.0141205787658691
+            },
+            {
+              "parameter": "package",
+              "rhat": 1.013243317604065
+            },
+            {
+              "parameter": "driver_pace",
+              "rhat": 1.012439489364624
+            },
+            {
+              "parameter": "package_contrast",
+              "rhat": 1.0121291875839233
+            }
+          ]
+        }
+      ],
+      "backend": "gpu",
+      "jax_version": "0.11.2",
+      "numpyro_version": "0.22.0",
+      "n_laps": 101708,
+      "n_races": 116,
+      "data_as_of": "2025-09",
+      "first_event": "2018-02",
+      "cache_sha256": "9c081469f40b7d7ff7b14f4acc14548db83ee7ec9f14d5aa51ee427509fd5e72",
+      "recorded_fit_seconds": 542.1
+    },
+    "2025-10_no_driver": {
+      "model": "total-dry-race-pace-v1",
+      "key": "2e1fbeafc1205c3380845314ec902f21e39af52c5470d93c62103b406e521b69",
+      "settings": {
+        "driver": false,
+        "car": true,
+        "warmup": 800,
+        "samples": 800,
+        "tries": 3
+      },
+      "diagnostics": {
+        "rhat_max": 1.0063488483428955,
+        "divergences": 0,
+        "n_draws": 3200,
+        "finite": true,
+        "converged": true
+      },
+      "attempts": [
+        {
+          "rhat_max": 1.0063488483428955,
+          "divergences": 0,
+          "n_draws": 3200,
+          "finite": true,
+          "converged": true,
+          "seconds": 512.5,
+          "worst_parameters": [
+            {
+              "parameter": "slope",
+              "rhat": 1.0063488483428955
+            },
+            {
+              "parameter": "day",
+              "rhat": 1.0041433572769165
+            },
+            {
+              "parameter": "compound",
+              "rhat": 1.0040159225463867
+            },
+            {
+              "parameter": "trend",
+              "rhat": 1.00385582447052
+            },
+            {
+              "parameter": "day_z",
+              "rhat": 1.0034886598587036
+            }
+          ]
+        }
+      ],
+      "backend": "gpu",
+      "jax_version": "0.11.2",
+      "numpyro_version": "0.22.0",
+      "n_laps": 101708,
+      "n_races": 116,
+      "data_as_of": "2025-09",
+      "first_event": "2018-02",
+      "cache_sha256": "88c3eb5afab960df4276422566b78a9a2afa7af20c68ac6710cffadf48b33446",
+      "recorded_fit_seconds": 512.5
+    },
+    "2025-10_no_car": {
+      "model": "total-dry-race-pace-v1",
+      "key": "86136e7dc997ba2a60892d399693691634db1fc646df62b1d20f65b8bc4360e2",
+      "settings": {
+        "driver": true,
+        "car": false,
+        "warmup": 800,
+        "samples": 800,
+        "tries": 3
+      },
+      "diagnostics": {
+        "rhat_max": 1.0075654983520508,
+        "divergences": 0,
+        "n_draws": 3200,
+        "finite": true,
+        "converged": true
+      },
+      "attempts": [
+        {
+          "rhat_max": 1.0075654983520508,
+          "divergences": 0,
+          "n_draws": 3200,
+          "finite": true,
+          "converged": true,
+          "seconds": 706.7,
+          "worst_parameters": [
+            {
+              "parameter": "form",
+              "rhat": 1.0075654983520508
+            },
+            {
+              "parameter": "skill",
+              "rhat": 1.0074217319488525
+            },
+            {
+              "parameter": "form_z",
+              "rhat": 1.0073845386505127
+            },
+            {
+              "parameter": "skill_raw",
+              "rhat": 1.006484866142273
+            },
+            {
+              "parameter": "wear_z",
+              "rhat": 1.0042999982833862
+            }
+          ]
+        }
+      ],
+      "backend": "gpu",
+      "jax_version": "0.11.2",
+      "numpyro_version": "0.22.0",
+      "n_laps": 101708,
+      "n_races": 116,
+      "data_as_of": "2025-09",
+      "first_event": "2018-02",
+      "cache_sha256": "c987f0424867c0ca30d551b0cfa5ed5e26858a1c9071969f34bac8dc13528ede",
+      "recorded_fit_seconds": 706.7
+    },
+    "2026-07_full": {
+      "model": "total-dry-race-pace-v1",
+      "key": "8f30e4eb4b79307f783ca78ae41f4572b7c0cfb368d41af5e2257c8b3cdd9f1e",
+      "settings": {
+        "driver": true,
+        "car": true,
+        "warmup": 800,
+        "samples": 800,
+        "tries": 3
+      },
+      "diagnostics": {
+        "rhat_max": 1.0041272640228271,
+        "divergences": 0,
+        "n_draws": 6400,
+        "finite": true,
+        "converged": true
+      },
+      "attempts": [
+        {
+          "rhat_max": 1.0556672811508179,
+          "divergences": 0,
+          "n_draws": 3200,
+          "finite": true,
+          "converged": false,
+          "seconds": 608.4,
+          "worst_parameters": [
+            {
+              "parameter": "skill",
+              "rhat": 1.0556672811508179
+            },
+            {
+              "parameter": "skill_raw",
+              "rhat": 1.0512369871139526
+            },
+            {
+              "parameter": "driver_pace",
+              "rhat": 1.035259485244751
+            },
+            {
+              "parameter": "package",
+              "rhat": 1.034943699836731
+            },
+            {
+              "parameter": "package_contrast",
+              "rhat": 1.0333386659622192
+            }
+          ]
+        },
+        {
+          "rhat_max": 1.0041272640228271,
+          "divergences": 0,
+          "n_draws": 6400,
+          "finite": true,
+          "converged": true,
+          "seconds": 1055.9,
+          "worst_parameters": [
+            {
+              "parameter": "package",
+              "rhat": 1.0041272640228271
+            },
+            {
+              "parameter": "package_contrast",
+              "rhat": 1.003226637840271
+            },
+            {
+              "parameter": "intercept",
+              "rhat": 1.0031501054763794
+            },
+            {
+              "parameter": "slope",
+              "rhat": 1.002780795097351
+            },
+            {
+              "parameter": "driver_pace",
+              "rhat": 1.0020382404327393
+            }
+          ]
+        }
+      ],
+      "backend": "gpu",
+      "jax_version": "0.11.2",
+      "numpyro_version": "0.22.0",
+      "n_laps": 116429,
+      "n_races": 132,
+      "data_as_of": "2026-07",
+      "first_event": "2018-02",
+      "cache_sha256": "0dcb7d123e794d2d4568e7c0e0c99db1e4305ac0125670e097a996665efb4f53",
+      "recorded_fit_seconds": 1664.3000000000002
+    },
+    "2026-07_no_driver": {
+      "model": "total-dry-race-pace-v1",
+      "key": "84c0782371d76648ca5f444984ea602ccb9eeab7232359dd6338860f70a1236f",
+      "settings": {
+        "driver": false,
+        "car": true,
+        "warmup": 800,
+        "samples": 800,
+        "tries": 3
+      },
+      "diagnostics": {
+        "rhat_max": 1.0051391124725342,
+        "divergences": 0,
+        "n_draws": 3200,
+        "finite": true,
+        "converged": true
+      },
+      "attempts": [
+        {
+          "rhat_max": 1.0051391124725342,
+          "divergences": 0,
+          "n_draws": 3200,
+          "finite": true,
+          "converged": true,
+          "seconds": 410.7,
+          "worst_parameters": [
+            {
+              "parameter": "compound",
+              "rhat": 1.0051391124725342
+            },
+            {
+              "parameter": "package_contrast",
+              "rhat": 1.0050143003463745
+            },
+            {
+              "parameter": "day_z",
+              "rhat": 1.0043690204620361
+            },
+            {
+              "parameter": "wear_z",
+              "rhat": 1.0041369199752808
+            },
+            {
+              "parameter": "package",
+              "rhat": 1.004115343093872
+            }
+          ]
+        }
+      ],
+      "backend": "gpu",
+      "jax_version": "0.11.2",
+      "numpyro_version": "0.22.0",
+      "n_laps": 116429,
+      "n_races": 132,
+      "data_as_of": "2026-07",
+      "first_event": "2018-02",
+      "cache_sha256": "2be68482a015162817d1df54b7f984df3f1033e6ccac284745f2164ee896c2cd",
+      "recorded_fit_seconds": 410.7
+    },
+    "2026-07_no_car": {
+      "model": "total-dry-race-pace-v1",
+      "key": "7c8dbc816b07fc3767c61bafaef2658f557c99dfb70a60c6c9280014e0fa64e3",
+      "settings": {
+        "driver": true,
+        "car": false,
+        "warmup": 800,
+        "samples": 800,
+        "tries": 3
+      },
+      "diagnostics": {
+        "rhat_max": 1.0151466131210327,
+        "divergences": 0,
+        "n_draws": 3200,
+        "finite": true,
+        "converged": true
+      },
+      "attempts": [
+        {
+          "rhat_max": 1.0151466131210327,
+          "divergences": 0,
+          "n_draws": 3200,
+          "finite": true,
+          "converged": true,
+          "seconds": 632.9,
+          "worst_parameters": [
+            {
+              "parameter": "compound",
+              "rhat": 1.0151466131210327
+            },
+            {
+              "parameter": "form_z",
+              "rhat": 1.0091801881790161
+            },
+            {
+              "parameter": "form",
+              "rhat": 1.0083041191101074
+            },
+            {
+              "parameter": "skill",
+              "rhat": 1.0081361532211304
+            },
+            {
+              "parameter": "skill_raw",
+              "rhat": 1.006547451019287
+            }
+          ]
+        }
+      ],
+      "backend": "gpu",
+      "jax_version": "0.11.2",
+      "numpyro_version": "0.22.0",
+      "n_laps": 116429,
+      "n_races": 132,
+      "data_as_of": "2026-07",
+      "first_event": "2018-02",
+      "cache_sha256": "a854faf0d52188ec1be69304371437bcd60e520cb17bb2b785884660fd99fad5",
+      "recorded_fit_seconds": 632.9
+    },
+    "full": {
+      "model": "total-dry-race-pace-v1",
+      "key": "8747468393d41cc1ef63846e11eecab29f8b8b54af3a61c1831791c6faf72ae1",
+      "settings": {
+        "driver": true,
+        "car": true,
+        "warmup": 800,
+        "samples": 800,
+        "tries": 3
+      },
+      "diagnostics": {
+        "rhat_max": 1.0181965827941895,
+        "divergences": 0,
+        "n_draws": 3200,
+        "finite": true,
+        "converged": true
+      },
+      "attempts": [
+        {
+          "rhat_max": 1.0181965827941895,
+          "divergences": 0,
+          "n_draws": 3200,
+          "finite": true,
+          "converged": true,
+          "seconds": 844.0,
+          "worst_parameters": [
+            {
+              "parameter": "package_contrast",
+              "rhat": 1.0181965827941895
+            },
+            {
+              "parameter": "skill",
+              "rhat": 1.0180476903915405
+            },
+            {
+              "parameter": "package",
+              "rhat": 1.0167492628097534
+            },
+            {
+              "parameter": "sd_form",
+              "rhat": 1.0122076272964478
+            },
+            {
+              "parameter": "driver_pace",
+              "rhat": 1.010238766670227
+            }
+          ]
+        }
+      ],
+      "backend": "gpu",
+      "jax_version": "0.11.2",
+      "numpyro_version": "0.22.0",
+      "n_laps": 122556,
+      "n_races": 139,
+      "data_as_of": "2026-15",
+      "first_event": "2018-02",
+      "cache_sha256": "6a3b755c5ecc2f3fa1f2b8e4aac0bc4234b82cdd24e828632349dda7540fca23",
+      "recorded_fit_seconds": 844.0
+    }
+  },
+  "retried_fits": [
+    "2026-07_full"
+  ],
+  "preserved_failed_cache_sha256": {
+    "2026-07_full.failed_0.npz": "86ccc72ac298a7db0fce4fa765061d7fa5bbf2a071e7c5787cbd030e6275b8b1"
+  },
+  "metrics": {
+    "drivers": {
+      "n_races": 29,
+      "n_predictions": 262,
+      "mse_difference": -0.07746263299988478,
+      "mse_difference_ci95": [
+        -0.10885449829323761,
+        -0.04749366924315563
+      ],
+      "improves": true,
+      "rmse": 0.3643159117517986,
+      "baseline_rmse": 0.4585903896883454,
+      "coverage90": 0.9083969465648855,
+      "mean_interval_width": 1.1869364940111187,
+      "baseline_interval_width": 1.421409308620452,
+      "calibrated": true,
+      "sharper": true,
+      "passed": true
+    },
+    "cars": {
+      "n_races": 29,
+      "n_predictions": 295,
+      "mse_difference": 0.004900385170389348,
+      "mse_difference_ci95": [
+        -0.005271023412581824,
+        0.014201078365322493
+      ],
+      "improves": false,
+      "rmse": 0.3849279426762627,
+      "baseline_rmse": 0.3789174082652727,
+      "coverage90": 0.847457627118644,
+      "mean_interval_width": 1.0726921274329362,
+      "baseline_interval_width": 1.1166044976639635,
+      "calibrated": false,
+      "sharper": true,
+      "passed": false
+    }
+  },
+  "prediction_metrics_recomputed_from_csv": true,
+  "manifests_verified": true,
+  "export_validation_matched": true,
+  "output_hashes": {
+    "outputs/race_total/pace.json": "9fa14898ab56950275a8eab9c31b34932f3413db248e22f9156db361bc7d6ce9",
+    "outputs/race_total/manifest.json": "baa6ca342f7436648f9f7a858b23524c2becfdb1533edab716cad589a1e56d72",
+    "outputs/race_total/validation.json": "44970ee89226e1c44d1a20472f75ee5ac9320f4c326ec0abf79048f91dca1361",
+    "outputs/race_total/validation.manifest.json": "18fc762838db9dfa83870c42776994a7287d5f6177a982d4fedab84ea16d196d",
+    "outputs/race_total/driver_predictions.csv": "cabfc7f374056dd65678fc7ed3fd2a5f1cec468b3fde5a142fef987b4cc55e48",
+    "outputs/race_total/car_predictions.csv": "20594544ebf30e909baf04d6fc38a387495e47e3adbb7a8b25a1a0eabaff5b6f",
+    "outputs/snapshots/race/2026-15_total-dry-race-pace-v1_8747468393d41cc1ef63.json": "9b4e9de5d3c714c887b974186b99595a57a59694f197f4ba91944ba99fcc6831"
+  },
+  "log_sha256": "78bcc94e6308994c8e10c5bc22d9011bdd29b761770f6e552148585ffd060ff9",
+  "exit_status_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+  "numerical_settings_changed": false,
+  "gate_or_fold_changed": false,
+  "successor_overall_accepted": false,
+  "publication_or_push_performed": false,
+  "recorded_fit_seconds_total": 6624.0,
+  "recorded_fit_seconds_exceed_observed_wall_interval": true,
+  "timing_consistency_verified": false,
+  "timing_limitation": "The sum of per-attempt monotonic fit durations exceeds the interval inferred from the launch timestamp and completion-file mtime. Both observations are retained; no exact end-to-end runtime or cause for the discrepancy is established.",
+  "terminal_unit_load_state": "not-found"
+}
