@@ -9,13 +9,13 @@ open until the full acceptance checklist has direct evidence.
 | Stable equal-machinery/team target | `overall_candidate.md`; driver-only state export interface; `overall_reference_calendar.json` fixes the common calendar, distances and context | Forecast-time condition policy; completion/reliability, lapping and shortened-event assumptions |
 | Shared current qualifying/race model | Joint model and synthetic interface/gradient tests | Fit, recover and calibrate its shared uncertainty |
 | Scientific specification | Executable likelihood/prior definitions and candidate contract | Final numerical/evaluation/prospective protocol before real-data fitting |
-| Complete entrant/cutoff catalog | Missing-qualifier, team-transfer, era and future-row tests; data preflight; outcome-free forecast catalogue retains unseen entrants and explicit missing state references | Verified as-of source/calendar inventory, joint future-state propagation and recovery on the real transfer network |
+| Complete entrant/cutoff catalog | Cutoff-first data design; outcome-free forecast catalogue; development state propagation reconstructs uncentred history and retains unseen entrants with population uncertainty | Verified as-of source/calendar inventory, accepted-posterior integration and recovery on the real transfer network |
 | Reproducible fit engine | `fitting.py`; immutable attempts/caches; the exhausted confounded case is preserved; saved-draw geometry diagnosis and equivalent-coordinate prototype | Separate approval and registration before the proposed post-failure numerical study; fresh recovery and runner resource measurements |
 | Known-truth recovery and simulation-based calibration | Generative responses and complete numerical-profile inventory: connected and sparse-rookie fits converged after retries; confounded fit exhausted its ladder | Complete registered SBC and stress studies, including the unresolved confounded case; no failed case may be discarded |
 | Coherent weekend simulation | Student-t elimination, current total race pace, shared weekend uncertainty | Common operations/conditions calibration, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |
 | Ability/outcome/numerical uncertainty | Nested simulation, MCSE and rank/ESS diagnostics; saved-draw diagnosis finds qualifying-contrast failures in the final confounded attempt | Resolve inference and check ranking functionals under converged posteriors with fixed simulation precision |
-| Chronological development comparison | Plan defines information horizons and baseline roles; blind scoring utilities preserve joint draws and required events; forecast catalogue separates pre-qualifying and actual-grid inputs from outcomes | Complete source verification, state propagation, condition policy and baseline implementations; freeze event inventory, calibration and stopping rules; run every fold |
+| Chronological development comparison | Plan defines information horizons and baseline roles; blind scoring utilities preserve joint draws and required events; outcome-free catalogue and joint state propagation have synthetic checks | Complete source verification, outcome/condition generation and baseline implementations; freeze event inventory, calibration and stopping rules; run every fold |
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence, common field and matching explanation draws/scenario | Producer/export, pairwise comparisons, and matching component explanations from accepted draws; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
@@ -104,8 +104,11 @@ The [forecast catalogue](overall_forecast_catalog.md) maps the full declared fie
 to training history while rejecting target-weekend observations. It preserves
 new-driver, new-team and new-circuit uncertainty requirements without filling
 missing states with average ability. Its source-vintage claims remain unverified;
-it does not propagate states or produce predictions. The next evaluation work
-must also reconstruct uncentred historical states before centring the new field.
+it does not propagate states or produce predictions. The separate
+[state implementation](overall_forecast_states.md) now reconstructs uncentred
+historical states before centring the new field. It retains the joint draw axes,
+propagates the existing driver/car walks, and preserves population uncertainty
+for unseen states. It has no outcome predictor or acceptance role.
 
 This work reproduced a grid-feature bug: the pit-lane fallback depended on field
 size after excluding result statuses. The correction uses the complete entered

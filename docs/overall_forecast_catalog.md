@@ -55,7 +55,8 @@ through the registered transitions and intervening calendar, and then centre on
 the forecast field. Comparing separately centred states from different past
 events would introduce an arbitrary difference between fields. New driver, car,
 team/era and circuit states also require their declared population uncertainty.
-That propagation is not implemented by this catalogue.
+That propagation is separate from this catalogue; the development implementation
+is described in [forecast states](overall_forecast_states.md).
 
 ## Evidence and remaining work
 
@@ -71,8 +72,9 @@ The [verification record](../outputs/championship/development/overall-forecast-c
 ties the focused and full-suite reports to their source revisions and preserves
 the original failing regression. It is software evidence only.
 
-Source collection and verification, future-state propagation, condition
+Source collection and verification, accepted-posterior integration, condition
 integration, baseline predictors and the frozen evaluation inventory remain
-required. No latent states are propagated, predictions scored or ranking
-published by this module. The catalogue alone cannot complete the chronological
-comparison or establish production readiness.
+required. The catalogue itself propagates no states and scores no predictions.
+The separate state implementation has synthetic checks; a full predictor and
+its scientific validation remain required. Neither module publishes a ranking
+or establishes production readiness.
