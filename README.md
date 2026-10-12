@@ -98,7 +98,8 @@ It provides:
   (research models collapsed), clearly marked historical validation, source
   fingerprints, and archives of as-published qualifying and race estimates.
 
-Start it from the repository root (Node 18+ and the existing Python environment):
+Start it from the repository root (Node 22.12+ and the existing Python environment;
+the requirement is declared in `dashboard/package.json`):
 
 ```bash
 .venv/bin/python -m f1rank.export             # creates the verified export manifest
