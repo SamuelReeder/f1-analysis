@@ -200,11 +200,24 @@ def order_log_probability(strength, positions):
     expected = np.arange(1, s.shape[-1] + 1)
     if ((ordered_rank > 0) & (ordered_rank != expected)).any():
         raise ValueError("Running positions must be unique and contiguous")
-    ordered = np.take_along_axis(np.where(mask, s, -np.inf), order, axis=-1)
-    tail = np.logaddexp.accumulate(ordered[..., ::-1], axis=-1)[..., ::-1]
+    ordered = np.take_along_axis(s, order, axis=-1)
     included = ordered_rank > 0
-    # Do not form -inf - -inf for all-padding tails or an empty panel.
-    return (np.where(included, ordered, 0.) - np.where(included, tail, 0.)).sum(axis=-1)
+    # Relative suffix normalizers preserve tied groups even at large offsets.
+    # Keep the NumPy implementation independent of the differentiable fit helper.
+    maximum = np.zeros(s.shape[:-1])
+    norm, result = np.zeros_like(maximum), np.zeros_like(maximum)
+    present = np.zeros(maximum.shape, bool)
+    for i in range(s.shape[-1] - 1, -1, -1):
+        active = included[..., i]
+        value = np.where(active, ordered[..., i], 0.)
+        previous = np.where(present, maximum, value)
+        new_maximum = np.maximum(value, previous)
+        relative = value - new_maximum
+        new_norm = np.exp(relative) + norm * np.exp(previous - new_maximum)
+        result += np.where(active, relative - np.log(new_norm), 0.)
+        maximum, norm = np.where(active, new_maximum, maximum), np.where(active, new_norm, norm)
+        present |= active
+    return result
 
 
 def completion_log_probability(coefficients, completed, failed):

@@ -9,7 +9,7 @@ import numpyro.distributions as dist
 from numpyro import handlers
 
 from ..model import centre, linear_recurrence
-from ..benchmark import plackett_luce
+from .order import plackett_luce
 from .qualifying import qualifying
 
 
@@ -89,8 +89,8 @@ def model(q, laps, outcomes, *, generate=False):
     pace = numpyro.deterministic("overall_pace", jnp.exp(context_coefficient("pace", 0)))
     strength = pace[o["context"], None] * total[o["entry"]] - grid[o["context"], None] * o["log_grid"]
     import jax
-    # The established helper uses finite underflow padding, avoiding undefined
-    # gradients in all-padding suffixes when races have different finisher counts.
+    # Explicit empty suffixes and relative normalizers exclude padding without
+    # losing probability or gradients at large common strength offsets.
     if generate:
         gumbel = numpyro.sample("generated_order_noise", dist.Gumbel(0., 1.).expand(strength.shape))
         order = jnp.argsort(-jnp.where(o["mask"], strength + gumbel, -jnp.inf), axis=1)

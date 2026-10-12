@@ -232,6 +232,29 @@ remains pending approval with its updated source identity; its fixed original
 arrays, seeds, settings and acceptance rules are preserved. Cache-format test
 fixtures do not constitute converged fits or scientific evidence.
 
+## Race-order arithmetic correction
+
+Dated 2026-10-12, with no fits running. Synthetic regressions reproduced numerical
+errors in the inherited race-order helper: finite padding could enter a
+denominator at sufficiently negative strengths, and subtracting large absolute
+log normalizers could erase uncertainty within tied groups. A common strength
+offset must not change a Plackett–Luce probability or its score gradient.
+
+The successor now uses relative suffix normalizers with explicit empty states.
+Its predictive helper uses the same mathematical calculation in NumPy. This
+corrects evaluation of the specified probability distribution; it does not add
+a ranking feature, change priors, retune an acceptance rule or alter the fixed
+fit settings. The historical benchmark implementation and published studies are
+not rewritten. Their old results are not evidence for this corrected source.
+
+The fitting-source fingerprint changes and affected successor fits/publication
+artifacts require regeneration. The proposed coordinate study remains pending
+approval under the updated fingerprint and must preserve its original arrays,
+truths, seeds and gates. A future study would evaluate the arithmetic correction
+and proposed coordinates together; it could not isolate either change as the
+cause of convergence. The original failed profile remains failed, and this
+boundary regression is not proof of that failure's cause.
+
 ## Remaining acceptance work
 
 - Complete synthetic recovery and simulation-based calibration, including the

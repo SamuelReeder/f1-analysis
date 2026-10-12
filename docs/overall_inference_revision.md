@@ -75,3 +75,11 @@ Registration checks reject missing approval and altered seeds, settings, gates
 or model inputs. Their [verification record](../outputs/championship/development/overall-control-rotation-checks/verification.json)
 identifies the tested source and passing reports. These are software and equivalence checks;
 actual convergence, complete recovery and predictive validation remain open.
+
+The later [race-order arithmetic correction](overall_candidate.md#race-order-arithmetic-correction)
+changes the successor's evaluated likelihood implementation and source identity,
+while retaining the specified Plackett–Luce distribution. The proposal remains
+pending approval with that source identity. Its input audit must reproduce the
+original observations and truths exactly. A future run would evaluate the
+corrected arithmetic and rotated coordinates together; it could not attribute a
+convergence change to either one alone or relabel the original failed profile.

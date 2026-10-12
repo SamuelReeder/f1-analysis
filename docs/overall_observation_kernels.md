@@ -54,6 +54,9 @@ log-grid term. Independent Gumbel perturbations generate a Plackett–Luce order
 on the running panel. The likelihood helper evaluates the exact conditional
 order probability, including empty and singleton panels. An entrant outside that
 panel has a zero position; this is not a final classification or a points score.
+The calculation uses relative suffix normalizers to retain tie uncertainty at
+large common strength offsets. Subtracting absolute log normalizers can erase
+that uncertainty even when each normalizer is computed with log-sum-exp.
 
 Completion uses the model's geometric next-lap failure and right-censored
 exposure likelihood. Each entrant's exposure must be supplied explicitly within
