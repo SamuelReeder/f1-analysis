@@ -554,3 +554,39 @@ reader and conditional pre-qualifying grid integration are recorded above.
 The original failed numerical case, fitting sources, data and pending proposal
 remain unchanged. The full Python suite passes after the separate legacy
 race-pace regeneration; canonical publication remains incomplete.
+
+## Paired simulation resource accounting
+
+The [resource definition](overall_simulation_resources.md) fixes a complete
+maximum-size paired block before measurement, using the committed field and
+reference calendar dimensions. It also allocates and touches the summary arrays
+at the initial and largest existing retry shapes. The
+[resource and equivalence record](../outputs/championship/development/overall-paired-simulation-resource-checks/verification.json)
+preserves the original implementation, exact synthetic comparisons and the
+connected controller checks. The initial launcher rejected a scope priority
+property before Python started; the corrected launcher applies priority to the
+child command, retaining the same memory and CPU caps.
+
+The [paired kernel](overall_paired_simulation.md) retains the original baseline
+simulator and replays its event randomness for explanations. It shares a
+qualifying intervention's grid between the qualifying-only and combined probes,
+and omits their unused championship countback. Every explanatory point total
+still comes from the existing full-field race-order and points functions. The
+summary and controller bind the kernel and its definition in their source
+identities. Fitting sources, data and the pending numerical proposal are unchanged.
+
+The matched maximum-size workload has identical synthetic input and complete
+output fingerprints under both implementations. Its recorded paired-block
+duration is lower with shared randomness, and both processes remain below the
+enforced memory cap. The focused connected suite passes; it is not a rerun of
+the full repository suite or a real-data scientific evaluation.
+
+The recorded complete-schedule counts are hypothetical workloads under the
+existing precision bounds. They have not been executed. A single block within
+the memory cap does not establish full-run practicality, precision, scientific
+acceptance or intended-runner readiness. Both UTC timestamp intervals and
+monotonic durations are preserved; the original measurement disagrees between
+these clocks, without an identified cause or a claimed exact wall-clock runtime.
+The resource fixture has zero retirement hazard and explicit full racing
+distance. Smaller exact comparisons exercise retirement behavior; neither
+measurement calibrates those assumptions or supplies accepted driver rankings.
