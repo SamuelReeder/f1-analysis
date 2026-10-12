@@ -49,6 +49,13 @@ do not turn a possible failure into an impossible one through early rounding.
 Arithmetic overflow or unusable underflow in the pace/grid coefficient rejects
 the prediction instead of clipping it.
 
+An explicitly selected [population extension](overall_unseen_circuits.md) can
+now supply grid, pace and hazard coefficients at an unseen circuit. It keeps the
+original training reference and its uncertain common mean, rather than
+recentering the fitted circuits. Circuit innovations persist across visits and
+remain paired with the fitted scales and other posterior parameters. This
+extension must still be identified in the final predictive registration.
+
 Race strength combines the same draw's total race state, pace coefficient and
 log-grid term. Independent Gumbel perturbations generate a Plackett–Luce order
 on the running panel. The likelihood helper evaluates the exact conditional
@@ -90,10 +97,11 @@ round them away. It does not add a random draw or replace the existing streams.
 - Future wetness and neutralisation are conditional inputs here. Their
   forecast-time distribution, source availability and integration remain open;
   unknown conditions cannot default to dry/green or use realized test outcomes.
-- An unseen circuit has no registered outcome-coefficient extension yet. The
-  iterator rejects it explicitly. The final evaluation must retain every required
-  event in its inventory and record that unresolved prediction, not drop the race
-  to produce a favorable score.
+- An unseen circuit requires an explicitly selected outcome-coefficient policy;
+  omission still rejects the prediction. The population extension has development
+  checks, but the qualifying-derived track factor's current no-adjustment
+  convention needs a final scientific policy. The final evaluation must retain
+  every required event, including an unresolved prediction, rather than drop it.
 - Missing qualifying times, penalties and grid eligibility need the complete
   grid-generation policy. The current conditional qualifying positions are not
   an official-grid simulator.

@@ -48,9 +48,33 @@ family and circuit identity, preserving dependence across events, draw batches
 and field permutations. Known-circuit predictions keep their existing formula.
 The output identifies the policy and remains development evidence only.
 
+These coordinates are latent circuit uncertainty. A caller repeating outcome
+simulations for a fixed outer latent state must hold them fixed; the lower-level
+coefficient helper accepts explicit coordinates for that purpose. Changing the
+trajectory seed draws a different population realization. The current iterator
+still produces a single trajectory per joint draw and does not establish the
+final nested replication or Monte Carlo precision policy.
+
 This addresses outcome coefficients, not the whole unseen-circuit problem.
 The qualifying-derived track factor still uses its existing no-adjustment
 convention, which needs a final scientific policy. Unknown future weather and
 neutralisation, official grid rules, completion/classification assumptions,
 accepted-posterior integration and calibration also remain required. An accepted
 driver ranking cannot be inferred from this extension's software checks.
+
+## Verification
+
+The [tests](../tests/test_overall_unseen_circuits.py) compare with the actual joint
+model's deterministic coefficients under an explicit reference change. Exact
+Gaussian moment fixtures check the retained common-mean variance, covariance
+between new circuits and relative uncertainty. Pipeline checks preserve repeated
+visits, draw batches, field permutations and path prefixes; omitted policies,
+malformed coordinates and nonfinite joint parameters fail before publication.
+Known-circuit behavior is also compared with the existing default path.
+
+The [verification record](../outputs/championship/development/overall-unseen-circuit-checks/verification.json)
+links the committed test source and capped local resource measurement. The
+resource workload uses synthetic parameters and a hypothetical circuit, including
+checked compressed-archive loading. It measures no MCMC, accepted-posterior
+behavior, real-event accuracy or intended-runner fitting cost. The original
+fitting inputs and pending numerical proposal remain unchanged.
