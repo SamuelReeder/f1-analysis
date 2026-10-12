@@ -4,6 +4,7 @@ Identity consistency and numerical summaries are not scientific acceptance.
 This module has no publication entry point and never permits publication.
 """
 import copy
+from dataclasses import replace
 import hashlib
 import json
 from pathlib import Path
@@ -11,7 +12,7 @@ import re
 
 import numpy as np
 
-from f1rank.overall.simulation import MAX_EXPECTED_POINTS_MCSE, POINTS
+from f1rank.overall.simulation import JointDraws, MAX_EXPECTED_POINTS_MCSE, POINTS, simulate
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFINITION = ROOT / "docs/overall_summary.md"
@@ -21,6 +22,8 @@ MAX_BLOCK_DRAWS = 128
 MAX_BLOCK_REPLICATES = 128
 IDENTITY_KEYS = {"fit_id", "posterior_key", "scenario_key", "simulation_key"}
 IMPLEMENTATION_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+SIMULATOR_SOURCES = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in (
+    "f1rank/overall/simulation.py", "f1rank/overall/scoring.py", "f1rank/overall/order.py")}
 
 
 def _source_fingerprints():
@@ -28,8 +31,12 @@ def _source_fingerprints():
     implementation = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     if implementation != IMPLEMENTATION_SHA256 or json.loads(contract_bytes) != CONTRACT:
         raise ValueError("Summary implementation or contract changed after import")
+    if any(hashlib.sha256((ROOT / name).read_bytes()).hexdigest() != value
+           for name, value in SIMULATOR_SOURCES.items()):
+        raise ValueError("Summary simulator dependency changed after import")
     return dict(definition_sha256=hashlib.sha256(DEFINITION.read_bytes()).hexdigest(),
-        implementation_sha256=implementation, contract_sha256=hashlib.sha256(contract_bytes).hexdigest())
+        implementation_sha256=implementation, contract_sha256=hashlib.sha256(contract_bytes).hexdigest(),
+        simulator_sources=SIMULATOR_SOURCES.copy())
 
 
 def _integer(value, minimum=0):
@@ -68,6 +75,43 @@ def _precision_summary(means, variances, replicates, bound):
         mcse=float(np.sqrt(variances.sum() / (count ** 2 * replicates))),
         max_conditional_mcse=float(conditional.max()), conditional_mcse_bound=float(bound),
         conditional_precision_passed=passed)
+
+
+def paired_simulation_block(draws, scenarios, *, replicates, seed, chain, draw_start,
+                            replicate_start, advancing):
+    """Generate paired baseline/probe seasons for a fixed bounded block layout.
+
+    The stream address includes the declared seed and block coordinates. The
+    same address is reused ONLY within this block's explanatory interventions.
+    A future registered controller must bind the layout and seed in its identity;
+    changing layout is not a way to rerun a failed precision measurement.
+    """
+    if (not isinstance(draws, JointDraws) or not _integer(replicates, 2)
+            or replicates > MAX_BLOCK_REPLICATES or len(draws.qualifying) > MAX_BLOCK_DRAWS
+            or not all(_integer(value) for value in (seed, chain, draw_start, replicate_start))):
+        raise ValueError("Need a bounded joint-draw block and complete nonnegative stream address")
+    source = _source_fingerprints()
+    address = [seed, chain, draw_start, replicate_start]
+    baseline = simulate(draws, scenarios, replicates=replicates, seed=address, advancing=advancing)
+    probes = np.empty(baseline["points"].shape + (len(PROBES),))
+    field_order = np.argsort(draws.drivers)
+    q_mean = draws.qualifying[:, field_order].mean(axis=-1)
+    r_mean = draws.race[:, field_order].mean(axis=-1)
+    for driver in range(len(draws.drivers)):
+        for k, name in enumerate(PROBES):
+            values = {}
+            if name in ("qualifying_pace", "all"):
+                values["qualifying"] = draws.qualifying.copy()
+                values["qualifying"][:, driver] = q_mean
+            if name in ("total_race_pace", "all"):
+                values["race"] = draws.race.copy()
+                values["race"][:, driver] = r_mean
+            intervention = simulate(replace(draws, **values), scenarios, replicates=replicates,
+                                    seed=address, advancing=advancing)
+            probes[..., driver, k] = intervention["points"][..., driver]
+    if source != _source_fingerprints():
+        raise ValueError("Paired simulation source changed during generation")
+    return baseline, probes
 
 
 class OverallSummary:

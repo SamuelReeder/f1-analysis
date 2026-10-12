@@ -1,12 +1,14 @@
 """Paired summary arithmetic and complete inventory; no fitted-driver evidence."""
 import copy
+from dataclasses import replace
 import json
 
 import numpy as np
 import pytest
 
-from analysis.overall_summary import OverallSummary, PROBES, MAX_BLOCK_REPLICATES
-from f1rank.overall.simulation import MAX_EXPECTED_POINTS_MCSE, POINTS, uncertainty
+from analysis.overall_summary import OverallSummary, PROBES, MAX_BLOCK_REPLICATES, paired_simulation_block
+from f1rank.overall.simulation import MAX_EXPECTED_POINTS_MCSE, POINTS, Scenario, simulate, uncertainty
+from test_overall import draws
 
 
 IDENTITY = dict(fit_id="synthetic-fit", posterior_key="a" * 64,
@@ -277,6 +279,81 @@ def test_changed_definition_cannot_label_an_existing_summary(monkeypatch, tmp_pa
         summary.finalize()
     definition.write_text(original)
     assert summary.finalize()["complete_draw_and_replicate_inventory"]
+
+
+def test_neutral_probes_reuse_exact_baseline_randomness_and_distinct_block_streams():
+    joint = draws(nd=3)
+    settings = dict(scenarios=[Scenario("ref", 0, 60, 60)], replicates=4, seed=71,
+                    chain=0, draw_start=0, replicate_start=0, advancing=(4, 2))
+    baseline, probes = paired_simulation_block(joint, **settings)
+    for k in range(len(PROBES)):
+        np.testing.assert_array_equal(probes[..., k], baseline["points"])
+    again, repeated_probes = paired_simulation_block(joint, **settings)
+    np.testing.assert_array_equal(repeated_probes, probes)
+    for key in ("points", "rank_low", "rank_high", "title_share"):
+        np.testing.assert_array_equal(again[key], baseline[key])
+    changed, _ = paired_simulation_block(joint, **{**settings, "replicate_start": 4})
+    assert (changed["points"] != baseline["points"]).any()
+
+
+def test_interventions_replace_only_selected_persistent_driver_states():
+    joint = draws(nd=3)
+    joint = replace(joint, qualifying=np.arange(18.).reshape(3, 6) / 5,
+                    race=np.arange(18., 0, -1).reshape(3, 6) / 7)
+    before_q, before_r = joint.qualifying.copy(), joint.race.copy()
+    settings = dict(scenarios=[Scenario("ref", 0, 60, 60)], replicates=4, seed=71,
+                    chain=0, draw_start=2, replicate_start=4, advancing=(4, 2))
+    baseline, probes = paired_simulation_block(joint, **settings)
+    for k, components in enumerate((("qualifying",), ("race",), ("qualifying", "race"))):
+        for driver in range(len(joint.drivers)):
+            changed = {}
+            for component in components:
+                value = getattr(joint, component)
+                changed[component] = value.copy()
+                changed[component][:, driver] = value.mean(axis=-1)
+            direct = simulate(replace(joint, **changed), settings["scenarios"],
+                replicates=4, seed=[71, 0, 2, 4], advancing=(4, 2))
+            np.testing.assert_array_equal(probes[..., driver, k], direct["points"][..., driver])
+    np.testing.assert_array_equal(joint.qualifying, before_q)
+    np.testing.assert_array_equal(joint.race, before_r)
+    order = [4, 1, 5, 3, 0, 2]
+    permuted = replace(joint, drivers=tuple(joint.drivers[i] for i in order),
+                       qualifying=joint.qualifying[:, order], race=joint.race[:, order])
+    other, other_probes = paired_simulation_block(permuted, **settings)
+    np.testing.assert_array_equal(other["points"], baseline["points"][..., order])
+    np.testing.assert_array_equal(other_probes, probes[..., order, :])
+
+
+def test_paired_generator_connects_to_complete_grouped_summary():
+    joint = draws(nd=3)
+    scenarios = [Scenario("first", 0, 60, 60), Scenario("second", 0, 50, 50)]
+    summary = OverallSummary(drivers=joint.drivers, posterior_shape=(2, 3),
+                             replicates=8, n_races=2, identity=IDENTITY)
+    all_points = []
+    for chain in range(2):
+        parts = []
+        for rep in (0, 4):
+            baseline, probes = paired_simulation_block(joint, scenarios, replicates=4, seed=71,
+                chain=chain, draw_start=0, replicate_start=rep, advancing=(4, 2))
+            summary.add(baseline, probes, chain=chain, draw_start=0,
+                        replicate_start=rep, identity=IDENTITY)
+            parts.append(baseline["points"])
+        all_points.append(np.concatenate(parts, axis=1))
+    result = summary.finalize()
+    direct = uncertainty(dict(points=np.concatenate(all_points, axis=0), n_races=2))
+    for row in result["standings"]:
+        i = joint.drivers.index(row["driver_id"])
+        np.testing.assert_allclose(row["expected_points"]["mean"], direct["expected_points"][i])
+        np.testing.assert_allclose(row["expected_points"]["mcse"], direct["expected_points_mcse"][i])
+    assert all(loss["mean"] == 0 for row in result["contributions"] for loss in row["losses"].values())
+    assert not result["publication_allowed"]
+
+
+def test_failed_simulated_season_is_not_replaced_or_conditioned_away():
+    joint = replace(draws(nd=3), retirement_hazard=np.full((3, 1), .999))
+    with pytest.raises(ValueError, match="No full-distance finisher"):
+        paired_simulation_block(joint, [Scenario("ref", 0, 60, 60)], replicates=4, seed=71,
+            chain=0, draw_start=0, replicate_start=0, advancing=(4, 2))
 
 
 @pytest.mark.parametrize("override", [dict(drivers=["a", "a"]), dict(posterior_shape=(1, 3)),

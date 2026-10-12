@@ -49,6 +49,15 @@ conditional model, not a causal attribution of innate talent. Separate losses
 must not be added: neutralizing correlated components can have interacting
 effects. This definition requires no learned component weights.
 
+The paired block generator invokes the existing simulator for the baseline and
+each declared intervention. Its random stream address contains the fixed seed,
+chain, draw-block start and replicate-block start; these coordinates differ
+between blocks and match within paired interventions. The complete block layout
+and seed must be fixed in the future simulation registration. Changing the layout
+can change random draws and requires a different simulation identity. This
+generator inherits the existing simulator's unresolved completion assumptions
+and raises on failures; it never substitutes another season.
+
 ## Separate uncertainty calculations
 
 Within each posterior draw, retain points means, variances and the full driver
@@ -89,7 +98,7 @@ blocks, field/draw permutations, paired explanatory losses and incomplete
 inventory rejection. Bounded accumulation avoids keeping the entire nested
 simulation cube in memory; it does not reduce the declared simulation workload.
 
-The posterior adapter, paired probe generator, accepted common scenario,
+The posterior adapter, accepted common scenario,
 scientific evidence checker, exporter and refresh controller must still be
 connected before this can produce the canonical payload. The original failed
 numerical profile remains failed. No synthetic array or caller-supplied success
