@@ -253,3 +253,9 @@ sample. Registered functionals require matching source and complete numerical
 reports; precision failures remain failed evaluations. This is machinery for
 the unfinished study, not an accepted ranking. Exact-target sensitivity, full
 recovery, weekend assumptions, predictive evidence and rollout remain open.
+The [ranking-recovery verification](../outputs/championship/development/overall-ranking-recovery-checks/verification.json)
+records the passing focused suite and a measured local synthetic workload at
+the reference field/calendar dimensions. It distinguishes conditional simulation
+cost from fitting, full-study and intended-runner resources. No new fit or driver
+table was produced. Model inputs and the pending study are unchanged, and the
+previous stale-export failures remain publication blockers.

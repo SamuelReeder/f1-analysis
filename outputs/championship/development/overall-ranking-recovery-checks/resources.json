@@ -1,0 +1,350 @@
+{
+  "purpose": "synthetic_ranking_functional_resource_check",
+  "source_commit": "88fa8a2bd58f0c2e9c38d32a5aba63e15b1cb82a",
+  "source_hashes": {
+    "analysis/overall_ranking_resources.py": "cf03d0001c83635cb6c8d28d4d0bf43f7c999f3f1fd09b8672d3fdccda9faa75",
+    "analysis/overall_ranking_recovery.py": "a4cd959a80107646afa69609b946e20efda905dc0ad254e2972d27a80a79f5b7",
+    "f1rank/overall/simulation.py": "57d31ee69f2f6b36fe551c9b6bcb51f0894e5cfbd03e1403adf77e7920c61ff9",
+    "f1rank/overall/order.py": "812af3dac1f6ad8fa016919332511a24fc99d53eef947edc1eeec55dd48cd95d",
+    "f1rank/overall/scoring.py": "8fc3051432ff7f5e00038a336923fe7c1fce114115b3a87b889079728db33aae",
+    "docs/overall_reference_calendar.json": "0267d8bbdbbdd32c47ce0c19d23afbc9ce60c2dabd8c24850ee32f465afc0be3",
+    "outputs/championship/development/interface_preflight.json": "722d431cfb3237c9920c8d2b81734abbe521a752a01b95b67c1eb9d171159afb",
+    "docs/overall_rotation_profile_proposal.json": "536fedbbb2a25c30b70b9987e640b8589e1dad624a8b0473ef0f99b06fff6e17",
+    "data/processed/race.parquet": "150a0ade6f32c82e54d648a2c1d72a382e2c831e3736691c94e9ef6905f9b0f3"
+  },
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rd940f12c786243b99024b6c9306579b8.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "recorded_at": "2026-10-12T12:26:53.010588+00:00",
+  "field_size": 22,
+  "reference_cutoff": "2026-15",
+  "parameter_values_evaluated": 1,
+  "policy": {
+    "scenario_id": "synthetic-resource-overall-common-2025-v1",
+    "target": "finite_simulation_equal_machinery_and_team",
+    "seasons": 62500,
+    "seed": 20261012,
+    "max_points_mcse": 0.05,
+    "precision_policy": "bounded_points_mcse_fixed_workload_no_retry",
+    "advancing": [
+      16,
+      10
+    ],
+    "scenarios": [
+      {
+        "event_id": "2025-01",
+        "context": 0,
+        "laps": 57,
+        "consecutive_racing_laps": 57
+      },
+      {
+        "event_id": "2025-02",
+        "context": 1,
+        "laps": 56,
+        "consecutive_racing_laps": 56
+      },
+      {
+        "event_id": "2025-03",
+        "context": 2,
+        "laps": 53,
+        "consecutive_racing_laps": 53
+      },
+      {
+        "event_id": "2025-04",
+        "context": 3,
+        "laps": 57,
+        "consecutive_racing_laps": 57
+      },
+      {
+        "event_id": "2025-05",
+        "context": 4,
+        "laps": 50,
+        "consecutive_racing_laps": 50
+      },
+      {
+        "event_id": "2025-06",
+        "context": 5,
+        "laps": 57,
+        "consecutive_racing_laps": 57
+      },
+      {
+        "event_id": "2025-07",
+        "context": 6,
+        "laps": 63,
+        "consecutive_racing_laps": 63
+      },
+      {
+        "event_id": "2025-08",
+        "context": 7,
+        "laps": 78,
+        "consecutive_racing_laps": 78
+      },
+      {
+        "event_id": "2025-09",
+        "context": 8,
+        "laps": 66,
+        "consecutive_racing_laps": 66
+      },
+      {
+        "event_id": "2025-10",
+        "context": 9,
+        "laps": 70,
+        "consecutive_racing_laps": 70
+      },
+      {
+        "event_id": "2025-11",
+        "context": 10,
+        "laps": 70,
+        "consecutive_racing_laps": 70
+      },
+      {
+        "event_id": "2025-12",
+        "context": 11,
+        "laps": 52,
+        "consecutive_racing_laps": 52
+      },
+      {
+        "event_id": "2025-13",
+        "context": 12,
+        "laps": 44,
+        "consecutive_racing_laps": 44
+      },
+      {
+        "event_id": "2025-14",
+        "context": 13,
+        "laps": 70,
+        "consecutive_racing_laps": 70
+      },
+      {
+        "event_id": "2025-15",
+        "context": 14,
+        "laps": 72,
+        "consecutive_racing_laps": 72
+      },
+      {
+        "event_id": "2025-16",
+        "context": 15,
+        "laps": 53,
+        "consecutive_racing_laps": 53
+      },
+      {
+        "event_id": "2025-17",
+        "context": 16,
+        "laps": 51,
+        "consecutive_racing_laps": 51
+      },
+      {
+        "event_id": "2025-18",
+        "context": 17,
+        "laps": 62,
+        "consecutive_racing_laps": 62
+      },
+      {
+        "event_id": "2025-19",
+        "context": 18,
+        "laps": 56,
+        "consecutive_racing_laps": 56
+      },
+      {
+        "event_id": "2025-20",
+        "context": 19,
+        "laps": 71,
+        "consecutive_racing_laps": 71
+      },
+      {
+        "event_id": "2025-21",
+        "context": 20,
+        "laps": 71,
+        "consecutive_racing_laps": 71
+      },
+      {
+        "event_id": "2025-22",
+        "context": 21,
+        "laps": 50,
+        "consecutive_racing_laps": 50
+      },
+      {
+        "event_id": "2025-23",
+        "context": 22,
+        "laps": 57,
+        "consecutive_racing_laps": 57
+      },
+      {
+        "event_id": "2025-24",
+        "context": 23,
+        "laps": 58,
+        "consecutive_racing_laps": 58
+      }
+    ]
+  },
+  "seasons": 62500,
+  "reference_events": 24,
+  "synthetic_parameter_values": {
+    "skill": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "overall_race_skill": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "sd_driver_form": 0.2,
+    "overall_sd_day": 0.3,
+    "overall_shared_weekend": 1.0,
+    "sigma0": 0.5,
+    "sigma_tau": 0.5,
+    "nu": 4.0,
+    "overall_grid": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "overall_pace": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "overall_hazard": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "output_quantities": 319,
+  "quantities_sha256": "026d3735ee67aff9a478c757640b3fd5857207b99e7a9148939a366ead82211a",
+  "every_output_finite": true,
+  "numerical_summary": {
+    "scenario_id": "synthetic-resource-overall-common-2025-v1",
+    "seasons": 62500,
+    "seed": 20261012,
+    "n_races": 24,
+    "max_driver_points_mcse": 0.0057274554528539195,
+    "worst_case_driver_points_mcse_bound": 0.05,
+    "points_precision_passed": true,
+    "protocol_sha256": "55da31c7ae0ce3f616146e0267e53d3182f48e434c995c01329cd4fee5f237d9",
+    "exact_expected_points": false,
+    "establishes_rank_precision": false,
+    "publication_allowed": false
+  },
+  "seconds": 13.58953143301187,
+  "process_max_rss_kib": 1153304,
+  "runtime": {
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "numpy": "2.5.3"
+  },
+  "limitations": [
+    "Arbitrary synthetic states, not fitted parameters or a recovery experiment",
+    "Explicit full-racing-distance and zero-retirement resource scenario, not a calibrated incident model",
+    "One parameter value; full-posterior and complete-study runtime are unmeasured",
+    "Local capped scope only; intended CI runner remains unverified"
+  ],
+  "mcmc_run": false,
+  "real_driver_table_saved": false,
+  "intended_ci_runner_verified": false,
+  "publication_allowed": false
+}

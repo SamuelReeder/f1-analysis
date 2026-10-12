@@ -80,3 +80,13 @@ joint-posterior target adapter, permutation invariance, shared finite ties,
 same-randomness monotonicity, paired numerical error and rejection of incomplete
 or unregistered scenarios. Fixed synthetic inputs and cache-format receipts are
 test fixtures, not driver evidence.
+
+The [verification record](../outputs/championship/development/overall-ranking-recovery-checks/verification.json)
+preserves the initial development checks, passing focused suite on committed
+source and a capped local resource measurement. The workload uses the committed
+field/calendar dimensions with arbitrary synthetic parameters, explicit full
+racing distance and no retirements. It verifies actual scope limits and records
+elapsed time and peak process memory. It does not measure a full posterior,
+complete recovery study or intended CI runner. Hashed model/data sources and the
+pending numerical proposal are unchanged; existing stale-publication failures
+still require regeneration.

@@ -1,0 +1,116 @@
+{
+  "recorded_at": "2026-10-12T12:28:28.313763+00:00",
+  "source_commit": "b03c10c6200a80c017e043eceb2784447910dfa3",
+  "source_hashes": {
+    "analysis/overall_ranking_recovery.py": "a4cd959a80107646afa69609b946e20efda905dc0ad254e2972d27a80a79f5b7",
+    "analysis/overall_recovery_checks.py": "b89d2d26fed2ad7a497d225fa54bb76b67620225f0e22dd25f0a40bda758495d",
+    "tests/test_overall_ranking_recovery.py": "626e0391ea864cb0c3ba9cdf2bb9103fd2502a09c94248a6489f38d476d16818",
+    "tests/test_overall_recovery_checks.py": "313e848afd86f16aab841d450b8d2ffd8eabf5f08cf8a74611945ac897b6e1ea",
+    "f1rank/overall/simulation.py": "57d31ee69f2f6b36fe551c9b6bcb51f0894e5cfbd03e1403adf77e7920c61ff9",
+    "f1rank/overall/scoring.py": "8fc3051432ff7f5e00038a336923fe7c1fce114115b3a87b889079728db33aae",
+    "f1rank/overall/order.py": "812af3dac1f6ad8fa016919332511a24fc99d53eef947edc1eeec55dd48cd95d",
+    "f1rank/overall/model.py": "83d97eb193495fc5ea2d7203b10ebd10f9fa1ef14f10bafe5ba86a868035b1ac",
+    "f1rank/overall/recovery.py": "c2ce4c3618cc19f9b0dd462557fd54d27aa65fa5ac344998d358067724b6d042",
+    "docs/overall_ranking_recovery.md": "6ec6cb449d123991a9b648db6648f1eb5765caeba730d67b2d256fb592deae19",
+    "docs/overall_rotation_profile_proposal.json": "536fedbbb2a25c30b70b9987e640b8589e1dad624a8b0473ef0f99b06fff6e17"
+  },
+  "reports": {
+    "initial.xml": {
+      "tests": 79,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 18.237,
+      "sha256": "230d414fb0a9b288fa7cd74899545fa5057927de5c6faf2c9ac22d742784dbd4",
+      "exit_code": 0,
+      "failed_tests": []
+    },
+    "focused.xml": {
+      "tests": 190,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 36.121,
+      "sha256": "645d7f1e6fda391e807f59695159ea042b36b976fa8ce3a29d936fe8c5d513af",
+      "exit_code": 0,
+      "failed_tests": []
+    }
+  },
+  "source_boundaries": {
+    "initial.xml": "Working-tree ranking/recovery tests before the additional adapter-equivalence and aggregate-report rejection fixtures. No MCMC or real-driver evaluation.",
+    "focused.xml": "Focused ranking, recovery, simulation, scoring, generation, fitting and archive tests on source_commit.",
+    "resources.json": "Capped synthetic functional workload on its recorded source_commit; arbitrary states at committed field/calendar dimensions, with zero retirement hazard and full racing distance. No fitted driver values or table retained."
+  },
+  "commands": {
+    "focused.xml": "python -m pytest -q tests/test_overall_ranking_recovery.py tests/test_overall_recovery_checks.py tests/test_overall.py tests/test_overall_contract.py tests/test_overall_event_rules.py tests/test_overall_order_generation.py tests/test_overall_fitting.py tests/test_overall_posterior_archive.py --junitxml=outputs/championship/development/overall-ranking-recovery-checks/focused.xml",
+    "resources.json": "python analysis/overall_ranking_resources.py --output outputs/championship/development/overall-ranking-recovery-checks/resources.json"
+  },
+  "execution": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "policy": "Sequential systemd user scopes"
+  },
+  "checks": [
+    "Fixed simulation function agrees with an exact analytically solvable field within its reported sampling error",
+    "Known-state mapping agrees with the checked joint-posterior counterfactual target interface",
+    "Permutation, repetition and fitted nuisance exclusion preserve the intended target",
+    "Faster race strength increases the fixed functional under common random numbers in the controlled fixture",
+    "Point differences retain same-season covariance; exact finite ties retain shared ranks and best-driver mass",
+    "A scoring-range variance bound prevents accidental constant tiny samples from passing points precision",
+    "A checked posterior can remain a valid fit while its ranking-functional evaluation fails precision",
+    "Missing numerical reports, changed scenario identity and unregistered evaluator source prevent complete calibration accounting"
+  ],
+  "resource_record": {
+    "file": "resources.json",
+    "sha256": "e52adc9a597c729ebfbe99c3ad4b3f17aa2dca59b5fe9508ebf1b72073461a63",
+    "source_commit": "88fa8a2bd58f0c2e9c38d32a5aba63e15b1cb82a",
+    "field_size": 22,
+    "seasons": 62500,
+    "reference_events": 24,
+    "parameter_values_evaluated": 1,
+    "seconds": 13.58953143301187,
+    "process_max_rss_kib": 1153304,
+    "limits": {
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rd940f12c786243b99024b6c9306579b8.scope",
+      "memory_max": "3221225472",
+      "cpu_max": "200000 100000"
+    },
+    "numerical_summary": {
+      "scenario_id": "synthetic-resource-overall-common-2025-v1",
+      "seasons": 62500,
+      "seed": 20261012,
+      "n_races": 24,
+      "max_driver_points_mcse": 0.0057274554528539195,
+      "worst_case_driver_points_mcse_bound": 0.05,
+      "points_precision_passed": true,
+      "protocol_sha256": "55da31c7ae0ce3f616146e0267e53d3182f48e434c995c01329cd4fee5f237d9",
+      "exact_expected_points": false,
+      "establishes_rank_precision": false,
+      "publication_allowed": false
+    }
+  },
+  "model_inputs_key": "d5b8c6c6ff3b858ee265ce4b8eb9199bc1ec752fd00083a5ca84d861c77a156b",
+  "model_data_contract_and_pending_proposal_unchanged": true,
+  "pending_proposal_status": "proposal_pending_user_approval",
+  "pending_proposal_user_approved": false,
+  "full_suite": {
+    "rerun": false,
+    "passing_full_suite_established": false,
+    "previous_verification": "../overall-race-only-checks/verification.json",
+    "previous_verification_sha256": "35be2b0a364153838dc4e8850eb38f0ae0eee4db110735d8e977ca45af416457",
+    "reason": "Only development evaluation code and resource tooling changed. Related tests passed; the prior stale-publication failures still require actual regeneration."
+  },
+  "limitations": [
+    "Finite-simulation quantities are approximations to expected points; near-tie rank precision is not established.",
+    "Full recovery/calibration registration, power and numerical-sensitivity assessment remain required.",
+    "The original confounded numerical case remains failed; the separate sampling study still awaits approval.",
+    "Current simulator limitations around completion, lapping, shortened events and correlated incidents remain.",
+    "The local resource record covers one arbitrary parameter value, not full-posterior, full-study or intended-runner cost.",
+    "No chronological or prospective predictive evidence was produced; publication regeneration and rollout checks remain open."
+  ],
+  "mcmc_run": false,
+  "sbc_study_run": false,
+  "ranking_recovery_established": false,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}
