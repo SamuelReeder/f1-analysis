@@ -37,6 +37,52 @@ def test_joint_scoring_preserves_dependence_between_factors():
     assert not np.isclose(joint, 2 * scores.log_predictive(a["log_probabilities"]))
 
 
+def test_conditioning_reweights_joint_draws_before_integrating_the_target():
+    target, panel = component([.9, .1]), component([.9, .1])
+    result = scores.conditional_log_predictive(target, panel)
+    np.testing.assert_allclose(result, np.log([.82]))
+    assert not np.isclose(result, scores.log_predictive(target["log_probabilities"]))
+    complement = component([.1, .9])
+    np.testing.assert_allclose(np.exp(result) + np.exp(scores.conditional_log_predictive(complement, panel)), 1.)
+
+
+def test_conditioning_weights_have_no_effect_when_independent_of_parameters():
+    target, panel = component([.9, .1]), component([1., 1.])
+    for shift in (0., -1000., -2e20):
+        panel["log_probabilities"][:] = shift
+        np.testing.assert_allclose(scores.conditional_log_predictive(target, panel), np.log([.5]), atol=1e-14)
+
+
+def test_conditional_score_keeps_zero_mass_and_rejects_impossible_conditioning():
+    target, panel = component([.9, .1]), component([1., 1.])
+    panel["log_probabilities"][0] = -np.inf
+    np.testing.assert_allclose(scores.conditional_log_predictive(target, panel), np.log([.1]))
+    target["log_probabilities"][:] = -np.inf
+    assert np.isneginf(scores.conditional_log_predictive(target, panel)).all()
+    panel["log_probabilities"][:] = -np.inf
+    with pytest.raises(ValueError, match="impossible conditioning"):
+        scores.conditional_log_predictive(target, panel)
+
+
+@pytest.mark.parametrize("key,value", [("posterior_id", "another-fit"),
+    ("draw_ids", ["chain0-draw1", "chain0-draw0"]), ("event_ids", ["2001-02"])])
+def test_conditional_score_rejects_independent_or_reordered_factors(key, value):
+    target, panel = component([.9, .1]), component([.9, .1])
+    panel[key] = value
+    with pytest.raises(ValueError, match="share"):
+        scores.conditional_log_predictive(target, panel)
+
+
+def test_conditional_mass_does_not_accept_positive_log_densities():
+    target, panel = component([.9, .1]), component([.9, .1])
+    for which in (target, panel):
+        other = copy.deepcopy(which["log_probabilities"])
+        which["log_probabilities"][0] = .1
+        with pytest.raises(ValueError, match="discrete log masses"):
+            scores.conditional_log_predictive(target, panel)
+        which["log_probabilities"] = other
+
+
 @pytest.mark.parametrize("key,value", [("posterior_id", "other-fit"),
     ("draw_ids", ["chain0-draw1", "chain0-draw0"]), ("event_ids", ["2001-02"])])
 def test_independent_or_misaligned_factors_cannot_be_paired(key, value):

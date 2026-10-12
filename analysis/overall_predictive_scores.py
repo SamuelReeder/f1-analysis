@@ -24,12 +24,8 @@ def log_predictive(log_probabilities):
     return np.logaddexp.reduce(values, axis=0) - np.log(len(values))
 
 
-def joint_log_predictive(components):
-    """Combine conditional factors within each SAME joint draw before integrating.
-
-Identity checks protect the interface. Producer provenance must independently
-establish that those identities came from the asserted posterior and targets.
-"""
+def _aligned_components(components):
+    """Validate the joint identities without dropping or independently pairing draws."""
     if not components:
         raise ValueError("No predictive components")
     first = components[0]
@@ -41,7 +37,7 @@ establish that those identities came from the asserted posterior and targets.
         if not isinstance(values, list) or not values or not all(isinstance(v, str) and v for v in values) or len(set(values)) != len(values):
             raise ValueError("Missing or duplicate predictive identities")
     shape = (len(first["draw_ids"]), len(first["event_ids"]))
-    total = np.zeros(shape)
+    aligned = []
     for component in components:
         if any(component.get(k) != first[k] for k in identities):
             raise ValueError("Predictive factors must share posterior, draws and event order")
@@ -49,8 +45,39 @@ establish that those identities came from the asserted posterior and targets.
         if values.shape != shape:
             raise ValueError("Predictive factor axes do not match their identities")
         log_predictive(values)  # validate each factor before summing
-        total += values
-    return log_predictive(total)
+        aligned.append(values)
+    return aligned
+
+
+def joint_log_predictive(components):
+    """Combine conditional factors within each SAME joint draw before integrating.
+
+Identity checks protect the interface. Producer provenance must independently
+establish that those identities came from the asserted posterior and targets.
+"""
+    return log_predictive(sum(_aligned_components(components)))
+
+
+def conditional_log_predictive(conditional, conditioning):
+    """Posterior predictive mass conditional on a model-generated discrete event.
+
+    Inputs hold log p(target | condition, theta) and log p(condition | theta)
+    on the SAME joint draws. Conditioning reweights those draws before averaging
+    the target probability. This is not the unweighted predictive mean, nor is
+    it permission to choose a favorable running panel or omit a required event.
+
+    Normalize the conditioning weights before adding target logs. Otherwise a
+    very negative common log mass can erase the target probabilities when forming
+    log p(target, condition) and subsequently subtracting log p(condition).
+    """
+    target, weight = _aligned_components([conditional, conditioning])
+    if (target > 0).any() or (weight > 0).any():
+        raise ValueError("Conditional scoring requires discrete log masses, not positive log densities")
+    maximum = weight.max(axis=0)
+    if np.isneginf(maximum).any():
+        raise ValueError("An impossible conditioning event has no conditional score; retain it as unresolved")
+    relative = weight - maximum
+    return np.logaddexp.reduce(relative + target, axis=0) - np.logaddexp.reduce(relative, axis=0)
 
 
 def _discrete(probabilities, observed):
