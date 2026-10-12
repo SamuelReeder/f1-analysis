@@ -19,6 +19,10 @@ from f1rank.lineage import REGULATION_RESETS
 # Its trace prior is checked against this value in the equivalence fixture.
 RACE_CAR_SD = 1.5
 DEFAULT_DRAW_BATCH = 128
+TRACK_POLICY_PATH = Path(__file__).resolve().parents[1] / "docs/overall_track_factor_policy.json"
+TRACK_POLICY_BYTES = TRACK_POLICY_PATH.read_bytes()
+TRACK_POLICY = json.loads(TRACK_POLICY_BYTES)
+UNSEEN_TRACK_POLICY = TRACK_POLICY["id"]
 
 
 def _parameters(design, posterior, *, validate_values=True):
@@ -265,7 +269,16 @@ def _forecast_batch(design, catalogs, p, q, noise):
         rteam = _centre(p["overall_team_link"][..., None] * stack(compat) + stack(rextra))
         qform, rform = _centre(stack(qday)), _centre(stack(rday))
         persistent, track, qcars, rcars = [], [], [], []
-        factor = 0. if catalog["new_circuit"] else float(q["circuit_factor"][catalog["circuit_index"]])
+        if catalog["likelihood_arm"] == "current_race_only":
+            factor, factor_policy = 0., "race_only_axis_removed"
+        elif catalog["new_circuit"]:
+            factor = (TRACK_POLICY["distribution"]["mean"]
+                      + TRACK_POLICY["distribution"]["standard_deviation"]
+                      * noise.draw("qualifying_circuit_factor", catalog["circuit_id"]))
+            factor_policy = UNSEEN_TRACK_POLICY
+        else:
+            factor = float(q["circuit_factor"][catalog["circuit_index"]])
+            factor_policy = "fixed_training_factor"
         for team in teams:
             if team not in car_state:
                 car = CAR_FIRST_SD * noise.draw("car_first", [team, event])
@@ -296,12 +309,12 @@ def _forecast_batch(design, catalogs, p, q, noise):
             raise ValueError("Nonfinite forecast state; no clipping or silent replacement is allowed")
         events.append(dict(event_id=event, drivers=drivers, cars=teams, entry_car=entry_car,
             states=states, catalog=catalog, circuit_factor=factor,
-            circuit_factor_policy="training factor; unseen circuit uses the existing no-adjustment convention"))
+            circuit_factor_policy=factor_policy))
     return events
 
 
 def iter_forecast_states(design, snapshots, posterior, *, seed, training_arrays_key,
-                         draw_batch_size=DEFAULT_DRAW_BATCH):
+                         draw_batch_size=DEFAULT_DRAW_BATCH, unseen_track_policy=None):
     """Yield a complete announced path for each contiguous batch of joint draws.
 
     All chains stay together. The caller must account for every draw_range;
@@ -315,6 +328,10 @@ def iter_forecast_states(design, snapshots, posterior, *, seed, training_arrays_
     shape = p["sd_level"].shape
     _Noise(seed, shape)  # fail before scanning arrays for an invalid seed
     catalogs = _catalogs(design, snapshots, training_arrays_key)
+    if unseen_track_policy not in (None, UNSEEN_TRACK_POLICY):
+        raise ValueError("Unsupported unseen qualifying track-factor policy")
+    if unseen_track_policy is None and any(c["new_circuit"] and c["likelihood_arm"] != "current_race_only" for c in catalogs):
+        raise ValueError("Unseen qualifying track factor requires an explicit population policy")
     key = _checked_parameter_digest(p, draw_batch_size)
     implementation = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     for start in range(0, shape[1], draw_batch_size):
@@ -325,12 +342,14 @@ def iter_forecast_states(design, snapshots, posterior, *, seed, training_arrays_
             events=events, training_arrays_key=training_arrays_key, seed=seed,
             implementation_sha256=implementation, consumed_posterior_key=key,
             posterior_shape=list(shape), draw_range=[start, stop],
+            unseen_track_policy=unseen_track_policy,
+            track_policy_sha256=hashlib.sha256(TRACK_POLICY_BYTES).hexdigest(),
             latent_states_propagated=True, convergence_verified=False, source_availability_verified=False,
             outcome_prediction_available=False, independent_evidence_established=False, publication_allowed=False)
 
 
 def forecast_states(design, snapshots, posterior, *, seed, training_arrays_key,
-                    draw_batch_size=DEFAULT_DRAW_BATCH):
+                    draw_batch_size=DEFAULT_DRAW_BATCH, unseen_track_policy=None):
     """Collect the complete forecast; use the iterator for bounded output memory.
 
     Supply a snapshot for every intervening event at one information origin.
@@ -339,14 +358,20 @@ def forecast_states(design, snapshots, posterior, *, seed, training_arrays_key,
     """
     result = None
     for batch in iter_forecast_states(design, snapshots, posterior, seed=seed,
-            training_arrays_key=training_arrays_key, draw_batch_size=draw_batch_size):
+            training_arrays_key=training_arrays_key, draw_batch_size=draw_batch_size,
+            unseen_track_policy=unseen_track_policy):
         start, stop = batch["draw_range"]
         if result is None:
             result = {k:v for k, v in batch.items() if k not in ("events", "draw_range")}
             shape = tuple(batch["posterior_shape"])
             result["events"] = [dict(event, states={name:np.empty(shape + value.shape[2:], dtype=value.dtype)
                 for name, value in event["states"].items()}) for event in batch["events"]]
+            for event in result["events"]:
+                if isinstance(event["circuit_factor"], np.ndarray):
+                    event["circuit_factor"] = np.empty(shape)
         for output, event in zip(result["events"], batch["events"]):
+            if isinstance(event["circuit_factor"], np.ndarray):
+                output["circuit_factor"][:, start:stop] = event["circuit_factor"]
             for name, value in event["states"].items():
                 output["states"][name][:, start:stop] = value
     return result

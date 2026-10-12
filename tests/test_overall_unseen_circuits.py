@@ -6,6 +6,7 @@ import pytest
 
 from analysis import overall_observation_kernels as kernels
 from analysis.overall_forecast_catalog import build_catalog
+from analysis.overall_forecast_states import UNSEEN_TRACK_POLICY
 from test_overall_forecast_states import fixture, future_path, trace_model
 from test_overall_observation_kernels import observation_posterior, scenarios
 
@@ -13,7 +14,7 @@ from test_overall_observation_kernels import observation_posterior, scenarios
 def predict(design, path, posterior, *, batch=7, policy=kernels.UNSEEN_CIRCUIT_POLICY):
     return list(kernels.iter_conditional_weekends(design, path, posterior, scenarios(path),
         advancing=(4, 2), seed=41, training_arrays_key=build_catalog(design, path[0])["training_arrays_key"],
-        draw_batch_size=batch, unseen_circuit_policy=policy))
+        draw_batch_size=batch, unseen_circuit_policy=policy, unseen_track_policy=UNSEEN_TRACK_POLICY))
 
 
 def test_extending_the_reference_in_a_model_trace_preserves_all_fitted_coefficients():

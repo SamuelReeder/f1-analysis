@@ -139,7 +139,8 @@ class ConditionLaw:
 
 
 def iter_forecast_weekends(design, snapshots, posterior, scenarios, *, advancing, seed,
-                           training_arrays_key, draw_batch_size=128, unseen_circuit_policy=None):
+                           training_arrays_key, draw_batch_size=128, unseen_circuit_policy=None,
+                           unseen_track_policy=None):
     """Unknown conditions integrated by joint simulation, still conditional on operations.
 
     Scenarios supply only exposure_laps and grid_policy. No observed future
@@ -152,4 +153,5 @@ def iter_forecast_weekends(design, snapshots, posterior, scenarios, *, advancing
         raise ValueError("Condition history and forecast training arrays disagree")
     yield from _iter_weekends(design, snapshots, posterior, scenarios,
         advancing=advancing, seed=seed, training_arrays_key=training_arrays_key,
-        draw_batch_size=draw_batch_size, unseen_circuit_policy=unseen_circuit_policy, condition_law=law)
+        draw_batch_size=draw_batch_size, unseen_circuit_policy=unseen_circuit_policy,
+        unseen_track_policy=unseen_track_policy, condition_law=law)

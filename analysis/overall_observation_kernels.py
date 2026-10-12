@@ -318,7 +318,7 @@ def _scenarios(design, snapshots, scenarios, advancing, unseen_circuit_policy, *
 
 def iter_conditional_weekends(design, snapshots, posterior, scenarios, *, advancing, seed,
                               training_arrays_key, draw_batch_size=DEFAULT_DRAW_BATCH,
-                              unseen_circuit_policy=None):
+                              unseen_circuit_policy=None, unseen_track_policy=None):
     """One conditional future trajectory per joint posterior draw, in batches.
 
     The SAME posterior mapping supplies states and observation coefficients. The
@@ -331,11 +331,12 @@ def iter_conditional_weekends(design, snapshots, posterior, scenarios, *, advanc
     """
     yield from _iter_weekends(design, snapshots, posterior, scenarios, advancing=advancing,
         seed=seed, training_arrays_key=training_arrays_key, draw_batch_size=draw_batch_size,
-        unseen_circuit_policy=unseen_circuit_policy)
+        unseen_circuit_policy=unseen_circuit_policy, unseen_track_policy=unseen_track_policy)
 
 
 def _iter_weekends(design, snapshots, posterior, scenarios, *, advancing, seed,
-                   training_arrays_key, draw_batch_size, unseen_circuit_policy, condition_law=None):
+                   training_arrays_key, draw_batch_size, unseen_circuit_policy,
+                   unseen_track_policy=None, condition_law=None):
     """Shared observation path: conditions are explicit or supplied by the fixed law."""
     if type(draw_batch_size) is not int or draw_batch_size < 1:
         raise ValueError("Draw batch size must be a positive integer")
@@ -347,7 +348,8 @@ def _iter_weekends(design, snapshots, posterior, scenarios, *, advancing, seed,
         separators=(",", ":"), allow_nan=False).encode()).hexdigest()
     source_hash = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     for batch in iter_forecast_states(design, snapshots, posterior, seed=seed,
-            training_arrays_key=training_arrays_key, draw_batch_size=draw_batch_size):
+            training_arrays_key=training_arrays_key, draw_batch_size=draw_batch_size,
+            unseen_track_policy=unseen_track_policy):
         start, stop = batch["draw_range"]
         part = {name:value[:, start:stop] for name, value in p.items()}
         noise, events = ObservationNoise(seed, shape, (start, stop)), []
@@ -377,6 +379,7 @@ def _iter_weekends(design, snapshots, posterior, scenarios, *, advancing, seed,
             order_factor = order_log_probability(strength, order)
             events.append(dict(event_id=event["event_id"], drivers=event["drivers"],
                 catalog=event["catalog"], qualifying=qualifying, grid_feature_slot=grid,
+                circuit_factor=event["circuit_factor"], circuit_factor_policy=event["circuit_factor_policy"],
                 context=coefficients, strength=strength, completion=completion,
                 running_positions=order, order_log_probability=order_factor,
                 joint_order_completion_log_probability=order_factor + completion["log_probability"].sum(axis=-1)))
@@ -389,6 +392,7 @@ def _iter_weekends(design, snapshots, posterior, scenarios, *, advancing, seed,
             training_arrays_key=training_arrays_key, state_parameter_key=batch["consumed_posterior_key"],
             observation_parameter_key=parameter_key, scenario_sha256=scenario_key,
             unseen_circuit_policy=unseen_circuit_policy,
+            unseen_track_policy=batch["unseen_track_policy"], track_policy_sha256=batch["track_policy_sha256"],
             state_implementation_sha256=batch["implementation_sha256"], implementation_sha256=source_hash,
             qualifying_advancing=list(advancing), conditional_outcomes_available=True,
             conditions_forecast=condition_law is not None, official_grid_generated=False, classification_generated=False,

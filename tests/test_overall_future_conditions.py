@@ -10,6 +10,7 @@ from analysis import overall_future_conditions as conditions
 from analysis import overall_observation_kernels as kernels
 from analysis import overall_predictive_scores as scores
 from analysis.overall_forecast_catalog import build_catalog
+from analysis.overall_forecast_states import UNSEEN_TRACK_POLICY
 from f1rank.overall.design import build
 from test_overall_forecast_states import fixture, future_path
 from test_overall_observation_kernels import observation_posterior, scenarios
@@ -135,7 +136,7 @@ def test_batches_field_permutation_prefix_and_unseen_circuit_preserve_joint_traj
     path, p = future_path(snap), observation_posterior(design)
     for s in path:
         s["event"]["circuit_id"] = "new"
-    kw = dict(unseen_circuit_policy=kernels.UNSEEN_CIRCUIT_POLICY)
+    kw = dict(unseen_circuit_policy=kernels.UNSEEN_CIRCUIT_POLICY, unseen_track_policy=UNSEEN_TRACK_POLICY)
     whole = predict(design, path, p, batch_size=7, **kw)[0]
     batched = predict(design, path, p, batch_size=3, **kw)
     shuffled = copy.deepcopy(path)

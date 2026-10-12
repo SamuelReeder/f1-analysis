@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from analysis.overall_forecast_catalog import build_catalog
-from analysis.overall_forecast_states import DEFAULT_DRAW_BATCH, iter_forecast_states
+from analysis.overall_forecast_states import DEFAULT_DRAW_BATCH, UNSEEN_TRACK_POLICY, iter_forecast_states
 from analysis.overall_observation_kernels import (CONTEXT_NAMES, UNSEEN_CIRCUIT_POLICY,
                                                 iter_conditional_weekends)
 from analysis.overall_posterior_archive import mapped_checked_posterior
@@ -84,6 +84,7 @@ def observation_arrays(event):
         for name, value in sorted(event[block].items()):
             yield block + ":" + name, value
     yield "qualifying:positions", event["qualifying"]["positions"]
+    yield "circuit_factor", np.asarray(event["circuit_factor"])
     for i, segment in enumerate(event["qualifying"]["segments"]):
         for name, value in sorted(segment.items()):
             yield f"qualifying:{i}:{name}", value
@@ -103,7 +104,7 @@ def run(*, compressed=False, observations=False, unseen_circuit=False, future_co
         "analysis/overall_forecast_resources.py", "f1rank/overall/design.py", "f1rank/overall/fitting.py",
         "f1rank/model.py", "f1rank/overall/model.py", "docs/overall_rotation_profile_proposal.json",
         "analysis/overall_posterior_archive.py", "analysis/overall_observation_kernels.py",
-        "f1rank/overall/order.py", "f1rank/overall/simulation.py"]
+        "f1rank/overall/order.py", "f1rank/overall/simulation.py", "docs/overall_track_factor_policy.json"]
     if future_conditions:
         tracked += ["analysis/overall_future_conditions.py", "docs/overall_condition_policy.json"]
     source = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
@@ -214,6 +215,7 @@ def run(*, compressed=False, observations=False, unseen_circuit=False, future_co
                         del value["wet"], value["neutralised"]
                 iterator = generator(design, snapshots, parameters, scenario,
                     advancing=QUALIFYING_FIELDS[len(field)],
+                    unseen_track_policy=UNSEEN_TRACK_POLICY if unseen_circuit or future_conditions else None,
                     unseen_circuit_policy=UNSEEN_CIRCUIT_POLICY if unseen_circuit or future_conditions else None, **args)
             else:
                 iterator = iter_forecast_states(design, [snap], parameters, **args)
@@ -269,6 +271,7 @@ def run(*, compressed=False, observations=False, unseen_circuit=False, future_co
         forecast=dict(kind="historical_condition_weekend" if future_conditions else "conditional_weekend" if observations else "latent_states",
             circuit_id=snap["event"]["circuit_id"], unseen_circuit=bool(catalog["new_circuit"]),
             unseen_circuit_policy=UNSEEN_CIRCUIT_POLICY if unseen_circuit or future_conditions else None,
+            unseen_track_policy=UNSEEN_TRACK_POLICY if unseen_circuit or future_conditions else None,
             event_circuits=[dict(event_id=s["event"]["event_id"], circuit_id=s["event"]["circuit_id"]) for s in snapshots],
             condition_history=condition_history,
             batches=batches, draws_per_chain=stop, max_batch_output_bytes=max_batch_bytes,
