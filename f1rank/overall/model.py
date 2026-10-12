@@ -9,7 +9,7 @@ import numpyro.distributions as dist
 from numpyro import handlers
 
 from ..model import centre, linear_recurrence
-from .order import plackett_luce
+from .order import plackett_luce, perturbed_order
 from .qualifying import qualifying
 
 
@@ -93,7 +93,7 @@ def model(q, laps, outcomes, *, generate=False):
     # losing probability or gradients at large common strength offsets.
     if generate:
         gumbel = numpyro.sample("generated_order_noise", dist.Gumbel(0., 1.).expand(strength.shape))
-        order = jnp.argsort(-jnp.where(o["mask"], strength + gumbel, -jnp.inf), axis=1)
+        order = perturbed_order(strength, gumbel, o["mask"])
         numpyro.deterministic("generated_order", order)
     else:
         numpyro.factor("overall_finish_order", plackett_luce(strength, o["mask"]).sum())

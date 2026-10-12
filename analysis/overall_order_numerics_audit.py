@@ -28,6 +28,7 @@ def audit():
 
     source = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     tracked = ["f1rank/overall/model.py", "f1rank/overall/order.py", "f1rank/overall/recovery.py",
+        "f1rank/overall/simulation.py",
         "analysis/overall_observation_kernels.py", "analysis/overall_order_numerics_audit.py",
         "docs/overall_candidate.md", "docs/overall_rotation_profile_proposal.json"]
     for name in tracked:

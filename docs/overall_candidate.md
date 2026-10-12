@@ -255,6 +255,25 @@ and proposed coordinates together; it could not isolate either change as the
 cause of convergence. The original failed profile remains failed, and this
 boundary regression is not proof of that failure's cause.
 
+## Race-order generation correction
+
+Dated 2026-10-12, with no fits running. Follow-up regressions reproduced a
+separate generation error: adding a Gumbel perturbation to a large strength could
+round away the perturbation before sorting. Equal strengths then followed an
+artificial tie convention instead of the supplied random draw. The joint model
+generator, conditional forecast and counterfactual race simulator now sort a
+compensated sum that retains its roundoff component. They use the existing random
+draws; no additional sampling site or seed search is introduced.
+
+The recovery consumer rejects invalid generated order indices before using them
+to index observations. The correction preserves the intended PL distribution
+and leaves the fitted likelihood, priors, fixed retry ladder and gates unchanged.
+It changes the source fingerprint and requires fresh affected evidence. The
+original registered observations and truths must still be reproduced exactly
+before the separately approved coordinate study can run. Its approval remains
+pending. These arithmetic checks do not establish full recovery or explain the
+earlier failure.
+
 ## Remaining acceptance work
 
 - Complete synthetic recovery and simulation-based calibration, including the

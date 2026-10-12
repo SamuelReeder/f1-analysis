@@ -92,7 +92,8 @@ def run(*, compressed=False, observations=False):
     tracked = ["analysis/overall_forecast_states.py", "analysis/overall_forecast_catalog.py",
         "analysis/overall_forecast_resources.py", "f1rank/overall/design.py", "f1rank/overall/fitting.py",
         "f1rank/model.py", "f1rank/overall/model.py", "docs/overall_rotation_profile_proposal.json",
-        "analysis/overall_posterior_archive.py", "analysis/overall_observation_kernels.py"]
+        "analysis/overall_posterior_archive.py", "analysis/overall_observation_kernels.py",
+        "f1rank/overall/order.py", "f1rank/overall/simulation.py"]
     source = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     for name in tracked:
         saved = subprocess.check_output(["git", "show", f"{source}:{name}"], cwd=ROOT)

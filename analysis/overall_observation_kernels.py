@@ -11,6 +11,7 @@ from pathlib import Path
 import numpy as np
 
 from analysis.overall_forecast_states import DEFAULT_DRAW_BATCH, iter_forecast_states
+from f1rank.overall.order import numpy_perturbed_order
 
 
 Q_PARAMETERS = ("sigma0", "sigma_tau", "nu", "sd_car_segment")
@@ -259,9 +260,8 @@ def draw_running_order(event, strength, running, noise):
                         for driver in event["drivers"]], axis=-1)
     tie = np.stack([noise.draw("race_order_tie", [event["event_id"], driver], distribution="uniform")
                    for driver in event["drivers"]], axis=-1)
-    score = strength + perturb
-    _finite("perturbed race strengths", score)
-    return _rank(score, tie, running)
+    order = numpy_perturbed_order(strength, perturb, running, tie_breaker=tie)
+    return np.where(running, np.argsort(order, axis=-1) + 1, 0)
 
 
 def _scenarios(design, snapshots, scenarios, advancing):

@@ -8,6 +8,7 @@ from dataclasses import dataclass
 import numpy as np
 
 from .scoring import POINTS, gp_points_table, score_grand_prix
+from .order import numpy_perturbed_order
 
 MAX_EXPECTED_POINTS_MCSE = .05
 QUALIFYING_FIELDS = {20: (15, 10), 22: (16, 10), 24: (17, 10)}
@@ -213,7 +214,7 @@ def simulate(draws, scenarios, *, replicates, seed=0, advancing=None):
                                    draws.q_df, rng, advancing)
             strength = (draws.pace_coefficient[:, s.context, None] * (r + rday)
                         - draws.grid_coefficient[:, s.context, None] * np.log(grid))
-            line = np.argsort(np.argsort(-(strength + rng.gumbel(size=q.shape)), axis=-1), axis=-1) + 1
+            line = np.argsort(numpy_perturbed_order(strength, rng.gumbel(size=q.shape)), axis=-1) + 1
             # Number of completed laps before a first failure; zero hazard is allowed.
             h = draws.retirement_hazard[:, s.context, None]
             uniform = rng.uniform(size=q.shape)

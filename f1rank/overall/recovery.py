@@ -102,6 +102,9 @@ def generate(case, seed):
     blocks["qualifying"]["y"] = np.asarray(trace["y"]["value"])
     blocks["laps"]["y"] = np.asarray(trace["generated_laps"]["value"])
     order = np.asarray(trace["generated_order"]["value"])
+    if not np.array_equal(np.sort(order, axis=-1),
+            np.broadcast_to(np.arange(order.shape[-1]), order.shape)):
+        raise ValueError("Invalid generated order; preserve the failure instead of indexing it")
     for name in ("entry", "log_grid", "mask"):
         blocks["outcomes"][name] = np.take_along_axis(np.asarray(blocks["outcomes"][name]), order, axis=1)
     blocks["outcomes"]["completed"] = np.asarray(trace["generated_completed"]["value"])
