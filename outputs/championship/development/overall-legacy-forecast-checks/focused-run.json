@@ -1,0 +1,25 @@
+{
+  "source_commit": "f3e1a99ca177547a1e7552d01b46cfbc3b733340",
+  "command": [
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_overall_legacy_forecast.py",
+    "tests/test_overall_baselines.py",
+    "tests/test_overall_forecast_catalog.py",
+    "tests/test_overall_forecast_states.py",
+    "tests/test_overall_forecast_batches.py",
+    "tests/test_overall_unseen_track_factor.py",
+    "tests/test_overall_race_only.py",
+    "--junitxml=outputs/championship/development/overall-legacy-forecast-checks/focused.xml"
+  ],
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r6e22685296d647e4ade2f07c0d4384c3.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "exit_code": 0,
+  "elapsed_seconds": 46.61530786601361,
+  "peak_child_rss_kib": 1219976
+}

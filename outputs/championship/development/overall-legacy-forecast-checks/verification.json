@@ -1,0 +1,58 @@
+{
+  "specification_commit": "5ffca4230b9669ea16611a8d8a6afce68bcf18b3",
+  "implementation_commit": "65967bb433222dcd4054d6202d27fa2b849254f3",
+  "source_hashes": {
+    "analysis/overall_legacy_forecast.py": "2f19b68fe43bd2244a1cd35c24c9b39b341b742ca5cb4d57f9bb05d81acde15b",
+    "analysis/overall_baselines.py": "8ce51f6634d74942cdc20b90a76b1ba3ab03979ed885470ac560e8a3d4b9b17d",
+    "analysis/overall_forecast_catalog.py": "7144a87398aea4e3435d4f87118ca3da6f475ca86f7b2710737f6be413abaf39",
+    "analysis/overall_forecast_states.py": "450a80b8c293d765ee2b9b8ae76e3c7e02dcc72774c4f328c9a93b0e68a1fd48",
+    "tests/test_overall_legacy_forecast.py": "7953b76838230576b36ae85eefb9d3accabef81061d60ec456028c8ad4fed13a"
+  },
+  "checks": {
+    "focused": {
+      "source_commit": "f3e1a99ca177547a1e7552d01b46cfbc3b733340",
+      "run": "focused-run.json",
+      "report": "focused.xml",
+      "tests": 135,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "race-integration": {
+      "source_commit": "65967bb433222dcd4054d6202d27fa2b849254f3",
+      "run": "race-integration-run.json",
+      "report": "race-integration.xml",
+      "tests": 141,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "shared-callers": {
+      "source_commit": "65967bb433222dcd4054d6202d27fa2b849254f3",
+      "run": "shared-callers-run.json",
+      "report": "shared-callers.xml",
+      "tests": 95,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "fitting_sources_and_data_unchanged_from": "8f1208b239978afb51cb37cd4c61187e1ea3525e",
+  "compared_paths": [
+    "f1rank",
+    "extract",
+    "data",
+    "docs/overall_candidate.md",
+    "docs/overall_rotation_profile_proposal.json"
+  ],
+  "pending_numerical_proposal_user_approved": false,
+  "full_integration_suite": "pending separate race-pace regeneration",
+  "legacy_forecast_resource_profile_measured": false,
+  "accepted_fit_loaded": false,
+  "real_event_scores_evaluated": false,
+  "mcmc_run_by_this_change": false,
+  "forecast_median_precision_established": false,
+  "source_availability_verified": false,
+  "independent_evidence_established": false,
+  "publication_allowed": false
+}
