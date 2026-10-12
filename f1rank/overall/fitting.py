@@ -4,6 +4,7 @@ Only registered runs may enter this runner. A numerical-profile registration is
 restricted to synthetic data and cannot authorize real-data fitting/publication.
 """
 import datetime as dt
+from contextlib import contextmanager
 import hashlib
 import json
 import os
@@ -66,22 +67,54 @@ def require_clean_inputs(inputs, root=ROOT):
                    stdout=subprocess.DEVNULL)
 
 
-def load_checked(run_dir, expected_key=None):
-    run_dir = Path(run_dir)
-    receipt = json.loads((run_dir / "receipt.json").read_text())
+@contextmanager
+def checked_archive(run_dir, expected_key=None):
+    """Share fit/source/byte checks with bounded readers, without loading arrays.
+
+    Callers must validate every member's axes and values before using a posterior.
+    Successful context exit also verifies that the source, receipt and opened
+    archive stayed unchanged. Do not commit a derived artifact before that exit.
+    """
+    run_dir = Path(run_dir).resolve()
+    receipt_path = run_dir / "receipt.json"
+    original_receipt = receipt_path.read_bytes()
+    receipt = json.loads(original_receipt)
     if receipt.get("state") != "converged" or receipt["diagnostics"].get("converged") is not True:
         raise ValueError("Failed or incomplete fit is not a posterior cache")
     if expected_key is not None and receipt["run_key"] != expected_key:
         raise ValueError("Fit does not match requested inputs")
     require_snapshot(receipt["source"])
-    archive = run_dir / receipt["posterior_file"]
-    if digest(archive) != receipt["posterior_sha256"]:
-        raise ValueError("Posterior archive changed")
-    with np.load(archive, allow_pickle=False) as saved:
-        post = {name: saved[name] for name in saved.files}
-    expected_shape = (receipt["settings"]["chains"], receipt["attempts"][-1]["samples"])
-    if not post or any(a.shape[:2] != expected_shape or not np.isfinite(a).all() for a in post.values()):
-        raise ValueError("Invalid posterior draw axes/values")
+    filename = receipt["posterior_file"]
+    if not isinstance(filename, str) or Path(filename).name != filename or not filename.endswith(".npz"):
+        raise ValueError("Invalid posterior archive path")
+    archive = run_dir / filename
+    if archive.resolve().parent != run_dir:
+        raise ValueError("Posterior archive must belong to its run directory")
+    expected_digest = receipt["posterior_sha256"]
+    with archive.open("rb") as handle:
+        def verify_bytes():
+            handle.seek(0)
+            if hashlib.file_digest(handle, "sha256").hexdigest() != expected_digest:
+                raise ValueError("Posterior archive changed")
+            opened, current = os.fstat(handle.fileno()), archive.stat()
+            if (opened.st_dev, opened.st_ino) != (current.st_dev, current.st_ino):
+                raise ValueError("Posterior archive was replaced")
+            handle.seek(0)
+        verify_bytes()
+        yield handle, receipt
+        if receipt_path.read_bytes() != original_receipt:
+            raise ValueError("Fit receipt changed while reading")
+        require_snapshot(json.loads(original_receipt)["source"])
+        verify_bytes()
+
+
+def load_checked(run_dir, expected_key=None):
+    with checked_archive(run_dir, expected_key) as (archive, receipt):
+        with np.load(archive, allow_pickle=False) as saved:
+            post = {name: saved[name] for name in saved.files}
+        expected_shape = (receipt["settings"]["chains"], receipt["attempts"][-1]["samples"])
+        if not post or any(a.shape[:2] != expected_shape or not np.isfinite(a).all() for a in post.values()):
+            raise ValueError("Invalid posterior draw axes/values")
     return post, receipt
 
 

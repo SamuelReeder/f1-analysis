@@ -216,6 +216,22 @@ regeneration. The proposed coordinate study remains pending approval and must
 use its updated input fingerprint. Its original synthetic-array hashes remain
 mandatory; the correction must not redraw or replace the old failed experiment.
 
+## Shared archive verification
+
+Dated 2026-10-12, with no fits running. The fitter's source, receipt and archive
+checks are shared with a bounded compressed-posterior reader. Archive checksums
+are streamed, and successful context exit rechecks the source, receipt and open
+archive. The new reader validates every array, even when only selected sites are
+retained as temporary memory maps. Fit settings, retry rules, diagnostics, priors
+and likelihoods are unchanged.
+
+This source refactor changes the fingerprint. Existing receipts retain their
+original source and cannot be relabeled as current. Affected fit/publication
+artifacts require regeneration before promotion. The coordinate-study proposal
+remains pending approval with its updated source identity; its fixed original
+arrays, seeds, settings and acceptance rules are preserved. Cache-format test
+fixtures do not constitute converged fits or scientific evidence.
+
 ## Remaining acceptance work
 
 - Complete synthetic recovery and simulation-based calibration, including the

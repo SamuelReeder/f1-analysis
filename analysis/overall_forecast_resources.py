@@ -5,6 +5,7 @@ maps contain arbitrary finite workload values, not an accepted posterior. The
 fit ladder supplies the largest draw shape; it is not run or modified here.
 """
 import argparse
+from contextlib import ExitStack
 import datetime as dt
 import hashlib
 import json
@@ -23,9 +24,11 @@ sys.path.insert(0, str(ROOT))
 
 from analysis.overall_forecast_catalog import build_catalog
 from analysis.overall_forecast_states import DEFAULT_DRAW_BATCH, iter_forecast_states
+from analysis.overall_posterior_archive import mapped_checked_posterior
 from f1rank.artifacts import RETRY
 from f1rank.overall.design import build
 from f1rank.overall.fitting import FIT_SETTINGS
+from f1rank.overall.provenance import snapshot
 
 WORKLOAD_SEED = 20261012
 
@@ -61,11 +64,12 @@ def parameter_template(design):
     return scalar, vectors
 
 
-def run():
+def run(*, compressed=False):
     limits = scope_limits()
     tracked = ["analysis/overall_forecast_states.py", "analysis/overall_forecast_catalog.py",
         "analysis/overall_forecast_resources.py", "f1rank/overall/design.py", "f1rank/overall/fitting.py",
-        "f1rank/model.py", "f1rank/overall/model.py", "docs/overall_rotation_profile_proposal.json"]
+        "f1rank/model.py", "f1rank/overall/model.py", "docs/overall_rotation_profile_proposal.json",
+        "analysis/overall_posterior_archive.py"]
     source = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     for name in tracked:
         saved = subprocess.check_output(["git", "show", f"{source}:{name}"], cwd=ROOT)
@@ -96,7 +100,7 @@ def run():
     scalars, vectors = parameter_template(design)
     total_bytes = int(np.prod(shape) * np.dtype("float32").itemsize * (len(scalars) + sum(vectors.values())))
     with tempfile.TemporaryDirectory(prefix="f1-overall-forecast-workload-") as directory:
-        if shutil.disk_usage(directory).free < 2 * total_bytes:
+        if shutil.disk_usage(directory).free < (4 if compressed else 2) * total_bytes:
             raise ValueError("Insufficient temporary disk for the synthetic workload")
         rng = np.random.default_rng(WORKLOAD_SEED)
         parameters = {name:np.full(shape, value, dtype=np.float32) for name, value in scalars.items()}
@@ -111,28 +115,57 @@ def run():
             del array
             parameters[name] = np.load(path, mmap_mode="r")
         generation_seconds = time.monotonic() - generated_at
-        forecast_at = time.monotonic()
+        names = list(parameters)
+        compression_seconds, compressed_bytes = 0., None
+        if compressed:
+            compression_at = time.monotonic()
+            archive = Path(directory) / "posterior.npz"
+            # This receipt is ONLY a temporary cache-format fixture. Its Boolean
+            # convergence field exercises the read path; it is not a diagnostic,
+            # fitted posterior, recovery result or publishable evidence.
+            np.savez_compressed(archive, **parameters, unused_full_history=parameters["skill_z"])
+            compressed_bytes = archive.stat().st_size
+            receipt = dict(schema_version=1, state="converged", diagnostics=dict(converged=True, fixture_only=True),
+                source=snapshot(), run_key="synthetic-archive-resource-fixture", posterior_file=archive.name,
+                posterior_sha256=sha(archive), settings=dict(chains=shape[0]), attempts=[dict(samples=shape[1])],
+                specification=dict(arrays_key=catalog["training_arrays_key"], synthetic=True),
+                purpose="cache_format_fixture_only", publication_allowed=False)
+            (Path(directory) / "receipt.json").write_text(json.dumps(receipt))
+            for value in parameters.values():
+                if isinstance(value, np.memmap): value._mmap.close()
+            del parameters
+            compression_seconds = time.monotonic() - compression_at
         stream, stop, batches, max_batch_bytes = hashlib.sha256(), 0, 0, 0
         parameter_key = None
-        for batch in iter_forecast_states(design, [snap], parameters, seed=WORKLOAD_SEED,
-                training_arrays_key=catalog["training_arrays_key"]):
-            if batch["draw_range"][0] != stop:
-                raise ValueError("Incomplete forecast draw coverage")
-            stop = batch["draw_range"][1]
-            batches += 1
-            if parameter_key not in (None, batch["consumed_posterior_key"]):
-                raise ValueError("Posterior identity changed during the resource check")
-            parameter_key = batch["consumed_posterior_key"]
-            arrays = batch["events"][0]["states"]
-            max_batch_bytes = max(max_batch_bytes, sum(value.nbytes for value in arrays.values()))
-            for name, value in sorted(arrays.items()):
-                if not np.isfinite(value).all():
-                    raise ValueError("Nonfinite workload output")
-                stream.update(name.encode())
-                stream.update(value.tobytes())
-        if stop != shape[1]:
-            raise ValueError("The resource check omitted posterior draws")
-        forecast_seconds = time.monotonic() - forecast_at
+        loading_at = time.monotonic()
+        with ExitStack() as stack:
+            if compressed:
+                parameters, _ = stack.enter_context(mapped_checked_posterior(directory, names=names,
+                    expected_key="synthetic-archive-resource-fixture",
+                    expected_arrays_key=catalog["training_arrays_key"], temporary_parent=directory))
+            loading_seconds = time.monotonic() - loading_at
+            forecast_at = time.monotonic()
+            for batch in iter_forecast_states(design, [snap], parameters, seed=WORKLOAD_SEED,
+                    training_arrays_key=catalog["training_arrays_key"]):
+                if batch["draw_range"][0] != stop:
+                    raise ValueError("Incomplete forecast draw coverage")
+                stop = batch["draw_range"][1]
+                batches += 1
+                if parameter_key not in (None, batch["consumed_posterior_key"]):
+                    raise ValueError("Posterior identity changed during the resource check")
+                parameter_key = batch["consumed_posterior_key"]
+                arrays = batch["events"][0]["states"]
+                max_batch_bytes = max(max_batch_bytes, sum(value.nbytes for value in arrays.values()))
+                for name, value in sorted(arrays.items()):
+                    if not np.isfinite(value).all():
+                        raise ValueError("Nonfinite workload output")
+                    stream.update(name.encode())
+                    stream.update(value.tobytes())
+            if stop != shape[1]:
+                raise ValueError("The resource check omitted posterior draws")
+            forecast_seconds = time.monotonic() - forecast_at
+            closing_at = time.monotonic()
+        closing_seconds = time.monotonic() - closing_at
     # A conservative allocation estimate from the preceding implementation:
     # these historical entry-state arrays alone used float64 at this input dtype.
     entry_states = ["qualifying_walk", "race_residual", "qualifying_skill", "race_skill"]
@@ -144,14 +177,19 @@ def run():
         counts=dict(entries=len(q.entries), cars=len(q.cars), drivers=len(q.drivers), forecast_field=len(field)),
         workload=dict(posterior_shape=list(shape), dtype="float32", seed=WORKLOAD_SEED,
             parameter_bytes=total_bytes, parameters_sha256=parameter_key, draws_from_fixed_retry_ladder=True,
-            archive_io="Temporary uncompressed memory maps; compressed accepted-posterior loading is not exercised",
+            archive_io="Temporary compressed cache-format fixture with checked source and checksum" if compressed else
+                "Temporary uncompressed memory maps; compressed accepted-posterior loading is not exercised",
+            compressed_bytes=compressed_bytes, synthetic_receipt_fixture=compressed,
+            unused_archive_site_validated=compressed,
             construction="Arbitrary finite synthetic parameter values; not fitted values or a recovery experiment"),
         forecast=dict(batches=batches, draws_per_chain=stop, max_batch_state_bytes=max_batch_bytes,
             batch_stream_sha256=stream.hexdigest(), every_state_finite=True),
         baseline_lower_bound=dict(source_revision="deb276e", entry_states=entry_states,
             entry_state_bytes=old_entry_bytes, parameter_plus_entry_state_bytes=total_bytes + old_entry_bytes,
             interpretation="Calculated lower bound, not a measured baseline peak; omits other history arrays, transients and process overhead"),
-        seconds=dict(build_design=build_seconds, generate_workload=generation_seconds, forecast=forecast_seconds,
+        seconds=dict(build_design=build_seconds, generate_workload=generation_seconds,
+                     compress_workload=compression_seconds, load_and_validate=loading_seconds,
+                     forecast=forecast_seconds, close_and_recheck=closing_seconds,
                      total=time.monotonic() - begun),
         process_max_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
         mcmc_run=False, fitted_parameters_used=False, real_predictions_scored=False,
@@ -161,11 +199,12 @@ def run():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", required=True)
+    parser.add_argument("--compressed", action="store_true", help="Exercise a temporary compressed cache-format fixture")
     args = parser.parse_args()
     path = Path(args.output)
     if path.exists():
         raise FileExistsError("Preserve the existing resource record")
-    result = run()
+    result = run(compressed=args.compressed)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
     print(json.dumps({key:result[key] for key in ("counts", "forecast", "seconds", "process_max_rss_kib")}))
