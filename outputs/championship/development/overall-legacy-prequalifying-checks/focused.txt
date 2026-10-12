@@ -1,0 +1,39 @@
+......F................................................................. [ 73%]
+..........................                                               [100%]
+=================================== FAILURES ===================================
+____________ test_qualifying_batch_field_and_path_prefix_invariance ____________
+
+    def test_qualifying_batch_field_and_path_prefix_invariance():
+        _,design,snap,p=qualifying_case()
+        short=generate(design,[snap],p,batch=1)
+        path=future_path(snap)
+        longer=generate(design,path,p,batch=5)
+        shuffled=copy.deepcopy(snap); shuffled["entrants"].reverse()
+        reverse=generate(design,[shuffled],p,batch=19)
+        for result in (longer,reverse):
+>           np.testing.assert_array_equal(result["events"][0]["grid_draws"],short["events"][0]["grid_draws"])
+E           AssertionError: 
+E           Arrays are not equal
+E           
+E           Mismatched elements: 64 / 84 (76.2%)
+E           First 5 mismatches are at indices:
+E            [0, 0, 0]: 2 (ACTUAL), 4 (DESIRED)
+E            [0, 0, 2]: 3 (ACTUAL), 2 (DESIRED)
+E            [0, 0, 3]: 4 (ACTUAL), 6 (DESIRED)
+E            [0, 0, 4]: 6 (ACTUAL), 3 (DESIRED)
+E            [0, 1, 0]: 4 (ACTUAL), 5 (DESIRED)
+E           Max absolute difference among violations: 5
+E           Max relative difference among violations: 5.
+E            ACTUAL: array([[[2, 1, 3, 4, 6, 5],
+E                   [4, 6, 2, 5, 1, 3],
+E                   [5, 4, 1, 2, 3, 6],...
+E            DESIRED: array([[[4, 1, 2, 6, 3, 5],
+E                   [5, 4, 3, 6, 1, 2],
+E                   [5, 6, 4, 2, 3, 1],...
+
+tests/test_overall_legacy_prequalifying.py:122: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  jax._src.xla_bridge:xla_bridge.py:879 An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not installed. Falling back to cpu.
+=========================== short test summary info ============================
+FAILED tests/test_overall_legacy_prequalifying.py::test_qualifying_batch_field_and_path_prefix_invariance
+1 failed, 97 passed in 29.96s

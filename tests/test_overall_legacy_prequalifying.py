@@ -113,10 +113,10 @@ def test_empty_or_singleton_panel_has_exact_unit_conditional_mass(panel):
 
 def test_qualifying_batch_field_and_path_prefix_invariance():
     _,design,snap,p=qualifying_case()
-    short=generate(design,[snap],p,batch=1)
     path=future_path(snap)
+    short=generate(design,path[:1],p,batch=1)
     longer=generate(design,path,p,batch=5)
-    shuffled=copy.deepcopy(snap); shuffled["entrants"].reverse()
+    shuffled=copy.deepcopy(path[0]); shuffled["entrants"].reverse()
     reverse=generate(design,[shuffled],p,batch=19)
     for result in (longer,reverse):
         np.testing.assert_array_equal(result["events"][0]["grid_draws"],short["events"][0]["grid_draws"])
