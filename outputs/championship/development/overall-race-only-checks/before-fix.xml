@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.144" timestamp="2026-10-12T07:24:00.851372-04:00" hostname="DESKTOP-M9I22TH"><testcase classname="tests.test_overall_race_only" name="test_race_evidence_remains_usable_without_qualifying_observations" time="0.409"><failure message="ValueError: Cannot set a DataFrame with multiple columns to the single column dev">def test_race_evidence_remains_usable_without_qualifying_observations():
+        source, clean = tables()
+        source["quali_times"] = source["quali_times"].iloc[:0].copy()
+&gt;       design = build("2022-02", tables=source, clean=clean)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_overall_race_only.py:11: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+f1rank/overall/design.py:90: in build
+    q = build_design(FIRST_QUALIFYING_SEASON, end_event=cutoff, tables=t)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+f1rank/design.py:264: in build_design
+    design.circuit_factor = circuit_factors(design)
+                            ^^^^^^^^^^^^^^^^^^^^^^^
+f1rank/design.py:118: in circuit_factors
+    pace["dev"] = pace.groupby("team_season_idx", group_keys=False).apply(detrend)
+    ^^^^^^^^^^^
+../../../../f1-analysis/.venv/lib/python3.12/site-packages/pandas/core/frame.py:4662: in __setitem__
+    self._set_item_frame_value(key, value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Empty DataFrame
+Columns: [r, team, event_idx, season, has_time, first, season_start, reset, team_season_idx, constructor_name, circuit]
+Index: []
+key = 'dev'
+value = Empty DataFrame
+Columns: [r, team, event_idx, season, has_time, first, season_start, reset, constructor_name, circuit]
+Index: []
+
+    def _set_item_frame_value(self, key, value: DataFrame) -&gt; None:
+        self._ensure_valid_index(value)
+    
+        # align columns
+        if key in self.columns:
+            loc = self.columns.get_loc(key)
+            cols = self.columns[loc]
+            len_cols = 1 if is_scalar(cols) or isinstance(cols, tuple) else len(cols)
+            if len_cols != len(value.columns):
+                raise ValueError("Columns must be same length as key")
+    
+            # align right-hand-side columns if self.columns
+            # is multi-index and self[key] is a sub-frame
+            if isinstance(self.columns, MultiIndex) and isinstance(
+                loc, (slice, Series, np.ndarray, Index)
+            ):
+                cols_droplevel = maybe_droplevels(cols, key)
+                if len(cols_droplevel) and not cols_droplevel.equals(value.columns):
+                    if (
+                        not isinstance(cols_droplevel, MultiIndex)
+                        and is_string_dtype(cols_droplevel.dtype)
+                        and (cols_droplevel == "").all()
+                    ):
+                        # if cols_droplevel contains only empty strings,
+                        # value.reindex(cols_droplevel, axis=1) would be full of NaNs
+                        # see GH#62518 and GH#61841
+                        value = value.copy(deep=False)
+                        value.columns = cols_droplevel
+                    else:
+                        value = value.reindex(cols_droplevel, axis=1)
+    
+                for col, col_droplevel in zip(cols, cols_droplevel, strict=True):
+                    self[col] = value[col_droplevel]
+                return
+    
+            if is_scalar(cols):
+                self[cols] = value[value.columns[0]]
+                return
+    
+            locs: np.ndarray | list
+            if isinstance(loc, slice):
+                locs = np.arange(loc.start, loc.stop, loc.step)
+            elif is_scalar(loc):
+                locs = [loc]
+            else:
+                locs = loc.nonzero()[0]
+    
+            return self.isetitem(locs, value)
+    
+        if len(value.columns) &gt; 1:
+&gt;           raise ValueError(
+                "Cannot set a DataFrame with multiple columns to the single "
+                f"column {key}"
+E               ValueError: Cannot set a DataFrame with multiple columns to the single column dev
+
+../../../../f1-analysis/.venv/lib/python3.12/site-packages/pandas/core/frame.py:4827: ValueError</failure></testcase></testsuite></testsuites>

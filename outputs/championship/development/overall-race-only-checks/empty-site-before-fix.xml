@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.483" timestamp="2026-10-12T07:24:41.389275-04:00" hostname="DESKTOP-M9I22TH"><testcase classname="tests.test_overall_race_only" name="test_diagnostics_record_empty_sites_without_changing_existing_decisions" time="0.780"><failure message="ValueError: cannot reshape array of size 0 into shape (0)">def test_diagnostics_record_empty_sites_without_changing_existing_decisions():
+        from f1rank.overall.diagnostics import check, MIN_CHAINS, MIN_ESS
+        draws = np.random.default_rng(0).normal(size=(MIN_CHAINS, MIN_ESS))
+        original = check({"parameter": draws}, 0)
+&gt;       extended = check({"parameter": draws, "mu": np.empty(draws.shape + (0,))}, 0)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_overall_race_only.py:24: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+grouped = {'parameter': array([[ 0.12573022, -0.13210486,  0.64042265, ..., -1.09547204,
+         0.3625025 ,  0.4439914 ],
+    ...., -0.36262639,
+         0.20310073, -0.30887138]], shape=(4, 400)), 'mu': array([], shape=(4, 400, 0), dtype=float64)}
+divergences = 0
+
+    def check(grouped, divergences):
+        from arviz_stats.base import array_stats
+        if not grouped:
+            raise ValueError("Empty posterior")
+        shape = np.asarray(next(iter(grouped.values()))).shape[:2]
+        if len(shape) != 2 or shape[0] &lt; MIN_CHAINS or shape[1] &lt; MIN_ESS // MIN_CHAINS:
+            return dict(converged=False, reason="Insufficient chains/draws", shape=list(shape))
+        rows, failures, constants = [], [], []
+        for name, raw in grouped.items():
+            a = np.asarray(raw, float)
+            if a.shape[:2] != shape or not np.isfinite(a).all():
+                failures.append(f"{name}: invalid shape or nonfinite values")
+                continue
+            a = a.reshape(*shape, -1)
+&gt;           varying = np.ptp(a.reshape(-1, a.shape[-1]), axis=0) &gt; 0
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           ValueError: cannot reshape array of size 0 into shape (0)
+
+f1rank/overall/diagnostics.py:28: ValueError</failure></testcase></testsuite></testsuites>
