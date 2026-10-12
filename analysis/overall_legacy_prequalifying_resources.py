@@ -124,7 +124,7 @@ def run():
                 or not np.isfinite(probability).all() or (probability > 0).any()):
             raise ValueError("Full empirical integration failed its coverage or finite-mass checks")
         integrations[arm] = dict(log_probabilities=probability.tolist(),
-            output_sha256=arrays_digest(dict(probabilities=probability)),
+            output_sha256=arrays_digest(dict(result=dict(log_probabilities=probability))),
             coefficient_parameter_key=result["coefficient_parameter_key"],
             full_product_pairs=int(np.prod(shape)) ** 2,
             evaluated_unique_grid_coefficient_pairs=unique_grids * int(np.prod(shape)),
