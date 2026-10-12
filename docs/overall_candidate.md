@@ -274,6 +274,24 @@ before the separately approved coordinate study can run. Its approval remains
 pending. These arithmetic checks do not establish full recovery or explain the
 earlier failure.
 
+## Empty qualifying blocks for the race-only comparison
+
+Dated 2026-10-12, with no fits running. The separately specified
+[race-only arm](overall_race_only.md) needs the shared entrant history with no
+qualifying observations or qualifying-derived circuit factor. Synthetic checks
+reproduced failures in the empty-observation data path and empty-site diagnostic
+reshape. The builder now gives empty qualifying blocks no segments or learned
+track adjustment. Diagnostics explicitly record zero-coordinate sites while
+retaining every existing test on nonempty coordinates. An empty posterior is
+not evidence of convergence.
+
+The joint likelihood, priors, sampler settings, gates and fixed retry ladder
+remain unchanged. These boundary corrections change the source fingerprint;
+affected evidence must be regenerated before promotion. The original numerical
+profile remains failed and its arrays and truths must still reproduce exactly.
+Updating the pending study's source identity does not grant its outstanding
+approval or authorize a race-only fit.
+
 ## Remaining acceptance work
 
 - Complete synthetic recovery and simulation-based calibration, including the

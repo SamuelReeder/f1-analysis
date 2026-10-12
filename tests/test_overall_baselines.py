@@ -139,8 +139,8 @@ def test_incomplete_or_ambiguous_inputs_stop_instead_of_dropping_entries(events,
         ordered_arrays(events, arm="legacy_grid_qualifying")
 
 
-def test_unimplemented_race_only_arm_cannot_silently_become_an_existing_baseline(events):
-    with pytest.raises(ValueError, match="own specification"):
+def test_race_only_arm_cannot_silently_become_an_existing_baseline(events):
+    with pytest.raises(ValueError, match="separate model"):
         ordered_arrays(events, arm="current_race_only")
 
 

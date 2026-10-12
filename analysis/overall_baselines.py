@@ -24,7 +24,7 @@ COEFFICIENT_SCALE = 5.
 
 def _arm(arm):
     if arm not in COEFFICIENTS:
-        raise ValueError("Unsupported baseline; current_race_only still needs its own specification")
+        raise ValueError("Unsupported legacy baseline; current_race_only uses its separate model")
     return COEFFICIENTS[arm]
 
 

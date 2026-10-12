@@ -15,7 +15,7 @@ open until the full acceptance checklist has direct evidence.
 | Coherent weekend simulation | Student-t elimination and shared weekend uncertainty; conditional kernels preserve teammate effects, context, order and completion within each joint draw; compensated race-order generation has controlled, exact-sum and compiled checks | Forecast-time conditions, official-grid eligibility/penalties, common operations calibration, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |
 | Ability/outcome/numerical uncertainty | Nested simulation, MCSE and rank/ESS diagnostics; saved-draw diagnosis finds qualifying-contrast failures in the final confounded attempt | Resolve inference and check ranking functionals under converged posteriors with fixed simulation precision |
-| Chronological development comparison | Plan defines information horizons and baseline roles; blind scoring utilities preserve joint draws, conditional weights and required events; outcome-free catalogue, joint states and conditional observation kernels have synthetic checks; explicit legacy/grid-only baseline arithmetic | Complete source verification, unknown-condition integration, unseen-circuit and classification-conditioning policies, baseline fitting/forecast integration and the current-race-only definition; freeze event inventory, calibration and stopping rules; run every fold |
+| Chronological development comparison | Plan defines information horizons and baseline roles; blind scoring utilities preserve joint draws, conditional weights and required events; outcome-free catalogue, joint states and conditional observation kernels have synthetic checks; explicit legacy/grid-only arithmetic and a race-only evidence ablation | Complete source verification, unknown-condition integration, unseen-circuit and classification-conditioning policies and baseline fitting/forecast integration; freeze event inventory, calibration and stopping rules; run every fold |
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence, common field and matching explanation draws/scenario | Producer/export, pairwise comparisons, and matching component explanations from accepted draws; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
@@ -211,3 +211,14 @@ remain part of the unfinished evaluation work.
 The [baseline verification](../outputs/championship/development/overall-baseline-checks/verification.json)
 records the focused synthetic checks and full local Python suite on committed
 source. Hashed model/data files and the pending numerical proposal are unchanged.
+
+The [race-only definition and implementation](overall_race_only.md) specify the
+remaining comparison arm as the same state prior family and race likelihoods
+without qualifying observations or their learned circuit factor. Its independent
+data path preserves the shared race history and removes qualifying outcomes
+before transformation. Development forecasting retains that arm's input identity.
+Empty-observation and empty-coordinate failures were reproduced and corrected;
+the source fingerprint changes while the joint probability model and numerical
+gates remain unchanged. The original failed profile is preserved and the separate
+numerical study remains pending approval. This supplies no fitted baseline,
+predictive improvement or publication evidence.

@@ -18,11 +18,16 @@ def check(grouped, divergences):
     shape = np.asarray(next(iter(grouped.values()))).shape[:2]
     if len(shape) != 2 or shape[0] < MIN_CHAINS or shape[1] < MIN_ESS // MIN_CHAINS:
         return dict(converged=False, reason="Insufficient chains/draws", shape=list(shape))
-    rows, failures, constants = [], [], []
+    rows, failures, constants, empty = [], [], [], []
     for name, raw in grouped.items():
         a = np.asarray(raw, float)
         if a.shape[:2] != shape or not np.isfinite(a).all():
             failures.append(f"{name}: invalid shape or nonfinite values")
+            continue
+        if a.size == 0:
+            # An absent observation block can have no segment coordinates.
+            # This is not a constant scalar/vector, nor evidence of convergence.
+            empty.append(dict(parameter=name, shape=list(a.shape)))
             continue
         a = a.reshape(*shape, -1)
         varying = np.ptp(a.reshape(-1, a.shape[-1]), axis=0) > 0
@@ -56,5 +61,5 @@ def check(grouped, divergences):
         failures.append("Divergence threshold failed")
     if not rows:
         failures.append("No varying posterior coordinates")
-    return dict(converged=not failures, failures=failures, parameters=rows, constants=constants,
+    return dict(converged=not failures, failures=failures, parameters=rows, constants=constants, empty_sites=empty,
                 n_draws=n, n_chains=shape[0], divergences=int(divergences))

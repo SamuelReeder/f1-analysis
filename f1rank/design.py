@@ -75,7 +75,7 @@ class Design:
             "obs_entry": o.entry_idx.to_numpy(),
             "obs_car": o.car_idx.to_numpy(),
             "obs_car_segment": o.car_segment_idx.to_numpy(),
-            "n_car_segments": int(o.car_segment_idx.max()) + 1,
+            "n_car_segments": 0 if o.empty else int(o.car_segment_idx.max()) + 1,
             "car_segment_session": o.groupby("car_segment_idx").session_idx.first().to_numpy(),
             "y": o.y.to_numpy(),
             "train": self.train if self.train is not None else np.ones(len(o), bool),
@@ -104,6 +104,9 @@ def circuit_factors(design: "Design", ridge: float = 5.0, iters: int = 200,
     than MIN_FACTOR_CIRCUITS such circuits (a short history), every circuit gets 0.
     """
     o = design.obs if design.train is None else design.obs.loc[design.train]
+    if o.empty:
+        # No qualifying evidence cannot define a qualifying-derived track axis.
+        return np.zeros(int(design.events.circuit_idx.max()) + 1)
     o = o.assign(r=o.y - o.groupby("session_idx").y.transform("median"))
     spread = o.groupby("session_idx").r.transform(lambda r: np.median(np.abs(r)))
     o = o[spread <= spread.quantile(spread_quantile)]

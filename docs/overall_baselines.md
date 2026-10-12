@@ -51,11 +51,12 @@ particular, the old exclusion of failed qualifying folds cannot be inherited as 
 way to omit required successor comparisons. Missing or failed baseline fits must
 remain visible and prevent a complete comparison.
 
-Current-race-only still requires its own probability-model and prior definition.
-The adapter rejects that arm instead of mapping it to legacy ratings-only. The
-end-to-end pre-qualifying comparison also still requires a registered grid and
-unknown-condition policy. No real-data scores, sampler changes or source-hashed
-model changes are made by this development interface.
+The separately implemented [current-race-only arm](overall_race_only.md) removes
+the qualifying evidence channel from the successor while retaining its race
+likelihoods and state prior family. The legacy adapter rejects that arm instead
+of mapping it to legacy ratings-only. Fitting integration and the end-to-end
+pre-qualifying comparison still require a registered grid and unknown-condition
+policy. No real-data scores or sampler changes are made by these interfaces.
 
 The [verification record](../outputs/championship/development/overall-baseline-checks/verification.json)
 links the focused and full local Python checks to their committed implementation.
