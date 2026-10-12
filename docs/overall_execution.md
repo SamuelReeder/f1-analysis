@@ -11,6 +11,10 @@ gates. Earlier statements below about pending approval describe those earlier
 work records; the original proposal remains unchanged as historical evidence.
 This approval does not establish convergence or authorize real-data fitting,
 ranking publication or deployment.
+The [launch record](../outputs/championship/development/overall-control-rotation-profile-v1-launch/launch.json)
+confirms that the capped service started after the committed input preflight.
+Its eventual results must be reviewed against the full registered inventory;
+launching it is not completion evidence.
 
 | Requirement | Current evidence | Remaining work |
 |---|---|---|

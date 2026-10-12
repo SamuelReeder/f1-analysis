@@ -1,0 +1,31 @@
+{
+  "purpose": "approved_matched_experiment_launch",
+  "recorded_at": "2026-10-12T16:27:23.497006-04:00",
+  "source_commit": "96aa63b1ad776278991cda5f36d7ebd85d1de7bb",
+  "registration": "docs/overall_rotation_profile_protocol.json",
+  "unit": "f1-overall-control-rotation-profile-v1.service",
+  "service": {
+    "MainPID": "813459",
+    "Result": "success",
+    "ExecMainStartTimestamp": "Mon 2026-10-12 16:27:23 EDT",
+    "Slice": "f1.slice",
+    "CPUWeight": "10",
+    "MemoryMax": "6442450944",
+    "Environment": "XLA_FLAGS=--xla_force_host_platform_device_count=4",
+    "WorkingDirectory": "/home/sreeder/.codex/worktrees/overall-model/f1-analysis",
+    "Nice": "19",
+    "LoadState": "loaded",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "monitor_interval_seconds": 1200,
+  "script_sha256": {
+    "outputs/logs/overall-control-rotation-profile-v1/run.sh": "7db372b5c4f0f9ce25b539d526a63c4e672555a56a7b38b11b7652de5e436c75",
+    "outputs/logs/overall-control-rotation-profile-v1/wait.sh": "85344a147cedb168e072143a45e4e92f5208c57134e6f930e08cedbddc4e1891"
+  },
+  "completion_status": "outputs/logs/overall-control-rotation-profile-v1/exit.status",
+  "log": "outputs/logs/overall-control-rotation-profile-v1/profile.log",
+  "original_profile_unchanged": true,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}
