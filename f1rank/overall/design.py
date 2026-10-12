@@ -10,7 +10,7 @@ from ..racepace import WET, clean_laps
 FIRST_QUALIFYING_SEASON = 2010
 FIRST_LAP_SEASON = 2018
 MIN_CLEAN_DRIVERS = 8
-TABLES = (*STAGE1_TABLES, "race_laps", "race_weather", "timeline")
+TABLES = (*STAGE1_TABLES, "race_laps", "race_weather", "race_track_status", "timeline")
 NON_START_OR_EXCLUDED = r"^(Did not start|Did not qualify|Did not prequalify|Withdrew|Excluded|Disqualified)$"
 FINISHED = r"^(Finished|\+[0-9]+ Laps?)$"
 
@@ -55,12 +55,28 @@ def known_rainfall(weather):
     return observed.groupby("event_id").rainfall.any()
 
 
+def known_neutralisation(track_status):
+    """Positive neutralisation evidence, or observed entirely known nonneutral data.
+
+    No rows, nulls or unrecognised codes cannot establish a green event. A known
+    SC/red/VSC code establishes that the event had neutralisation even if another
+    reading is missing. VSC ending is still neutralised. This checks observed
+    evidence, not whether the external archive covers the complete session.
+    """
+    frame = track_status.assign(
+        known=track_status.status.isin(["1", "2", "4", "5", "6", "7"]),
+        neutralised=track_status.status.isin(["4", "5", "6", "7"]))
+    events = frame.groupby("event_id").agg(known=("known", "all"), neutralised=("neutralised", "any"))
+    return events.loc[events.known | events.neutralised, "neutralised"]
+
+
 def clean_training_laps(tables):
     raw, weather, timeline = (tables[k] for k in ("race_laps", "race_weather", "timeline"))
     rain = known_rainfall(weather)
+    neutral = known_neutralisation(tables["race_track_status"])
     chunks = []
     for event, frame in raw.groupby("event_id", sort=True):
-        if (int(event[:4]) < FIRST_LAP_SEASON or event not in rain.index
+        if (int(event[:4]) < FIRST_LAP_SEASON or event not in rain.index or event not in neutral.index
                 or rain[event] or frame.compound.isin(WET).any()):
             continue
         clean = clean_laps(frame, timeline[timeline.event_id == event])
@@ -104,11 +120,12 @@ def build(cutoff, *, tables=None, clean=None):
 
     entry_car = car_key.get_indexer(pd.MultiIndex.from_frame(q.entries[["event_idx", "team"]]))
     ld["entry"] = entry_index(C)
-    # Context is circuit x wet/dry x neutralised/green. Missing weather is excluded,
-    # never silently relabelled dry. Old lap archives do not supply this likelihood.
+    # Context is circuit x wet/dry x neutralised/green. Missing context is excluded,
+    # never silently relabelled dry/green. Old lap archives do not supply this likelihood.
     races = t["race"].loc[t["race"].event_id >= f"{FIRST_LAP_SEASON}-01"].copy()
     weather = known_rainfall(t["race_weather"])
-    covered = set(t["race_laps"].event_id) & set(weather.index)
+    neutral = known_neutralisation(t["race_track_status"])
+    covered = set(t["race_laps"].event_id) & set(weather.index) & set(neutral.index)
     wet_tyres = t["race_laps"].groupby("event_id").compound.agg(lambda s: s.isin(WET).any())
     excluded_events = sorted(set(races.event_id) - covered)
     races = races[races.event_id.isin(covered)]
@@ -119,10 +136,9 @@ def build(cutoff, *, tables=None, clean=None):
     races = races[~races.status.str.match(NON_START_OR_EXCLUDED)].copy()
     if races.empty:
         raise ValueError("No eligible race outcomes")
-    neutral = set(t["timeline"].loc[t["timeline"].kind.isin(["safety_car", "vsc", "red_flag"]), "event_id"])
     circ = races.event_id.map(events.circuit_idx).to_numpy(int)
     wet = (races.event_id.map(weather) | races.event_id.map(wet_tyres).fillna(False)).to_numpy(int)
-    sc = races.event_id.isin(neutral).to_numpy(int)
+    sc = races.event_id.map(neutral).to_numpy(int)
     races["context"] = circ * 4 + wet * 2 + sc
     races["entry_idx"] = entry_index(races)
     races["running"] = races.status.str.match(FINISHED)

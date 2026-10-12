@@ -41,6 +41,7 @@ def tables():
              drivers=pd.DataFrame(dict(driver_id=drivers, dob=["2000-01-01"] * 6, debut_season=[2021] * 6)),
              entries=pd.DataFrame(ent), quali_times=pd.DataFrame(quali), race=pd.DataFrame(races),
              race_laps=pd.DataFrame(clean), race_weather=pd.DataFrame(dict(event_id=events, rainfall=False)),
+             race_track_status=pd.DataFrame(dict(event_id=events, time=0., status="1")),
              timeline=pd.DataFrame(columns=["event_id", "kind"]))
     return t, pd.DataFrame(clean)
 

@@ -130,20 +130,24 @@ def leader_lap(laps: pd.DataFrame):
 def neutralisations(event_id: str, ts: pd.DataFrame, lap_at) -> list[dict]:
     rows, open_ = [], {}
     for r in ts.sort_values("time").itertuples():
-        statuses = set(str(r.status))
+        raw_statuses = set(str(r.status))
+        # VSC ending remains neutralised; clear (or a replacing status) ends it.
+        # Preserve the source code when a partial feed first begins at ending.
+        statuses = {"6" if code == "7" else code for code in raw_statuses}
         # a new status ends the previous non-green ones it replaces
         for code in list(open_):
             if code not in statuses:
-                start, t0 = open_.pop(code)
+                start, t0, source_code = open_.pop(code)
                 rows.append(_row(event_id, None, start, lap_at(r.time), TRACK_STATUS[code],
                                  f"{TRACK_STATUS[code]} from {t0:.0f}s to {r.time:.0f}s",
-                                 [{"source": "fastf1 track status", "status": code}]))
+                                 [{"source": "fastf1 track status", "status": source_code}]))
         for code in statuses & set(TRACK_STATUS):
             if code not in open_:
-                open_[code] = (lap_at(r.time), r.time)
-    for code, (start, t0) in open_.items():
+                source_code = "7" if code == "6" and "7" in raw_statuses and "6" not in raw_statuses else code
+                open_[code] = (lap_at(r.time), r.time, source_code)
+    for code, (start, t0, source_code) in open_.items():
         rows.append(_row(event_id, None, start, None, TRACK_STATUS[code], f"{TRACK_STATUS[code]} from {t0:.0f}s",
-                         [{"source": "fastf1 track status", "status": code}]))
+                         [{"source": "fastf1 track status", "status": source_code}]))
     return rows
 
 

@@ -91,8 +91,8 @@ individual driver reliability.
 constructing any statistics, factors or identifiers. Qualifying uses the existing
 window and robust-lap rules. Dry laps and context-dependent outcomes use the
 declared FastF1-era window, avoiding the incomplete tyre archive. Missing weather
-excludes that event from the outcome likelihood and is recorded, rather than
-being labeled dry. Race entrants absent from qualifying receive latent states
+or unresolved track-status evidence excludes that event from the outcome
+likelihood and is recorded, rather than being labeled dry or green. Race entrants absent from qualifying receive latent states
 and uncertainty. Team identity conflicts and missing driver metadata fail.
 
 The latest race's entrants define the field. Non-starts, disqualifications and
@@ -308,6 +308,33 @@ seeds, numerical thresholds or the retry ladder, and cannot rescue the failed
 profile. The source fingerprint changes; affected evidence needs regeneration.
 The pending coordinate proposal must retain its original observations, truths,
 settings and seeds under the updated fingerprint. Its approval remains pending.
+
+## Track-status boundary correction
+
+Dated 2026-10-12, with no fits running. Synthetic regressions reproduced an
+absent/null track-status archive entering the outcome likelihood as green and a
+VSC interval ending at the ending notification. FastF1 distinguishes the ending
+notification from the later clear signal in its
+[track-status definition](https://raw.githubusercontent.com/theOehrly/Fast-F1/v3.8.3/fastf1/_api.py).
+The timeline now retains that ending phase in the VSC interval, including when
+a partial feed first observes the ending notification. Source evidence retains
+the original status code.
+
+The shared design now consumes the raw track-status table after applying the
+training cutoff. A positive SC/red/VSC observation establishes neutralisation;
+an event can be treated as nonneutral only when its observed status rows are
+nonempty and entirely recognised. Missing/unknown status without positive
+evidence remains unresolved and is excluded from context-dependent outcomes
+and clean-lap evidence. This does not certify full external archive coverage.
+The synthetic design now declares its intended green observations explicitly;
+its original arrays and generated truths must still reproduce exactly.
+
+The preserved regressions are in
+`development/overall-track-context-checks/before-fix.xml`. This is a data-boundary
+and timeline correction, not a change to the probability model, sampler settings,
+retry ladder, seeds or gates. It changes hashed source and requires regeneration
+of affected artifacts. The original failed profile remains failed; the separate
+coordinate experiment remains pending approval under its updated source identity.
 
 ## Remaining acceptance work
 

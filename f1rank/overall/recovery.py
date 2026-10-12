@@ -81,6 +81,7 @@ def synthetic_design(case):
         drivers=pd.DataFrame(dict(driver_id=drivers, dob=[f"{1988 + i}-01-01" for i in range(N_DRIVERS)],
                                  debut_season=[2010 + i for i in range(N_DRIVERS)])),
         race_weather=pd.DataFrame(dict(event_id=event_frame.event_id, rainfall=False)),
+        race_track_status=pd.DataFrame(dict(event_id=event_frame.event_id, time=0., status="1")),
         timeline=pd.DataFrame(columns=["event_id", "kind"]))
     design = build(str(event_frame.event_id.max()), tables=t, clean=lap_frame)
     design.qualifying.circuit_factor = np.linspace(-1., 1., len(design.catalog["circuits"]))
