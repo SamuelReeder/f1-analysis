@@ -5,6 +5,7 @@ maps contain arbitrary finite workload values, not an accepted posterior. The
 fit ladder supplies the largest draw shape; it is not run or modified here.
 """
 import argparse
+import copy
 from contextlib import ExitStack
 import datetime as dt
 import hashlib
@@ -86,17 +87,25 @@ def observation_arrays(event):
     for i, segment in enumerate(event["qualifying"]["segments"]):
         for name, value in sorted(segment.items()):
             yield f"qualifying:{i}:{name}", value
+    if "conditions" in event:
+        for name, value in sorted(event["conditions"].items()):
+            yield "conditions:" + name, value
+        yield "joint_conditions_order_completion_log_probability", event["joint_conditions_order_completion_log_probability"]
 
 
-def run(*, compressed=False, observations=False, unseen_circuit=False):
+def run(*, compressed=False, observations=False, unseen_circuit=False, future_conditions=False):
     if unseen_circuit and not observations:
         raise ValueError("Unseen-circuit outcome resource checks require observations")
+    if future_conditions and not observations:
+        raise ValueError("Condition forecast resource checks require observations")
     limits = scope_limits()
     tracked = ["analysis/overall_forecast_states.py", "analysis/overall_forecast_catalog.py",
         "analysis/overall_forecast_resources.py", "f1rank/overall/design.py", "f1rank/overall/fitting.py",
         "f1rank/model.py", "f1rank/overall/model.py", "docs/overall_rotation_profile_proposal.json",
         "analysis/overall_posterior_archive.py", "analysis/overall_observation_kernels.py",
         "f1rank/overall/order.py", "f1rank/overall/simulation.py"]
+    if future_conditions:
+        tracked += ["analysis/overall_future_conditions.py", "docs/overall_condition_policy.json"]
     source = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     for name in tracked:
         saved = subprocess.check_output(["git", "show", f"{source}:{name}"], cwd=ROOT)
@@ -127,6 +136,22 @@ def run(*, compressed=False, observations=False, unseen_circuit=False):
     catalog = build_catalog(design, snap)
     if unseen_circuit and not catalog["new_circuit"]:
         raise ValueError("Synthetic circuit identity unexpectedly exists in training")
+    snapshots = [snap]
+    if future_conditions:
+        # Exercise both posterior frequencies and unseen-circuit prior, plus a
+        # repeated visit. This is a fixed hypothetical resource path, not a
+        # selected predictive inventory or a claim about the actual calendar.
+        for offset in (1, 2):
+            next_snap = copy.deepcopy(snap)
+            next_id = f"{year}-{last_round + 1 + offset:02}"
+            next_snap["event"].update(event_id=next_id,
+                circuit_id=("synthetic_unseen_circuit" if offset == 1 else str(q.events.iloc[-1].circuit_id)),
+                qualifying_start=str(last_date + dt.timedelta(days=13 + 14 * offset)) + "T14:00:00Z",
+                race_start=str(last_date + dt.timedelta(days=14 + 14 * offset)) + "T14:00:00Z")
+            next_snap["calendar_after_cutoff"] = [s["event"]["event_id"] for s in snapshots] + [next_id]
+            for row in next_snap["entrants"]:
+                row["prior_entries_after_cutoff"] = offset
+            snapshots.append(next_snap)
     shape = (FIT_SETTINGS["chains"], FIT_SETTINGS["samples"] * max(row[1] for row in RETRY))
     scalars, vectors = parameter_template(design, observations=observations)
     total_bytes = int(np.prod(shape) * np.dtype("float32").itemsize * (len(scalars) + sum(vectors.values())))
@@ -167,7 +192,7 @@ def run(*, compressed=False, observations=False, unseen_circuit=False):
             del parameters
             compression_seconds = time.monotonic() - compression_at
         stream, stop, batches, max_batch_bytes = hashlib.sha256(), 0, 0, 0
-        parameter_key, observation_key = None, None
+        parameter_key, observation_key, condition_history = None, None, None
         loading_at = time.monotonic()
         with ExitStack() as stack:
             if compressed:
@@ -178,12 +203,18 @@ def run(*, compressed=False, observations=False, unseen_circuit=False):
             forecast_at = time.monotonic()
             args = dict(seed=WORKLOAD_SEED, training_arrays_key=catalog["training_arrays_key"])
             if observations:
-                scenario = {event_id:dict(wet=False, neutralised=False,
+                scenario = {s["event"]["event_id"]:dict(wet=False, neutralised=False,
                     grid_policy="qualifying_order_no_penalties",
-                    exposure_laps={r.driver_id:snap["event"]["scheduled_laps"] for r in field.itertuples()})}
-                iterator = iter_conditional_weekends(design, [snap], parameters, scenario,
+                    exposure_laps={r.driver_id:s["event"]["scheduled_laps"] for r in field.itertuples()}) for s in snapshots}
+                generator = iter_conditional_weekends
+                if future_conditions:
+                    from analysis.overall_future_conditions import iter_forecast_weekends
+                    generator = iter_forecast_weekends
+                    for value in scenario.values():
+                        del value["wet"], value["neutralised"]
+                iterator = generator(design, snapshots, parameters, scenario,
                     advancing=QUALIFYING_FIELDS[len(field)],
-                    unseen_circuit_policy=UNSEEN_CIRCUIT_POLICY if unseen_circuit else None, **args)
+                    unseen_circuit_policy=UNSEEN_CIRCUIT_POLICY if unseen_circuit or future_conditions else None, **args)
             else:
                 iterator = iter_forecast_states(design, [snap], parameters, **args)
             for batch in iterator:
@@ -199,7 +230,15 @@ def run(*, compressed=False, observations=False, unseen_circuit=False):
                     if observation_key not in (None, batch["observation_parameter_key"]):
                         raise ValueError("Observation parameters changed during the resource check")
                     observation_key = batch["observation_parameter_key"]
-                arrays = dict(observation_arrays(batch["events"][0])) if observations else batch["events"][0]["states"]
+                if future_conditions:
+                    if condition_history not in (None, batch["condition_history"]):
+                        raise ValueError("Condition history changed during the resource check")
+                    condition_history = batch["condition_history"]
+                    repeated = [e for e in batch["events"] if e["catalog"]["circuit_id"] == batch["events"][0]["catalog"]["circuit_id"]]
+                    if len(repeated) < 2 or not np.array_equal(repeated[0]["conditions"]["probabilities"], repeated[1]["conditions"]["probabilities"]):
+                        raise ValueError("Circuit-frequency uncertainty did not persist across visits")
+                arrays = ({f'{event["event_id"]}:{name}':value for event in batch["events"] for name, value in observation_arrays(event)}
+                          if observations else batch["events"][0]["states"])
                 max_batch_bytes = max(max_batch_bytes, sum(value.nbytes for value in arrays.values()))
                 for name, value in sorted(arrays.items()):
                     if not np.isfinite(value).all():
@@ -227,13 +266,15 @@ def run(*, compressed=False, observations=False, unseen_circuit=False):
             compressed_bytes=compressed_bytes, synthetic_receipt_fixture=compressed,
             unused_archive_site_validated=compressed,
             construction="Arbitrary finite synthetic parameter values; not fitted values or a recovery experiment"),
-        forecast=dict(kind="conditional_weekend" if observations else "latent_states",
+        forecast=dict(kind="historical_condition_weekend" if future_conditions else "conditional_weekend" if observations else "latent_states",
             circuit_id=snap["event"]["circuit_id"], unseen_circuit=bool(catalog["new_circuit"]),
-            unseen_circuit_policy=UNSEEN_CIRCUIT_POLICY if unseen_circuit else None,
+            unseen_circuit_policy=UNSEEN_CIRCUIT_POLICY if unseen_circuit or future_conditions else None,
+            event_circuits=[dict(event_id=s["event"]["event_id"], circuit_id=s["event"]["circuit_id"]) for s in snapshots],
+            condition_history=condition_history,
             batches=batches, draws_per_chain=stop, max_batch_output_bytes=max_batch_bytes,
             observation_parameters_sha256=observation_key,
             batch_stream_sha256=stream.hexdigest(), every_output_finite=True,
-            conditions_forecast=False, classification_generated=False),
+            conditions_forecast=future_conditions, classification_generated=False),
         baseline_lower_bound=dict(source_revision="deb276e", entry_states=entry_states,
             entry_state_bytes=old_entry_bytes, parameter_plus_entry_state_bytes=total_bytes + old_entry_bytes,
             interpretation="Calculated lower bound, not a measured baseline peak; omits other history arrays, transients and process overhead"),
@@ -252,12 +293,13 @@ if __name__ == "__main__":
     parser.add_argument("--compressed", action="store_true", help="Exercise a temporary compressed cache-format fixture")
     parser.add_argument("--observations", action="store_true", help="Include conditional qualifying, order and completion observations")
     parser.add_argument("--unseen-circuit", action="store_true", help="Exercise population outcome coefficients at a hypothetical new circuit")
+    parser.add_argument("--future-conditions", action="store_true", help="Exercise unknown conditions across a fixed hypothetical path with repeated and unseen circuits")
     args = parser.parse_args()
     path = Path(args.output)
     if path.exists():
         raise FileExistsError("Preserve the existing resource record")
     result = run(compressed=args.compressed, observations=args.observations,
-                 unseen_circuit=args.unseen_circuit)
+                 unseen_circuit=args.unseen_circuit, future_conditions=args.future_conditions)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
     print(json.dumps({key:result[key] for key in ("counts", "forecast", "seconds", "process_max_rss_kib")}))
