@@ -87,3 +87,25 @@ The [new input audit](../outputs/championship/development/overall-order-numerics
 confirms that the corrected source reproduces the registered observations and
 truths. Historical geometry and grid-audit programs deliberately require their
 original model source; their committed reports remain records of those revisions.
+
+## Runner accounting before execution
+
+The pending runner must enforce the matched-truth condition directly, in addition
+to the earlier input audits. Bind the original profile's committed truth files
+in the proposed registration and compare the complete generated truth record
+before starting each study. A changed or missing truth must stop that study
+before sampling; it cannot be replaced by a new generating value.
+
+For every returned sampling attempt, attach the unchanged diagnostic check for
+every current-field qualifying and race contrast, retaining chain means and
+within-chain standard deviations. Include failed attempts as well as successful
+ones. These are the comparison reports already promised by the proposal. They
+do not replace or modify the original attempt's convergence decision, trigger
+additional retries, or supply a new acceptance criterion. Preserve a separate
+failure in these reported diagnostics even if the original parameter check
+passes. Software fixtures for this reporting path are not MCMC results.
+
+These safeguards change the runner's implementation fingerprint. They do not
+change the model input identity, study inventory, coordinates, truths, seeds,
+sampling settings, numerical gates or pending approval status. No experiment is
+launched by implementing them.
