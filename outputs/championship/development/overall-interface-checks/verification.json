@@ -1,0 +1,123 @@
+{
+  "source_commit": "fc1ad4028619ac2068f8a968b0dbfb198e100de6",
+  "started_at": "2026-10-12T06:57:41.928848+00:00",
+  "scope": "Local interface verification, using the committed legacy release and synthetic successor fixtures. No accepted producer or scientific result is established.",
+  "resources": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "sequential": true
+  },
+  "node": "v22.20.0",
+  "steps": [
+    {
+      "name": "install",
+      "command": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "-q",
+        "-p",
+        "MemoryMax=3G",
+        "-p",
+        "CPUQuota=200%",
+        "--",
+        "npm",
+        "ci"
+      ],
+      "exit_code": 0,
+      "seconds": 2.8497826969833113
+    },
+    {
+      "name": "build",
+      "command": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "-q",
+        "-p",
+        "MemoryMax=3G",
+        "-p",
+        "CPUQuota=200%",
+        "--",
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--base=/f1-analysis/"
+      ],
+      "exit_code": 0,
+      "seconds": 4.370496935036499
+    },
+    {
+      "name": "browser",
+      "command": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "-q",
+        "-p",
+        "MemoryMax=3G",
+        "-p",
+        "CPUQuota=200%",
+        "--",
+        "npx",
+        "playwright",
+        "test",
+        "--workers=2",
+        "--reporter=line,json"
+      ],
+      "exit_code": 0,
+      "seconds": 242.78979215200525
+    }
+  ],
+  "not_verified": [
+    "Full scientific recovery and calibration",
+    "Successor producer and canonical publication",
+    "Workflow-equivalent clean environment and intended runner",
+    "Live deployment"
+  ],
+  "finished_at": "2026-10-12T07:01:29.402446+00:00",
+  "browser_stats": {
+    "startTime": "2026-10-12T06:57:49.504Z",
+    "duration": 241905.54400000002,
+    "expected": 116,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "files": {
+    "browser-before-schema-guard.json": "3c3c2ba3f100b170875d1de00f6559abed4fc70c780a28bf56d2d17391fe08c7",
+    "browser-heading-failure.json": "a564d1e35ecf782df59e26664dca7912812560823818b2db063a3234559b1847",
+    "browser-import-failure.json": "c4c41876d914bf5b449780d9410bc77858a5cb47676141b86d94903817cd4a0d",
+    "browser.json": "c699cab99ef5b481941718f5cf71e689422d201f99f83a0505bd8fa4bf753ae8",
+    "contract.xml": "c759ed4d2a03a04553f0ee880ddff7ecc00a3864511ab30d4245f4e8481a54b4",
+    "npm-audit-after.json": "1f484cbfcaa2a097a48a3fb46b90d013ca6687200d9a0ee07c736d1cf4e98ab4",
+    "npm-audit-before.json": "78a0442326d62deff6f68dfed5320c1102a8872cb09a74ea1ea12e9cca91d2f3"
+  },
+  "contract_check": {
+    "file": "contract.xml",
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 0.224,
+    "scope": "The display scoring, interval mass and precision limit agree with the simulator."
+  },
+  "retained_development_failures": {
+    "browser-import-failure.json": "The initial test file omitted the JSON import attribute required by the Node module loader. Corrected in the test harness.",
+    "browser-heading-failure.json": "The phone tests expected an Overall page heading on the Drivers route. The existing route uses Drivers; corrected the route-aware assertion, then exercised the accessibility checks."
+  },
+  "earlier_success": {
+    "file": "browser-before-schema-guard.json",
+    "scope": "Full browser check before adding explicit rejection of successor payloads with missing or legacy schema identifiers. The final browser.json reruns the complete suite including those cases."
+  },
+  "fit_sources_unchanged": {
+    "baseline": "0df3cf7",
+    "paths": [
+      "f1rank",
+      "extract",
+      "data",
+      "docs/overall_candidate.md"
+    ],
+    "git_diff_exit_code": 0
+  }
+}

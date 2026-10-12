@@ -19,7 +19,7 @@ open until the full acceptance checklist has direct evidence.
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence, common field and matching explanation draws/scenario | Producer/export, pairwise comparisons, and matching component explanations from accepted draws; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
-| Software and runner readiness | Earlier interface verification; new tests accompany each fit-engine change | Full Python, build/browser, clean-environment and intended-runner checks on final source |
+| Software and runner readiness | Earlier fitting-engine Python verification; `development/overall-interface-checks/verification.json` records the committed successor frontend build, browser suite, contract check and dependency audit | Full Python and complete workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
 | Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
 
 The numerical profile is registered separately in
@@ -51,3 +51,11 @@ about expected points from simulated season outcomes, and explanations identify
 their posterior and common scenario. Synthetic browser fixtures are interface
 checks only. The producer has not yet emitted an accepted successor artifact;
 the public payload remains unchanged.
+
+Interface verification is recorded under
+[`overall-interface-checks`](../outputs/championship/development/overall-interface-checks/verification.json).
+The final run installed dependencies from the lockfile, built for the repository
+URL and passed the browser suite on committed source. Earlier test-harness
+failures are retained alongside the corrected run. The dependency advisories and
+post-update audit are also preserved. These checks do not validate the model,
+replace an end-to-end publishing run, or establish intended-runner readiness.

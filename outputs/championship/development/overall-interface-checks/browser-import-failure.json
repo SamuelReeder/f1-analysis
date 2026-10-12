@@ -1,0 +1,73 @@
+{
+  "config": {
+    "configFile": "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/dashboard/playwright.config.ts",
+    "rootDir": "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/dashboard/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {},
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/dashboard/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "",
+        "name": "",
+        "testDir": "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/dashboard/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "line"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 2,
+    "webServer": {
+      "command": "npm run preview -- --host 127.0.0.1 --port 4180 --strictPort --base /f1-analysis/",
+      "cwd": ".",
+      "url": "http://127.0.0.1:4180/f1-analysis/",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [],
+  "errors": [
+    {
+      "message": "TypeError: Module \"file:///home/sreeder/.codex/worktrees/overall-model/f1-analysis/contracts/overall.json\" needs an import attribute of \"type: json\"",
+      "stack": "TypeError: Module \"file:///home/sreeder/.codex/worktrees/overall-model/f1-analysis/contracts/overall.json\" needs an import attribute of \"type: json\""
+    }
+  ],
+  "stats": {
+    "startTime": "2026-10-12T06:46:36.783Z",
+    "duration": 135883.32,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
