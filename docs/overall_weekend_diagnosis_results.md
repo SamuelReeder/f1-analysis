@@ -82,3 +82,27 @@ joint prior and likelihood, all dimensions, original observations and truths,
 and the full fixed diagnostic/retry procedure. Such a proposal needs equivalence
 checks and a separate frozen experiment before fitting. This diagnosis does not
 authorize a rerun or changing model assumptions to obtain a preferred ranking.
+
+## Prepared follow-up
+
+The [conditional weekend-coordinate proposal](overall_weekend_coordinates.md)
+now has a prototype and a guarded runner. It represents the same model through
+total race form and its complementary qualifying direction. It preserves the
+existing lap-control rotation, model/data sources, priors, likelihoods, all
+dimensions and original synthetic problems. It does not set weekend scales or
+driver ratings to values suggested by this diagnosis.
+
+The [verification](../outputs/championship/development/overall-weekend-coordinate-checks/verification.json)
+records 60 passing focused tests. They cover complete joint density, every
+observation factor, prior parameters, the hyperparameter-dependent Jacobian,
+finite gradients and the experiment's registration boundaries. These are not
+new convergence or recovery results.
+
+The [separate proposed registration](overall_weekend_profile_proposal.json)
+retains the complete study inventory, sampling seeds, settings, thresholds and
+retry ladder. It uses the previously registered 6G memory cap and shared 800%
+CPU slice. Every study and failed attempt must be retained, with one waiter at
+the user's requested monitoring interval. It requires a new approval and frozen
+registration before launching; approval for the completed experiment has already
+been used. No new fit, real-driver ranking, push, merge or release occurred in
+preparing this proposal.

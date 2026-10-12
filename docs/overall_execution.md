@@ -23,6 +23,12 @@ The total weekend race effect is sampled more reliably than its qualifying/race
 decomposition; driver/car compensation and failed qualifying comparisons remain.
 This narrows the next computational investigation without establishing its cause,
 accepting a failed fit, or authorizing a new one.
+The [conditional weekend-coordinate proposal](overall_weekend_coordinates.md)
+has now been implemented outside the production model and checked for full
+distribution equivalence. Its [verification](../outputs/championship/development/overall-weekend-coordinate-checks/verification.json)
+records 60 passing focused tests. The [new proposed registration](overall_weekend_profile_proposal.json)
+is pending approval; its guarded runner preserves the original model, truths,
+settings, gates and full retry/study inventory. No new fit has run.
 
 | Requirement | Current evidence | Remaining work |
 |---|---|---|
@@ -30,7 +36,7 @@ accepting a failed fit, or authorizing a new one.
 | Shared current qualifying/race model | Joint model and synthetic interface/gradient tests | Fit, recover and calibrate its shared uncertainty |
 | Scientific specification | Executable likelihood/prior definitions and candidate contract | Final numerical/evaluation/prospective protocol before real-data fitting |
 | Complete entrant/cutoff catalog | Cutoff-first data design; outcome-free forecast catalogue; development state propagation reconstructs uncentred history and retains unseen entrants with population uncertainty | Verified as-of source/calendar inventory, accepted-posterior integration and recovery on the real transfer network |
-| Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks for full and bounded loaders; corrected race-order arithmetic has known-probability/gradient checks; failed original and coordinate profiles plus complete saved-draw diagnosis of weekend decomposition and driver/car compensation | Prepare and verify a separately registered computational proposal; no automatic retuning; full recovery and intended-runner resource measurements remain open |
+| Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks for full and bounded loaders; failed original and coordinate profiles plus complete saved-draw diagnosis; conditional weekend-coordinate prototype passes equivalence and registration checks | Separately approve, freeze and evaluate the prepared computational proposal; no automatic retuning; full recovery and intended-runner resource measurements remain open |
 | Known-truth recovery and simulation-based calibration | Generative responses and complete numerical-profile inventory: connected and sparse-rookie fits converged after retries; confounded fit exhausted its ladder; development evaluator covers state contrasts and observation likelihoods, distinguishes fixed-truth stress cases and requires a complete inventory | Full study registration, power justification and execution, including ranking functionals and the unresolved confounded case; no failed case may be discarded |
 | Coherent weekend simulation | Student-t elimination and shared weekend uncertainty; observation kernels preserve teammate effects, context, order and completion within each joint draw; historical joint condition integration; explicit unseen-circuit outcome and qualifying track-factor extensions | Condition/circuit calibration and final registration, qualifying weather, official-grid eligibility/penalties, common operations, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |
