@@ -286,3 +286,12 @@ The sampling implementation, base settings, probability-model sources and gates 
 unchanged; a future full calibration registration must supply its separate seed
 inventory. The pending coordinate study remains unapproved, and fresh affected
 artifacts are required before publication.
+
+The [recorded power planning](../outputs/championship/development/overall-calibration-power/verification.json)
+shows the cost of detecting subtle rank-distribution errors under the complete
+test family. Stronger controlled errors need fewer replicates; no single small
+pilot supplies broad sensitivity. All fixed-grid results are preserved. A
+probability-roundoff correction leaves the planning choices, rejection regions
+and earliest grid sizes unchanged. No full-study size is selected, no fitted
+SBC ranks were inspected and no gates are relaxed. Feasibility, full registration
+and model acceptance remain open.

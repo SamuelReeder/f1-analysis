@@ -59,3 +59,39 @@ Full numerical sensitivity for close rankings, error-pattern relevance,
 study-size selection, frozen protocol and actual execution remain required.
 The separate coordinate study still awaits approval. No planning probability
 establishes recovery, real-data calibration or permission to publish a ranking.
+
+## Recorded planning result
+
+The [committed calculation](../outputs/championship/development/overall-calibration-power/planning.json)
+counts **9,496** rank-CDF tests in the complete prior-predictive family. With its
+illustrative **5%** family error budget and **80%** lower-bound power target, the
+earliest tested grid sizes are:
+
+| Extra rank mass placed at | 10% mixture | 25% mixture |
+|---|---:|---:|
+| Lower end | 1,600 | 200 |
+| Both ends | 6,400 | 1,600 |
+| Middle | 6,400 | 800 |
+
+These are independent replicates of the affected case. A mixture replaces the
+stated fraction of a uniform rank distribution with mass at the indicated
+positions; it is not a percentage error in a driver's ability. The exact binary
+prior-only example first meets the illustrative target at **100** replicates.
+The uniform reference correctly has no grid size meeting that detection target.
+These are the earliest points on the declared grid, not exact minimum sample
+sizes or an approved inventory. Every grid result is retained in the artifact.
+
+This calculation shows why a small computational profile cannot establish
+sensitivity to subtle calibration errors across the full quantity family. It
+does not justify removing difficult quantities, weakening a gate or treating a
+large study as affordable before its fitting cost is measured. Actual study
+size remains unselected.
+
+The [verification record](../outputs/championship/development/overall-calibration-power/verification.json)
+preserves the initial calculation and a reproduced floating-point overshoot in
+a long sum of binomial probabilities. The corrected arithmetic uses binomial
+tail functions and enforces probability bounds within rounding tolerance.
+Inventory, alternatives, grid, error budget, rejection regions and the earliest
+grid sizes are verified unchanged. The exact small enumeration, null error
+budget and saturation checks pass. This numerical correction changes no model,
+sampling setting or scientific acceptance rule.
