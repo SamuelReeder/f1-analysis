@@ -6,7 +6,7 @@ MIN_ESS = 400
 MAX_MCSE_SD_RATIO = .05
 MAX_DIVERGENCE_RATE = .001
 MIN_CHAINS = 4
-DETERMINISTIC_SITES = frozenset({"skill", "car", "car_event", "car_track", "track_load",
+DETERMINISTIC_SITES = frozenset({"skill", "car", "car_total", "car_event", "car_track", "track_load",
     "compat", "driver_form", "car_segment", "overall_race_skill", "overall_team",
     "overall_car", "overall_day", "overall_grid", "overall_pace", "overall_hazard"})
 

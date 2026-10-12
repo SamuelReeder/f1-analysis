@@ -8,8 +8,9 @@ import numpyro
 import numpyro.distributions as dist
 from numpyro import handlers
 
-from ..model import centre, linear_recurrence, model as qualifying_model
+from ..model import centre, linear_recurrence
 from ..benchmark import plackett_luce
+from .qualifying import qualifying
 
 
 def normal(name, size, scale=1.):
@@ -20,10 +21,10 @@ def scale(name, prior):
     return numpyro.sample("overall_sd_" + name, dist.HalfNormal(prior))
 
 
-def model(q, laps, outcomes):
+def model(q, laps, outcomes, *, generate=False):
     # The trace observes sites; it does not block them from the enclosing MCMC.
     # Thus race and qualifying update the same skill, car and weekend variables.
-    trace = handlers.trace(qualifying_model).get_trace(q, compat_unit="era")
+    trace = handlers.trace(qualifying).get_trace(q, generate=generate)
     value = lambda key: trace[key]["value"]
     link = numpyro.sample("overall_qualifying_link", dist.Normal(1, .5))
     level = scale("level", .5) * normal("level_z", q["n_drivers"])
@@ -68,7 +69,12 @@ def model(q, laps, outcomes):
     previous = jnp.concatenate([jnp.zeros(1), residual_lap[:-1]])
     location = jnp.where(r["prev"], rho * previous, 0)
     noise_scale = jnp.where(r["prev"], sigma, sigma / jnp.sqrt(1 - rho ** 2))
-    numpyro.factor("overall_laps", dist.StudentT(nu, location, noise_scale).log_prob(residual_lap).sum())
+    if generate:
+        innovation = numpyro.sample("generated_lap_innovation", dist.StudentT(nu, 0., noise_scale))
+        simulated = mean + linear_recurrence(jnp.where(r["prev"], rho, 0.), innovation)
+        numpyro.deterministic("generated_laps", simulated)
+    else:
+        numpyro.factor("overall_laps", dist.StudentT(nu, location, noise_scale).log_prob(residual_lap).sum())
 
     # Partial pooling keeps a rare circuit/condition from getting its own free fit.
     o = outcomes
@@ -85,11 +91,24 @@ def model(q, laps, outcomes):
     import jax
     # The established helper uses finite underflow padding, avoiding undefined
     # gradients in all-padding suffixes when races have different finisher counts.
-    numpyro.factor("overall_finish_order", plackett_luce(strength, o["mask"]).sum())
+    if generate:
+        gumbel = numpyro.sample("generated_order_noise", dist.Gumbel(0., 1.).expand(strength.shape))
+        order = jnp.argsort(-jnp.where(o["mask"], strength + gumbel, -jnp.inf), axis=1)
+        numpyro.deterministic("generated_order", order)
+    else:
+        numpyro.factor("overall_finish_order", plackett_luce(strength, o["mask"]).sum())
     hazard = numpyro.deterministic("overall_hazard", jax.nn.sigmoid(context_coefficient("hazard", -6)))
     # Observed completed laps are censored exposure for finishers. Retirement
     # contributes the next-lap failure. This is a common all-cause hazard, not a
     # validated driver-specific incident model or a mechanical-cause attribution.
     h = hazard[o["risk_context"]]
-    numpyro.factor("overall_completion", (o["completed"] * jnp.log1p(-h)
-                    + o["failed"] * jnp.log(h)).sum())
+    if generate:
+        failure = numpyro.sample("generated_failure_lap", dist.Geometric(probs=h))
+        # Exposure windows are fixed design variables; status/completion are new
+        # draws. They do not choose the independent conditional-order observation
+        # panel used by this likelihood-level calibration experiment.
+        numpyro.deterministic("generated_completed", jnp.minimum(failure, o["risk_distance"]))
+        numpyro.deterministic("generated_failed", failure < o["risk_distance"])
+    else:
+        numpyro.factor("overall_completion", (o["completed"] * jnp.log1p(-h)
+                        + o["failed"] * jnp.log(h)).sum())

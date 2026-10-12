@@ -14,8 +14,9 @@ reference scenario. Qualifying and race measurements belong to the same model.
 No current-team effect contributes to the counterfactual driver score. This is
 conditional performance; observational driver/car separation is still uncertain.
 
-The code presently supplies a joint likelihood, bounded data design, joint-draw
-interface, weekend simulation, numerical checks and provenance. It is not wired
+The code supplies a joint likelihood, bounded data design, joint-draw interface,
+weekend simulation, numerical checks, provenance and a registered fitting engine.
+It is not wired
 into the public producer. Real-data preflight only builds inputs; it never fits,
 scores drivers or sets an acceptance flag. There is no alternative dashboard
 ranking. The old failed combined gate cannot authorize this candidate.
@@ -36,7 +37,12 @@ qualifying likelihood in `f1rank.model.model` is included directly, with
 `compat_unit="era"`: persistent driver and car walks, experience/age terms,
 team-by-regulation-era effects, circuit loading, transient driver/car effects,
 car-segment effects, segment intercepts and Student-t observation noise. Its
-existing priors and centering constraints are inherited verbatim. This is a
+existing priors and centering constraints are inherited verbatim. In the successor,
+the car-event prior is expressed as a proper Normal and sampled in noncentred
+coordinates. This replaces the legacy improper site plus Normal factor with the
+same distribution; the old model itself is unchanged. Density-equivalence tests
+protect this transformation, and a proper generator permits known-truth studies.
+This is a
 starting likelihood, not a claim that every existing structural choice is proven.
 
 Total current race ability is `r[i] = centre(a*q[i] + u[i])`. The coefficient `a`
@@ -144,10 +150,21 @@ structurally constant deterministic coordinates are reported separately. The
 legacy diagnostics and previous accepted/failed runs are not reclassified.
 
 The existing fixed `artifacts.RETRY` ladder remains the only permitted retry
-policy for a future candidate fitter. Do not weaken a threshold after seeing
+policy for the candidate fitter. Do not weaken a threshold after seeing
 results. A code correction changes the source fingerprint and requires a new
-run, preserving the failure and amendment. No fitter or real-data fit is claimed
-by the current interface implementation.
+run, preserving the failure and amendment. The fitter requires committed source,
+data and registration, records each attempt, preserves failed draws separately,
+and checks hashes before loading a posterior. Interrupted and failed receipts
+cannot be used as converged caches. A numerical-profile registration cannot
+authorize a real-data fit or publication.
+
+The [numerical profile](overall_profile_protocol.json) registers synthetic
+likelihood-response generation and computational checks. It conditions on fixed
+observation availability, control variables, finishing-order panels and exposure
+windows. It therefore does not establish end-to-end weekend calibration, selection
+behavior, or successful recovery over the complete required inventory. Current
+progress and missing acceptance evidence are tracked in the
+[execution ledger](overall_execution.md).
 
 ## Remaining acceptance work
 
@@ -158,8 +175,9 @@ by the current interface implementation.
 - Set the immutable reference calendar and its forecast-time condition policy;
   complete the lapping/shortened-event and reliability assumptions. Resolve
   whether the common all-cause hazard meets the stated target.
-- Implement the checked fitter, fixed retries, caches and immutable run receipts;
-  measure actual fitting runtime and memory before choosing a refresh schedule.
+- Exercise the implemented checked fitter, fixed retries, caches and immutable
+  run receipts on the registered inventory; measure actual fitting runtime and
+  memory before choosing a refresh schedule.
 - Freeze chronological development replay, comparison arms and calibration
   requirements. Register new future predictions before claiming independent
   evidence of improvement. The old candidate's registration cannot be reused.

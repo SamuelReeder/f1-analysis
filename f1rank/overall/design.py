@@ -135,6 +135,7 @@ def build(cutoff, *, tables=None, clean=None):
     from ..race_total_model import contrast_basis
     od = dict(entry=entry, log_grid=grid, mask=mask, context=context,
               risk_entry=races.entry_idx.to_numpy(int), risk_context=races.context.to_numpy(int),
+              risk_distance=races.groupby("event_id").laps.transform("max").to_numpy(float),
               completed=races.laps.to_numpy(float), failed=(~races.running).to_numpy(),
               entry_car=entry_car, n_circuits=n_circ,
               context_circuit=np.repeat(np.arange(n_circ), 4),

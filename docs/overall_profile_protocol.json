@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "id": "overall-computation-profile-v1",
+  "status": "frozen",
+  "registered_local_date": "2026-10-12",
+  "purpose": "numerical_profile",
+  "fit_settings": {
+    "warmup": 800,
+    "samples": 800,
+    "chains": 4,
+    "target_accept": 0.9,
+    "max_tree_depth": 10,
+    "init_median_samples": 15,
+    "seed": 0
+  },
+  "retry": [[1, 1, null], [2, 2, null], [3, 4, null], [3, 4, 0.98]],
+  "studies": ["connected", "confounded", "sparse_rookie"],
+  "synthetic": {
+    "connected": {"case": "connected", "seed": 20261012},
+    "confounded": {"case": "confounded", "seed": 20261013},
+    "sparse_rookie": {"case": "sparse_rookie", "seed": 20261014}
+  },
+  "resources": {"slice": "f1.slice", "MemoryMax": "6G", "slice_CPUQuota": "800%", "CPUWeight": 10, "Nice": 19},
+  "scope": "Conditional likelihood recovery and resource profiling on synthetic designs. Qualifying observation availability, lap controls, finishing-order panel and completion exposure windows are fixed design variables. New responses are drawn from the joint prior. This is not end-to-end weekend calibration.",
+  "diagnostics": {
+    "rank_rhat_strict_upper": 1.01,
+    "bulk_ess_min": 400,
+    "tail_ess_min": 400,
+    "mean_mcse_sd_upper": 0.05,
+    "divergences_per_draw_upper": 0.001
+  },
+  "reports": ["all_attempts", "all_current_driver_pairwise_qualifying_contrasts", "all_current_driver_pairwise_race_contrasts", "runtime", "peak_resident_memory", "tree_depth_saturation"],
+  "stopping": "Process every named study, including after an earlier convergence failure. Only the fixed retry ladder may retry a convergence failure. Preserve failures and do not change settings, priors, seeds, cutoffs or diagnostics to rescue them. A source correction invalidates reuse and requires a recorded amendment. Do not silently redraw nonfinite prior simulations.",
+  "acceptance": {
+    "authorizes_real_data_fit": false,
+    "authorizes_publication": false,
+    "establishes_sbc": false,
+    "establishes_full_recovery": false,
+    "criterion": "All declared numerical studies are accounted for; report convergence and precision as measured. Full recovery and calibration require the separate complete inventory and registration before real-data fitting."
+  }
+}

@@ -1,0 +1,36 @@
+# Overall plan: execution and acceptance ledger
+
+This ledger tracks the full [plan](overall_model_plan.md). A completed code
+module is not a completed scientific or production requirement. The goal remains
+open until the full acceptance checklist has direct evidence.
+
+| Requirement | Current evidence | Remaining work |
+|---|---|---|
+| Stable equal-machinery/team target | `overall_candidate.md`; driver-only state export interface | Freeze reference calendar, condition distribution, reliability and distance assumptions |
+| Shared current qualifying/race model | Joint model and synthetic interface/gradient tests | Fit, recover and calibrate its shared uncertainty |
+| Scientific specification | Executable likelihood/prior definitions and candidate contract | Final numerical/evaluation/prospective protocol before real-data fitting |
+| Complete entrant/cutoff catalog | Missing-qualifier, team-transfer, era and future-row tests; data preflight | Recovery on the real transfer network and forecast catalog for unseen entrants/events |
+| Reproducible fit engine | `fitting.py`; fixed retry, source-change, cache-corruption and terminal-failure tests | Registered numerical profile, full recovery fits and measured resource use |
+| Known-truth recovery and simulation-based calibration | Generative qualifying/lap/order/completion responses and fixture inventory | Complete registered SBC and stress studies, every truth/failure accounted for |
+| Coherent weekend simulation | Student-t elimination, current total race pace, shared weekend uncertainty | Common operations/conditions calibration, lapping, shortened-race and incident assumptions |
+| Scoring and ties | Classification, points, race/qualifying countback and exchangeable-tie fixtures | Final complete event-rule fixtures and calibrated end-to-end simulation |
+| Ability/outcome/numerical uncertainty | Nested simulation, MCSE and rank/ESS diagnostics | Check ranking functionals under converged posteriors and fixed simulation precision |
+| Chronological development comparison | Plan defines information horizons and baseline roles | Freeze all folds, arms, primary metrics, calibration and stopping rules; run every fold |
+| Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
+| Canonical producer and explanations | Old failed gate still withholds a ranking | Version-aware producer/export and matching component explanations from accepted draws |
+| Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
+| Software and runner readiness | Earlier interface verification; new tests accompany each fit-engine change | Full Python, build/browser, clean-environment and intended-runner checks on final source |
+| Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
+
+The numerical profile is registered separately in
+[`overall_profile_protocol.json`](overall_profile_protocol.json). It answers
+whether the inference machinery can run on the specified synthetic designs, and
+records the cost and failures. Its small inventory cannot establish SBC, full
+recovery, real-data calibration or permission to publish. Full recovery must
+also include the dominant-teammate, regulation-change and real-transfer-network
+cases provided by `recovery.py`, under a complete registration.
+
+No model fit or real-data predictive score has been used to choose the profile
+settings. Previous finite-gradient tests, software checks and data-shape checks
+are development evidence only. A failed profile remains failed; it does not
+authorize weakening a gate or revising a desired driver's position.
