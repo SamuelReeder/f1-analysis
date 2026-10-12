@@ -1,0 +1,18 @@
+{
+  "source_commit": "5c8acddae02d299d42873f2fe629b929b6270e72",
+  "command": [
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "--junitxml=outputs/championship/development/overall-track-context-checks/after-race-regeneration.xml"
+  ],
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r371d6500c8bf43b7ba235ff0b779b83e.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "exit_code": 0,
+  "elapsed_seconds": 156.04765573202167,
+  "peak_child_rss_kib": 2351472
+}

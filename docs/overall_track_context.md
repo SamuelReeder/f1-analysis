@@ -43,8 +43,25 @@ accuracy or a new driver ranking. All affected racing artifacts still require
 fresh evidence before promotion. Forecast-time condition integration and the
 remaining scientific and production requirements remain open.
 
-The full-suite record has 611 passing checks and one publication failure: the
-race-pace export still names the previous timeline hash. Its original GPU model,
-folds, ablations, sampling settings, seeds, retry procedure and gates must be
-regenerated unchanged before that dependency can pass. The stale manifest is
-retained until the normal producer writes fresh evidence.
+The initial full-suite record had 611 passing checks and one publication failure:
+the race-pace export named the previous timeline hash. The normal GPU producer
+has now completed regeneration with unchanged model, folds, ablations, sampling
+settings, seeds, retry procedure and gates. Its fresh manifests pass verification,
+and the validation metrics reproduce from the generated prediction files.
+The [run review](../outputs/championship/development/overall-track-context-checks/race-pace-review.json)
+and [fit log](../outputs/championship/development/overall-track-context-checks/race-pace-fit.txt)
+preserve every attempt. The driver teammate-gap gate passes and the car gate
+fails; the car table remains withheld. The existing total-race-pace procedure is
+separate from the successor's unresolved numerical profile and cannot establish
+that model's acceptance.
+The [post-regeneration full Python suite](../outputs/championship/development/overall-track-context-checks/race-pace-verification.json)
+passes, including the previously failing checked current dashboard data contract.
+Refreshing the portable publication and its final production checks remains
+separate work.
+
+The review retains the per-attempt durations and the interval inferred from the
+launch timestamp and completion-file modification time. Their totals disagree,
+so an exact end-to-end runtime is unverified. The transient service had already
+been collected and no matching journal records were available; peak memory and
+CPU accounting could not be recovered. Its enforced launch limits and CPU slice
+settings remain in the launch receipt. Intended-runner resources remain untested.

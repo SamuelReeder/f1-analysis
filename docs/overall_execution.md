@@ -395,6 +395,17 @@ The [verification record](../outputs/championship/development/overall-track-cont
 identifies the checked revisions and evidence. This prerequisite correction
 does not complete the forecast-time condition policy or scientific acceptance.
 
+The existing total-race-pace producer subsequently completed its unchanged
+validation and export. The [review](../outputs/championship/development/overall-track-context-checks/race-pace-review.json)
+preserves all attempts, including the failed attempt before the fixed retry,
+reproduces the validation metrics and verifies the generated manifests. Driver
+teammate-gap validation passes; car validation fails and its table is withheld.
+The [post-regeneration full Python suite](../outputs/championship/development/overall-track-context-checks/race-pace-verification.json)
+passes, resolving the stale-manifest failure. Exact service runtime and peak
+resource accounting remain unverified as disclosed in the review. These results
+do not resolve the successor's failed numerical profile or accept Overall;
+portable publication and final production checks still remain.
+
 ## Historical forecast conditions
 
 The [condition specification](overall_future_conditions.md) was committed before
@@ -408,9 +419,9 @@ conditional scoring integrates panel and condition weights together.
 The [verification record](../outputs/championship/development/overall-condition-checks/verification.json)
 identifies the passing focused checks and their enforced resource limits. The
 fitting sources, processed data and pending numerical proposal are unchanged.
-No real-history condition frequencies or held-out forecast scores were evaluated;
-no new fit or publication was authorized. The full integration suite waits for
-the existing race-pace regeneration to finish.
+No real-history condition frequencies or held-out forecast scores were evaluated
+in those focused checks; no successor fit or publication was authorized. The
+subsequent post-regeneration full suite is recorded above.
 
 This completes development condition integration only. Its stationarity and
 coverage assumptions still need calibration and final registration. Qualifying
@@ -438,9 +449,9 @@ hypothetical schedule, with no real-event accuracy or ranking outcome evaluated.
 This advances forecast implementation; it does not complete scientific
 acceptance, recovery or independent validation. The original failed profile,
 fitting source, data and pending numerical proposal remain unchanged. The
-legacy race-pace regeneration and its existing waiter continue separately.
-The full integration suite, canonical accepted producer and deployment remain
-open; no push, merge or release occurred.
+legacy race-pace regeneration and subsequent full suite are recorded above.
+The canonical accepted producer and deployment remain open; no push, merge or
+release occurred.
 
 ## Exact comparison origins
 
@@ -476,9 +487,11 @@ covers original-model trace comparisons, population newcomers, lineage reuse,
 transient exclusion, future-data boundaries, invariance and conditional race
 probabilities, plus the shared forecast callers.
 
-No baseline was fitted and no real held-out score was evaluated. Checked-fit
-loading, common-history integration, median/forecast precision and the
-pre-qualifying grid mixture remain required before the complete comparison.
+No successor comparison baseline was fitted and no real held-out comparison
+score was evaluated. Accepted-fit/source verification, common-history
+integration, median/forecast precision, official-grid rules and qualifying
+weather remain required before the complete comparison. The bounded legacy
+reader and conditional pre-qualifying grid integration are recorded above.
 The original failed numerical case, fitting sources, data and pending proposal
-remain unchanged. Full output integration checks still await the separate
-legacy race-pace regeneration, and canonical publication remains incomplete.
+remain unchanged. The full Python suite passes after the separate legacy
+race-pace regeneration; canonical publication remains incomplete.

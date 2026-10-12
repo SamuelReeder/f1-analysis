@@ -849,19 +849,26 @@ without needing JAX or the ignored posterior caches. `research_estimates.json`
 holds values for investigation even when a table fails its publication gate and
 is never included in the dashboard payload.
 
-Commit the code, validation outputs and portable export together, then push to
-`main` to run the existing checked Pages deployment. Merely polling the website
-does not refit the models. The full race fit is a substantial GPU job; historical
-fits are reused on later runs when their training data have not changed.
+Commit the verified outputs and a fresh portable publication receipt before
+requesting push approval. The [Pages workflow](.github/workflows/dashboard.yml)
+can publish both `main` and this repository's PR builds. Merely polling the
+website does not refit the models. Historical fits are reused when their
+training data have not changed.
 
-The first export contains 22 current driver estimates from 122,648 clean laps in
-139 dry races. All ten real-data fits passed the convergence checks with zero
-divergences (maximum R-hat 1.034). The three historical windows contain 29 test races:
+The regenerated export after the [track-context correction](docs/overall_track_context.md)
+contains 22 current driver estimates from 122,556 clean laps in 139 dry races.
+All ten real-data fits ultimately passed the existing convergence checks with
+zero divergences; maximum accepted R-hat was 1.018. The `2026-07_full` validation
+fit required its fixed retry: R-hat fell from 1.056 on the failed first attempt
+to 1.004 on the second. The [run review](outputs/championship/development/overall-track-context-checks/race-pace-review.json)
+retains every attempt and the timing/accounting limitations. The three historical
+windows contain 29 test races. These are regenerated local outputs; a fresh
+publication check and approved deployment are still required.
 
-| Prediction target | RMSE | Baseline RMSE | 90% interval coverage | Ranking |
+| Prediction target | RMSE | Baseline RMSE | 90% interval coverage | Export status |
 | --- | ---: | ---: | ---: | --- |
-| Teammate driver pace gaps (262 comparisons) | 0.328s | 0.413s | 90.8% | Published |
-| Team-average pace (295 predictions) | 0.346s | 0.341s | 84.1% | Withheld |
+| Teammate driver pace gaps (262 comparisons) | 0.328s | 0.413s | 90.8% | Available |
+| Team-average pace (295 predictions) | 0.346s | 0.341s | 84.7% | Withheld |
 
 Errors are seconds per 90-second lap. Driver improvement is supported by the
 race-block bootstrap; car improvement is not. The car model also misses the
