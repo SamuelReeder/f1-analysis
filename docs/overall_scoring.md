@@ -64,8 +64,12 @@ without dropping its event or replacing it with a finite penalty.
 ## Complete chronological comparisons
 
 Each comparison requires the full inventory and all declared arms. Every record
-must match its event's target, forecast origin, strictly earlier training cutoff
-and field. Missing, duplicate, failed or mismatched records prevent a complete
+must match its event's target, exact forecast time, input snapshot, common
+bounded training-history inventory, conditioning definition, strictly earlier
+training cutoff and field. The [origin-identity correction](overall_comparison_origins.md)
+requires these content identities and binds the complete comparison inventory.
+Matching claims do not certify the underlying sources or their availability.
+Missing, duplicate, failed or mismatched records prevent a complete
 comparison. Different forecast origins cannot be pooled into a single result.
 The running-finisher target still needs a separate completion/retirement check;
 success on survivors does not establish the complete weekend prediction.

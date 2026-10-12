@@ -406,3 +406,19 @@ fitting source, data and pending numerical proposal remain unchanged. The
 legacy race-pace regeneration and its existing waiter continue separately.
 The full integration suite, canonical accepted producer and deployment remain
 open; no push, merge or release occurred.
+
+## Exact comparison origins
+
+The [comparison-origin audit](overall_comparison_origins.md) reproduced a
+consistency gap: origin labels alone allowed synthetic records with different
+forecast times, snapshots, common history or conditioning definitions to enter
+a passing comparison. The scorer now requires exact normalized times and
+content identities for every arm, and records the bound comparison inventory.
+Missing or mismatched records remain required failures.
+
+The [verification record](../outputs/championship/development/overall-comparison-origin-checks/verification.json)
+preserves the earlier failures, corrected checks and unchanged numerical scoring
+definitions. This checks consistency of claimed information; verified source
+vintages, preserved input artifacts and the full evaluation controller remain
+required. No real scores, fit settings or acceptance thresholds were changed.
+The running fit and pending numerical-study proposal are unaffected.

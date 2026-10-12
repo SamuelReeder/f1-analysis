@@ -14,8 +14,9 @@ The catalogue supports the plan's pre-qualifying and actual-grid information
 sets. The actual-grid input requires an explicit starting position for every
 entrant. Pre-qualifying input rejects grid positions. Both reject realized
 qualifying times, race results, completed distance, weather and neutralisation.
-Future conditions stay unknown; their integration policy remains to be defined
-before predictive evaluation.
+Future conditions stay unknown here. The separate
+[historical condition model](overall_future_conditions.md) integrates them in
+development forecasts; its calibration and final registration remain required.
 
 Dates must carry timezones. Training events must precede the forecast origin,
 which must satisfy the declared session schedule. The catalogue binds its
@@ -73,7 +74,7 @@ ties the focused and full-suite reports to their source revisions and preserves
 the original failing regression. It is software evidence only.
 
 Source collection and verification, accepted-posterior integration, condition
-integration, baseline predictors and the frozen evaluation inventory remain
+calibration and final registration, baseline integration and the frozen evaluation inventory remain
 required. The catalogue itself propagates no states and scores no predictions.
 The separate state implementation has synthetic checks; a full predictor and
 its scientific validation remain required. Neither module publishes a ranking
