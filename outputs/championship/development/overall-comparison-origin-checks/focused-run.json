@@ -1,0 +1,22 @@
+{
+  "source_commit": "bbbb4cad9e99cb4801557ccdf30300dd37c85fb2",
+  "command": [
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_overall_comparison_origin.py",
+    "tests/test_overall_predictive_scores.py",
+    "tests/test_overall_forecast_catalog.py",
+    "tests/test_overall_future_conditions.py",
+    "--junitxml=outputs/championship/development/overall-comparison-origin-checks/focused.xml"
+  ],
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-rf608c6baff6e498094f1a962aaaa6efa.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "exit_code": 0,
+  "elapsed_seconds": 4.9635958290309645,
+  "peak_child_rss_kib": 366960
+}

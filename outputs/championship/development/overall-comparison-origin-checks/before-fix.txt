@@ -1,0 +1,259 @@
+FFFFFFFFFFFFF.FF                                                         [100%]
+=================================== FAILURES ===================================
+_ test_different_information_or_conditioning_rule_cannot_pass[origin_at-2001-03-01T13:00:00Z] _
+
+field = 'origin_at', changed = '2001-03-01T13:00:00Z'
+
+    @pytest.mark.parametrize("field,changed", [
+        ("origin_at", "2001-03-01T13:00:00Z"),
+        ("snapshot_sha256", "a" * 64),
+        ("training_history_sha256", "b" * 64),
+        ("target_definition_sha256", "c" * 64),
+    ])
+    def test_different_information_or_conditioning_rule_cannot_pass(field, changed):
+        inventory, rows = inventory_and_records()
+        rows[0][field] = changed
+        result = scores.compare_arms(rows, inventory)
+>       assert not result["complete"]
+E       assert not True
+
+tests/test_overall_comparison_origin.py:20: AssertionError
+_ test_different_information_or_conditioning_rule_cannot_pass[snapshot_sha256-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa] _
+
+field = 'snapshot_sha256'
+changed = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+
+    @pytest.mark.parametrize("field,changed", [
+        ("origin_at", "2001-03-01T13:00:00Z"),
+        ("snapshot_sha256", "a" * 64),
+        ("training_history_sha256", "b" * 64),
+        ("target_definition_sha256", "c" * 64),
+    ])
+    def test_different_information_or_conditioning_rule_cannot_pass(field, changed):
+        inventory, rows = inventory_and_records()
+        rows[0][field] = changed
+        result = scores.compare_arms(rows, inventory)
+>       assert not result["complete"]
+E       assert not True
+
+tests/test_overall_comparison_origin.py:20: AssertionError
+_ test_different_information_or_conditioning_rule_cannot_pass[training_history_sha256-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb] _
+
+field = 'training_history_sha256'
+changed = 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
+
+    @pytest.mark.parametrize("field,changed", [
+        ("origin_at", "2001-03-01T13:00:00Z"),
+        ("snapshot_sha256", "a" * 64),
+        ("training_history_sha256", "b" * 64),
+        ("target_definition_sha256", "c" * 64),
+    ])
+    def test_different_information_or_conditioning_rule_cannot_pass(field, changed):
+        inventory, rows = inventory_and_records()
+        rows[0][field] = changed
+        result = scores.compare_arms(rows, inventory)
+>       assert not result["complete"]
+E       assert not True
+
+tests/test_overall_comparison_origin.py:20: AssertionError
+_ test_different_information_or_conditioning_rule_cannot_pass[target_definition_sha256-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc] _
+
+field = 'target_definition_sha256'
+changed = 'cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc'
+
+    @pytest.mark.parametrize("field,changed", [
+        ("origin_at", "2001-03-01T13:00:00Z"),
+        ("snapshot_sha256", "a" * 64),
+        ("training_history_sha256", "b" * 64),
+        ("target_definition_sha256", "c" * 64),
+    ])
+    def test_different_information_or_conditioning_rule_cannot_pass(field, changed):
+        inventory, rows = inventory_and_records()
+        rows[0][field] = changed
+        result = scores.compare_arms(rows, inventory)
+>       assert not result["complete"]
+E       assert not True
+
+tests/test_overall_comparison_origin.py:20: AssertionError
+_ test_missing_record_identity_remains_a_required_unresolved_result[origin_at] _
+
+field = 'origin_at'
+
+    @pytest.mark.parametrize("field", ["origin_at", "snapshot_sha256", "training_history_sha256", "target_definition_sha256"])
+    def test_missing_record_identity_remains_a_required_unresolved_result(field):
+        inventory, rows = inventory_and_records()
+        rows[0].pop(field)
+        result = scores.compare_arms(rows, inventory)
+>       assert not result["complete"] and not result["comparison_rule_passed"]
+E       assert (not True)
+
+tests/test_overall_comparison_origin.py:31: AssertionError
+_ test_missing_record_identity_remains_a_required_unresolved_result[snapshot_sha256] _
+
+field = 'snapshot_sha256'
+
+    @pytest.mark.parametrize("field", ["origin_at", "snapshot_sha256", "training_history_sha256", "target_definition_sha256"])
+    def test_missing_record_identity_remains_a_required_unresolved_result(field):
+        inventory, rows = inventory_and_records()
+        rows[0].pop(field)
+        result = scores.compare_arms(rows, inventory)
+>       assert not result["complete"] and not result["comparison_rule_passed"]
+E       assert (not True)
+
+tests/test_overall_comparison_origin.py:31: AssertionError
+_ test_missing_record_identity_remains_a_required_unresolved_result[training_history_sha256] _
+
+field = 'training_history_sha256'
+
+    @pytest.mark.parametrize("field", ["origin_at", "snapshot_sha256", "training_history_sha256", "target_definition_sha256"])
+    def test_missing_record_identity_remains_a_required_unresolved_result(field):
+        inventory, rows = inventory_and_records()
+        rows[0].pop(field)
+        result = scores.compare_arms(rows, inventory)
+>       assert not result["complete"] and not result["comparison_rule_passed"]
+E       assert (not True)
+
+tests/test_overall_comparison_origin.py:31: AssertionError
+_ test_missing_record_identity_remains_a_required_unresolved_result[target_definition_sha256] _
+
+field = 'target_definition_sha256'
+
+    @pytest.mark.parametrize("field", ["origin_at", "snapshot_sha256", "training_history_sha256", "target_definition_sha256"])
+    def test_missing_record_identity_remains_a_required_unresolved_result(field):
+        inventory, rows = inventory_and_records()
+        rows[0].pop(field)
+        result = scores.compare_arms(rows, inventory)
+>       assert not result["complete"] and not result["comparison_rule_passed"]
+E       assert (not True)
+
+tests/test_overall_comparison_origin.py:31: AssertionError
+_ test_invalid_common_inventory_cannot_establish_comparability[origin_at-2001-03-01T12:00:00] _
+
+field = 'origin_at', bad = '2001-03-01T12:00:00'
+
+    @pytest.mark.parametrize("field,bad", [
+        ("origin_at", "2001-03-01T12:00:00"),
+        ("origin_at", "not a date"),
+        ("snapshot_sha256", ""),
+        ("training_history_sha256", "not a content digest"),
+        ("target_definition_sha256", None),
+    ])
+    def test_invalid_common_inventory_cannot_establish_comparability(field, bad):
+        inventory, rows = inventory_and_records()
+        inventory[0][field] = bad
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_overall_comparison_origin.py:44: Failed
+_ test_invalid_common_inventory_cannot_establish_comparability[origin_at-not a date] _
+
+field = 'origin_at', bad = 'not a date'
+
+    @pytest.mark.parametrize("field,bad", [
+        ("origin_at", "2001-03-01T12:00:00"),
+        ("origin_at", "not a date"),
+        ("snapshot_sha256", ""),
+        ("training_history_sha256", "not a content digest"),
+        ("target_definition_sha256", None),
+    ])
+    def test_invalid_common_inventory_cannot_establish_comparability(field, bad):
+        inventory, rows = inventory_and_records()
+        inventory[0][field] = bad
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_overall_comparison_origin.py:44: Failed
+_ test_invalid_common_inventory_cannot_establish_comparability[snapshot_sha256-] _
+
+field = 'snapshot_sha256', bad = ''
+
+    @pytest.mark.parametrize("field,bad", [
+        ("origin_at", "2001-03-01T12:00:00"),
+        ("origin_at", "not a date"),
+        ("snapshot_sha256", ""),
+        ("training_history_sha256", "not a content digest"),
+        ("target_definition_sha256", None),
+    ])
+    def test_invalid_common_inventory_cannot_establish_comparability(field, bad):
+        inventory, rows = inventory_and_records()
+        inventory[0][field] = bad
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_overall_comparison_origin.py:44: Failed
+_ test_invalid_common_inventory_cannot_establish_comparability[training_history_sha256-not a content digest] _
+
+field = 'training_history_sha256', bad = 'not a content digest'
+
+    @pytest.mark.parametrize("field,bad", [
+        ("origin_at", "2001-03-01T12:00:00"),
+        ("origin_at", "not a date"),
+        ("snapshot_sha256", ""),
+        ("training_history_sha256", "not a content digest"),
+        ("target_definition_sha256", None),
+    ])
+    def test_invalid_common_inventory_cannot_establish_comparability(field, bad):
+        inventory, rows = inventory_and_records()
+        inventory[0][field] = bad
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_overall_comparison_origin.py:44: Failed
+_ test_invalid_common_inventory_cannot_establish_comparability[target_definition_sha256-None] _
+
+field = 'target_definition_sha256', bad = None
+
+    @pytest.mark.parametrize("field,bad", [
+        ("origin_at", "2001-03-01T12:00:00"),
+        ("origin_at", "not a date"),
+        ("snapshot_sha256", ""),
+        ("training_history_sha256", "not a content digest"),
+        ("target_definition_sha256", None),
+    ])
+    def test_invalid_common_inventory_cannot_establish_comparability(field, bad):
+        inventory, rows = inventory_and_records()
+        inventory[0][field] = bad
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_overall_comparison_origin.py:44: Failed
+__________ test_every_arm_has_to_match_the_same_registered_definition __________
+
+    def test_every_arm_has_to_match_the_same_registered_definition():
+        inventory, rows = inventory_and_records()
+        for row in rows:
+            row["target_definition_sha256"] = "d" * 64
+        result = scores.compare_arms(rows, inventory)
+>       assert not result["complete"] and not result["comparison_rule_passed"]
+E       assert (not True)
+
+tests/test_overall_comparison_origin.py:61: AssertionError
+_ test_receipt_binds_comparison_inventory_without_certifying_claimed_provenance _
+
+    def test_receipt_binds_comparison_inventory_without_certifying_claimed_provenance():
+        inventory, rows = inventory_and_records()
+        result = scores.compare_arms(rows, inventory)
+        assert result["complete"] and result["comparison_rule_passed"]
+        assert not result["publication_allowed"]
+>       assert not result["source_availability_verified"]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'source_availability_verified'
+
+tests/test_overall_comparison_origin.py:69: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_overall_comparison_origin.py::test_different_information_or_conditioning_rule_cannot_pass[origin_at-2001-03-01T13:00:00Z]
+FAILED tests/test_overall_comparison_origin.py::test_different_information_or_conditioning_rule_cannot_pass[snapshot_sha256-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]
+FAILED tests/test_overall_comparison_origin.py::test_different_information_or_conditioning_rule_cannot_pass[training_history_sha256-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb]
+FAILED tests/test_overall_comparison_origin.py::test_different_information_or_conditioning_rule_cannot_pass[target_definition_sha256-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc]
+FAILED tests/test_overall_comparison_origin.py::test_missing_record_identity_remains_a_required_unresolved_result[origin_at]
+FAILED tests/test_overall_comparison_origin.py::test_missing_record_identity_remains_a_required_unresolved_result[snapshot_sha256]
+FAILED tests/test_overall_comparison_origin.py::test_missing_record_identity_remains_a_required_unresolved_result[training_history_sha256]
+FAILED tests/test_overall_comparison_origin.py::test_missing_record_identity_remains_a_required_unresolved_result[target_definition_sha256]
+FAILED tests/test_overall_comparison_origin.py::test_invalid_common_inventory_cannot_establish_comparability[origin_at-2001-03-01T12:00:00]
+FAILED tests/test_overall_comparison_origin.py::test_invalid_common_inventory_cannot_establish_comparability[origin_at-not a date]
+FAILED tests/test_overall_comparison_origin.py::test_invalid_common_inventory_cannot_establish_comparability[snapshot_sha256-]
+FAILED tests/test_overall_comparison_origin.py::test_invalid_common_inventory_cannot_establish_comparability[training_history_sha256-not a content digest]
+FAILED tests/test_overall_comparison_origin.py::test_invalid_common_inventory_cannot_establish_comparability[target_definition_sha256-None]
+FAILED tests/test_overall_comparison_origin.py::test_every_arm_has_to_match_the_same_registered_definition
+FAILED tests/test_overall_comparison_origin.py::test_receipt_binds_comparison_inventory_without_certifying_claimed_provenance
+15 failed, 1 passed in 0.28s
