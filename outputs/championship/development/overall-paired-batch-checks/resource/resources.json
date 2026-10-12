@@ -1,0 +1,143 @@
+{
+ "purpose": "synthetic_paired_simulation_block_resources",
+ "status": "complete",
+ "started_at": "2026-10-12T18:14:12.351872+00:00",
+ "completed_stages": [
+  "full_accumulator_allocation_and_schedule_accounting",
+  "complete_paired_block",
+  "accumulation_and_input_rechecks"
+ ],
+ "mcmc_run": false,
+ "publication_allowed": false,
+ "full_simulation_complete": false,
+ "simulation_precision_established": false,
+ "intended_ci_runner_verified": false,
+ "real_driver_table_saved": false,
+ "limits": {
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r77428bd91e27447ab3e804de9f210d82.scope",
+  "memory_max": "3221225472",
+  "cpu_max": "200000 100000"
+ },
+ "source_commit": "dcb364c30b5dc6e7ff50896130a0948d70ac1157",
+ "source_hashes": {
+  "analysis/overall_paired_simulation.py": "d5089402c87d3d1e7f20b31e4c924ed32283784486eae6b02ec8b0488e053b69",
+  "analysis/overall_posterior_archive.py": "bcd0a84eeb64393591b0fee77c3422c92b4455d05f4ac3fa65a1ec81fb1a6af0",
+  "analysis/overall_ranking_recovery.py": "a4cd959a80107646afa69609b946e20efda905dc0ad254e2972d27a80a79f5b7",
+  "analysis/overall_ranking_resources.py": "cf03d0001c83635cb6c8d28d4d0bf43f7c999f3f1fd09b8672d3fdccda9faa75",
+  "analysis/overall_simulation_controller.py": "420af952d9508766536e4d52b212a7076295f6f11e937f4c86861117abc551ab",
+  "analysis/overall_simulation_resources.py": "b3460abf3cc5d93aa0cc1fe0f94ab40f1aae44378bc7f14790fe94776f4e3eb3",
+  "analysis/overall_summary.py": "62eeaa9a783cb755960b6cd8e18e627e2074f958b95ccfae86a635d548724ec1",
+  "contracts/overall.json": "804c3cb2543de91416b73ede82891f7a76a5da69e93804300b4a653703ed1f35",
+  "data/processed/race.parquet": "150a0ade6f32c82e54d648a2c1d72a382e2c831e3736691c94e9ef6905f9b0f3",
+  "docs/overall_paired_simulation.md": "91d71b4652a61697a6cd0e90bce4a51c98f6a208afcd8670cb9cd690ef7d89f2",
+  "docs/overall_reference_calendar.json": "0267d8bbdbbdd32c47ce0c19d23afbc9ce60c2dabd8c24850ee32f465afc0be3",
+  "docs/overall_rotation_profile_proposal.json": "3de78b55e5e53e395fe19738d825c6228b7b2e8a6e9c24933d9e9bd3ced818da",
+  "docs/overall_simulation_controller.md": "9941c564f97af02f8e40b428f251150ba73fe00c7aaf68ef07a533cfb79bd232",
+  "docs/overall_simulation_resources.md": "d6b556e1d1ff7627eb0e67186cc793186d060f62fb1813231856a34d961f062e",
+  "docs/overall_summary.md": "b1c32ea2d9b98f34c69a6841032e35ca259b9733f281392714ca9e1158b29a76",
+  "f1rank/artifacts.py": "2e9b0b2171d3fb2db3fecea14c944ed3b2d4865ea87c853535bc80e245ee9bbb",
+  "f1rank/overall/fitting.py": "302ad0d46d286cf7f869c4d002433eb4da9a0b024d30de7c20b660cdb81f91ac",
+  "f1rank/overall/order.py": "812af3dac1f6ad8fa016919332511a24fc99d53eef947edc1eeec55dd48cd95d",
+  "f1rank/overall/provenance.py": "d9437b15338cb907d728483b7d93a38bddbc957d15fade120c78b3268e2e7c8a",
+  "f1rank/overall/scoring.py": "8fc3051432ff7f5e00038a336923fe7c1fce114115b3a87b889079728db33aae",
+  "f1rank/overall/simulation.py": "57d31ee69f2f6b36fe551c9b6bcb51f0894e5cfbd03e1403adf77e7920c61ff9",
+  "outputs/championship/development/interface_preflight.json": "722d431cfb3237c9920c8d2b81734abbe521a752a01b95b67c1eb9d171159afb"
+ },
+ "runtime": {
+  "python": "3.12.3",
+  "implementation": "CPython",
+  "numpy": "2.5.3",
+  "bit_generator": "PCG64",
+  "platform": "linux",
+  "machine": "x86_64",
+  "byteorder": "little"
+ },
+ "field_size": 22,
+ "reference_events": 24,
+ "reference_cutoff": "2026-15",
+ "measured_block": {
+  "draws": 128,
+  "replicates": 128,
+  "seed": 20261012,
+  "chain": 0,
+  "draw_start": 0,
+  "replicate_start": 0,
+  "explanations": [
+   "qualifying_pace",
+   "total_race_pace",
+   "all"
+  ],
+  "baseline_and_probe_panels": 67,
+  "baseline_seasons": 16384,
+  "baseline_and_probe_seasons": 1097728
+ },
+ "hypothetical_complete_schedules": {
+  "initial": {
+   "posterior_shape": [
+    4,
+    800
+   ],
+   "replicates": 250000,
+   "blocks": 54712,
+   "baseline_seasons": 800000000,
+   "baseline_and_probe_seasons": 53600000000,
+   "executed": false,
+   "conditional_difference_mcse_bound": 0.05
+  },
+  "largest_retry": {
+   "posterior_shape": [
+    4,
+    3200
+   ],
+   "replicates": 250000,
+   "blocks": 195400,
+   "baseline_seasons": 3200000000,
+   "baseline_and_probe_seasons": 214400000000,
+   "executed": false,
+   "conditional_difference_mcse_bound": 0.05
+  }
+ },
+ "accumulator_storage_bytes": {
+  "initial": 16374240,
+  "largest_retry": 65449440
+ },
+ "paired_block_seconds": 101.36434178700438,
+ "accumulation_seconds": 0.04455949197290465,
+ "incomplete_finalization_rejection": "Every declared posterior draw must have its complete replicate inventory",
+ "synthetic_parameters_sha256": "b136cd5dcbd1832ad0a58a13a5d8793e6437c94788b60a6fc328e54b05f59c99",
+ "output_arrays_sha256": "8b0e07da6c7d2b1a152cf4f8417068fa53ac0867c36aedc58aec4ac9c31d05ee",
+ "output_array_bytes": 20185088,
+ "output_shapes": {
+  "points": [
+   128,
+   128,
+   22
+  ],
+  "title_share": [
+   128,
+   128,
+   22
+  ],
+  "rank_low": [
+   128,
+   128,
+   22
+  ],
+  "rank_high": [
+   128,
+   128,
+   22
+  ],
+  "probe_points": [
+   128,
+   128,
+   22,
+   3
+  ]
+ },
+ "every_output_finite": true,
+ "nonzero_paired_probe_losses": 1027021,
+ "finished_at": "2026-10-12T18:15:44.870417+00:00",
+ "total_monotonic_seconds": 101.53398613497848,
+ "process_max_rss_kib": 369196
+}
