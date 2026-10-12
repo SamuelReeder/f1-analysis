@@ -1,0 +1,27 @@
+{
+  "tests": {
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "seconds": 0.519,
+  "limits": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%"
+  },
+  "command": "python -m pytest -q tests/test_overall_reference.py --junitxml=/tmp/f1-overall-reference-tests.xml",
+  "checks": [
+    "all_reference_events_retained",
+    "equal_weights",
+    "missing_context_rejected",
+    "future_outcomes_do_not_change_reference"
+  ],
+  "files": {
+    "analysis/overall_reference_calendar.py": "f06c050318ec58d990ac5200d8eed423ee0c4e4aea9d8ca6d8f3cebba02670ab",
+    "tests/test_overall_reference.py": "bc722b9ee87e6db58b906640f99bd8ea397b73bb92dcbd5dab25110252b90279",
+    "docs/overall_reference_calendar.json": "0267d8bbdbbdd32c47ce0c19d23afbc9ce60c2dabd8c24850ee32f465afc0be3"
+  },
+  "no_driver_standings_used": true,
+  "publication_allowed": false
+}
