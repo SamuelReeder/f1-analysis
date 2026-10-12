@@ -19,7 +19,7 @@ open until the full acceptance checklist has direct evidence.
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence, common field and matching explanation draws/scenario | Producer/export, pairwise comparisons, and matching component explanations from accepted draws; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
-| Software and runner readiness | Full local Python suite after joint forecast-state propagation (`development/overall-forecast-state-checks/verification.json`); earlier grid, coordinate-wrapper, event-scoring, weather, interface and dependency checks are preserved | Full-archive forecasting resources/batching; workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
+| Software and runner readiness | Joint state propagation now batches draws and retains terminal history; local synthetic workload at the committed data shape completes under the enforced resource caps; full suite in `development/overall-forecast-batch-checks/verification.json` | Compressed accepted-posterior loading and end-to-end resources; workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
 | Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
 
 The numerical profile is registered separately in
@@ -134,3 +134,12 @@ fixture issue, not a changed prior or acceptance criterion. Fitting sources and
 the pending numerical registration are unchanged. This implementation still
 requires accepted-posterior integration, full-archive resource work and the
 complete predictive experiment; it has produced no ranking.
+
+The [batching and resource verification](../outputs/championship/development/overall-forecast-batch-checks/verification.json)
+adds bounded parameter checks, terminal-state reconstruction and complete draw
+batches without changing the innovations or model. The resource workload uses
+synthetic values in temporary memory maps at the current design dimensions and
+the largest draw shape from the unchanged retry ladder. It verifies actual local
+scope limits, records complete finite output coverage and retains no driver table.
+Compressed accepted-posterior loading and intended-runner resources remain open;
+neither this workload nor its passing software checks authorize a ranking.

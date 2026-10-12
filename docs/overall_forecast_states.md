@@ -80,8 +80,8 @@ verified; the current checks use synthetic parameter arrays.
 
 `iter_forecast_states` processes contiguous draw batches while retaining the
 common chain axis. It validates and hashes all consumed parameters in bounded
-chunks before yielding any forecast. A corrupt final draw therefore fails before
-a caller receives an apparently usable partial result. The digest remains
+chunks before yielding any forecast. Nonfinite or out-of-support parameters in
+the final draw therefore fail before any batch is yielded. The digest remains
 compatible with the original array identity, including for strided inputs and
 read-only memory maps.
 
@@ -100,7 +100,9 @@ by the numerical equivalence checks.
 
 The iterator labels every draw range and the full posterior shape. Consumers
 must account for all ranges and release processed outputs to keep output memory
-bounded. `forecast_states` remains a convenience wrapper that collects the whole
+bounded. A later arithmetic or processing failure must invalidate the whole
+forecast; successfully consuming an initial batch is insufficient.
+`forecast_states` remains a convenience wrapper that collects the whole
 forecast; its retained output memory grows with the forecast horizon. Neither
 interface verifies or loads a compressed fitted archive. A later integration
 must preserve the fitter's source, checksum and convergence checks.
@@ -112,6 +114,13 @@ memory and CPU caps, uses temporary uncompressed memory maps, checks complete
 draw coverage, and retains no driver-state table. It runs no fit or predictive
 evaluation. Local resource evidence cannot establish readiness on the intended
 CI runner or the memory required by compressed-archive loading.
+
+The [local resource record](../outputs/championship/development/overall-forecast-batch-checks/resources.json)
+shows complete processing of that workload under the enforced scope limits. Its
+peak resident memory covers the whole process, including data construction and
+workload creation. The old-history allocation figure is a calculated lower bound,
+not a measured baseline peak or a speed comparison. The temporary workload maps
+were removed after the check; only its identity, coverage and measurements remain.
 
 ## Verification
 
@@ -125,6 +134,11 @@ draw indices, field permutations, prefix consistency and invalid input rejection
 The [verification record](../outputs/championship/development/overall-forecast-state-checks/verification.json)
 identifies the tested source and full-suite report. It also preserves the initial
 distribution-property assertion failure and the subsequent passing focused run.
+
+The subsequent [batch verification](../outputs/championship/development/overall-forecast-batch-checks/verification.json)
+records bounded validation, original-stream equivalence, terminal reconstruction,
+complete draw coverage and the full local suite on committed source. It links the
+resource workload separately from scientific acceptance.
 
 These are probability-interface and software checks, not parameter recovery,
 simulation-based calibration or evidence that the model predicts real races well.

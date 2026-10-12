@@ -1,0 +1,86 @@
+{
+  "recorded_at": "2026-10-12T09:36:48.610596+00:00",
+  "source_commit": "3b2d163a732876eabc4da29fed6eb17d60f9da5a",
+  "source_hashes": {
+    "analysis/overall_forecast_states.py": "6f892cd83f5f18c7df392d5b969941e72583008210d38a62490261483643dd59",
+    "analysis/overall_forecast_resources.py": "3a845108a5907f133b48ed966eb37db7377b190ccf9efc652762a8d10464f3fe",
+    "analysis/overall_forecast_catalog.py": "d385ac287a6380515fc38dead3ac12f3625d4a70661767af0acc05a65cb612ea",
+    "tests/test_overall_forecast_batches.py": "b3e16c663177bbcb4ead1702ff2700ed5759f2c4e163c173fce63b9b8ea19275",
+    "tests/test_overall_forecast_states.py": "706aa23d03cb50d9ddba7d23f54e3d885a1514a814133620c1f7f67204b367aa",
+    "docs/overall_forecast_states.md": "251c9344d7a71a4690e4bf4303bb03ff865c1c8e529409960701c13f3808bd8d"
+  },
+  "reports": {
+    "software.xml": {
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 19.011,
+      "sha256": "da7319624c9fbd201814bce547a76950a281456f2720def19f734b9f295350e8",
+      "exit_code": 0
+    },
+    "full-software.xml": {
+      "tests": 352,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 88.269,
+      "sha256": "3e0e82143d673f1c8c0ac92e09ab89ea35cce0583d35128b67fe758c273a9e4e",
+      "exit_code": 0
+    }
+  },
+  "commands": {
+    "software.xml": "python -m pytest tests/test_overall_forecast_batches.py tests/test_overall_forecast_states.py -q",
+    "full-software.xml": "python -m pytest -q",
+    "resources.json": "python analysis/overall_forecast_resources.py --output outputs/championship/development/overall-forecast-batch-checks/resources.json"
+  },
+  "execution": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "policy": "Sequential systemd user scopes; resource check independently read its cgroup limits"
+  },
+  "source_boundaries": {
+    "software.xml": "Focused checks ran before the source commit; the tested implementation and test contents are preserved at source_commit.",
+    "full-software.xml": "Full suite ran on the committed source.",
+    "resources.json": "Resource check verifies committed inputs and reports its source revision and exact hashes."
+  },
+  "checks": [
+    "Terminal history matches full reconstruction for archive and double precision.",
+    "Chunked validation/hash matches the original array identity for noncontiguous and memory-mapped arrays.",
+    "Normal and Student-t batch noise exactly slices the original full stream.",
+    "Batch sizes preserve the full forecast within floating-point tolerance, including the last singleton draw.",
+    "Nonfinite final input is rejected before any forecast batch is yielded.",
+    "All synthetic workload draws are processed and every resulting state is finite."
+  ],
+  "resources": {
+    "file": "resources.json",
+    "sha256": "a174f45fe4a91d5cd3f3157473aa6ac3632f042d01da04913c42deaf1c8c2576",
+    "process_max_rss_kib": 1792364,
+    "seconds": {
+      "build_design": 2.033724108012393,
+      "generate_workload": 4.4486197819933295,
+      "forecast": 5.9591269479715265,
+      "total": 12.492601650010329
+    }
+  },
+  "limitations": [
+    "Resource results are from local synthetic parameter arrays at the committed design shape, not fitted driver values.",
+    "The baseline memory figure is an allocation lower bound, not a measured baseline peak or speed comparison.",
+    "Compressed accepted-posterior loading, an intended CI runner and end-to-end refresh resources remain unverified.",
+    "The collecting convenience wrapper retains all forecast output; bounded consumers must consume every iterator range and release processed batches.",
+    "These checks do not establish convergence, recovery, calibration or predictive improvement."
+  ],
+  "unchanged_fitting_source_since": "deb276e",
+  "unchanged_fitting_paths": [
+    "f1rank",
+    "extract",
+    "data",
+    "docs/overall_candidate.md",
+    "docs/overall_rotation_profile_proposal.json"
+  ],
+  "numerical_proposal_status": "proposal_pending_user_approval",
+  "numerical_proposal_user_approved": false,
+  "mcmc_run": false,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}
