@@ -1,5 +1,6 @@
 """Known arithmetic and failed-archive boundaries; no inference experiment."""
 import hashlib
+import json
 
 import numpy as np
 import pytest
@@ -59,6 +60,7 @@ def test_reconstruction_agrees_with_the_actual_joint_model():
              for name in SCALARS + VECTORS}
     scalar, fields, error = derived_quantities(saved, q, d.outcomes)
     assert all(row['max_absolute_error'] <= row['allowed_roundoff'] for row in error.values())
+    json.dumps(error, allow_nan=False)
     np.testing.assert_array_equal(fields['race_form'], saved['overall_day'])
     np.testing.assert_allclose(fields['race_total_location'], saved['overall_race_skill']
         + saved['overall_team'] + saved['overall_day'] + saved['overall_car'][..., d.outcomes['entry_car']])

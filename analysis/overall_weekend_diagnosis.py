@@ -115,7 +115,7 @@ def derived_quantities(saved, q, outcomes):
         error = float(np.abs(actual - reconstructed).max())
         if error > tolerance:
             raise ValueError(f"Stored {name} does not reproduce its model definition")
-        errors[name] = dict(max_absolute_error=error, allowed_roundoff=tolerance)
+        errors[name] = dict(max_absolute_error=error, allowed_roundoff=float(tolerance))
     for name, values in (("centred_qualifying_innovation", zq), ("centred_race_innovation", zr),
             ("centred_car_innovation", zc), ("qualifying_form", form),
             ("independent_race_form", independent), ("total_race_form", day),
