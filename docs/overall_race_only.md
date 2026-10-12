@@ -73,3 +73,13 @@ require evaluation under the common registered grid policy as well. The current
 conditional forecast interface does not settle official-grid, unknown-condition,
 lapping, exposure or classification policy. This definition authorizes no fit,
 new profile run or publication, and leaves the original failed profile preserved.
+
+The [verification record](../outputs/championship/development/overall-race-only-checks/verification.json)
+preserves the failing boundary regressions, an initial fixture failure, passing
+focused checks and the original-input audit. The full local Python run has
+publication-integration failures: the saved qualifying export records the old
+data-builder hash. The first provenance guard therefore rejects that export, and
+the portable-fit mismatch check cannot reach its intended later assertion. The
+guard and old export are preserved. Affected artifacts must be regenerated and
+the complete suite rerun before publication; the full suite is not reported as
+passing on this source.

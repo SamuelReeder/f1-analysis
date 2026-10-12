@@ -222,3 +222,10 @@ the source fingerprint changes while the joint probability model and numerical
 gates remain unchanged. The original failed profile is preserved and the separate
 numerical study remains pending approval. This supplies no fitted baseline,
 predictive improvement or publication evidence.
+The [race-only verification](../outputs/championship/development/overall-race-only-checks/verification.json)
+records passing focused checks and exact reproduction of the original study's
+observations and truths. Its full local suite fails the publication integration
+checks because `outputs/ratings/manifest.json` still records the previous
+`f1rank/design.py` hash. The source change requires artifact regeneration; no
+manifest is rewritten to hide that dependency and no check is weakened. Fresh
+affected artifacts and a passing full suite remain explicit rollout requirements.

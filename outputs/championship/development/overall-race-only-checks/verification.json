@@ -1,0 +1,180 @@
+{
+  "recorded_at": "2026-10-12T11:35:44.488787+00:00",
+  "source_commit": "5486f8f04226374aa5d061fc39e61e7e8ea5cc8f",
+  "regression_commit": "e7839f2",
+  "source_hashes": {
+    "f1rank/design.py": "4fc124f37db9ad14ef67d42ef6cb46000e4b7914588e3cf91a5841094125712c",
+    "f1rank/overall/diagnostics.py": "7dff41cc89046160269424c1ab47ede26eb7dc8b8d0a107cf1e68fc1c7e2a791",
+    "f1rank/overall/model.py": "83d97eb193495fc5ea2d7203b10ebd10f9fa1ef14f10bafe5ba86a868035b1ac",
+    "analysis/overall_race_only.py": "aa7e87e9829585e5fe80421c4cc6b93d33b7ef82c9e8bf9c82380e06cca28889",
+    "analysis/overall_forecast_catalog.py": "342d2e1ad61022617964280a07f29131c9807312f4cd1e3b6e6ba00975f33a85",
+    "analysis/overall_order_numerics_audit.py": "c70cdd8f6a889490a1509593dface525feff72cde860e7e7cc70e4d0df374f48",
+    "analysis/overall_baselines.py": "8ce51f6634d74942cdc20b90a76b1ba3ab03979ed885470ac560e8a3d4b9b17d",
+    "tests/test_overall_race_only.py": "d1026192bf3430735036cfc4b12441e20f374d3d3d511516915b825acb0cef21",
+    "tests/test_overall_baselines.py": "ab18e2531e16ea00a8045b830d58e229bca7ac8257f0018fa319ccfc0bbb87c3",
+    "docs/overall_race_only.md": "dfa1bda6143fdab93b8564d98a96a22b720419b518d8ae55210baeba89117a2e",
+    "docs/overall_candidate.md": "10a73b62f0ae951becb4f7565da476725819704cfa87fc186bcd47f37168a88c",
+    "docs/overall_rotation_profile_proposal.json": "536fedbbb2a25c30b70b9987e640b8589e1dad624a8b0473ef0f99b06fff6e17"
+  },
+  "reports": {
+    "before-fix.xml": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.144,
+      "exit_code": 1,
+      "sha256": "dd3255920f333837db4c638561e364fc016ba47669b1f3049b6256bcc4efcd8d",
+      "failed_tests": [
+        "tests.test_overall_race_only::test_race_evidence_remains_usable_without_qualifying_observations"
+      ]
+    },
+    "empty-site-before-fix.xml": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.483,
+      "exit_code": 1,
+      "sha256": "6b5d3c82c27386863f5b20fe1c62fa73fa20366e047ff25c853020e07a3e4bf9",
+      "failed_tests": [
+        "tests.test_overall_race_only::test_diagnostics_record_empty_sites_without_changing_existing_decisions"
+      ]
+    },
+    "initial.xml": {
+      "tests": 19,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 23.768,
+      "exit_code": 1,
+      "sha256": "eb276526f85d158fd2002f90ca98355557aa49e39cadb3edbc8f947d2096d7ba",
+      "failed_tests": [
+        "tests.test_overall_race_only::test_race_evidence_is_still_used[laps]"
+      ]
+    },
+    "focused.xml": {
+      "tests": 103,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 42.406,
+      "exit_code": 0,
+      "sha256": "d9cb96dff723c40cb8e8bd6c14a73671a5d705777053236339cefe9158667c4e",
+      "failed_tests": []
+    },
+    "full.xml": {
+      "tests": 475,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 99.881,
+      "exit_code": 1,
+      "sha256": "f22d2f43ed519617e0affdddfff8523d661739a38f3c8745fbef3ed733a34c70",
+      "failed_tests": [
+        "tests.test_dashboard::test_checked_current_data_contract",
+        "tests.test_dashboard::test_export_rejects_mismatched_portable_fit_identity"
+      ]
+    }
+  },
+  "source_boundaries": {
+    "before-fix.xml": "Original shared builder failed with absent qualifying observations; regression and raw failure committed before the correction.",
+    "empty-site-before-fix.xml": "Original diagnostics failed on a zero-coordinate site; regression and raw failure committed before the correction.",
+    "initial.xml": "Initial working-tree implementation; lap-sensitivity fixture tried to mutate an immutable JAX array. Fixed by copying the synthetic response to NumPy. The later common-prior equivalence check was not yet present.",
+    "focused.xml": "Focused comparison, fitting and forecasting tests on source_commit.",
+    "full.xml": "Full local Python suite on source_commit. Publication integration remains blocked by the stale qualifying export.",
+    "input-audit.json": "Exact original registered synthetic observations and truths, regenerated on source_commit without MCMC."
+  },
+  "commands": {
+    "focused.xml": "python -m pytest -q tests/test_overall_race_only.py tests/test_overall_baselines.py tests/test_overall_fitting.py tests/test_overall_forecast_catalog.py tests/test_overall_forecast_states.py",
+    "full.xml": "python -m pytest -q",
+    "input-audit.json": "python analysis/overall_order_numerics_audit.py --output outputs/championship/development/overall-race-only-checks/input-audit.json"
+  },
+  "execution": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "policy": "Sequential systemd user scopes"
+  },
+  "arm": "current_race_only",
+  "evidence_policy": "race_evidence_only_v1",
+  "checks": [
+    "Qualifying table is not loaded by the race-only builder",
+    "Qualifying observations, availability and derived circuit factor cannot change model inputs or density",
+    "Shared structural prior inputs and race blocks are preserved",
+    "Common prior densities and race factors match the joint model at matched latent values",
+    "Race laps, grid, finishing order and completion remain informative",
+    "Finite potential and gradients on a synthetic field",
+    "Matched future states and complete conditional forecast batches retain the separate arm identity",
+    "Empty diagnostic sites preserve existing decisions and cannot establish convergence"
+  ],
+  "input_audit": {
+    "file": "input-audit.json",
+    "sha256": "2655f2e7811a6f014ea709f4f77861dabaeb1465282df3dca260578e60fa7b5c",
+    "studies": [
+      {
+        "study": "connected",
+        "seed": 20261012,
+        "arrays_key": "4ac5ab7125adfa2fc8a0ca18829fbe941be0ec94b5e857fc54a16751bba3a948",
+        "original_truth_sha256": "0effa6798e618d269e44912a2dbf4c760e12aeb64f607660b6b288b5cac25931",
+        "arrays_and_truths_identical": true
+      },
+      {
+        "study": "confounded",
+        "seed": 20261013,
+        "arrays_key": "4d50cfb60b150f68abac84c2bc1619c649e76ebff8212884c52bcb1b88b6891b",
+        "original_truth_sha256": "d9af54f7cb9865b0ecf607b56bf1e1e01d7f199e24fa547d5b57daa75945f3df",
+        "arrays_and_truths_identical": true
+      },
+      {
+        "study": "sparse_rookie",
+        "seed": 20261014,
+        "arrays_key": "ca20697300ef8607dc61590f9a00bc8d304142c525997aa90608b2aabb7d9196",
+        "original_truth_sha256": "48b4c7587e111de5018eade208ae830261f84a3c221b1270eba2bb713b68769b",
+        "arrays_and_truths_identical": true
+      }
+    ],
+    "original_study_states": [
+      {
+        "study": "connected",
+        "state": "converged"
+      },
+      {
+        "study": "confounded",
+        "state": "failed"
+      },
+      {
+        "study": "sparse_rookie",
+        "state": "converged"
+      }
+    ]
+  },
+  "model_inputs_key": "d5b8c6c6ff3b858ee265ce4b8eb9199bc1ec752fd00083a5ca84d861c77a156b",
+  "pending_proposal_status": "proposal_pending_user_approval",
+  "pending_proposal_user_approved": false,
+  "publication_blocker": {
+    "artifact": "outputs/ratings",
+    "manifest": "outputs/ratings/manifest.json",
+    "manifest_sha256": "f0d49de3aa39e72b176a764275b23c2eceb7fe169396b14a1a6290b62bbba7eb",
+    "changed_dependency": "f1rank/design.py",
+    "recorded_sha256": "2ad04c1267364acbd76dba29e85acb354e3c2b27f0c4070b24872b72589f1fc1",
+    "current_sha256": "4fc124f37db9ad14ef67d42ef6cb46000e4b7914588e3cf91a5841094125712c",
+    "recorded_matches_pre_change_source": true,
+    "full_suite_passed": false,
+    "requires_regeneration": true,
+    "action": "Preserve stale exports and the guard. Regenerate affected artifacts before publication and rerun the complete suite.",
+    "guard_weakened": false,
+    "manifests_rewritten": false
+  },
+  "limitations": [
+    "No baseline posterior has been fitted or accepted.",
+    "No real-data prediction comparison or calibration result exists for this arm.",
+    "Training-origin/source verification and complete evaluation registration remain required.",
+    "Unknown conditions, official grid, exposure, lapping and classification policy remain incomplete.",
+    "The original failed numerical profile remains failed; the separate numerical study is still pending approval.",
+    "Affected saved artifacts are stale and the full suite has not passed on this source."
+  ],
+  "mcmc_run": false,
+  "real_data_predictions_scored": false,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}

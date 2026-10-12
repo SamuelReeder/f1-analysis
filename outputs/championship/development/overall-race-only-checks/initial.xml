@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="19" time="23.768" timestamp="2026-10-12T07:28:17.369233-04:00" hostname="DESKTOP-M9I22TH"><testcase classname="tests.test_overall_race_only" name="test_race_evidence_remains_usable_without_qualifying_observations" time="0.150" /><testcase classname="tests.test_overall_race_only" name="test_diagnostics_record_empty_sites_without_changing_existing_decisions" time="0.540" /><testcase classname="tests.test_overall_race_only" name="test_empty_sites_cannot_supply_convergence_or_hide_constant_coordinates" time="0.000" /><testcase classname="tests.test_overall_race_only" name="test_race_only_keeps_the_shared_race_history_and_structural_prior_inputs" time="0.148" /><testcase classname="tests.test_overall_race_only" name="test_qualifying_times_positions_and_availability_cannot_change_race_only_inputs" time="0.165" /><testcase classname="tests.test_overall_race_only" name="test_default_race_only_loader_never_opens_qualifying_times" time="0.054" /><testcase classname="tests.test_overall_race_only" name="test_race_only_preserves_cutoff_first_filtering" time="0.109" /><testcase classname="tests.test_overall_race_only" name="test_race_only_density_is_the_inherited_model_on_no_qualifying_evidence" time="8.108" /><testcase classname="tests.test_overall_race_only" name="test_model_rejects_indirect_qualifying_evidence_by_construction" time="0.196" /><testcase classname="tests.test_overall_race_only" name="test_race_evidence_is_still_used[laps]" time="0.052"><failure message="TypeError: JAX arrays are immutable and do not support in-place item assignment. Instead of x[idx] = y, use x = x.at[idx].set(y) or another .at[] method: https://docs.jax.dev/en/latest/_autosummary/jax.numpy.ndarray.at.html">traced = (({'n_drivers': 6, 'n_entries': 18, 'n_cars': 9, 'n_sessions': 9, ...}, {'y': Array([0. , 0. , 0. , 0.1, 0.1, 0.1, 0.2...), 'scale': None, 'is_observed': True, 'intermediates': [], 'cond_indep_stack': [], 'infer': {'is_auxiliary': True}}}))
+target = 'laps'
+
+    @pytest.mark.parametrize("target", ["laps", "order", "completion", "grid"])
+    def test_race_evidence_is_still_used(traced, target):
+        from numpyro.infer.util import log_density
+        args, params, _ = traced
+        changed = copy.deepcopy(args)
+        factor = dict(laps="overall_laps", order="overall_finish_order",
+                      completion="overall_completion", grid="overall_finish_order")[target]
+&gt;       if target == "laps": changed[1]["y"][0] += 1.
+                             ^^^^^^^^^^^^^^^^^^
+
+tests/test_overall_race_only.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Array([0. , 0. , 0. , 0.1, 0.1, 0.1, 0.2, 0.2, 0.2, 0.3, 0.3, 0.3, 0.4,
+       0.4, 0.4, 0.5, 0.5, 0.5, 0. , 0. , 0. ,...0. , 0. , 0. ,
+       0.1, 0.1, 0.1, 0.2, 0.2, 0.2, 0.3, 0.3, 0.3, 0.4, 0.4, 0.4, 0.5,
+       0.5, 0.5], dtype=float32)
+i = 0, x = Array(1., dtype=float32)
+
+    def _unimplemented_setitem(self, i, x):
+      msg = ("JAX arrays are immutable and do not support in-place item assignment."
+             " Instead of x[idx] = y, use x = x.at[idx].set(y) or another .at[] method:"
+             " https://docs.jax.dev/en/latest/_autosummary/jax.numpy.ndarray.at.html")
+&gt;     raise TypeError(msg)
+E     TypeError: JAX arrays are immutable and do not support in-place item assignment. Instead of x[idx] = y, use x = x.at[idx].set(y) or another .at[] method: https://docs.jax.dev/en/latest/_autosummary/jax.numpy.ndarray.at.html
+
+../../../../f1-analysis/.venv/lib/python3.12/site-packages/jax/_src/numpy/array_methods.py:975: TypeError</failure></testcase><testcase classname="tests.test_overall_race_only" name="test_race_evidence_is_still_used[order]" time="0.193" /><testcase classname="tests.test_overall_race_only" name="test_race_evidence_is_still_used[completion]" time="0.182" /><testcase classname="tests.test_overall_race_only" name="test_race_evidence_is_still_used[grid]" time="0.195" /><testcase classname="tests.test_overall_race_only" name="test_race_only_potential_has_finite_gradient" time="9.696" /><testcase classname="tests.test_overall_race_only" name="test_race_only_forecast_uses_matching_states_and_retains_arm_identity" time="2.275" /><testcase classname="tests.test_overall_race_only" name="test_race_only_conditional_weekend_keeps_complete_draw_batches_and_actual_grid" time="0.165" /><testcase classname="tests.test_overall_race_only" name="test_forecast_cannot_silently_restore_qualifying_inputs[undeclared_arm]" time="0.115" /><testcase classname="tests.test_overall_race_only" name="test_forecast_cannot_silently_restore_qualifying_inputs[observations]" time="0.114" /><testcase classname="tests.test_overall_race_only" name="test_forecast_cannot_silently_restore_qualifying_inputs[factor]" time="0.114" /></testsuite></testsuites>
