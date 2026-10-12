@@ -112,6 +112,9 @@ def build(cutoff, *, tables=None, clean=None):
     wet_tyres = t["race_laps"].groupby("event_id").compound.agg(lambda s: s.isin(WET).any())
     excluded_events = sorted(set(races.event_id) - covered)
     races = races[races.event_id.isin(covered)]
+    # A pit-lane start uses the full entered field, as it does in a forecast.
+    # Later DNS/DSQ result exclusions cannot change this pre-race feature.
+    races["grid_slot"] = np.where(races.grid > 0, races.grid, races.groupby("event_id").driver_id.transform("size"))
     excluded_status = races[races.status.str.match(NON_START_OR_EXCLUDED)].copy()
     races = races[~races.status.str.match(NON_START_OR_EXCLUDED)].copy()
     if races.empty:
@@ -123,7 +126,6 @@ def build(cutoff, *, tables=None, clean=None):
     races["context"] = circ * 4 + wet * 2 + sc
     races["entry_idx"] = entry_index(races)
     races["running"] = races.status.str.match(FINISHED)
-    races["grid_slot"] = np.where(races.grid > 0, races.grid, races.groupby("event_id").driver_id.transform("size"))
     if races.laps.isna().any() or (races.laps < 0).any() or (races.grid_slot < 1).any():
         raise ValueError("Invalid completion or grid data")
     F = races[races.running].sort_values(["event_id", "position"])

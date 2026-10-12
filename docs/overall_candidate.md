@@ -199,6 +199,23 @@ profile. The hashed source change requires fresh registered evidence and
 regeneration of affected publication artifacts before promotion. Existing
 receipts remain records of their original source.
 
+## Grid-feature boundary correction
+
+Dated 2026-10-12, with no fits running. The forecast-catalogue work reproduced a
+training-feature bug: the pit-lane fallback slot used the field size after result
+exclusions. A later disqualification could therefore change another entrant's
+nominal starting-slot feature. The correction computes that fallback from the
+complete entered field before applying the documented outcome exclusions. It
+matches the field available to the forecast and does not change a prior, gate,
+cutoff, seed or scoring rule.
+
+The failing regression is preserved under
+`development/overall-forecast-catalog-checks/grid-before-fix.xml`. This correction
+changes the source fingerprint, so affected model/publication outputs require
+regeneration. The proposed coordinate study remains pending approval and must
+use its updated input fingerprint. Its original synthetic-array hashes remain
+mandatory; the correction must not redraw or replace the old failed experiment.
+
 ## Remaining acceptance work
 
 - Complete synthetic recovery and simulation-based calibration, including the
