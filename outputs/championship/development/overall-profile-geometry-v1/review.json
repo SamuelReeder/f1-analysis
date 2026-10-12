@@ -1,0 +1,176 @@
+{
+  "purpose": "posthoc_numerical_geometry",
+  "results_sha256": "8da95063b7fb3f5cd6509b786863046d74bee6ddba03ad73dd23a71ac959f468",
+  "studies": [
+    {
+      "study": "connected",
+      "arrays_and_truth_reproduced": true,
+      "generating_scales": {
+        "overall_sd_lap": 0.16155491769313812,
+        "overall_lap_nu": 9.590493202209473,
+        "overall_lap_rho": -0.15452587604522705,
+        "sigma0": 0.6705427765846252,
+        "sigma_tau": 0.36681896448135376,
+        "sd_level": 0.6803195476531982,
+        "sd_driver_form": 0.29399076104164124,
+        "overall_sd_level": 0.1983429193496704,
+        "overall_sd_day": 0.1042485162615776,
+        "overall_sd_car_day": 0.12279819697141647
+      },
+      "conditional_curvature_ratio_range": [
+        67621.18888939325,
+        67621.18888939325
+      ],
+      "smallest_active_design_singular_value_range": [
+        8.663425119407458e-08,
+        8.663425119407458e-08
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "original_converged": false,
+          "max_absolute_control_correlation": 0.99830017102757,
+          "controls": [
+            "overall_compound[0]",
+            "overall_trend[0]"
+          ],
+          "race_index": 0,
+          "chain_index": 0
+        },
+        {
+          "attempt": 2,
+          "original_converged": true,
+          "max_absolute_control_correlation": 0.9981137748728223,
+          "controls": [
+            "overall_compound[0]",
+            "overall_trend[0]"
+          ],
+          "race_index": 0,
+          "chain_index": 3
+        }
+      ]
+    },
+    {
+      "study": "confounded",
+      "arrays_and_truth_reproduced": true,
+      "generating_scales": {
+        "overall_sd_lap": 0.09605666249990463,
+        "overall_lap_nu": 13.590743064880371,
+        "overall_lap_rho": -0.4881349802017212,
+        "sigma0": 1.4268428087234497,
+        "sigma_tau": 0.6034778356552124,
+        "sd_level": 0.3230651617050171,
+        "sd_driver_form": 0.2735748291015625,
+        "overall_sd_level": 0.05816958472132683,
+        "overall_sd_day": 0.12832209467887878,
+        "overall_sd_car_day": 0.24407163262367249
+      },
+      "conditional_curvature_ratio_range": [
+        293570.4256543513,
+        293570.4256543513
+      ],
+      "smallest_active_design_singular_value_range": [
+        8.663425119407458e-08,
+        8.663425119407458e-08
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "original_converged": false,
+          "max_absolute_control_correlation": 0.9996612487242515,
+          "controls": [
+            "overall_tyre_slope[0]",
+            "overall_compound[0]"
+          ],
+          "race_index": 0,
+          "chain_index": 0
+        },
+        {
+          "attempt": 2,
+          "original_converged": false,
+          "max_absolute_control_correlation": 0.999601472044337,
+          "controls": [
+            "overall_compound[22]",
+            "overall_trend[11]"
+          ],
+          "race_index": 11,
+          "chain_index": 0
+        },
+        {
+          "attempt": 3,
+          "original_converged": false,
+          "max_absolute_control_correlation": 0.9995345510868487,
+          "controls": [
+            "overall_compound[4]",
+            "overall_trend[2]"
+          ],
+          "race_index": 2,
+          "chain_index": 0
+        },
+        {
+          "attempt": 4,
+          "original_converged": false,
+          "max_absolute_control_correlation": 0.9996134321805159,
+          "controls": [
+            "overall_tyre_slope[8]",
+            "overall_compound[8]"
+          ],
+          "race_index": 4,
+          "chain_index": 3
+        }
+      ]
+    },
+    {
+      "study": "sparse_rookie",
+      "arrays_and_truth_reproduced": true,
+      "generating_scales": {
+        "overall_sd_lap": 0.851301908493042,
+        "overall_lap_nu": 27.122024536132812,
+        "overall_lap_rho": -0.3585408627986908,
+        "sigma0": 0.2605758607387543,
+        "sigma_tau": 0.002664942294359207,
+        "sd_level": 0.8304805159568787,
+        "sd_driver_form": 0.039236344397068024,
+        "overall_sd_level": 0.1572481095790863,
+        "overall_sd_day": 0.5101755261421204,
+        "overall_sd_car_day": 0.08584748953580856
+      },
+      "conditional_curvature_ratio_range": [
+        2551.4297512125577,
+        3061.5157014555416
+      ],
+      "smallest_active_design_singular_value_range": [
+        7.908588998806e-08,
+        8.663425119407458e-08
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "original_converged": false,
+          "max_absolute_control_correlation": 0.965405482489127,
+          "controls": [
+            "overall_compound[20]",
+            "overall_trend[10]"
+          ],
+          "race_index": 10,
+          "chain_index": 2
+        },
+        {
+          "attempt": 2,
+          "original_converged": true,
+          "max_absolute_control_correlation": 0.9657216386799196,
+          "controls": [
+            "overall_compound[20]",
+            "overall_trend[10]"
+          ],
+          "race_index": 10,
+          "chain_index": 0
+        }
+      ]
+    }
+  ],
+  "refit_performed": false,
+  "publication_allowed": false,
+  "original_failures_changed": false,
+  "interpretation": "The synthetic lap controls have strong saved-draw correlations and uneven local curvature. These post hoc diagnostics motivate testing equivalent coordinates, but do not prove the cause of the failed fit. Tiny singular values can reflect rounded input representation; the reported numerical rank is not proof of scientific identification. Every original attempt is retained. Failed samples remain unusable for ranking."
+}
