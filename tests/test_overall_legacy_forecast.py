@@ -214,3 +214,40 @@ def test_future_qualifying_results_do_not_change_training_or_forecast_features()
     assert original["training_arrays_key"] == future["training_arrays_key"]
     for name,value in original["events"][0]["race_features"].items():
         np.testing.assert_array_equal(value,future["events"][0]["race_features"][name])
+
+
+def race_case():
+    _,design,snap,p = setup()
+    snap["information_set"] = "actual_grid"
+    for i,row in enumerate(snap["entrants"]):
+        row["grid_position"] = i + 1 if i < 5 else 0
+    forecast = predict(design,[snap],p)
+    panel = {snap["event"]["event_id"]:{r["driver_id"]:i+1 for i,r in enumerate(snap["entrants"])}}
+    coefficients = dict(c_grid=np.ones((2,3)),a_car=np.zeros((2,3)),b_driver=np.zeros((2,3)))
+    return forecast,panel,coefficients
+
+
+def test_race_adapter_uses_origin_grid_and_independent_coefficient_draw_axes():
+    forecast,panel,coefficients = race_case()
+    result = legacy.forecast_legacy_race(forecast,coefficients,panel)
+    # PL weights are reciprocal grid slots here; the pit-lane slot is full field.
+    weights = 1 / np.arange(1,7)
+    expected = sum(np.log(weights[i]/weights[i:].sum()) for i in range(6))
+    np.testing.assert_allclose(result["log_probabilities"],np.full((2,3,1),expected))
+    assert result["qualifying_posterior_shape"] == [2,7]
+    assert result["coefficient_posterior_shape"] == [2,3]
+    assert result["origins"][0]["snapshot_sha256"] == forecast["events"][0]["catalog"]["snapshot_sha256"]
+    assert not result["publication_allowed"] and not result["source_availability_verified"]
+
+
+@pytest.mark.parametrize("fault",["missing_event","missing_driver","prequalifying","incomplete_features","invalid_order"])
+def test_race_adapter_cannot_substitute_response_data_for_forecast_inputs(fault):
+    forecast,panel,coefficients = race_case()
+    event = forecast["events"][0]
+    if fault == "missing_event": panel.clear()
+    elif fault == "missing_driver": panel[event["event_id"]].pop(event["drivers"][0])
+    elif fault == "prequalifying": event["catalog"]["information_set"] = "prequalifying"
+    elif fault == "incomplete_features": forecast.pop("feature_policy")
+    else: panel[event["event_id"]][event["drivers"][0]] = 2
+    with pytest.raises(ValueError):
+        legacy.forecast_legacy_race(forecast,coefficients,panel)

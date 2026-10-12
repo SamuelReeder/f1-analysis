@@ -8,12 +8,14 @@ from pathlib import Path
 
 import numpy as np
 
-from analysis.overall_baselines import legacy_feature_medians
+from analysis.overall_baselines import (COEFFICIENTS, legacy_feature_medians,
+                                        log_probabilities, ordered_arrays)
 from analysis.overall_forecast_catalog import build_qualifying_catalog
 from analysis.overall_forecast_states import (DEFAULT_DRAW_BATCH, _Noise, _centre,
     _checked_parameter_digest, _trend, validate_catalog_path)
 from f1rank.lineage import REGULATION_RESETS
 from f1rank.model import CAR_FIRST_SD
+from f1rank.overall.fitting import arrays_digest
 
 
 POLICY = "legacy_qualifying_forecast_v1"
@@ -186,3 +188,49 @@ def forecast_legacy_features(design, snapshots, posterior, **kwargs):
         event["race_features"] = dict(driver=features["driver"], car=features["car"][event["entry_car"]])
     result["feature_policy"] = "median_of_paired_persistent_states_without_future_transients"
     return result
+
+
+def forecast_legacy_race(qualifying_forecast, coefficient_posterior, running_positions):
+    """Actual-grid conditional scores using forecast legacy plug-in features.
+
+    Running positions are later response data, keyed by every declared driver.
+    No grid or qualifying features are read from those outcomes. This adapter
+    does not choose finish-status exclusions or certify source/convergence.
+    Coefficient draws need not share the qualifying fit's draw count: its
+    feature medians are fixed under the legacy baseline definition.
+    """
+    if (qualifying_forecast.get("purpose") != "development_legacy_qualifying_states"
+            or qualifying_forecast.get("policy") != POLICY
+            or qualifying_forecast.get("feature_policy") != "median_of_paired_persistent_states_without_future_transients"):
+        raise ValueError("Legacy race prediction requires the complete qualifying feature forecast")
+    events = qualifying_forecast["events"]
+    if not isinstance(running_positions, dict) or set(running_positions) != {e["event_id"] for e in events}:
+        raise ValueError("Every forecast event needs its complete declared response panel")
+    rows = []
+    for event in events:
+        catalog, field = event["catalog"], event["drivers"]
+        positions = running_positions[event["event_id"]]
+        if catalog["information_set"] != "actual_grid":
+            raise ValueError("Legacy race-stage prediction requires an actual-grid forecast origin")
+        if not isinstance(positions, dict) or set(positions) != set(field):
+            raise ValueError("Running positions must retain the full declared forecast field")
+        grid = {r["driver_id"]:r["grid_feature_slot"] for r in catalog["entries"]}
+        rows.append(dict(event_id=event["event_id"], drivers=field,
+            grid_slot=[grid[d] for d in field], running_position=[positions[d] for d in field],
+            **event["race_features"]))
+    arm = "legacy_grid_qualifying"
+    panel = ordered_arrays(rows, arm=arm)
+    probabilities = log_probabilities(coefficient_posterior, panel)
+    coefficients = {name:np.asarray(coefficient_posterior[name]) for name in COEFFICIENTS[arm]}
+    return dict(purpose="development_legacy_race_forecast", arm=arm,
+        event_ids=panel["event_ids"], fields=panel["fields"],
+        log_probabilities=probabilities, axes=["chain", "draw", "event"],
+        coefficient_posterior_shape=list(probabilities.shape[:2]),
+        coefficient_parameter_key=arrays_digest(dict(coefficients=coefficients)),
+        qualifying_parameter_key=qualifying_forecast["consumed_posterior_key"],
+        qualifying_training_arrays_key=qualifying_forecast["training_arrays_key"],
+        qualifying_posterior_shape=qualifying_forecast["posterior_shape"],
+        origins=[dict(event_id=e["event_id"], origin_at=e["catalog"]["origin_at"],
+                      snapshot_sha256=e["catalog"]["snapshot_sha256"]) for e in events],
+        source_availability_verified=False, convergence_verified=False,
+        independent_evidence_established=False, publication_allowed=False)
