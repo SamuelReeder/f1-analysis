@@ -26,5 +26,12 @@
   "probability_sum_absolute_tolerance": 1e-10,
   "zero_probability_policy": "Keep negative-infinite log scores; never clip or silently omit them. An infinite primary comparison remains unresolved and cannot pass the comparison rule.",
   "failure_policy": "Account for every required event and arm. Missing, duplicate, failed, mismatched-origin, mismatched-field or future-trained records prevent a complete comparison.",
+  "comparison_information_identity": {
+    "origin_at": "Exact timezone-aware forecast timestamp, normalized to UTC for comparison.",
+    "snapshot_sha256": "Content identity of the same normalized outcome-free field, schedule and grid snapshot for every arm at this origin.",
+    "training_history_sha256": "Content identity of the common bounded upstream history inventory; arm-specific arrays and evidence ablations may differ under their fixed definitions.",
+    "target_definition_sha256": "Content identity of the registered target and conditioning rule, including whether completion information conditions the order score.",
+    "verification_boundary": "Matching identities do not prove source availability or certify their claimed contents. The evaluation runner must verify preserved artifacts; scoring never sets source verification or publication true."
+  },
   "remaining_registration": ["candidate and baseline implementations", "frozen event inventory", "forecast origins and unknown-condition policy", "calibration acceptance rules", "complete recovery inventory", "independent future horizon and stopping rule"]
 }

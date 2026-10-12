@@ -3,6 +3,8 @@
 This module does not fit, choose folds, set calibration gates or publish ranks.
 The scoring contract alone is not a complete experimental registration.
 """
+import datetime as dt
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -11,6 +13,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = json.loads((ROOT / "docs/overall_scoring_contract.json").read_text())
+INFORMATION_DIGESTS = ("snapshot_sha256", "training_history_sha256", "target_definition_sha256")
 
 
 def log_predictive(log_probabilities):
@@ -197,12 +200,33 @@ def _paired(differences, seasons):
                 comparison_rule_passed=bool(len(years) >= policy["minimum_seasons"] and low > 0))
 
 
+def _comparison_identity(record):
+    """Validate claims of identical information, without certifying their sources."""
+    origin = record.get("origin_at")
+    if not isinstance(origin, str):
+        raise ValueError("Comparison needs an explicit forecast-origin timestamp")
+    try:
+        time = dt.datetime.fromisoformat(origin)
+    except ValueError as exc:
+        raise ValueError("Invalid comparison forecast-origin timestamp") from exc
+    if time.tzinfo is None or time.utcoffset() is None:
+        raise ValueError("Comparison forecast origin must include a timezone")
+    result = dict(origin_at=time.astimezone(dt.timezone.utc).isoformat())
+    for key in INFORMATION_DIGESTS:
+        value = record.get(key)
+        if not isinstance(value, str) or not re.fullmatch(r"[a-f0-9]{64}", value):
+            raise ValueError(f"Comparison needs a valid {key}")
+        result[key] = value
+    return result
+
+
 def compare_arms(records, inventory):
     """Require a complete, common event inventory for this ONE forecast origin.
 
 Inventory records identify event, strictly earlier training cutoff, complete
-field, information set and target. This function cannot certify a registration
-date or prove input provenance: the evaluation runner must do those checks.
+field, exact origin, input snapshot, common bounded history and target definition.
+This function checks matching identities, not a registration date or source
+availability. The evaluation runner must verify the underlying artifacts.
 """
     if not inventory:
         raise ValueError("Empty evaluation inventory")
@@ -214,7 +238,7 @@ date or prove input provenance: the evaluation runner must do those checks.
         _field(event["field"])
         if event["information_set"] not in ("prequalifying", "actual_grid") or event["target"] != CONTRACT["primary_target"]:
             raise ValueError("Unsupported comparison origin or target")
-        expected[key] = event
+        expected[key] = dict(event, **_comparison_identity(event))
     if len({e["information_set"] for e in inventory}) != 1:
         raise ValueError("Do not pool different forecast origins")
     arms = [CONTRACT["candidate_arm"], CONTRACT["primary_baseline"], *CONTRACT["secondary_baselines"]]
@@ -230,6 +254,8 @@ date or prove input provenance: the evaluation runner must do those checks.
         try:
             if any(row.get(k) != target[k] for k in ("training_cutoff", "information_set", "target")) or _field(row.get("field")) != _field(target["field"]):
                 raise ValueError("mismatched cutoff, field, origin or target")
+            if any(value != target[k] for k, value in _comparison_identity(row).items()):
+                raise ValueError("mismatched forecast time, snapshot, training history or target definition")
             if row.get("status") != "scored":
                 raise ValueError("required fit or score failed")
             score = row.get("log_probability")
@@ -241,8 +267,14 @@ date or prove input provenance: the evaluation runner must do those checks.
         for arm in arms:
             if (event, arm) not in found:
                 errors.append(dict(event_id=event, arm=arm, reason="missing required result"))
+    identity_fields = ("event_id", "training_cutoff", "information_set", "target", "origin_at", *INFORMATION_DIGESTS)
+    bound_inventory = [dict({k:expected[e][k] for k in identity_fields}, field=_field(expected[e]["field"]))
+                       for e in sorted(expected)]
+    inventory_key = hashlib.sha256(json.dumps(bound_inventory, sort_keys=True,
+        separators=(",", ":"), allow_nan=False).encode()).hexdigest()
     result = dict(complete=not errors, errors=errors, required_events=sorted(expected),
                   required_arms=arms, comparison_rule_passed=False, publication_allowed=False,
+                  comparison_inventory_sha256=inventory_key, source_availability_verified=False,
                   comparisons={})
     if errors:
         return result
