@@ -135,6 +135,18 @@ def race_model(arrays, *, arm):
     numpyro.deterministic("ll_race", ll)
 
 
+def coefficient_draws(posterior, arm):
+    """Validate the paired joint coefficients consumed by a baseline arm."""
+    names = _arm(arm)
+    if any(name not in posterior for name in names):
+        raise ValueError("Missing baseline coefficient draws")
+    values = {name: _finite(posterior[name], name) for name in names}
+    shape = values["c_grid"].shape
+    if len(shape) != 2 or min(shape) < 2 or any(a.shape != shape for a in values.values()):
+        raise ValueError("Baseline coefficients must retain paired chain/draw axes")
+    return values
+
+
 def log_probabilities(posterior, panel):
     """Conditional order log masses with chain, draw, event axes retained.
 
@@ -143,13 +155,8 @@ def log_probabilities(posterior, panel):
     conditional on the supplied running panel, with no completion model. It
     supplies no retirement, full-classification or pre-qualifying forecast.
     """
-    names = _arm(panel["arm"])
-    if any(name not in posterior for name in names):
-        raise ValueError("Missing baseline coefficient draws")
-    values = {name: _finite(posterior[name], name) for name in names}
-    shape = values["c_grid"].shape
-    if len(shape) != 2 or min(shape) < 2 or any(a.shape != shape for a in values.values()):
-        raise ValueError("Baseline coefficients must retain paired chain/draw axes")
+    values = coefficient_draws(posterior, panel["arm"])
+    names = tuple(values)
     arrays = panel["arrays"]
     result = []
     for row in range(len(panel["event_ids"])):

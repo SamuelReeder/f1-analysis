@@ -34,7 +34,7 @@ def predict(design, path, p, *, batch=3, cutoff=None, metadata=None, seed=41):
         draw_batch_size=batch)
 
 
-def full_fixture(source, design, snap, event, p):
+def full_fixture(source, design, snap, event, p, *, keep_future_times=False):
     """Condition the original model on matching coordinates and the announced field."""
     source = copy.deepcopy(source)
     target = snap["event"]["event_id"]
@@ -47,7 +47,8 @@ def full_fixture(source, design, snap, event, p):
             source["drivers"] = pd.concat([source["drivers"], pd.DataFrame([dict(driver_id=r["driver_id"],
                 dob=r["dob"], debut_season=r["debut_season"])])], ignore_index=True)
     # Future times do not define the training factor or the conditioned states.
-    source["quali_times"] = source["quali_times"].loc[lambda x: x.event_id < target]
+    if not keep_future_times:
+        source["quali_times"] = source["quali_times"].loc[lambda x: x.event_id < target]
     full = build_design(2010, end_event=target, tables=source)
     old_circuit = design.events.groupby("circuit_id").circuit_idx.first()
     for name, index in full.events.groupby("circuit_id").circuit_idx.first().items():
