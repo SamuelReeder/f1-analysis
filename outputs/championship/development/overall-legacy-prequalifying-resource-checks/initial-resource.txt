@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/analysis/overall_legacy_prequalifying_resources.py", line 167, in <module>
+    result = run()
+             ^^^^^
+  File "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/analysis/overall_legacy_prequalifying_resources.py", line 127, in run
+    output_sha256=arrays_digest(dict(probabilities=probability)),
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/f1rank/overall/fitting.py", line 32, in arrays_digest
+    for name, value in sorted(block.items()):
+                              ^^^^^^^^^^^
+AttributeError: 'numpy.ndarray' object has no attribute 'items'. Did you mean: 'item'?

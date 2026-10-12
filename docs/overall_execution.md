@@ -62,8 +62,21 @@ including original-model density agreement, known probabilities, normalization,
 sample/batch invariance and the connected forecast path. No model or acceptance
 rule was changed by the fixture correction. This remains conditional on all
 entrants setting times and starting in qualifying order. Official-grid rules,
-qualifying weather, full product workload resources, forecast precision and
-accepted chronological evaluation remain open.
+qualifying weather, forecast precision and accepted chronological evaluation
+remain open.
+
+The [full-product resource record](../outputs/championship/development/overall-legacy-prequalifying-resource-checks/verification.json)
+extends this check to the committed legacy data dimensions and largest existing
+retry draw shape. Both race arms integrate every synthetic grid/coefficient
+combination under the enforced local memory/CPU caps, with distinct varying
+coefficient vectors and finite conditional masses. The initial measurement
+script failed while formatting its output digest; the record preserves that
+failure and the corrected run. Integration arithmetic, fitting sources, data
+and the pending numerical-study proposal are unchanged. Recorded monotonic
+durations disagree with UTC timestamp intervals; both clocks remain in the
+evidence without a claimed cause or exact wall-clock runtime. This workload
+does not supply fitted baselines, forecast precision, hosted-runner measurements
+or predictive acceptance.
 
 No model fit or real-data predictive score has been used to choose the profile
 settings. Previous finite-gradient tests, software checks and data-shape checks

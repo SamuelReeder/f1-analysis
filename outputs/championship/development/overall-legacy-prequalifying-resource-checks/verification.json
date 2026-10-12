@@ -1,0 +1,58 @@
+{
+  "purpose": "synthetic_legacy_prequalifying_full_product_resource_verification",
+  "definition": "docs/overall_legacy_prequalifying_resources.md",
+  "definition_and_initial_source": "eddf644ab010a0d4958ae16a0dd22b5e69d9a0d3",
+  "corrected_source": "00687f38f237db6a78cf075c73d8bd09e9e63c78",
+  "initial_failure": {
+    "run": "initial-resource-run.json",
+    "traceback": "initial-resource.txt",
+    "reason": "The measurement report passed an array where the shared digest helper requires a named block. No integration arithmetic or workload setting changed in the correction."
+  },
+  "corrected_measurement": {
+    "run": "corrected-resource-run.json",
+    "report": "resource.json",
+    "full_draw_and_product_coverage": true,
+    "finite_conditional_masses": true
+  },
+  "unchanged_from": "4c7d47b40a7dbfdbeef004fed703d2f05895f686",
+  "unchanged_paths": [
+    "f1rank",
+    "extract",
+    "data",
+    "docs/overall_rotation_profile_proposal.json"
+  ],
+  "pending_numerical_proposal_user_approved": false,
+  "clocks": {
+    "records": {
+      "initial": {
+        "utc_timestamp_interval_seconds": 60.984059,
+        "recorded_monotonic_elapsed_seconds": 75.77869327098597,
+        "difference_seconds": 14.794634270985966
+      },
+      "corrected": {
+        "utc_timestamp_interval_seconds": 125.516987,
+        "recorded_monotonic_elapsed_seconds": 138.53797036100877,
+        "difference_seconds": 13.020983361008774
+      }
+    },
+    "agreement_verified": false,
+    "note": "Monotonic durations and UTC timestamp intervals disagree. Both are preserved as recorded; no cause or exact wall-clock runtime is established."
+  },
+  "prior_arithmetic_verification": "../overall-legacy-prequalifying-checks/verification.json",
+  "software_scope": "A resource harness and report-format correction only; production fitting, forecasting kernels and the public payload are unchanged.",
+  "mcmc_run": false,
+  "accepted_fit_loaded": false,
+  "real_predictions_scored": false,
+  "forecast_precision_verified": false,
+  "intended_ci_runner_verified": false,
+  "publication_allowed": false,
+  "evidence_sha256": {
+    "corrected-resource-run.json": "53f2c2ab34ea766baa6bdd753dbe65dab9403dd21657dbc4eb041a333938a021",
+    "corrected-resource.txt": "816c9b506b40b883839e8f40674ca08c7dbc40fdbf7c9f8d162841bd5cc87b3f",
+    "corrected-run.py": "badc5fe06e0534941b57c315ea8f5f6de0f78eb100e65df92719aed379c76e3d",
+    "initial-resource-run.json": "8dbe7411a5e8df9b88e95c2ecd9ab525d9ef13396c195e578550d3afe803a9ae",
+    "initial-resource.txt": "e2314e1164ac807f2c7e4ba91213556bdc83044e6ebd76b34f474aa69e1372a1",
+    "initial-run.py": "ce921e50260976364df1538d858a28a5361564cb8d42ecd8a24ebb58c6094be0",
+    "resource.json": "0792512bcdbc5164d7142f5e7ca659e3a970822be780d611c4f3cb2260fcb369"
+  }
+}
