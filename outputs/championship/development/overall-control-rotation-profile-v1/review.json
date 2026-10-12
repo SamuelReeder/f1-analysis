@@ -1,0 +1,2024 @@
+{
+  "purpose": "complete_matched_coordinate_experiment_review",
+  "recorded_at": "2026-10-12T17:42:15.871965-04:00",
+  "evidence_commit": "e20d590809d2babc545ef67efc417da3c132077e",
+  "registration": "docs/overall_rotation_profile_protocol.json",
+  "registration_sha256": "ca1c8a599e81f9b664fbbe2cd5ff264c17e788065a42141648a4d3f24903372f",
+  "summary_sha256": "b649ca74a5f54b321b0b90d6d148cbd1a318a55afc2bba35d97834aca02e38d8",
+  "model_inputs_key": "eae65767fe29bedcf396beeddbd8bf19b5bdc2a5769dd70f10fda50ef22bad18",
+  "all_processed": true,
+  "all_converged": false,
+  "service": {
+    "MainPID": "0",
+    "Result": "exit-code",
+    "ExecMainStartTimestamp": "Mon 2026-10-12 16:27:23 EDT",
+    "ExecMainExitTimestamp": "Mon 2026-10-12 17:26:17 EDT",
+    "ExecMainStatus": "1",
+    "Slice": "f1.slice",
+    "MemoryPeak": "1958191104",
+    "CPUUsageNSec": "13019893327000",
+    "MemoryMax": "6442450944",
+    "Nice": "19",
+    "LoadState": "loaded",
+    "ActiveState": "failed",
+    "SubState": "failed"
+  },
+  "gnu_time_wall_seconds": 3534.02,
+  "resource_output_sha256": "c3144f6becd6cb95c3ced49754c3311c639753bee9b2abba33db7c140936bd9b",
+  "original_log_sha256": "42fafff60419592f26a5e06a40c70ace482f8ec3905813e03bec00e57fecc4ce",
+  "original_review_sha256": "d645b2adb8f01d02d3cde6d5225e21c5bcd689c58ae3abf7edef847bfc57daba",
+  "studies": [
+    {
+      "study": "connected",
+      "state": "converged",
+      "receipt_state": "converged",
+      "study_file_sha256": "d59da7f182f3b7f0f45b068ede3787c76fa9136b33c3d36bed96b0d8913ec490",
+      "source_commit": "96aa63b1ad776278991cda5f36d7ebd85d1de7bb",
+      "run_key": "00e4adfe0d5f508ad5920314e8a03a7e0585292768db9bd33fb0f450268ae80d",
+      "arrays_and_truths_match_original": true,
+      "truth_sha256": "0effa6798e618d269e44912a2dbf4c760e12aeb64f607660b6b288b5cac25931",
+      "receipt_monotonic_seconds": 1341.5895916489535,
+      "process_cumulative_max_rss_kib": 1686656,
+      "started_at": "2026-10-12T20:27:32.335079+00:00",
+      "finished_at": "2026-10-12T20:47:51.705023+00:00",
+      "timestamp_interval_seconds": 1219.369944,
+      "attempts": [
+        {
+          "attempt": 1,
+          "settings": {
+            "warmup": 800,
+            "samples": 800,
+            "chains": 4,
+            "target_accept": 0.9,
+            "max_tree_depth": 10,
+            "init_median_samples": 15,
+            "seed": 0
+          },
+          "seconds": 223.06013420200907,
+          "converged": false,
+          "draws": 3200,
+          "divergences": 0,
+          "rhat_max": 1.0141674228899396,
+          "rhat_parameter": "overall_intercept",
+          "bulk_ess_min": 592.3929079048173,
+          "tail_ess_min": 827.1989598321647,
+          "mcse_sd_max": 0.0413870154412997,
+          "tree_depth_limit_fraction": 1.0,
+          "mean_accept_prob": 0.9520237445831299,
+          "failed_parameters": [
+            {
+              "parameter": "car_step_z",
+              "passed": false,
+              "rhat_max": 1.0101669667250104,
+              "bulk_ess_min": 1806.3546448523555,
+              "tail_ess_min": 1119.1854571940419,
+              "mcse_sd_max": 0.02667816373819921,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_hazard_wet",
+              "passed": false,
+              "rhat_max": 1.0100759493206728,
+              "bulk_ess_min": 6815.495218688074,
+              "tail_ess_min": 1803.6561328055097,
+              "mcse_sd_max": 0.012103910248964232,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_intercept",
+              "passed": false,
+              "rhat_max": 1.0141674228899396,
+              "bulk_ess_min": 6306.193946191104,
+              "tail_ess_min": 1867.802541361576,
+              "mcse_sd_max": 0.012518435543794657,
+              "constant_coordinates": 0
+            }
+          ],
+          "control_rotation_sha256": "fd8235b6254ee2b2ab28bd164df64fcd9c5a920bb2ee0ac77934c4d4f9442bd0",
+          "current_driver_contrasts_reported": 30,
+          "failed_driver_contrasts": [],
+          "archive": "outputs/championship/cache/overall-control-rotation-profile-v1/connected/failed_1.npz",
+          "archive_bytes": 19609384,
+          "archive_sha256": "6380e6243404d1e9fc1562b9dd877689ca42494ff989b0a4dc7a640ddc4df146",
+          "archive_role": "failed_diagnostic_only",
+          "runtime": {
+            "jax": "0.11.2",
+            "numpyro": "0.22.0",
+            "backend": "cpu"
+          }
+        },
+        {
+          "attempt": 2,
+          "settings": {
+            "warmup": 1600,
+            "samples": 1600,
+            "chains": 4,
+            "target_accept": 0.9,
+            "max_tree_depth": 10,
+            "init_median_samples": 15,
+            "seed": 1
+          },
+          "seconds": 411.74452271003975,
+          "converged": false,
+          "draws": 6400,
+          "divergences": 0,
+          "rhat_max": 1.0066576072388371,
+          "rhat_parameter": "sigma_tau",
+          "bulk_ess_min": 541.3847778269175,
+          "tail_ess_min": 299.4705906943318,
+          "mcse_sd_max": 0.04873344041810774,
+          "tree_depth_limit_fraction": 0.70546875,
+          "mean_accept_prob": 0.9255216717720032,
+          "failed_parameters": [
+            {
+              "parameter": "sigma_tau",
+              "passed": false,
+              "rhat_max": 1.0066576072388371,
+              "bulk_ess_min": 541.3847778269175,
+              "tail_ess_min": 299.4705906943318,
+              "mcse_sd_max": 0.04873344041810774,
+              "constant_coordinates": 0
+            }
+          ],
+          "control_rotation_sha256": "fd8235b6254ee2b2ab28bd164df64fcd9c5a920bb2ee0ac77934c4d4f9442bd0",
+          "current_driver_contrasts_reported": 30,
+          "failed_driver_contrasts": [],
+          "archive": "outputs/championship/cache/overall-control-rotation-profile-v1/connected/failed_2.npz",
+          "archive_bytes": 39202083,
+          "archive_sha256": "08fc5fdaae2bb7d2e3f16c95a4b53e3888b51943e0c8b034195b63f05dfe65c6",
+          "archive_role": "failed_diagnostic_only",
+          "runtime": {
+            "jax": "0.11.2",
+            "numpyro": "0.22.0",
+            "backend": "cpu"
+          }
+        },
+        {
+          "attempt": 3,
+          "settings": {
+            "warmup": 2400,
+            "samples": 3200,
+            "chains": 4,
+            "target_accept": 0.9,
+            "max_tree_depth": 10,
+            "init_median_samples": 15,
+            "seed": 2
+          },
+          "seconds": 702.989916926017,
+          "converged": true,
+          "draws": 12800,
+          "divergences": 2,
+          "rhat_max": 1.0039739830867296,
+          "rhat_parameter": "overall_sd_day",
+          "bulk_ess_min": 2051.337861299147,
+          "tail_ess_min": 2184.45121249936,
+          "mcse_sd_max": 0.022201445171041577,
+          "tree_depth_limit_fraction": 0.782734375,
+          "mean_accept_prob": 0.9273411631584167,
+          "failed_parameters": [],
+          "control_rotation_sha256": "fd8235b6254ee2b2ab28bd164df64fcd9c5a920bb2ee0ac77934c4d4f9442bd0",
+          "current_driver_contrasts_reported": 30,
+          "failed_driver_contrasts": [],
+          "archive": "outputs/championship/cache/overall-control-rotation-profile-v1/connected/posterior.npz",
+          "archive_bytes": 78386853,
+          "archive_sha256": "bef146a1b4c0deb7feea0fee1cda8123b9fb542e5dd2e5076c9bd87396b52ba4",
+          "archive_role": "converged_profile_only",
+          "runtime": {
+            "jax": "0.11.2",
+            "numpyro": "0.22.0",
+            "backend": "cpu"
+          }
+        }
+      ],
+      "original_profile": {
+        "state": "converged",
+        "attempts": 2,
+        "receipt_monotonic_seconds": 564.1497146500042,
+        "final_rhat_max": 1.0040657971200915
+      }
+    },
+    {
+      "study": "confounded",
+      "state": "failed",
+      "receipt_state": "failed_convergence",
+      "study_file_sha256": "2ef8636f4377c7cddd7dda277d054d181f8bc920d303af239988c82f603eafd0",
+      "source_commit": "3a3b82a587a43bfc4f989d95004b534f16408560",
+      "run_key": "a19e9d6d85c59d46e2658ddbf963ef1b9e3041602548d3de235724981f5f3848",
+      "arrays_and_truths_match_original": true,
+      "truth_sha256": "d9af54f7cb9865b0ecf607b56bf1e1e01d7f199e24fa547d5b57daa75945f3df",
+      "receipt_monotonic_seconds": 2295.8105916720233,
+      "process_cumulative_max_rss_kib": 1721600,
+      "started_at": "2026-10-12T20:48:07.914225+00:00",
+      "finished_at": "2026-10-12T21:22:47.296381+00:00",
+      "timestamp_interval_seconds": 2079.382156,
+      "attempts": [
+        {
+          "attempt": 1,
+          "settings": {
+            "warmup": 800,
+            "samples": 800,
+            "chains": 4,
+            "target_accept": 0.9,
+            "max_tree_depth": 10,
+            "init_median_samples": 15,
+            "seed": 0
+          },
+          "seconds": 240.87528914498398,
+          "converged": false,
+          "draws": 3200,
+          "divergences": 0,
+          "rhat_max": 1.1237084003691036,
+          "rhat_parameter": "overall_sd_day",
+          "bulk_ess_min": 24.185494811484993,
+          "tail_ess_min": 55.78396433016259,
+          "mcse_sd_max": 0.2100192343401481,
+          "tree_depth_limit_fraction": 1.0,
+          "mean_accept_prob": 0.9257411360740662,
+          "failed_parameters": [
+            {
+              "parameter": "car",
+              "passed": false,
+              "rhat_max": 1.0172229798620718,
+              "bulk_ess_min": 368.96681745081446,
+              "tail_ess_min": 608.6120154128076,
+              "mcse_sd_max": 0.051658178977022275,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_event",
+              "passed": false,
+              "rhat_max": 1.012493641395637,
+              "bulk_ess_min": 578.4897249430645,
+              "tail_ess_min": 938.5348414858472,
+              "mcse_sd_max": 0.04270410614193425,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_jump_z",
+              "passed": false,
+              "rhat_max": 1.0182186896287186,
+              "bulk_ess_min": 333.93455305477517,
+              "tail_ess_min": 491.75443407324855,
+              "mcse_sd_max": 0.054781418642725364,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_segment",
+              "passed": false,
+              "rhat_max": 1.015783005786633,
+              "bulk_ess_min": 588.0234438486135,
+              "tail_ess_min": 980.4447536572098,
+              "mcse_sd_max": 0.039223109796625855,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_segment_z",
+              "passed": false,
+              "rhat_max": 1.0136243775161107,
+              "bulk_ess_min": 562.0477528613047,
+              "tail_ess_min": 1092.1001624625585,
+              "mcse_sd_max": 0.04217157782875053,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_step_z",
+              "passed": false,
+              "rhat_max": 1.0182724051782484,
+              "bulk_ess_min": 361.67789926509704,
+              "tail_ess_min": 221.82100875185304,
+              "mcse_sd_max": 0.06372209894211976,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_total",
+              "passed": false,
+              "rhat_max": 1.010535029324522,
+              "bulk_ess_min": 345.30024237691896,
+              "tail_ess_min": 591.5221381717889,
+              "mcse_sd_max": 0.053778765149630085,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_total_decentered",
+              "passed": false,
+              "rhat_max": 1.0138900779427564,
+              "bulk_ess_min": 628.364627726576,
+              "tail_ess_min": 1076.4926609443378,
+              "mcse_sd_max": 0.03992219913869443,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "driver_form",
+              "passed": false,
+              "rhat_max": 1.06429045547945,
+              "bulk_ess_min": 62.668176827567095,
+              "tail_ess_min": 495.75361624285637,
+              "mcse_sd_max": 0.11977392009339063,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "driver_form_z",
+              "passed": false,
+              "rhat_max": 1.031921789901152,
+              "bulk_ess_min": 140.13768595278407,
+              "tail_ess_min": 392.653986993997,
+              "mcse_sd_max": 0.08550289997786227,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "level_z",
+              "passed": false,
+              "rhat_max": 1.0169140285700897,
+              "bulk_ess_min": 260.0992267720193,
+              "tail_ess_min": 220.2925170047031,
+              "mcse_sd_max": 0.06464158612515478,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "mu",
+              "passed": false,
+              "rhat_max": 1.0165320333790127,
+              "bulk_ess_min": 431.775560730575,
+              "tail_ess_min": 331.19241428750126,
+              "mcse_sd_max": 0.05146682810420971,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_car",
+              "passed": false,
+              "rhat_max": 1.0164384711717256,
+              "bulk_ess_min": 488.7329762695857,
+              "tail_ess_min": 847.6509651810574,
+              "mcse_sd_max": 0.045169328649284815,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_car_contrast",
+              "passed": false,
+              "rhat_max": 1.0285164940856208,
+              "bulk_ess_min": 275.44344649663446,
+              "tail_ess_min": 325.24255356772767,
+              "mcse_sd_max": 0.06039694699208369,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_car_day_z",
+              "passed": false,
+              "rhat_max": 1.0126069634928916,
+              "bulk_ess_min": 587.25940940372,
+              "tail_ess_min": 928.9896957227622,
+              "mcse_sd_max": 0.04131738842920166,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_car_link",
+              "passed": false,
+              "rhat_max": 1.0266587632067283,
+              "bulk_ess_min": 239.1383522616025,
+              "tail_ess_min": 372.40704530895823,
+              "mcse_sd_max": 0.0645249722096034,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_day",
+              "passed": false,
+              "rhat_max": 1.0299724037454123,
+              "bulk_ess_min": 182.6061085051288,
+              "tail_ess_min": 704.2713051216771,
+              "mcse_sd_max": 0.073909774626652,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_day_z",
+              "passed": false,
+              "rhat_max": 1.037518028044568,
+              "bulk_ess_min": 107.02459552643609,
+              "tail_ess_min": 647.5768775049137,
+              "mcse_sd_max": 0.09891644361548754,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_grid",
+              "passed": false,
+              "rhat_max": 1.0100007192825382,
+              "bulk_ess_min": 842.298311764931,
+              "tail_ess_min": 1079.378759434683,
+              "mcse_sd_max": 0.03269732412744252,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_grid_wet",
+              "passed": false,
+              "rhat_max": 1.0126744133881738,
+              "bulk_ess_min": 874.6764666923982,
+              "tail_ess_min": 1523.001099305231,
+              "mcse_sd_max": 0.03382788667168432,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_lap_controls_rotated",
+              "passed": false,
+              "rhat_max": 1.0108915514088577,
+              "bulk_ess_min": 429.1971613556606,
+              "tail_ess_min": 796.96426577264,
+              "mcse_sd_max": 0.04824438774612245,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_lap_nu",
+              "passed": false,
+              "rhat_max": 1.0081692593113167,
+              "bulk_ess_min": 359.2291585673941,
+              "tail_ess_min": 664.753153859591,
+              "mcse_sd_max": 0.051612820195859554,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_level_z",
+              "passed": false,
+              "rhat_max": 1.0114319992042353,
+              "bulk_ess_min": 500.7888209380353,
+              "tail_ess_min": 863.4007033033687,
+              "mcse_sd_max": 0.04460463293027128,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_pace",
+              "passed": false,
+              "rhat_max": 1.013835080904569,
+              "bulk_ess_min": 649.6384089711703,
+              "tail_ess_min": 1075.2365705930558,
+              "mcse_sd_max": 0.03969126089502218,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_pace_base",
+              "passed": false,
+              "rhat_max": 1.0102342682236014,
+              "bulk_ess_min": 715.8331876893985,
+              "tail_ess_min": 1219.7884083655515,
+              "mcse_sd_max": 0.03736248052389208,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_qualifying_link",
+              "passed": false,
+              "rhat_max": 1.0334743884951683,
+              "bulk_ess_min": 200.0290651401036,
+              "tail_ess_min": 486.6260444219389,
+              "mcse_sd_max": 0.07133263170775764,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_race_skill",
+              "passed": false,
+              "rhat_max": 1.0153657115802042,
+              "bulk_ess_min": 492.601212512233,
+              "tail_ess_min": 726.5982357347046,
+              "mcse_sd_max": 0.04504639093577814,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_sd_car_day",
+              "passed": false,
+              "rhat_max": 1.0150738010864269,
+              "bulk_ess_min": 199.6071765895592,
+              "tail_ess_min": 476.5564204107796,
+              "mcse_sd_max": 0.06671987755564554,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_sd_day",
+              "passed": false,
+              "rhat_max": 1.1237084003691036,
+              "bulk_ess_min": 24.185494811484993,
+              "tail_ess_min": 175.34525121886008,
+              "mcse_sd_max": 0.2100192343401481,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_sd_drift_race",
+              "passed": false,
+              "rhat_max": 1.0075540296130527,
+              "bulk_ess_min": 551.655865919276,
+              "tail_ess_min": 252.57495292806715,
+              "mcse_sd_max": 0.03482141883650089,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_sd_drift_season",
+              "passed": false,
+              "rhat_max": 1.01506716224071,
+              "bulk_ess_min": 293.38724054805635,
+              "tail_ess_min": 415.96425060900646,
+              "mcse_sd_max": 0.05149730816314382,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_sd_lap",
+              "passed": false,
+              "rhat_max": 1.007571346458175,
+              "bulk_ess_min": 356.94700850586395,
+              "tail_ess_min": 949.4679429255743,
+              "mcse_sd_max": 0.052982588702364435,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_sd_level",
+              "passed": false,
+              "rhat_max": 1.0165924015547596,
+              "bulk_ess_min": 243.42536679599382,
+              "tail_ess_min": 287.97168481211344,
+              "mcse_sd_max": 0.06152413299776628,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_sd_wear",
+              "passed": false,
+              "rhat_max": 1.0111048229618853,
+              "bulk_ess_min": 471.0027342585321,
+              "tail_ess_min": 1137.8714060019283,
+              "mcse_sd_max": 0.04603647445558625,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_shared_weekend",
+              "passed": false,
+              "rhat_max": 1.013191534974832,
+              "bulk_ess_min": 240.0860311439822,
+              "tail_ess_min": 280.2666736126055,
+              "mcse_sd_max": 0.0633744545778799,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_traffic",
+              "passed": false,
+              "rhat_max": 1.0095292232210742,
+              "bulk_ess_min": 370.16933697402817,
+              "tail_ess_min": 749.3807232654516,
+              "mcse_sd_max": 0.0520604902484666,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_walk_z",
+              "passed": false,
+              "rhat_max": 1.0101954406438318,
+              "bulk_ess_min": 600.4834932549671,
+              "tail_ess_min": 862.6356878340599,
+              "mcse_sd_max": 0.04075411329846867,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_wear_z",
+              "passed": false,
+              "rhat_max": 1.011622527948431,
+              "bulk_ess_min": 453.3331842732887,
+              "tail_ess_min": 544.2271974460157,
+              "mcse_sd_max": 0.0471589996234341,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "rho_reset",
+              "passed": false,
+              "rhat_max": 1.0101466659131908,
+              "bulk_ess_min": 515.8263470608916,
+              "tail_ess_min": 801.6908010877007,
+              "mcse_sd_max": 0.044027150918765565,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_car_event",
+              "passed": false,
+              "rhat_max": 1.008509684562072,
+              "bulk_ess_min": 383.33948219511205,
+              "tail_ess_min": 362.1990932068321,
+              "mcse_sd_max": 0.048267295174665076,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_car_race",
+              "passed": false,
+              "rhat_max": 1.0198673158654195,
+              "bulk_ess_min": 379.1791193416314,
+              "tail_ess_min": 342.0263327504077,
+              "mcse_sd_max": 0.049810342435363766,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_car_season",
+              "passed": false,
+              "rhat_max": 1.0256179694736083,
+              "bulk_ess_min": 232.577148503057,
+              "tail_ess_min": 170.0113987566598,
+              "mcse_sd_max": 0.060016635423724235,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_car_segment",
+              "passed": false,
+              "rhat_max": 1.0186458983023257,
+              "bulk_ess_min": 412.69014681720563,
+              "tail_ess_min": 624.7093666725094,
+              "mcse_sd_max": 0.045357783129006145,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_driver_form",
+              "passed": false,
+              "rhat_max": 1.0695909282382392,
+              "bulk_ess_min": 60.26792145353163,
+              "tail_ess_min": 163.46279194045735,
+              "mcse_sd_max": 0.12041987658089462,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_level",
+              "passed": false,
+              "rhat_max": 1.0181191438381838,
+              "bulk_ess_min": 155.09843116787164,
+              "tail_ess_min": 55.78396433016259,
+              "mcse_sd_max": 0.07288002654420374,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_skill_race",
+              "passed": false,
+              "rhat_max": 1.0128233950980208,
+              "bulk_ess_min": 496.2286218167662,
+              "tail_ess_min": 766.0401984277119,
+              "mcse_sd_max": 0.042262871508890486,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_skill_season",
+              "passed": false,
+              "rhat_max": 1.0075250232569553,
+              "bulk_ess_min": 307.8758561105284,
+              "tail_ess_min": 424.8364919655596,
+              "mcse_sd_max": 0.05248246975098959,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_track_load",
+              "passed": false,
+              "rhat_max": 1.009525470122502,
+              "bulk_ess_min": 391.8040540976979,
+              "tail_ess_min": 714.7950812980732,
+              "mcse_sd_max": 0.04662720716551098,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sigma0",
+              "passed": false,
+              "rhat_max": 1.0090620281246794,
+              "bulk_ess_min": 298.49757403768143,
+              "tail_ess_min": 412.3880657198254,
+              "mcse_sd_max": 0.05776297810248367,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sigma_tau",
+              "passed": false,
+              "rhat_max": 1.015030597464823,
+              "bulk_ess_min": 360.92401783768605,
+              "tail_ess_min": 710.1172746323061,
+              "mcse_sd_max": 0.052961387480012126,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sigma_u",
+              "passed": false,
+              "rhat_max": 1.0134593408351562,
+              "bulk_ess_min": 435.7730595114793,
+              "tail_ess_min": 496.7077218335754,
+              "mcse_sd_max": 0.04818584713655022,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "skill",
+              "passed": false,
+              "rhat_max": 1.0264179096684811,
+              "bulk_ess_min": 234.54034344662182,
+              "tail_ess_min": 364.7247066213995,
+              "mcse_sd_max": 0.06250077413406523,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "skill_z",
+              "passed": false,
+              "rhat_max": 1.0107490990386971,
+              "bulk_ess_min": 639.7348465393839,
+              "tail_ess_min": 974.8393660352976,
+              "mcse_sd_max": 0.03942838184633159,
+              "constant_coordinates": 0
+            }
+          ],
+          "control_rotation_sha256": "fd8235b6254ee2b2ab28bd164df64fcd9c5a920bb2ee0ac77934c4d4f9442bd0",
+          "current_driver_contrasts_reported": 30,
+          "failed_driver_contrasts": [
+            {
+              "site": "skill",
+              "driver_i": "synthetic_1",
+              "driver_j": "synthetic_0",
+              "diagnostic": {
+                "converged": false,
+                "failures": [
+                  "contrast: convergence/precision threshold failed"
+                ],
+                "parameters": [
+                  {
+                    "parameter": "contrast",
+                    "passed": false,
+                    "rhat_max": 1.016324827753102,
+                    "bulk_ess_min": 236.99279500485454,
+                    "tail_ess_min": 483.59743077587405,
+                    "mcse_sd_max": 0.06586104719409931,
+                    "constant_coordinates": 0
+                  }
+                ],
+                "constants": [],
+                "empty_sites": [],
+                "n_draws": 3200,
+                "n_chains": 4,
+                "divergences": 0
+              },
+              "chain_means": [
+                1.1545430421829224,
+                1.1316001415252686,
+                1.2518385648727417,
+                1.2749779224395752
+              ],
+              "chain_standard_deviations": [
+                0.4225281774997711,
+                0.4568612277507782,
+                0.41209644079208374,
+                0.4072151780128479
+              ]
+            },
+            {
+              "site": "skill",
+              "driver_i": "synthetic_2",
+              "driver_j": "synthetic_1",
+              "diagnostic": {
+                "converged": false,
+                "failures": [
+                  "contrast: convergence/precision threshold failed"
+                ],
+                "parameters": [
+                  {
+                    "parameter": "contrast",
+                    "passed": false,
+                    "rhat_max": 1.010458159705736,
+                    "bulk_ess_min": 518.2588535129496,
+                    "tail_ess_min": 552.123340577019,
+                    "mcse_sd_max": 0.045393789280858736,
+                    "constant_coordinates": 0
+                  }
+                ],
+                "constants": [],
+                "empty_sites": [],
+                "n_draws": 3200,
+                "n_chains": 4,
+                "divergences": 0
+              },
+              "chain_means": [
+                0.2374504804611206,
+                0.2788580358028412,
+                0.27173012495040894,
+                0.1322544813156128
+              ],
+              "chain_standard_deviations": [
+                0.622279942035675,
+                0.611794650554657,
+                0.7353823184967041,
+                0.5935568809509277
+              ]
+            },
+            {
+              "site": "skill",
+              "driver_i": "synthetic_3",
+              "driver_j": "synthetic_1",
+              "diagnostic": {
+                "converged": false,
+                "failures": [
+                  "contrast: convergence/precision threshold failed"
+                ],
+                "parameters": [
+                  {
+                    "parameter": "contrast",
+                    "passed": false,
+                    "rhat_max": 1.011656418368654,
+                    "bulk_ess_min": 518.9652690014445,
+                    "tail_ess_min": 963.3483678695785,
+                    "mcse_sd_max": 0.04405764183344024,
+                    "constant_coordinates": 0
+                  }
+                ],
+                "constants": [],
+                "empty_sites": [],
+                "n_draws": 3200,
+                "n_chains": 4,
+                "divergences": 0
+              },
+              "chain_means": [
+                0.11347517371177673,
+                0.1335386037826538,
+                0.08735940605401993,
+                -0.0335211381316185
+              ],
+              "chain_standard_deviations": [
+                0.6845738291740417,
+                0.6697514653205872,
+                0.7544090151786804,
+                0.6463841795921326
+              ]
+            },
+            {
+              "site": "skill",
+              "driver_i": "synthetic_4",
+              "driver_j": "synthetic_1",
+              "diagnostic": {
+                "converged": false,
+                "failures": [
+                  "contrast: convergence/precision threshold failed"
+                ],
+                "parameters": [
+                  {
+                    "parameter": "contrast",
+                    "passed": false,
+                    "rhat_max": 1.0172097514436005,
+                    "bulk_ess_min": 429.31069533683785,
+                    "tail_ess_min": 1012.5421779763512,
+                    "mcse_sd_max": 0.04818357553188381,
+                    "constant_coordinates": 0
+                  }
+                ],
+                "constants": [],
+                "empty_sites": [],
+                "n_draws": 3200,
+                "n_chains": 4,
+                "divergences": 0
+              },
+              "chain_means": [
+                0.29132938385009766,
+                0.29973694682121277,
+                0.20899799466133118,
+                0.12915034592151642
+              ],
+              "chain_standard_deviations": [
+                0.7374638915061951,
+                0.6923996806144714,
+                0.7773422598838806,
+                0.6914639472961426
+              ]
+            },
+            {
+              "site": "skill",
+              "driver_i": "synthetic_5",
+              "driver_j": "synthetic_1",
+              "diagnostic": {
+                "converged": false,
+                "failures": [
+                  "contrast: convergence/precision threshold failed"
+                ],
+                "parameters": [
+                  {
+                    "parameter": "contrast",
+                    "passed": false,
+                    "rhat_max": 1.0129081541822966,
+                    "bulk_ess_min": 440.2716543058443,
+                    "tail_ess_min": 1106.7644649067354,
+                    "mcse_sd_max": 0.04752196924485213,
+                    "constant_coordinates": 0
+                  }
+                ],
+                "constants": [],
+                "empty_sites": [],
+                "n_draws": 3200,
+                "n_chains": 4,
+                "divergences": 0
+              },
+              "chain_means": [
+                0.35882431268692017,
+                0.34222549200057983,
+                0.28655439615249634,
+                0.20042705535888672
+              ],
+              "chain_standard_deviations": [
+                0.7562547922134399,
+                0.7219057679176331,
+                0.7796502113342285,
+                0.7324779033660889
+              ]
+            },
+            {
+              "site": "overall_race_skill",
+              "driver_i": "synthetic_1",
+              "driver_j": "synthetic_0",
+              "diagnostic": {
+                "converged": false,
+                "failures": [
+                  "contrast: convergence/precision threshold failed"
+                ],
+                "parameters": [
+                  {
+                    "parameter": "contrast",
+                    "passed": false,
+                    "rhat_max": 1.0121508135023263,
+                    "bulk_ess_min": 704.9706094538617,
+                    "tail_ess_min": 1186.8448715161012,
+                    "mcse_sd_max": 0.03776583325468758,
+                    "constant_coordinates": 0
+                  }
+                ],
+                "constants": [],
+                "empty_sites": [],
+                "n_draws": 3200,
+                "n_chains": 4,
+                "divergences": 0
+              },
+              "chain_means": [
+                2.0811822414398193,
+                2.1181161403656006,
+                2.1380910873413086,
+                2.100437641143799
+              ],
+              "chain_standard_deviations": [
+                0.32848870754241943,
+                0.31278231739997864,
+                0.291747123003006,
+                0.29645073413848877
+              ]
+            },
+            {
+              "site": "overall_race_skill",
+              "driver_i": "synthetic_4",
+              "driver_j": "synthetic_1",
+              "diagnostic": {
+                "converged": false,
+                "failures": [
+                  "contrast: convergence/precision threshold failed"
+                ],
+                "parameters": [
+                  {
+                    "parameter": "contrast",
+                    "passed": false,
+                    "rhat_max": 1.0137595026724067,
+                    "bulk_ess_min": 499.1308997056819,
+                    "tail_ess_min": 943.5689867390096,
+                    "mcse_sd_max": 0.044667204378263374,
+                    "constant_coordinates": 0
+                  }
+                ],
+                "constants": [],
+                "empty_sites": [],
+                "n_draws": 3200,
+                "n_chains": 4,
+                "divergences": 0
+              },
+              "chain_means": [
+                0.1391455978155136,
+                0.06461921334266663,
+                -0.1397434026002884,
+                -0.14758183062076569
+              ],
+              "chain_standard_deviations": [
+                1.1354172229766846,
+                1.0769321918487549,
+                1.1031289100646973,
+                0.9807578325271606
+              ]
+            },
+            {
+              "site": "overall_race_skill",
+              "driver_i": "synthetic_5",
+              "driver_j": "synthetic_1",
+              "diagnostic": {
+                "converged": false,
+                "failures": [
+                  "contrast: convergence/precision threshold failed"
+                ],
+                "parameters": [
+                  {
+                    "parameter": "contrast",
+                    "passed": false,
+                    "rhat_max": 1.011775822560579,
+                    "bulk_ess_min": 475.78021446990687,
+                    "tail_ess_min": 968.0188102533585,
+                    "mcse_sd_max": 0.04598937456979501,
+                    "constant_coordinates": 0
+                  }
+                ],
+                "constants": [],
+                "empty_sites": [],
+                "n_draws": 3200,
+                "n_chains": 4,
+                "divergences": 0
+              },
+              "chain_means": [
+                0.4464625418186188,
+                0.3536588251590729,
+                0.15945889055728912,
+                0.15043607354164124
+              ],
+              "chain_standard_deviations": [
+                1.1241511106491089,
+                1.105082631111145,
+                1.1214278936386108,
+                0.9973855018615723
+              ]
+            }
+          ],
+          "archive": "outputs/championship/cache/overall-control-rotation-profile-v1/confounded/failed_1.npz",
+          "archive_bytes": 19420134,
+          "archive_sha256": "bb4d21f6b0c98e11cebc25b9a428dcc50b9af42bf520b55c0f5bc7009ef13bf2",
+          "archive_role": "failed_diagnostic_only",
+          "runtime": {
+            "jax": "0.11.2",
+            "numpyro": "0.22.0",
+            "backend": "cpu"
+          }
+        },
+        {
+          "attempt": 2,
+          "settings": {
+            "warmup": 1600,
+            "samples": 1600,
+            "chains": 4,
+            "target_accept": 0.9,
+            "max_tree_depth": 10,
+            "init_median_samples": 15,
+            "seed": 1
+          },
+          "seconds": 465.99286066700006,
+          "converged": false,
+          "draws": 6400,
+          "divergences": 0,
+          "rhat_max": 1.0894407181888517,
+          "rhat_parameter": "overall_sd_day",
+          "bulk_ess_min": 42.55984166886963,
+          "tail_ess_min": 181.36747203281686,
+          "mcse_sd_max": 0.16444229176992692,
+          "tree_depth_limit_fraction": 1.0,
+          "mean_accept_prob": 0.9477752447128296,
+          "failed_parameters": [
+            {
+              "parameter": "car",
+              "passed": false,
+              "rhat_max": 1.017732519972276,
+              "bulk_ess_min": 478.3321001118374,
+              "tail_ess_min": 791.5390039918123,
+              "mcse_sd_max": 0.04598852983914573,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_event",
+              "passed": false,
+              "rhat_max": 1.011345594747104,
+              "bulk_ess_min": 758.0410720144007,
+              "tail_ess_min": 1406.8030785826145,
+              "mcse_sd_max": 0.03875537862170611,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_jump_z",
+              "passed": false,
+              "rhat_max": 1.0149497532890623,
+              "bulk_ess_min": 504.4793646305415,
+              "tail_ess_min": 825.7336961407743,
+              "mcse_sd_max": 0.044604053382569384,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_segment_z",
+              "passed": false,
+              "rhat_max": 1.0105203420248177,
+              "bulk_ess_min": 869.3764179899802,
+              "tail_ess_min": 1489.4314835629145,
+              "mcse_sd_max": 0.03390054217529593,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_step_z",
+              "passed": false,
+              "rhat_max": 1.013271768775208,
+              "bulk_ess_min": 385.0347365413159,
+              "tail_ess_min": 186.73971055270565,
+              "mcse_sd_max": 0.0882645113169055,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_total",
+              "passed": false,
+              "rhat_max": 1.0146314725118937,
+              "bulk_ess_min": 519.1271764012763,
+              "tail_ess_min": 806.4234901751164,
+              "mcse_sd_max": 0.04392039727139564,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "compat_z",
+              "passed": false,
+              "rhat_max": 1.0107125779494224,
+              "bulk_ess_min": 1055.1135203267697,
+              "tail_ess_min": 1680.8699415739927,
+              "mcse_sd_max": 0.030812372496806576,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "driver_form",
+              "passed": false,
+              "rhat_max": 1.0622451534761053,
+              "bulk_ess_min": 59.84448526947825,
+              "tail_ess_min": 820.086013670083,
+              "mcse_sd_max": 0.12195443748729745,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "driver_form_z",
+              "passed": false,
+              "rhat_max": 1.0339641266092428,
+              "bulk_ess_min": 233.15777373743964,
+              "tail_ess_min": 656.0821886750457,
+              "mcse_sd_max": 0.06652911333989188,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_car",
+              "passed": false,
+              "rhat_max": 1.0122519472824627,
+              "bulk_ess_min": 639.0837867000587,
+              "tail_ess_min": 1034.5804805537248,
+              "mcse_sd_max": 0.03961283703770063,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_car_contrast",
+              "passed": false,
+              "rhat_max": 1.0155242481442062,
+              "bulk_ess_min": 473.4631117076614,
+              "tail_ess_min": 999.6680045132359,
+              "mcse_sd_max": 0.04601651838601597,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_car_link",
+              "passed": false,
+              "rhat_max": 1.0111264783790317,
+              "bulk_ess_min": 375.9686139918726,
+              "tail_ess_min": 496.0984953616595,
+              "mcse_sd_max": 0.05177655613384717,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_day",
+              "passed": false,
+              "rhat_max": 1.011195325152415,
+              "bulk_ess_min": 515.5106656128213,
+              "tail_ess_min": 1161.0221491985399,
+              "mcse_sd_max": 0.04431521651039709,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_day_z",
+              "passed": false,
+              "rhat_max": 1.026679977180794,
+              "bulk_ess_min": 205.88689264899315,
+              "tail_ess_min": 746.4478348166967,
+              "mcse_sd_max": 0.070386562258938,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_race_skill",
+              "passed": false,
+              "rhat_max": 1.0144831621153034,
+              "bulk_ess_min": 642.7706212867985,
+              "tail_ess_min": 976.4301623059234,
+              "mcse_sd_max": 0.039584512715270206,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_sd_car_day",
+              "passed": false,
+              "rhat_max": 1.0158738759053592,
+              "bulk_ess_min": 234.6692415371726,
+              "tail_ess_min": 371.73097277880123,
+              "mcse_sd_max": 0.06670140932396416,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_sd_day",
+              "passed": false,
+              "rhat_max": 1.0894407181888517,
+              "bulk_ess_min": 42.55984166886963,
+              "tail_ess_min": 236.5460852100563,
+              "mcse_sd_max": 0.16444229176992692,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_shared_weekend",
+              "passed": false,
+              "rhat_max": 1.0236275894269289,
+              "bulk_ess_min": 241.8619025977029,
+              "tail_ess_min": 395.2105384332969,
+              "mcse_sd_max": 0.062129966568773294,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_wear_z",
+              "passed": false,
+              "rhat_max": 1.0154735454716142,
+              "bulk_ess_min": 549.5821416661278,
+              "tail_ess_min": 1036.4800623142169,
+              "mcse_sd_max": 0.04263983547722104,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_car_race",
+              "passed": false,
+              "rhat_max": 1.0128058196505252,
+              "bulk_ess_min": 326.3309107025515,
+              "tail_ess_min": 181.36747203281686,
+              "mcse_sd_max": 0.055201194294529236,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_car_reset",
+              "passed": false,
+              "rhat_max": 1.010957529817619,
+              "bulk_ess_min": 662.9546298725388,
+              "tail_ess_min": 825.8270050840571,
+              "mcse_sd_max": 0.031904568949748295,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_driver_form",
+              "passed": false,
+              "rhat_max": 1.0285200075948027,
+              "bulk_ess_min": 188.10415577288626,
+              "tail_ess_min": 227.8986603000323,
+              "mcse_sd_max": 0.06922628690196421,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_level",
+              "passed": false,
+              "rhat_max": 1.0126883479557198,
+              "bulk_ess_min": 436.2611111472481,
+              "tail_ess_min": 286.9926301650241,
+              "mcse_sd_max": 0.0427048463150541,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_track_load",
+              "passed": false,
+              "rhat_max": 1.0124231400928934,
+              "bulk_ess_min": 406.5696777711931,
+              "tail_ess_min": 550.0922316277504,
+              "mcse_sd_max": 0.04230745384946072,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sigma0",
+              "passed": false,
+              "rhat_max": 1.0087012853290682,
+              "bulk_ess_min": 370.5268436598008,
+              "tail_ess_min": 997.8039477822133,
+              "mcse_sd_max": 0.05209385424215434,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sigma_u",
+              "passed": false,
+              "rhat_max": 1.0158041453425242,
+              "bulk_ess_min": 594.2164706011145,
+              "tail_ess_min": 1050.2679104585147,
+              "mcse_sd_max": 0.041653694563792566,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "skill",
+              "passed": false,
+              "rhat_max": 1.0109847308421633,
+              "bulk_ess_min": 497.09277751965453,
+              "tail_ess_min": 1127.6443932195111,
+              "mcse_sd_max": 0.04301909784970282,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "skill_z",
+              "passed": false,
+              "rhat_max": 1.0135998012221694,
+              "bulk_ess_min": 761.6819038361713,
+              "tail_ess_min": 1311.831829374814,
+              "mcse_sd_max": 0.03644426492844139,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "track_load",
+              "passed": false,
+              "rhat_max": 1.0100912260513168,
+              "bulk_ess_min": 844.9449747801214,
+              "tail_ess_min": 1425.3054704535873,
+              "mcse_sd_max": 0.032063150450274976,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "track_load_z",
+              "passed": false,
+              "rhat_max": 1.0118667381461235,
+              "bulk_ess_min": 797.5315107161032,
+              "tail_ess_min": 1603.0813409180466,
+              "mcse_sd_max": 0.03542433863959987,
+              "constant_coordinates": 0
+            }
+          ],
+          "control_rotation_sha256": "fd8235b6254ee2b2ab28bd164df64fcd9c5a920bb2ee0ac77934c4d4f9442bd0",
+          "current_driver_contrasts_reported": 30,
+          "failed_driver_contrasts": [
+            {
+              "site": "overall_race_skill",
+              "driver_i": "synthetic_3",
+              "driver_j": "synthetic_1",
+              "diagnostic": {
+                "converged": false,
+                "failures": [
+                  "contrast: convergence/precision threshold failed"
+                ],
+                "parameters": [
+                  {
+                    "parameter": "contrast",
+                    "passed": false,
+                    "rhat_max": 1.011674104784167,
+                    "bulk_ess_min": 706.3988682266264,
+                    "tail_ess_min": 1193.6469368911823,
+                    "mcse_sd_max": 0.037716237297870395,
+                    "constant_coordinates": 0
+                  }
+                ],
+                "constants": [],
+                "empty_sites": [],
+                "n_draws": 6400,
+                "n_chains": 4,
+                "divergences": 0
+              },
+              "chain_means": [
+                0.02013276144862175,
+                -0.3714114725589752,
+                -0.19299350678920746,
+                -0.23057694733142853
+              ],
+              "chain_standard_deviations": [
+                1.0002477169036865,
+                1.01070237159729,
+                1.003552794456482,
+                0.9204273223876953
+              ]
+            }
+          ],
+          "archive": "outputs/championship/cache/overall-control-rotation-profile-v1/confounded/failed_2.npz",
+          "archive_bytes": 38818734,
+          "archive_sha256": "d95367353044e2b0aebe1f297e41d1c464305a6728f9fb05f047aa01fa38eaab",
+          "archive_role": "failed_diagnostic_only",
+          "runtime": {
+            "jax": "0.11.2",
+            "numpyro": "0.22.0",
+            "backend": "cpu"
+          }
+        },
+        {
+          "attempt": 3,
+          "settings": {
+            "warmup": 2400,
+            "samples": 3200,
+            "chains": 4,
+            "target_accept": 0.9,
+            "max_tree_depth": 10,
+            "init_median_samples": 15,
+            "seed": 2
+          },
+          "seconds": 800.5895506640081,
+          "converged": false,
+          "draws": 12800,
+          "divergences": 0,
+          "rhat_max": 1.0227055371159113,
+          "rhat_parameter": "overall_sd_day",
+          "bulk_ess_min": 179.5561470098825,
+          "tail_ess_min": 323.20255570698805,
+          "mcse_sd_max": 0.0750672968340814,
+          "tree_depth_limit_fraction": 1.0,
+          "mean_accept_prob": 0.9424600005149841,
+          "failed_parameters": [
+            {
+              "parameter": "driver_form",
+              "passed": false,
+              "rhat_max": 1.0110102598781439,
+              "bulk_ess_min": 324.469597530182,
+              "tail_ess_min": 804.4502051178382,
+              "mcse_sd_max": 0.05157546772172187,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_sd_car_day",
+              "passed": false,
+              "rhat_max": 1.0122657773142225,
+              "bulk_ess_min": 623.2299391887128,
+              "tail_ess_min": 1328.2034748720696,
+              "mcse_sd_max": 0.03961146063497438,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_sd_day",
+              "passed": false,
+              "rhat_max": 1.0227055371159113,
+              "bulk_ess_min": 179.5561470098825,
+              "tail_ess_min": 643.0739782761061,
+              "mcse_sd_max": 0.0750672968340814,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_driver_form",
+              "passed": false,
+              "rhat_max": 1.0096514819756732,
+              "bulk_ess_min": 278.1328435683509,
+              "tail_ess_min": 323.20255570698805,
+              "mcse_sd_max": 0.05828751806571136,
+              "constant_coordinates": 0
+            }
+          ],
+          "control_rotation_sha256": "fd8235b6254ee2b2ab28bd164df64fcd9c5a920bb2ee0ac77934c4d4f9442bd0",
+          "current_driver_contrasts_reported": 30,
+          "failed_driver_contrasts": [],
+          "archive": "outputs/championship/cache/overall-control-rotation-profile-v1/confounded/failed_3.npz",
+          "archive_bytes": 77626612,
+          "archive_sha256": "deabedc1db62f6e36d54aacf69aae01c9fc37581ac22faf0b7822bf39292d8a8",
+          "archive_role": "failed_diagnostic_only",
+          "runtime": {
+            "jax": "0.11.2",
+            "numpyro": "0.22.0",
+            "backend": "cpu"
+          }
+        },
+        {
+          "attempt": 4,
+          "settings": {
+            "warmup": 2400,
+            "samples": 3200,
+            "chains": 4,
+            "target_accept": 0.98,
+            "max_tree_depth": 10,
+            "init_median_samples": 15,
+            "seed": 3
+          },
+          "seconds": 782.4649547330337,
+          "converged": false,
+          "draws": 12800,
+          "divergences": 0,
+          "rhat_max": 1.0576536665182228,
+          "rhat_parameter": "overall_sd_day",
+          "bulk_ess_min": 69.59602909190396,
+          "tail_ess_min": 70.00199651922009,
+          "mcse_sd_max": 0.12336833027506394,
+          "tree_depth_limit_fraction": 1.0,
+          "mean_accept_prob": 0.9805602431297302,
+          "failed_parameters": [
+            {
+              "parameter": "car",
+              "passed": false,
+              "rhat_max": 1.0173596845399915,
+              "bulk_ess_min": 427.7451419626012,
+              "tail_ess_min": 1046.163272066695,
+              "mcse_sd_max": 0.048864158903361855,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_event",
+              "passed": false,
+              "rhat_max": 1.0122698752425954,
+              "bulk_ess_min": 909.7107049503365,
+              "tail_ess_min": 1689.0424094752555,
+              "mcse_sd_max": 0.034375564644165454,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_segment",
+              "passed": false,
+              "rhat_max": 1.0106355909504665,
+              "bulk_ess_min": 823.0738131706513,
+              "tail_ess_min": 1283.5099780927274,
+              "mcse_sd_max": 0.03390846066707801,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_segment_z",
+              "passed": false,
+              "rhat_max": 1.01093635475286,
+              "bulk_ess_min": 768.4658973345158,
+              "tail_ess_min": 1452.4505569293935,
+              "mcse_sd_max": 0.03610598353241886,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_step_z",
+              "passed": false,
+              "rhat_max": 1.0182937195747683,
+              "bulk_ess_min": 468.41554106013706,
+              "tail_ess_min": 426.27547421779394,
+              "mcse_sd_max": 0.051370675723077484,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_total",
+              "passed": false,
+              "rhat_max": 1.0102360942589372,
+              "bulk_ess_min": 438.06174506885856,
+              "tail_ess_min": 1022.6145516767428,
+              "mcse_sd_max": 0.04778645593650175,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "car_track",
+              "passed": false,
+              "rhat_max": 1.011640992543639,
+              "bulk_ess_min": 622.0786166991503,
+              "tail_ess_min": 1013.6711020391133,
+              "mcse_sd_max": 0.041467405839642875,
+              "constant_coordinates": 9
+            },
+            {
+              "parameter": "driver_form",
+              "passed": false,
+              "rhat_max": 1.028145561397617,
+              "bulk_ess_min": 136.44055212807572,
+              "tail_ess_min": 572.8302264955967,
+              "mcse_sd_max": 0.0786236429333048,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "driver_form_z",
+              "passed": false,
+              "rhat_max": 1.0223558425087966,
+              "bulk_ess_min": 216.75017288147063,
+              "tail_ess_min": 407.39254850154083,
+              "mcse_sd_max": 0.06813119416264335,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "mu",
+              "passed": false,
+              "rhat_max": 1.0099480599036361,
+              "bulk_ess_min": 507.7231182016722,
+              "tail_ess_min": 254.18634660178859,
+              "mcse_sd_max": 0.05532738282577045,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_car",
+              "passed": false,
+              "rhat_max": 1.0136658383551267,
+              "bulk_ess_min": 546.7429844177309,
+              "tail_ess_min": 1097.809824305565,
+              "mcse_sd_max": 0.04265768176091336,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_car_contrast",
+              "passed": false,
+              "rhat_max": 1.010758855868277,
+              "bulk_ess_min": 382.4714599588601,
+              "tail_ess_min": 814.4451819437979,
+              "mcse_sd_max": 0.051955415598089714,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_car_day_z",
+              "passed": false,
+              "rhat_max": 1.010034368608256,
+              "bulk_ess_min": 793.1820727833484,
+              "tail_ess_min": 1202.3180903749221,
+              "mcse_sd_max": 0.035569373565782866,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_day",
+              "passed": false,
+              "rhat_max": 1.0192403972196882,
+              "bulk_ess_min": 559.7426478959213,
+              "tail_ess_min": 906.5216363819216,
+              "mcse_sd_max": 0.04226802811125208,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_day_z",
+              "passed": false,
+              "rhat_max": 1.0211111404360504,
+              "bulk_ess_min": 268.8131152214733,
+              "tail_ess_min": 967.4638395345423,
+              "mcse_sd_max": 0.061094793924607746,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_lap_controls_rotated",
+              "passed": false,
+              "rhat_max": 1.0138562119499406,
+              "bulk_ess_min": 560.3049721059392,
+              "tail_ess_min": 1107.9641529885603,
+              "mcse_sd_max": 0.04228700377333735,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_race_skill",
+              "passed": false,
+              "rhat_max": 1.0134127215134927,
+              "bulk_ess_min": 566.0386283226042,
+              "tail_ess_min": 968.9765517267975,
+              "mcse_sd_max": 0.041925255830112786,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_sd_car_day",
+              "passed": false,
+              "rhat_max": 1.013630185767554,
+              "bulk_ess_min": 266.2068038658003,
+              "tail_ess_min": 732.0182996370245,
+              "mcse_sd_max": 0.061742809678557206,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_sd_day",
+              "passed": false,
+              "rhat_max": 1.0576536665182228,
+              "bulk_ess_min": 69.59602909190396,
+              "tail_ess_min": 344.03852501064415,
+              "mcse_sd_max": 0.12336833027506394,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_sd_drift_race",
+              "passed": false,
+              "rhat_max": 1.0109507808672973,
+              "bulk_ess_min": 536.4044472062693,
+              "tail_ess_min": 327.70358388499403,
+              "mcse_sd_max": 0.03566175861841073,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_sd_drift_season",
+              "passed": false,
+              "rhat_max": 1.010441878391142,
+              "bulk_ess_min": 619.3856035615311,
+              "tail_ess_min": 925.0483717510721,
+              "mcse_sd_max": 0.03744355853851437,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_sd_level",
+              "passed": false,
+              "rhat_max": 1.0084396604046877,
+              "bulk_ess_min": 277.47213006388176,
+              "tail_ess_min": 309.4532842751056,
+              "mcse_sd_max": 0.051958862189859976,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_shared_weekend",
+              "passed": false,
+              "rhat_max": 1.0241684534263384,
+              "bulk_ess_min": 228.38550040115507,
+              "tail_ess_min": 558.8806756485151,
+              "mcse_sd_max": 0.06767203588355004,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_traffic",
+              "passed": false,
+              "rhat_max": 1.014322475313569,
+              "bulk_ess_min": 531.0319052097087,
+              "tail_ess_min": 1154.726400055367,
+              "mcse_sd_max": 0.04338942505491995,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "overall_wear_z",
+              "passed": false,
+              "rhat_max": 1.0118639940521663,
+              "bulk_ess_min": 464.6983292796403,
+              "tail_ess_min": 707.8755972056674,
+              "mcse_sd_max": 0.04643690375758168,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "rho_reset",
+              "passed": false,
+              "rhat_max": 1.0123631225790086,
+              "bulk_ess_min": 664.5217052905407,
+              "tail_ess_min": 1545.333355745703,
+              "mcse_sd_max": 0.03900671445803882,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_car_event",
+              "passed": false,
+              "rhat_max": 1.0117405603610952,
+              "bulk_ess_min": 654.1972983066095,
+              "tail_ess_min": 888.9750766692493,
+              "mcse_sd_max": 0.03568313500966133,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_car_season",
+              "passed": false,
+              "rhat_max": 1.005986921462773,
+              "bulk_ess_min": 441.5212333981758,
+              "tail_ess_min": 358.2591737045391,
+              "mcse_sd_max": 0.04413090829458891,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_driver_form",
+              "passed": false,
+              "rhat_max": 1.0345468648522178,
+              "bulk_ess_min": 101.78813524151732,
+              "tail_ess_min": 70.00199651922009,
+              "mcse_sd_max": 0.09593294193232077,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sd_track_load",
+              "passed": false,
+              "rhat_max": 1.0152594755964397,
+              "bulk_ess_min": 423.0183470961437,
+              "tail_ess_min": 877.4707908007971,
+              "mcse_sd_max": 0.043648231398630555,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sigma0",
+              "passed": false,
+              "rhat_max": 1.0128200480222602,
+              "bulk_ess_min": 375.44816689502613,
+              "tail_ess_min": 852.3670176235848,
+              "mcse_sd_max": 0.051741412478837845,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "sigma_u",
+              "passed": false,
+              "rhat_max": 1.013868183886453,
+              "bulk_ess_min": 539.7726106242745,
+              "tail_ess_min": 751.1763425442583,
+              "mcse_sd_max": 0.04405323404411929,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "skill",
+              "passed": false,
+              "rhat_max": 1.0161247797653425,
+              "bulk_ess_min": 509.2588466139441,
+              "tail_ess_min": 1124.1413588686573,
+              "mcse_sd_max": 0.04415428913696124,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "track_load",
+              "passed": false,
+              "rhat_max": 1.010381991435905,
+              "bulk_ess_min": 715.5544834104159,
+              "tail_ess_min": 1229.0670503091465,
+              "mcse_sd_max": 0.03777645220716176,
+              "constant_coordinates": 0
+            },
+            {
+              "parameter": "track_load_z",
+              "passed": false,
+              "rhat_max": 1.0101343954953899,
+              "bulk_ess_min": 628.11275109656,
+              "tail_ess_min": 1084.2184165207661,
+              "mcse_sd_max": 0.03989211328604345,
+              "constant_coordinates": 0
+            }
+          ],
+          "control_rotation_sha256": "fd8235b6254ee2b2ab28bd164df64fcd9c5a920bb2ee0ac77934c4d4f9442bd0",
+          "current_driver_contrasts_reported": 30,
+          "failed_driver_contrasts": [
+            {
+              "site": "skill",
+              "driver_i": "synthetic_4",
+              "driver_j": "synthetic_1",
+              "diagnostic": {
+                "converged": false,
+                "failures": [
+                  "contrast: convergence/precision threshold failed"
+                ],
+                "parameters": [
+                  {
+                    "parameter": "contrast",
+                    "passed": false,
+                    "rhat_max": 1.011654548330646,
+                    "bulk_ess_min": 565.6422312226827,
+                    "tail_ess_min": 1382.786035564113,
+                    "mcse_sd_max": 0.04223069723345851,
+                    "constant_coordinates": 0
+                  }
+                ],
+                "constants": [],
+                "empty_sites": [],
+                "n_draws": 12800,
+                "n_chains": 4,
+                "divergences": 0
+              },
+              "chain_means": [
+                0.08977100998163223,
+                0.2698666751384735,
+                0.2870471179485321,
+                0.08727803826332092
+              ],
+              "chain_standard_deviations": [
+                0.7955711483955383,
+                0.6471324563026428,
+                0.6743387579917908,
+                0.7308793067932129
+              ]
+            },
+            {
+              "site": "skill",
+              "driver_i": "synthetic_5",
+              "driver_j": "synthetic_1",
+              "diagnostic": {
+                "converged": false,
+                "failures": [
+                  "contrast: convergence/precision threshold failed"
+                ],
+                "parameters": [
+                  {
+                    "parameter": "contrast",
+                    "passed": false,
+                    "rhat_max": 1.0114306946101703,
+                    "bulk_ess_min": 563.9589318941935,
+                    "tail_ess_min": 1073.4138949046887,
+                    "mcse_sd_max": 0.04238243284012756,
+                    "constant_coordinates": 0
+                  }
+                ],
+                "constants": [],
+                "empty_sites": [],
+                "n_draws": 12800,
+                "n_chains": 4,
+                "divergences": 0
+              },
+              "chain_means": [
+                0.13160564005374908,
+                0.2956361472606659,
+                0.35137027502059937,
+                0.13766402006149292
+              ],
+              "chain_standard_deviations": [
+                0.8063571453094482,
+                0.699189305305481,
+                0.674989640712738,
+                0.7494950294494629
+              ]
+            }
+          ],
+          "archive": "outputs/championship/cache/overall-control-rotation-profile-v1/confounded/failed_4.npz",
+          "archive_bytes": 77583790,
+          "archive_sha256": "6cb1e0035bb2e7cebc710e13db4e839b9d3d3cb83ea47bef797064505338abf2",
+          "archive_role": "failed_diagnostic_only",
+          "runtime": {
+            "jax": "0.11.2",
+            "numpyro": "0.22.0",
+            "backend": "cpu"
+          }
+        }
+      ],
+      "original_profile": {
+        "state": "failed",
+        "attempts": 4,
+        "receipt_monotonic_seconds": 1962.056758212042,
+        "final_rhat_max": 1.056273342069574
+      }
+    },
+    {
+      "study": "sparse_rookie",
+      "state": "converged",
+      "receipt_state": "converged",
+      "study_file_sha256": "852e5fcd3d176922b19d0ed58464a50e210d1285f6fc756f3b5980c7e8d91aca",
+      "source_commit": "3a3b82a587a43bfc4f989d95004b534f16408560",
+      "run_key": "c70fd3a5db7ef5ec7b430b11c4940f1cd4ce275a2aabfcb7cf135558226523d7",
+      "arrays_and_truths_match_original": true,
+      "truth_sha256": "48b4c7587e111de5018eade208ae830261f84a3c221b1270eba2bb713b68769b",
+      "receipt_monotonic_seconds": 220.24505829496775,
+      "process_cumulative_max_rss_kib": 1745684,
+      "started_at": "2026-10-12T21:22:56.252230+00:00",
+      "finished_at": "2026-10-12T21:26:16.464541+00:00",
+      "timestamp_interval_seconds": 200.212311,
+      "attempts": [
+        {
+          "attempt": 1,
+          "settings": {
+            "warmup": 800,
+            "samples": 800,
+            "chains": 4,
+            "target_accept": 0.9,
+            "max_tree_depth": 10,
+            "init_median_samples": 15,
+            "seed": 0
+          },
+          "seconds": 84.64049352495931,
+          "converged": false,
+          "draws": 3200,
+          "divergences": 1,
+          "rhat_max": 1.0102352487044752,
+          "rhat_parameter": "car_segment_z",
+          "bulk_ess_min": 957.7524874182066,
+          "tail_ess_min": 1232.8504911893679,
+          "mcse_sd_max": 0.032039282955340455,
+          "tree_depth_limit_fraction": 0.0,
+          "mean_accept_prob": 0.9221145510673523,
+          "failed_parameters": [
+            {
+              "parameter": "car_segment_z",
+              "passed": false,
+              "rhat_max": 1.0102352487044752,
+              "bulk_ess_min": 4992.563031180661,
+              "tail_ess_min": 1717.913854672989,
+              "mcse_sd_max": 0.01414264908338691,
+              "constant_coordinates": 0
+            }
+          ],
+          "control_rotation_sha256": "d6a64b7b64eab409fcd3c719bfb22e0abaf5a5c557df623cf31cbf21322a791c",
+          "current_driver_contrasts_reported": 30,
+          "failed_driver_contrasts": [],
+          "archive": "outputs/championship/cache/overall-control-rotation-profile-v1/sparse_rookie/failed_1.npz",
+          "archive_bytes": 18518259,
+          "archive_sha256": "64d206b9e7e3ed2b4e9af8c9ea2c31bf67639660dfef473252c2ced957e3e93b",
+          "archive_role": "failed_diagnostic_only",
+          "runtime": {
+            "jax": "0.11.2",
+            "numpyro": "0.22.0",
+            "backend": "cpu"
+          }
+        },
+        {
+          "attempt": 2,
+          "settings": {
+            "warmup": 1600,
+            "samples": 1600,
+            "chains": 4,
+            "target_accept": 0.9,
+            "max_tree_depth": 10,
+            "init_median_samples": 15,
+            "seed": 1
+          },
+          "seconds": 134.05396341101732,
+          "converged": true,
+          "draws": 6400,
+          "divergences": 3,
+          "rhat_max": 1.0062361511687317,
+          "rhat_parameter": "overall_wear_z",
+          "bulk_ess_min": 1627.3097898673927,
+          "tail_ess_min": 2107.2949879757066,
+          "mcse_sd_max": 0.02417600299768712,
+          "tree_depth_limit_fraction": 0.0,
+          "mean_accept_prob": 0.9346890449523926,
+          "failed_parameters": [],
+          "control_rotation_sha256": "d6a64b7b64eab409fcd3c719bfb22e0abaf5a5c557df623cf31cbf21322a791c",
+          "current_driver_contrasts_reported": 30,
+          "failed_driver_contrasts": [],
+          "archive": "outputs/championship/cache/overall-control-rotation-profile-v1/sparse_rookie/posterior.npz",
+          "archive_bytes": 37092117,
+          "archive_sha256": "d0cedc5fc031a6c0e86566faa86cf7bace3642ee05b9e69e5ee8f66efb72cb5f",
+          "archive_role": "converged_profile_only",
+          "runtime": {
+            "jax": "0.11.2",
+            "numpyro": "0.22.0",
+            "backend": "cpu"
+          }
+        }
+      ],
+      "original_profile": {
+        "state": "converged",
+        "attempts": 2,
+        "receipt_monotonic_seconds": 193.77034403802827,
+        "final_rhat_max": 1.0057847665587587
+      }
+    }
+  ],
+  "total_receipt_monotonic_seconds": 3857.6452416159445,
+  "total_attempts": 9,
+  "crash_or_oom_in_this_experiment": false,
+  "full_recovery_complete": false,
+  "sbc_complete": false,
+  "real_driver_ranking_produced": false,
+  "publication_allowed": false,
+  "full_goal_complete": false,
+  "original_failures_changed": false,
+  "limitations": [
+    "This experiment did not resolve the confounded case; its failed draws cannot be used for driver inference or publication.",
+    "Corrected numerical arithmetic and the rotated coordinates were evaluated together, so changes cannot be causally attributed to the rotation alone.",
+    "The earlier confounded attempt with passing driver contrasts still failed the original parameter diagnostics and cannot replace the exhausted result.",
+    "Process resident-memory maxima are cumulative within the service, not independent per-study peak measurements; service MemoryPeak also includes cgroup overhead.",
+    "Recorded monotonic receipt durations differ from timestamp intervals and GNU time wall duration; both are retained without an established cause.",
+    "These local synthetic fits do not establish full recovery, real-data calibration, ranking precision, independent predictive evidence or intended-runner resources."
+  ]
+}
