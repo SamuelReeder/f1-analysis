@@ -15,7 +15,7 @@ open until the full acceptance checklist has direct evidence.
 | Coherent weekend simulation | Student-t elimination and shared weekend uncertainty; conditional kernels preserve teammate effects, context, order and completion within each joint draw; compensated race-order generation has controlled, exact-sum and compiled checks | Forecast-time conditions, official-grid eligibility/penalties, common operations calibration, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |
 | Ability/outcome/numerical uncertainty | Nested simulation, MCSE and rank/ESS diagnostics; saved-draw diagnosis finds qualifying-contrast failures in the final confounded attempt | Resolve inference and check ranking functionals under converged posteriors with fixed simulation precision |
-| Chronological development comparison | Plan defines information horizons and baseline roles; blind scoring utilities preserve joint draws, conditional weights and required events; outcome-free catalogue, joint states and conditional observation kernels have synthetic checks | Complete source verification, unknown-condition integration, unseen-circuit and classification-conditioning policies and baseline implementations; freeze event inventory, calibration and stopping rules; run every fold |
+| Chronological development comparison | Plan defines information horizons and baseline roles; blind scoring utilities preserve joint draws, conditional weights and required events; outcome-free catalogue, joint states and conditional observation kernels have synthetic checks; explicit legacy/grid-only baseline arithmetic | Complete source verification, unknown-condition integration, unseen-circuit and classification-conditioning policies, baseline fitting/forecast integration and the current-race-only definition; freeze event inventory, calibration and stopping rules; run every fold |
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence, common field and matching explanation draws/scenario | Producer/export, pairwise comparisons, and matching component explanations from accepted draws; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
@@ -200,3 +200,11 @@ The fitting-source identity changes and affected evidence requires regeneration;
 the numerical study remains pending approval and the original failure remains.
 These checks close the identified order-generation arithmetic gap, not the
 remaining recovery, condition, exposure, classification or calibration work.
+
+The [baseline interfaces](overall_baselines.md) preserve the executable legacy
+qualifying-feature medians, lineage compatibility definition and race-mapping
+priors. Conditional order arithmetic retains joint coefficient draws and the full
+declared field. Grid-only has no qualifying-feature dependency. This development
+layer supplies no accepted fits, real-data scores or as-of provenance guarantee;
+the common history, current-race-only definition and end-to-end forecast policy
+remain part of the unfinished evaluation work.
