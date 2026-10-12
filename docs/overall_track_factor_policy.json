@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "id": "standard_normal_unseen_qualifying_axis_v1",
+  "status": "development_specification_before_forecast_evaluation",
+  "distribution": {"family": "normal", "mean": 0.0, "standard_deviation": 1.0},
+  "scope": "A new population assumption for the qualifying-derived track factor at a circuit absent from the training catalogue; not an inferred posterior for its physical characteristics.",
+  "reference": "Keep the fixed training factor's origin and units. Its eligible training values are scaled to unit spread by f1rank.design.circuit_factors, without mean centering. The neutral origin remains zero; do not recenter training factors or car states.",
+  "independence": "New circuit coordinates are independent of each other and the fitted posterior conditional on its training design. Within a draw, use the same circuit coordinate with each paired team-season loading and its paired qualifying/race car link.",
+  "persistence": "Reuse the circuit coordinate across visits and seasons within a trajectory, regardless of entrant order, forecast prefix or draw batching.",
+  "known_circuits": "Retain the fitted fixed factor, including a zero factor selected by the existing insufficient-history convention. Uncertainty in learned training factors is not estimated by this extension.",
+  "short_training_history": "A new joint-model circuit retains the specified population distribution even when the training factor axis is all zero. Its population spread is an assumption, not a scale learned from absent data; fitted loading uncertainty remains prior-dominated where appropriate.",
+  "race_only_ablation": "Preserve the explicitly removed qualifying-derived axis at zero for every circuit. Do not inject a qualifying factor or its variation into that separately defined evidence ablation.",
+  "interface": "Joint-model forecasts at unseen circuits require this policy explicitly. Omission rejects the forecast instead of choosing a fixed neutral factor. Known-circuit forecasts remain unchanged.",
+  "tuning": "No real-event accuracy or ranking outcome selects this population law. Preserve failures; any revision requires a new declared version before evaluation.",
+  "remaining": "Calibrate this extrapolation and the existing fixed-factor approximation; register circuit treatment for all arms before predictive evaluation. This does not repair uncertainty in the fitted training factors.",
+  "scientific_acceptance_established": false,
+  "independent_evidence_established": false,
+  "publication_allowed": false
+}
