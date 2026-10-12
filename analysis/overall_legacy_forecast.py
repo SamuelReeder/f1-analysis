@@ -19,6 +19,11 @@ from f1rank.overall.fitting import arrays_digest
 
 
 POLICY = "legacy_qualifying_forecast_v1"
+# Pass this to f1rank.fit.fit(extra_sites=...) when a separately registered
+# baseline fit is run. Its default export drops these sampled coordinates;
+# centred historical ratings cannot replace the uncentred terminal states.
+FORECAST_EXTRA_SITES = ("level_z", "skill_z", "car_step_z", "car_jump_z",
+                        "track_load_z", "compat_z")
 
 
 class LegacyNoise(_Noise):
@@ -38,8 +43,11 @@ def _parameters(design, posterior, fit_metadata):
               "sd_track_load", "sd_compat", "sd_car_event", "sd_driver_form")
     vectors = dict(level_z=q["n_drivers"], skill_z=q["n_entries"], car_step_z=q["n_cars"],
                    car_jump_z=q["n_cars"], track_load_z=q["n_team_seasons"], compat_z=q["n_stints"])
-    if any(name not in posterior for name in (*scalar, *vectors)):
-        raise ValueError("Missing legacy qualifying state draws")
+    missing = sorted(set((*scalar, *vectors)) - set(posterior))
+    if missing:
+        raise ValueError("Missing legacy qualifying state draws: " + ", ".join(missing)
+                         + "; the default legacy archive omits forecast coordinates. "
+                         "Registered forecast fits must retain FORECAST_EXTRA_SITES.")
     p = {name: np.asarray(posterior[name]) for name in (*scalar, *vectors)}
     shape = p["sd_level"].shape
     if len(shape) != 2 or min(shape) < 2:

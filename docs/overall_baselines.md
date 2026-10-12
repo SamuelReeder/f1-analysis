@@ -18,6 +18,18 @@ its era-based team effects. The adapter requires the standard fitting
 metadata and matching qualifying arrays, rejects successor-specific posterior
 sites, and leaves source/convergence verification to the checked fit loader.
 
+The original `f1rank.fit.fit` exporter does not retain the sampled coordinates
+needed by this adapter by default. Future registered baseline fits must pass
+`extra_sites=FORECAST_EXTRA_SITES`, declared in the adapter, to retain the raw
+driver walks, car innovations, track loadings and lineage effects. This changes
+the saved variables only; it does not change the likelihood, priors or sampling
+settings. Existing centred rating arrays cannot silently substitute for missing
+uncentred states. An older archive lacking these coordinates is rejected and
+remains unusable for this forecast path. No old fit has been relabeled or rerun.
+The legacy metadata/design check also does not provide the successor's immutable
+source receipt, convergence acceptance or bounded archive loading; integration
+of those checks remains required before an accepted baseline forecast.
+
 Propagate the original uncentred driver and persistent-car walks from their last
 training states, then centre on the complete announced future field. Retain the
 existing event/season gap scales, experience/age trend, car carryover and reset
