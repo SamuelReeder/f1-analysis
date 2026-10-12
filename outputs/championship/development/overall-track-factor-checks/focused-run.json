@@ -1,0 +1,25 @@
+{
+  "source_commit": "4bac4c7319801823d3886f3795e693660dc82d09",
+  "command": [
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_overall_unseen_track_factor.py",
+    "tests/test_overall_future_conditions.py",
+    "tests/test_overall_unseen_circuits.py",
+    "tests/test_overall_forecast_states.py",
+    "tests/test_overall_forecast_batches.py",
+    "tests/test_overall_observation_kernels.py",
+    "tests/test_overall_race_only.py",
+    "--junitxml=outputs/championship/development/overall-track-factor-checks/focused.xml"
+  ],
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-rf4728434f01f46a882533d025f76fc8e.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "exit_code": 0,
+  "elapsed_seconds": 51.65874772000825,
+  "peak_child_rss_kib": 1166972
+}

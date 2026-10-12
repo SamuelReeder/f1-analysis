@@ -1,0 +1,1285 @@
+{
+  "purpose": "synthetic_forecast_resource_check",
+  "source_commit": "4bac4c7319801823d3886f3795e693660dc82d09",
+  "source_hashes": {
+    "analysis/overall_forecast_states.py": "14898cbaaee8f5bd413e0fc3d2851981d26d35466fc632fe4cf84cb090ff5f51",
+    "analysis/overall_forecast_catalog.py": "342d2e1ad61022617964280a07f29131c9807312f4cd1e3b6e6ba00975f33a85",
+    "analysis/overall_forecast_resources.py": "13efa0e9bfbb69899608f71d2aaa03b0d5ded9e831c55088ae0580bfabb73d09",
+    "f1rank/overall/design.py": "acb76be3a2754a2f354a4a70b728c7d17aa2915318a0ff778e6e9ed8f8439092",
+    "f1rank/overall/fitting.py": "302ad0d46d286cf7f869c4d002433eb4da9a0b024d30de7c20b660cdb81f91ac",
+    "f1rank/model.py": "a92d3c965fa80cc57213b8aa607d232d4196aab2ea76f55e4f4e28e363341d2b",
+    "f1rank/overall/model.py": "83d97eb193495fc5ea2d7203b10ebd10f9fa1ef14f10bafe5ba86a868035b1ac",
+    "docs/overall_rotation_profile_proposal.json": "3de78b55e5e53e395fe19738d825c6228b7b2e8a6e9c24933d9e9bd3ced818da",
+    "analysis/overall_posterior_archive.py": "d963d652dc9711f7a39ea279e9a9a406c902a54be4a588de0922a6d1442f34c5",
+    "analysis/overall_observation_kernels.py": "2b572fbbc5a577580d4abd42951b2fda92cc6dcac649e7bf35ee866c4a2fc4f2",
+    "f1rank/overall/order.py": "812af3dac1f6ad8fa016919332511a24fc99d53eef947edc1eeec55dd48cd95d",
+    "f1rank/overall/simulation.py": "57d31ee69f2f6b36fe551c9b6bcb51f0894e5cfbd03e1403adf77e7920c61ff9",
+    "docs/overall_track_factor_policy.json": "6fb0af1edd406c67e1ce8327346f9e81d4d9793ec95f10bf37cb4d30580809e0",
+    "analysis/overall_future_conditions.py": "e0a9ef1a484a695a7790b87bca8f4daed07316035329c5e8395e54f6a3330b8f",
+    "docs/overall_condition_policy.json": "6785fd29dcbcfad449dc6aecfdbafeaa349d20d321ed6c176610fa92327f581a"
+  },
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r4d699f8887f44dbe9f8666593e83bc11.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "recorded_at": "2026-10-12T14:20:45.230022+00:00",
+  "cutoff": "2026-15",
+  "preflight_reference_sha256": "722d431cfb3237c9920c8d2b81734abbe521a752a01b95b67c1eb9d171159afb",
+  "training_arrays_key": "2b6a57f0491afb8348aaa7501c3626995672b87e06d1da2f037db01a781625d4",
+  "counts": {
+    "entries": 7246,
+    "cars": 3624,
+    "drivers": 84,
+    "forecast_field": 22
+  },
+  "workload": {
+    "posterior_shape": [
+      4,
+      3200
+    ],
+    "dtype": "float32",
+    "seed": 20261012,
+    "parameter_bytes": 1169612800,
+    "parameters_sha256": "7ef96a76e62652ec2c867ecf177447a3142107c54da850d3c8f6904c3f99a8a4",
+    "draws_from_fixed_retry_ladder": true,
+    "archive_io": "Temporary compressed cache-format fixture with checked source and checksum",
+    "compressed_bytes": 1424937632,
+    "synthetic_receipt_fixture": true,
+    "unused_archive_site_validated": true,
+    "construction": "Arbitrary finite synthetic parameter values; not fitted values or a recovery experiment"
+  },
+  "forecast": {
+    "kind": "historical_condition_weekend",
+    "circuit_id": "baku",
+    "unseen_circuit": false,
+    "unseen_circuit_policy": "independent_gaussian_with_training_reference",
+    "unseen_track_policy": "standard_normal_unseen_qualifying_axis_v1",
+    "event_circuits": [
+      {
+        "event_id": "2026-16",
+        "circuit_id": "baku"
+      },
+      {
+        "event_id": "2026-17",
+        "circuit_id": "synthetic_unseen_circuit"
+      },
+      {
+        "event_id": "2026-18",
+        "circuit_id": "baku"
+      }
+    ],
+    "condition_history": {
+      "training_cutoff": "2026-15",
+      "training_arrays_key": "2b6a57f0491afb8348aaa7501c3626995672b87e06d1da2f037db01a781625d4",
+      "states": [
+        "dry_green",
+        "dry_neutralised",
+        "wet_green",
+        "wet_neutralised"
+      ],
+      "event_contexts": [
+        {
+          "event_id": "2018-01",
+          "circuit_id": "albert_park",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2018-02",
+          "circuit_id": "bahrain",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2018-03",
+          "circuit_id": "shanghai",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2018-04",
+          "circuit_id": "baku",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2018-05",
+          "circuit_id": "catalunya",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2018-06",
+          "circuit_id": "monaco",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2018-07",
+          "circuit_id": "villeneuve",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2018-08",
+          "circuit_id": "ricard",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2018-09",
+          "circuit_id": "red_bull_ring",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2018-10",
+          "circuit_id": "silverstone",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2018-11",
+          "circuit_id": "hockenheimring",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2018-12",
+          "circuit_id": "hungaroring",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2018-13",
+          "circuit_id": "spa",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2018-15",
+          "circuit_id": "marina_bay",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2018-16",
+          "circuit_id": "sochi",
+          "state": "wet_green"
+        },
+        {
+          "event_id": "2018-17",
+          "circuit_id": "suzuka",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2018-18",
+          "circuit_id": "americas",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2018-19",
+          "circuit_id": "rodriguez",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2018-20",
+          "circuit_id": "interlagos",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2018-21",
+          "circuit_id": "yas_marina",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2019-01",
+          "circuit_id": "albert_park",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2019-02",
+          "circuit_id": "bahrain",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2019-03",
+          "circuit_id": "shanghai",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2019-04",
+          "circuit_id": "baku",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2019-05",
+          "circuit_id": "catalunya",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2019-06",
+          "circuit_id": "monaco",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2019-07",
+          "circuit_id": "villeneuve",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2019-08",
+          "circuit_id": "ricard",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2019-09",
+          "circuit_id": "red_bull_ring",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2019-10",
+          "circuit_id": "silverstone",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2019-11",
+          "circuit_id": "hockenheimring",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2019-12",
+          "circuit_id": "hungaroring",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2019-13",
+          "circuit_id": "spa",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2019-14",
+          "circuit_id": "monza",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2019-15",
+          "circuit_id": "marina_bay",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2019-16",
+          "circuit_id": "sochi",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2019-17",
+          "circuit_id": "suzuka",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2019-18",
+          "circuit_id": "rodriguez",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2019-19",
+          "circuit_id": "americas",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2019-20",
+          "circuit_id": "interlagos",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2019-21",
+          "circuit_id": "yas_marina",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2020-01",
+          "circuit_id": "red_bull_ring",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2020-02",
+          "circuit_id": "red_bull_ring",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2020-03",
+          "circuit_id": "hungaroring",
+          "state": "wet_green"
+        },
+        {
+          "event_id": "2020-04",
+          "circuit_id": "silverstone",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2020-05",
+          "circuit_id": "silverstone",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2020-06",
+          "circuit_id": "catalunya",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2020-07",
+          "circuit_id": "spa",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2020-08",
+          "circuit_id": "monza",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2020-09",
+          "circuit_id": "mugello",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2020-10",
+          "circuit_id": "sochi",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2020-11",
+          "circuit_id": "nurburgring",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2020-12",
+          "circuit_id": "portimao",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2020-13",
+          "circuit_id": "imola",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2020-14",
+          "circuit_id": "istanbul",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2020-15",
+          "circuit_id": "bahrain",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2020-16",
+          "circuit_id": "bahrain",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2020-17",
+          "circuit_id": "yas_marina",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2021-01",
+          "circuit_id": "bahrain",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2021-02",
+          "circuit_id": "imola",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2021-03",
+          "circuit_id": "portimao",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2021-04",
+          "circuit_id": "catalunya",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2021-05",
+          "circuit_id": "monaco",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2021-06",
+          "circuit_id": "baku",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2021-07",
+          "circuit_id": "ricard",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2021-08",
+          "circuit_id": "red_bull_ring",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2021-09",
+          "circuit_id": "red_bull_ring",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2021-10",
+          "circuit_id": "silverstone",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2021-11",
+          "circuit_id": "hungaroring",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2021-12",
+          "circuit_id": "spa",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2021-13",
+          "circuit_id": "zandvoort",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2021-14",
+          "circuit_id": "monza",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2021-15",
+          "circuit_id": "sochi",
+          "state": "wet_green"
+        },
+        {
+          "event_id": "2021-16",
+          "circuit_id": "istanbul",
+          "state": "wet_green"
+        },
+        {
+          "event_id": "2021-17",
+          "circuit_id": "americas",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2021-18",
+          "circuit_id": "rodriguez",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2021-19",
+          "circuit_id": "interlagos",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2021-20",
+          "circuit_id": "losail",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2021-21",
+          "circuit_id": "jeddah",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2021-22",
+          "circuit_id": "yas_marina",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2022-01",
+          "circuit_id": "bahrain",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2022-02",
+          "circuit_id": "jeddah",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2022-03",
+          "circuit_id": "albert_park",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2022-04",
+          "circuit_id": "imola",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2022-05",
+          "circuit_id": "miami",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2022-06",
+          "circuit_id": "catalunya",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2022-07",
+          "circuit_id": "monaco",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2022-08",
+          "circuit_id": "baku",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2022-09",
+          "circuit_id": "villeneuve",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2022-10",
+          "circuit_id": "silverstone",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2022-11",
+          "circuit_id": "red_bull_ring",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2022-12",
+          "circuit_id": "ricard",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2022-13",
+          "circuit_id": "hungaroring",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2022-14",
+          "circuit_id": "spa",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2022-15",
+          "circuit_id": "zandvoort",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2022-16",
+          "circuit_id": "monza",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2022-17",
+          "circuit_id": "marina_bay",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2022-18",
+          "circuit_id": "suzuka",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2022-19",
+          "circuit_id": "americas",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2022-20",
+          "circuit_id": "rodriguez",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2022-21",
+          "circuit_id": "interlagos",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2022-22",
+          "circuit_id": "yas_marina",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2023-01",
+          "circuit_id": "bahrain",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2023-02",
+          "circuit_id": "jeddah",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2023-03",
+          "circuit_id": "albert_park",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2023-04",
+          "circuit_id": "baku",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2023-05",
+          "circuit_id": "miami",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2023-06",
+          "circuit_id": "monaco",
+          "state": "wet_green"
+        },
+        {
+          "event_id": "2023-07",
+          "circuit_id": "catalunya",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2023-08",
+          "circuit_id": "villeneuve",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2023-09",
+          "circuit_id": "red_bull_ring",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2023-10",
+          "circuit_id": "silverstone",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2023-11",
+          "circuit_id": "hungaroring",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2023-12",
+          "circuit_id": "spa",
+          "state": "wet_green"
+        },
+        {
+          "event_id": "2023-13",
+          "circuit_id": "zandvoort",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2023-14",
+          "circuit_id": "monza",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2023-15",
+          "circuit_id": "marina_bay",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2023-16",
+          "circuit_id": "suzuka",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2023-17",
+          "circuit_id": "losail",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2023-18",
+          "circuit_id": "americas",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2023-19",
+          "circuit_id": "rodriguez",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2023-20",
+          "circuit_id": "interlagos",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2023-21",
+          "circuit_id": "vegas",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2023-22",
+          "circuit_id": "yas_marina",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2024-01",
+          "circuit_id": "bahrain",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2024-02",
+          "circuit_id": "jeddah",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2024-03",
+          "circuit_id": "albert_park",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2024-04",
+          "circuit_id": "suzuka",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2024-05",
+          "circuit_id": "shanghai",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2024-06",
+          "circuit_id": "miami",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2024-07",
+          "circuit_id": "imola",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2024-08",
+          "circuit_id": "monaco",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2024-09",
+          "circuit_id": "villeneuve",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2024-10",
+          "circuit_id": "catalunya",
+          "state": "wet_green"
+        },
+        {
+          "event_id": "2024-11",
+          "circuit_id": "red_bull_ring",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2024-12",
+          "circuit_id": "silverstone",
+          "state": "wet_green"
+        },
+        {
+          "event_id": "2024-13",
+          "circuit_id": "hungaroring",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2024-14",
+          "circuit_id": "spa",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2024-15",
+          "circuit_id": "zandvoort",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2024-16",
+          "circuit_id": "monza",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2024-17",
+          "circuit_id": "baku",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2024-18",
+          "circuit_id": "marina_bay",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2024-19",
+          "circuit_id": "americas",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2024-20",
+          "circuit_id": "rodriguez",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2024-21",
+          "circuit_id": "interlagos",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2024-22",
+          "circuit_id": "vegas",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2024-23",
+          "circuit_id": "losail",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2024-24",
+          "circuit_id": "yas_marina",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2025-01",
+          "circuit_id": "albert_park",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2025-02",
+          "circuit_id": "shanghai",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2025-03",
+          "circuit_id": "suzuka",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2025-04",
+          "circuit_id": "bahrain",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2025-05",
+          "circuit_id": "jeddah",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2025-06",
+          "circuit_id": "miami",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2025-07",
+          "circuit_id": "imola",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2025-08",
+          "circuit_id": "monaco",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2025-09",
+          "circuit_id": "catalunya",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2025-10",
+          "circuit_id": "villeneuve",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2025-11",
+          "circuit_id": "red_bull_ring",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2025-12",
+          "circuit_id": "silverstone",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2025-13",
+          "circuit_id": "spa",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2025-14",
+          "circuit_id": "hungaroring",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2025-15",
+          "circuit_id": "zandvoort",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2025-16",
+          "circuit_id": "monza",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2025-17",
+          "circuit_id": "baku",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2025-18",
+          "circuit_id": "marina_bay",
+          "state": "wet_green"
+        },
+        {
+          "event_id": "2025-19",
+          "circuit_id": "americas",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2025-20",
+          "circuit_id": "rodriguez",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2025-21",
+          "circuit_id": "interlagos",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2025-22",
+          "circuit_id": "vegas",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2025-23",
+          "circuit_id": "losail",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2025-24",
+          "circuit_id": "yas_marina",
+          "state": "dry_green"
+        },
+        {
+          "event_id": "2026-01",
+          "circuit_id": "albert_park",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2026-02",
+          "circuit_id": "shanghai",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2026-03",
+          "circuit_id": "suzuka",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2026-04",
+          "circuit_id": "miami",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2026-05",
+          "circuit_id": "villeneuve",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2026-06",
+          "circuit_id": "monaco",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2026-07",
+          "circuit_id": "catalunya",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2026-08",
+          "circuit_id": "red_bull_ring",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2026-09",
+          "circuit_id": "silverstone",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2026-10",
+          "circuit_id": "spa",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2026-11",
+          "circuit_id": "hungaroring",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2026-12",
+          "circuit_id": "zandvoort",
+          "state": "wet_neutralised"
+        },
+        {
+          "event_id": "2026-13",
+          "circuit_id": "monza",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2026-14",
+          "circuit_id": "madring",
+          "state": "dry_neutralised"
+        },
+        {
+          "event_id": "2026-15",
+          "circuit_id": "baku",
+          "state": "dry_neutralised"
+        }
+      ],
+      "counts": {
+        "albert_park": [
+          1,
+          4,
+          0,
+          2
+        ],
+        "americas": [
+          2,
+          5,
+          0,
+          0
+        ],
+        "bahrain": [
+          1,
+          8,
+          0,
+          0
+        ],
+        "baku": [
+          0,
+          8,
+          0,
+          0
+        ],
+        "buddh": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "catalunya": [
+          3,
+          4,
+          1,
+          1
+        ],
+        "hockenheimring": [
+          0,
+          0,
+          0,
+          2
+        ],
+        "hungaroring": [
+          4,
+          2,
+          1,
+          2
+        ],
+        "imola": [
+          1,
+          2,
+          0,
+          2
+        ],
+        "interlagos": [
+          1,
+          4,
+          0,
+          2
+        ],
+        "istanbul": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "jeddah": [
+          0,
+          5,
+          0,
+          0
+        ],
+        "losail": [
+          0,
+          3,
+          0,
+          1
+        ],
+        "madring": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "marina_bay": [
+          1,
+          3,
+          1,
+          1
+        ],
+        "miami": [
+          1,
+          1,
+          0,
+          3
+        ],
+        "monaco": [
+          1,
+          3,
+          1,
+          3
+        ],
+        "monza": [
+          3,
+          5,
+          0,
+          0
+        ],
+        "mugello": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "nurburgring": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "portimao": [
+          1,
+          1,
+          0,
+          0
+        ],
+        "red_bull_ring": [
+          2,
+          5,
+          0,
+          4
+        ],
+        "ricard": [
+          1,
+          2,
+          0,
+          1
+        ],
+        "rodriguez": [
+          0,
+          7,
+          0,
+          0
+        ],
+        "sepang": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "shanghai": [
+          1,
+          3,
+          0,
+          1
+        ],
+        "silverstone": [
+          1,
+          6,
+          1,
+          2
+        ],
+        "sochi": [
+          0,
+          1,
+          2,
+          1
+        ],
+        "spa": [
+          1,
+          5,
+          1,
+          2
+        ],
+        "suzuka": [
+          2,
+          4,
+          0,
+          1
+        ],
+        "valencia": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "vegas": [
+          1,
+          2,
+          0,
+          0
+        ],
+        "villeneuve": [
+          1,
+          3,
+          0,
+          3
+        ],
+        "yas_marina": [
+          4,
+          3,
+          0,
+          1
+        ],
+        "yeongam": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "zandvoort": [
+          2,
+          2,
+          0,
+          2
+        ]
+      },
+      "excluded_context_events": [
+        "2018-14"
+      ],
+      "events_without_risk_context": [
+        "2018-14"
+      ],
+      "policy_id": "historical_joint_circuit_conditions_v1",
+      "policy_sha256": "52c7867f0bdc75112de0c93d8a74321fd1edf85afc5fc4865562c3dc37b09f56",
+      "source_availability_verified": false,
+      "independent_evidence_established": false,
+      "publication_allowed": false,
+      "history_sha256": "0b436c5a870e6698733bbf0f211f089e659e9bb631fed47f9f27b8bf8d5b8604"
+    },
+    "batches": 25,
+    "draws_per_chain": 3200,
+    "max_batch_output_bytes": 4842528,
+    "observation_parameters_sha256": "b628f989a73960728adbd8db39436d6dcc66fa9302485341d7a543f77a1ffefb",
+    "batch_stream_sha256": "8d1204c69ba5a049eb014efa3504d874a5a6b993d0f2622d0b95afc98662d316",
+    "every_output_finite": true,
+    "conditions_forecast": true,
+    "classification_generated": false
+  },
+  "baseline_lower_bound": {
+    "source_revision": "deb276e",
+    "entry_states": [
+      "qualifying_walk",
+      "race_residual",
+      "qualifying_skill",
+      "race_skill"
+    ],
+    "entry_state_bytes": 2967961600,
+    "parameter_plus_entry_state_bytes": 4137574400,
+    "interpretation": "Calculated lower bound, not a measured baseline peak; omits other history arrays, transients and process overhead"
+  },
+  "seconds": {
+    "build_design": 2.4236787499976344,
+    "generate_workload": 4.532753139967099,
+    "compress_workload": 40.41464689699933,
+    "load_and_validate": 6.170740581001155,
+    "forecast": 12.961741661012638,
+    "close_and_recheck": 0.7963896989822388,
+    "total": 67.46647104300791
+  },
+  "process_max_rss_kib": 1822676,
+  "mcmc_run": false,
+  "fitted_parameters_used": false,
+  "real_predictions_scored": false,
+  "intended_ci_runner_verified": false,
+  "publication_allowed": false
+}
