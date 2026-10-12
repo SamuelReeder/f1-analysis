@@ -339,3 +339,23 @@ not establish accepted-fit integration, calibrated forecasts or intended-runner
 resources. Final circuit treatment still needs registration, and the unknown
 qualifying track factor, future conditions, classification and scientific
 acceptance requirements remain open.
+
+## Observed track-status boundaries (2026-10-12)
+
+Investigation of future-condition handling reproduced an upstream data issue:
+missing track-status evidence entered the outcome likelihood as green, and the
+timeline ended VSC periods at the ending notification. The
+[correction and audit](overall_track_context.md) preserve the failing regressions,
+rebuild the timeline through its normal producer and compare lap selection on
+the same raw history. Event-level labels remain unchanged in the current
+archive, but training-lap membership changes.
+
+The shared model design now requires known track context. Original synthetic
+observations and truths reproduce exactly after their intended green context
+is made explicit. The probability model and fixed numerical procedure remain
+unchanged, and the failed profile remains failed. Hashed source and processed
+timeline data changed, so the pending proposal's identity was updated and
+affected outputs require regeneration. The proposal is still unapproved.
+The [verification record](../outputs/championship/development/overall-track-context-checks/verification.json)
+identifies the checked revisions and evidence. This prerequisite correction
+does not complete the forecast-time condition policy or scientific acceptance.

@@ -5,7 +5,12 @@
       "path": "outputs/championship/development/overall-track-context-checks/before-fix.xml",
       "sha256": "072c3920ce7a53fd0770322dd5a829cf6b10223f00e41287f00ce2dec592f742",
       "tests": 13,
-      "failures": [
+      "failures": 6,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 7,
+      "elapsed_seconds": 1.914,
+      "failed_tests": [
         {
           "test": "tests.test_timeline::test_vsc_ending_keeps_the_period_open_until_clear",
           "message": "AssertionError: assert ('vsc', 2, 3) == ('vsc', 2, 4)\n  \n  At index 2 diff: 3 != 4\n  Use -v to get more diff"
@@ -30,38 +35,36 @@
           "test": "tests.test_overall_track_context::test_vsc_ending_is_neutralisation_even_without_a_derived_timeline_row",
           "message": "assert np.int64(0) == 1"
         }
-      ],
-      "errors": 0,
-      "skipped": 0,
-      "passed": 7,
-      "elapsed_seconds": 1.914
+      ]
     },
     "focused": {
       "source_commit": "6ae2214b69f19deab3078a250eb08738eb32bb1d",
       "path": "outputs/championship/development/overall-track-context-checks/focused.xml",
       "sha256": "8bb04a5ccc781815867f61bec687a4597ab576fbdcc735f6a010e0dddc574d2f",
       "tests": 106,
-      "failures": [],
+      "failures": 0,
       "errors": 0,
       "skipped": 0,
       "passed": 106,
-      "elapsed_seconds": 42.371
+      "elapsed_seconds": 42.371,
+      "failed_tests": []
     },
     "full": {
       "source_commit": "4d8ab5b1740a4424c91d29c4bd539691b95558c9",
       "path": "outputs/championship/development/overall-track-context-checks/full.xml",
       "sha256": "e90e2eacc4a491823e89fbcb913b04baa1cdddf6b170088cdec5d543ce4fe23f",
       "tests": 612,
-      "failures": [
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 611,
+      "elapsed_seconds": 106.72,
+      "failed_tests": [
         {
           "test": "tests.test_dashboard::test_checked_current_data_contract",
           "message": "f1rank.artifacts.StaleArtifact: /home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/race_total: missing or stale provenance (changed data/processed/timeline.parquet); regenerate this artifact"
         }
-      ],
-      "errors": 0,
-      "skipped": 0,
-      "passed": 611,
-      "elapsed_seconds": 106.72
+      ]
     }
   },
   "test_scope_limits": {
