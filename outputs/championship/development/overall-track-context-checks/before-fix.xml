@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="13" time="1.914" timestamp="2026-10-12T09:31:30.421165-04:00" hostname="DESKTOP-M9I22TH"><testcase classname="tests.test_timeline" name="test_incident_messages_are_grouped_and_classified" time="0.009" /><testcase classname="tests.test_timeline" name="test_neutralisation_periods" time="0.002" /><testcase classname="tests.test_timeline" name="test_vsc_ending_keeps_the_period_open_until_clear" time="0.001"><failure message="AssertionError: assert ('vsc', 2, 3) == ('vsc', 2, 4)&#10;  &#10;  At index 2 diff: 3 != 4&#10;  Use -v to get more diff">def test_vsc_ending_keeps_the_period_open_until_clear():
+        ts = pd.DataFrame({"time": [100., 190., 280.], "status": ["6", "7", "1"]})
+        lap_at = tl.leader_lap(pd.DataFrame({"lap_number": np.arange(1, 6),
+                                           "time": np.arange(1, 6) * 90.}))
+        rows = tl.neutralisations("2024-01", ts, lap_at)
+        assert len(rows) == 1
+&gt;       assert (rows[0]["kind"], rows[0]["lap_start"], rows[0]["lap_end"]) == ("vsc", 2, 4)
+E       AssertionError: assert ('vsc', 2, 3) == ('vsc', 2, 4)
+E         
+E         At index 2 diff: 3 != 4
+E         Use -v to get more diff
+
+tests/test_timeline.py:57: AssertionError</failure></testcase><testcase classname="tests.test_timeline" name="test_vsc_ending_without_an_earlier_deployment_remains_positive_evidence" time="0.001"><failure message="assert 0 == 1&#10; +  where 0 = len([])">def test_vsc_ending_without_an_earlier_deployment_remains_positive_evidence():
+        ts = pd.DataFrame({"time": [190., 280.], "status": ["7", "1"]})
+        rows = tl.neutralisations("2024-01", ts, lambda time: int(time // 90) + 1)
+&gt;       assert len(rows) == 1
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+tests/test_timeline.py:63: AssertionError</failure></testcase><testcase classname="tests.test_timeline" name="test_retirement_lap_adds_laps_missing_from_fastf1" time="0.003" /><testcase classname="tests.test_timeline" name="test_cause_probabilities_sum_to_one" time="0.006" /><testcase classname="tests.test_timeline" name="test_overrides_must_match_a_row" time="0.010" /><testcase classname="tests.test_timeline" name="test_withdrawn_cars_by_laps_completed" time="0.000" /><testcase classname="tests.test_overall_track_context" name="test_missing_track_status_cannot_enter_the_outcome_likelihood_as_green[absent_event]" time="0.308"><failure message="AssertionError: assert '2022-02' in []">missing = 'absent_event'
+
+    @pytest.mark.parametrize("missing", ["absent_event", "null_only", "mixed_clear_unknown"])
+    def test_missing_track_status_cannot_enter_the_outcome_likelihood_as_green(missing):
+        source, clean = source_tables()
+        status = source["race_track_status"]
+        if missing == "absent_event":
+            source["race_track_status"] = status[status.event_id != "2022-02"]
+        else:
+            status.loc[status.event_id == "2022-02", "status"] = None
+            if missing == "mixed_clear_unknown":
+                source["race_track_status"] = pd.concat([status, pd.DataFrame([
+                    {"event_id": "2022-02", "time": 5., "status": "1"}])], ignore_index=True)
+        design = build("2022-02", tables=source, clean=clean)
+&gt;       assert "2022-02" in design.catalog["excluded_context_events"]
+E       AssertionError: assert '2022-02' in []
+
+tests/test_overall_track_context.py:29: AssertionError</failure></testcase><testcase classname="tests.test_overall_track_context" name="test_missing_track_status_cannot_enter_the_outcome_likelihood_as_green[null_only]" time="0.068"><failure message="AssertionError: assert '2022-02' in []">missing = 'null_only'
+
+    @pytest.mark.parametrize("missing", ["absent_event", "null_only", "mixed_clear_unknown"])
+    def test_missing_track_status_cannot_enter_the_outcome_likelihood_as_green(missing):
+        source, clean = source_tables()
+        status = source["race_track_status"]
+        if missing == "absent_event":
+            source["race_track_status"] = status[status.event_id != "2022-02"]
+        else:
+            status.loc[status.event_id == "2022-02", "status"] = None
+            if missing == "mixed_clear_unknown":
+                source["race_track_status"] = pd.concat([status, pd.DataFrame([
+                    {"event_id": "2022-02", "time": 5., "status": "1"}])], ignore_index=True)
+        design = build("2022-02", tables=source, clean=clean)
+&gt;       assert "2022-02" in design.catalog["excluded_context_events"]
+E       AssertionError: assert '2022-02' in []
+
+tests/test_overall_track_context.py:29: AssertionError</failure></testcase><testcase classname="tests.test_overall_track_context" name="test_missing_track_status_cannot_enter_the_outcome_likelihood_as_green[mixed_clear_unknown]" time="0.063"><failure message="AssertionError: assert '2022-02' in []">missing = 'mixed_clear_unknown'
+
+    @pytest.mark.parametrize("missing", ["absent_event", "null_only", "mixed_clear_unknown"])
+    def test_missing_track_status_cannot_enter_the_outcome_likelihood_as_green(missing):
+        source, clean = source_tables()
+        status = source["race_track_status"]
+        if missing == "absent_event":
+            source["race_track_status"] = status[status.event_id != "2022-02"]
+        else:
+            status.loc[status.event_id == "2022-02", "status"] = None
+            if missing == "mixed_clear_unknown":
+                source["race_track_status"] = pd.concat([status, pd.DataFrame([
+                    {"event_id": "2022-02", "time": 5., "status": "1"}])], ignore_index=True)
+        design = build("2022-02", tables=source, clean=clean)
+&gt;       assert "2022-02" in design.catalog["excluded_context_events"]
+E       AssertionError: assert '2022-02' in []
+
+tests/test_overall_track_context.py:29: AssertionError</failure></testcase><testcase classname="tests.test_overall_track_context" name="test_vsc_ending_is_neutralisation_even_without_a_derived_timeline_row" time="0.062"><failure message="assert np.int64(0) == 1">def test_vsc_ending_is_neutralisation_even_without_a_derived_timeline_row():
+        source, clean = source_tables()
+        source["race_track_status"].loc[lambda x: x.event_id == "2022-02", "status"] = "7"
+        design = build("2022-02", tables=source, clean=clean)
+        index = design.catalog["outcome_events"].index("2022-02")
+&gt;       assert design.outcomes["context_sc"][design.outcomes["context"][index]] == 1
+E       assert np.int64(0) == 1
+
+tests/test_overall_track_context.py:40: AssertionError</failure></testcase><testcase classname="tests.test_overall_track_context" name="test_observed_clear_and_future_status_data_remain_separate" time="0.063" /></testsuite></testsuites>
