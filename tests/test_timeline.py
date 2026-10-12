@@ -48,6 +48,23 @@ def test_neutralisation_periods():
     assert (red["kind"], red["lap_start"], red["lap_end"]) == ("red_flag", 6, None)
 
 
+def test_vsc_ending_keeps_the_period_open_until_clear():
+    ts = pd.DataFrame({"time": [100., 190., 280.], "status": ["6", "7", "1"]})
+    lap_at = tl.leader_lap(pd.DataFrame({"lap_number": np.arange(1, 6),
+                                       "time": np.arange(1, 6) * 90.}))
+    rows = tl.neutralisations("2024-01", ts, lap_at)
+    assert len(rows) == 1
+    assert (rows[0]["kind"], rows[0]["lap_start"], rows[0]["lap_end"]) == ("vsc", 2, 4)
+
+
+def test_vsc_ending_without_an_earlier_deployment_remains_positive_evidence():
+    ts = pd.DataFrame({"time": [190., 280.], "status": ["7", "1"]})
+    rows = tl.neutralisations("2024-01", ts, lambda time: int(time // 90) + 1)
+    assert len(rows) == 1
+    assert (rows[0]["kind"], rows[0]["lap_start"], rows[0]["lap_end"]) == ("vsc", 3, 4)
+    assert json.loads(rows[0]["evidence"])[0]["status"] == "7"
+
+
 def test_retirement_lap_adds_laps_missing_from_fastf1():
     laps = pd.DataFrame({"driver_id": "x", "lap_number": [1, 2, 3], "time": [90.0, 180.0, 270.0]})
     leader = pd.DataFrame({"lap_number": np.arange(1, 11), "time": np.arange(1, 11) * 85.0})
