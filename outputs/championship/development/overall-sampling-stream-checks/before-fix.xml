@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.543" timestamp="2026-10-12T08:34:32.471232-04:00" hostname="DESKTOP-M9I22TH"><testcase classname="tests.test_overall_sampling_streams" name="test_recovery_fits_use_every_predeclared_sampling_seed" time="0.019"><failure message="AssertionError: assert {'first': [0,... [0, 1, 2, 3]} == {'first': [10..., 21, 22, 23]}&#10;  &#10;  Differing items:&#10;  {'first': [0, 1, 2, 3]} != {'first': [10, 11, 12, 13]}&#10;  {'second': [0, 1, 2, 3]} != {'second': [20, 21, 22, 23]}&#10;  Use -v to get more diff">runner = ({'qualifying': {'y': array([0.])}, 'laps': {'y': array([0.])}, 'outcomes': {'mask': array([ True])}}, PosixPath('/tmp...ts_use_every_p0/registration.json'), PosixPath('/tmp/pytest-of-sreeder/pytest-29/test_recovery_fits_use_every_p0/fit'))
+
+    def test_recovery_fits_use_every_predeclared_sampling_seed(runner):
+        blocks, path, directory = runner
+        reg = recovery_registration(path)
+        seen, receipts = {}, {}
+        for study in reg["studies"]:
+            seen[study] = []
+            def sample(blocks, settings):
+                seen[study].append(settings.copy())
+                return sampled(settings, len(seen[study]) == len(fitting.RETRY))
+            _, receipts[study] = fitting.run(blocks, {}, directory / study, path,
+                study=study, synthetic=True, sample=sample)
+&gt;       assert {study:[s["seed"] for s in attempts] for study, attempts in seen.items()} == reg["sampling_seeds"]
+E       AssertionError: assert {'first': [0,... [0, 1, 2, 3]} == {'first': [10..., 21, 22, 23]}
+E         
+E         Differing items:
+E         {'first': [0, 1, 2, 3]} != {'first': [10, 11, 12, 13]}
+E         {'second': [0, 1, 2, 3]} != {'second': [20, 21, 22, 23]}
+E         Use -v to get more diff
+
+tests/test_overall_sampling_streams.py:30: AssertionError</failure></testcase></testsuite></testsuites>
