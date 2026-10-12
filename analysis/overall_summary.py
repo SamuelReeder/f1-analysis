@@ -20,6 +20,7 @@ CONTRACT = json.loads((ROOT / "contracts/overall.json").read_text())
 PROBES = tuple(CONTRACT["required_explanations"])
 MAX_BLOCK_DRAWS = 128
 MAX_BLOCK_REPLICATES = 128
+MAX_STREAM_WORD = int(np.iinfo(np.uint32).max)
 IDENTITY_KEYS = {"fit_id", "posterior_key", "scenario_key", "simulation_key"}
 IMPLEMENTATION_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 SIMULATOR_SOURCES = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in (
@@ -88,7 +89,8 @@ def paired_simulation_block(draws, scenarios, *, replicates, seed, chain, draw_s
     """
     if (not isinstance(draws, JointDraws) or not _integer(replicates, 2)
             or replicates > MAX_BLOCK_REPLICATES or len(draws.qualifying) > MAX_BLOCK_DRAWS
-            or not all(_integer(value) for value in (seed, chain, draw_start, replicate_start))):
+            or not all(_integer(value) and value <= MAX_STREAM_WORD
+                       for value in (seed, chain, draw_start, replicate_start))):
         raise ValueError("Need a bounded joint-draw block and complete nonnegative stream address")
     source = _source_fingerprints()
     address = [seed, chain, draw_start, replicate_start]

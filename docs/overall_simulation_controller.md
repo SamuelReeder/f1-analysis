@@ -47,6 +47,8 @@ impossible declared partition instead of dropping or duplicating a sample.
 
 Record the complete range schedule before simulation. Each random stream is
 addressed by the fixed seed, chain, draw-range start and replicate-range start.
+Each component must fit the generator's unsigned stream word; axes and workload
+limits are checked before constructing the range schedule.
 The controller supplies this address to the paired generator and supplies the
 same coordinates to the accumulator. Only a baseline and its declared probes
 share an address. The frozen layout is part of the simulation identity: a new

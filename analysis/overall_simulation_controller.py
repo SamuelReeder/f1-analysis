@@ -16,7 +16,7 @@ import numpy as np
 
 from analysis.overall_posterior_archive import mapped_checked_posterior
 from analysis.overall_ranking_recovery import SITES
-from analysis.overall_summary import (CONTRACT, MAX_BLOCK_DRAWS, MAX_BLOCK_REPLICATES,
+from analysis.overall_summary import (CONTRACT, MAX_BLOCK_DRAWS, MAX_BLOCK_REPLICATES, MAX_STREAM_WORD,
                                      OverallSummary, paired_simulation_block)
 from f1rank.artifacts import atomic_json, digest
 from f1rank.overall.fitting import arrays_digest
@@ -180,8 +180,11 @@ def validate_protocol(protocol, reference, reference_sha256, design):
         raise ValueError("Simulation design differs from the registered fit arrays or catalog")
     shape, workload = protocol["posterior_shape"], protocol["workload"]
     _keys(workload, ("seed", "replicates", "draw_batch_size", "replicate_batch_size", "stream_policy"))
-    if (not isinstance(shape, list) or len(shape) != 2 or not all(_integer(n, 2) for n in shape)
-            or not _integer(workload["seed"]) or workload["stream_policy"] != STREAM_POLICY
+    if (not isinstance(shape, list) or len(shape) != 2
+            or not all(_integer(n, 2) and n <= MAX_STREAM_WORD for n in shape)
+            or not _integer(workload["seed"]) or workload["seed"] > MAX_STREAM_WORD
+            or not _integer(workload["replicates"], 2) or workload["replicates"] > MAX_STREAM_WORD
+            or workload["stream_policy"] != STREAM_POLICY
             or not _integer(workload["draw_batch_size"], 2) or workload["draw_batch_size"] > MAX_BLOCK_DRAWS
             or not _integer(workload["replicate_batch_size"], 2) or workload["replicate_batch_size"] > MAX_BLOCK_REPLICATES):
         raise ValueError("Invalid grouped draw axes or fixed simulation workload")

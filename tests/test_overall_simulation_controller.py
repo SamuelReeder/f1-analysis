@@ -208,7 +208,7 @@ def test_mutated_inputs_cannot_produce_a_completed_summary(case, monkeypatch, ch
 
 
 @pytest.mark.parametrize("change", ["not_committed", "source", "target", "field_mapping", "shape", "partition",
-    "reference", "future_reference", "unknown_circuit", "weight", "race_control", "qualifying_format"])
+    "reference", "future_reference", "unknown_circuit", "weight", "race_control", "qualifying_format", "stream_word"])
 def test_invalid_frozen_inputs_stop_before_any_simulation(case, monkeypatch, change):
     if change == "not_committed":
         case.path.write_text(case.path.read_text() + "\n")
@@ -217,6 +217,7 @@ def test_invalid_frozen_inputs_stop_before_any_simulation(case, monkeypatch, cha
     elif change == "field_mapping": case.design.catalog["field_entries"].reverse()
     elif change == "shape": case.protocol["posterior_shape"] = [1, 5]
     elif change == "partition": case.protocol["workload"]["draw_batch_size"] = 2
+    elif change == "stream_word": case.protocol["workload"]["seed"] = controller.MAX_STREAM_WORD + 1
     elif change == "reference": case.protocol["reference_sha256"] = "0" * 64
     elif change in ("future_reference", "unknown_circuit", "weight"):
         row = case.reference["events"][0]

@@ -53,6 +53,9 @@ The paired block generator invokes the existing simulator for the baseline and
 each declared intervention. Its random stream address contains the fixed seed,
 chain, draw-block start and replicate-block start; these coordinates differ
 between blocks and match within paired interventions. The complete block layout
+uses fixed-width unsigned stream words enforced by the generator. Oversized
+coordinates are rejected before simulation, rather than allowing ambiguous
+variable-width integer encodings at the random-stream boundary. The layout
 and seed must be fixed in the future simulation registration. Changing the layout
 can change random draws and requires a different simulation identity. This
 generator inherits the existing simulator's unresolved completion assumptions

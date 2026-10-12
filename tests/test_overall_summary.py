@@ -6,7 +6,7 @@ import json
 import numpy as np
 import pytest
 
-from analysis.overall_summary import OverallSummary, PROBES, MAX_BLOCK_REPLICATES, paired_simulation_block
+from analysis.overall_summary import OverallSummary, PROBES, MAX_BLOCK_REPLICATES, MAX_STREAM_WORD, paired_simulation_block
 from f1rank.overall.simulation import MAX_EXPECTED_POINTS_MCSE, POINTS, Scenario, simulate, uncertainty
 from test_overall import draws
 
@@ -354,6 +354,15 @@ def test_failed_simulated_season_is_not_replaced_or_conditioned_away():
     with pytest.raises(ValueError, match="No full-distance finisher"):
         paired_simulation_block(joint, [Scenario("ref", 0, 60, 60)], replicates=4, seed=71,
             chain=0, draw_start=0, replicate_start=0, advancing=(4, 2))
+
+
+@pytest.mark.parametrize("coordinate", ["seed", "chain", "draw_start", "replicate_start"])
+def test_stream_address_coordinates_cannot_expand_into_multiple_unsigned_words(coordinate):
+    address = dict(seed=71, chain=0, draw_start=0, replicate_start=0)
+    address[coordinate] = MAX_STREAM_WORD + 1
+    with pytest.raises(ValueError, match="stream address"):
+        paired_simulation_block(draws(nd=3), [Scenario("ref", 0, 60, 60)],
+                                replicates=4, advancing=(4, 2), **address)
 
 
 @pytest.mark.parametrize("override", [dict(drivers=["a", "a"]), dict(posterior_shape=(1, 3)),
