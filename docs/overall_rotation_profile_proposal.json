@@ -95,7 +95,7 @@
   "additional_source_sha256": {
     "analysis/overall_control_rotation.py": "49e4dbef148b7206634655532294a31f650542b8960d1f7d55fedc1755097a84",
     "analysis/overall_profile_geometry.py": "714ba47c374f68c616d2453d0df9b677b5faa55c299e4e866771e30a41f4c4f2",
-    "analysis/overall_rotation_profile.py": "3e581e2044daa82175b2a26f6b66e6b34b162d2b4cb64939dac9950a5b1eaa9a"
+    "analysis/overall_rotation_profile.py": "53165782f703c8ba3ee4637fb3449c5b7101bbf1b092489d07bc865a7d21d253"
   },
   "original_arrays_sha256": {
     "connected": "4ac5ab7125adfa2fc8a0ca18829fbe941be0ec94b5e857fc54a16751bba3a948",
@@ -109,5 +109,20 @@
   "order_generation_note": "Pending source identity updated for compensated race-order perturbations and rejection of invalid generated indices. Random sites, original registered seeds, priors, likelihood, settings and gates are unchanged; original synthetic arrays and truths must still match exactly. A future result evaluates the numerical corrections and proposed coordinates together. Approval remains pending.",
   "empty_qualifying_note": "The shared data builder now handles an empty qualifying observation block, and diagnostics record zero-coordinate sites without changing checks on existing coordinates. This supports the separately specified race-only arm. The original study inventory, priors, settings, seeds and gates are unchanged; its original observations and truths must reproduce exactly. Updating the source identity grants no approval and runs no race-only fit.",
   "calibration_sampling_stream_note": "The fitter now requires distinct predeclared generation and sampling keys for a new recovery_calibration registration. The original numerical profile and this matched proposal keep their original sampling seed schedule, settings, retries, diagnostics, priors and likelihoods. Their original observations and truths must still reproduce exactly. The source identity changes but grants no approval and launches no calibration study.",
-  "track_status_correction_note": "Pending source identity updated for explicit observed track-status coverage and VSC-ending timeline boundaries. Synthetic fixtures declare their original green context; original model arrays and generated truths must still reproduce exactly. No probability-model, sampler, retry, seed or acceptance rule changes. Approval remains pending; original failures remain preserved."
+  "track_status_correction_note": "Pending source identity updated for explicit observed track-status coverage and VSC-ending timeline boundaries. Synthetic fixtures declare their original green context; original model arrays and generated truths must still reproduce exactly. No probability-model, sampler, retry, seed or acceptance rule changes. Approval remains pending; original failures remain preserved.",
+  "original_truth_files": {
+    "connected": {
+      "path": "outputs/championship/development/overall-computation-profile-v1/connected.truth.json",
+      "sha256": "0effa6798e618d269e44912a2dbf4c760e12aeb64f607660b6b288b5cac25931"
+    },
+    "confounded": {
+      "path": "outputs/championship/development/overall-computation-profile-v1/confounded.truth.json",
+      "sha256": "d9af54f7cb9865b0ecf607b56bf1e1e01d7f199e24fa547d5b57daa75945f3df"
+    },
+    "sparse_rookie": {
+      "path": "outputs/championship/development/overall-computation-profile-v1/sparse_rookie.truth.json",
+      "sha256": "48b4c7587e111de5018eade208ae830261f84a3c221b1270eba2bb713b68769b"
+    }
+  },
+  "reporting_integrity_note": "The pending runner now binds and compares the original complete generating truths before sampling and automatically records all current-field qualifying/race contrast diagnostics on every returned attempt. These reports do not change the original convergence decision, retry ladder, model inputs, coordinates, seeds, settings or gates. Approval remains pending."
 }

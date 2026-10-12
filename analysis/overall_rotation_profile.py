@@ -29,7 +29,12 @@ METHOD = "data_only_lap_control_rotation_v1"
 
 
 def require_prototype_sources(registration):
-    for name, expected in registration["additional_source_sha256"].items():
+    expected_files = dict(registration["additional_source_sha256"])
+    for record in registration["original_truth_files"].values():
+        if record["path"] in expected_files and expected_files[record["path"]] != record["sha256"]:
+            raise ValueError("Conflicting original truth fingerprints")
+        expected_files[record["path"]] = record["sha256"]
+    for name, expected in expected_files.items():
         path = ROOT / name
         if digest(path) != expected:
             raise ValueError("Registered rotation implementation changed")
@@ -50,10 +55,70 @@ def checked_registration(path):
         raise ValueError("The original profile registration changed")
     if any(registration[key] != parent[key] for key in ("studies", "synthetic", "fit_settings", "retry", "diagnostics")):
         raise ValueError("Matched study must retain the original inventory, truths, settings and gates")
+    truth_files = registration.get("original_truth_files", {})
+    if set(truth_files) != set(parent["studies"]):
+        raise ValueError("The complete original truth inventory is required")
+    for study, record in truth_files.items():
+        expected_path = f"outputs/championship/development/{parent['id']}/{study}.truth.json"
+        if record.get("path") != expected_path:
+            raise ValueError("Matched truths must come from the original profile")
     if snapshot()["key"] != registration["registered_model_inputs_key"]:
         raise ValueError("Model/data inputs differ from the separately proposed experiment")
     require_prototype_sources(registration)
     return registration
+
+
+def matched_truth_record(registration, study, blocks, truth):
+    """Compare every generating truth before sampling, including unused states."""
+    spec = registration["synthetic"][study]
+    record = dict(case=spec["case"], seed=spec["seed"], arrays_key=arrays_digest(blocks),
+                  truth={key: np.asarray(value).tolist() for key, value in truth.items()})
+    if record["arrays_key"] != registration["original_arrays_sha256"][study]:
+        raise ValueError("Synthetic observations changed; never redraw the failed study")
+    original = registration["original_truth_files"][study]
+    path = ROOT / original["path"]
+    if digest(path) != original["sha256"]:
+        raise ValueError("Original generating truth file changed")
+    if record != json.loads(path.read_text()):
+        raise ValueError("Generated truths differ from the original matched study")
+    return record
+
+
+def contrast_reports(post, catalog, divergences):
+    """Report every pair separately without changing the attempt's retry gate."""
+    drivers, entries = catalog["field"], np.asarray(catalog["field_entries"])
+    if (len(drivers) < 2 or len(set(drivers)) != len(drivers)
+            or entries.shape != (len(drivers),) or entries.dtype.kind not in "iu"
+            or len(np.unique(entries)) != len(entries) or (entries < 0).any()):
+        raise ValueError("Current-field identities and entry indices must be complete and unique")
+    rows, shape = [], None
+    for site in ("skill", "overall_race_skill"):
+        values = np.asarray(post[site])
+        if (values.ndim != 3 or min(values.shape[:2]) < 2
+                or entries.max() >= values.shape[-1] or not np.isfinite(values).all()):
+            raise ValueError("Current driver states require finite complete grouped draws")
+        if shape is not None and values.shape[:2] != shape:
+            raise ValueError("Qualifying and race states must share chain/draw axes")
+        shape = values.shape[:2]
+        current = values[:, :, entries]
+        for i in range(len(drivers)):
+            for j in range(i):
+                difference = current[:, :, i] - current[:, :, j]
+                rows.append(dict(site=site, driver_i=drivers[i], driver_j=drivers[j],
+                    diagnostic=check({"contrast": difference}, divergences),
+                    chain_means=difference.mean(axis=1).tolist(),
+                    chain_standard_deviations=difference.std(axis=1, ddof=1).tolist()))
+    return dict(current_driver_contrasts=rows,
+        all_reported_contrasts_passed=all(row["diagnostic"]["converged"] for row in rows),
+        changes_attempt_convergence_decision=False, publication_allowed=False)
+
+
+def sample_with_reports(blocks, settings, registration, rotation, catalog):
+    post, diagnostic = sample_rotated(blocks, settings, registration, rotation)
+    result = dict(diagnostic)
+    result["comparison_reports"] = contrast_reports(post, catalog, diagnostic["divergences"])
+    require_prototype_sources(registration)
+    return post, result
 
 
 def sample_rotated(blocks, settings, registration, rotation):
@@ -102,16 +167,14 @@ def execute(registration_path):
             require_snapshot(inputs)
             require_prototype_sources(registration)
             blocks, catalog, truth = generate(spec["case"], spec["seed"])
-            if arrays_digest(blocks) != registration["original_arrays_sha256"][study]:
-                raise ValueError("Synthetic observations changed; never redraw the failed study")
+            truth_record = matched_truth_record(registration, study, blocks, truth)
             rotation = build_rotation(blocks["laps"])
             catalog.update(method=METHOD, control_rotation_sha256=rotation.fingerprint(),
                            additional_source_sha256=registration["additional_source_sha256"])
             truth_file = destination / f"{study}.truth.json"
-            atomic_json(truth_file, dict(case=spec["case"], seed=spec["seed"], arrays_key=arrays_digest(blocks),
-                                        truth={k:v.tolist() for k, v in truth.items()}))
+            atomic_json(truth_file, truth_record)
             post, receipt = run(blocks, catalog, cache, registration_path, study=study, synthetic=True,
-                sample=lambda b, s: sample_rotated(b, s, registration, rotation))
+                sample=lambda b, s: sample_with_reports(b, s, registration, rotation, catalog))
             result = dict(study=study, state="converged", receipt=receipt,
                 truth_sha256=digest(truth_file), recovery=recovery_metrics(post, truth, catalog))
             del post
