@@ -259,3 +259,21 @@ the reference field/calendar dimensions. It distinguishes conditional simulation
 cost from fitting, full-study and intended-runner resources. No new fit or driver
 table was produced. Model inputs and the pending study are unchanged, and the
 previous stale-export failures remain publication blockers.
+
+Preparing the power analysis identified a missing full-SBC prerequisite:
+independent replicates cannot reuse the numerical profile's common sampling
+streams. The [sampling-stream implementation](overall_sampling_streams.md)
+requires every generation and sampling key to be fixed and distinct in a new
+calibration registration. It records the actual per-study settings, protects
+the entire retry inventory in the cache identity and preserves the original
+profile schedule. No calibration fit was run. The source fingerprint changes,
+affected evidence requires regeneration and the separate numerical proposal
+still awaits approval. Full power/study-size selection remains unfinished.
+
+The [power-planning calculation](overall_calibration_power.md) uses the complete
+current quantity family and fixed synthetic rank-error distributions. It
+computes exact per-cutoff rejection probabilities and dependence-safe bounds
+within an affected quantity, without fitting or reading empirical SBC ranks.
+The planning assumptions and grid are not a selected study size or a full
+calibration registration. Every result and its scope must remain visible before
+study-size and resource decisions are made.
