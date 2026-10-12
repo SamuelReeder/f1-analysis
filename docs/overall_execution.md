@@ -359,3 +359,26 @@ affected outputs require regeneration. The proposal is still unapproved.
 The [verification record](../outputs/championship/development/overall-track-context-checks/verification.json)
 identifies the checked revisions and evidence. This prerequisite correction
 does not complete the forecast-time condition policy or scientific acceptance.
+
+## Historical forecast conditions
+
+The [condition specification](overall_future_conditions.md) was committed before
+implementation or condition evaluation. It supplies a fixed historical joint
+wet/neutralisation law from the bounded shared outcome inventory. Eligible
+events count once, missing context remains excluded, and circuit-frequency
+uncertainty persists across future visits. The development iterator connects
+that law to the existing paired state and observation pipeline. Single-event
+conditional scoring integrates panel and condition weights together.
+
+The [verification record](../outputs/championship/development/overall-condition-checks/verification.json)
+identifies the passing focused checks and their enforced resource limits. The
+fitting sources, processed data and pending numerical proposal are unchanged.
+No real-history condition frequencies or held-out forecast scores were evaluated;
+no new fit or publication was authorized. The full integration suite waits for
+the existing race-pace regeneration to finish.
+
+This completes development condition integration only. Its stationarity and
+coverage assumptions still need calibration and final registration. Qualifying
+weather, official grids, exposure and classification, the failed numerical case,
+full recovery, independent predictive evidence and canonical publication remain
+open. The separate coordinate experiment remains pending user approval.

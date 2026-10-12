@@ -94,9 +94,11 @@ round them away. It does not add a random draw or replace the existing streams.
 
 ## Remaining scientific and production requirements
 
-- Future wetness and neutralisation are conditional inputs here. Their
-  forecast-time distribution, source availability and integration remain open;
-  unknown conditions cannot default to dry/green or use realized test outcomes.
+- The conditional interface retains explicit wetness and neutralisation inputs.
+  The separate [historical condition forecast](overall_future_conditions.md) now
+  integrates unknown conditions through these same observation kernels. It has
+  a fixed development law and synthetic checks; calibration, source availability
+  and inclusion in the final predictive registration remain open.
 - An unseen circuit requires an explicitly selected outcome-coefficient policy;
   omission still rejects the prediction. The population extension has development
   checks, but the qualifying-derived track factor's current no-adjustment

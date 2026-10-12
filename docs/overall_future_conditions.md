@@ -48,3 +48,23 @@ circuit uncertainty. These checks do not establish calibration, historical
 source availability or an accepted equal-car reference calendar. Exposure,
 official grids, classification, qualifying weather and the final evaluation
 inventory remain separate open requirements.
+
+## Implementation and evidence
+
+[`overall_future_conditions.py`](../analysis/overall_future_conditions.py) builds
+the condition posterior from the bounded shared design and supplies the unknown
+conditions to the same weekend observation path used for explicit scenarios.
+Future scenario inputs retain exposure and grid policy; supplying observed
+wetness or neutralisation is rejected. Per-event outputs preserve the sampled
+condition, its circuit probabilities and its conditional log mass, alongside
+the original paired order/completion factors. Shared circuit draws persist
+across visits and batch boundaries. These outputs remain development-only.
+
+The [verification record](../outputs/championship/development/overall-condition-checks/verification.json)
+links the committed specification, implementation and focused synthetic checks.
+It covers exact sequence probabilities, Dirichlet means, missing and future
+data rejection, no-finisher events, equivalence to explicit conditional
+weekends, unseen circuits, input permutations, batching and condition-weighted
+panel scoring. No real-event condition counts or forecast scores were evaluated.
+The full integration suite remains pending the running race-pace regeneration;
+its source files and input data were kept unchanged during this work.
