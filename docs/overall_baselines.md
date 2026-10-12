@@ -6,6 +6,46 @@ comparisons. [The implementation](../analysis/overall_baselines.py) now provides
 the primary and grid-only conditional race-order likelihoods and their predictive
 arithmetic. It does not fit models, score real races or authorize publication.
 
+## Qualifying forecast definition before evaluation
+
+The legacy race baseline requires a separate qualifying-only posterior from the
+standard model, with its original lineage compatibility. Its future driver and
+car states must not be copied from the successor's race-updated posterior or
+its era-based team effects. The adapter will require the standard fitting
+metadata and matching qualifying arrays, reject successor-specific posterior
+sites, and leave source/convergence verification to the checked fit loader.
+
+Propagate the original uncentred driver and persistent-car walks from their last
+training states, then centre on the complete announced future field. Retain the
+existing event/season gap scales, experience/age trend, car carryover and reset
+rule. A new driver, team or driver-lineage pair receives the original population
+distribution. Returning to a lineage reuses its driver-team effect even across
+an era boundary, as specified by the legacy likelihood. New team-season track
+loadings receive the existing prior.
+
+Known circuits use the fixed factor learned from qualifying training data.
+An unseen circuit retains the original legacy no-adjustment convention, recorded
+explicitly in its output. This is a disclosed baseline limitation; adopting the
+successor's new population extrapolation here would change the specified primary
+baseline. No future qualifying results or circuit factors estimated with future
+observations may enter the forecast.
+
+Future transients can generate qualifying observations, but they do not enter
+the legacy race features. Compute the driver feature as the median of paired
+future skill plus lineage-compatibility draws, and the car feature as the median
+of paired persistent-car plus track-effect draws. Every posterior draw must be
+accounted for before taking those medians; sums of marginal medians are not
+equivalent. This preserves the legacy plug-in definition rather than propagating
+qualifying uncertainty through the race coefficients.
+
+The forecast field and intervening lineups/calendar are declared outcome-free
+inputs at one origin. The adapter must preserve new entrants, team transfers,
+missing qualifying observations, path prefixes and batch/field invariance.
+Random streams identify state, driver/team and event so iteration order cannot
+change the forecast. The numerical forecast replication/precision policy and
+source-vintage verification remain required for the final evaluation; a single
+development trajectory per qualifying draw does not establish them.
+
 The primary baseline preserves the definitions in
 [`qualifying.features`](../f1rank/qualifying.py) and
 [`championship.race_model`](../f1rank/championship.py):
