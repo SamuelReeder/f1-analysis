@@ -208,3 +208,6 @@ declared field. Grid-only has no qualifying-feature dependency. This development
 layer supplies no accepted fits, real-data scores or as-of provenance guarantee;
 the common history, current-race-only definition and end-to-end forecast policy
 remain part of the unfinished evaluation work.
+The [baseline verification](../outputs/championship/development/overall-baseline-checks/verification.json)
+records the focused synthetic checks and full local Python suite on committed
+source. Hashed model/data files and the pending numerical proposal are unchanged.

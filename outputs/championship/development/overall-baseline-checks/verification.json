@@ -1,0 +1,71 @@
+{
+  "recorded_at": "2026-10-12T11:18:45.201819+00:00",
+  "source_commit": "26077faa876744972552b2c7c201038a9d3a1f97",
+  "source_hashes": {
+    "analysis/overall_baselines.py": "178222410eb1ee1db1a0ee05aa930096e58350d76fa7014e8ab0fb61b41e7360",
+    "tests/test_overall_baselines.py": "a5784ed450fa12296a4cd278bd61b00e6b74985137de994358418c21789aa1ee",
+    "analysis/overall_observation_kernels.py": "d37b616ff9f64fdce1b183bbfba3ac3dbfa7b56182bf9d036a6b5bf3aa29c62e",
+    "f1rank/overall/order.py": "812af3dac1f6ad8fa016919332511a24fc99d53eef947edc1eeec55dd48cd95d",
+    "f1rank/championship.py": "e1799e4cb86fcd46d2f85cd8d8c23f363310da7c19fc3e8425412f4846425aba",
+    "f1rank/qualifying.py": "16a59d96dcfebaf0eab1c2575279bc3fe0a7f2a0a72f955609d66d8701b90668",
+    "f1rank/model.py": "a92d3c965fa80cc57213b8aa607d232d4196aab2ea76f55e4f4e28e363341d2b",
+    "docs/overall_scoring_contract.json": "5345328b41581fd21c2e95aa3f5fd71c3b853876f104a99374b7a731823ee422"
+  },
+  "reports": {
+    "focused.xml": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.742,
+      "exit_code": 0,
+      "sha256": "ac948904ca2cf78bc45d86d3f3e0433973d302d8efe953017e9d04a748b1a301"
+    },
+    "full.xml": {
+      "tests": 455,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 93.549,
+      "exit_code": 0,
+      "sha256": "7b68c9a71c0b756e68e6937ff8f270cde03502f4572e104edf004f47b2fe53ae"
+    }
+  },
+  "commands": {
+    "focused.xml": "python -m pytest -q tests/test_overall_baselines.py --junitxml=outputs/championship/development/overall-baseline-checks/focused.xml",
+    "full.xml": "python -m pytest -q --junitxml=outputs/championship/development/overall-baseline-checks/full.xml"
+  },
+  "execution": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "policy": "Sequential systemd user scopes"
+  },
+  "implemented_arms": [
+    "legacy_grid_qualifying",
+    "grid_only"
+  ],
+  "pending_arm": "current_race_only",
+  "checks": [
+    "Legacy prior sites and ordinary likelihood equivalence",
+    "Median of paired qualifying sums, not marginal medians",
+    "Paired coefficient draws and probability integration",
+    "Full fields and pit-lane slots retained before running-panel selection",
+    "Empty and singleton panels retained",
+    "Field permutation invariance",
+    "Small-field probability normalization",
+    "Ambiguous and missing inputs rejected"
+  ],
+  "source_hashed_model_data_files_changed": false,
+  "original_failed_profile_preserved": true,
+  "numerical_study_approval": "pending",
+  "limitations": [
+    "Arithmetic interfaces do not certify convergence, source vintage or matching training history.",
+    "Legacy plug-in qualifying features do not propagate qualifying-feature uncertainty.",
+    "Current-race-only, classification conditioning and pre-qualifying forecast policies remain unspecified.",
+    "No accepted-fit integration, real-data comparison, recovery or production-readiness claim."
+  ],
+  "mcmc_run": false,
+  "real_data_predictions_scored": false,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}

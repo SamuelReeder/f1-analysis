@@ -56,3 +56,7 @@ The adapter rejects that arm instead of mapping it to legacy ratings-only. The
 end-to-end pre-qualifying comparison also still requires a registered grid and
 unknown-condition policy. No real-data scores, sampler changes or source-hashed
 model changes are made by this development interface.
+
+The [verification record](../outputs/championship/development/overall-baseline-checks/verification.json)
+links the focused and full local Python checks to their committed implementation.
+Those are synthetic/software checks, not comparative predictive evidence.
