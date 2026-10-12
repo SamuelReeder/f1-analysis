@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "purpose": "numerical_profile",
+  "fit_settings": {
+    "warmup": 800,
+    "samples": 800,
+    "chains": 4,
+    "target_accept": 0.9,
+    "max_tree_depth": 10,
+    "init_median_samples": 15,
+    "seed": 0
+  },
+  "retry": [
+    [
+      1,
+      1,
+      null
+    ],
+    [
+      2,
+      2,
+      null
+    ],
+    [
+      3,
+      4,
+      null
+    ],
+    [
+      3,
+      4,
+      0.98
+    ]
+  ],
+  "studies": [
+    "connected",
+    "confounded",
+    "sparse_rookie"
+  ],
+  "synthetic": {
+    "connected": {
+      "case": "connected",
+      "seed": 20261012
+    },
+    "confounded": {
+      "case": "confounded",
+      "seed": 20261013
+    },
+    "sparse_rookie": {
+      "case": "sparse_rookie",
+      "seed": 20261014
+    }
+  },
+  "resources": {
+    "slice": "f1.slice",
+    "MemoryMax": "6G",
+    "slice_CPUQuota": "800%",
+    "CPUWeight": 10,
+    "Nice": 19
+  },
+  "diagnostics": {
+    "rank_rhat_strict_upper": 1.01,
+    "bulk_ess_min": 400,
+    "tail_ess_min": 400,
+    "mean_mcse_sd_upper": 0.05,
+    "divergences_per_draw_upper": 0.001
+  },
+  "acceptance": {
+    "authorizes_real_data_fit": false,
+    "authorizes_publication": false,
+    "establishes_sbc": false,
+    "establishes_full_recovery": false,
+    "criterion": "Report every matched study under the unchanged diagnostics; this experiment does not complete recovery, SBC or predictive validation."
+  },
+  "parent_registration": "docs/overall_profile_protocol.json",
+  "parent_registration_sha256": "96a2d6baf66eea8dd8d57e86057edddd233c1bbeb0fd0ef2fcd789f454ae83e8",
+  "original_arrays_sha256": {
+    "connected": "4ac5ab7125adfa2fc8a0ca18829fbe941be0ec94b5e857fc54a16751bba3a948",
+    "confounded": "4d50cfb60b150f68abac84c2bc1619c649e76ebff8212884c52bcb1b88b6891b",
+    "sparse_rookie": "ca20697300ef8607dc61590f9a00bc8d304142c525997aa90608b2aabb7d9196"
+  },
+  "registered_model_inputs_key": "eae65767fe29bedcf396beeddbd8bf19b5bdc2a5769dd70f10fda50ef22bad18",
+  "original_truth_files": {
+    "connected": {
+      "path": "outputs/championship/development/overall-computation-profile-v1/connected.truth.json",
+      "sha256": "0effa6798e618d269e44912a2dbf4c760e12aeb64f607660b6b288b5cac25931"
+    },
+    "confounded": {
+      "path": "outputs/championship/development/overall-computation-profile-v1/confounded.truth.json",
+      "sha256": "d9af54f7cb9865b0ecf607b56bf1e1e01d7f199e24fa547d5b57daa75945f3df"
+    },
+    "sparse_rookie": {
+      "path": "outputs/championship/development/overall-computation-profile-v1/sparse_rookie.truth.json",
+      "sha256": "48b4c7587e111de5018eade208ae830261f84a3c221b1270eba2bb713b68769b"
+    }
+  },
+  "id": "overall-weekend-coordinate-profile-v1",
+  "status": "proposal_pending_user_approval",
+  "user_approved": false,
+  "proposed_local_date": "2026-10-12",
+  "method": "conditional_weekend_with_control_rotation_v1",
+  "definition": "docs/overall_weekend_coordinates.md",
+  "preceding_experiment_registration": "docs/overall_rotation_profile_protocol.json",
+  "preceding_experiment_registration_sha256": "ca1c8a599e81f9b664fbbe2cd5ff264c17e788065a42141648a4d3f24903372f",
+  "scope": "Separate post-failure computational experiment: compose the previously evaluated lap-control rotation with the fixed conditional orthogonal map of qualifying and race innovations into total race form and its complement. Preserve every original prior, likelihood, latent dimension, model/data source, generated observation, truth, study, sampling seed, sampler setting, diagnostic threshold and retry. No real-driver fitting or ranking.",
+  "stopping": "Process every original study with only the unchanged fixed retry ladder. Preserve all attempts, including failures, and refuse an existing experiment directory. Do not search coordinate variants, redraw truths, adjust settings, extend retries, choose an earlier failed attempt or use this computational profile for publication.",
+  "reports": [
+    "all_attempts",
+    "all_original_and_new_coordinate_diagnostics",
+    "all_current_driver_pairwise_qualifying_contrasts",
+    "all_current_driver_pairwise_race_contrasts",
+    "runtime",
+    "peak_resident_memory",
+    "tree_depth_saturation",
+    "rotation_basis_sha256",
+    "matched_original_arrays_and_truths_sha256"
+  ],
+  "additional_source_sha256": {
+    "analysis/overall_control_rotation.py": "49e4dbef148b7206634655532294a31f650542b8960d1f7d55fedc1755097a84",
+    "analysis/overall_profile_geometry.py": "714ba47c374f68c616d2453d0df9b677b5faa55c299e4e866771e30a41f4c4f2",
+    "analysis/overall_weekend_coordinates.py": "4f2e05020fc1a2cb1c38bc9a1f7ccadec83bc83b09a2a6402c8a38180e4ca972",
+    "analysis/overall_weekend_profile.py": "d65af5bb85b99a226c3b3993dce107b2154bf3baf3550612818f6a21f6b54a52",
+    "docs/overall_weekend_coordinates.md": "1f8c0f22f120b183b255045d1c3a07c6f9039b7f5c866171d05acdc9c76ec7bf"
+  }
+}
