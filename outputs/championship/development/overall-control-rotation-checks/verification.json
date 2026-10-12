@@ -1,0 +1,62 @@
+{
+  "recorded_at": "2026-10-12T08:26:19.219743+00:00",
+  "source_commit": "7c4f150f412f6fa48ac394b68b2210688cc8ffcc",
+  "source_hashes": {
+    "analysis/overall_profile_geometry.py": "714ba47c374f68c616d2453d0df9b677b5faa55c299e4e866771e30a41f4c4f2",
+    "analysis/overall_control_rotation.py": "49e4dbef148b7206634655532294a31f650542b8960d1f7d55fedc1755097a84",
+    "analysis/overall_rotation_profile.py": "3e581e2044daa82175b2a26f6b66e6b34b162d2b4cb64939dac9950a5b1eaa9a",
+    "docs/overall_rotation_profile_proposal.json": "8249a07a924c353c23161fa56e63296f8785caba128b1f6416a3c8103766157f",
+    "tests/test_overall_control_rotation.py": "8408109146ce72416b8afca615abd128aea72c955839854eafb6bdb78f7c96a4"
+  },
+  "commands": {
+    "software.xml": "python -m pytest tests/test_overall_control_rotation.py -q",
+    "full-software.xml": "python -m pytest -q",
+    "pending-registration.xml": "python -m pytest tests/test_overall_control_rotation.py::test_pending_proposal_cannot_launch_a_fit -q"
+  },
+  "resources": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "execution": "Sequential systemd user scopes"
+  },
+  "reports": {
+    "software.xml": {
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 24.73,
+      "sha256": "1fb2d971a0e75ae19a320adf1e41107a72ffc7a95fb8999f926b2cb20999912c",
+      "exit_code": 0
+    },
+    "full-software.xml": {
+      "tests": 283,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 76.426,
+      "sha256": "4493475abffcfafabfe88d1f4e0653fd2ca3f0829a4be5d2ea50d1985355e8fe",
+      "exit_code": 0
+    },
+    "pending-registration.xml": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.346,
+      "sha256": "8186c372ec822915e8666464397c3de6550bad6444fc151a0dddd068206e1ded",
+      "exit_code": 0
+    }
+  },
+  "final_fixture_adjustment": {
+    "file": "tests/test_overall_control_rotation.py",
+    "sha256": "cba90787c8a0280bb142640b035c35c959679ec8474fe36c78776929d4c901cb",
+    "report": "pending-registration.xml",
+    "scope": "After the full suite, the pending-registration fixture was made independent of the live proposal approval state. Its focused check passes. Implementation and proposal code are unchanged."
+  },
+  "scope": "Equivalent Gaussian-control covariance and inversion, response independence, original full-joint density including change-of-variables Jacobian, observation-factor agreement and finite gradients. Guards reject unauthorized or changed registrations and existing experiment directories. Full local suite passed; no MCMC experiment was run.",
+  "mcmc_run": false,
+  "numerical_improvement_established": false,
+  "original_failure_preserved": true,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}

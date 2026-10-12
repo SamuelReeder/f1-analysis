@@ -28,3 +28,16 @@ Next steps are read-only diagnosis of the saved attempts, completion of the scie
 The [saved-draw diagnosis](../outputs/championship/development/overall-profile-diagnosis-v1/review.json) examines every attempt and every current qualifying/race driver pair. It verifies the original checker and reproduces the saved state diagnostics before deriving contrasts. Qualifying comparisons also fail in the final confounded attempt. Some earlier attempts have cleaner contrast diagnostics, but their complete fits failed; selecting those attempts would not meet the registered requirement. The failure therefore cannot be dismissed as affecting only irrelevant parameters.
 
 This analysis is explicitly post hoc. It neither reclassifies the original attempts nor turns their failed draws into driver estimates or calibrated uncertainty. Archive checksums and all contrast diagnostics are preserved in its result file.
+
+## Post hoc control geometry
+
+The [geometry diagnosis](../outputs/championship/development/overall-profile-geometry-v1/review.json)
+reproduces the original synthetic arrays and truths and retains the control
+correlations from every saved attempt and chain. It identifies strong coupling
+among lap controls as a reason to investigate sampling coordinates; it does not
+establish the cause of the failure or a successful repair.
+
+The separate [inference proposal](overall_inference_revision.md) preserves the
+original prior and likelihood while rotating those controls. Density and software
+checks are recorded, but the proposed numerical experiment awaits approval and
+registration. This original profile remains failed.

@@ -10,7 +10,7 @@ open until the full acceptance checklist has direct evidence.
 | Shared current qualifying/race model | Joint model and synthetic interface/gradient tests | Fit, recover and calibrate its shared uncertainty |
 | Scientific specification | Executable likelihood/prior definitions and candidate contract | Final numerical/evaluation/prospective protocol before real-data fitting |
 | Complete entrant/cutoff catalog | Missing-qualifier, team-transfer, era and future-row tests; data preflight | Recovery on the real transfer network and forecast catalog for unseen entrants/events |
-| Reproducible fit engine | `fitting.py`; fixed retry, source-change, cache-corruption and terminal-failure tests; completed numerical profile preserves an exhausted confounded case | Diagnose failed inference without retuning; fresh registered evidence after source correction; full recovery and runner resource measurements |
+| Reproducible fit engine | `fitting.py`; immutable attempts/caches; the exhausted confounded case is preserved; saved-draw geometry diagnosis and equivalent-coordinate prototype | Separate approval and registration before the proposed post-failure numerical study; fresh recovery and runner resource measurements |
 | Known-truth recovery and simulation-based calibration | Generative responses and complete numerical-profile inventory: connected and sparse-rookie fits converged after retries; confounded fit exhausted its ladder | Complete registered SBC and stress studies, including the unresolved confounded case; no failed case may be discarded |
 | Coherent weekend simulation | Student-t elimination, current total race pace, shared weekend uncertainty | Common operations/conditions calibration, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |
@@ -19,7 +19,7 @@ open until the full acceptance checklist has direct evidence.
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence, common field and matching explanation draws/scenario | Producer/export, pairwise comparisons, and matching component explanations from accepted draws; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
-| Software and runner readiness | Full Python suite after the event-scoring implementation (`development/overall-event-rule-checks/verification.json`); earlier weather correction, interface build/browser/contract checks and dependency audit are preserved | Complete workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
+| Software and runner readiness | Full Python suite with the proposed coordinate wrapper (`development/overall-control-rotation-checks/verification.json`); earlier event-scoring, weather, interface and dependency checks are preserved | Complete workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
 | Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
 
 The numerical profile is registered separately in
@@ -91,3 +91,11 @@ The reference calendar and failed numerical profile remain unchanged. A scorer
 does not provide a model for when an event stops, which cars are lapped, or how
 incidents correlate. Those requirements and the final publication-source
 regeneration remain open.
+
+The [inference proposal](overall_inference_revision.md) responds to the saved-draw
+geometry evidence with a distribution-preserving coordinate transformation for
+the lap controls. Its mathematical/software checks pass. The original model,
+registered sampler settings, gates and failed profile remain unchanged. The
+matched experiment is prepared under a separate identity and explicitly pending
+user approval; the runner refuses that pending registration. No transformed
+MCMC fit has been run and no convergence improvement is claimed.

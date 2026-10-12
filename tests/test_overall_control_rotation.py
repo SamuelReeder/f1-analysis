@@ -124,11 +124,17 @@ def test_misaligned_or_missing_coordinates_are_rejected(design):
         build_rotation(bad)
 
 
-def test_pending_proposal_cannot_launch_a_fit():
-    from analysis.overall_rotation_profile import checked_registration
+def test_pending_proposal_cannot_launch_a_fit(tmp_path, monkeypatch):
+    from f1rank.overall import fitting
     proposal = Path(__file__).resolve().parents[1] / "docs/overall_rotation_profile_proposal.json"
+    # Exercise a pending registration even after the real proposal is approved.
+    pending = json.loads(proposal.read_text())
+    pending.update(status="proposal_pending_user_approval", user_approved=False)
+    path = tmp_path / "proposal.json"
+    path.write_text(json.dumps(pending))
+    monkeypatch.setattr(fitting.subprocess, "check_output", lambda *a, **k:path.read_bytes())
     with pytest.raises(ValueError, match="frozen"):
-        checked_registration(proposal)
+        fitting.committed_registration(path, root=tmp_path)
 
 
 @pytest.mark.parametrize("change", ["approval", "seed", "settings", "gate", "inputs"])
