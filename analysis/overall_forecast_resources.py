@@ -24,7 +24,8 @@ sys.path.insert(0, str(ROOT))
 
 from analysis.overall_forecast_catalog import build_catalog
 from analysis.overall_forecast_states import DEFAULT_DRAW_BATCH, iter_forecast_states
-from analysis.overall_observation_kernels import CONTEXT_NAMES, iter_conditional_weekends
+from analysis.overall_observation_kernels import (CONTEXT_NAMES, UNSEEN_CIRCUIT_POLICY,
+                                                iter_conditional_weekends)
 from analysis.overall_posterior_archive import mapped_checked_posterior
 from f1rank.artifacts import RETRY
 from f1rank.overall.design import build
@@ -87,7 +88,9 @@ def observation_arrays(event):
             yield f"qualifying:{i}:{name}", value
 
 
-def run(*, compressed=False, observations=False):
+def run(*, compressed=False, observations=False, unseen_circuit=False):
+    if unseen_circuit and not observations:
+        raise ValueError("Unseen-circuit outcome resource checks require observations")
     limits = scope_limits()
     tracked = ["analysis/overall_forecast_states.py", "analysis/overall_forecast_catalog.py",
         "analysis/overall_forecast_resources.py", "f1rank/overall/design.py", "f1rank/overall/fitting.py",
@@ -119,7 +122,11 @@ def run(*, compressed=False, observations=False):
             race_start=str(last_date + dt.timedelta(days=14)) + "T14:00:00Z"),
         calendar_after_cutoff=[event_id], entrants=[dict(driver_id=r.driver_id, team=r.team,
             prior_entries_after_cutoff=0) for r in field.itertuples()])
+    if unseen_circuit:
+        snap["event"]["circuit_id"] = "synthetic_unseen_circuit"
     catalog = build_catalog(design, snap)
+    if unseen_circuit and not catalog["new_circuit"]:
+        raise ValueError("Synthetic circuit identity unexpectedly exists in training")
     shape = (FIT_SETTINGS["chains"], FIT_SETTINGS["samples"] * max(row[1] for row in RETRY))
     scalars, vectors = parameter_template(design, observations=observations)
     total_bytes = int(np.prod(shape) * np.dtype("float32").itemsize * (len(scalars) + sum(vectors.values())))
@@ -175,7 +182,8 @@ def run(*, compressed=False, observations=False):
                     grid_policy="qualifying_order_no_penalties",
                     exposure_laps={r.driver_id:snap["event"]["scheduled_laps"] for r in field.itertuples()})}
                 iterator = iter_conditional_weekends(design, [snap], parameters, scenario,
-                    advancing=QUALIFYING_FIELDS[len(field)], **args)
+                    advancing=QUALIFYING_FIELDS[len(field)],
+                    unseen_circuit_policy=UNSEEN_CIRCUIT_POLICY if unseen_circuit else None, **args)
             else:
                 iterator = iter_forecast_states(design, [snap], parameters, **args)
             for batch in iterator:
@@ -220,6 +228,8 @@ def run(*, compressed=False, observations=False):
             unused_archive_site_validated=compressed,
             construction="Arbitrary finite synthetic parameter values; not fitted values or a recovery experiment"),
         forecast=dict(kind="conditional_weekend" if observations else "latent_states",
+            circuit_id=snap["event"]["circuit_id"], unseen_circuit=bool(catalog["new_circuit"]),
+            unseen_circuit_policy=UNSEEN_CIRCUIT_POLICY if unseen_circuit else None,
             batches=batches, draws_per_chain=stop, max_batch_output_bytes=max_batch_bytes,
             observation_parameters_sha256=observation_key,
             batch_stream_sha256=stream.hexdigest(), every_output_finite=True,
@@ -241,11 +251,13 @@ if __name__ == "__main__":
     parser.add_argument("--output", required=True)
     parser.add_argument("--compressed", action="store_true", help="Exercise a temporary compressed cache-format fixture")
     parser.add_argument("--observations", action="store_true", help="Include conditional qualifying, order and completion observations")
+    parser.add_argument("--unseen-circuit", action="store_true", help="Exercise population outcome coefficients at a hypothetical new circuit")
     args = parser.parse_args()
     path = Path(args.output)
     if path.exists():
         raise FileExistsError("Preserve the existing resource record")
-    result = run(compressed=args.compressed, observations=args.observations)
+    result = run(compressed=args.compressed, observations=args.observations,
+                 unseen_circuit=args.unseen_circuit)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
     print(json.dumps({key:result[key] for key in ("counts", "forecast", "seconds", "process_max_rss_kib")}))
