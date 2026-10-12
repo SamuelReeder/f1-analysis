@@ -40,7 +40,7 @@ settings, gates and full retry/study inventory. No new fit has run.
 | Known-truth recovery and simulation-based calibration | Generative responses and complete numerical-profile inventory: connected and sparse-rookie fits converged after retries; confounded fit exhausted its ladder; development evaluator covers state contrasts and observation likelihoods, distinguishes fixed-truth stress cases and requires a complete inventory | Full study registration, power justification and execution, including ranking functionals and the unresolved confounded case; no failed case may be discarded |
 | Coherent weekend simulation | Student-t elimination and shared weekend uncertainty; observation kernels preserve teammate effects, context, order and completion within each joint draw; historical joint condition integration; explicit unseen-circuit outcome and qualifying track-factor extensions | Condition/circuit calibration and final registration, qualifying weather, official-grid eligibility/penalties, common operations, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |
-| Ability/outcome/numerical uncertainty | Nested simulation, MCSE and rank/ESS diagnostics; saved-draw diagnosis finds qualifying-contrast failures in the final confounded attempt | Resolve inference and check ranking functionals under converged posteriors with fixed simulation precision |
+| Ability/outcome/numerical uncertainty | Nested simulation, grouped moments and complete conditional ordering-sensitivity bounds; saved noise examples show that a passing noisy checker cannot establish functional convergence; saved-draw diagnosis retains qualifying-contrast failures | Resolve inference; register and validate functional MCMC diagnostics and near-tie precision under converged posteriors; measure the complete nested workload |
 | Chronological development comparison | Plan defines information horizons and baseline roles; scoring utilities preserve joint draws, conditional panel/condition weights and required events; outcome-free catalogue, joint states and observation kernels have synthetic checks; unseen-circuit extensions and unknown-condition simulation; explicit legacy/grid-only arithmetic and a race-only evidence ablation | Complete source verification, final condition/circuit registration and calibration, uncertainty in learned training factors, classification-conditioning policy and baseline fitting/forecast integration; freeze event inventory, calibration and stopping rules; run every fold |
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence; bounded paired summaries and a fixed synthetic archive-to-summary controller have checked integration paths | Accepted real-data protocol/scenario integration, full simulation resources and precision, evidence-backed exporter and matching explanation/pairwise payload; full contract validation |
@@ -687,3 +687,17 @@ to 28.700 seconds with own-driver scoring; the connected focused suite passes
 clock and workload limits described above. Full posterior simulation, numerical
 ranking acceptance and scientific validation have not been completed. The
 original failed numerical profile and pending separate-study approval remain.
+
+The [conditional ordering-sensitivity report](overall_rank_sensitivity_results.md)
+adds simultaneous simulation-error bounds for every retained baseline and
+explanation mean, all pairwise comparisons and expected-point rank CDFs. It reads
+complete grouped companions through the existing checked loader and preserves
+chain-level reports. These bounds describe inner simulation error for the fixed
+trace; they cannot authenticate posterior probabilities or functional convergence.
+
+The focused connected suite passes 84 tests. Both existing saved noise examples
+remain unresolved under the fixed conditional bounds, including the mixed control
+whose exact checker passes. The full recorded grouped dimensions also complete
+under the local scope caps. No new random draws, fit, changed gate or accepted
+ranking follows. The separate weekend-coordinate experiment remains awaiting
+approval, and full functional MCMC validation remains open.
