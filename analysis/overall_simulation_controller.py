@@ -7,8 +7,10 @@ import datetime as dt
 import hashlib
 import json
 from pathlib import Path
+import platform
 import re
 import subprocess
+import sys
 import time
 import traceback
 
@@ -32,6 +34,12 @@ SOURCE_NAMES = (
 LOADED_PYTHON = {name: digest(ROOT / name) for name in SOURCE_NAMES if name.endswith(".py")}
 PURPOSE = "synthetic_canonical_simulation"
 STREAM_POLICY = "seed_chain_draw_start_replicate_start_v1"
+
+
+def runtime_identity():
+    return dict(python=platform.python_version(), implementation=platform.python_implementation(),
+        numpy=np.__version__, bit_generator=type(np.random.default_rng(0).bit_generator).__name__,
+        platform=sys.platform, machine=platform.machine(), byteorder=sys.byteorder)
 
 
 def _hash(value):
@@ -163,12 +171,13 @@ def committed_protocol(path, *, root=ROOT):
 
 
 def validate_protocol(protocol, reference, reference_sha256, design):
-    _keys(protocol, ("schema_version", "status", "purpose", "model_version", "target", "sources",
+    _keys(protocol, ("schema_version", "status", "purpose", "model_version", "target", "sources", "runtime",
         "reference_sha256", "fit", "posterior_shape", "workload", "advancing", "race_control"))
     if (type(protocol["schema_version"]) is not int or protocol["schema_version"] != 1
             or protocol["status"] != "frozen" or protocol["purpose"] != PURPOSE
             or protocol["model_version"] != CONTRACT["model_version"] or protocol["target"] != CONTRACT["target"]
             or protocol["sources"] != source_fingerprints()
+            or protocol["runtime"] != runtime_identity()
             or not _sha(reference_sha256) or protocol["reference_sha256"] != reference_sha256):
         raise ValueError("Simulation protocol, reference or registered sources do not match")
     fit = protocol["fit"]
@@ -234,6 +243,7 @@ def execute(run_dir, design, protocol_path, reference_path, output_dir, *, regis
         started_at=dt.datetime.now(dt.timezone.utc).isoformat(), synthetic=True,
         conditional_simulation_precision_passed=False, scientific_evidence_verified=False,
         reference_source_availability_verified=False, publication_allowed=False)
+    receipt["runtime"] = protocol["runtime"]
     receipt.update(source_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
         registration_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=registration_root, text=True).strip())
     output_dir.mkdir(parents=True, exist_ok=False)
@@ -283,10 +293,12 @@ def execute(run_dir, design, protocol_path, reference_path, output_dir, *, regis
         # A result stays private until the archive's exit checks have passed.
         if (digest(protocol_path) != protocol_key or reference_path.read_bytes() != reference_bytes
                 or protocol["sources"] != source_fingerprints() or design_identity(design) != identity
+                or protocol["runtime"] != runtime_identity()
                 or digest(run_dir / "receipt.json") != fit["receipt_sha256"]
                 or receipt["completed_blocks"] != schedule["blocks"]):
             raise ValueError("Simulation inputs or complete schedule changed during execution")
         result.update(controller_sources=protocol["sources"], protocol_sha256=protocol_key,
+            simulation_runtime=protocol["runtime"],
             reference_scenario_id=reference["scenario_id"],
             unresolved_reference_assumptions=reference["unresolved_before_publication"],
             synthetic=True, reference_source_availability_verified=False)

@@ -22,6 +22,13 @@ race-control assumption. These are simulation decisions, not fitted component
 weights. A protocol change produces a different simulation identity and must
 not be used to rerun a failed measurement until it appears favorable.
 
+Bind the Python implementation/version, NumPy version, default bit-generator
+identity, operating platform, machine architecture and byte order too. Check
+them before and after execution and retain them in the receipt. Changed library
+versions cannot silently reuse a simulation identity. These recorded runtime
+fields do not substitute for full reproducibility/resource verification on the
+intended runner.
+
 The design's current race field and its driver-entry mapping must agree with
 the fit catalog and its training arrays. Missing qualifying observations do
 not remove entrants from that field. No parameter may be filled with zero,

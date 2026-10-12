@@ -63,6 +63,7 @@ def case(tmp_path, monkeypatch):
     reference_path.write_text(json.dumps(reference, indent=2) + "\n")
     protocol = dict(schema_version=1, status="frozen", purpose=controller.PURPOSE,
         model_version=controller.CONTRACT["model_version"], target=controller.CONTRACT["target"],
+        runtime=controller.runtime_identity(),
         sources=controller.source_fingerprints(), reference_sha256=controller.digest(reference_path),
         fit={}, posterior_shape=list(shape), workload=dict(seed=29, replicates=5,
             draw_batch_size=3, replicate_batch_size=3, stream_policy=controller.STREAM_POLICY),
@@ -143,6 +144,7 @@ def test_checked_archive_full_schedule_matches_direct_paired_summary(case, monke
     monkeypatch.setattr(controller, "paired_simulation_block", inspect)
     result, receipt = execute(case)
     assert receipt["state"] == "complete" and receipt["completed_blocks"] == receipt["schedule"]["blocks"]
+    assert receipt["runtime"] == result["simulation_runtime"] == controller.runtime_identity()
     addresses = [(k["seed"], k["chain"], k["draw_start"], k["replicate_start"]) for k, _, _ in calls]
     assert len(set(addresses)) == len(addresses) == 8
     assert not list(case.maps.iterdir())
@@ -208,12 +210,13 @@ def test_mutated_inputs_cannot_produce_a_completed_summary(case, monkeypatch, ch
 
 
 @pytest.mark.parametrize("change", ["not_committed", "source", "target", "field_mapping", "shape", "partition",
-    "reference", "future_reference", "unknown_circuit", "weight", "race_control", "qualifying_format", "stream_word"])
+    "reference", "future_reference", "unknown_circuit", "weight", "race_control", "qualifying_format", "stream_word", "runtime"])
 def test_invalid_frozen_inputs_stop_before_any_simulation(case, monkeypatch, change):
     if change == "not_committed":
         case.path.write_text(case.path.read_text() + "\n")
     elif change == "source": case.protocol["sources"]["analysis/overall_summary.py"] = "0" * 64
     elif change == "target": case.protocol["target"] = "current_team"
+    elif change == "runtime": case.protocol["runtime"]["numpy"] = "different-version"
     elif change == "field_mapping": case.design.catalog["field_entries"].reverse()
     elif change == "shape": case.protocol["posterior_shape"] = [1, 5]
     elif change == "partition": case.protocol["workload"]["draw_batch_size"] = 2
