@@ -1,4 +1,5 @@
 import copy
+import hashlib
 import json
 
 import numpy as np
@@ -15,6 +16,10 @@ def component(probabilities):
 def inventory_and_records():
     inventory = [dict(event_id=event, training_cutoff=f"{int(event[:4]) - 1}-01",
                       field=["a", "b"], information_set="actual_grid",
+                      origin_at=f"{event[:4]}-03-01T12:00:00Z",
+                      snapshot_sha256=hashlib.sha256(("snapshot:" + event).encode()).hexdigest(),
+                      training_history_sha256=hashlib.sha256(("history:" + event).encode()).hexdigest(),
+                      target_definition_sha256=hashlib.sha256(b"fixture: running panel only").hexdigest(),
                       target=scores.CONTRACT["primary_target"])
                  for event in ["2001-01", "2002-01", "2002-02", "2003-01"]]
     arms = [scores.CONTRACT["candidate_arm"], scores.CONTRACT["primary_baseline"],
