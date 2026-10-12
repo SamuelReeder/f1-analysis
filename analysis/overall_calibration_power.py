@@ -52,9 +52,20 @@ def power_bounds(rank_probabilities, *, replicates, family_size, alpha):
     rows = []
     for cutoff, rejected in enumerate(rejection_regions(replicates, chains, family_size, alpha)):
         p0, p1 = (cutoff + 1) / (chains + 1), float(probabilities[:cutoff + 1].sum())
-        counts = np.asarray(rejected, dtype=int)
-        power = float(binom.pmf(counts, replicates, p1).sum())
-        size = float(binom.pmf(counts, replicates, p0).sum())
+        accepted = np.ones(replicates + 1, dtype=bool)
+        accepted[list(rejected)] = False
+        remaining = np.flatnonzero(accepted)
+        if not len(remaining) or not accepted[remaining[0]:remaining[-1] + 1].all():
+            raise ValueError("Unexpected noncontiguous acceptance region")
+        def probability(p):
+            # Sum the two disjoint tails using CDF/SF, avoiding a long PMF sum.
+            value = float(binom.cdf(remaining[0] - 1, replicates, p)
+                          + binom.sf(remaining[-1], replicates, p))
+            tolerance = np.finfo(float).eps * (replicates + 1)
+            if not np.isfinite(value) or not -tolerance <= value <= 1 + tolerance:
+                raise ValueError("Binomial tail probability is outside rounding tolerance")
+            return min(1., max(0., value))
+        power, size = probability(p1), probability(p0)
         rows.append(dict(cutoff=cutoff, null_probability=p0, alternative_probability=p1,
             rejection_counts=list(rejected), null_rejection_probability=size, rejection_probability=power))
     # Cutoffs are dependent, as are driver quantities. Do not multiply their
