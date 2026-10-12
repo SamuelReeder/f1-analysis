@@ -1,0 +1,83 @@
+{
+  "purpose": "legacy_prequalifying_development_verification",
+  "specification_commit": "bf96e11e2225c1a9613d74360759905275130c60",
+  "implementation_commit": "d991265e00ac03ef8390dd88f9f05929e8b94d31",
+  "source_hashes": {
+    "analysis/overall_legacy_prequalifying.py": "3a4c84b16f70f38489dfa6e10e9e2289400bb1650d4988157dddc17eaf6fc952",
+    "analysis/overall_legacy_forecast.py": "1ff46104b10d7c88ed642acb865ad3f4ccdffdf4f8c37d8263bdcc8504d64a2b",
+    "analysis/overall_baselines.py": "37cbcbb3a488153954cf9561e3d9408d278b4b2a5905c4a679e8aed19c323d58",
+    "analysis/overall_observation_kernels.py": "2b572fbbc5a577580d4abd42951b2fda92cc6dcac649e7bf35ee866c4a2fc4f2",
+    "analysis/overall_forecast_states.py": "450a80b8c293d765ee2b9b8ae76e3c7e02dcc72774c4f328c9a93b0e68a1fd48",
+    "analysis/overall_forecast_catalog.py": "7144a87398aea4e3435d4f87118ca3da6f475ca86f7b2710737f6be413abaf39",
+    "tests/test_overall_legacy_prequalifying.py": "264719273bad1ec8e3b5041788d170fd35f687a54146a8bac166f62092b8963c",
+    "tests/test_overall_legacy_forecast.py": "a9f642487fe67a2ffcea70b1ea30ee4c4b8a33748353a420ebd32447de76f8e8",
+    "docs/overall_legacy_prequalifying.md": "14eb84de98257c276a71e65a24e2ebe66c16a70964818719eca445e1ddb670bf"
+  },
+  "checks": {
+    "focused": {
+      "source_commit": "dba4e25ac2aa4b3e34b1a9ac50ac429af6f6036b",
+      "run": "focused-run.json",
+      "report": "focused.xml",
+      "tests": 98,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "corrected": {
+      "source_commit": "1b5464c4717f6c7293a71bc08eb0a514264fabd9",
+      "run": "corrected-run.json",
+      "report": "corrected.xml",
+      "tests": 98,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "connection": {
+      "source_commit": "5b5f5952f744339a97c3041565419a0852c54ec6",
+      "run": "connection-run.json",
+      "report": "connection.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "identity": {
+      "source_commit": "d991265e00ac03ef8390dd88f9f05929e8b94d31",
+      "run": "identity-run.json",
+      "report": "identity.xml",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "initial_failure": "Prefix fixture compared different event dates/identities; fixed to compare the same first event. Forecast/model code unchanged by that correction.",
+  "overlapping_checks_must_not_be_summed": true,
+  "checked_behavior": [
+    "Original qualifying observation locations, scales and log densities under matched innovations",
+    "Complete empirical product with unequal fit sample counts and paired coefficients",
+    "Hand-computable mixtures, order normalization and exact empty/singleton panel masses",
+    "Sample permutation and product-batch invariance; qualifying field/batch/path-prefix invariance",
+    "Generated qualifying path connected to both primary and grid-only race mappings",
+    "Complete input identities and retention of qualifying training-array identity"
+  ],
+  "fitting_sources_and_data_unchanged_from": "8f1208b239978afb51cb37cd4c61187e1ea3525e",
+  "compared_paths": [
+    "f1rank",
+    "extract",
+    "data",
+    "docs/overall_candidate.md",
+    "docs/overall_rotation_profile_proposal.json"
+  ],
+  "pending_numerical_proposal_user_approved": false,
+  "full_integration_suite": "pending monitored race-pace regeneration completion",
+  "prequalifying_product_resource_profile_measured": false,
+  "official_grid_policy_complete": false,
+  "qualifying_weather_policy_complete": false,
+  "forecast_precision_verified": false,
+  "accepted_fit_loaded": false,
+  "real_event_scores_evaluated": false,
+  "mcmc_run_by_this_change": false,
+  "independent_evidence_established": false,
+  "publication_allowed": false
+}

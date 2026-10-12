@@ -1,0 +1,19 @@
+{
+  "source_commit": "d991265e00ac03ef8390dd88f9f05929e8b94d31",
+  "command": [
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_overall_legacy_prequalifying.py",
+    "--junitxml=outputs/championship/development/overall-legacy-prequalifying-checks/identity.xml"
+  ],
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r396d358c1023444692e32c472e0796c3.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "exit_code": 0,
+  "elapsed_seconds": 6.509958372975234,
+  "peak_child_rss_kib": 486052
+}

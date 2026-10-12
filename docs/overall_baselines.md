@@ -93,6 +93,9 @@ and both the primary and grid-only race mappings can use this grid distribution.
 This is conditional on every entrant setting a time and starting in qualifying
 order. Official-grid rules, qualifying weather, numerical forecast precision and
 the accepted end-to-end predictive evaluation remain open.
+The [pre-qualifying verification record](../outputs/championship/development/overall-legacy-prequalifying-checks/verification.json)
+links the original-model, known-probability and connected-path checks, and
+preserves the initial test-fixture failure separately from the corrected run.
 
 The [forecast verification record](../outputs/championship/development/overall-legacy-forecast-checks/verification.json)
 links synthetic original-model trace comparisons, lineage persistence, newcomer

@@ -51,6 +51,20 @@ set and leave no temporary maps. This measures archive I/O and forecast resource
 it does not establish accepted baseline fits, forecast-median precision,
 real-event prediction, source availability or intended-runner readiness.
 
+The legacy pre-qualifying path now generates trajectories from the original
+qualifying observation process and integrates the full empirical product of
+grid trajectories and joint race-coefficient draws. This follows the separately
+committed [definition](overall_legacy_prequalifying.md), retains fixed feature
+medians, and supports both primary and grid-only race mappings. Its
+[verification](../outputs/championship/development/overall-legacy-prequalifying-checks/verification.json)
+preserves the initial mismatched-date fixture failure and corrected evidence,
+including original-model density agreement, known probabilities, normalization,
+sample/batch invariance and the connected forecast path. No model or acceptance
+rule was changed by the fixture correction. This remains conditional on all
+entrants setting times and starting in qualifying order. Official-grid rules,
+qualifying weather, full product workload resources, forecast precision and
+accepted chronological evaluation remain open.
+
 No model fit or real-data predictive score has been used to choose the profile
 settings. Previous finite-gradient tests, software checks and data-shape checks
 are development evidence only. A failed profile remains failed; it does not
