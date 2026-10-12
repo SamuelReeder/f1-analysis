@@ -567,11 +567,11 @@ connected controller checks. The initial launcher rejected a scope priority
 property before Python started; the corrected launcher applies priority to the
 child command, retaining the same memory and CPU caps.
 
-The [paired kernel](overall_paired_simulation.md) retains the original baseline
+The first [paired kernel](overall_paired_simulation.md) retained the original baseline
 simulator and replays its event randomness for explanations. It shares a
 qualifying intervention's grid between the qualifying-only and combined probes,
-and omits their unused championship countback. Every explanatory point total
-still comes from the existing full-field race-order and points functions. The
+and omits their unused championship countback. That version computed every
+explanatory point total through the existing full-field race-order and points functions. The
 summary and controller bind the kernel and its definition in their source
 identities. Fitting sources, data and the pending numerical proposal are unchanged.
 
@@ -594,10 +594,31 @@ measurement calibrates those assumptions or supplies accepted driver rankings.
 The subsequent [batching record](../outputs/championship/development/overall-paired-batch-checks/verification.json)
 checks a kernel that processes the intervened-driver axis together. It records
 the original qualifying random values and repeats each draw lane's values and
-parameters across that axis. The original qualifying, race-order and full-field
-scoring functions remain in use. Replay verifies the requested method, shape,
+parameters across that axis. That measured version used the original qualifying,
+race-order and full-field scoring functions. Replay verifies the requested method, shape,
 degrees of freedom and complete request inventory. Direct comparisons check
 qualifying grids and the following race/retirement random values, in addition
 to the existing complete season and controller checks. This changes computation
 only; all fixed draws, replicates, events, entrants and explanations remain
 required. Complete-run practicality and scientific acceptance remain open.
+
+The [own-driver scoring definition](overall_own_points.md) then specializes the
+explanatory computation to the generated complete crossing-order permutations.
+It counts competitors ahead of the affected driver by distance and crossing
+order, retaining the original classification threshold and points-table function.
+It rejects missing/repeated competitors, invalid distances and unsupported
+all-retired scenarios. The original baseline classification and championship
+countback are unchanged; the helper does not replace general dead-heat scoring
+or race adjudication.
+
+Its [verification](../outputs/championship/development/overall-own-points-checks/verification.json)
+records exact agreement against full-field scoring for exhaustive small-field
+boundary cases, generated full-size fields and the complete paired/controller
+tests. The unchanged maximum-size resource block has identical parameter and
+complete output fingerprints across all recorded implementations. The recorded
+paired-block duration falls from 300.745 seconds in the original implementation
+to 28.700 seconds with own-driver scoring; the connected focused suite passes
+236 tests. These are local synthetic engineering measurements, with the same
+clock and workload limits described above. Full posterior simulation, numerical
+ranking acceptance and scientific validation have not been completed. The
+original failed numerical profile and pending separate-study approval remain.

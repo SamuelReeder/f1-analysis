@@ -1,0 +1,166 @@
+{
+  "recorded_at": "2026-10-12T18:41:08.514636+00:00",
+  "review_source_sha256": "8f3cb502e733b2cb1a8b8a7dea321697865bfe686f7b22490db387ed704432ed",
+  "reports": {
+    "exhaustive.xml": {
+      "source_commit": "ac69b9b6e007dc5dea965083e94b1d9193f34f38",
+      "sha256": "4bcbad2c946a82a4aac9ff5974e20ad718e54cb7b6d4fd4569469e8a1b31d844",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "reported_seconds": 1.08,
+      "output_file": "exhaustive.txt",
+      "output_sha256": "6a5af9736f8b026afca4e1e282c9f73726ed2ae581d614255242884a7f870fc6"
+    },
+    "connected.xml": {
+      "source_commit": "d8ced5dfe8d79887b9e2bea6718b2bee6d224d1c",
+      "sha256": "4e46d59609534a1d34e6daa52e1fb87f35d664d52f6a6c6f16bdca286c3a6187",
+      "tests": 236,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "reported_seconds": 24.16,
+      "output_file": "connected.txt",
+      "output_sha256": "d989712d4783c52017b01b014ff4c34e1570ac8bfc607ef08032d8c6348a647e"
+    }
+  },
+  "resources": {
+    "original": {
+      "file": "overall-paired-simulation-resource-checks/resources.json",
+      "sha256": "a83dad1ce2d10bd5b5ce49692bba74b9fbe8dc60a6261c2d4341ac0a5ac48ef8",
+      "source_commit": "ebca96cff91c5ce6acaef403dd166ec6661d511b",
+      "paired_block_seconds": 300.74536686501233,
+      "accumulation_seconds": 0.04626210796413943,
+      "total_monotonic_seconds": 300.9264580869931,
+      "timestamp_interval_seconds": 273.379239,
+      "process_max_rss_kib": 353952,
+      "limits": {
+        "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r2682d591003a47fabef77b0c57ac4708.scope",
+        "memory_max": "3221225472",
+        "cpu_max": "200000 100000"
+      },
+      "input_sha256": "b136cd5dcbd1832ad0a58a13a5d8793e6437c94788b60a6fc328e54b05f59c99",
+      "output_sha256": "8b0e07da6c7d2b1a152cf4f8417068fa53ac0867c36aedc58aec4ac9c31d05ee"
+    },
+    "shared_randomness": {
+      "file": "overall-paired-simulation-resource-checks/optimized/resources.json",
+      "sha256": "f13d0457f05d9da74cc5e6833c59b71033be673a441f042fc8cdbf1a19b5502f",
+      "source_commit": "237fc495fb6fe8dc61dff0dc2b27051a4c6c72be",
+      "paired_block_seconds": 155.79613651597174,
+      "accumulation_seconds": 0.046888536016922444,
+      "total_monotonic_seconds": 155.97199001995614,
+      "timestamp_interval_seconds": 141.949319,
+      "process_max_rss_kib": 365992,
+      "limits": {
+        "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r7cde58762b214de3941088b2ba476e6d.scope",
+        "memory_max": "3221225472",
+        "cpu_max": "200000 100000"
+      },
+      "input_sha256": "b136cd5dcbd1832ad0a58a13a5d8793e6437c94788b60a6fc328e54b05f59c99",
+      "output_sha256": "8b0e07da6c7d2b1a152cf4f8417068fa53ac0867c36aedc58aec4ac9c31d05ee"
+    },
+    "batched_interventions": {
+      "file": "overall-paired-batch-checks/resource/resources.json",
+      "sha256": "7944dd2eca1a0d310254c9e202bcfef0285108cac78c8676797284a2e6c64f37",
+      "source_commit": "dcb364c30b5dc6e7ff50896130a0948d70ac1157",
+      "paired_block_seconds": 101.36434178700438,
+      "accumulation_seconds": 0.04455949197290465,
+      "total_monotonic_seconds": 101.53398613497848,
+      "timestamp_interval_seconds": 92.518545,
+      "process_max_rss_kib": 369196,
+      "limits": {
+        "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r77428bd91e27447ab3e804de9f210d82.scope",
+        "memory_max": "3221225472",
+        "cpu_max": "200000 100000"
+      },
+      "input_sha256": "b136cd5dcbd1832ad0a58a13a5d8793e6437c94788b60a6fc328e54b05f59c99",
+      "output_sha256": "8b0e07da6c7d2b1a152cf4f8417068fa53ac0867c36aedc58aec4ac9c31d05ee"
+    },
+    "own_driver_scoring": {
+      "file": "overall-own-points-checks/resource/resources.json",
+      "sha256": "21b143b82ecf39212308f4604ed32b6691c2fdd7e690546b3c72829a6bc27415",
+      "source_commit": "d8ced5dfe8d79887b9e2bea6718b2bee6d224d1c",
+      "paired_block_seconds": 28.699652464012615,
+      "accumulation_seconds": 0.04579534102231264,
+      "total_monotonic_seconds": 28.87767137901392,
+      "timestamp_interval_seconds": 26.372148,
+      "process_max_rss_kib": 369612,
+      "limits": {
+        "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r4ba2ba71574442dbb9097fc31f7bb06a.scope",
+        "memory_max": "3221225472",
+        "cpu_max": "200000 100000"
+      },
+      "input_sha256": "b136cd5dcbd1832ad0a58a13a5d8793e6437c94788b60a6fc328e54b05f59c99",
+      "output_sha256": "8b0e07da6c7d2b1a152cf4f8417068fa53ac0867c36aedc58aec4ac9c31d05ee"
+    }
+  },
+  "exact_inputs_and_complete_outputs_match": true,
+  "recorded_duration_ratio_to_original": 10.479059537119005,
+  "recorded_duration_ratio_to_batched": 3.5319013675900175,
+  "fixed_workload": {
+    "draws": 128,
+    "replicates": 128,
+    "seed": 20261012,
+    "chain": 0,
+    "draw_start": 0,
+    "replicate_start": 0,
+    "explanations": [
+      "qualifying_pace",
+      "total_race_pace",
+      "all"
+    ],
+    "baseline_and_probe_panels": 67,
+    "baseline_seasons": 16384,
+    "baseline_and_probe_seasons": 1097728
+  },
+  "hypothetical_complete_schedules": {
+    "initial": {
+      "posterior_shape": [
+        4,
+        800
+      ],
+      "replicates": 250000,
+      "blocks": 54712,
+      "baseline_seasons": 800000000,
+      "baseline_and_probe_seasons": 53600000000,
+      "executed": false,
+      "conditional_difference_mcse_bound": 0.05
+    },
+    "largest_retry": {
+      "posterior_shape": [
+        4,
+        3200
+      ],
+      "replicates": 250000,
+      "blocks": 195400,
+      "baseline_seasons": 3200000000,
+      "baseline_and_probe_seasons": 214400000000,
+      "executed": false,
+      "conditional_difference_mcse_bound": 0.05
+    }
+  },
+  "checks": [
+    "Exhaustive small-field distance/order cases spanning the classification threshold match the original full-field scorer's diagonal",
+    "Generated full-size fields and no-points controls match exactly, with read-only inputs unchanged",
+    "Invalid orders, incomplete axes, invalid distances and unsupported all-retired scenarios are rejected",
+    "The full original paired-simulator and connected archive/controller checks remain passing",
+    "The unchanged maximum-size measured block has matching input and complete output fingerprints across every recorded implementation"
+  ],
+  "focused_suites_overlap": true,
+  "full_repository_suite_rerun": false,
+  "fitting_sources_data_and_pending_proposal_unchanged": true,
+  "mcmc_run": false,
+  "full_posterior_workload_executed": false,
+  "simulation_precision_established": false,
+  "scientific_evidence_verified": false,
+  "publication_allowed": false,
+  "full_goal_complete": false,
+  "limitations": [
+    "Specialization for complete strict generated orders; general dead-heat adjudication remains with the original scorer",
+    "Measured local resource fixture has zero retirement hazard and full racing distance; smaller exact tests cover retirements",
+    "Monotonic durations and UTC intervals are retained separately; their earlier discrepancy has no established cause",
+    "Recorded duration ratios apply only to these local blocks, not full-run or intended-runner cost",
+    "Full workload feasibility and precision, the failed numerical case, recovery and independent validation remain unresolved"
+  ]
+}
