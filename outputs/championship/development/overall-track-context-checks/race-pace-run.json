@@ -1,0 +1,59 @@
+{
+  "source_commit": "f8ccb4b66419a7da49ed457f51c2888fe0f27882",
+  "purpose": "Regenerate unchanged existing race-pace model and fixed validation after corrected timeline inputs",
+  "unit": "f1-race-total-track-v1.service",
+  "launch_properties": {
+    "MainPID": "668050",
+    "ExecMainStartTimestamp": "Mon 2026-10-12 09:48:13 EDT",
+    "Slice": "f1.slice",
+    "MemoryMax": "10737418240",
+    "MemorySwapMax": "1073741824",
+    "Nice": "19",
+    "ActiveState": "active",
+    "SubState": "running",
+    "InvocationID": "1ff2906e06ce408d9d89f3c90ffb5826"
+  },
+  "slice_properties": {
+    "CPUWeight": "10",
+    "CPUQuotaPerSecUSec": "8s"
+  },
+  "command": [
+    "/home/sreeder/f1-analysis/.venv-gpu/bin/python",
+    "-u",
+    "-m",
+    "f1rank.race_total",
+    "--validate",
+    "--export"
+  ],
+  "environment": {
+    "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+  },
+  "input_hashes": {
+    "f1rank/race_total_model.py": "d5ac8de128f21a4ba54cd10b30dfd44b388c32f60434b8df673614f318f11179",
+    "f1rank/race_total.py": "5eda2ea367dc42eea8b20ba8634c607e648c7dc8d8d40d5f7f594fb679d2e204",
+    "f1rank/race_publication.py": "e3bd070bd5fc97e56a0a1d782b88c05791fcdc26c27775bebe7cc871819c4383",
+    "f1rank/race_targets.py": "ececa920bb14982330e9f89584d144aa4573d39a9bb4b1203900f4c042edc9f9",
+    "f1rank/racepace.py": "2acd02207e5f58aab73752e8f7cec36d1ba31f289313b0cf0b152fd8d6fd8e0c",
+    "f1rank/artifacts.py": "2e9b0b2171d3fb2db3fecea14c944ed3b2d4865ea87c853535bc80e245ee9bbb",
+    "data/processed/race_laps.parquet": "ec207fe6188a5d664b8554bd7f171f2ed30425ed2a5216dc701e67c20ce44d96",
+    "data/processed/race_weather.parquet": "ee5609b61f3a9020c29f6fff9cd68fc05dd21e2607127819e97150c3e63445b5",
+    "data/processed/timeline.parquet": "b6cb2b15a59c2f5fc90ff2648a21cc2adc9351a8f093b1c26333519a49e48922",
+    "data/processed/entries.parquet": "b3b39c63dcf372b945a027a639c6d587f961593e1fe391db7fef6a802c580673",
+    "data/processed/race.parquet": "150a0ade6f32c82e54d648a2c1d72a382e2c831e3736691c94e9ef6905f9b0f3",
+    "data/processed/race_classification.parquet": "3600e360c706c06fb38a5391be106e79b6170d30bcdda8d7c38f01d34c28bc11",
+    "data/processed/events.parquet": "8ee0985bd11b0962168ac02353b6dee1361ad0526f2a9d4933f901f32016a2f8",
+    "data/processed/drivers.parquet": "0cd1efedc831515d51cce8217a6f6968f1d355be92a91175ef12f52b36c700db"
+  },
+  "runner_script": "#!/bin/bash\nset -u\n/home/sreeder/f1-analysis/.venv-gpu/bin/python -u -m f1rank.race_total --validate --export\nresult=$?\nprintf '%s\\n' \"$result\" > outputs/logs/race-total-track-v1/exit.status\nexit \"$result\"\n",
+  "waiter_script": "#!/bin/bash\nset -u\nstop_at=$((SECONDS + 7200))\nwhile (( SECONDS < stop_at )); do\n    if [[ -f outputs/logs/race-total-track-v1/exit.status ]]; then\n        cat outputs/logs/race-total-track-v1/exit.status\n        exit 0\n    fi\n    state=$(systemctl --user show f1-race-total-track-v1.service --property=ActiveState --value)\n    if [[ \"$state\" != active && \"$state\" != activating ]]; then\n        printf 'Service state: %s\\n' \"$state\"\n        exit 1\n    fi\n    sleep 1200\ndone\nprintf 'Wait interval expired; inspect the same service before rearming.\\n'\nexit 2\n",
+  "log": "outputs/logs/race-total-track-v1/fit.log",
+  "exit_status": "outputs/logs/race-total-track-v1/exit.status",
+  "waiter_session_id": 5642,
+  "monitor_interval_seconds": 1200,
+  "waiter_maximum_seconds": 7200,
+  "numerical_settings_changed": false,
+  "gate_or_fold_changed": false,
+  "separate_overall_coordinate_study_approved": false,
+  "overall_model_inputs_key": "eae65767fe29bedcf396beeddbd8bf19b5bdc2a5769dd70f10fda50ef22bad18",
+  "publication_or_push_authorized": false
+}
