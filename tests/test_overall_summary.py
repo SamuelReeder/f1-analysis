@@ -356,7 +356,8 @@ def test_failed_simulated_season_is_not_replaced_or_conditioned_away():
             chain=0, draw_start=0, replicate_start=0, advancing=(4, 2))
 
 
-@pytest.mark.parametrize("dependency", ["analysis/overall_paired_simulation.py", "docs/overall_paired_simulation.md"])
+@pytest.mark.parametrize("dependency", ["analysis/overall_paired_simulation.py", "docs/overall_paired_simulation.md",
+    "analysis/overall_own_points.py", "docs/overall_own_points.md"])
 def test_paired_kernel_and_definition_are_bound_before_generation(monkeypatch, dependency):
     import analysis.overall_summary as module
     monkeypatch.setitem(module.SIMULATOR_SOURCES, dependency, "0" * 64)

@@ -25,6 +25,7 @@ IDENTITY_KEYS = {"fit_id", "posterior_key", "scenario_key", "simulation_key"}
 IMPLEMENTATION_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 SIMULATOR_SOURCES = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in (
     "analysis/overall_paired_simulation.py", "docs/overall_paired_simulation.md",
+    "analysis/overall_own_points.py", "docs/overall_own_points.md",
     "f1rank/overall/simulation.py", "f1rank/overall/scoring.py", "f1rank/overall/order.py")}
 
 

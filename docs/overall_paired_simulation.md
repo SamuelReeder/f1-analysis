@@ -17,8 +17,10 @@ uses the baseline grid. Keep the original race-strength expression and its
 operation order; adding a delta to an already rounded strength is not required
 to give an identical result.
 
-Score each intervention through the existing full-field race-order and points
-functions and retain only the intervened driver's season points. Explanations
+Order each intervention with the existing full-field race-order function.
+The [own-driver scorer](overall_own_points.md) computes exactly the affected
+driver's points under the existing classification and points rules, without
+constructing unused classifications for its competitors. Explanations
 do not consume the intervention's championship ranks or title probability, so
 their championship countback is omitted. Baseline countback remains unchanged.
 Retirement uniforms and hazards do not depend on the state intervention, so a
@@ -39,10 +41,11 @@ Check the random method, requested shape and Student-t degrees of freedom on
 replay, and require that all recorded requests are consumed. There are no new
 random draws or alternative seeds on this intervention axis.
 
-Pass the batched strengths, shared Gumbels and shared completion distances to
-the original race-order and full-field scoring functions. Retain the diagonal
-of the intervention/driver axes: every driver's own points from its own
-intervention. Keep season additions in their original event order. Broadcasting
+Pass the batched strengths and shared Gumbels to the original race-order
+function. With shared completion distances, retain every driver's own points
+from its own intervention. The original batched full-field scorer is preserved
+as a recorded comparison; the equivalent own-driver specialization removes
+unneeded work. Keep season additions in their original event order. Broadcasting
 inputs must not mutate them or pair different draw lanes. The independent
 replicate loop, baseline season ranks and complete field remain unchanged.
 

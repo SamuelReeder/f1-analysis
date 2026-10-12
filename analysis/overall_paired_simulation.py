@@ -7,8 +7,8 @@ unneeded: only the intervened driver's season points enter the summary.
 """
 import numpy as np
 
+from analysis.overall_own_points import own_driver_points
 from f1rank.overall.order import numpy_perturbed_order
-from f1rank.overall.scoring import score_grand_prix
 from f1rank.overall.simulation import QUALIFYING_FIELDS, qualifying_grid, simulate
 
 PROBE_ORDER = ("qualifying_pace", "total_race_pace", "all")
@@ -112,14 +112,11 @@ simulation here retains all original scenario and failure validation too.
             pace = draws.pace_coefficient[:, scenario.context, None, None]
             grid_effect = draws.grid_coefficient[:, scenario.context, None, None]
             many_gumbels = np.broadcast_to(gumbels[:, None, :], (nd, n, n))
-            many_laps = np.broadcast_to(laps[:, None, :], (nd, n, n))
             # Keep the original expression/order of operations. Adding a
             # strength delta to a rounded baseline need not be bit-identical.
             for k, (race_state, qualifying) in enumerate(
                     ((r[:, None, :], changed_grid), (r_probe, grid[:, None, :]), (r_probe, changed_grid))):
                 strength = pace * (race_state + rday[:, None, :]) - grid_effect * np.log(qualifying)
-                line = np.argsort(numpy_perturbed_order(strength, many_gumbels), axis=-1) + 1
-                _, points = score_grand_prix(many_laps, line, scheduled_laps=scenario.laps,
-                    leader_laps=scenario.laps, consecutive_racing_laps=scenario.consecutive_racing_laps)
-                probes[:, rep, :, k] += points[:, drivers, drivers]
+                orders = numpy_perturbed_order(strength, many_gumbels)
+                probes[:, rep, :, k] += own_driver_points(laps, orders, scenario)
     return baseline, probes[:, :, reverse]
