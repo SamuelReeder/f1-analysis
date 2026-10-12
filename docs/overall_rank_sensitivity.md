@@ -79,3 +79,10 @@ Preserve both cases regardless of the sensitivity bounds. This is a descriptive
 reanalysis of known synthetic examples, not new validation or evidence about a
 real driver. Full functional MCMC diagnostics and prospective precision
 registration remain required.
+
+Measure the diagnostic's local cost at the complete chain/draw/field dimensions
+already recorded by the grouped-moment storage fixture. Supply the committed
+points table, padded with zeros, as constant anonymous point means, zero losses
+and the recorded replicate count. This is a synthetic resource workload, not a
+simulation or an accepted posterior. Preserve its full report and the measured
+resource scope; do not extrapolate it to fitting or the full nested simulator.

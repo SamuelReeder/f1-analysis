@@ -95,6 +95,21 @@ def test_full_mean_family_and_variable_replication_are_kept():
     assert all(result[key] is False for key in ('mcmc_precision_verified','rank_precision_established','scientific_evidence_verified','publication_allowed'))
 
 
+def test_well_separated_means_resolve_order_without_claiming_mcmc_acceptance():
+    means=np.broadcast_to([25.,18.,0.],(2,2,3))
+    result=sensitivity.envelope(means,np.full((2,2),250000),['a','b','c'],error_probability=.1)
+    for i,row in enumerate(result['drivers']):
+        expected=([0.]*i)+([1.]*(3-i))
+        assert row['rank_cdf_bounds']['lower']==row['rank_cdf_bounds']['upper']==expected
+    assert result['mcmc_precision_verified'] is result['rank_precision_established'] is False
+
+
+def test_imported_source_cannot_be_relabelled_as_another_implementation(monkeypatch):
+    monkeypatch.setattr(sensitivity,'LOADED_SOURCE_HASHES',{})
+    with pytest.raises(ValueError,match='changed after import'):
+        sensitivity.source_fingerprints()
+
+
 @pytest.mark.parametrize('change',['counts','nan','range','axis','field','delta','losses','complex'])
 def test_incomplete_or_invalid_mean_inventory_is_rejected(change):
     means=np.ones((2,2,2));counts=np.full((2,2),10);field=['a','b'];delta=.1;losses=np.zeros((2,2,2,3))

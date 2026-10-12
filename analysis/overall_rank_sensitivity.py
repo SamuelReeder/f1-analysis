@@ -24,6 +24,9 @@ def sha(path):
         return hashlib.file_digest(handle, "sha256").hexdigest()
 
 
+LOADED_SOURCE_HASHES = {name: sha(ROOT / name) for name in SOURCES}
+
+
 def _field(field, n):
     if (not isinstance(field, (tuple, list)) or len(field) != n or n < 2
             or any(not isinstance(v, str) or not v.strip() for v in field)
@@ -150,7 +153,10 @@ def envelope(points_mean, replicate_counts, field, *, error_probability, probe_l
 def source_fingerprints():
     if json.loads((ROOT / "contracts/overall.json").read_text()) != CONTRACT:
         raise ValueError("Scoring contract changed after import")
-    return {name: sha(ROOT / name) for name in SOURCES}
+    current = {name: sha(ROOT / name) for name in SOURCES}
+    if current != LOADED_SOURCE_HASHES:
+        raise ValueError("Diagnostic sources changed after import")
+    return current
 
 
 def analyse_checked(folder, *, expected_simulation_key, expected_archive_sha256, error_probability, output_dir):
