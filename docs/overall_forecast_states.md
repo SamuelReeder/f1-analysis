@@ -73,8 +73,10 @@ counterfactual also still needs its accepted producer and common scenario.
 No fit is loaded or certified here. Every result leaves convergence, source
 verification, independent evidence and publication flags false. It records the
 training arrays, consumed parameter arrays, implementation hash and supplied
-seed. Production archive loading and intended-runner memory/runtime remain to be
-verified; the current checks use synthetic parameter arrays.
+seed. The [bounded archive reader](overall_posterior_archive.md) now shares the
+fitter's source, receipt and checksum checks. Accepted-fit integration and
+intended-runner memory/runtime remain to be verified; the resource checks use
+synthetic parameter arrays.
 
 ## Bounded processing
 
@@ -104,8 +106,10 @@ bounded. A later arithmetic or processing failure must invalidate the whole
 forecast; successfully consuming an initial batch is insufficient.
 `forecast_states` remains a convenience wrapper that collects the whole
 forecast; its retained output memory grows with the forecast horizon. Neither
-interface verifies or loads a compressed fitted archive. A later integration
-must preserve the fitter's source, checksum and convergence checks.
+interface itself verifies or loads a compressed fitted archive. Callers can use
+the mapped archive context, supplying the expected run and training-array
+identities and completing that context successfully before committing an output.
+The canonical producer still needs this integration and its acceptance checks.
 
 [`overall_forecast_resources.py`](../analysis/overall_forecast_resources.py)
 measures a synthetic workload at the committed training-data shape and the
@@ -139,6 +143,12 @@ The subsequent [batch verification](../outputs/championship/development/overall-
 records bounded validation, original-stream equivalence, terminal reconstruction,
 complete draw coverage and the full local suite on committed source. It links the
 resource workload separately from scientific acceptance.
+
+The subsequent [archive verification](../outputs/championship/development/overall-archive-checks/verification.json)
+exercises compressed loading, validation of unused sites, mutation rejection and
+cleanup. Its local synthetic format fixture produces the same state checksum as
+the uncompressed workload. Its convergence field is a test fixture, not fit
+evidence; no resource check establishes scientific acceptance or CI readiness.
 
 These are probability-interface and software checks, not parameter recovery,
 simulation-based calibration or evidence that the model predicts real races well.

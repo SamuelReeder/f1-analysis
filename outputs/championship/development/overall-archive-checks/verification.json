@@ -1,0 +1,97 @@
+{
+  "recorded_at": "2026-10-12T09:58:52.793859+00:00",
+  "source_commit": "d8d9c3dea20d7bf197f897d158b01248be4b6651",
+  "source_hashes": {
+    "f1rank/overall/fitting.py": "506782633f38e49272479f25c2b6e31c7dc13543fc7ea31603f8d27a62957df7",
+    "analysis/overall_posterior_archive.py": "d963d652dc9711f7a39ea279e9a9a406c902a54be4a588de0922a6d1442f34c5",
+    "analysis/overall_forecast_resources.py": "8aef54db3989ff896d071c133c1b52f2028ad30699a425f2023180fb2e907e0e",
+    "tests/test_overall_posterior_archive.py": "8d705f1871cc767941a027c014bfdea85e1bcf85fdf969b2fe9b123eb547d8a5",
+    "docs/overall_candidate.md": "352b5e586d416d9e9fe7534aa7f4910cf453ae604c75ab1387cd1829890af25f",
+    "docs/overall_rotation_profile_proposal.json": "6abfaccd3265df6497297f9a33dc8256a4ebbb39e3771a4e42df620f5692d340"
+  },
+  "reports": {
+    "software.xml": {
+      "tests": 35,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 13.851,
+      "exit_code": 0,
+      "sha256": "ae1e4413de0fcc05e9e7b9f3e703e6519f6cbbe6ad70752be0e0cddb948eaa2d"
+    },
+    "full-software.xml": {
+      "tests": 381,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 88.477,
+      "exit_code": 0,
+      "sha256": "91f6400cf2c5e025178bdada5f5a7e1b9bc7a921f4eb26482b1fe3ac60678fbe"
+    }
+  },
+  "commands": {
+    "software.xml": "python -m pytest tests/test_overall_posterior_archive.py tests/test_overall_fitting.py -q",
+    "full-software.xml": "python -m pytest -q",
+    "resources.json": "python analysis/overall_forecast_resources.py --compressed --output outputs/championship/development/overall-archive-checks/resources.json"
+  },
+  "execution": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "policy": "Sequential systemd user scopes; resource program also checked its actual cgroup limits"
+  },
+  "source_boundaries": {
+    "software.xml": "Initial focused run before the final source commit. After this report, archive checks captured the original expected digest independently of returned metadata; a mutation regression and exact forecast round-trip test were added.",
+    "full-software.xml": "Full suite ran on committed source after all guard and fixture changes.",
+    "resources.json": "Full-dimension compressed synthetic cache-format workload ran on the same committed source; no fitter was run."
+  },
+  "computation_preserved": {
+    "functions_ast_equal_to_344c725": [
+      "arrays_digest",
+      "committed_registration",
+      "require_clean_inputs",
+      "_sample",
+      "run"
+    ],
+    "fit_settings_ast_equal": true,
+    "probability_and_generator_sources_match_original_profile": {
+      "f1rank/overall/model.py": "e333aa52727051d84649eaeb1bb63fdb97e0135a0aff310ebacccf24dbb8528b",
+      "f1rank/overall/qualifying.py": "8f60d291a289452b9f2a24bb21313ecbbbbc4369060dbaff053fa2b73c0e59b7",
+      "f1rank/overall/recovery.py": "e5926f703a1b6eae6d9ae2ece9a4debfc589ffc7c834ecd026a67440634669e1",
+      "f1rank/model.py": "a92d3c965fa80cc57213b8aa607d232d4196aab2ea76f55e4f4e28e363341d2b",
+      "f1rank/race_total_model.py": "d5ac8de128f21a4ba54cd10b30dfd44b388c32f60434b8df673614f318f11179"
+    },
+    "retry_diagnostics_and_data_unchanged": true,
+    "model_inputs_key": "f57814446f187783b7c90eea93c4b844b0d38202a3dde35114f55dbd9dd3dc9a"
+  },
+  "resources": {
+    "file": "resources.json",
+    "sha256": "f4131bfdca599d283a8e2a1d082c6f519f3b923ec0b8f611bce17c609bd4bc94",
+    "process_max_rss_kib": 1806292,
+    "seconds": {
+      "build_design": 2.0227942610508762,
+      "generate_workload": 4.1763755769934505,
+      "compress_workload": 37.43393901898526,
+      "load_and_validate": 7.470479317009449,
+      "forecast": 6.007527188048698,
+      "close_and_recheck": 0.7335372899542563,
+      "total": 57.921706666995306
+    },
+    "comparison_file": "outputs/championship/development/overall-forecast-batch-checks/resources.json",
+    "comparison_sha256": "a174f45fe4a91d5cd3f3157473aa6ac3632f042d01da04913c42deaf1c8c2576",
+    "parameter_identity_equal": true,
+    "forecast_state_stream_equal": true
+  },
+  "scope": "Shared immutable archive checks, bounded decompression, whole-archive finite/axis validation, selected read-only maps, cleanup, source/receipt/archive mutation rejection and unchanged downstream forecasts.",
+  "limitations": [
+    "Cache-format fixtures use an explicitly synthetic convergence Boolean to exercise I/O; this is not evidence that any fit converged.",
+    "Resource figures cover a local synthetic workload, not MCMC fitting, the intended CI runner or a complete production refresh.",
+    "The source refactor invalidates affected old receipts; prior failures are preserved and the numerical study remains unapproved.",
+    "Recovery, calibration, predictive evaluation, accepted producer integration and deployment remain incomplete."
+  ],
+  "numerical_proposal_status": "proposal_pending_user_approval",
+  "numerical_proposal_user_approved": false,
+  "mcmc_run": false,
+  "real_data_predictions_scored": false,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}

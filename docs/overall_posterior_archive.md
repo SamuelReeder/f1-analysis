@@ -60,3 +60,11 @@ successful context exit. It verifies the enforced local memory and CPU limits.
 It does not establish MCMC fitting resources, intended-CI-runner readiness or
 end-to-end refresh behavior. Temporary workload files are discarded; only
 identity, coverage, timing and resource measurements are retained.
+
+The [verification record](../outputs/championship/development/overall-archive-checks/verification.json)
+links the passing full suite and local compressed workload. The consumed
+parameter identity and complete forecast-state checksum match the preceding
+uncompressed workload. It separately verifies that the sampling functions and
+settings were unchanged, and that the probability-model and generator sources
+still match the original failed numerical profile. The pending experiment's
+source fingerprint is current; its approval status remains pending.

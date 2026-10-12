@@ -10,7 +10,7 @@ open until the full acceptance checklist has direct evidence.
 | Shared current qualifying/race model | Joint model and synthetic interface/gradient tests | Fit, recover and calibrate its shared uncertainty |
 | Scientific specification | Executable likelihood/prior definitions and candidate contract | Final numerical/evaluation/prospective protocol before real-data fitting |
 | Complete entrant/cutoff catalog | Cutoff-first data design; outcome-free forecast catalogue; development state propagation reconstructs uncentred history and retains unseen entrants with population uncertainty | Verified as-of source/calendar inventory, accepted-posterior integration and recovery on the real transfer network |
-| Reproducible fit engine | `fitting.py`; immutable attempts/caches; the exhausted confounded case is preserved; saved-draw geometry diagnosis and equivalent-coordinate prototype | Separate approval and registration before the proposed post-failure numerical study; fresh recovery and runner resource measurements |
+| Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks for full and bounded loaders; the exhausted confounded case and geometry diagnosis are preserved | Separate approval and registration before the proposed post-failure numerical study; fresh recovery and runner resource measurements |
 | Known-truth recovery and simulation-based calibration | Generative responses and complete numerical-profile inventory: connected and sparse-rookie fits converged after retries; confounded fit exhausted its ladder | Complete registered SBC and stress studies, including the unresolved confounded case; no failed case may be discarded |
 | Coherent weekend simulation | Student-t elimination, current total race pace, shared weekend uncertainty | Common operations/conditions calibration, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |
@@ -19,7 +19,7 @@ open until the full acceptance checklist has direct evidence.
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence, common field and matching explanation draws/scenario | Producer/export, pairwise comparisons, and matching component explanations from accepted draws; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
-| Software and runner readiness | Joint state propagation now batches draws and retains terminal history; local synthetic workload at the committed data shape completes under the enforced resource caps; full suite in `development/overall-forecast-batch-checks/verification.json` | Compressed accepted-posterior loading and end-to-end resources; workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
+| Software and runner readiness | Batched state propagation and bounded checked archive loading; local compressed synthetic workload completes under enforced caps with unchanged state checksum; full suite in `development/overall-archive-checks/verification.json` | Accepted-fit integration and end-to-end fitting/refresh resources; workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
 | Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
 
 The numerical profile is registered separately in
@@ -143,3 +143,17 @@ the largest draw shape from the unchanged retry ladder. It verifies actual local
 scope limits, records complete finite output coverage and retains no driver table.
 Compressed accepted-posterior loading and intended-runner resources remain open;
 neither this workload nor its passing software checks authorize a ranking.
+
+The [archive verification](../outputs/championship/development/overall-archive-checks/verification.json)
+adds shared immutable fit checks and bounded decompression. Every archived array
+is checked even when a forecast retains only selected sites. The compressed
+synthetic format fixture matches the earlier uncompressed parameter identity and
+forecast-state checksum, under the enforced local resource caps. Its convergence
+Boolean is explicitly a fixture field, not a successful numerical fit.
+
+The shared fitter refactor changes the model source fingerprint and the pending
+proposal is updated accordingly. Protected sampling functions/settings and the
+original probability-model/generator sources are verified unchanged. Prior
+failures remain preserved; affected outputs still require regeneration and the
+proposed numerical study still requires the outstanding approval. Accepted-model
+integration, scientific evidence and intended-runner readiness remain open.
