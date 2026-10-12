@@ -1,0 +1,276 @@
+{
+ "source_commit": "91d7a75fd46acf2ff6cf47db1d3ce6f178368acc",
+ "audit_source_sha256": "bc8d27be7b05e45c3b269ee9f345396ccf23396221f8b55a7fec27b72e04fe82",
+ "fit_revision": "350b238",
+ "fit_identity": "20261002T002001Z",
+ "fit_fingerprint": "683ad2df34ea41b4",
+ "fit_hashes": {
+  "archive": "b05a68620c36a8ccfe76cbf40000adddb0bdb47d69a5297c7412697948ea205f",
+  "metadata": "f7b21b1a486f643c29e7d8f714b065a5a1d9f30ebd803762011ce48c5142508e"
+ },
+ "original_source_and_data_sha256": {
+  "f1rank/model.py": "a92d3c965fa80cc57213b8aa607d232d4196aab2ea76f55e4f4e28e363341d2b",
+  "f1rank/lineage.py": "17a6af0cd00fd1f171aac23766d79c2337f0905a8e39289b279dbf4f27fc634a",
+  "data/processed/events.parquet": "8ee0985bd11b0962168ac02353b6dee1361ad0526f2a9d4933f901f32016a2f8",
+  "data/processed/entries.parquet": "b3b39c63dcf372b945a027a639c6d587f961593e1fe391db7fef6a802c580673",
+  "data/processed/drivers.parquet": "0cd1efedc831515d51cce8217a6f6968f1d355be92a91175ef12f52b36c700db",
+  "data/processed/quali_times.parquet": "4ca966349ce047fce097c9aae0f71dc411f95998408554bf94e6db01c938b1e6"
+ },
+ "unchanged_sampling_functions": [
+  "to_jax",
+  "initial_values",
+  "fit",
+  "fingerprint",
+  "design_ids"
+ ],
+ "original_design_sha256": "1e517556ab14b02e106bc0e611d76b0dbf9c73fec500f6b4bf58628491e49fcf",
+ "current_design_sha256": "4fc124f37db9ad14ef67d42ef6cb46000e4b7914588e3cf91a5841094125712c",
+ "exact_model_arrays": {
+  "n_drivers": {
+   "dtype": "int64",
+   "shape": [],
+   "sha256": "e398142931ca52d61ce08a16f68f29270fd272253bf84b7bc800899efb5698ca"
+  },
+  "n_entries": {
+   "dtype": "int64",
+   "shape": [],
+   "sha256": "cb732aeb06791f37e34f0a43b221a3917d4a4d77ef816e9184d237cc09861c8e"
+  },
+  "n_cars": {
+   "dtype": "int64",
+   "shape": [],
+   "sha256": "8a6301cb9f3c58fa0b8f92c536a71c56fc55ddd87f9587bd8cf27d71dd9e01d9"
+  },
+  "n_sessions": {
+   "dtype": "int64",
+   "shape": [],
+   "sha256": "1a1be85b0f74b698a4a970c899466f8f1b085a1b5f707e43de0a198fc0b1c7f7"
+  },
+  "n_events": {
+   "dtype": "int64",
+   "shape": [],
+   "sha256": "f87473049399914397cf90227dacdb273005d90e70cb52116a606e506b5599b9"
+  },
+  "n_circuits": {
+   "dtype": "int64",
+   "shape": [],
+   "sha256": "dd3168a635e962767dc4501dcef1d88bdfd9825d9c5a55d01dff715e7da9b5ec"
+  },
+  "n_team_seasons": {
+   "dtype": "int64",
+   "shape": [],
+   "sha256": "3ee7e1c4088240b12c9ff4cb0468bdcf227b4966fed52ff2bfe5334c52958c87"
+  },
+  "entry_event": {
+   "dtype": "int64",
+   "shape": [
+    7246
+   ],
+   "sha256": "ab3778c870225cc3aa94697fac9aaaa36b64a440989eddc7f14972ac47cc030f"
+  },
+  "car_event": {
+   "dtype": "int64",
+   "shape": [
+    3624
+   ],
+   "sha256": "f09b3e4ad87450eb8eb3a7f1261d446f79add49c2f5cd86f398896e6b309feae"
+  },
+  "car_team_season": {
+   "dtype": "int64",
+   "shape": [
+    3624
+   ],
+   "sha256": "3e73df660d65ae3f82b46391bd4fd6a76a8f3239cea1f61a55aead61795a4e0d"
+  },
+  "car_circuit": {
+   "dtype": "int64",
+   "shape": [
+    3624
+   ],
+   "sha256": "5018fea75ed4afab72cd65e78fc821b0e3658ca157d0fcd65764cf6ebad85553"
+  },
+  "circuit_factor": {
+   "dtype": "float64",
+   "shape": [
+    36
+   ],
+   "sha256": "24d4245760283138710e6d069043428150e998bb1617d548dd8e926db9bd204f"
+  },
+  "entry_driver": {
+   "dtype": "int64",
+   "shape": [
+    7246
+   ],
+   "sha256": "80f80300fcb2c2af3d7aa1bdd6c27a7fa138a5dccf184eac24cdf04a00a4c0df"
+  },
+  "entry_stint": {
+   "dtype": "int64",
+   "shape": [
+    7246
+   ],
+   "sha256": "3bd13015919aff6cb14f70531d3a6fe0866517a712003a971ecb1819449ff5c1"
+  },
+  "entry_spell": {
+   "dtype": "int64",
+   "shape": [
+    7246
+   ],
+   "sha256": "2f5e80aef4822d5f8412fcfa7f9b6bc4c057657ffe46367012f5bef350acdf56"
+  },
+  "n_spells": {
+   "dtype": "int64",
+   "shape": [],
+   "sha256": "116647996ba5768b31a6cfed010b35e3d6c50917c214c64e4e1fa2f34d7208b3"
+  },
+  "entry_era_stint": {
+   "dtype": "int64",
+   "shape": [
+    7246
+   ],
+   "sha256": "4c2611a48bd4004e3302f904b451f94961aa3af75e7dbff09b6bb5f1b2ddb57e"
+  },
+  "n_era_stints": {
+   "dtype": "int64",
+   "shape": [],
+   "sha256": "1781f6b93d1d180d7717d03441ca642f1ebe74e548f05b31b2ce4631efae61fc"
+  },
+  "entry_placebo": {
+   "dtype": "int64",
+   "shape": [
+    7246
+   ],
+   "sha256": "13cce4c2dbcebc27f7a7914b662b502324ff03ae9aa3f9ff8ee0edf2e7ed942a"
+  },
+  "n_placebo": {
+   "dtype": "int64",
+   "shape": [],
+   "sha256": "4e8e14f0ac28d4a6840065d73ba438653d810ecc41ec9b7509615e009a5f3da4"
+  },
+  "n_stints": {
+   "dtype": "int64",
+   "shape": [],
+   "sha256": "f090d8def1e8b5306741957d592246cc08a6e5c88bfe9fe501389cb17c35d971"
+  },
+  "entry_first": {
+   "dtype": "bool",
+   "shape": [
+    7246
+   ],
+   "sha256": "8a2d31f9c35a893c501c19783cf852ec7db4ced29ed029819e18df81f9ed8399"
+  },
+  "entry_same_season": {
+   "dtype": "bool",
+   "shape": [
+    7246
+   ],
+   "sha256": "80cf8dfbf086a9f0605886884ef8c5f62b2ba4a52bc76a86c3a6f1b7ac47a14b"
+  },
+  "entry_event_gap": {
+   "dtype": "float64",
+   "shape": [
+    7246
+   ],
+   "sha256": "d6394b2ef1a2cdd1c1a0d0d8d613303e0b4906eaaa27f5702727e34b7b11fcdd"
+  },
+  "entry_season_gap": {
+   "dtype": "float64",
+   "shape": [
+    7246
+   ],
+   "sha256": "0374e889c0c89b64126cfe257e6a5bc92b3073a5d3927e0161517ba61d30c2e7"
+  },
+  "entry_experience": {
+   "dtype": "float64",
+   "shape": [
+    7246
+   ],
+   "sha256": "bedbd7afec3125c5adfea8b971ba060ab22f978683c260aa0d76dd2620f836b6"
+  },
+  "entry_age_over": {
+   "dtype": "float64",
+   "shape": [
+    7246
+   ],
+   "sha256": "515f3023774cef61f4ca1bd13deea71fb8b36114da4441230f23f80a7d995fa0"
+  },
+  "car_first": {
+   "dtype": "bool",
+   "shape": [
+    3624
+   ],
+   "sha256": "cbfb4499231baddae98e165e91ccc5c4d8ec78944d348690d7f1c795aeb14890"
+  },
+  "car_season_start": {
+   "dtype": "bool",
+   "shape": [
+    3624
+   ],
+   "sha256": "60ed680c9ae67cbbf38ff0f0321dd81e8b5f52d612fc8496a62506e4626071fe"
+  },
+  "car_reset": {
+   "dtype": "bool",
+   "shape": [
+    3624
+   ],
+   "sha256": "4b65daff8c9c8c8093c6c1f7b36acd40871fe99ae54ba4ee19cc3a4db9846390"
+  },
+  "obs_session": {
+   "dtype": "int64",
+   "shape": [
+    15656
+   ],
+   "sha256": "adec6d6a1c28ca4591c4d7fb60897653f5ccf449b1e6b532cb5844d33679c5bb"
+  },
+  "obs_entry": {
+   "dtype": "int64",
+   "shape": [
+    15656
+   ],
+   "sha256": "cc82108e4681fd157e5646b8878c256e943c8241bac32d0ff719a23568f3806c"
+  },
+  "obs_car": {
+   "dtype": "int64",
+   "shape": [
+    15656
+   ],
+   "sha256": "b1121a8223b3800c381427df48f6f5e6587727473e5c9083e80dd8b14a82ce45"
+  },
+  "obs_car_segment": {
+   "dtype": "int64",
+   "shape": [
+    15656
+   ],
+   "sha256": "0e904e6f5af388ed03ce94078ed639d4aa2b2233e71392ed03e5fb31361a2c1c"
+  },
+  "n_car_segments": {
+   "dtype": "int64",
+   "shape": [],
+   "sha256": "951ff07845f625b4a4eaef6bd2c686c6e870daa8f498e728a5240598cc0f0d83"
+  },
+  "car_segment_session": {
+   "dtype": "int64",
+   "shape": [
+    8720
+   ],
+   "sha256": "5081df7630317e10622af958eabde6170069da5ed2011d0a9aced19e7cfb6edd"
+  },
+  "y": {
+   "dtype": "float64",
+   "shape": [
+    15656
+   ],
+   "sha256": "a8004f3e6496e88f15465af9a311591d82b16fd872d6d9d0c0f9f831a60d1c7a"
+  },
+  "train": {
+   "dtype": "bool",
+   "shape": [
+    15656
+   ],
+   "sha256": "eba41fb2be00c485bbd0a897eb752c6baf6e572cc6b47a31e997e421afde4f3e"
+  }
+ },
+ "state_identity_equal": true,
+ "compatible_for_qualifying_reexport": true,
+ "requires_export_convergence_check": true,
+ "accepts_overall_model": false
+}
