@@ -84,10 +84,10 @@ def test_permuted_field_and_noop_interventions_keep_original_identity_pairing():
     np.testing.assert_array_equal(probes, np.repeat(baseline["points"][..., None], len(PROBE_ORDER), axis=-1))
 
 
-def test_exact_sporting_ties_and_compensated_large_strengths_are_unchanged():
+def test_no_points_and_compensated_large_strengths_are_unchanged():
     joint = fixture()
-    # A no-points season can retain championship ties. Extreme common ability
-    # also exercises the original compensated Gumbel ordering without overflow.
+    # No-points seasons still use sporting countback. Extreme common ability
+    # exercises the original compensated Gumbel ordering without overflow.
     joint = replace(joint, race=np.full_like(joint.race, 1e20))
     scenarios = [Scenario("reference", 0, 60, 0)]
     settings = dict(replicates=3, seed=[71, 0, 0, 0], advancing=(4, 2))
