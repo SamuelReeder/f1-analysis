@@ -26,6 +26,7 @@ IMPLEMENTATION_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 SIMULATOR_SOURCES = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in (
     "analysis/overall_paired_simulation.py", "docs/overall_paired_simulation.md",
     "analysis/overall_own_points.py", "docs/overall_own_points.md",
+    "analysis/overall_simulation_moments.py", "docs/overall_functional_diagnostics.md",
     "f1rank/overall/simulation.py", "f1rank/overall/scoring.py", "f1rank/overall/order.py")}
 
 
@@ -151,6 +152,25 @@ class OverallSummary:
     @property
     def storage_bytes(self):
         return sum(value.nbytes for value in vars(self).values() if isinstance(value, np.ndarray))
+
+    def grouped_moments(self):
+        """Copy complete grouped conditional moments for subsequent diagnostics."""
+        if not self._closed or not np.all(self._counts == self.replicates):
+            raise ValueError("Finalize a complete summary before exporting diagnostic moments")
+        if self._sources != _source_fingerprints():
+            raise ValueError("Diagnostic source changed after summary validation")
+        arrays = dict(replicate_counts=self._counts.copy(), points_mean=self._means.copy(),
+            points_sample_covariance=self._covariance_sum/(self.replicates-1),
+            probe_loss_mean=self._loss_means.copy(),
+            probe_loss_sample_variance=self._loss_variance_sum/(self.replicates-1))
+        meta = dict(schema_version=1, purpose="grouped_conditional_simulation_moments",
+            identity=copy.deepcopy(self.identity), field=list(self.drivers), posterior_shape=list(self.shape),
+            replicates_per_draw=self.replicates, n_races=self.n_races, probe_names=list(PROBES),
+            units="points_per_grand_prix", sources=copy.deepcopy(self._sources),
+            conditional_covariance="unbiased_single_season_gp_average; divide_by_replicates_for_mean_error",
+            mcmc_precision_verified=False, rank_precision_established=False,
+            scientific_evidence_verified=False, publication_allowed=False)
+        return meta, arrays
 
     def add(self, result, probe_points, *, chain, draw_start, replicate_start, identity):
         """Add a bounded draw × replicate block after validating it completely.

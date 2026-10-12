@@ -158,6 +158,13 @@ def test_checked_archive_full_schedule_matches_direct_paired_summary(case, monke
                    replicate_start=kwargs["replicate_start"], identity=result["identity"])
     expected = direct.finalize()
     compare_nested({k:result[k] for k in expected}, expected)
+    from analysis.overall_simulation_moments import load_checked
+    metadata, moments = load_checked(case.output, expected_simulation_key=receipt["simulation_key"],
+        expected_archive_sha256=result["diagnostic_moments"]["sha256"])
+    assert metadata == receipt["diagnostic_moments"] == result["diagnostic_moments"]
+    for name, value in direct.grouped_moments()[1].items():
+        np.testing.assert_allclose(moments[name], value, atol=1e-13)
+        assert not moments[name].flags.writeable
     assert controller.digest(case.output / "summary.json") == receipt["summary_sha256"]
     assert json.loads((case.output / "receipt.json").read_text()) == receipt
     assert json.loads((case.output / "summary.json").read_text()) == result
@@ -181,6 +188,7 @@ def test_failure_preserves_progress_and_does_not_create_partial_summary(case, mo
     assert receipt["state"] == "failed_exception" and receipt["completed_blocks"] == 1
     assert "Synthetic interrupted block" in receipt["traceback"]
     assert not (case.output / "summary.json").exists() and not list(case.maps.iterdir())
+    assert not (case.output / "diagnostic_moments.npz").exists()
     with pytest.raises(FileExistsError):
         execute(case)
     assert calls == 2
@@ -207,6 +215,7 @@ def test_mutated_inputs_cannot_produce_a_completed_summary(case, monkeypatch, ch
         execute(case)
     assert json.loads((case.output / "receipt.json").read_text())["state"] == "failed_exception"
     assert not (case.output / "summary.json").exists() and not list(case.maps.iterdir())
+    assert not (case.output / "diagnostic_moments.npz").exists()
 
 
 @pytest.mark.parametrize("change", ["not_committed", "source", "target", "field_mapping", "shape", "partition",

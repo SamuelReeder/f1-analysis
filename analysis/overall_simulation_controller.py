@@ -18,6 +18,7 @@ import numpy as np
 
 from analysis.overall_posterior_archive import mapped_checked_posterior
 from analysis.overall_ranking_recovery import SITES
+from analysis.overall_simulation_moments import write_once as write_moments
 from analysis.overall_summary import (CONTRACT, MAX_BLOCK_DRAWS, MAX_BLOCK_REPLICATES, MAX_STREAM_WORD,
                                      OverallSummary, paired_simulation_block)
 from f1rank.artifacts import atomic_json, digest
@@ -29,6 +30,7 @@ SOURCE_NAMES = (
     "analysis/overall_simulation_controller.py", "analysis/overall_summary.py",
     "analysis/overall_paired_simulation.py", "docs/overall_paired_simulation.md",
     "analysis/overall_own_points.py", "docs/overall_own_points.md",
+    "analysis/overall_simulation_moments.py", "docs/overall_functional_diagnostics.md",
     "analysis/overall_ranking_recovery.py", "analysis/overall_posterior_archive.py",
     "f1rank/artifacts.py", "f1rank/overall/fitting.py", "f1rank/overall/provenance.py",
     "f1rank/overall/simulation.py", "f1rank/overall/scoring.py", "f1rank/overall/order.py",
@@ -292,6 +294,7 @@ def execute(run_dir, design, protocol_path, reference_path, output_dir, *, regis
                             last_completed_block=block, block_inventory_sha256=inventory.hexdigest())
                         atomic_json(output_dir / "receipt.json", receipt)
             result = summary.finalize()
+            moment_metadata, moment_arrays = summary.grouped_moments()
         # A result stays private until the archive's exit checks have passed.
         if (digest(protocol_path) != protocol_key or reference_path.read_bytes() != reference_bytes
                 or protocol["sources"] != source_fingerprints() or design_identity(design) != identity
@@ -304,6 +307,8 @@ def execute(run_dir, design, protocol_path, reference_path, output_dir, *, regis
             reference_scenario_id=reference["scenario_id"],
             unresolved_reference_assumptions=reference["unresolved_before_publication"],
             synthetic=True, reference_source_availability_verified=False)
+        result["diagnostic_moments"] = write_moments(output_dir, moment_metadata, moment_arrays)
+        receipt["diagnostic_moments"] = result["diagnostic_moments"]
         atomic_json(output_dir / "summary.json", result)
         receipt.update(state="complete", summary_sha256=digest(output_dir / "summary.json"),
             conditional_simulation_precision_passed=all(result[name] for name in (

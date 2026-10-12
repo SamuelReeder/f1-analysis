@@ -76,6 +76,41 @@ def test_streaming_moments_and_rank_quantiles_match_direct_nested_arrays():
         accumulator.finalize()
 
 
+def test_grouped_diagnostic_moments_preserve_chains_draws_and_conditional_covariance():
+    points, probes = fixture()
+    accumulator, result = consume(points, probes)
+    metadata, moments = accumulator.grouped_moments()
+    averages = points/2
+    losses = (points[...,None]-probes)/2
+    np.testing.assert_array_equal(moments["replicate_counts"], np.full(points.shape[:2], points.shape[2]))
+    np.testing.assert_allclose(moments["points_mean"], averages.mean(axis=2), atol=1e-13)
+    for c in range(points.shape[0]):
+        for d in range(points.shape[1]):
+            np.testing.assert_allclose(moments["points_sample_covariance"][c,d], np.cov(averages[c,d], rowvar=False), atol=1e-13)
+    np.testing.assert_allclose(moments["probe_loss_mean"], losses.mean(axis=2), atol=1e-13)
+    np.testing.assert_allclose(moments["probe_loss_sample_variance"], losses.var(axis=2, ddof=1), atol=1e-13)
+    assert metadata["field"] == FIELD and metadata["identity"] == IDENTITY
+    assert metadata["probe_names"] == list(PROBES) and metadata["posterior_shape"] == [2,3]
+    assert not metadata["mcmc_precision_verified"] and not metadata["rank_precision_established"]
+    assert not metadata["scientific_evidence_verified"] and not metadata["publication_allowed"]
+    for array in moments.values(): array[...] = 0
+    _, fresh = accumulator.grouped_moments()
+    np.testing.assert_allclose(fresh["points_mean"], averages.mean(axis=2), atol=1e-13)
+
+
+def test_incomplete_or_unfinalized_summary_cannot_export_diagnostic_moments():
+    points, probes = fixture()
+    accumulator = OverallSummary(drivers=FIELD, posterior_shape=(2,3), replicates=5, n_races=2, identity=IDENTITY)
+    with pytest.raises(ValueError, match="Finalize a complete"):
+        accumulator.grouped_moments()
+    for c in range(2):
+        accumulator.add(result_for(points[c]), probes[c], chain=c, draw_start=0, replicate_start=0, identity=IDENTITY)
+    with pytest.raises(ValueError, match="Finalize a complete"):
+        accumulator.grouped_moments()
+    accumulator.finalize()
+    assert accumulator.grouped_moments()[1]["points_mean"].shape == (2,3,3)
+
+
 def test_pairwise_comparisons_and_explanations_use_paired_season_errors():
     points, probes = fixture()
     _, result = consume(points, probes)
