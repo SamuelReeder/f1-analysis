@@ -44,7 +44,7 @@ review. Passing R-hat alone cannot rescue a failure of another criterion.
 
 The final confounded attempt had maximum R-hat 1.057654, minimum bulk ESS
 69.60, minimum tail ESS 70.00 and maximum mean MCSE/SD 0.123368. It had no
-divergences, but every transition reached the registered depth limit. Its
+divergences, but every recorded sampling transition reached the registered depth limit. Its
 largest R-hat was in `overall_sd_day`, the race weekend-variation scale.
 Qualifying form and its scale also failed. These identify diagnostics needing
 investigation, not an established cause of the failure.
