@@ -13,6 +13,7 @@ import resource
 import subprocess
 import sys
 import time
+import types
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -93,15 +94,74 @@ def run(baseline):
         predictive_improvement_established=False, publication_allowed=False)
 
 
+def compare_laps(baseline):
+    """Read-only old/new cleaning comparison on the same cutoff and raw tables."""
+    import ast
+    from f1rank.overall import design
+
+    limits, begun = scope_limits(), time.monotonic()
+    source = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    baseline = subprocess.check_output(["git", "rev-parse", baseline], cwd=ROOT, text=True).strip()
+    historical = lambda name: subprocess.check_output(["git", "show", f"{baseline}:{name}"], cwd=ROOT)
+    if historical("f1rank/racepace.py") != (ROOT / "f1rank/racepace.py").read_bytes():
+        raise ValueError("Other lap-cleaning dependencies changed")
+    def leader_ast(text):
+        return next(ast.dump(node, include_attributes=False) for node in ast.parse(text).body
+                    if isinstance(node, ast.FunctionDef) and node.name == "leader_lap")
+    if leader_ast(historical("f1rank/timeline.py")) != leader_ast((ROOT / "f1rank/timeline.py").read_text()):
+        raise ValueError("Leader-lap lookup changed")
+    names = ["analysis/overall_track_context_audit.py", "f1rank/overall/design.py",
+             "f1rank/racepace.py", "f1rank/timeline.py"]
+    for name in names:
+        if subprocess.check_output(["git", "show", f"{source}:{name}"], cwd=ROOT) != (ROOT/name).read_bytes():
+            raise ValueError("Commit impact-audit sources before running")
+    module = types.ModuleType("f1rank.overall._original_track_design")
+    module.__file__, module.__package__ = str(ROOT / "f1rank/overall/design.py"), "f1rank.overall"
+    sys.modules[module.__name__] = module
+    try:
+        exec(compile(historical("f1rank/overall/design.py"), module.__file__, "exec"), module.__dict__)
+        tables = {name: pd.read_parquet(ROOT / "data/processed" / f"{name}.parquet") for name in design.TABLES}
+        cutoff = str(tables["events"].event_id.max())
+        old_tables = {**tables, "timeline": pd.read_parquet(io.BytesIO(historical("data/processed/timeline.parquet")))}
+        before = module.clean_training_laps(module.bounded_tables(old_tables, cutoff))
+        after = design.clean_training_laps(design.bounded_tables(tables, cutoff))
+    finally:
+        del sys.modules[module.__name__]
+    keys = ["event_id", "driver_id", "lap_number"]
+    if before.duplicated(keys).any() or after.duplicated(keys).any():
+        raise ValueError("Duplicate clean-lap identity")
+    before, after = before.set_index(keys), after.set_index(keys)
+    removed, added = before.index.difference(after.index), after.index.difference(before.index)
+    shared = before.index.intersection(after.index)
+    change = (before.loc[shared, "y"] - after.loc[shared, "y"]).abs()
+    records = lambda index: json.loads(index.to_frame(index=False).to_json(orient="records"))
+    return dict(source_commit=source, baseline_commit=baseline, cutoff=cutoff, limits=limits,
+        source_hashes={name: sha(ROOT/name) for name in names},
+        table_hashes={name: sha(ROOT / "data/processed" / f"{name}.parquet") for name in design.TABLES},
+        original_design_sha256=hashlib.sha256(historical("f1rank/overall/design.py")).hexdigest(),
+        other_cleaning_dependencies_unchanged=True,
+        original_clean_laps=len(before), corrected_clean_laps=len(after),
+        original_clean_events=int(before.index.get_level_values("event_id").nunique()),
+        corrected_clean_events=int(after.index.get_level_values("event_id").nunique()),
+        removed=records(removed), added=records(added),
+        shared_laps_with_changed_transformed_pace=int((change > 0).sum()),
+        max_absolute_transformed_pace_difference=float(change.max()) if len(change) else None,
+        elapsed_seconds=time.monotonic()-begun,
+        peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+        real_predictions_scored=False, downstream_regeneration_required=True, publication_allowed=False)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--baseline", required=True)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--compare-laps", action="store_true", help="Audit cleaning impact without rebuilding outputs")
     args = parser.parse_args()
     if args.output.exists():
         raise FileExistsError("Preserve the existing audit")
-    result = run(args.baseline)
+    result = compare_laps(args.baseline) if args.compare_laps else run(args.baseline)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
     print(json.dumps({name: result[name] for name in
-        ("changed_vsc_event_count", "outcome_context_changes", "elapsed_seconds", "peak_rss_kib")}))
+        ("original_clean_laps", "corrected_clean_laps", "elapsed_seconds", "peak_rss_kib")
+        if name in result}))

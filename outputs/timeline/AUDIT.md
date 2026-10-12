@@ -87,8 +87,8 @@ Evidence rates among retirements, by season:
 ```
 {
  "previous_build": "timeline-v1",
- "added": 0,
- "removed": 0,
+ "added": 100,
+ "removed": 100,
  "cause_changed_by_0.05_plus": []
 }
 ```
