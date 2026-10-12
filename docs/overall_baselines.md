@@ -35,6 +35,16 @@ It does not convert legacy metadata into a successor fit receipt or certify
 source provenance, convergence or scientific acceptance. Those checks remain
 required before an accepted baseline forecast.
 
+The development resource workload in
+[`overall_legacy_resources.py`](../analysis/overall_legacy_resources.py) uses the
+committed cutoff/data dimensions with arbitrary synthetic values. It includes
+historical state blocks that the forecast does not retain, checks every archived
+member, and compares the complete future features and hypothetical actual-grid
+order probabilities before and after compressed loading. Its draw shape comes
+from the existing largest Overall retry solely to size the workload; it does not
+choose future baseline fitting settings. The workload measures the local archive
+and forecast path, not MCMC, accepted-fit diagnostics or intended-runner capacity.
+
 Propagate the original uncentred driver and persistent-car walks from their last
 training states, then centre on the complete announced future field. Retain the
 existing event/season gap scales, experience/age trend, car carryover and reset
