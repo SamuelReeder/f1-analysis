@@ -26,9 +26,14 @@ the saved variables only; it does not change the likelihood, priors or sampling
 settings. Existing centred rating arrays cannot silently substitute for missing
 uncentred states. An older archive lacking these coordinates is rejected and
 remains unusable for this forecast path. No old fit has been relabeled or rerun.
-The legacy metadata/design check also does not provide the successor's immutable
-source receipt, convergence acceptance or bounded archive loading; integration
-of those checks remains required before an accepted baseline forecast.
+The [bounded legacy reader](../analysis/overall_legacy_archive.py) preserves the
+original metadata/design check and additionally requires explicit archive,
+sidecar and full training-array identities. It validates every draw array and
+scalar information field, including unselected members, and closes temporary
+read-only maps on exit. Successful exit rechecks the original files and design.
+It does not convert legacy metadata into a successor fit receipt or certify
+source provenance, convergence or scientific acceptance. Those checks remain
+required before an accepted baseline forecast.
 
 Propagate the original uncentred driver and persistent-car walks from their last
 training states, then centre on the complete announced future field. Retain the
