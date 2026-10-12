@@ -24,11 +24,13 @@ sys.path.insert(0, str(ROOT))
 
 from analysis.overall_forecast_catalog import build_catalog
 from analysis.overall_forecast_states import DEFAULT_DRAW_BATCH, iter_forecast_states
+from analysis.overall_observation_kernels import CONTEXT_NAMES, iter_conditional_weekends
 from analysis.overall_posterior_archive import mapped_checked_posterior
 from f1rank.artifacts import RETRY
 from f1rank.overall.design import build
 from f1rank.overall.fitting import FIT_SETTINGS
 from f1rank.overall.provenance import snapshot
+from f1rank.overall.simulation import QUALIFYING_FIELDS
 
 WORKLOAD_SEED = 20261012
 
@@ -49,7 +51,7 @@ def scope_limits():
     return dict(cgroup=str(group), memory_max=memory, cpu_max=cpu)
 
 
-def parameter_template(design):
+def parameter_template(design, *, observations=False):
     q = design.qualifying.arrays()
     scalar = {key:.15 for key in (
         "sd_level", "sd_skill_race", "sd_skill_season", "overall_sd_level", "overall_sd_drift_race",
@@ -61,15 +63,36 @@ def parameter_template(design):
         overall_walk_z=q["n_entries"], car_step_z=q["n_cars"], car_jump_z=q["n_cars"],
         track_load_z=q["n_team_seasons"], compat_z=q["n_era_stints"], overall_team_z=q["n_era_stints"],
         overall_car_contrast=design.outcomes["car_basis"].shape[1])
+    if observations:
+        scalar.update(sigma0=.4, sigma_tau=.3, nu=5., sd_car_segment=.2)
+        for name in CONTEXT_NAMES:
+            for part, value in dict(base=-3. if name == "hazard" else .2, wet=.1, sc=-.2).items():
+                scalar[f"overall_{name}_{part}"] = value
+            scalar[f"overall_sd_{name}_circuit"] = .3
+            vectors[f"overall_{name}_circuit_z"] = design.outcomes["n_circuits"]
     return scalar, vectors
 
 
-def run(*, compressed=False):
+def observation_arrays(event):
+    """Only numeric conditional outputs, without recording a driver table."""
+    for name in ("grid_feature_slot", "strength", "running_positions", "order_log_probability",
+                 "joint_order_completion_log_probability"):
+        yield name, event[name]
+    for block in ("completion", "context"):
+        for name, value in sorted(event[block].items()):
+            yield block + ":" + name, value
+    yield "qualifying:positions", event["qualifying"]["positions"]
+    for i, segment in enumerate(event["qualifying"]["segments"]):
+        for name, value in sorted(segment.items()):
+            yield f"qualifying:{i}:{name}", value
+
+
+def run(*, compressed=False, observations=False):
     limits = scope_limits()
     tracked = ["analysis/overall_forecast_states.py", "analysis/overall_forecast_catalog.py",
         "analysis/overall_forecast_resources.py", "f1rank/overall/design.py", "f1rank/overall/fitting.py",
         "f1rank/model.py", "f1rank/overall/model.py", "docs/overall_rotation_profile_proposal.json",
-        "analysis/overall_posterior_archive.py"]
+        "analysis/overall_posterior_archive.py", "analysis/overall_observation_kernels.py"]
     source = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     for name in tracked:
         saved = subprocess.check_output(["git", "show", f"{source}:{name}"], cwd=ROOT)
@@ -97,7 +120,7 @@ def run(*, compressed=False):
             prior_entries_after_cutoff=0) for r in field.itertuples()])
     catalog = build_catalog(design, snap)
     shape = (FIT_SETTINGS["chains"], FIT_SETTINGS["samples"] * max(row[1] for row in RETRY))
-    scalars, vectors = parameter_template(design)
+    scalars, vectors = parameter_template(design, observations=observations)
     total_bytes = int(np.prod(shape) * np.dtype("float32").itemsize * (len(scalars) + sum(vectors.values())))
     with tempfile.TemporaryDirectory(prefix="f1-overall-forecast-workload-") as directory:
         if shutil.disk_usage(directory).free < (4 if compressed else 2) * total_bytes:
@@ -136,7 +159,7 @@ def run(*, compressed=False):
             del parameters
             compression_seconds = time.monotonic() - compression_at
         stream, stop, batches, max_batch_bytes = hashlib.sha256(), 0, 0, 0
-        parameter_key = None
+        parameter_key, observation_key = None, None
         loading_at = time.monotonic()
         with ExitStack() as stack:
             if compressed:
@@ -145,16 +168,29 @@ def run(*, compressed=False):
                     expected_arrays_key=catalog["training_arrays_key"], temporary_parent=directory))
             loading_seconds = time.monotonic() - loading_at
             forecast_at = time.monotonic()
-            for batch in iter_forecast_states(design, [snap], parameters, seed=WORKLOAD_SEED,
-                    training_arrays_key=catalog["training_arrays_key"]):
+            args = dict(seed=WORKLOAD_SEED, training_arrays_key=catalog["training_arrays_key"])
+            if observations:
+                scenario = {event_id:dict(wet=False, neutralised=False,
+                    grid_policy="qualifying_order_no_penalties",
+                    exposure_laps={r.driver_id:snap["event"]["scheduled_laps"] for r in field.itertuples()})}
+                iterator = iter_conditional_weekends(design, [snap], parameters, scenario,
+                    advancing=QUALIFYING_FIELDS[len(field)], **args)
+            else:
+                iterator = iter_forecast_states(design, [snap], parameters, **args)
+            for batch in iterator:
                 if batch["draw_range"][0] != stop:
                     raise ValueError("Incomplete forecast draw coverage")
                 stop = batch["draw_range"][1]
                 batches += 1
-                if parameter_key not in (None, batch["consumed_posterior_key"]):
+                state_key = batch["state_parameter_key"] if observations else batch["consumed_posterior_key"]
+                if parameter_key not in (None, state_key):
                     raise ValueError("Posterior identity changed during the resource check")
-                parameter_key = batch["consumed_posterior_key"]
-                arrays = batch["events"][0]["states"]
+                parameter_key = state_key
+                if observations:
+                    if observation_key not in (None, batch["observation_parameter_key"]):
+                        raise ValueError("Observation parameters changed during the resource check")
+                    observation_key = batch["observation_parameter_key"]
+                arrays = dict(observation_arrays(batch["events"][0])) if observations else batch["events"][0]["states"]
                 max_batch_bytes = max(max_batch_bytes, sum(value.nbytes for value in arrays.values()))
                 for name, value in sorted(arrays.items()):
                     if not np.isfinite(value).all():
@@ -182,8 +218,11 @@ def run(*, compressed=False):
             compressed_bytes=compressed_bytes, synthetic_receipt_fixture=compressed,
             unused_archive_site_validated=compressed,
             construction="Arbitrary finite synthetic parameter values; not fitted values or a recovery experiment"),
-        forecast=dict(batches=batches, draws_per_chain=stop, max_batch_state_bytes=max_batch_bytes,
-            batch_stream_sha256=stream.hexdigest(), every_state_finite=True),
+        forecast=dict(kind="conditional_weekend" if observations else "latent_states",
+            batches=batches, draws_per_chain=stop, max_batch_output_bytes=max_batch_bytes,
+            observation_parameters_sha256=observation_key,
+            batch_stream_sha256=stream.hexdigest(), every_output_finite=True,
+            conditions_forecast=False, classification_generated=False),
         baseline_lower_bound=dict(source_revision="deb276e", entry_states=entry_states,
             entry_state_bytes=old_entry_bytes, parameter_plus_entry_state_bytes=total_bytes + old_entry_bytes,
             interpretation="Calculated lower bound, not a measured baseline peak; omits other history arrays, transients and process overhead"),
@@ -200,11 +239,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", required=True)
     parser.add_argument("--compressed", action="store_true", help="Exercise a temporary compressed cache-format fixture")
+    parser.add_argument("--observations", action="store_true", help="Include conditional qualifying, order and completion observations")
     args = parser.parse_args()
     path = Path(args.output)
     if path.exists():
         raise FileExistsError("Preserve the existing resource record")
-    result = run(compressed=args.compressed)
+    result = run(compressed=args.compressed, observations=args.observations)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
     print(json.dumps({key:result[key] for key in ("counts", "forecast", "seconds", "process_max_rss_kib")}))

@@ -65,10 +65,13 @@ specification, alongside future weather, neutralisation and operations.
 
 The result contains latent qualifying/race components and their observed-state
 totals for the announced cars and teams. Those totals are for predictive work;
-they are not the equal-machinery driver ranking. Outcome generation, qualifying
-segment effects, context coefficients, condition integration, calibration and
-baseline predictors remain to be connected and validated. The canonical
-counterfactual also still needs its accepted producer and common scenario.
+they are not the equal-machinery driver ranking. The
+[conditional observation kernels](overall_observation_kernels.md) now connect
+these states to qualifying segments, known-circuit coefficients, running order
+and fixed-exposure completion under explicit scenarios. Condition integration,
+official grids, final classification, calibration and baseline predictors remain
+to be completed and validated. The canonical counterfactual also still needs its
+accepted producer and common scenario.
 
 No fit is loaded or certified here. Every result leaves convergence, source
 verification, independent evidence and publication flags false. It records the
