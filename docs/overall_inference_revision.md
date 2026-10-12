@@ -83,3 +83,7 @@ pending approval with that source identity. Its input audit must reproduce the
 original observations and truths exactly. A future run would evaluate the
 corrected arithmetic and rotated coordinates together; it could not attribute a
 convergence change to either one alone or relabel the original failed profile.
+The [new input audit](../outputs/championship/development/overall-order-numerics-checks/input-audit.json)
+confirms that the corrected source reproduces the registered observations and
+truths. Historical geometry and grid-audit programs deliberately require their
+original model source; their committed reports remain records of those revisions.

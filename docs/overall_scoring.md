@@ -40,6 +40,9 @@ conditions on running status alone or on additional completion information. That
 choice, the exposure policy and corresponding baseline probabilities still must
 be frozen before successor predictive scoring; all required events remain in the
 inventory. Synthetic arithmetic checks do not supply retirement calibration.
+The [conditional-scoring and order-arithmetic verification](../outputs/championship/development/overall-order-numerics-checks/verification.json)
+records the committed implementation and full-suite checks, including aligned
+weights, zero probabilities and rare common conditioning events.
 
 Ordinal diagnostics use log probability and the sum of squared differences
 between predicted and observed cumulative probabilities. Lower ranked probability

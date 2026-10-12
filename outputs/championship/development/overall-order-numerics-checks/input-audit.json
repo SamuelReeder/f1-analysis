@@ -1,0 +1,60 @@
+{
+  "purpose": "numerical_correction_input_audit",
+  "source_commit": "9306a1acec4b773396e493dc8af4f4c21bb2a113",
+  "recorded_at": "2026-10-12T10:41:59.905283+00:00",
+  "model_inputs_key": "a5374e01e0efcae2a7fc55bbc30dfd3cdf090400056bbb3f74a0702d8ecf5c3f",
+  "source_hashes": {
+    "f1rank/overall/model.py": "2c390e130c93702499d55c179b2767e8c61c9a145dcbdc2dd0b1d14c308f1108",
+    "f1rank/overall/order.py": "6490c1e7c8cd4ad227e800d4d179ff3eebafa7ddd62cab075c41f8d1c94d07f2",
+    "f1rank/overall/recovery.py": "e5926f703a1b6eae6d9ae2ece9a4debfc589ffc7c834ecd026a67440634669e1",
+    "analysis/overall_observation_kernels.py": "2075c2fb2b217e8160c28993a985ed0b936bfe977f4c868071e737c5d9833cb9",
+    "analysis/overall_order_numerics_audit.py": "de8c7c4ad8bead3bce02186b38d2a8b44d5bbe22b2a98438f557684901859419",
+    "docs/overall_candidate.md": "13f14f76ea121f9ada3967303fedbba77d4a0df291372e1365c1483a1e1b2701",
+    "docs/overall_rotation_profile_proposal.json": "0de664a2f41b461da248e5b6f2b453509ce3cc10bcb4fbeb2d6171a3d601d365"
+  },
+  "parent_registration_sha256": "96a2d6baf66eea8dd8d57e86057edddd233c1bbeb0fd0ef2fcd789f454ae83e8",
+  "studies": [
+    {
+      "study": "connected",
+      "seed": 20261012,
+      "arrays_key": "4ac5ab7125adfa2fc8a0ca18829fbe941be0ec94b5e857fc54a16751bba3a948",
+      "original_truth_sha256": "0effa6798e618d269e44912a2dbf4c760e12aeb64f607660b6b288b5cac25931",
+      "arrays_and_truths_identical": true
+    },
+    {
+      "study": "confounded",
+      "seed": 20261013,
+      "arrays_key": "4d50cfb60b150f68abac84c2bc1619c649e76ebff8212884c52bcb1b88b6891b",
+      "original_truth_sha256": "d9af54f7cb9865b0ecf607b56bf1e1e01d7f199e24fa547d5b57daa75945f3df",
+      "arrays_and_truths_identical": true
+    },
+    {
+      "study": "sparse_rookie",
+      "seed": 20261014,
+      "arrays_key": "ca20697300ef8607dc61590f9a00bc8d304142c525997aa90608b2aabb7d9196",
+      "original_truth_sha256": "48b4c7587e111de5018eade208ae830261f84a3c221b1270eba2bb713b68769b",
+      "arrays_and_truths_identical": true
+    }
+  ],
+  "original_summary_sha256": "0a965087b4c0d9405d208f4dda639f32ccccee82532789803cc19accdcc1d5c6",
+  "original_study_states": [
+    {
+      "study": "connected",
+      "state": "converged"
+    },
+    {
+      "study": "confounded",
+      "state": "failed"
+    },
+    {
+      "study": "sparse_rookie",
+      "state": "converged"
+    }
+  ],
+  "original_all_converged": false,
+  "pending_proposal_status": "proposal_pending_user_approval",
+  "pending_proposal_user_approved": false,
+  "causal_explanation_established": false,
+  "mcmc_run": false,
+  "publication_allowed": false
+}

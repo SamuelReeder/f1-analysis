@@ -119,6 +119,11 @@ or a driver's rank. The numerical-study proposal remains pending human approval.
 The [verification record](../outputs/championship/development/overall-observation-checks/verification.json)
 identifies the committed source, passing focused and full-suite reports, preserved
 test-fixture failures and unchanged fitting-input identity.
+The later [race-order verification](../outputs/championship/development/overall-order-numerics-checks/verification.json)
+records the relative-normalizer correction, its failing-before/passing-after
+regressions, unchanged original synthetic inputs and fresh software/resource
+checks. That correction changes the fitting-input identity; earlier receipts
+remain evidence only for their recorded source.
 
 The [resource profiler](../analysis/overall_forecast_resources.py) can also
 exercise these conditional observations after loading a temporary compressed

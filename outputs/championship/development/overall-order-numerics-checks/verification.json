@@ -1,0 +1,190 @@
+{
+  "recorded_at": "2026-10-12T10:48:21.567473+00:00",
+  "source_commit": "70898b822e8b14e9803869d34786a96922b41dd7",
+  "correction_commit": "9306a1acec4b773396e493dc8af4f4c21bb2a113",
+  "regression_commit": "c8e9d04",
+  "source_hashes": {
+    "f1rank/overall/model.py": "2c390e130c93702499d55c179b2767e8c61c9a145dcbdc2dd0b1d14c308f1108",
+    "f1rank/overall/order.py": "6490c1e7c8cd4ad227e800d4d179ff3eebafa7ddd62cab075c41f8d1c94d07f2",
+    "f1rank/overall/recovery.py": "e5926f703a1b6eae6d9ae2ece9a4debfc589ffc7c834ecd026a67440634669e1",
+    "f1rank/overall/fitting.py": "506782633f38e49272479f25c2b6e31c7dc13543fc7ea31603f8d27a62957df7",
+    "f1rank/overall/diagnostics.py": "4f40755049eba86a47d69738b250accae2fa5e5c0361d4f52c5be4a04708a203",
+    "analysis/overall_observation_kernels.py": "2075c2fb2b217e8160c28993a985ed0b936bfe977f4c868071e737c5d9833cb9",
+    "analysis/overall_predictive_scores.py": "7ba072824fcfd5a359a5d5be59cbbe92f7b4f654bcd0f586d01c98b3ae83762d",
+    "analysis/overall_order_numerics_audit.py": "de8c7c4ad8bead3bce02186b38d2a8b44d5bbe22b2a98438f557684901859419",
+    "tests/test_overall_order_numerics.py": "531fdef3f4def48c64f8200274abf8ca3d1bc8c973e86890570b7ccf47db6646",
+    "tests/test_overall_predictive_scores.py": "9786777bd0e636a87888afa85b0301f273c9071ff52488c56352ee2fea51eaf0",
+    "docs/overall_candidate.md": "13f14f76ea121f9ada3967303fedbba77d4a0df291372e1365c1483a1e1b2701",
+    "docs/overall_rotation_profile_proposal.json": "0de664a2f41b461da248e5b6f2b453509ce3cc10bcb4fbeb2d6171a3d601d365"
+  },
+  "reports": {
+    "before-fix.xml": {
+      "tests": 8,
+      "failures": 4,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 3.9,
+      "exit_code": 1,
+      "sha256": "15e03856ef1f721fc4e19fea23fbc4eda93102cf7fe3db81ba421f7e2e85c0b6"
+    },
+    "all-before-fix.xml": {
+      "tests": 10,
+      "failures": 6,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 3.88,
+      "exit_code": 1,
+      "sha256": "27d946512f3b5f030fd91998deb22b66d9c52f886222fc46ab897d04634bf58b"
+    },
+    "software.xml": {
+      "tests": 53,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 36.969,
+      "exit_code": 0,
+      "sha256": "b1a7ac82eae1ffa16feb64e3e54fc1372083fb3382a7713582ae66cf9e68d8b8"
+    },
+    "full-software.xml": {
+      "tests": 424,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 91.413,
+      "exit_code": 0,
+      "sha256": "70ffbe824430ee96ebce69ff0ba00cefb2a1bcf29fe67e6c6a4a640616afa96d"
+    }
+  },
+  "commands": {
+    "before-fix.xml": "python -m pytest tests/test_overall_order_numerics.py -q",
+    "all-before-fix.xml": "python -m pytest tests/test_overall_order_numerics.py -q",
+    "software.xml": "python -m pytest tests/test_overall_order_numerics.py tests/test_overall_observation_kernels.py tests/test_overall_control_rotation.py -q",
+    "full-software.xml": "python -m pytest -q",
+    "input-audit.json": "python analysis/overall_order_numerics_audit.py --output outputs/championship/development/overall-order-numerics-checks/input-audit.json",
+    "resources.json": "python analysis/overall_forecast_resources.py --compressed --observations --output outputs/championship/development/overall-order-numerics-checks/resources.json"
+  },
+  "source_boundaries": {
+    "before-fix.xml": "Initial fitted-helper regressions against unchanged source 3dacfe8, before the separate forecast regressions were added. Raw failure report preserved.",
+    "all-before-fix.xml": "All arithmetic regressions on committed c8e9d04, before correcting either fitted or forecast helpers.",
+    "software.xml": "Focused corrected probability/gradient checks before the correction commit; helper/test sources match correction_commit. Candidate/proposal notes and the input audit were added afterward.",
+    "full-software.xml": "Full Python suite after both the arithmetic correction and conditional predictive scorer were committed.",
+    "input-audit.json": "Exact regeneration of the original registered synthetic observations and truths; no sampling or saved-posterior inspection.",
+    "resources.json": "Compressed synthetic format workload and conditional predictions on source_commit; no fit or real-driver scoring."
+  },
+  "execution": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "policy": "Sequential systemd user scopes; resource profiler verified actual cgroup limits"
+  },
+  "correction": {
+    "target": "Numerical evaluation of the specified Plackett-Luce order probability",
+    "padding": "Explicit empty suffix states exclude all padding probability and gradients",
+    "normalizers": "Relative suffix maxima and exponential sums preserve uncertainty in tied groups",
+    "tested": [
+      "Known equal-driver probabilities",
+      "Common strength offsets",
+      "Separated tied suffixes",
+      "Analytical score gradients",
+      "Empty/singleton and noncontiguous masks",
+      "Small-field normalization",
+      "Agreement of observation kernels with model traces",
+      "Existing coordinate-rotation equivalence checks"
+    ],
+    "predictive_conditioning": "Aligned posterior draws are weighted by their conditioning-event masses before target integration; rare shared log masses and impossible conditions are tested",
+    "likelihood_implementation_changed": true,
+    "mathematical_probability_family_unchanged": true,
+    "fit_settings_priors_seeds_gates_unchanged": true,
+    "checked_unchanged_sources": [
+      "f1rank/overall/fitting.py",
+      "f1rank/overall/diagnostics.py",
+      "f1rank/overall/recovery.py",
+      "f1rank/overall/qualifying.py",
+      "f1rank/model.py",
+      "f1rank/benchmark.py",
+      "f1rank/artifacts.py"
+    ],
+    "unchanged_source_reference": "3dacfe8"
+  },
+  "input_audit": {
+    "file": "input-audit.json",
+    "sha256": "dda77ca59b8a46c6e20c9b866971b0ce9528fb849e8fabff1952ae02ef583ffa",
+    "studies": [
+      {
+        "study": "connected",
+        "seed": 20261012,
+        "arrays_key": "4ac5ab7125adfa2fc8a0ca18829fbe941be0ec94b5e857fc54a16751bba3a948",
+        "original_truth_sha256": "0effa6798e618d269e44912a2dbf4c760e12aeb64f607660b6b288b5cac25931",
+        "arrays_and_truths_identical": true
+      },
+      {
+        "study": "confounded",
+        "seed": 20261013,
+        "arrays_key": "4d50cfb60b150f68abac84c2bc1619c649e76ebff8212884c52bcb1b88b6891b",
+        "original_truth_sha256": "d9af54f7cb9865b0ecf607b56bf1e1e01d7f199e24fa547d5b57daa75945f3df",
+        "arrays_and_truths_identical": true
+      },
+      {
+        "study": "sparse_rookie",
+        "seed": 20261014,
+        "arrays_key": "ca20697300ef8607dc61590f9a00bc8d304142c525997aa90608b2aabb7d9196",
+        "original_truth_sha256": "48b4c7587e111de5018eade208ae830261f84a3c221b1270eba2bb713b68769b",
+        "arrays_and_truths_identical": true
+      }
+    ],
+    "original_study_states": [
+      {
+        "study": "connected",
+        "state": "converged"
+      },
+      {
+        "study": "confounded",
+        "state": "failed"
+      },
+      {
+        "study": "sparse_rookie",
+        "state": "converged"
+      }
+    ]
+  },
+  "resources": {
+    "file": "resources.json",
+    "sha256": "2b12e8726efde0e78052d86290722cbae7792eea736a2f0ba2bc48115bd40957",
+    "seconds": {
+      "build_design": 1.9872087170369923,
+      "generate_workload": 4.229813822952565,
+      "compress_workload": 37.42940477799857,
+      "load_and_validate": 5.839976335992105,
+      "forecast": 9.410731956013478,
+      "close_and_recheck": 0.760453190014232,
+      "total": 59.83588264003629
+    },
+    "process_max_rss_kib": 1815640,
+    "forecast": {
+      "kind": "conditional_weekend",
+      "batches": 25,
+      "draws_per_chain": 3200,
+      "max_batch_output_bytes": 1579696,
+      "observation_parameters_sha256": "b628f989a73960728adbd8db39436d6dcc66fa9302485341d7a543f77a1ffefb",
+      "batch_stream_sha256": "7f4afd7763739db3f20c8f8316bd03d9f3e5912fec25d82c7496b0bac70f5f3d",
+      "every_output_finite": true,
+      "conditions_forecast": false,
+      "classification_generated": false
+    },
+    "synthetic_parameters_only": true
+  },
+  "model_inputs_key": "a5374e01e0efcae2a7fc55bbc30dfd3cdf090400056bbb3f74a0702d8ecf5c3f",
+  "pending_proposal_status": "proposal_pending_user_approval",
+  "pending_proposal_user_approved": false,
+  "limitations": [
+    "Boundary arithmetic regressions do not identify the cause of the original failed numerical profile.",
+    "A future rotated study would evaluate corrected arithmetic and proposed coordinates together, not isolate either causal effect.",
+    "Existing successor receipts retain their old source identity; affected fits/publication artifacts require regeneration.",
+    "Sampled-order behavior at extreme strength offsets still needs its own generative check.",
+    "Classification conditioning, exposure, unknown-condition policies, complete recovery/calibration and independent evaluation remain incomplete.",
+    "Resource evidence uses a local synthetic cache-format fixture, not MCMC or the intended CI runner."
+  ],
+  "mcmc_run": false,
+  "real_data_predictions_scored": false,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}
