@@ -59,10 +59,11 @@ def test_every_intervention_matches_original_seasons_exactly(dtype, seed):
 
 
 @pytest.mark.parametrize("n", sorted(QUALIFYING_FIELDS))
-def test_supported_qualifying_fields_have_exact_probe_points(n):
+@pytest.mark.parametrize("explicit", [True, False])
+def test_supported_qualifying_fields_have_exact_probe_points(n, explicit):
     joint = fixture(n=n, nd=2)
     scenarios = [Scenario("reference", 1, 45, 45)]
-    settings = dict(replicates=2, seed=[71, 3, 256, 128], advancing=QUALIFYING_FIELDS[n])
+    settings = dict(replicates=2, seed=[71, 3, 256, 128], advancing=QUALIFYING_FIELDS[n] if explicit else None)
     assert_same(paired_seasons(joint, scenarios, **settings), reference(joint, scenarios, **settings))
 
 

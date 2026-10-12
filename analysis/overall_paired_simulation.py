@@ -11,7 +11,7 @@ import numpy as np
 
 from f1rank.overall.order import numpy_perturbed_order
 from f1rank.overall.scoring import score_grand_prix
-from f1rank.overall.simulation import qualifying_grid, simulate
+from f1rank.overall.simulation import QUALIFYING_FIELDS, qualifying_grid, simulate
 
 PROBE_ORDER = ("qualifying_pace", "total_race_pace", "all")
 
@@ -28,6 +28,8 @@ simulation here retains all original scenario and failure validation too.
     reverse = np.argsort(ix)
     q, r = draws.qualifying[:, ix], draws.race[:, ix]
     nd, n = q.shape
+    if advancing is None:
+        advancing = QUALIFYING_FIELDS[n]
     q_mean, r_mean = q.mean(axis=-1), r.mean(axis=-1)
     probes = np.zeros((nd, replicates, n, len(PROBE_ORDER)))
     rng = np.random.default_rng(seed)
