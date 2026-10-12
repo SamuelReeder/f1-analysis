@@ -19,7 +19,7 @@ open until the full acceptance checklist has direct evidence.
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence, common field and matching explanation draws/scenario | Producer/export, pairwise comparisons, and matching component explanations from accepted draws; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
-| Software and runner readiness | Full Python suite with the proposed coordinate wrapper (`development/overall-control-rotation-checks/verification.json`); earlier event-scoring, weather, interface and dependency checks are preserved | Complete workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
+| Software and runner readiness | Full local Python suite after the forecast catalogue and grid correction (`development/overall-forecast-catalog-checks/verification.json`); earlier coordinate-wrapper, event-scoring, weather, interface and dependency checks are preserved | Complete workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
 | Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
 
 The numerical profile is registered separately in
@@ -115,3 +115,10 @@ reproduces the original synthetic observations and truths without fitting.
 The pending numerical proposal's source fingerprint is updated; its approval
 status, synthetic arrays, priors, settings and acceptance rules remain unchanged.
 Affected outputs require regeneration before promotion.
+
+The [forecast and grid verification](../outputs/championship/development/overall-forecast-catalog-checks/verification.json)
+records the failing regression, passing focused checks, input audit and full local
+Python suite. It distinguishes the audit's base revision from its exact corrected
+source hashes, verified against the committed fix. These checks establish the
+input correction and software behavior; they measure no predictive improvement
+and do not complete the acceptance plan.

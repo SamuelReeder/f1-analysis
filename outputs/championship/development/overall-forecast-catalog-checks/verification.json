@@ -1,0 +1,87 @@
+{
+  "recorded_at": "2026-10-12T08:55:59.872435+00:00",
+  "source_commit": "45be0b0f7a3c83821eddaf4ed8c9473406ca289e",
+  "source_hashes": {
+    "f1rank/overall/design.py": "34fcc7707cfae7e6feb1b5e495b2c645958c8203e463b8dc04e93046c8a127f9",
+    "analysis/overall_forecast_catalog.py": "d385ac287a6380515fc38dead3ac12f3625d4a70661767af0acc05a65cb612ea",
+    "analysis/overall_grid_boundary_audit.py": "b835c593d3287d03625716c447a5486a4577eb9cc2712546c13ead116a945f35",
+    "tests/test_overall_forecast_catalog.py": "5a14e1b2a281a7d6f0d03c1f5cab5ca7ae463288e13dea8f1d29325521ddefb7",
+    "tests/test_overall_grid_boundary.py": "0ee005523d3316d2e0c0c86d377441fd2ef7f3b389f9ce8bc8821f2f45f45c00",
+    "docs/overall_candidate.md": "81f5ba0532e2e65db4bc73a193008900304a16a4a3a0c2cb3316ee94fe4044d2",
+    "docs/overall_forecast_catalog.md": "157d73a2b716253cb40557d51e3435595ca76ad1e9c31bc0488f070afd2a6806",
+    "docs/overall_rotation_profile_proposal.json": "87ae578c2016833b843079e870e96d6d184f4caccac43138a74c19b63a549a33"
+  },
+  "reports": {
+    "software.xml": {
+      "tests": 33,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.374,
+      "sha256": "7a0290730e3974fc8e48dd10213e19f10c4a6c236598716aa21af798b2fe24c8",
+      "exit_code": 0
+    },
+    "grid-before-fix.xml": {
+      "tests": 2,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.476,
+      "sha256": "a9ba9c991e6c260f63bb0a5567a76024103f0fd281958662034f9dfa2719cd86",
+      "exit_code": 1
+    },
+    "after-fix.xml": {
+      "tests": 35,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.842,
+      "sha256": "c559d43257d295fa95183c3d15d0442a3262791d14245ba260b8c4a8d909d935",
+      "exit_code": 0
+    },
+    "full-software.xml": {
+      "tests": 318,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 77.941,
+      "sha256": "52fb675c7ae420ea334137f1717b0c50e831e117a42b77811561a91834ccad55",
+      "exit_code": 0
+    }
+  },
+  "commands": {
+    "software.xml": "python -m pytest tests/test_overall_forecast_catalog.py -q",
+    "grid-before-fix.xml": "python -m pytest tests/test_overall_grid_boundary.py -q",
+    "after-fix.xml": "python -m pytest tests/test_overall_grid_boundary.py tests/test_overall_forecast_catalog.py -q",
+    "full-software.xml": "python -m pytest -q",
+    "grid-audit.json": "python analysis/overall_grid_boundary_audit.py --output outputs/championship/development/overall-forecast-catalog-checks/grid-audit.json"
+  },
+  "resources": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "execution": "Sequential systemd user scopes"
+  },
+  "source_boundaries": {
+    "before_fix": "The initial catalogue checks and failing grid regressions use the implementation preserved in a822172c26ab8055d26510794bf4e8f070f264b3.",
+    "after_fix": "The focused checks and input audit ran before the correction was committed. The audit records the base commit and exact corrected file hashes; those hashes have been verified against source_commit above. The full suite ran after that commit.",
+    "original_profile": "Original failed profile outputs are preserved. The audit verifies original probability-model/generator sources and identical registered synthetic observation arrays and truths."
+  },
+  "input_audit": {
+    "file": "grid-audit.json",
+    "sha256": "b4eaad2b60ffd22e46cc5744621885abf83c75b57f964d7ef65ab3968cb22e9d",
+    "verified_corrected_source_commit": "45be0b0f7a3c83821eddaf4ed8c9473406ca289e",
+    "changed_grid_feature_rows": 5,
+    "changed_order_likelihood_rows": 3,
+    "changed_order_likelihood_events": 3
+  },
+  "pending_numerical_proposal": {
+    "status": "proposal_pending_user_approval",
+    "user_approved": false,
+    "model_inputs_key": "fc7fb01ccfe2dba8d632a1bf2a2f03bf70b9c75dd392e82d86b021647710909d"
+  },
+  "scope": "Forecast information boundaries and explicit missing state references; grid feature independence from later result exclusions; original synthetic observations retained. Full local Python suite passed. This does not implement future-state propagation or establish independent predictive evidence.",
+  "mcmc_run": false,
+  "predictive_effect_measured": false,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}

@@ -1,0 +1,81 @@
+{
+  "purpose": "grid_feature_boundary_audit",
+  "cutoff": "2026-15",
+  "source_commit": "a822172c26ab8055d26510794bf4e8f070f264b3",
+  "source_hashes": {
+    "f1rank/overall/design.py": "34fcc7707cfae7e6feb1b5e495b2c645958c8203e463b8dc04e93046c8a127f9",
+    "docs/overall_candidate.md": "81f5ba0532e2e65db4bc73a193008900304a16a4a3a0c2cb3316ee94fe4044d2",
+    "analysis/overall_grid_boundary_audit.py": "b835c593d3287d03625716c447a5486a4577eb9cc2712546c13ead116a945f35",
+    "analysis/overall_forecast_catalog.py": "d385ac287a6380515fc38dead3ac12f3625d4a70661767af0acc05a65cb612ea",
+    "tests/test_overall_grid_boundary.py": "0ee005523d3316d2e0c0c86d377441fd2ef7f3b389f9ce8bc8821f2f45f45c00"
+  },
+  "model_inputs_key": "fc7fb01ccfe2dba8d632a1bf2a2f03bf70b9c75dd392e82d86b021647710909d",
+  "original_profile_registration_sha256": "96a2d6baf66eea8dd8d57e86057edddd233c1bbeb0fd0ef2fcd789f454ae83e8",
+  "original_probability_sources_unchanged": true,
+  "original_synthetic_studies": [
+    {
+      "study": "connected",
+      "arrays_key": "4ac5ab7125adfa2fc8a0ca18829fbe941be0ec94b5e857fc54a16751bba3a948",
+      "arrays_and_truths_identical": true
+    },
+    {
+      "study": "confounded",
+      "arrays_key": "4d50cfb60b150f68abac84c2bc1619c649e76ebff8212884c52bcb1b88b6891b",
+      "arrays_and_truths_identical": true
+    },
+    {
+      "study": "sparse_rookie",
+      "arrays_key": "ca20697300ef8607dc61590f9a00bc8d304142c525997aa90608b2aabb7d9196",
+      "arrays_and_truths_identical": true
+    }
+  ],
+  "input_sha256": {
+    "data/processed/race.parquet": "150a0ade6f32c82e54d648a2c1d72a382e2c831e3736691c94e9ef6905f9b0f3",
+    "data/processed/race_weather.parquet": "ee5609b61f3a9020c29f6fff9cd68fc05dd21e2607127819e97150c3e63445b5",
+    "data/processed/race_laps.parquet": "ec207fe6188a5d664b8554bd7f171f2ed30425ed2a5216dc701e67c20ce44d96"
+  },
+  "changed_grid_feature_rows": 5,
+  "changed_order_likelihood_rows": 3,
+  "changed_order_likelihood_events": 3,
+  "affected_rows": [
+    {
+      "event_id": "2019-17",
+      "driver_id": "kubica",
+      "entered_field_size": 20,
+      "result_filtered_field_size": 18,
+      "used_in_order_likelihood": true
+    },
+    {
+      "event_id": "2020-14",
+      "driver_id": "russell",
+      "entered_field_size": 20,
+      "result_filtered_field_size": 19,
+      "used_in_order_likelihood": true
+    },
+    {
+      "event_id": "2020-14",
+      "driver_id": "latifi",
+      "entered_field_size": 20,
+      "result_filtered_field_size": 19,
+      "used_in_order_likelihood": false
+    },
+    {
+      "event_id": "2021-11",
+      "driver_id": "giovinazzi",
+      "entered_field_size": 20,
+      "result_filtered_field_size": 19,
+      "used_in_order_likelihood": true
+    },
+    {
+      "event_id": "2023-19",
+      "driver_id": "stroll",
+      "entered_field_size": 20,
+      "result_filtered_field_size": 19,
+      "used_in_order_likelihood": false
+    }
+  ],
+  "model_fitted": false,
+  "predictive_effect_measured": false,
+  "publication_allowed": false,
+  "interpretation": "The correction prevents result exclusions from changing pit-lane grid features. Affected historical inputs are listed without refitting or evaluating outcomes. The original registered synthetic arrays and truths are unchanged; their failed fit remains failed. No cause or cure of that failure is claimed."
+}

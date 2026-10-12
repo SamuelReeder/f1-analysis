@@ -67,6 +67,10 @@ The original failed numerical profile remains unchanged. Its synthetic arrays
 and truths are reproduced by the audit despite the training-input correction;
 the still-pending coordinate experiment uses the updated source fingerprint.
 
+The [verification record](../outputs/championship/development/overall-forecast-catalog-checks/verification.json)
+ties the focused and full-suite reports to their source revisions and preserves
+the original failing regression. It is software evidence only.
+
 Source collection and verification, future-state propagation, condition
 integration, baseline predictors and the frozen evaluation inventory remain
 required. No latent states are propagated, predictions scored or ranking
