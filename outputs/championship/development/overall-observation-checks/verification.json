@@ -1,0 +1,125 @@
+{
+  "recorded_at": "2026-10-12T10:30:16.144487+00:00",
+  "source_commit": "8f87af5ec1f94c1e649556950f976836277e0337",
+  "source_hashes": {
+    "analysis/overall_observation_kernels.py": "a62ff8cff91a7bf92262ba2b89fa5ab52bd30ef80317e4ea3e354f6525dabd29",
+    "analysis/overall_forecast_resources.py": "b61889167947930355117ee159f04af796dd1cb4376bf70954e3eb1f1cc5b1ce",
+    "analysis/overall_forecast_states.py": "6f892cd83f5f18c7df392d5b969941e72583008210d38a62490261483643dd59",
+    "analysis/overall_forecast_catalog.py": "d385ac287a6380515fc38dead3ac12f3625d4a70661767af0acc05a65cb612ea",
+    "analysis/overall_posterior_archive.py": "d963d652dc9711f7a39ea279e9a9a406c902a54be4a588de0922a6d1442f34c5",
+    "tests/test_overall_observation_kernels.py": "2bcaf9bc8ccebef417b22a8f902d190b329e5ca61c933493e75049399e2695dc",
+    "f1rank/overall/model.py": "e333aa52727051d84649eaeb1bb63fdb97e0135a0aff310ebacccf24dbb8528b",
+    "f1rank/overall/qualifying.py": "8f60d291a289452b9f2a24bb21313ecbbbbc4369060dbaff053fa2b73c0e59b7",
+    "f1rank/model.py": "a92d3c965fa80cc57213b8aa607d232d4196aab2ea76f55e4f4e28e363341d2b",
+    "docs/overall_observation_kernels.md": "e596f3aeb1d206d0e6451aba3a9e7df8359e9748663be19a6bf1c38c09b9d732",
+    "docs/overall_rotation_profile_proposal.json": "6abfaccd3265df6497297f9a33dc8256a4ebbb39e3771a4e42df620f5692d340"
+  },
+  "reports": {
+    "initial-software.xml": {
+      "tests": 25,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 16.449,
+      "exit_code": 1,
+      "sha256": "6f190a842b85cecb64646118bc27bee1d85cebbd26b784e4814442c59ac0dc3f"
+    },
+    "fixture-df-failure.xml": {
+      "tests": 26,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 15.654,
+      "exit_code": 1,
+      "sha256": "be6fca4b6db4bd799b3c5510804f2637c596f610b30cdf09bb710cba78c7c070"
+    },
+    "software.xml": {
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 15.83,
+      "exit_code": 0,
+      "sha256": "e6a9ed6d8f4569f800008e682a50a45d801fbe1f88b10e28997d1c5eaf45714b"
+    },
+    "full-software.xml": {
+      "tests": 407,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 91.364,
+      "exit_code": 0,
+      "sha256": "ea1c204d87a7482d4be8d4ed534cb17f16e562027909f8d9823b81a7cdad5558"
+    }
+  },
+  "commands": {
+    "software.xml": "python -m pytest tests/test_overall_observation_kernels.py -q",
+    "full-software.xml": "python -m pytest -q",
+    "resources.json": "python analysis/overall_forecast_resources.py --compressed --observations --output outputs/championship/development/overall-observation-checks/resources.json"
+  },
+  "execution": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "policy": "Sequential systemd user scopes; resource program verified its actual cgroup limits"
+  },
+  "source_boundaries": {
+    "initial-software.xml": "Early working-tree fixture tried to read Student-t properties directly from the MaskedDistribution wrapper; failure and all test results retained. This initial working tree was not separately committed.",
+    "fixture-df-failure.xml": "After unwrapping the masked distribution, the fixture wrongly indexed the shared degrees-of-freedom parameter as an observation vector. Failure retained; this intermediate fixture was not separately committed.",
+    "software.xml": "Corrected targeted suite; observation implementation and fixture match the committed source above.",
+    "full-software.xml": "Full Python suite on the committed implementation above.",
+    "resources.json": "Compressed synthetic cache-format workload with conditional observation generation on the same committed implementation."
+  },
+  "scope": [
+    "Qualifying locations, scales, degrees of freedom and observation densities match conditioned model traces on synthetic fixtures.",
+    "Known-circuit context coefficients match every tested wet/neutralisation combination.",
+    "Running-order and completion factors match the existing joint likelihood on synthetic fixtures.",
+    "Small running-panel order permutations and censored geometric probabilities normalize to their known totals.",
+    "Joint draw indices, shared teammate effects, elimination, extreme hazard logits, generated frequencies, field permutations, path prefixes and batch coverage are checked.",
+    "Invalid parameters and unresolved conditions cannot silently produce a prediction."
+  ],
+  "resources": {
+    "file": "resources.json",
+    "sha256": "fa83eae17b0c432762358d2675d31c305637601cf7b25c7172a1cf38c4410f43",
+    "process_max_rss_kib": 1815500,
+    "seconds": {
+      "build_design": 1.9669418929843232,
+      "generate_workload": 4.565480598015711,
+      "compress_workload": 37.14400697295787,
+      "load_and_validate": 5.762251523032319,
+      "forecast": 8.433454267971683,
+      "close_and_recheck": 0.7374023850425147,
+      "total": 58.73289714398561
+    },
+    "forecast": {
+      "kind": "conditional_weekend",
+      "batches": 25,
+      "draws_per_chain": 3200,
+      "max_batch_output_bytes": 1579696,
+      "observation_parameters_sha256": "b628f989a73960728adbd8db39436d6dcc66fa9302485341d7a543f77a1ffefb",
+      "batch_stream_sha256": "6fb4f57d2248df4288260f38429afa495ee3f836b3a2850535f2d43176503c98",
+      "every_output_finite": true,
+      "conditions_forecast": false,
+      "classification_generated": false
+    },
+    "synthetic_parameters_only": true
+  },
+  "computation_preserved": {
+    "model_inputs_key": "f57814446f187783b7c90eea93c4b844b0d38202a3dde35114f55dbd9dd3dc9a",
+    "unchanged_from_previous_verification": true,
+    "fit_settings_priors_gates_seeds_and_data_unchanged": true,
+    "original_failed_profile_preserved": true
+  },
+  "limitations": [
+    "These are software and conditional generative-equivalence checks, not convergence, recovery or predictive-calibration evidence.",
+    "Future conditions, unseen outcome-circuit coefficients, missing qualifying/penalty policy, completion exposure, lapping, shortened races and classification conditioning remain unresolved.",
+    "The resource measurement uses synthetic parameters and a temporary receipt with an explicit fixture convergence field; it is not a successful MCMC fit.",
+    "Resource figures are local; intended-runner fitting, full refresh and deployment remain unverified.",
+    "Canonical equal-opportunity producer integration and independent predictive evidence remain incomplete."
+  ],
+  "numerical_proposal_status": "proposal_pending_user_approval",
+  "numerical_proposal_user_approved": false,
+  "mcmc_run": false,
+  "real_data_predictions_scored": false,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}

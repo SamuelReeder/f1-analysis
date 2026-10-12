@@ -113,6 +113,9 @@ frequencies, batching, field permutation, path prefixes and input rejection.
 These are software and generative-equivalence checks on synthetic inputs. They
 cannot establish convergence, predictive calibration, cross-team identification
 or a driver's rank. The numerical-study proposal remains pending human approval.
+The [verification record](../outputs/championship/development/overall-observation-checks/verification.json)
+identifies the committed source, passing focused and full-suite reports, preserved
+test-fixture failures and unchanged fitting-input identity.
 
 The [resource profiler](../analysis/overall_forecast_resources.py) can also
 exercise these conditional observations after loading a temporary compressed
@@ -120,4 +123,6 @@ archive of synthetic parameters at the committed training-data shape. It retains
 only output checksums, coverage and measurements. It uses hypothetical conditions
 and an unchanged future field, and does not measure fitting or verify the intended
 CI runner. Its receipt is explicitly a cache-format fixture, not a successful
-convergence result.
+convergence result. The [local resource record](../outputs/championship/development/overall-observation-checks/resources.json)
+confirms complete draw coverage and finite conditional outputs within the
+enforced scope limits.

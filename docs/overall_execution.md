@@ -12,14 +12,14 @@ open until the full acceptance checklist has direct evidence.
 | Complete entrant/cutoff catalog | Cutoff-first data design; outcome-free forecast catalogue; development state propagation reconstructs uncentred history and retains unseen entrants with population uncertainty | Verified as-of source/calendar inventory, accepted-posterior integration and recovery on the real transfer network |
 | Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks for full and bounded loaders; the exhausted confounded case and geometry diagnosis are preserved | Separate approval and registration before the proposed post-failure numerical study; fresh recovery and runner resource measurements |
 | Known-truth recovery and simulation-based calibration | Generative responses and complete numerical-profile inventory: connected and sparse-rookie fits converged after retries; confounded fit exhausted its ladder | Complete registered SBC and stress studies, including the unresolved confounded case; no failed case may be discarded |
-| Coherent weekend simulation | Student-t elimination, current total race pace, shared weekend uncertainty | Common operations/conditions calibration, lapping, shortened-race and incident assumptions |
+| Coherent weekend simulation | Student-t elimination and shared weekend uncertainty; conditional forecast kernels preserve teammate segment effects, context coefficients, running order and completion within each joint draw, with matched-model and known-probability checks | Forecast-time conditions, official-grid eligibility/penalties, common operations calibration, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |
 | Ability/outcome/numerical uncertainty | Nested simulation, MCSE and rank/ESS diagnostics; saved-draw diagnosis finds qualifying-contrast failures in the final confounded attempt | Resolve inference and check ranking functionals under converged posteriors with fixed simulation precision |
-| Chronological development comparison | Plan defines information horizons and baseline roles; blind scoring utilities preserve joint draws and required events; outcome-free catalogue and joint state propagation have synthetic checks | Complete source verification, outcome/condition generation and baseline implementations; freeze event inventory, calibration and stopping rules; run every fold |
+| Chronological development comparison | Plan defines information horizons and baseline roles; blind scoring utilities preserve joint draws and required events; outcome-free catalogue, joint states and conditional observation kernels have synthetic checks | Complete source verification, unknown-condition integration, unseen-circuit and classification-conditioning policies and baseline implementations; freeze event inventory, calibration and stopping rules; run every fold |
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence, common field and matching explanation draws/scenario | Producer/export, pairwise comparisons, and matching component explanations from accepted draws; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
-| Software and runner readiness | Batched state propagation and bounded checked archive loading; local compressed synthetic workload completes under enforced caps with unchanged state checksum; full suite in `development/overall-archive-checks/verification.json` | Accepted-fit integration and end-to-end fitting/refresh resources; workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
+| Software and runner readiness | Batched states and conditional observation kernels; bounded checked archive loading; capped synthetic resource and software records under `development/overall-archive-checks/` and `development/overall-observation-checks/` | Accepted-fit integration and end-to-end fitting/refresh resources; workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
 | Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
 
 The numerical profile is registered separately in
@@ -157,3 +157,17 @@ original probability-model/generator sources are verified unchanged. Prior
 failures remain preserved; affected outputs still require regeneration and the
 proposed numerical study still requires the outstanding approval. Accepted-model
 integration, scientific evidence and intended-runner readiness remain open.
+
+The [conditional observation implementation](overall_observation_kernels.md)
+connects the state forecaster to the existing qualifying and race likelihood
+pieces while preserving joint draws. It keeps official-grid, classification,
+unknown-condition and unseen-circuit policies explicitly unresolved. Known-truth
+fixture checks compare observation densities and coefficients with model traces,
+normalize small-panel order and censoring probabilities, and retain the draw set
+across field permutations and batches. This is development implementation, not
+an accepted prediction experiment or a substitute for the failed numerical case.
+The [verification record](../outputs/championship/development/overall-observation-checks/verification.json)
+preserves the initial fixture failures, corrected focused run, full local suite
+and compressed synthetic resource measurement. The fitting-input identity and
+pending numerical proposal are unchanged. No model was fitted or ranking
+published by this work.
