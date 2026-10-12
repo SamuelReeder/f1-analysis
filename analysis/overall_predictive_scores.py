@@ -80,6 +80,48 @@ def conditional_log_predictive(conditional, conditioning):
     return np.logaddexp.reduce(relative + target, axis=0) - np.logaddexp.reduce(relative, axis=0)
 
 
+def condition_mixture_log_predictive(conditional, conditioning, weights):
+    """Single-event target scores integrating conditions AND their panel weights.
+
+    Factor axes are draw/event/condition; weight axes are event/condition. Weights
+    are exact posterior mean frequencies under the independent condition model,
+    not independently averaged target/panel factors. This does not compute a
+    multi-event joint likelihood with shared condition-frequency uncertainty.
+    """
+    names = ("posterior_id", "draw_ids", "event_ids", "condition_ids")
+    if any(conditional.get(k) != conditioning.get(k) for k in names):
+        raise ValueError("Condition factors must share posterior, draws, events and condition order")
+    ids = conditional.get("condition_ids")
+    if (not isinstance(ids, list) or not ids or any(not isinstance(k, str) or not k for k in ids)
+            or len(ids) != len(set(ids))):
+        raise ValueError("Missing or duplicate condition identities")
+    if (weights.get("event_ids") != conditional.get("event_ids")
+            or weights.get("condition_ids") != ids or not weights.get("condition_history_sha256")):
+        raise ValueError("Condition weights require matching identities and a history receipt")
+    # Reuse strict joint identity validation on each condition slice.
+    a, b = [np.asarray(c["log_probabilities"], dtype=float) for c in (conditional, conditioning)]
+    if (a.ndim != 3 or b.shape != a.shape or a.shape[-1] != len(ids)):
+        raise ValueError("Expected paired draw/event/condition factors")
+    for k in range(len(ids)):
+        _aligned_components([dict(conditional, log_probabilities=a[..., k]),
+                             dict(conditioning, log_probabilities=b[..., k])])
+    if (a > 0).any() or (b > 0).any():
+        raise ValueError("Condition scoring requires discrete log masses")
+    w = np.asarray(weights["probabilities"], dtype=float)
+    if (w.shape != a.shape[1:] or not np.isfinite(w).all() or (w < 0).any() or (w > 1).any()
+            or not np.allclose(w.sum(axis=-1), 1., rtol=0., atol=CONTRACT["probability_sum_absolute_tolerance"])):
+        raise ValueError("Invalid condition weights; no silent normalization")
+    with np.errstate(divide="ignore"):
+        log_weight = b + np.log(w)[None, ...]
+    maximum = log_weight.max(axis=(0, 2))
+    if np.isneginf(maximum).any():
+        raise ValueError("Impossible conditioning panel across all conditions")
+    relative = log_weight - maximum[None, :, None]
+    numerator = np.logaddexp.reduce(np.logaddexp.reduce(relative + a, axis=2), axis=0)
+    denominator = np.logaddexp.reduce(np.logaddexp.reduce(relative, axis=2), axis=0)
+    return numerator - denominator
+
+
 def _discrete(probabilities, observed):
     p = np.asarray(probabilities, dtype=float)
     y = np.asarray(observed)

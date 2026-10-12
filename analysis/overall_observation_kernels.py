@@ -149,8 +149,11 @@ def context_coefficients(parameters, circuit, *, wet, neutralised, new_circuit_z
     for every coefficient family. Raw fitted circuit coordinates retain their
     unobserved common mean; dropping it would understate unseen-circuit uncertainty.
     """
-    if type(wet) is not bool or type(neutralised) is not bool:
-        raise ValueError("Explicit conditional wet/neutralised booleans are required")
+    shape = np.shape(parameters["overall_grid_base"])
+    for condition in (wet, neutralised):
+        if type(condition) is not bool and not (isinstance(condition, np.ndarray)
+                and condition.dtype.kind == "b" and condition.shape == shape):
+            raise ValueError("Explicit booleans or matching chain/draw condition arrays are required")
     if circuit is None:
         if not isinstance(new_circuit_z, dict) or set(new_circuit_z) != set(CONTEXT_NAMES):
             raise ValueError("Unseen circuit requires explicit population coordinates for every coefficient")
@@ -283,7 +286,7 @@ def draw_running_order(event, strength, running, noise):
     return np.where(running, np.argsort(order, axis=-1) + 1, 0)
 
 
-def _scenarios(design, snapshots, scenarios, advancing, unseen_circuit_policy):
+def _scenarios(design, snapshots, scenarios, advancing, unseen_circuit_policy, *, forecast_conditions=False):
     if unseen_circuit_policy not in (None, UNSEEN_CIRCUIT_POLICY):
         raise ValueError("Unsupported unseen-circuit policy")
     if not isinstance(scenarios, dict) or set(scenarios) != {s["event"]["event_id"] for s in snapshots}:
@@ -292,9 +295,12 @@ def _scenarios(design, snapshots, scenarios, advancing, unseen_circuit_policy):
     for snap in snapshots:
         event, entrants = snap["event"], snap["entrants"]
         scenario = scenarios[event["event_id"]]
-        if not isinstance(scenario, dict) or set(scenario) != {"wet", "neutralised", "exposure_laps", "grid_policy"}:
-            raise ValueError("Scenario requires wet, neutralised, exposure_laps and grid_policy")
-        if type(scenario["wet"]) is not bool or type(scenario["neutralised"]) is not bool:
+        required = {"exposure_laps", "grid_policy"}
+        if not forecast_conditions:
+            required |= {"wet", "neutralised"}
+        if not isinstance(scenario, dict) or set(scenario) != required:
+            raise ValueError("Scenario fields must match the explicit or forecast condition policy")
+        if not forecast_conditions and (type(scenario["wet"]) is not bool or type(scenario["neutralised"]) is not bool):
             raise ValueError("Unknown conditions cannot be silently labelled dry or green")
         if event["circuit_id"] not in circuits and unseen_circuit_policy is None:
             raise ValueError("Unseen circuit coefficients require a registered extension policy")
@@ -323,9 +329,18 @@ def iter_conditional_weekends(design, snapshots, posterior, scenarios, *, advanc
     Unseen circuits require an explicit population policy; the output records
     its identity without certifying that a predictive registration selected it.
     """
+    yield from _iter_weekends(design, snapshots, posterior, scenarios, advancing=advancing,
+        seed=seed, training_arrays_key=training_arrays_key, draw_batch_size=draw_batch_size,
+        unseen_circuit_policy=unseen_circuit_policy)
+
+
+def _iter_weekends(design, snapshots, posterior, scenarios, *, advancing, seed,
+                   training_arrays_key, draw_batch_size, unseen_circuit_policy, condition_law=None):
+    """Shared observation path: conditions are explicit or supplied by the fixed law."""
     if type(draw_batch_size) is not int or draw_batch_size < 1:
         raise ValueError("Draw batch size must be a positive integer")
-    _scenarios(design, snapshots, scenarios, advancing, unseen_circuit_policy)
+    _scenarios(design, snapshots, scenarios, advancing, unseen_circuit_policy,
+               forecast_conditions=condition_law is not None)
     p, shape, parameter_key = _observation_parameters(design, posterior, draw_batch_size)
     ObservationNoise(seed, shape, (0, shape[1]))
     scenario_key = hashlib.sha256(json.dumps(scenarios, sort_keys=True,
@@ -338,6 +353,8 @@ def iter_conditional_weekends(design, snapshots, posterior, scenarios, *, advanc
         noise, events = ObservationNoise(seed, shape, (start, stop)), []
         for event in batch["events"]:
             scenario = scenarios[event["event_id"]]
+            conditions = scenario if condition_law is None else condition_law.draw(
+                event["catalog"], seed=seed, shape=shape, draw_range=(start, stop))
             qualifying = qualifying_segments(event, part, noise, advancing=advancing, full_df=p["nu"])
             new_coordinates = None
             if event["catalog"]["new_circuit"]:
@@ -346,7 +363,7 @@ def iter_conditional_weekends(design, snapshots, posterior, scenarios, *, advanc
                 new_coordinates = {name: noise.draw("unseen_context_circuit",
                     [name, event["catalog"]["circuit_id"]]) for name in CONTEXT_NAMES}
             coefficients = context_coefficients(part, event["catalog"]["circuit_index"],
-                wet=scenario["wet"], neutralised=scenario["neutralised"],
+                wet=conditions["wet"], neutralised=conditions["neutralised"],
                 new_circuit_z=new_coordinates)
             if scenario["grid_policy"] == "actual_grid":
                 slots = {r["driver_id"]: r["grid_feature_slot"] for r in event["catalog"]["entries"]}
@@ -363,13 +380,24 @@ def iter_conditional_weekends(design, snapshots, posterior, scenarios, *, advanc
                 context=coefficients, strength=strength, completion=completion,
                 running_positions=order, order_log_probability=order_factor,
                 joint_order_completion_log_probability=order_factor + completion["log_probability"].sum(axis=-1)))
-        yield dict(purpose="development_conditional_weekend", axes=["chain", "draw", "driver"],
+            if condition_law is not None:
+                events[-1].update(conditions=conditions,
+                    joint_conditions_order_completion_log_probability=(
+                        events[-1]["joint_order_completion_log_probability"] + conditions["log_probability"]))
+        result = dict(purpose="development_conditional_weekend", axes=["chain", "draw", "driver"],
             events=events, posterior_shape=list(shape), draw_range=[start, stop], seed=seed,
             training_arrays_key=training_arrays_key, state_parameter_key=batch["consumed_posterior_key"],
             observation_parameter_key=parameter_key, scenario_sha256=scenario_key,
             unseen_circuit_policy=unseen_circuit_policy,
             state_implementation_sha256=batch["implementation_sha256"], implementation_sha256=source_hash,
             qualifying_advancing=list(advancing), conditional_outcomes_available=True,
-            conditions_forecast=False, official_grid_generated=False, classification_generated=False,
+            conditions_forecast=condition_law is not None, official_grid_generated=False, classification_generated=False,
             convergence_verified=False, source_availability_verified=False,
             independent_evidence_established=False, publication_allowed=False)
+        if condition_law is not None:
+            from analysis import overall_future_conditions
+            result.update(purpose="development_historical_condition_weekend",
+                condition_history=condition_law.history,
+                condition_implementation_sha256=hashlib.sha256(
+                    Path(overall_future_conditions.__file__).read_bytes()).hexdigest())
+        yield result
