@@ -19,7 +19,7 @@ open until the full acceptance checklist has direct evidence.
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence, common field and matching explanation draws/scenario | Producer/export, pairwise comparisons, and matching component explanations from accepted draws; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
-| Software and runner readiness | Full local Python suite after the forecast catalogue and grid correction (`development/overall-forecast-catalog-checks/verification.json`); earlier coordinate-wrapper, event-scoring, weather, interface and dependency checks are preserved | Complete workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
+| Software and runner readiness | Full local Python suite after joint forecast-state propagation (`development/overall-forecast-state-checks/verification.json`); earlier grid, coordinate-wrapper, event-scoring, weather, interface and dependency checks are preserved | Full-archive forecasting resources/batching; workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
 | Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
 
 The numerical profile is registered separately in
@@ -125,3 +125,12 @@ Python suite. It distinguishes the audit's base revision from its exact correcte
 source hashes, verified against the committed fix. These checks establish the
 input correction and software behavior; they measure no predictive improvement
 and do not complete the acceptance plan.
+
+The [forecast-state verification](../outputs/championship/development/overall-forecast-state-checks/verification.json)
+records agreement with the joint model under matched innovations, checks of new
+states and retained dependence, and the full local suite on committed source.
+The initial distribution-property assertion failure is preserved. It was a test
+fixture issue, not a changed prior or acceptance criterion. Fitting sources and
+the pending numerical registration are unchanged. This implementation still
+requires accepted-posterior integration, full-archive resource work and the
+complete predictive experiment; it has produced no ranking.

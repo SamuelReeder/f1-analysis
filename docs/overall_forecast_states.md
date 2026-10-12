@@ -54,6 +54,8 @@ participation counts; omitted fields, inconsistent counts and changing metadata
 are rejected. This is conditional on the declared calendar and lineups. Source
 verification and uncertainty about schedule or lineup changes remain separate
 requirements. The catalogue's cross-season completeness limitation still applies.
+Checking training event dates alone also cannot establish when archived results
+became available; source verification must establish that information boundary.
 
 The circuit loading uses the frozen training factor. For an unseen circuit it
 inherits the existing qualifying design's no-adjustment convention. This does
@@ -82,6 +84,10 @@ model conditioned on identical innovations. The cases cover same-season updates,
 a regulation reset and an unseen team. Separate checks exercise field centring,
 newcomer uncertainty, the car-season mean, missing participation, preserved joint
 draw indices, field permutations, prefix consistency and invalid input rejection.
+
+The [verification record](../outputs/championship/development/overall-forecast-state-checks/verification.json)
+identifies the tested source and full-suite report. It also preserves the initial
+distribution-property assertion failure and the subsequent passing focused run.
 
 These are probability-interface and software checks, not parameter recovery,
 simulation-based calibration or evidence that the model predicts real races well.

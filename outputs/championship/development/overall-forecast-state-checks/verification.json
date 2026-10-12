@@ -1,0 +1,87 @@
+{
+  "recorded_at": "2026-10-12T09:18:20.442813+00:00",
+  "source_commit": "8ebbabc7b109ef664ff965294c614b62ed839107",
+  "source_hashes": {
+    "analysis/overall_forecast_states.py": "2f4561cfa9647ee3a452169123f47d0ae9b23524151d2b6150902255cfabb919",
+    "analysis/overall_forecast_catalog.py": "d385ac287a6380515fc38dead3ac12f3625d4a70661767af0acc05a65cb612ea",
+    "tests/test_overall_forecast_states.py": "706aa23d03cb50d9ddba7d23f54e3d885a1514a814133620c1f7f67204b367aa",
+    "docs/overall_forecast_states.md": "2fd55b9375e2ee5fb9f5a7629eadd73722d294ee28e6b09b1fe3464727c0eb03",
+    "f1rank/model.py": "a92d3c965fa80cc57213b8aa607d232d4196aab2ea76f55e4f4e28e363341d2b",
+    "f1rank/overall/model.py": "e333aa52727051d84649eaeb1bb63fdb97e0135a0aff310ebacccf24dbb8528b",
+    "f1rank/overall/qualifying.py": "8f60d291a289452b9f2a24bb21313ecbbbbc4369060dbaff053fa2b73c0e59b7",
+    "f1rank/overall/design.py": "34fcc7707cfae7e6feb1b5e495b2c645958c8203e463b8dc04e93046c8a127f9",
+    "f1rank/race_total_model.py": "d5ac8de128f21a4ba54cd10b30dfd44b388c32f60434b8df673614f318f11179"
+  },
+  "reports": {
+    "initial-fixture.xml": {
+      "tests": 19,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 16.266,
+      "sha256": "2e6cb1c858a09293999968264e1b47cf8d4d3888df4c36876d95f7f537ec4ef9",
+      "exit_code": 1
+    },
+    "software.xml": {
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 16.014,
+      "sha256": "b97071b354e7f5b69c68d2b75c03a3f759f898288de24d1b04ce853c8761194d",
+      "exit_code": 0
+    },
+    "full-software.xml": {
+      "tests": 340,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 86.438,
+      "sha256": "00511272ab24e70e5d20ebadb3cd3a2c379f29cc8e00bd7f326119a1b1cd4857",
+      "exit_code": 0
+    }
+  },
+  "commands": {
+    "initial-fixture.xml": "python -m pytest tests/test_overall_forecast_states.py -q",
+    "software.xml": "python -m pytest tests/test_overall_forecast_states.py -q",
+    "full-software.xml": "python -m pytest -q"
+  },
+  "resources": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "execution": "Sequential systemd user scopes"
+  },
+  "source_boundaries": {
+    "initial-fixture.xml": "Initial development check before commit. State equivalence assertions passed; the prior-scale assertion raised AttributeError because ExpandedDistribution does not expose a direct scale attribute. The check now uses its public variance. The original failure is preserved.",
+    "software.xml": "Focused development check before the implementation commit. Before the final full suite, parameter validation was changed to preserve archive dtype and reject nonnumeric arrays, the implementation hash was added to results, and a test was renamed to accurately describe repeated same-era effects.",
+    "full-software.xml": "Full suite ran on the committed implementation identified by source_commit, after all implementation and fixture changes."
+  },
+  "equivalence_scope": [
+    "Uncentred training states reconstruct the existing joint model deterministics.",
+    "Future states match the joint model conditioned on identical innovations for within-season, regulation-reset and new-team cases.",
+    "New-team relative uncertainty includes the common season mean integrated out by the original contrast prior.",
+    "Joint chain/draw axes, announced participation gaps, shared car identity, field centring and prefix/permutation invariance are retained."
+  ],
+  "unchanged_fitting_source_since": "a3e7225",
+  "unchanged_fitting_paths": [
+    "f1rank",
+    "extract",
+    "data",
+    "docs/overall_candidate.md",
+    "docs/overall_rotation_profile_proposal.json"
+  ],
+  "numerical_proposal_status": "proposal_pending_user_approval",
+  "numerical_proposal_user_approved": false,
+  "model_inputs_key": "fc7fb01ccfe2dba8d632a1bf2a2f03bf70b9c75dd392e82d86b021647710909d",
+  "limitations": [
+    "Synthetic probability-interface checks do not establish recovery, convergence, calibration or predictive improvement.",
+    "The state utility is not a posterior loader; accepted-posterior provenance and source-vintage verification remain required.",
+    "Future conditions, outcome generation, circuit-coefficient extension, baselines and scientific evaluation remain incomplete.",
+    "Full-archive batching and intended-runner memory/runtime remain unverified."
+  ],
+  "mcmc_run": false,
+  "real_data_predictions_scored": false,
+  "ranking_produced": false,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}
