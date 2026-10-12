@@ -8,9 +8,10 @@ calendar, field, simulation count, precision rules or intervention definition.
 
 Within each event, weekend deviations, retirement uniforms and race-order
 Gumbels are shared by all the paired interventions, as they were when each
-intervention restarted the same simulator. Save the random-generator state
-immediately before qualifying. Replay that state for each driver's qualifying
-intervention with the original qualifying function. Its resulting grid applies
+intervention restarted the same simulator. Record the normal and Student-t
+draws while the original qualifying function constructs the baseline grid.
+Replay each draw lane's exact random values for every driver's qualifying
+intervention with that same qualifying function. Its resulting grid applies
 to both that driver's qualifying-only and combined probes. The race-only probe
 uses the baseline grid. Keep the original race-strength expression and its
 operation order; adding a delta to an already rounded strength is not required
@@ -22,6 +23,34 @@ do not consume the intervention's championship ranks or title probability, so
 their championship countback is omitted. Baseline countback remains unchanged.
 Retirement uniforms and hazards do not depend on the state intervention, so a
 baseline all-retired failure cannot become an acceptable explanatory season.
+
+## Batched interventions
+
+This batching definition precedes the batched implementation and measurement.
+It follows the original separate calls and the shared-randomness kernel already
+measured in the immutable resource record. It changes neither the registered
+stream address nor the existing draw and replicate block sizes.
+
+Within an event, add an intervention axis in sorted driver-identity order. Each
+entry on that axis neutralizes only the corresponding driver's state. Flatten
+the draw/intervention axes only while calling the original qualifying function,
+repeating each lane's parameters and saved random values in the same order.
+Check the random method, requested shape and Student-t degrees of freedom on
+replay, and require that all recorded requests are consumed. There are no new
+random draws or alternative seeds on this intervention axis.
+
+Pass the batched strengths, shared Gumbels and shared completion distances to
+the original race-order and full-field scoring functions. Retain the diagonal
+of the intervention/driver axes: every driver's own points from its own
+intervention. Keep season additions in their original event order. Broadcasting
+inputs must not mutate them or pair different draw lanes. The independent
+replicate loop, baseline season ranks and complete field remain unchanged.
+
+Before adoption, compare the replayed qualifying grids against individual calls
+from a saved generator state as well as complete baseline/probe seasons against
+the original simulator. Require exact output fingerprints on the unchanged
+maximum-size resource workload. Preserve failures; do not change values,
+workload or tolerances in response to a disagreement.
 
 Before connecting this kernel to the summary/controller, compare every probe
 and the complete baseline against the original separate simulator calls.
