@@ -1,11 +1,13 @@
 """Exact paired-kernel equivalence; no posterior or scientific acceptance."""
+import copy
 from dataclasses import replace
 
 import numpy as np
 import pytest
 
-from analysis.overall_paired_simulation import PROBE_ORDER, paired_seasons
-from f1rank.overall.simulation import JointDraws, QUALIFYING_FIELDS, Scenario, simulate
+from analysis.overall_paired_simulation import (PROBE_ORDER, _RecordedQualifyingNoise,
+    _RepeatedQualifyingNoise, paired_seasons)
+from f1rank.overall.simulation import JointDraws, QUALIFYING_FIELDS, Scenario, qualifying_grid, simulate
 
 
 def fixture(n=6, nd=3, dtype=np.float64, seed=17):
@@ -43,6 +45,62 @@ def assert_same(actual, expected):
     for name in a:
         np.testing.assert_array_equal(a[name], b[name])
     np.testing.assert_array_equal(ap, bp)
+
+
+@pytest.mark.parametrize("n,advancing", [(2, (1,)), (6, (4, 2)), (22, (16, 10))])
+@pytest.mark.parametrize("nd", [2, 5])
+@pytest.mark.parametrize("dtype", [np.float32, np.float64])
+def test_batched_qualifying_replays_each_lane_and_preserves_following_randomness(n, advancing, nd, dtype):
+    joint = fixture(n=n, nd=nd, dtype=dtype)
+    q = joint.qualifying
+    rng = np.random.default_rng([71, 2, 128, 256])
+    qday = rng.normal(size=q.shape) * joint.q_weekend_sd[:, None]
+    state = copy.deepcopy(rng.bit_generator.state)
+    captured = _RecordedQualifyingNoise(rng)
+    baseline = qualifying_grid(q, qday, joint.q_scale, joint.q_log_scale_sd, joint.q_df, captured, advancing)
+    original = np.random.default_rng(0)
+    original.bit_generator.state = copy.deepcopy(state)
+    plain = qualifying_grid(q, qday, joint.q_scale, joint.q_log_scale_sd, joint.q_df, original, advancing)
+    np.testing.assert_array_equal(baseline, plain)
+    np.testing.assert_array_equal(rng.gumbel(size=q.shape), original.gumbel(size=q.shape))
+    np.testing.assert_array_equal(rng.uniform(size=q.shape), original.uniform(size=q.shape))
+    probes = np.broadcast_to(q[:, None, :], (nd, n, n)).copy()
+    drivers = np.arange(n)
+    probes[:, drivers, drivers] = q[:, np.argsort(joint.drivers)].mean(axis=-1)[:, None]
+    replay = _RepeatedQualifyingNoise(captured, n)
+    many = qualifying_grid(probes.reshape(nd*n, n), np.repeat(qday, n, axis=0),
+        np.repeat(joint.q_scale, n), np.repeat(joint.q_log_scale_sd, n), np.repeat(joint.q_df, n),
+        replay, advancing).reshape(nd, n, n)
+    replay.finish()
+    for driver in range(n):
+        original.bit_generator.state = copy.deepcopy(state)
+        expected = qualifying_grid(probes[:, driver], qday, joint.q_scale, joint.q_log_scale_sd,
+                                   joint.q_df, original, advancing)
+        np.testing.assert_array_equal(many[:, driver], expected)
+
+
+@pytest.mark.parametrize("mismatch", ["method", "shape", "degrees", "incomplete", "extra"])
+def test_qualifying_replay_rejects_changed_random_requests(mismatch):
+    captured = _RecordedQualifyingNoise(np.random.default_rng(71))
+    captured.normal(size=2)
+    df = np.array([[3.], [5.]])
+    captured.standard_t(df, size=(2, 6))
+    replay = _RepeatedQualifyingNoise(captured, 6)
+    expanded_df = np.repeat(df, 6, axis=0)
+    with pytest.raises(ValueError, match="Qualifying replay"):
+        if mismatch == "method":
+            replay.standard_t(expanded_df, size=(12, 6))
+        elif mismatch == "shape":
+            replay.normal(size=13)
+        else:
+            replay.normal(size=12)
+            if mismatch == "degrees":
+                replay.standard_t(expanded_df + 1, size=(12, 6))
+            elif mismatch == "incomplete":
+                replay.finish()
+            else:
+                replay.standard_t(expanded_df, size=(12, 6))
+                replay.normal(size=12)
 
 
 @pytest.mark.parametrize("dtype", [np.float32, np.float64])
