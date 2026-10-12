@@ -212,6 +212,16 @@ matched experiment is prepared under a separate identity and explicitly pending
 user approval; the runner refuses that pending registration. No transformed
 MCMC fit has been run and no convergence improvement is claimed.
 
+The [matched-study reporting checks](../outputs/championship/development/overall-rotation-reporting-checks/verification.json)
+close gaps in the prepared experiment runner. Its proposal now pins the original
+committed truth files, and each complete generating truth record is compared
+before sampling. Every returned attempt carries all current-field qualifying
+and race contrast diagnostics, including failures. These reports do not change
+the original convergence decision or retry policy. The focused suite passed
+43 checks using mathematical tests and synthetic sampling stubs; it ran no MCMC
+experiment. Model/data inputs, rotation, sampler function, seeds, settings and
+gates are unchanged. The experiment still awaits the requested user approval.
+
 The [forecast catalogue](overall_forecast_catalog.md) maps the full declared field
 to training history while rejecting target-weekend observations. It preserves
 new-driver, new-team and new-circuit uncertainty requirements without filling

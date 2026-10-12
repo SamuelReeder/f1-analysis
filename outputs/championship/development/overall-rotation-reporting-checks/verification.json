@@ -1,0 +1,99 @@
+{
+  "recorded_at": "2026-10-12T19:19:18.233926+00:00",
+  "purpose": "matched_profile_runner_accounting_software_verification",
+  "source_commit": "e57a3d22e7e658e40d5788bf4177ca8d3fd97783",
+  "evidence_commit": "f0e73807e3974c58e493d5183986526d3f863247",
+  "base_commit": "a95ad18c57e22ed4a4b9f6dadf67ef735c837568",
+  "reports": {
+    "targeted.xml": {
+      "tests": 43,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "reported_seconds": 28.83,
+      "sha256": "b7f9e56ed676631e4d5640f8859bd07377ac4e6b6ae718d3f1949c85e7ea20dc",
+      "output_file": "targeted.txt",
+      "output_sha256": "ad636b6081d5904d3dabd098867ab43e8f0a71f901372aae0f1fa95550d0f150"
+    }
+  },
+  "source_hashes": {
+    "analysis/overall_rotation_profile.py": "53165782f703c8ba3ee4637fb3449c5b7101bbf1b092489d07bc865a7d21d253",
+    "tests/test_overall_rotation_reporting.py": "e5eae05ae4c848577d5b668894f534df20d9bb622da8617c5542d3696ef45988",
+    "tests/test_overall_control_rotation.py": "cba90787c8a0280bb142640b035c35c959679ec8474fe36c78776929d4c901cb",
+    "tests/test_overall_fitting.py": "c168dd3a93149d9f6e333909c3e16217e33a76c8556115b4e48857c50205c226",
+    "docs/overall_rotation_profile_proposal.json": "47cdffa46f9be3547a0ee23e1554edbb735121c7a71cc41402a625c8cb0fc860",
+    "docs/overall_inference_revision.md": "ecd7072c92b28a8645c1a7d1b2a118f33d6bf57e23402cfd880a2938f6808e9c"
+  },
+  "resources": {
+    "execution": "sequential systemd user scope",
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "slice": "f1.slice",
+    "nice": 19
+  },
+  "model_inputs_key": "eae65767fe29bedcf396beeddbd8bf19b5bdc2a5769dd70f10fda50ef22bad18",
+  "model_extraction_data_and_rotation_unchanged": true,
+  "sampling_function_ast_unchanged": true,
+  "sampling_function_ast_sha256": "7fde82601930084fea3e441a089a3815a7e4ce3c01992530da3f4b7b04b87a4e",
+  "unchanged_proposal_fields": [
+    "id",
+    "status",
+    "user_approved",
+    "purpose",
+    "method",
+    "fit_settings",
+    "retry",
+    "studies",
+    "synthetic",
+    "resources",
+    "diagnostics",
+    "reports",
+    "stopping",
+    "acceptance",
+    "original_arrays_sha256",
+    "registered_model_inputs_key"
+  ],
+  "original_truth_files": {
+    "connected": {
+      "path": "outputs/championship/development/overall-computation-profile-v1/connected.truth.json",
+      "sha256": "0effa6798e618d269e44912a2dbf4c760e12aeb64f607660b6b288b5cac25931"
+    },
+    "confounded": {
+      "path": "outputs/championship/development/overall-computation-profile-v1/confounded.truth.json",
+      "sha256": "d9af54f7cb9865b0ecf607b56bf1e1e01d7f199e24fa547d5b57daa75945f3df"
+    },
+    "sparse_rookie": {
+      "path": "outputs/championship/development/overall-computation-profile-v1/sparse_rookie.truth.json",
+      "sha256": "48b4c7587e111de5018eade208ae830261f84a3c221b1270eba2bb713b68769b"
+    }
+  },
+  "original_generation_audit": {
+    "file": "outputs/championship/development/overall-track-context-checks/input-audit.json",
+    "sha256": "5503c0ea246b6fb9974bb50cacae812a72f35a10ecf81715fd2133512c836a6d",
+    "same_current_model_inputs": true,
+    "rerun": false
+  },
+  "checks": [
+    "All qualifying and race driver comparisons agree with the existing checker and direct chain means/standard deviations",
+    "Malformed field mappings, mismatched axes and nonfinite posterior fixtures are rejected",
+    "Changed observations, missing/extra truths, an altered unused truth and changed truth files are rejected",
+    "A changed truth fails the study before rotation construction or sampling",
+    "The original fitter preserves comparison reports in every failed and successful synthetic-stub attempt",
+    "A comparison diagnostic failure cannot alter the original attempt gate or invoke another retry",
+    "Original truth files are unchanged from the committed original experiment; mathematical rotation and fitting checks pass"
+  ],
+  "mcmc_run": false,
+  "original_failures_changed": false,
+  "user_approved": false,
+  "scientific_evidence_verified": false,
+  "publication_allowed": false,
+  "full_goal_complete": false,
+  "full_repository_suite_rerun": false,
+  "limitations": [
+    "Retry-path fixtures substitute synthetic draws and diagnostic results; they do not establish sampling convergence or resources",
+    "Additional comparisons report failures but do not change the frozen fit-acceptance rule",
+    "Original generating-array/truth reproduction uses the existing audit on the identical current model inputs, not a new generative run",
+    "The runner source fingerprint and pinned truth-file inventory changed; model, coordinates, seeds, settings and gates did not",
+    "The separate experiment still requires explicit user approval; full recovery, independent prediction and accepted publication remain incomplete"
+  ]
+}
