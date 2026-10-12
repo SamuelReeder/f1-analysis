@@ -1,0 +1,28 @@
+{
+  "source_commit": "c72a7bf779de2a66eeee57df642a23cd223d4c58",
+  "recorded_at": "2026-10-12T07:39:24.368383+00:00",
+  "command": "python -m pytest -q",
+  "resources": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%"
+  },
+  "tests": 225,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "seconds": 63.838,
+  "source_hashes": {
+    "f1rank/overall/design.py": "a59cc43dfed0f74324911aa681bea8a5c9693aa1f55832da6847a1788bf5f026",
+    "docs/overall_candidate.md": "a2f99f715ad8bfff6653e2633ef17f457c65384b473afbc57a529b687b3727e2",
+    "tests/test_overall_missing_weather.py": "e1f72e2ac6e1af0a09863060ff0891c7f15d73bc65b6a723b707f2b2ee6e3f40"
+  },
+  "reports": {
+    "before-fix.xml": "abbbeffe3c4ed13b0040e0ba69af598b1128e55e60a57672a25ffd976444cd64",
+    "after-fix.xml": "b739a22e98fd179e1876aafdaf2ee8da451d4578b3922bc7083ec65263c268ae",
+    "full-software.xml": "0898a98532b5b9e3d12cb79d0a0627857a6f5e4b1e8a6fc2a3f6197a2ea62a5b"
+  },
+  "scope": "Software correction of the documented unknown-weather exclusion policy. The full local Python suite passes; this does not cure the registered numerical-profile failure or establish scientific acceptance.",
+  "regeneration_required": true,
+  "profile_failure_preserved": true,
+  "full_goal_complete": false
+}

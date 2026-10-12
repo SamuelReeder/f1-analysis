@@ -14,12 +14,12 @@ open until the full acceptance checklist has direct evidence.
 | Known-truth recovery and simulation-based calibration | Generative responses and complete numerical-profile inventory: connected and sparse-rookie fits converged after retries; confounded fit exhausted its ladder | Complete registered SBC and stress studies, including the unresolved confounded case; no failed case may be discarded |
 | Coherent weekend simulation | Student-t elimination, current total race pace, shared weekend uncertainty | Common operations/conditions calibration, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Classification, points, race/qualifying countback and exchangeable-tie fixtures | Final complete event-rule fixtures and calibrated end-to-end simulation |
-| Ability/outcome/numerical uncertainty | Nested simulation, MCSE and rank/ESS diagnostics | Check ranking functionals under converged posteriors and fixed simulation precision |
+| Ability/outcome/numerical uncertainty | Nested simulation, MCSE and rank/ESS diagnostics; saved-draw diagnosis finds qualifying-contrast failures in the final confounded attempt | Resolve inference and check ranking functionals under converged posteriors with fixed simulation precision |
 | Chronological development comparison | Plan defines information horizons and baseline roles; `overall_scoring_contract.json` and blind scoring utilities preserve joint draws, required events and the inherited primary comparison | Complete forecast design and baseline implementations; freeze event inventory, calibration and stopping rules; run every fold |
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence, common field and matching explanation draws/scenario | Producer/export, pairwise comparisons, and matching component explanations from accepted draws; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
-| Software and runner readiness | Earlier fitting-engine Python verification; `development/overall-interface-checks/verification.json` records the committed successor frontend build, browser suite, contract check and dependency audit | Full Python and complete workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
+| Software and runner readiness | Full Python suite after the unknown-weather correction (`development/weather-boundary-checks/verification.json`); committed interface build/browser/contract checks and dependency audit | Complete workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
 | Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
 
 The numerical profile is registered separately in
@@ -79,3 +79,6 @@ the complete fixed ladder. This was a numerical profile on synthetic designs,
 not a real-driver ranking, complete recovery study or calibration success.
 The failure and tree-depth saturation remain part of the record. No sampler
 setting or acceptance threshold has been changed in response to them.
+The [profile report](overall_profile_results.md) links its recorded diagnostics
+and post hoc saved-draw analysis. The latter does not provide a substitute
+acceptance gate or permit selecting a different retry.
