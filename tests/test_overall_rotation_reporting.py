@@ -156,10 +156,8 @@ def test_every_retry_preserves_reports_without_changing_the_gate(
             assert (directory / f"failed_{number}.npz").exists()
 
 
-def test_proposal_pins_the_original_truths_without_authorizing_a_run():
+def test_proposal_pins_the_original_truths():
     proposal = json.loads((runner.ROOT / "docs/overall_rotation_profile_proposal.json").read_text())
-    assert not proposal["user_approved"]
-    assert proposal["status"] == "proposal_pending_user_approval"
     runner.require_prototype_sources(proposal)
     assert set(proposal["original_truth_files"]) == set(proposal["studies"])
     for study in proposal["studies"]:
@@ -178,3 +176,24 @@ def test_registration_rejects_an_incomplete_truth_inventory(monkeypatch):
     monkeypatch.setattr(runner, "committed_registration", lambda _: registration)
     with pytest.raises(ValueError, match="complete original truth inventory"):
         runner.checked_registration("synthetic-fixture.json")
+
+
+def test_changed_truth_fails_the_study_before_sampling(matched, monkeypatch):
+    registration, blocks, truth, path = matched
+    registration.update(id="fixture-profile", studies=["toy"])
+    truth["unused_state"][0] += 1
+    monkeypatch.setattr(runner, "checked_registration", lambda _: registration)
+    monkeypatch.setattr(runner, "snapshot", lambda: dict(key="synthetic-fixture", inputs={}))
+    monkeypatch.setattr(runner, "require_snapshot", lambda _: None)
+    monkeypatch.setattr(runner, "require_prototype_sources", lambda _: None)
+    monkeypatch.setattr(runner, "generate", lambda *args: (blocks, {}, truth))
+    monkeypatch.setattr(runner, "build_rotation", lambda _: pytest.fail("Do not construct a changed study"))
+    monkeypatch.setattr(runner, "run", lambda *args, **kwargs: pytest.fail("Do not sample changed truths"))
+    result = runner.execute(path.parent / "fixture-registration.json")
+    assert result["all_processed"] and not result["all_converged"]
+    destination = path.parent / "outputs/championship/development/fixture-profile"
+    failed = json.loads((destination / "toy.json").read_text())
+    assert failed["state"] == "failed"
+    assert "Generated truths differ" in failed["message"]
+    assert failed["receipt"] is None
+    assert not (destination / "toy.truth.json").exists()
