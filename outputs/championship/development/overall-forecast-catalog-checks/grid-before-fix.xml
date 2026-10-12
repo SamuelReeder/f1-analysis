@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="1.476" timestamp="2026-10-12T04:45:06.868957-04:00" hostname="DESKTOP-M9I22TH"><testcase classname="tests.test_overall_grid_boundary" name="test_pit_lane_grid_feature_does_not_use_later_field_exclusions[Disqualified]" time="0.799"><failure message="AssertionError: &#10;Arrays are not equal&#10;&#10;Mismatched elements: 1 / 1 (100%)&#10;Mismatch at index:&#10; [0]: 1.6094379124341003 (ACTUAL), 1.791759469228055 (DESIRED)&#10;Max absolute difference among violations: 0.18232156&#10;Max relative difference among violations: 0.1017556&#10; ACTUAL: array([1.609438])&#10; DESIRED: array([1.791759])">later_status = 'Disqualified'
+
+    @pytest.mark.parametrize("later_status", ["Disqualified", "Did not start"])
+    def test_pit_lane_grid_feature_does_not_use_later_field_exclusions(later_status):
+        source, clean = tables()
+        event = "2022-02"
+        pit_driver = (source["race"].event_id == event) &amp; (source["race"].driver_id == "d0")
+        source["race"].loc[pit_driver, "grid"] = 0
+        before = build(event, tables=source, clean=clean)
+        source["race"].loc[(source["race"].event_id == event) &amp; (source["race"].driver_id == "d1"), "status"] = later_status
+        after = build(event, tables=source, clean=clean)
+    
+        def grid_feature(design):
+            entry = design.qualifying.entries
+            index = int(entry.loc[(entry.event_id == event) &amp; (entry.driver_id == "d0"), "entry_idx"].iloc[0])
+            where = (design.outcomes["entry"] == index) &amp; design.outcomes["mask"]
+            return design.outcomes["log_grid"][where]
+    
+        # The excluded driver's result is not a new starting position for the pit-lane
+        # driver. Match the complete declared field used at forecast time.
+        np.testing.assert_array_equal(grid_feature(before), np.log([6]))
+&gt;       np.testing.assert_array_equal(grid_feature(after), grid_feature(before))
+E       AssertionError: 
+E       Arrays are not equal
+E       
+E       Mismatched elements: 1 / 1 (100%)
+E       Mismatch at index:
+E        [0]: 1.6094379124341003 (ACTUAL), 1.791759469228055 (DESIRED)
+E       Max absolute difference among violations: 0.18232156
+E       Max relative difference among violations: 0.1017556
+E        ACTUAL: array([1.609438])
+E        DESIRED: array([1.791759])
+
+tests/test_overall_grid_boundary.py:28: AssertionError</failure></testcase><testcase classname="tests.test_overall_grid_boundary" name="test_pit_lane_grid_feature_does_not_use_later_field_exclusions[Did not start]" time="0.117"><failure message="AssertionError: &#10;Arrays are not equal&#10;&#10;Mismatched elements: 1 / 1 (100%)&#10;Mismatch at index:&#10; [0]: 1.6094379124341003 (ACTUAL), 1.791759469228055 (DESIRED)&#10;Max absolute difference among violations: 0.18232156&#10;Max relative difference among violations: 0.1017556&#10; ACTUAL: array([1.609438])&#10; DESIRED: array([1.791759])">later_status = 'Did not start'
+
+    @pytest.mark.parametrize("later_status", ["Disqualified", "Did not start"])
+    def test_pit_lane_grid_feature_does_not_use_later_field_exclusions(later_status):
+        source, clean = tables()
+        event = "2022-02"
+        pit_driver = (source["race"].event_id == event) &amp; (source["race"].driver_id == "d0")
+        source["race"].loc[pit_driver, "grid"] = 0
+        before = build(event, tables=source, clean=clean)
+        source["race"].loc[(source["race"].event_id == event) &amp; (source["race"].driver_id == "d1"), "status"] = later_status
+        after = build(event, tables=source, clean=clean)
+    
+        def grid_feature(design):
+            entry = design.qualifying.entries
+            index = int(entry.loc[(entry.event_id == event) &amp; (entry.driver_id == "d0"), "entry_idx"].iloc[0])
+            where = (design.outcomes["entry"] == index) &amp; design.outcomes["mask"]
+            return design.outcomes["log_grid"][where]
+    
+        # The excluded driver's result is not a new starting position for the pit-lane
+        # driver. Match the complete declared field used at forecast time.
+        np.testing.assert_array_equal(grid_feature(before), np.log([6]))
+&gt;       np.testing.assert_array_equal(grid_feature(after), grid_feature(before))
+E       AssertionError: 
+E       Arrays are not equal
+E       
+E       Mismatched elements: 1 / 1 (100%)
+E       Mismatch at index:
+E        [0]: 1.6094379124341003 (ACTUAL), 1.791759469228055 (DESIRED)
+E       Max absolute difference among violations: 0.18232156
+E       Max relative difference among violations: 0.1017556
+E        ACTUAL: array([1.609438])
+E        DESIRED: array([1.791759])
+
+tests/test_overall_grid_boundary.py:28: AssertionError</failure></testcase></testsuite></testsuites>
