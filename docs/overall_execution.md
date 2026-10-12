@@ -12,7 +12,7 @@ open until the full acceptance checklist has direct evidence.
 | Complete entrant/cutoff catalog | Cutoff-first data design; outcome-free forecast catalogue; development state propagation reconstructs uncentred history and retains unseen entrants with population uncertainty | Verified as-of source/calendar inventory, accepted-posterior integration and recovery on the real transfer network |
 | Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks for full and bounded loaders; corrected race-order arithmetic has known-probability/gradient checks; the exhausted confounded case and geometry diagnosis are preserved | Separate approval and registration before the proposed post-failure numerical study on corrected source; fresh recovery and runner resource measurements |
 | Known-truth recovery and simulation-based calibration | Generative responses and complete numerical-profile inventory: connected and sparse-rookie fits converged after retries; confounded fit exhausted its ladder | Complete registered SBC and stress studies, including the unresolved confounded case; no failed case may be discarded |
-| Coherent weekend simulation | Student-t elimination and shared weekend uncertainty; conditional forecast kernels preserve teammate segment effects, context coefficients, running order and completion within each joint draw, with matched-model and known-probability checks | Forecast-time conditions, official-grid eligibility/penalties, common operations calibration, lapping, shortened-race and incident assumptions |
+| Coherent weekend simulation | Student-t elimination and shared weekend uncertainty; conditional kernels preserve teammate effects, context, order and completion within each joint draw; compensated race-order generation has controlled, exact-sum and compiled checks | Forecast-time conditions, official-grid eligibility/penalties, common operations calibration, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |
 | Ability/outcome/numerical uncertainty | Nested simulation, MCSE and rank/ESS diagnostics; saved-draw diagnosis finds qualifying-contrast failures in the final confounded attempt | Resolve inference and check ranking functionals under converged posteriors with fixed simulation precision |
 | Chronological development comparison | Plan defines information horizons and baseline roles; blind scoring utilities preserve joint draws, conditional weights and required events; outcome-free catalogue, joint states and conditional observation kernels have synthetic checks | Complete source verification, unknown-condition integration, unseen-circuit and classification-conditioning policies and baseline implementations; freeze event inventory, calibration and stopping rules; run every fold |
@@ -186,4 +186,17 @@ event has a very small common probability, and reject impossible conditioning
 or mismatched draws. The final choice of conditioning information and exposure
 still belongs in the complete predictive registration. The numerical regression
 evidence concerns evaluated probabilities and gradients; sampled-order behavior
-under extreme offsets still needs a separate generative check.
+under extreme offsets was subsequently checked separately as recorded below.
+
+The [generation correction](overall_order_generation.md) reproduces and fixes
+rounded-away race-order perturbations in the joint generator, conditional
+forecast and counterfactual race simulation. It uses the same random draws and
+retains their roundoff component during sorting. The
+[verification record](../outputs/championship/development/overall-order-generation-checks/verification.json)
+preserves the failing regressions, corrected compiled/known-sum checks, full
+suite, unchanged original synthetic inputs and capped resource measurement.
+Invalid generated indices are rejected before they can select an observation.
+The fitting-source identity changes and affected evidence requires regeneration;
+the numerical study remains pending approval and the original failure remains.
+These checks close the identified order-generation arithmetic gap, not the
+remaining recovery, condition, exposure, classification or calibration work.

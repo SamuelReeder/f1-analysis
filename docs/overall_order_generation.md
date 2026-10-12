@@ -46,3 +46,10 @@ frequencies, invalid arithmetic and the recovery consumer's rejection path.
 The original numerical-profile inputs must still match their frozen identities.
 The profile failure remains recorded, the proposed sampling study remains
 unapproved, and full recovery, calibration and production integration remain open.
+
+The [verification record](../outputs/championship/development/overall-order-generation-checks/verification.json)
+identifies the tested source, preserved failure reports, full local suite and
+compressed synthetic workload. The [input audit](../outputs/championship/development/overall-order-generation-checks/input-audit.json)
+reproduces the original registered observations and truths exactly. The resource
+workload tests the local forecast path with synthetic parameters; it does not
+measure MCMC fitting or establish readiness on the intended CI runner.

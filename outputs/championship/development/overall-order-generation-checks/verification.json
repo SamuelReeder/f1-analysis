@@ -1,0 +1,198 @@
+{
+  "recorded_at": "2026-10-12T11:06:35.177389+00:00",
+  "source_commit": "cc7ea2db9c9bf869c97da535d91aa39f5dae375a",
+  "regression_commit": "e1637ea",
+  "source_hashes": {
+    "f1rank/overall/order.py": "812af3dac1f6ad8fa016919332511a24fc99d53eef947edc1eeec55dd48cd95d",
+    "f1rank/overall/model.py": "83d97eb193495fc5ea2d7203b10ebd10f9fa1ef14f10bafe5ba86a868035b1ac",
+    "f1rank/overall/recovery.py": "c2ce4c3618cc19f9b0dd462557fd54d27aa65fa5ac344998d358067724b6d042",
+    "f1rank/overall/simulation.py": "57d31ee69f2f6b36fe551c9b6bcb51f0894e5cfbd03e1403adf77e7920c61ff9",
+    "analysis/overall_observation_kernels.py": "d37b616ff9f64fdce1b183bbfba3ac3dbfa7b56182bf9d036a6b5bf3aa29c62e",
+    "analysis/overall_order_numerics_audit.py": "8cf42c23bbabbbb1d31e54f567161ff468305bea3d19a4ae7950da9bff9b9b24",
+    "analysis/overall_forecast_resources.py": "c1ffdce235b6315b791bfe5d07080ea87c42214760163aa96d5fd2bb21ea57b4",
+    "tests/test_overall_order_generation.py": "80d8977425acaff709456f126d47a99692f960389a5b7a14d75749c236c5de91",
+    "docs/overall_candidate.md": "3bc4ac11c6c115aac73bb0566c0b5cf67258c4c2bcdb716236668bc45e187c77",
+    "docs/overall_rotation_profile_proposal.json": "a23cf457e9eaf8b2de1ce200a1888f2459fe3381eaae2b669a3b0f594569d5f9"
+  },
+  "reports": {
+    "before-fix.xml": {
+      "tests": 3,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 8.089,
+      "exit_code": 1,
+      "sha256": "57d062b2b316bee5eb3b9aad88e5862afc4f9b46159ee65a5ec097d2971caa86"
+    },
+    "initial-fixed.xml": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 8.046,
+      "exit_code": 0,
+      "sha256": "b442cb021f5c44da3cdc04f5586c1c84cc727ffac9257c6cb53e41592da6bc11"
+    },
+    "software.xml": {
+      "tests": 63,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 30.517,
+      "exit_code": 0,
+      "sha256": "b4ed439b6ce6293e50d2431c6cb99b1fa9f740e86bdc80b5588b7a771d78ed9d"
+    },
+    "full-software.xml": {
+      "tests": 435,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 92.332,
+      "exit_code": 0,
+      "sha256": "ee805192d7ad45103c4d972db89854ce2b5b60bcfdcac5e2e949d3a88391d4b0"
+    }
+  },
+  "commands": {
+    "before-fix.xml": "python -m pytest tests/test_overall_order_generation.py -q",
+    "initial-fixed.xml": "python -m pytest tests/test_overall_order_generation.py -q",
+    "software.xml": "python -m pytest tests/test_overall_order_generation.py tests/test_overall_order_numerics.py tests/test_overall_observation_kernels.py tests/test_overall.py -q",
+    "full-software.xml": "python -m pytest -q",
+    "input-audit.json": "python analysis/overall_order_numerics_audit.py --output outputs/championship/development/overall-order-generation-checks/input-audit.json",
+    "resources.json": "python analysis/overall_forecast_resources.py --compressed --observations --output outputs/championship/development/overall-order-generation-checks/resources.json"
+  },
+  "source_boundaries": {
+    "before-fix.xml": "Original joint generator, conditional forecast and counterfactual simulation failed the controlled common-offset regressions; report committed with their regression source.",
+    "initial-fixed.xml": "Initial compensated-sort working tree before invalid-index guards and expanded exact-sum tests. This intermediate implementation was not separately committed.",
+    "software.xml": "Expanded focused suite. A recovery-consumer rejection regression was added afterward and is covered by the full suite. Generator/helper code matches source_commit.",
+    "full-software.xml": "Full local Python suite on source_commit.",
+    "input-audit.json": "Regenerated all original registered synthetic observations and truths on source_commit; exact original identities required.",
+    "resources.json": "Compressed synthetic cache-format workload on source_commit; no fitted posterior or real-driver score."
+  },
+  "execution": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "policy": "Sequential systemd user scopes; resource profiler verified actual cgroup limits"
+  },
+  "correction": {
+    "algorithm": "Compensated TwoSum sorting keeps rounded sum and roundoff term as separate ordered keys",
+    "paths": [
+      "joint model generated order",
+      "conditional forecast running order",
+      "equal-opportunity simulated race line order"
+    ],
+    "random_sites_added": false,
+    "original_seeds_unchanged": true,
+    "priors_and_gates_unchanged": true,
+    "pl_log_probability_function_ast_unchanged": true,
+    "checked_unchanged_sources": [
+      "f1rank/overall/fitting.py",
+      "f1rank/overall/diagnostics.py",
+      "f1rank/overall/qualifying.py",
+      "f1rank/model.py",
+      "f1rank/benchmark.py",
+      "f1rank/artifacts.py"
+    ],
+    "exact_tie_policy": "Existing stable input order, or existing identity-keyed tie uniforms where already supplied",
+    "invalid_arithmetic": "NumPy rejects invalid sums; JAX returns invalid indices which the recovery consumer rejects before indexing"
+  },
+  "checks": [
+    "Actual joint-model trace with supplied perturbations",
+    "Common-offset counterfactual race points",
+    "Exact rational sums of supplied inputs",
+    "Compiled and eager JAX behavior",
+    "Separated tied groups and masks",
+    "Input permutations",
+    "Exact tie conventions",
+    "First-place probability frequencies",
+    "Invalid arithmetic and actual recovery-consumer rejection"
+  ],
+  "input_audit": {
+    "file": "input-audit.json",
+    "sha256": "7dbd0027610f7480819efd832bddf71aa5d395f3a004e5f88db58aed65b3d1de",
+    "studies": [
+      {
+        "study": "connected",
+        "seed": 20261012,
+        "arrays_key": "4ac5ab7125adfa2fc8a0ca18829fbe941be0ec94b5e857fc54a16751bba3a948",
+        "original_truth_sha256": "0effa6798e618d269e44912a2dbf4c760e12aeb64f607660b6b288b5cac25931",
+        "arrays_and_truths_identical": true
+      },
+      {
+        "study": "confounded",
+        "seed": 20261013,
+        "arrays_key": "4d50cfb60b150f68abac84c2bc1619c649e76ebff8212884c52bcb1b88b6891b",
+        "original_truth_sha256": "d9af54f7cb9865b0ecf607b56bf1e1e01d7f199e24fa547d5b57daa75945f3df",
+        "arrays_and_truths_identical": true
+      },
+      {
+        "study": "sparse_rookie",
+        "seed": 20261014,
+        "arrays_key": "ca20697300ef8607dc61590f9a00bc8d304142c525997aa90608b2aabb7d9196",
+        "original_truth_sha256": "48b4c7587e111de5018eade208ae830261f84a3c221b1270eba2bb713b68769b",
+        "arrays_and_truths_identical": true
+      }
+    ],
+    "original_study_states": [
+      {
+        "study": "connected",
+        "state": "converged"
+      },
+      {
+        "study": "confounded",
+        "state": "failed"
+      },
+      {
+        "study": "sparse_rookie",
+        "state": "converged"
+      }
+    ]
+  },
+  "resources": {
+    "file": "resources.json",
+    "sha256": "d5dec7bf6ecdf77745b16ee91022e15f33c66a29e1a1903a1f39a262a9107677",
+    "seconds": {
+      "build_design": 2.0465693189762533,
+      "generate_workload": 4.179146013048012,
+      "compress_workload": 36.98393743496854,
+      "load_and_validate": 5.473604990984313,
+      "forecast": 8.301236579020042,
+      "close_and_recheck": 0.7486721450113691,
+      "total": 57.87815139797749
+    },
+    "process_max_rss_kib": 1806900,
+    "forecast": {
+      "kind": "conditional_weekend",
+      "batches": 25,
+      "draws_per_chain": 3200,
+      "max_batch_output_bytes": 1579696,
+      "observation_parameters_sha256": "b628f989a73960728adbd8db39436d6dcc66fa9302485341d7a543f77a1ffefb",
+      "batch_stream_sha256": "7f4afd7763739db3f20c8f8316bd03d9f3e5912fec25d82c7496b0bac70f5f3d",
+      "every_output_finite": true,
+      "conditions_forecast": false,
+      "classification_generated": false
+    },
+    "previous_file": "outputs/championship/development/overall-order-numerics-checks/resources.json",
+    "previous_sha256": "2b12e8726efde0e78052d86290722cbae7792eea736a2f0ba2bc48115bd40957",
+    "parameter_identity_equal": true,
+    "conditional_output_stream_equal": true,
+    "synthetic_parameters_only": true
+  },
+  "methods_sources": [
+    "https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf",
+    "https://docs.jax.dev/en/latest/_autosummary/jax.lax.optimization_barrier.html"
+  ],
+  "model_inputs_key": "33350fd84802556dd44ee7c94ac4656102c8065d58dd386e5e93b7ebc5e5274f",
+  "pending_proposal_status": "proposal_pending_user_approval",
+  "pending_proposal_user_approved": false,
+  "limitations": [
+    "The original failed numerical profile remains failed; its cause is not established.",
+    "A future study would evaluate numerical corrections and rotated coordinates together, without isolating causal effects.",
+    "The helper preserves supplied floating-point values, not information lost earlier in strength construction; every backend and floating-point edge is not certified.",
+    "Resource evidence is a local synthetic workload, not MCMC or the intended CI runner.",
+    "Recovery, forecast conditions, exposure/classification, calibration, independent evaluation and production integration remain incomplete."
+  ],
+  "mcmc_run": false,
+  "real_data_predictions_scored": false,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}

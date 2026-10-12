@@ -81,6 +81,9 @@ before taking a batch slice, including when Student-t degrees of freedom vary
 by draw. Changing batch size, input field row order or the length of the future
 path therefore does not change earlier draws. Repeating future trajectories and
 establishing Monte Carlo precision still require the final replication policy.
+The later [race-order generation correction](overall_order_generation.md) also
+preserves the sampled Gumbel perturbations when a large common strength would
+round them away. It does not add a random draw or replace the existing streams.
 
 ## Remaining scientific and production requirements
 
