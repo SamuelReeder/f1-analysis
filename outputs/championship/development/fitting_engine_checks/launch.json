@@ -1,0 +1,30 @@
+{
+  "unit": "f1-overall-profile.service",
+  "state_at_launch": {
+    "MainPID": "612673",
+    "ExecMainStartTimestamp": "Mon 2026-10-12 02:23:30 EDT",
+    "Slice": "f1.slice",
+    "MemoryMax": "6442450944",
+    "MemorySwapMax": "0",
+    "Nice": "19",
+    "ActiveState": "active",
+    "SubState": "running",
+    "InvocationID": "bb87932df8184cb98e24d43563513ad0"
+  },
+  "slice": {
+    "CPUWeight": "10",
+    "CPUQuotaPerSecUSec": "8s"
+  },
+  "registration": "docs/overall_profile_protocol.json",
+  "source_commit": "0df3cf7",
+  "command": [
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-u",
+    "-m",
+    "f1rank.overall.recovery",
+    "--registration",
+    "docs/overall_profile_protocol.json"
+  ],
+  "purpose": "synthetic_numerical_profile",
+  "publication_allowed": false
+}

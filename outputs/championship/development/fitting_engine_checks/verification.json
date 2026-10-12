@@ -1,0 +1,33 @@
+{
+  "source_commit": "0df3cf7dbd05437e818e5d78eb4ef49f1e3dab73",
+  "generated_at": "2026-10-12T06:23:30.461103+00:00",
+  "tests": {
+    "tests": 190,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "seconds": 63.799,
+  "limits": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%"
+  },
+  "command": "python -m pytest -q --junitxml=/tmp/f1-overall-fitting-tests.xml",
+  "covered": [
+    "generative_density_equivalence",
+    "deterministic_synthetic_generation",
+    "fixed_retry_ladder",
+    "terminal_failure_cache_rejection",
+    "source_change_failure",
+    "posterior_corruption_rejection",
+    "real_fit_registration_rejection",
+    "full_repository_regressions"
+  ],
+  "test_sha256": {
+    "tests/test_overall.py": "f743562c5db117a6f206613ef89d44a4f803768284f4b543d782eb332bb5769f",
+    "tests/test_overall_fitting.py": "c168dd3a93149d9f6e333909c3e16217e33a76c8556115b4e48857c50205c226"
+  },
+  "proves_posterior_recovery": false,
+  "proves_predictive_improvement": false,
+  "publication_allowed": false
+}
