@@ -50,3 +50,12 @@ This fixes a prerequisite of the proposed power calculation. Full study size,
 power against declared error patterns, numerical-sensitivity assessment,
 complete registration and actual inference remain unfinished. The development
 fixtures cannot establish calibration, ranking recovery or publication readiness.
+
+The [verification record](../outputs/championship/development/overall-sampling-stream-checks/verification.json)
+links the failing regression, passing focused checks, full local suite and exact
+original-input audit. The full suite still fails the previously recorded
+stale-qualifying-export integration checks. The sampler implementation, base
+settings, probability-model sources and gates are verified unchanged; only the
+new calibration path uses a separately declared seed inventory. The original
+profile's observations and truths reproduce exactly. Its failure is preserved,
+and the updated pending source identity grants no approval.

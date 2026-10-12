@@ -277,3 +277,12 @@ within an affected quantity, without fitting or reading empirical SBC ranks.
 The planning assumptions and grid are not a selected study size or a full
 calibration registration. Every result and its scope must remain visible before
 study-size and resource decisions are made.
+
+The [sampling-stream verification](../outputs/championship/development/overall-sampling-stream-checks/verification.json)
+preserves the original failing interface regression, passing corrected checks,
+and the full local suite with its unchanged stale-export failures. The input
+audit reproduces the original numerical-profile observations and truths exactly.
+The sampling implementation, base settings, probability-model sources and gates remain
+unchanged; a future full calibration registration must supply its separate seed
+inventory. The pending coordinate study remains unapproved, and fresh affected
+artifacts are required before publication.

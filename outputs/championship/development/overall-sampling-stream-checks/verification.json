@@ -1,0 +1,162 @@
+{
+  "recorded_at": "2026-10-12T12:51:45.436864+00:00",
+  "source_commit": "ab521c92cb4aea302b8f6ccf2e8c1f6a2892fe53",
+  "regression_commit": "2c8ebda",
+  "implementation_commit": "e41b337",
+  "source_hashes": {
+    "f1rank/overall/fitting.py": "302ad0d46d286cf7f869c4d002433eb4da9a0b024d30de7c20b660cdb81f91ac",
+    "analysis/overall_recovery_checks.py": "5f3711c3a9ac14cc193429477be5bceb9a2a8ac2eff5c1f6176e52d4d280fd82",
+    "analysis/overall_order_numerics_audit.py": "3b452efb0bf563c9797b14ebf4c27704e57437dd51ac6939dba1b5814d59ac69",
+    "tests/test_overall_sampling_streams.py": "19821359c4cb34bd455a0487af3390d75204724552ac91ba5ce83ae33bb8afc4",
+    "tests/test_overall_recovery_checks.py": "17936efd2486b432b05c9e16aa87e700b383b70f5c99e0657466dd60a7f0d563",
+    "f1rank/overall/model.py": "83d97eb193495fc5ea2d7203b10ebd10f9fa1ef14f10bafe5ba86a868035b1ac",
+    "f1rank/overall/recovery.py": "c2ce4c3618cc19f9b0dd462557fd54d27aa65fa5ac344998d358067724b6d042",
+    "f1rank/overall/diagnostics.py": "7dff41cc89046160269424c1ab47ede26eb7dc8b8d0a107cf1e68fc1c7e2a791",
+    "f1rank/artifacts.py": "2e9b0b2171d3fb2db3fecea14c944ed3b2d4865ea87c853535bc80e245ee9bbb",
+    "docs/overall_candidate.md": "82f74d33e89b5b3303dd5052bc2d640bfd7b8346432e95ee13ce1fa58f18e7a7",
+    "docs/overall_rotation_profile_proposal.json": "3f6921b695a0e102fd67df3a8e73237b3f9acb56ff73f1ff6965575cbc4659fb",
+    "analysis/overall_calibration_power.py": "93cd60539b5f6285d23abd47d836fb21b22731a2541a2811259ff1f3596117e3",
+    "tests/test_overall_calibration_power.py": "f50e13feb9a409fbca0d21d623ba110b9d3121c41420511ffd25ed165d18233d"
+  },
+  "reports": {
+    "before-fix.xml": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.543,
+      "sha256": "af7795be61eccf016800abadecb360223682fc34709c8d82bdd6c9ff64539697",
+      "exit_code": 1,
+      "failed_tests": [
+        "tests.test_overall_sampling_streams::test_recovery_fits_use_every_predeclared_sampling_seed"
+      ]
+    },
+    "initial.xml": {
+      "tests": 125,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 32.192,
+      "sha256": "8c36787c2fe62c7355ef59b2c45c99894b97c5eb6ce063d963b324857587b830",
+      "exit_code": 0,
+      "failed_tests": []
+    },
+    "full.xml": {
+      "tests": 588,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 103.508,
+      "sha256": "f045eb77478c1e8f5219e84a551a9201faabca678c90f85d024bd2a01220c719",
+      "exit_code": 1,
+      "failed_tests": [
+        "tests.test_dashboard::test_checked_current_data_contract",
+        "tests.test_dashboard::test_export_rejects_mismatched_portable_fit_identity"
+      ]
+    }
+  },
+  "source_boundaries": {
+    "before-fix.xml": "Runner-interface regression committed before the correction. Explicit sampling stubs show the ignored calibration schedule; no MCMC.",
+    "initial.xml": "Working-tree focused stream, fit, recovery, ranking and coordinate-proposal checks before the power-planning module was added and pending source identity was updated.",
+    "full.xml": "Full local Python suite on source_commit. New tests pass; the same stale-publication integration failures remain.",
+    "input-audit.json": "Regenerated original numerical-profile observations and truths on source_commit, without fitting. Exact identities preserved."
+  },
+  "commands": {
+    "initial.xml": "python -m pytest -q tests/test_overall_sampling_streams.py tests/test_overall_fitting.py tests/test_overall_recovery_checks.py tests/test_overall_ranking_recovery.py tests/test_overall_control_rotation.py",
+    "full.xml": "python -m pytest -q",
+    "input-audit.json": "python analysis/overall_order_numerics_audit.py --output outputs/championship/development/overall-sampling-stream-checks/input-audit.json"
+  },
+  "execution": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "policy": "Sequential systemd user scopes"
+  },
+  "protected_fitter_ast_unchanged": {
+    "_sample": true,
+    "FIT_SETTINGS": true
+  },
+  "protected_probability_and_gate_sources_unchanged": {
+    "f1rank/overall/model.py": true,
+    "f1rank/overall/qualifying.py": true,
+    "f1rank/model.py": true,
+    "f1rank/overall/recovery.py": true,
+    "f1rank/artifacts.py": true,
+    "f1rank/overall/diagnostics.py": true
+  },
+  "checks": [
+    "Generation and every attempt seed are fixed for the complete future calibration inventory",
+    "Repeated, missing, out-of-range or cross-purpose seed schedules fail before sampling/cache creation",
+    "The actual declared seed is passed to the sampler stub and recorded in each attempt",
+    "Original profile sampling schedule and all other retry controls remain unchanged",
+    "Changed unused retry keys invalidate cache identity; mutations during fitting are recorded failures",
+    "Checked recovery uses the registered per-study base settings",
+    "An exact Uniform example demonstrates the problem with reusing one set of posterior draws across SBC replicates"
+  ],
+  "input_audit": {
+    "file": "input-audit.json",
+    "sha256": "fcaa7bde14baa7f65a60040195024b7eb38316aff226c68703f79f0578621a45",
+    "studies": [
+      {
+        "study": "connected",
+        "seed": 20261012,
+        "arrays_key": "4ac5ab7125adfa2fc8a0ca18829fbe941be0ec94b5e857fc54a16751bba3a948",
+        "original_truth_sha256": "0effa6798e618d269e44912a2dbf4c760e12aeb64f607660b6b288b5cac25931",
+        "arrays_and_truths_identical": true
+      },
+      {
+        "study": "confounded",
+        "seed": 20261013,
+        "arrays_key": "4d50cfb60b150f68abac84c2bc1619c649e76ebff8212884c52bcb1b88b6891b",
+        "original_truth_sha256": "d9af54f7cb9865b0ecf607b56bf1e1e01d7f199e24fa547d5b57daa75945f3df",
+        "arrays_and_truths_identical": true
+      },
+      {
+        "study": "sparse_rookie",
+        "seed": 20261014,
+        "arrays_key": "ca20697300ef8607dc61590f9a00bc8d304142c525997aa90608b2aabb7d9196",
+        "original_truth_sha256": "48b4c7587e111de5018eade208ae830261f84a3c221b1270eba2bb713b68769b",
+        "arrays_and_truths_identical": true
+      }
+    ],
+    "original_study_states": [
+      {
+        "study": "connected",
+        "state": "converged"
+      },
+      {
+        "study": "confounded",
+        "state": "failed"
+      },
+      {
+        "study": "sparse_rookie",
+        "state": "converged"
+      }
+    ]
+  },
+  "model_inputs_key": "bd006936348cc74d848ec2d08c8836556801a0e6511866ad2b0f64b2103e824f",
+  "requires_affected_artifact_regeneration": true,
+  "pending_proposal_status": "proposal_pending_user_approval",
+  "pending_proposal_user_approved": false,
+  "full_suite_passed": false,
+  "publication_blocker": {
+    "artifact": "outputs/ratings",
+    "manifest": "outputs/ratings/manifest.json",
+    "manifest_sha256": "f0d49de3aa39e72b176a764275b23c2eceb7fe169396b14a1a6290b62bbba7eb",
+    "changed_dependency": "f1rank/design.py",
+    "recorded_sha256": "2ad04c1267364acbd76dba29e85acb354e3c2b27f0c4070b24872b72589f1fc1",
+    "current_sha256": "4fc124f37db9ad14ef67d42ef6cb46000e4b7914588e3cf91a5841094125712c",
+    "recorded_matches_pre_change_source": true,
+    "full_suite_passed": false,
+    "requires_regeneration": true,
+    "action": "Preserve stale exports and the guard. Regenerate affected artifacts before publication and rerun the complete suite.",
+    "guard_weakened": false,
+    "manifests_rewritten": false
+  },
+  "prior_publication_blocker_reference": "../overall-race-only-checks/verification.json",
+  "prior_publication_blocker_reference_sha256": "35be2b0a364153838dc4e8850eb38f0ae0eee4db110735d8e977ca45af416457",
+  "mcmc_run": false,
+  "full_calibration_registration_frozen": false,
+  "full_study_run": false,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}
