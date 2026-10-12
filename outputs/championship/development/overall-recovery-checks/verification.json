@@ -1,0 +1,82 @@
+{
+  "recorded_at": "2026-10-12T12:11:21.327392+00:00",
+  "source_commit": "0de1668406d6b9756a9d2e1d69deff7b30658cdb",
+  "source_hashes": {
+    "analysis/overall_recovery_checks.py": "7c82145b181d6f2dda77809d18f5af549367819f213f5479f58a2ecf66e60acd",
+    "tests/test_overall_recovery_checks.py": "313e848afd86f16aab841d450b8d2ffd8eabf5f08cf8a74611945ac897b6e1ea",
+    "docs/overall_recovery_checks.md": "62f7bde227ec78696627c55641b612f1c78b0a488070ddf43b147ddb7dfc9af3",
+    "f1rank/overall/recovery.py": "c2ce4c3618cc19f9b0dd462557fd54d27aa65fa5ac344998d358067724b6d042",
+    "f1rank/overall/fitting.py": "506782633f38e49272479f25c2b6e31c7dc13543fc7ea31603f8d27a62957df7",
+    "analysis/overall_posterior_archive.py": "d963d652dc9711f7a39ea279e9a9a406c902a54be4a588de0922a6d1442f34c5",
+    "docs/overall_rotation_profile_proposal.json": "536fedbbb2a25c30b70b9987e640b8589e1dad624a8b0473ef0f99b06fff6e17"
+  },
+  "reports": {
+    "initial.xml": {
+      "tests": 37,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 14.926,
+      "sha256": "0e709e8c4f7841b5e73015437a8d2026917da6d0878b85435800a66e47d1d6aa",
+      "failed_tests": [],
+      "exit_code": 0
+    },
+    "focused.xml": {
+      "tests": 94,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 18.04,
+      "sha256": "e29c195cf4d0ea817cc22fa3db735db934bd6ff51f271bdcc1a838d1d9fafaaf",
+      "failed_tests": [],
+      "exit_code": 0
+    }
+  },
+  "source_boundaries": {
+    "initial.xml": "Initial uncommitted evaluator arithmetic checks before interval recovery, complete registration identity checks and checked-archive integration were added. Its exact source revision was not committed; it is retained as historical development output only.",
+    "focused.xml": "Recovery evaluator, checked archive and fitting interface tests on source_commit. Synthetic parameters and cache-format receipts are software fixtures, not accepted MCMC evidence."
+  },
+  "commands": {
+    "focused.xml": "python -m pytest -q tests/test_overall_recovery_checks.py tests/test_overall_posterior_archive.py tests/test_overall_fitting.py --junitxml=outputs/championship/development/overall-recovery-checks/focused.xml"
+  },
+  "execution": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "policy": "Sequential systemd user scope",
+    "peak_memory_measured": false
+  },
+  "checks": [
+    "Existing synthetic observations, catalogue and deterministic truth remain unchanged when latent parameters are captured",
+    "Exact binary posterior has uniform randomized parameter and likelihood ranks",
+    "Prior-only inference in that exact example passes parameter ranks but fails likelihood-rank uniformity",
+    "Same-draw state intervals agree with the existing pairwise recovery convention",
+    "One value-independent selected draw per chain, with reproducible truth-inclusive tie randomization",
+    "Complete fixed study inventory distinguishes stress cases and refuses aggregate tests on a successful subset",
+    "Source-matched immutable archive identity and registration are required by the checked consumer",
+    "Direct arithmetic evaluations cannot verify fits or authorize publication"
+  ],
+  "model_inputs_key": "d5b8c6c6ff3b858ee265ce4b8eb9199bc1ec752fd00083a5ca84d861c77a156b",
+  "model_data_contract_and_pending_proposal_unchanged": true,
+  "pending_proposal_status": "proposal_pending_user_approval",
+  "pending_proposal_user_approved": false,
+  "full_suite": {
+    "rerun": false,
+    "reason": "This change adds a development evaluator without changing the hashed model, generator, data or publication path. Related tests passed; the last full suite still has the documented stale qualifying-export failures.",
+    "previous_verification": "../overall-race-only-checks/verification.json",
+    "previous_verification_sha256": "35be2b0a364153838dc4e8850eb38f0ae0eee4db110735d8e977ca45af416457",
+    "passing_full_suite_established": false
+  },
+  "limitations": [
+    "No full recovery-calibration study registration, replicate counts or power justification exists yet.",
+    "The coarse rank policy still requires independently initialized, adequately sampled chains and a prospective sensitivity justification.",
+    "Conditional generator checks do not establish end-to-end weekend or real-world adequacy.",
+    "Expected-point and ranking-functional recovery remain unimplemented.",
+    "The original failed numerical case remains failed, and the separate proposed study still needs approval.",
+    "Predictive comparisons, prospective evidence, artifact regeneration and production checks remain incomplete."
+  ],
+  "mcmc_run": false,
+  "sbc_study_run": false,
+  "establishes_full_recovery": false,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}

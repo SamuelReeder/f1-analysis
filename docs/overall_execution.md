@@ -238,3 +238,9 @@ value-independent selections from separate chains and needs a prespecified
 study-size/power justification. This is evaluation machinery, not a completed
 SBC study, accepted inference or a ranking. Full registration, ranking recovery,
 the pending numerical approval and stale-publication regeneration remain open.
+The [recovery-check verification](../outputs/championship/development/overall-recovery-checks/verification.json)
+records passing focused software tests on committed source and preserves the
+earlier development output. It includes exact probability fixtures, joint-state
+interval checks and archive/registration mismatch rejection. Model inputs and
+the pending proposal remain unchanged. No MCMC or full SBC study was run, and
+the previous full-suite publication failures remain unresolved.

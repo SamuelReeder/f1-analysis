@@ -84,3 +84,10 @@ Software fixtures use explicit generated values and cache-format receipts. They
 are not fitted evidence, including when a fixture exercises the successful
 archive-reader path. Existing stale-publication failures also remain open; this
 development evaluator does not regenerate the published payload.
+
+The [verification record](../outputs/championship/development/overall-recovery-checks/verification.json)
+links the preserved initial development output and passing focused checks against
+committed source. The latter covers the evaluator, shared archive reader and fit
+interfaces. Hashed model/data inputs and the pending numerical proposal are
+unchanged. The full local suite was not repeated for this isolated addition;
+its previously recorded stale-export failures remain explicit rollout blockers.
