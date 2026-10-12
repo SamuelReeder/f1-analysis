@@ -35,6 +35,23 @@
       "failures": 0,
       "errors": 0,
       "skipped": 0
+    },
+    "fit-export": {
+      "source_commit": "37429079418b67af0c1378b7bf38d737d7a995e7",
+      "run": "fit-export-run.json",
+      "report": "fit-export.xml",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "source_hashes": {
+        "analysis/overall_legacy_forecast.py": "1ff46104b10d7c88ed642acb865ad3f4ccdffdf4f8c37d8263bdcc8504d64a2b",
+        "f1rank/fit.py": "e655df046123f62a13e9d0001c091d46c97b0551b3506ffec2f8db701fbcb6b1",
+        "f1rank/model.py": "a92d3c965fa80cc57213b8aa607d232d4196aab2ea76f55e4f4e28e363341d2b",
+        "tests/test_overall_legacy_fit_export.py": "3582a903e203ad0cf273c5cd9babb25f8469ea922cdaacaa6b0b6dd169d21ea5",
+        "tests/test_overall_legacy_forecast.py": "7953b76838230576b36ae85eefb9d3accabef81061d60ec456028c8ad4fed13a"
+      },
+      "scope": "Original export filter and metadata/save/load with synthetic sampler output; no MCMC, accepted convergence or bounded archive loading"
     }
   },
   "fitting_sources_and_data_unchanged_from": "8f1208b239978afb51cb37cd4c61187e1ea3525e",
@@ -54,5 +71,6 @@
   "forecast_median_precision_established": false,
   "source_availability_verified": false,
   "independent_evidence_established": false,
-  "publication_allowed": false
+  "publication_allowed": false,
+  "legacy_export_requires_explicit_extra_sites": true
 }

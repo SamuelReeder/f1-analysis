@@ -1,0 +1,22 @@
+{
+  "source_commit": "37429079418b67af0c1378b7bf38d737d7a995e7",
+  "command": [
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_overall_legacy_fit_export.py",
+    "tests/test_overall_legacy_forecast.py",
+    "--junitxml=/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-legacy-forecast-checks/fit-export.xml"
+  ],
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r16326189639d4aa1869c31f7518e9cf8.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "exit_code": 0,
+  "elapsed_seconds": 14.262118345999625,
+  "peak_child_rss_kib": 614472,
+  "sampler_output_is_synthetic": true,
+  "mcmc_run": false
+}

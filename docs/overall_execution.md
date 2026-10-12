@@ -30,6 +30,16 @@ recovery, real-data calibration or permission to publish. Full recovery must
 also include the dominant-teammate, regulation-change and real-transfer-network
 cases provided by `recovery.py`, under a complete registration.
 
+The legacy forecast's export boundary is now checked against the original fit
+exporter and metadata/save/load path using synthetic sampler output. Its default
+archive omits raw coordinates needed to propagate future states, so a future
+registered baseline fit must explicitly retain `FORECAST_EXTRA_SITES`. The
+adapter identifies missing coordinates and rejects an incomplete archive. The
+[record](../outputs/championship/development/overall-legacy-forecast-checks/verification.json)
+preserves this software check separately from accepted-fit integration. No fit
+was run by it; bounded legacy archive loading, forecast resource measurement,
+source/convergence acceptance and actual baseline evaluation remain open.
+
 No model fit or real-data predictive score has been used to choose the profile
 settings. Previous finite-gradient tests, software checks and data-shape checks
 are development evidence only. A failed profile remains failed; it does not
