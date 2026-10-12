@@ -84,11 +84,15 @@ only running positions and must retain every declared driver, including those
 outside the running panel. It rejects a pre-qualifying origin instead of inventing
 a grid. It keeps qualifying-fit and race-coefficient identities separately: the
 legacy fixed feature medians do not require equal posterior draw counts or
-arbitrary pairing between those fits. End-to-end pre-qualifying grid integration
-remains a separate open requirement. Its
-[development probability definition](overall_legacy_prequalifying.md) specifies
-how to integrate the grid and coefficient distributions without arbitrary
-pairing, while retaining the remaining official-grid and precision requirements.
+arbitrary pairing between those fits. The separate
+[pre-qualifying implementation](../analysis/overall_legacy_prequalifying.py)
+now follows its prior [probability definition](overall_legacy_prequalifying.md):
+generate paired qualifying trajectories and integrate their complete empirical
+product with joint race-coefficient draws. Repeated grids retain their counts,
+and both the primary and grid-only race mappings can use this grid distribution.
+This is conditional on every entrant setting a time and starting in qualifying
+order. Official-grid rules, qualifying weather, numerical forecast precision and
+the accepted end-to-end predictive evaluation remain open.
 
 The [forecast verification record](../outputs/championship/development/overall-legacy-forecast-checks/verification.json)
 links synthetic original-model trace comparisons, lineage persistence, newcomer

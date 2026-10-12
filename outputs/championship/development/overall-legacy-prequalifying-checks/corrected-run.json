@@ -1,0 +1,22 @@
+{
+  "source_commit": "1b5464c4717f6c7293a71bc08eb0a514264fabd9",
+  "command": [
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_overall_legacy_prequalifying.py",
+    "tests/test_overall_legacy_forecast.py",
+    "tests/test_overall_baselines.py",
+    "tests/test_overall_observation_kernels.py",
+    "--junitxml=outputs/championship/development/overall-legacy-prequalifying-checks/corrected.xml"
+  ],
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-rbcb8e8feaa4e4728a4181f6988e28ca7.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "exit_code": 0,
+  "elapsed_seconds": 26.02127800899325,
+  "peak_child_rss_kib": 877952
+}

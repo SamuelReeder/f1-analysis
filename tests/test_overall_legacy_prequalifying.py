@@ -127,6 +127,21 @@ def test_qualifying_batch_field_and_path_prefix_invariance():
     np.testing.assert_array_equal(event["grid_draws"],direct["positions"])
 
 
+def test_generated_grid_forecast_connects_to_each_baseline_for_complete_path():
+    _,design,snap,p=qualifying_case()
+    forecast=generate(design,future_path(snap),p)
+    _,beta,_=mixture_fixture()
+    panels={e["event_id"]:{d:i+1 for i,d in enumerate(e["drivers"])} for e in forecast["events"]}
+    for arm in ("legacy_grid_qualifying","grid_only"):
+        result=integrate(forecast,beta,panels,arm=arm)
+        assert result["event_ids"]==[e["event_id"] for e in forecast["events"]]
+        for i,event in enumerate(forecast["events"]):
+            expected=direct_probability(dict(forecast,events=[event]),beta,panels,arm)
+            np.testing.assert_allclose(np.exp(result["log_probabilities"][i]),expected,rtol=1e-14)
+        assert not result["official_grid_policy_complete"]
+        assert not result["publication_allowed"]
+
+
 def test_qualifying_locations_scales_and_density_match_original_legacy_model():
     import jax
     import jax.numpy as jnp
