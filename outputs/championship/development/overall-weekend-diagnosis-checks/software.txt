@@ -1,0 +1,29 @@
+.....F................................                                   [100%]
+=================================== FAILURES ===================================
+_________ test_centering_retains_event_membership_and_does_not_mutate __________
+
+    def test_centering_retains_event_membership_and_does_not_mutate():
+        values = np.array([[[2., 4., 8., 10., 12.], [3., 3., 9., 9., 12.]]])
+        original = values.copy()
+        groups = np.array([0, 1, 0, 1, 1])
+        expected = np.array([[[-3., -4., 3., 2., 4.], [-3., -5., 3., 1., 4.]]])
+>       np.testing.assert_allclose(centre(values, groups), expected)
+E       AssertionError: 
+E       Not equal to tolerance rtol=1e-07, atol=0
+E       
+E       Mismatched elements: 3 / 10 (30%)
+E       Mismatch at indices:
+E        [0, 0, 1]: -4.666666666666666 (ACTUAL), -4.0 (DESIRED)
+E        [0, 0, 3]: 1.333333333333334 (ACTUAL), 2.0 (DESIRED)
+E        [0, 0, 4]: 3.333333333333334 (ACTUAL), 4.0 (DESIRED)
+E       Max absolute difference among violations: 0.66666667
+E       Max relative difference among violations: 0.33333333
+E        ACTUAL: array([[[-3.      , -4.666667,  3.      ,  1.333333,  3.333333],
+E               [-3.      , -5.      ,  3.      ,  1.      ,  4.      ]]])
+E        DESIRED: array([[[-3., -4.,  3.,  2.,  4.],
+E               [-3., -5.,  3.,  1.,  4.]]])
+
+tests/test_overall_weekend_diagnosis.py:37: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_overall_weekend_diagnosis.py::test_centering_retains_event_membership_and_does_not_mutate
+1 failed, 37 passed in 11.51s

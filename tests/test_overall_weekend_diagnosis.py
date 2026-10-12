@@ -33,7 +33,7 @@ def test_centering_retains_event_membership_and_does_not_mutate():
     values = np.array([[[2., 4., 8., 10., 12.], [3., 3., 9., 9., 12.]]])
     original = values.copy()
     groups = np.array([0, 1, 0, 1, 1])
-    expected = np.array([[[-3., -4., 3., 2., 4.], [-3., -5., 3., 1., 4.]]])
+    expected = np.array([[[-3., -14/3, 3., 4/3, 10/3], [-3., -5., 3., 1., 4.]]])
     np.testing.assert_allclose(centre(values, groups), expected)
     np.testing.assert_array_equal(values, original)
 
