@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "id": "overall-control-rotation-profile-v1",
+  "status": "frozen",
+  "purpose": "numerical_profile",
+  "fit_settings": {
+    "warmup": 800,
+    "samples": 800,
+    "chains": 4,
+    "target_accept": 0.9,
+    "max_tree_depth": 10,
+    "init_median_samples": 15,
+    "seed": 0
+  },
+  "retry": [
+    [
+      1,
+      1,
+      null
+    ],
+    [
+      2,
+      2,
+      null
+    ],
+    [
+      3,
+      4,
+      null
+    ],
+    [
+      3,
+      4,
+      0.98
+    ]
+  ],
+  "studies": [
+    "connected",
+    "confounded",
+    "sparse_rookie"
+  ],
+  "synthetic": {
+    "connected": {
+      "case": "connected",
+      "seed": 20261012
+    },
+    "confounded": {
+      "case": "confounded",
+      "seed": 20261013
+    },
+    "sparse_rookie": {
+      "case": "sparse_rookie",
+      "seed": 20261014
+    }
+  },
+  "resources": {
+    "slice": "f1.slice",
+    "MemoryMax": "6G",
+    "slice_CPUQuota": "800%",
+    "CPUWeight": 10,
+    "Nice": 19
+  },
+  "scope": "Post-failure, matched computational experiment: rotate all fixed-scale Gaussian lap controls by the data-only prior-whitened design eigenbasis. Keep every direction and the original prior/likelihood. Original generator, observations, truths, studies, seeds, sampler settings, gates and retries are unchanged. This is neither independent model evidence nor a change to the original failed profile.",
+  "diagnostics": {
+    "rank_rhat_strict_upper": 1.01,
+    "bulk_ess_min": 400,
+    "tail_ess_min": 400,
+    "mean_mcse_sd_upper": 0.05,
+    "divergences_per_draw_upper": 0.001
+  },
+  "reports": [
+    "all_attempts",
+    "all_current_driver_pairwise_qualifying_contrasts",
+    "all_current_driver_pairwise_race_contrasts",
+    "runtime",
+    "peak_resident_memory",
+    "tree_depth_saturation",
+    "rotation_basis_sha256",
+    "matched_original_arrays_sha256",
+    "original_and_rotated_control_diagnostics"
+  ],
+  "stopping": "Process the whole original inventory. Only the existing fixed retry ladder is allowed. Preserve all attempts, including failures. Do not search rotations, adjust settings, redraw truths, select an earlier failed attempt or use this profile for publication.",
+  "acceptance": {
+    "authorizes_real_data_fit": false,
+    "authorizes_publication": false,
+    "establishes_sbc": false,
+    "establishes_full_recovery": false,
+    "criterion": "Report every matched study under the unchanged diagnostics; this experiment does not complete recovery, SBC or predictive validation."
+  },
+  "user_approved": true,
+  "proposed_local_date": "2026-10-12",
+  "method": "data_only_lap_control_rotation_v1",
+  "parent_registration": "docs/overall_profile_protocol.json",
+  "parent_registration_sha256": "96a2d6baf66eea8dd8d57e86057edddd233c1bbeb0fd0ef2fcd789f454ae83e8",
+  "additional_source_sha256": {
+    "analysis/overall_control_rotation.py": "49e4dbef148b7206634655532294a31f650542b8960d1f7d55fedc1755097a84",
+    "analysis/overall_profile_geometry.py": "714ba47c374f68c616d2453d0df9b677b5faa55c299e4e866771e30a41f4c4f2",
+    "analysis/overall_rotation_profile.py": "53165782f703c8ba3ee4637fb3449c5b7101bbf1b092489d07bc865a7d21d253"
+  },
+  "original_arrays_sha256": {
+    "connected": "4ac5ab7125adfa2fc8a0ca18829fbe941be0ec94b5e857fc54a16751bba3a948",
+    "confounded": "4d50cfb60b150f68abac84c2bc1619c649e76ebff8212884c52bcb1b88b6891b",
+    "sparse_rookie": "ca20697300ef8607dc61590f9a00bc8d304142c525997aa90608b2aabb7d9196"
+  },
+  "registered_model_inputs_key": "eae65767fe29bedcf396beeddbd8bf19b5bdc2a5769dd70f10fda50ef22bad18",
+  "source_correction_note": "Pending proposal updated after the grid-feature boundary correction. Result exclusions no longer alter pit-lane grid features. Original synthetic-array hashes, likelihoods, priors, seeds, settings and gates must still match; the original failed profile is unchanged.",
+  "archive_verification_note": "Pending source fingerprint updated after factoring shared receipt/source/archive checks and streaming archive checksums. No fit settings, retry rules, seeds, diagnostics, priors, likelihoods or original synthetic arrays change. Approval remains pending.",
+  "order_numerics_note": "Pending source identity updated for relative race-order normalizers and exact padding exclusion. This corrects numerical evaluation of the specified Plackett-Luce distribution, without changing priors, settings, gates, seeds or the required original synthetic arrays/truths. A future rotated run would evaluate both the corrected arithmetic and proposed coordinates, and could not isolate either as the cause of convergence. Approval remains pending; the original failure is preserved.",
+  "order_generation_note": "Pending source identity updated for compensated race-order perturbations and rejection of invalid generated indices. Random sites, original registered seeds, priors, likelihood, settings and gates are unchanged; original synthetic arrays and truths must still match exactly. A future result evaluates the numerical corrections and proposed coordinates together. Approval remains pending.",
+  "empty_qualifying_note": "The shared data builder now handles an empty qualifying observation block, and diagnostics record zero-coordinate sites without changing checks on existing coordinates. This supports the separately specified race-only arm. The original study inventory, priors, settings, seeds and gates are unchanged; its original observations and truths must reproduce exactly. Updating the source identity grants no approval and runs no race-only fit.",
+  "calibration_sampling_stream_note": "The fitter now requires distinct predeclared generation and sampling keys for a new recovery_calibration registration. The original numerical profile and this matched proposal keep their original sampling seed schedule, settings, retries, diagnostics, priors and likelihoods. Their original observations and truths must still reproduce exactly. The source identity changes but grants no approval and launches no calibration study.",
+  "track_status_correction_note": "Pending source identity updated for explicit observed track-status coverage and VSC-ending timeline boundaries. Synthetic fixtures declare their original green context; original model arrays and generated truths must still reproduce exactly. No probability-model, sampler, retry, seed or acceptance rule changes. Approval remains pending; original failures remain preserved.",
+  "original_truth_files": {
+    "connected": {
+      "path": "outputs/championship/development/overall-computation-profile-v1/connected.truth.json",
+      "sha256": "0effa6798e618d269e44912a2dbf4c760e12aeb64f607660b6b288b5cac25931"
+    },
+    "confounded": {
+      "path": "outputs/championship/development/overall-computation-profile-v1/confounded.truth.json",
+      "sha256": "d9af54f7cb9865b0ecf607b56bf1e1e01d7f199e24fa547d5b57daa75945f3df"
+    },
+    "sparse_rookie": {
+      "path": "outputs/championship/development/overall-computation-profile-v1/sparse_rookie.truth.json",
+      "sha256": "48b4c7587e111de5018eade208ae830261f84a3c221b1270eba2bb713b68769b"
+    }
+  },
+  "reporting_integrity_note": "The pending runner now binds and compares the original complete generating truths before sampling and automatically records all current-field qualifying/race contrast diagnostics on every returned attempt. These reports do not change the original convergence decision, retry ladder, model inputs, coordinates, seeds, settings or gates. Approval remains pending.",
+  "registered_local_date": "2026-10-12",
+  "approval": {
+    "local_date": "2026-10-12",
+    "timezone": "America/Toronto",
+    "user_message": "ok do it",
+    "scope": "Run the separate prepared coordinate-rotation inference experiment. No real-data fitting, driver ranking, push, merge or release is authorized by this experiment.",
+    "proposal_path": "docs/overall_rotation_profile_proposal.json",
+    "proposal_sha256": "47cdffa46f9be3547a0ee23e1554edbb735121c7a71cc41402a625c8cb0fc860",
+    "proposal_commit": "2de9fe3ad38a3fd06fbbf9daa6541414d2b771df"
+  },
+  "approval_note": "The earlier amendment notes describe preparation while approval was pending. The user subsequently approved this exact prepared experiment; its original proposal remains as the historical record. All model inputs, coordinates, original arrays/truths, seeds, settings, gates, retry rules, inventory and resources are retained."
+}

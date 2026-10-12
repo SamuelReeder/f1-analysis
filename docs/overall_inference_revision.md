@@ -3,10 +3,12 @@
 The original [profile](overall_profile_results.md) remains failed. The proposed
 next experiment tests equivalent sampling coordinates for the lap-control
 parameters. It changes no prior, likelihood, driver score, convergence threshold,
-sampling seed or retry limit. It is **pending user approval**, not running and not
-an accepted correction. The executable
-[proposal](overall_rotation_profile_proposal.json) cannot pass the runner's
-registration checks until separately approved and frozen.
+sampling seed or retry limit. The user approved the separate experiment on
+2026-10-12. The [frozen registration](overall_rotation_profile_protocol.json)
+preserves the prepared inputs, settings, gates and inventory. The original
+[proposal](overall_rotation_profile_proposal.json) retains its historical pending
+state and cannot itself pass the runner's registration checks. Approval to run
+the experiment does not establish a successful correction or authorize a ranking.
 
 ## Evidence for investigating the sampling coordinates
 
