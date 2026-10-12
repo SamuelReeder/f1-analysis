@@ -27,6 +27,7 @@ from f1rank.overall.simulation import JointDraws, Scenario
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_NAMES = (
     "analysis/overall_simulation_controller.py", "analysis/overall_summary.py",
+    "analysis/overall_paired_simulation.py", "docs/overall_paired_simulation.md",
     "analysis/overall_ranking_recovery.py", "analysis/overall_posterior_archive.py",
     "f1rank/artifacts.py", "f1rank/overall/fitting.py", "f1rank/overall/provenance.py",
     "f1rank/overall/simulation.py", "f1rank/overall/scoring.py", "f1rank/overall/order.py",

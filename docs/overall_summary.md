@@ -50,7 +50,10 @@ must not be added: neutralizing correlated components can have interacting
 effects. This definition requires no learned component weights.
 
 The paired block generator invokes the existing simulator for the baseline and
-each declared intervention. Its random stream address contains the fixed seed,
+replays its event randomness for every intervention through the
+[equivalent paired kernel](overall_paired_simulation.md). This reuses qualifying
+grids and omits unused probe championship countback, while preserving all paired
+point totals. Its random stream address contains the fixed seed,
 chain, draw-block start and replicate-block start; these coordinates differ
 between blocks and match within paired interventions. The complete block layout
 uses fixed-width unsigned stream words enforced by the generator. Oversized

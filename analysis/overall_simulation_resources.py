@@ -82,7 +82,7 @@ def run(output_dir):
                   "largest_retry": (FIT_SETTINGS["chains"], FIT_SETTINGS["samples"] * max(row[1] for row in RETRY))}
         report.update(field_size=n, reference_events=races, reference_cutoff=preflight["cutoff"],
             measured_block=dict(draws=nd, replicates=nr, seed=SEED, chain=0, draw_start=0,
-                replicate_start=0, explanations=list(PROBES), simulator_invocations=1+n*len(PROBES),
+                replicate_start=0, explanations=list(PROBES), baseline_and_probe_panels=1+n*len(PROBES),
                 baseline_seasons=nd*nr, baseline_and_probe_seasons=nd*nr*(1+n*len(PROBES))),
             hypothetical_complete_schedules={}, accumulator_storage_bytes={})
         for name, shape in shapes.items():
@@ -127,6 +127,8 @@ def run(output_dir):
         try:
             accumulator.finalize()
         except ValueError as exc:
+            if str(exc) != "Every declared posterior draw must have its complete replicate inventory":
+                raise
             report["incomplete_finalization_rejection"] = str(exc)
         else:
             raise AssertionError("An incomplete block cannot supply a completed posterior summary")

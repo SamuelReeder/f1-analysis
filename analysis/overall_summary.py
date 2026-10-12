@@ -4,7 +4,6 @@ Identity consistency and numerical summaries are not scientific acceptance.
 This module has no publication entry point and never permits publication.
 """
 import copy
-from dataclasses import replace
 import hashlib
 import json
 from pathlib import Path
@@ -12,7 +11,8 @@ import re
 
 import numpy as np
 
-from f1rank.overall.simulation import JointDraws, MAX_EXPECTED_POINTS_MCSE, POINTS, simulate
+from analysis.overall_paired_simulation import PROBE_ORDER, paired_seasons
+from f1rank.overall.simulation import JointDraws, MAX_EXPECTED_POINTS_MCSE, POINTS
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFINITION = ROOT / "docs/overall_summary.md"
@@ -24,6 +24,7 @@ MAX_STREAM_WORD = int(np.iinfo(np.uint32).max)
 IDENTITY_KEYS = {"fit_id", "posterior_key", "scenario_key", "simulation_key"}
 IMPLEMENTATION_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 SIMULATOR_SOURCES = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in (
+    "analysis/overall_paired_simulation.py", "docs/overall_paired_simulation.md",
     "f1rank/overall/simulation.py", "f1rank/overall/scoring.py", "f1rank/overall/order.py")}
 
 
@@ -94,23 +95,10 @@ def paired_simulation_block(draws, scenarios, *, replicates, seed, chain, draw_s
         raise ValueError("Need a bounded joint-draw block and complete nonnegative stream address")
     source = _source_fingerprints()
     address = [seed, chain, draw_start, replicate_start]
-    baseline = simulate(draws, scenarios, replicates=replicates, seed=address, advancing=advancing)
-    probes = np.empty(baseline["points"].shape + (len(PROBES),))
-    field_order = np.argsort(draws.drivers)
-    q_mean = draws.qualifying[:, field_order].mean(axis=-1)
-    r_mean = draws.race[:, field_order].mean(axis=-1)
-    for driver in range(len(draws.drivers)):
-        for k, name in enumerate(PROBES):
-            values = {}
-            if name in ("qualifying_pace", "all"):
-                values["qualifying"] = draws.qualifying.copy()
-                values["qualifying"][:, driver] = q_mean
-            if name in ("total_race_pace", "all"):
-                values["race"] = draws.race.copy()
-                values["race"][:, driver] = r_mean
-            intervention = simulate(replace(draws, **values), scenarios, replicates=replicates,
-                                    seed=address, advancing=advancing)
-            probes[..., driver, k] = intervention["points"][..., driver]
+    if tuple(PROBES) != PROBE_ORDER:
+        raise ValueError("Paired simulator and explanation contract disagree")
+    baseline, probes = paired_seasons(draws, scenarios, replicates=replicates,
+                                      seed=address, advancing=advancing)
     if source != _source_fingerprints():
         raise ValueError("Paired simulation source changed during generation")
     return baseline, probes
