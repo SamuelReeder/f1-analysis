@@ -17,7 +17,12 @@ record convergence for connected and sparse-rookie studies after retries, and
 exhaustion of the confounded study's fixed ladder. Every study was processed;
 the computational requirement remains failed. Original truths, arrays, settings
 and gates were preserved. No further fit, ranking or publication follows from
-this result. The next available work is diagnosis of the existing saved draws.
+this result. The [saved-draw diagnosis](overall_weekend_diagnosis_results.md) is
+now complete. It preserves every study, attempt, chain and current-driver pair.
+The total weekend race effect is sampled more reliably than its qualifying/race
+decomposition; driver/car compensation and failed qualifying comparisons remain.
+This narrows the next computational investigation without establishing its cause,
+accepting a failed fit, or authorizing a new one.
 
 | Requirement | Current evidence | Remaining work |
 |---|---|---|
@@ -25,7 +30,7 @@ this result. The next available work is diagnosis of the existing saved draws.
 | Shared current qualifying/race model | Joint model and synthetic interface/gradient tests | Fit, recover and calibrate its shared uncertainty |
 | Scientific specification | Executable likelihood/prior definitions and candidate contract | Final numerical/evaluation/prospective protocol before real-data fitting |
 | Complete entrant/cutoff catalog | Cutoff-first data design; outcome-free forecast catalogue; development state propagation reconstructs uncentred history and retains unseen entrants with population uncertainty | Verified as-of source/calendar inventory, accepted-posterior integration and recovery on the real transfer network |
-| Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks for full and bounded loaders; corrected race-order arithmetic has known-probability/gradient checks; original and approved coordinate profiles both preserve an exhausted confounded case; every approved study and retry is recorded | Diagnose the unresolved failure from saved draws; no automatic retuning; full recovery and intended-runner resource measurements remain open |
+| Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks for full and bounded loaders; corrected race-order arithmetic has known-probability/gradient checks; failed original and coordinate profiles plus complete saved-draw diagnosis of weekend decomposition and driver/car compensation | Prepare and verify a separately registered computational proposal; no automatic retuning; full recovery and intended-runner resource measurements remain open |
 | Known-truth recovery and simulation-based calibration | Generative responses and complete numerical-profile inventory: connected and sparse-rookie fits converged after retries; confounded fit exhausted its ladder; development evaluator covers state contrasts and observation likelihoods, distinguishes fixed-truth stress cases and requires a complete inventory | Full study registration, power justification and execution, including ranking functionals and the unresolved confounded case; no failed case may be discarded |
 | Coherent weekend simulation | Student-t elimination and shared weekend uncertainty; observation kernels preserve teammate effects, context, order and completion within each joint draw; historical joint condition integration; explicit unseen-circuit outcome and qualifying track-factor extensions | Condition/circuit calibration and final registration, qualifying weather, official-grid eligibility/penalties, common operations, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |

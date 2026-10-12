@@ -39,5 +39,8 @@ establish the cause of the failure or a successful repair.
 
 The separate [inference proposal](overall_inference_revision.md) preserves the
 original prior and likelihood while rotating those controls. Density and software
-checks are recorded, but the proposed numerical experiment awaits approval and
-registration. This original profile remains failed.
+checks were recorded before the separate numerical experiment. The user approved
+that experiment on 2026-10-12; its [completed result](overall_rotation_profile_results.md)
+again failed the confounded case. The original profile remains failed. The later
+[weekend diagnosis](overall_weekend_diagnosis_results.md) preserves all attempts
+and narrows the next investigation without accepting a failed result.
