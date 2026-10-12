@@ -1,0 +1,111 @@
+{
+  "recorded_at": "2026-10-12T13:01:07.507492+00:00",
+  "source_commit": "2fd55f09876c5ce7a247b45163b40a9806a956ae",
+  "test_source_commit": "2fd55f0",
+  "reports": {
+    "roundoff-initial.xml": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 4.754,
+      "sha256": "fb3b026923f95e42bfc52c2041825887e81e125f0d2c55d635534d8e47be1e1d",
+      "exit_code": 0,
+      "failed_tests": []
+    },
+    "roundoff-before-fix.xml": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.674,
+      "sha256": "749167803fe9a363f6ee923002cdb3ab4458fe4e265826951ac3a16f4adc4398",
+      "exit_code": 1,
+      "failed_tests": [
+        "tests.test_overall_calibration_power::test_saturated_power_remains_a_probability"
+      ]
+    },
+    "verification.xml": {
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.729,
+      "sha256": "0714f93cfa1db0bca9424e749fecd469f214744c8fbad355176df5bf426173a7",
+      "exit_code": 0,
+      "failed_tests": []
+    }
+  },
+  "source_boundaries": {
+    "planning-initial.json": "Fixed grid and complete quantity family on the original planning source; retained with the reproduced floating-point probability overshoot.",
+    "roundoff-initial.xml": "The first working-tree fixture used a grid case that did not reproduce the overshoot. Preserved without treating it as a failing regression.",
+    "roundoff-before-fix.xml": "Exact binary-prior-only grid case reproduced the probability overshoot; committed before correction.",
+    "verification.xml": "Corrected probability tests, exact small enumeration, error-budget checks and the saturation regression on test_source_commit.",
+    "planning.json": "Same planning inventory, grid, alternatives and rejection regions on corrected arithmetic; no fitted ranks or model fits."
+  },
+  "commands": {
+    "planning": "python analysis/overall_calibration_power.py --output outputs/championship/development/overall-calibration-power/planning.json",
+    "verification": "python -m pytest -q tests/test_overall_calibration_power.py"
+  },
+  "execution": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "policy": "Sequential systemd user scopes"
+  },
+  "artifacts": {
+    "planning-initial.json": {
+      "sha256": "3d984cd42bf2813490eb01cf8a7c2d0cd1efae9bc00332ac72f6f6154fdfa838",
+      "source_commit": "ab521c92cb4aea302b8f6ccf2e8c1f6a2892fe53"
+    },
+    "planning.json": {
+      "sha256": "b71dc5773d39355854bd79f3f53f781a8c16aa6329febdf9c46545bd022b849a",
+      "source_commit": "2fd55f09876c5ce7a247b45163b40a9806a956ae"
+    }
+  },
+  "protected_planning_and_test_definition_ast_unchanged": {
+    "REPLICATE_GRID": true,
+    "MIXTURE_WEIGHTS": true,
+    "PLANNING_FAMILY_ERROR": true,
+    "PLANNING_POWER": true,
+    "rejection_regions": true,
+    "alternatives": true,
+    "current_inventory": true
+  },
+  "comparison": {
+    "inventory_settings_grid_and_work_counts_unchanged": true,
+    "alternatives_and_first_grid_sizes_unchanged": true,
+    "rejection_count_intervals_unchanged": true,
+    "max_absolute_probability_change": 1.9984014443252818e-15,
+    "all_corrected_probabilities_within_unit_interval": true
+  },
+  "findings": {
+    "family_size": 9496,
+    "assumed_family_error_probability": 0.05,
+    "illustrative_power_target": 0.8,
+    "first_grid_sizes": {
+      "uniform_reference": null,
+      "lower_end_mixture_0.1": 1600,
+      "both_ends_mixture_0.1": 6400,
+      "middle_mixture_0.1": 6400,
+      "lower_end_mixture_0.25": 200,
+      "both_ends_mixture_0.25": 1600,
+      "middle_mixture_0.25": 800,
+      "binary_prior_only_inference": 100
+    }
+  },
+  "full_suite_reference": "../overall-sampling-stream-checks/verification.json",
+  "full_suite_reference_sha256": "d99b002e8d745e371e825771ffac7b336b1483cb924585d1cc8a477c398805cd",
+  "full_suite_passed": false,
+  "limitations": [
+    "Synthetic rank alternatives are not measured inference errors in the F1 model",
+    "Bounds do not specify the joint whole-family power or detect every possible error",
+    "The first grid size meeting an illustrative target is not a selected or approved study size",
+    "No fit runtime, full-study cost or intended-runner feasibility is established",
+    "Original numerical failure and pending sampling approval remain unresolved"
+  ],
+  "selected_study_size": null,
+  "full_registration_frozen": false,
+  "model_fits_run": false,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}
