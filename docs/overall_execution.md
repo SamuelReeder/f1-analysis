@@ -404,7 +404,17 @@ The [post-regeneration full Python suite](../outputs/championship/development/ov
 passes, resolving the stale-manifest failure. Exact service runtime and peak
 resource accounting remain unverified as disclosed in the review. These results
 do not resolve the successor's failed numerical profile or accept Overall;
-portable publication and final production checks still remain.
+successor publication and its final production checks still remain.
+
+The local portable dashboard publication has been regenerated from those
+checked legacy outputs. Its [verification](../outputs/championship/development/overall-post-regeneration-publication/verification.json)
+records the production build, browser suite and a clean checkout with fresh
+publishing dependencies and no posterior caches. That checkout passes the
+Dashboard workflow's application checks while reusing the local OS browser
+libraries; it is not a hosted-runner measurement or a refresh-fitting run.
+The payload retains the withheld car table and unavailable Overall standings.
+The test evidence covers the current publication and synthetic successor UI
+contracts, not an accepted successor model or a live deployment.
 
 ## Historical forecast conditions
 

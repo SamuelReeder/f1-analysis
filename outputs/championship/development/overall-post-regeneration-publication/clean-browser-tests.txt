@@ -1,0 +1,143 @@
+
+> f1-analysis@1.0.0 test
+> playwright test --workers=2 --reporter=line,json
+
+[1A[2K[2m[WebServer] [22m(node:722256) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+Running 116 tests using 2 workers
+
+[1A[2K(node:722276) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K(node:722277) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K(node:722276) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K(node:722277) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K[1/116] tests/briefing.spec.ts:86:1 › the default briefing leads with the runtime ranking and its uncertainty
+[1A[2K[2/116] tests/briefing.spec.ts:107:1 › chapters advance, survive reload, and respect browser back and forward
+[1A[2K[3/116] tests/briefing.spec.ts:138:3 › qualifying offers a granular result and a contextual return
+[1A[2K[4/116] tests/briefing.spec.ts:138:3 › cars offers a granular result and a contextual return
+[1A[2K[5/116] tests/briefing.spec.ts:138:3 › race offers a granular result and a contextual return
+[1A[2K[6/116] tests/briefing.spec.ts:138:3 › overall offers a granular result and a contextual return
+[1A[2K[7/116] tests/briefing.spec.ts:138:3 › evidence offers a granular result and a contextual return
+[1A[2K[8/116] tests/briefing.spec.ts:150:1 › car comparison keeps its entity through reload, browser history and briefing return
+[1A[2K[9/116] tests/briefing.spec.ts:173:1 › a new release updates the briefing conclusion and ranking together
+[1A[2K[10/116] tests/briefing.spec.ts:191:3 › the not established equal-car briefing never presents untrusted standings
+[1A[2K[11/116] tests/briefing.spec.ts:191:3 › the stale equal-car briefing never presents untrusted standings
+[1A[2K[12/116] tests/briefing.spec.ts:191:3 › the unavailable equal-car briefing never presents untrusted standings
+[1A[2K[13/116] tests/briefing.spec.ts:191:3 › the failed gate equal-car briefing never presents untrusted standings
+[1A[2K[14/116] tests/briefing.spec.ts:191:3 › the legacy equal-car briefing never presents untrusted standings
+[1A[2K[15/116] tests/briefing.spec.ts:207:1 › a passed equal-car briefing explains the runtime outcome and exclusions
+[1A[2K[16/116] tests/briefing.spec.ts:227:3 › race briefing independently publishes the driver evidence
+[1A[2K[17/116] tests/briefing.spec.ts:227:3 › race briefing independently publishes the car evidence
+[1A[2K[18/116] tests/briefing.spec.ts:247:3 › evidence concludes 'Better than last season’s gap' from the interval, not just headline error
+[1A[2K[19/116] tests/briefing.spec.ts:247:3 › evidence concludes 'No clear difference from last season’s gap' from the interval, not just headline error
+[1A[2K[20/116] tests/briefing.spec.ts:247:3 › evidence concludes 'Worse than last season’s gap' from the interval, not just headline error
+[1A[2K[21/116] tests/briefing.spec.ts:247:3 › evidence concludes 'Baseline comparison unavailable' from the interval, not just headline error
+[1A[2K[22/116] tests/briefing.spec.ts:258:3 › qualifying briefing is accessible at desktop and phone widths
+[1A[2K[23/116] tests/briefing.spec.ts:258:3 › cars briefing is accessible at desktop and phone widths
+[1A[2K[24/116] tests/briefing.spec.ts:258:3 › race briefing is accessible at desktop and phone widths
+[1A[2K[25/116] tests/briefing.spec.ts:258:3 › overall briefing is accessible at desktop and phone widths
+[1A[2K[26/116] tests/briefing.spec.ts:258:3 › evidence briefing is accessible at desktop and phone widths
+[1A[2K[27/116] tests/briefing.spec.ts:280:3 › qualifying puts the complete ranking first on a black page with controls in normal flow
+[1A[2K[28/116] tests/briefing.spec.ts:280:3 › cars puts the complete ranking first on a black page with controls in normal flow
+[1A[2K[29/116] tests/dashboard.spec.ts:17:1 › rankings, search, team filter, driver details and metric-specific CSV
+[1A[2K[30/116] tests/dashboard.spec.ts:53:1 › season trends support absent entrants and car circuit adjustment
+[1A[2K[31/116] tests/dashboard.spec.ts:83:1 › driver charts split car and driver, and history can show estimates after each race
+[1A[2K[32/116] tests/dashboard.spec.ts:119:1 › revised history can be shown as rank in each event's field
+[1A[2K[33/116] tests/dashboard.spec.ts:140:1 › track record shows the forecast published before the next race
+[1A[2K[34/116] tests/dashboard.spec.ts:162:1 › track record reports pooled forecast checks and the latest forecast
+[1A[2K[35/116] tests/dashboard.spec.ts:204:1 › comparisons reverse correctly and matrix cells select the actual pair
+[1A[2K[36/116] tests/dashboard.spec.ts:237:1 › health discloses unavailable racing, historical gates and snapshots
+[1A[2K[37/116] tests/dashboard.spec.ts:264:1 › methodology has its own page with a reading guide and equations
+[1A[2K[38/116] tests/dashboard.spec.ts:292:1 › failed update keeps the previous good data visible
+[1A[2K[39/116] tests/dashboard.spec.ts:305:1 › publisher failure is surfaced without hiding rankings
+[1A[2K[40/116] tests/dashboard.spec.ts:329:1 › a new release is adopted by the refresh check
+[1A[2K[41/116] tests/dashboard.spec.ts:351:1 › initial unavailable dataset has a working retry
+[1A[2K[42/116] tests/dashboard.spec.ts:424:1 › ranking metrics support browser history, direct links and switching entity
+[1A[2K[43/116] tests/dashboard.spec.ts:471:3 › switching pace at 1440px keeps the selection, filters and layout
+[1A[2K[44/116] tests/dashboard.spec.ts:471:3 › switching pace at 390px keeps the selection, filters and layout
+[1A[2K[45/116] tests/dashboard.spec.ts:555:1 › race rankings follow their entity pages, with search, CSV and accessible detail
+[1A[2K[46/116] tests/dashboard.spec.ts:608:1 › a withheld car race ranking does not hide a supported driver table
+[1A[2K[47/116] tests/dashboard.spec.ts:661:1 › an unsupported race ranking cannot replace the previous release
+[1A[2K[48/116] tests/dashboard.spec.ts:705:3 › drivers has no browser errors, no mobile overflow, and accessible controls
+[1A[2K[49/116] tests/dashboard.spec.ts:705:3 › drivers/race has no browser errors, no mobile overflow, and accessible controls
+[1A[2K[50/116] tests/dashboard.spec.ts:705:3 › drivers/overall has no browser errors, no mobile overflow, and accessible controls
+[1A[2K[51/116] tests/dashboard.spec.ts:705:3 › cars has no browser errors, no mobile overflow, and accessible controls
+[1A[2K[52/116] tests/dashboard.spec.ts:705:3 › cars/race has no browser errors, no mobile overflow, and accessible controls
+[1A[2K[53/116] tests/dashboard.spec.ts:705:3 › compare has no browser errors, no mobile overflow, and accessible controls
+[1A[2K[54/116] tests/dashboard.spec.ts:705:3 › forecasts has no browser errors, no mobile overflow, and accessible controls
+[1A[2K[55/116] tests/dashboard.spec.ts:705:3 › methodology has no browser errors, no mobile overflow, and accessible controls
+[1A[2K[56/116] tests/dashboard.spec.ts:705:3 › health has no browser errors, no mobile overflow, and accessible controls
+[1A[2K[57/116] tests/dashboard.spec.ts:798:3 › equal-car passed fixture is accessible and fits phone widths
+[1A[2K[58/116] tests/dashboard.spec.ts:798:3 › equal-car not-established fixture is accessible and fits phone widths
+[1A[2K[59/116] tests/dashboard.spec.ts:850:1 › equal-car direct links and browser history stay under Drivers
+[1A[2K[60/116] tests/dashboard.spec.ts:866:3 › equal-car stale release never falls back to a ranking
+[1A[2K[61/116] tests/dashboard.spec.ts:866:3 › equal-car unavailable release never falls back to a ranking
+[1A[2K[62/116] tests/dashboard.spec.ts:866:3 › equal-car legacy release never falls back to a ranking
+[1A[2K[63/116] tests/dashboard.spec.ts:878:1 › a failed overall gate hides even accidentally supplied standings
+[1A[2K[64/116] tests/overall-current.spec.ts:48:1 › the single Overall view separates performance uncertainty, season variation and numerical error
+[1A[2K[65/116] tests/overall-current.spec.ts:70:5 › provenance evidence failed withholds standings despite an old combined success flag
+[1A[2K[66/116] tests/overall-current.spec.ts:70:5 › provenance evidence missing withholds standings despite an old combined success flag
+[1A[2K[67/116] tests/overall-current.spec.ts:70:5 › convergence evidence failed withholds standings despite an old combined success flag
+[1A[2K[68/116] tests/overall-current.spec.ts:70:5 › convergence evidence missing withholds standings despite an old combined success flag
+[1A[2K[69/116] tests/overall-current.spec.ts:70:5 › recovery evidence failed withholds standings despite an old combined success flag
+[1A[2K[70/116] tests/overall-current.spec.ts:70:5 › recovery evidence missing withholds standings despite an old combined success flag
+[1A[2K[71/116] tests/overall-current.spec.ts:70:5 › chronological_prediction evidence failed withholds standings despite an old combined success flag
+[1A[2K[72/116] tests/overall-current.spec.ts:70:5 › chronological_prediction evidence missing withholds standings despite an old combined success flag
+[1A[2K[73/116] tests/overall-current.spec.ts:70:5 › grid_calibration evidence failed withholds standings despite an old combined success flag
+[1A[2K[74/116] tests/overall-current.spec.ts:70:5 › grid_calibration evidence missing withholds standings despite an old combined success flag
+[1A[2K[75/116] tests/overall-current.spec.ts:70:5 › race_calibration evidence failed withholds standings despite an old combined success flag
+[1A[2K[76/116] tests/overall-current.spec.ts:70:5 › race_calibration evidence missing withholds standings despite an old combined success flag
+[1A[2K[77/116] tests/overall-current.spec.ts:70:5 › retirement_calibration evidence failed withholds standings despite an old combined success flag
+[1A[2K[78/116] tests/overall-current.spec.ts:70:5 › retirement_calibration evidence missing withholds standings despite an old combined success flag
+[1A[2K[79/116] tests/overall-current.spec.ts:70:5 › prospective_prediction evidence failed withholds standings despite an old combined success flag
+[1A[2K[80/116] tests/overall-current.spec.ts:70:5 › prospective_prediction evidence missing withholds standings despite an old combined success flag
+[1A[2K[81/116] tests/overall-current.spec.ts:70:5 › simulation_precision evidence failed withholds standings despite an old combined success flag
+[1A[2K[82/116] tests/overall-current.spec.ts:70:5 › simulation_precision evidence missing withholds standings despite an old combined success flag
+[1A[2K[83/116] tests/overall-current.spec.ts:111:3 › wrong model cannot publish a claimed established ranking
+[1A[2K[84/116] tests/overall-current.spec.ts:111:3 › wrong target cannot publish a claimed established ranking
+[1A[2K[85/116] tests/overall-current.spec.ts:111:3 › missing entrant cannot publish a claimed established ranking
+[1A[2K[86/116] tests/overall-current.spec.ts:111:3 › duplicate entrant cannot publish a claimed established ranking
+[1A[2K[87/116] tests/overall-current.spec.ts:111:3 › unrecognized entrant cannot publish a claimed established ranking
+[1A[2K[88/116] tests/overall-current.spec.ts:111:3 › duplicate field cannot publish a claimed established ranking
+[1A[2K[89/116] tests/overall-current.spec.ts:111:3 › missing evidence cannot publish a claimed established ranking
+[1A[2K[90/116] tests/overall-current.spec.ts:111:3 › incomplete evidence cannot publish a claimed established ranking
+[1A[2K[91/116] tests/overall-current.spec.ts:111:3 › invalid check reason cannot publish a claimed established ranking
+[1A[2K[92/116] tests/overall-current.spec.ts:111:3 › missing evidence source cannot publish a claimed established ranking
+[1A[2K[93/116] tests/overall-current.spec.ts:111:3 › missing fit identity cannot publish a claimed established ranking
+[1A[2K[94/116] tests/overall-current.spec.ts:111:3 › invalid interval cannot publish a claimed established ranking
+[1A[2K[95/116] tests/overall-current.spec.ts:111:3 › nonfinite points cannot publish a claimed established ranking
+[1A[2K[96/116] tests/overall-current.spec.ts:111:3 › insufficient simulation precision cannot publish a claimed established ranking
+[1A[2K[97/116] tests/overall-current.spec.ts:111:3 › missing explanation cannot publish a claimed established ranking
+[1A[2K[98/116] tests/overall-current.spec.ts:111:3 › mixed explanation draws cannot publish a claimed established ranking
+[1A[2K[99/116] tests/overall-current.spec.ts:111:3 › mixed explanation scenario cannot publish a claimed established ranking
+[1A[2K[100/116] tests/overall-current.spec.ts:111:3 › missing race explanation cannot publish a claimed established ranking
+[1A[2K[101/116] tests/overall-current.spec.ts:111:3 › duplicate explanation cannot publish a claimed established ranking
+[1A[2K[102/116] tests/overall-current.spec.ts:111:3 › invalid title probabilities cannot publish a claimed established ranking
+[1A[2K[103/116] tests/overall-current.spec.ts:111:3 › invalid finish range cannot publish a claimed established ranking
+[1A[2K[104/116] tests/overall-current.spec.ts:124:3 › not established hides accidentally retained successor rows
+[1A[2K[105/116] tests/overall-current.spec.ts:124:3 › stale hides accidentally retained successor rows
+[1A[2K[106/116] tests/overall-current.spec.ts:124:3 › unavailable hides accidentally retained successor rows
+[1A[2K[107/116] tests/overall-current.spec.ts:134:3 › successor with schema undefined cannot fall back to legacy success
+[1A[2K[108/116] tests/overall-current.spec.ts:134:3 › successor with schema 1 cannot fall back to legacy success
+[1A[2K[109/116] tests/overall-current.spec.ts:134:3 › successor with schema 3 cannot fall back to legacy success
+[1A[2K[110/116] tests/overall-current.spec.ts:146:1 › briefing and methodology describe the successor with the same target
+[1A[2K[111/116] tests/overall-current.spec.ts:160:3 › successor established remains accessible on small screens
+[1A[2K[112/116] tests/overall-current.spec.ts:160:3 › successor not established remains accessible on small screens
+[1A[2K[113/116] tests/performance-colors.spec.ts:94:1 › median pace controls a continuous spectrum, with identical colors across views and filters
+[1A[2K[114/116] tests/performance-colors.spec.ts:123:1 › car, dry-race and equal-car tables use their primary estimate consistently
+[1A[2K[115/116] tests/performance-colors.spec.ts:144:1 › equal-valued and single-entry fields use a finite neutral color
+[1A[2K[116/116] tests/performance-colors.spec.ts:167:1 › colored estimates remain legible on black at phone width
+[1A[2K  116 passed (4.0m)

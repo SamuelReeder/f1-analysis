@@ -1,0 +1,67 @@
+{
+  "purpose": "Current legacy publication and successor frontend software verification",
+  "workflow_source_commit": "43046da894bc48c50883c3810b5b93b1e5058836",
+  "workflow": ".github/workflows/dashboard.yml",
+  "checks": {
+    "local_build": {
+      "run": "build-run.json",
+      "exit_code": 0
+    },
+    "local_browser": {
+      "run": "browser-run.json",
+      "report": "browser.json",
+      "stats": {
+        "startTime": "2026-10-12T15:51:14.111Z",
+        "duration": 254467.481,
+        "expected": 116,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    "clean_checkout": {
+      "run": "clean-ci-run.json",
+      "python_report": "clean-python-tests.xml",
+      "python_counts": {
+        "tests": 49,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "browser_report": "clean-ci-browser.json",
+      "browser_stats": {
+        "startTime": "2026-10-12T15:55:50.039Z",
+        "duration": 238003.075,
+        "expected": 116,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  },
+  "publication": {
+    "release": "5a1a7a68019ae251e8cd",
+    "pointer": "dashboard/public/data/latest.json",
+    "payload": "dashboard/public/data/releases/5a1a7a68019ae251e8cd.json",
+    "payload_sha256": "f41ad8417fd1fcee56db0c8abb38e925d6700f066bd08e7a6171fddb09ccc430",
+    "data_as_of": {
+      "event_id": "2026-15",
+      "race_name": "Azerbaijan Grand Prix",
+      "date": "2026-09-26"
+    },
+    "race_fit_id": "8747468393d41cc1ef63",
+    "race_pace_matches_regenerated_output": true,
+    "car_table_withheld": true,
+    "overall_status": "stale",
+    "overall_standings_empty": true
+  },
+  "credentials_redacted_in_logs": [],
+  "clean_checkout_without_posterior_fits": true,
+  "used_fresh_python_and_npm_dependencies": true,
+  "os_browser_libraries_reused": true,
+  "hosted_github_runner_verified": false,
+  "refresh_fit_runtime_or_memory_in_ci_verified": false,
+  "successor_overall_accepted": false,
+  "push_or_deployment_performed": false,
+  "receipt_note": "Evidence inventory is committed before the final receipt is refreshed and independently checked in the clean checkout."
+}

@@ -1,0 +1,19 @@
+{
+  "source_commit": "43046da894bc48c50883c3810b5b93b1e5058836",
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "--workers=2",
+    "--reporter=line,json"
+  ],
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r432972e0158d48929f6b09c22e8f69f9.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "exit_code": 0,
+  "elapsed_seconds": 255.84687589498935,
+  "peak_child_rss_kib": 444804,
+  "url": "http://127.0.0.1:4180/f1-analysis/"
+}

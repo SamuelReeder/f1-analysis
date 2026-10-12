@@ -1,0 +1,146 @@
+{
+  "source_commit": "43046da894bc48c50883c3810b5b93b1e5058836",
+  "started_at": "2026-10-12T15:55:30.052850+00:00",
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r49541b905bb14c55a3a040a2ef43b2ab.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "stages": [
+    {
+      "name": "clean-clone",
+      "command": [
+        "git",
+        "clone",
+        "--no-local",
+        "--depth",
+        "1",
+        "--branch",
+        "overall-model-implementation",
+        "--quiet",
+        "/home/sreeder/.codex/worktrees/overall-model/f1-analysis",
+        "/tmp/f1-overall-clean-ci-acnaaf6l/repo"
+      ],
+      "exit_code": 0,
+      "seconds": 2.2629586500115693,
+      "log": "clean-clone.txt"
+    },
+    {
+      "name": "clean-venv",
+      "command": [
+        "/usr/bin/python3.12",
+        "-m",
+        "venv",
+        "/tmp/f1-overall-clean-ci-acnaaf6l/repo/.venv-ci"
+      ],
+      "exit_code": 0,
+      "seconds": 2.104261834989302,
+      "log": "clean-venv.txt"
+    },
+    {
+      "name": "clean-python-install",
+      "command": [
+        "/tmp/f1-overall-clean-ci-acnaaf6l/repo/.venv-ci/bin/python",
+        "-m",
+        "pip",
+        "install",
+        "--disable-pip-version-check",
+        "-r",
+        "dashboard/requirements.txt"
+      ],
+      "exit_code": 0,
+      "seconds": 7.301597735029645,
+      "log": "clean-python-install.txt"
+    },
+    {
+      "name": "clean-portable-receipt",
+      "command": [
+        "/tmp/f1-overall-clean-ci-acnaaf6l/repo/.venv-ci/bin/python",
+        "dashboard/verify_publication.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.14962265198118985,
+      "log": "clean-portable-receipt.txt"
+    },
+    {
+      "name": "clean-python-tests",
+      "command": [
+        "/tmp/f1-overall-clean-ci-acnaaf6l/repo/.venv-ci/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_dashboard.py",
+        "tests/test_portable_publication.py",
+        "-q",
+        "--junitxml=/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/logs/overall-post-regeneration-publication/clean-python-tests.xml"
+      ],
+      "exit_code": 0,
+      "seconds": 1.6257132579921745,
+      "log": "clean-python-tests.txt"
+    },
+    {
+      "name": "clean-npm-install",
+      "command": [
+        "npm",
+        "ci",
+        "--prefix",
+        "dashboard"
+      ],
+      "exit_code": 0,
+      "seconds": 2.688378997030668,
+      "log": "clean-npm-install.txt"
+    },
+    {
+      "name": "clean-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "dashboard",
+        "run",
+        "build",
+        "--",
+        "--base=/f1-analysis/"
+      ],
+      "exit_code": 0,
+      "seconds": 4.460324298997875,
+      "log": "clean-build.txt"
+    },
+    {
+      "name": "clean-browser-install",
+      "command": [
+        "npx",
+        "playwright",
+        "install",
+        "chromium"
+      ],
+      "exit_code": 0,
+      "seconds": 0.6377516980282962,
+      "log": "clean-browser-install.txt"
+    },
+    {
+      "name": "clean-browser-tests",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "--workers=2",
+        "--reporter=line,json"
+      ],
+      "exit_code": 0,
+      "seconds": 238.79068880795967,
+      "log": "clean-browser-tests.txt"
+    }
+  ],
+  "fresh_checkout": true,
+  "fresh_python_environment": true,
+  "fresh_npm_install": true,
+  "hosted_github_runner": false,
+  "actual_fit_or_refresh_run": false,
+  "qualification": "Local application commands from the Dashboard workflow; existing OS browser libraries are reused rather than running the hosted runner OS-package installation",
+  "driver_ranking_source": "Current committed portable payload; no ignored posterior fits copied",
+  "checkout": "/tmp/f1-overall-clean-ci-acnaaf6l/repo",
+  "elapsed_seconds": 260.2128345189849,
+  "peak_child_rss_kib": 426304,
+  "cgroup_memory_peak_bytes": "3221225472",
+  "tracked_files_unchanged": true,
+  "exit_code": 0
+}

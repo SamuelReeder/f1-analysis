@@ -862,8 +862,10 @@ zero divergences; maximum accepted R-hat was 1.018. The `2026-07_full` validatio
 fit required its fixed retry: R-hat fell from 1.056 on the failed first attempt
 to 1.004 on the second. The [run review](outputs/championship/development/overall-track-context-checks/race-pace-review.json)
 retains every attempt and the timing/accounting limitations. The three historical
-windows contain 29 test races. These are regenerated local outputs; a fresh
-publication check and approved deployment are still required.
+windows contain 29 test races. The regenerated local publication passed the
+[build, browser and clean-checkout checks](outputs/championship/development/overall-post-regeneration-publication/verification.json).
+Deployment still requires approval; these checks do not establish the successor
+Overall model's scientific acceptance.
 
 | Prediction target | RMSE | Baseline RMSE | 90% interval coverage | Export status |
 | --- | ---: | ---: | ---: | --- |

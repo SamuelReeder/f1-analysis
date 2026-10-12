@@ -56,8 +56,10 @@ separate from the successor's unresolved numerical profile and cannot establish
 that model's acceptance.
 The [post-regeneration full Python suite](../outputs/championship/development/overall-track-context-checks/race-pace-verification.json)
 passes, including the previously failing checked current dashboard data contract.
-Refreshing the portable publication and its final production checks remains
-separate work.
+The [portable publication checks](../outputs/championship/development/overall-post-regeneration-publication/verification.json)
+record the refreshed local payload, production build, browser tests and a clean
+checkout without posterior caches. They do not constitute deployment or
+acceptance of the successor Overall model.
 
 The review retains the per-attempt durations and the interval inferred from the
 launch timestamp and completion-file modification time. Their totals disagree,
