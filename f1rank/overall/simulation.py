@@ -7,8 +7,8 @@ from dataclasses import dataclass
 
 import numpy as np
 
-POINTS = np.array([25, 18, 15, 12, 10, 8, 6, 4, 2, 1], dtype=float)
-CLASSIFICATION_FRACTION = .9
+from .scoring import POINTS, gp_points_table, score_grand_prix
+
 MAX_EXPECTED_POINTS_MCSE = .05
 QUALIFYING_FIELDS = {20: (15, 10), 22: (16, 10), 24: (17, 10)}
 
@@ -109,10 +109,15 @@ class JointDraws:
 
 @dataclass(frozen=True)
 class Scenario:
-    """One occurrence of a GP in the frozen, equally weighted reference calendar."""
+    """One GP, with explicit race-control assumptions for scoring.
+
+    consecutive_racing_laps is a scenario input until a calibrated model generates
+    the race-control sequence. A neutralisation indicator alone cannot supply it.
+    """
     event_id: str
     context: int
     laps: int
+    consecutive_racing_laps: int
 
 
 def qualifying_grid(ability, weekend, scale, log_scale_sd, df, rng, advancing):
@@ -135,31 +140,6 @@ def qualifying_grid(ability, weekend, scale, log_scale_sd, df, rng, advancing):
         order[:, keep:active.shape[-1]] = ranked[:, keep:]
         active = ranked[:, :keep]
     return np.argsort(order, axis=-1) + 1
-
-
-def classify(completed_laps, line_order):
-    """Completion distance precedes order at the line; late retirees can score.
-
-    line_order is a unique ordinal for each driver's last crossing. Full-distance
-    simulator draws are continuous; exact race dead heats are outside this model.
-    A zero-lap race has no classified entries.
-    """
-    laps, line = np.asarray(completed_laps), np.asarray(line_order)
-    if laps.shape != line.shape or laps.ndim < 1 or laps.shape[-1] < 2:
-        raise ValueError("Completion and line-order arrays must agree")
-    _finite("completed_laps", laps)
-    _finite("line_order", line)
-    if (laps < 0).any() or (laps != np.floor(laps)).any():
-        raise ValueError("Completed laps must be non-negative integers")
-    if not np.all(np.sort(line, axis=-1) == np.arange(1, line.shape[-1] + 1)):
-        raise ValueError("Line order must be a permutation of positions")
-    order = np.lexsort((line, -laps), axis=-1)
-    rank = np.argsort(order, axis=-1) + 1
-    winner_laps = laps.max(axis=-1, keepdims=True)
-    eligible = (winner_laps > 0) & (laps >= np.floor(CLASSIFICATION_FRACTION * winner_laps))
-    positions = np.where(eligible, rank, 0)
-    table = np.pad(POINTS, (1, max(0, laps.shape[-1] - len(POINTS))))
-    return positions, table[positions]
 
 
 def championship_countback(points, finishes, qualifying):
@@ -207,6 +187,10 @@ def simulate(draws, scenarios, *, replicates, seed=0, advancing=None):
     for s in scenarios:
         if s.context < 0 or s.context >= draws.grid_coefficient.shape[1] or s.laps < 2 or int(s.laps) != s.laps:
             raise ValueError("Invalid reference scenario")
+        if not np.isscalar(s.consecutive_racing_laps):
+            raise ValueError("Reference race-control assumption must be scalar")
+        gp_points_table(scheduled_laps=s.laps, leader_laps=s.laps,
+                        consecutive_racing_laps=s.consecutive_racing_laps)
     ix = np.argsort(draws.drivers)
     reverse = np.argsort(ix)
     q, r = draws.qualifying[:, ix], draws.race[:, ix]
@@ -240,7 +224,9 @@ def simulate(draws, scenarios, *, replicates, seed=0, advancing=None):
             # silently award full points as if the scheduled distance was covered.
             if (laps.max(axis=-1) < s.laps).any():
                 raise ValueError("No full-distance finisher: shortened-race model required")
-            finish, points = classify(laps, line)
+            finish, points = score_grand_prix(
+                laps, line, scheduled_laps=s.laps, leader_laps=s.laps,
+                consecutive_racing_laps=s.consecutive_racing_laps)
             season_points[:, rep] += points
             finishes.append(finish)
             grids.append(grid)

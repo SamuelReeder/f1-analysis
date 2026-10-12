@@ -124,8 +124,10 @@ finisher; shortened races fail explicitly rather than receiving full points.
 The final scenario must declare its distance, elimination format and condition
 mix. It must not be selected by inspecting driver standings.
 
-Scoring uses the GP points array and classification fraction committed in the
-simulator. Championship ties use race-position countback, then qualifying-position
+Scoring uses the frozen [event-rule contract](overall_event_rules.md) and
+[scoring module](../f1rank/overall/scoring.py). It requires explicit scheduled,
+leader and consecutive racing distances rather than assuming every classified
+event earns full points. Championship ties use race-position countback, then qualifying-position
 countback. Residual exact ties retain a rank interval and share title probability.
 Continuous race-order draws exclude exact race dead heats; that is a simulation
 assumption, not a replacement sporting rule. Sources are FIA
@@ -182,6 +184,20 @@ remains a record of its original source, including its exhausted confounded
 case. The correction is not an explanation or rescue for that failure.
 It changes the source fingerprint, so subsequent work requires fresh registered
 evidence; old receipts must not be relabeled as fits of corrected source.
+
+## Event-scoring implementation after the numerical profile
+
+Dated 2026-10-12, with no fits running. The deterministic scorer now handles the
+frozen points columns, explicit race-control eligibility and dead heats. The
+simulator calls it and requires a consecutive-racing-lap assumption in each
+scenario. It still refuses unsupported shortened-event generation and does not
+infer missing race-control information from the frozen reference calendar.
+
+This completes more of the scoring implementation; it does not change priors,
+fit settings, seeds or acceptance thresholds, and cannot rescue the failed
+profile. The hashed source change requires fresh registered evidence and
+regeneration of affected publication artifacts before promotion. Existing
+receipts remain records of their original source.
 
 ## Remaining acceptance work
 

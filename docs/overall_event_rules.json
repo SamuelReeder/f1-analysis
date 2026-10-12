@@ -1,0 +1,40 @@
+{
+  "id": "fia-f1-2026-a03-b09-gp",
+  "status": "frozen_scoring_arithmetic",
+  "recorded_date": "2026-10-12",
+  "sources": [
+    {
+      "url": "https://www.fia.com/system/files/documents/fia_2026_f1_regulations_-_section_a_general_provisions_-_iss_03_-_2026-06-25.pdf",
+      "alternate_official_url": "https://api.fia.com/system/files/documents/fia_2026_f1_regulations_-_section_a_general_provisions_-_iss_03_-_2026-06-25.pdf",
+      "sha256": "6ce8c9420ddb8194e1b5ea8f678dbbdcb4bb2094780e636324b709ee70d276d6",
+      "articles": ["A2.1.4c", "A2.2.1", "A2.2.3"],
+      "pages": [9, 10, 11]
+    },
+    {
+      "url": "https://www.fia.com/system/files/documents/fia_2026_f1_regulations_-_section_b_sporting_-_iss_09_-_2026-10-01.pdf",
+      "sha256": "5e156f50f1ca529d43551f52e82f5f2872bdfbe088e96fab39b861f6b0704b85",
+      "articles": ["B2.5.5"],
+      "pages": [26]
+    }
+  ],
+  "classification_fraction": [9, 10],
+  "classification_rounding": "floor",
+  "classification_zero": "unclassified",
+  "minimum_consecutive_racing_laps": 2,
+  "distance_thresholds": [[1, 4], [1, 2], [3, 4]],
+  "points_columns": ["ineligible", "below_quarter", "quarter_to_half", "half_to_three_quarters", "at_least_three_quarters"],
+  "points_tables": [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [6, 4, 3, 2, 1, 0, 0, 0, 0, 0],
+    [13, 10, 8, 6, 5, 4, 3, 2, 1, 0],
+    [19, 14, 12, 10, 8, 6, 4, 3, 2, 1],
+    [25, 18, 15, 12, 10, 8, 6, 4, 2, 1]
+  ],
+  "race_distance_inputs": "Scheduled distance and leader distance between start and end signals exclude formation laps. Final classified distance is separate. No distance is inferred from a finish order or neutralisation flag.",
+  "race_control_input": "Longest run of complete consecutive leader laps without SC or VSC. Unknown is an error, not a points-eligible default.",
+  "race_ties": "Competition ranks; equally share the points of all occupied places, including places outside the points table.",
+  "championship_countback": ["points", "race_position_counts", "qualifying_position_counts"],
+  "unresolved_championship_ties": "Model convention: retain the tied rank interval and divide title mass equally, without identity-based adjudication.",
+  "scope": "Grand Prix scoring only; adjudicated outcomes, without sprint points or historical fastest-lap bonuses. Deterministic rules do not establish a generative or calibrated model for lapping, race stoppages, correlated incidents, DNS, disqualifications or penalties.",
+  "authorizes_publication": false
+}

@@ -5,7 +5,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from f1rank.overall.simulation import (JointDraws, Scenario, classify, championship_countback,
+from f1rank.overall.scoring import classify, score_grand_prix
+from f1rank.overall.simulation import (JointDraws, Scenario, championship_countback,
                                       qualifying_grid, simulate, uncertainty)
 
 
@@ -45,21 +46,23 @@ def tables():
 
 
 def test_current_race_retiree_can_score_and_distance_precedes_line_order():
-    positions, points = classify(np.array([60, 54, 53, 59]), np.array([2, 1, 3, 4]))
+    positions, points = score_grand_prix([60, 54, 53, 59], [2, 1, 3, 4],
+        scheduled_laps=60, leader_laps=60, consecutive_racing_laps=60)
     np.testing.assert_array_equal(positions, [1, 3, 0, 2])
     np.testing.assert_array_equal(points, [25, 15, 0, 18])
     # The FIA threshold rounds the required completed laps down.
-    positions, _ = classify(np.array([53, 47, 46]), np.array([1, 2, 3]))
+    positions = classify([53, 47, 46], [1, 2, 3])
     np.testing.assert_array_equal(positions, [1, 2, 0])
 
 
 def test_no_completed_laps_means_no_points_and_bad_inputs_fail():
-    positions, points = classify(np.zeros(3), np.arange(1, 4))
+    positions, points = score_grand_prix(np.zeros(3), np.arange(1, 4),
+        scheduled_laps=60, leader_laps=0, consecutive_racing_laps=0)
     assert not positions.any() and not points.any()
     with pytest.raises(ValueError):
         classify(np.array([60, 54.5]), np.array([1, 2]))
     with pytest.raises(ValueError):
-        classify(np.array([60, 54]), np.array([1, 1]))
+        classify(np.array([60, 54]), np.array([1, 3]))
 
 
 def test_countback_uses_wins_then_seconds_then_qualifying_then_shared_tie():
@@ -81,7 +84,7 @@ def test_simulation_is_exactly_invariant_to_driver_array_permutation():
     d = replace(d, qualifying=d.qualifying + np.arange(6) / 10, race=d.race - np.arange(6) / 10)
     ix = [3, 0, 5, 1, 4, 2]
     shuffled = replace(d, drivers=tuple(d.drivers[i] for i in ix), qualifying=d.qualifying[:, ix], race=d.race[:, ix])
-    args = dict(scenarios=[Scenario("ref", 0, 60)], replicates=3, seed=17, advancing=(4, 2))
+    args = dict(scenarios=[Scenario("ref", 0, 60, 60)], replicates=3, seed=17, advancing=(4, 2))
     a, b = simulate(d, **args), simulate(shuffled, **args)
     for name in ("points", "title_share", "rank_low", "rank_high"):
         np.testing.assert_array_equal(a[name][:, :, ix], b[name])
@@ -91,7 +94,7 @@ def test_faster_race_pace_cannot_lose_points_under_common_randomness():
     d = draws()
     race = d.race.copy()
     race[:, 0] += 1.
-    args = dict(scenarios=[Scenario("ref", 0, 60)], replicates=10, seed=14, advancing=(4, 2))
+    args = dict(scenarios=[Scenario("ref", 0, 60, 60)], replicates=10, seed=14, advancing=(4, 2))
     a, b = simulate(d, **args), simulate(replace(d, race=race), **args)
     assert (b["points"][:, :, 0] >= a["points"][:, :, 0]).all()
     assert (b["points"][:, :, 0] > a["points"][:, :, 0]).any()
@@ -118,7 +121,7 @@ def test_actual_field_format_and_shared_ties_are_order_independent():
 
 def test_equal_driver_simulations_are_exchangeable_in_distribution():
     d = draws(nd=128)
-    result = simulate(d, [Scenario("ref", 0, 60)], replicates=128, seed=8, advancing=(4, 2))
+    result = simulate(d, [Scenario("ref", 0, 60, 60)], replicates=128, seed=8, advancing=(4, 2))
     points = result["points"].reshape(-1, 6)
     expected = np.array([25, 18, 15, 12, 10, 8]).mean()
     # A broad fixed Monte Carlo check catches systematic slot/identity advantage.
