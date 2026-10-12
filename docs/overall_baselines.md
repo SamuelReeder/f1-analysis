@@ -4,16 +4,19 @@ The [model plan](overall_model_plan.md) fixes the primary comparison as the exis
 grid-plus-qualifying race model, with grid-only and current-race-only secondary
 comparisons. [The implementation](../analysis/overall_baselines.py) now provides
 the primary and grid-only conditional race-order likelihoods and their predictive
-arithmetic. It does not fit models, score real races or authorize publication.
+arithmetic. The [legacy forecast adapter](../analysis/overall_legacy_forecast.py)
+propagates qualifying-only future states and connects their fixed features to
+the primary baseline's actual-grid race predictions. These interfaces do not
+fit models, score real races or authorize publication.
 
 ## Qualifying forecast definition before evaluation
 
 The legacy race baseline requires a separate qualifying-only posterior from the
 standard model, with its original lineage compatibility. Its future driver and
 car states must not be copied from the successor's race-updated posterior or
-its era-based team effects. The adapter will require the standard fitting
-metadata and matching qualifying arrays, reject successor-specific posterior
-sites, and leave source/convergence verification to the checked fit loader.
+its era-based team effects. The adapter requires the standard fitting
+metadata and matching qualifying arrays, rejects successor-specific posterior
+sites, and leaves source/convergence verification to the checked fit loader.
 
 Propagate the original uncentred driver and persistent-car walks from their last
 training states, then centre on the complete announced future field. Retain the
@@ -45,6 +48,23 @@ Random streams identify state, driver/team and event so iteration order cannot
 change the forecast. The numerical forecast replication/precision policy and
 source-vintage verification remain required for the final evaluation; a single
 development trajectory per qualifying draw does not establish them.
+
+The actual-grid adapter reads grid slots only from the forecast catalogue,
+including its complete-field pit-lane convention. Later response input supplies
+only running positions and must retain every declared driver, including those
+outside the running panel. It rejects a pre-qualifying origin instead of inventing
+a grid. It keeps qualifying-fit and race-coefficient identities separately: the
+legacy fixed feature medians do not require equal posterior draw counts or
+arbitrary pairing between those fits. End-to-end pre-qualifying grid integration
+remains a separate open requirement.
+
+The [forecast verification record](../outputs/championship/development/overall-legacy-forecast-checks/verification.json)
+links synthetic original-model trace comparisons, lineage persistence, newcomer
+and missing-qualifying cases, unchanged features under transient variation,
+batch/field/prefix invariance, future-result rejection and a hand-computable
+actual-grid order probability. It also records checks of the shared catalogue
+and forecast path used by the successor. It establishes no accepted fit,
+real-race accuracy, forecast-median precision or runner resource profile.
 
 The primary baseline preserves the definitions in
 [`qualifying.features`](../f1rank/qualifying.py) and

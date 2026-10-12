@@ -59,6 +59,13 @@ team/era and circuit states also require their declared population uncertainty.
 That propagation is separate from this catalogue; the development implementation
 is described in [forecast states](overall_forecast_states.md).
 
+The same field/time validation now supports a separately identified legacy
+qualifying-only catalogue. It binds only that qualifying design's arrays, with
+the `legacy_qualifying` arm identity, rather than filling in missing race
+observations or relabeling a successor catalogue. Its
+[baseline forecaster](overall_baselines.md) preserves the original lineage
+effect definition. Source verification remains false for both catalogue paths.
+
 ## Evidence and remaining work
 
 Synthetic boundary checks live in

@@ -422,3 +422,28 @@ definitions. This checks consistency of claimed information; verified source
 vintages, preserved input artifacts and the full evaluation controller remain
 required. No real scores, fit settings or acceptance thresholds were changed.
 The running fit and pending numerical-study proposal are unaffected.
+
+## Legacy qualifying forecast and race-stage integration
+
+The [baseline forecast definition](overall_baselines.md) was committed before
+implementation or evaluation. Its adapter reconstructs the original
+qualifying-only state walks, preserves driver-lineage effects across regulation
+changes and returns, and retains the original fixed-factor/plug-in feature
+definitions. The common outcome-free field validator now returns a distinct
+qualifying-only catalogue without fabricated race observations or successor
+parameter identities.
+
+The actual-grid race adapter consumes those future feature medians and the
+legacy race coefficients on their own draw axes. Grid inputs come only from the
+forecast catalogue; later running-position responses retain the complete field.
+The [verification record](../outputs/championship/development/overall-legacy-forecast-checks/verification.json)
+covers original-model trace comparisons, population newcomers, lineage reuse,
+transient exclusion, future-data boundaries, invariance and conditional race
+probabilities, plus the shared forecast callers.
+
+No baseline was fitted and no real held-out score was evaluated. Checked-fit
+loading, common-history integration, median/forecast precision and the
+pre-qualifying grid mixture remain required before the complete comparison.
+The original failed numerical case, fitting sources, data and pending proposal
+remain unchanged. Full output integration checks still await the separate
+legacy race-pace regeneration, and canonical publication remains incomplete.
