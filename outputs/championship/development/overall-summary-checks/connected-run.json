@@ -1,0 +1,22 @@
+{
+  "source_commit": "1b43df4c3d25f30425b59e56f95aa57409fda663",
+  "command": [
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_overall_summary.py",
+    "tests/test_overall_contract.py",
+    "--junitxml=outputs/logs/overall-summary-checks/connected.xml"
+  ],
+  "started_at": "2026-10-12T16:37:23.372314+00:00",
+  "finished_at": "2026-10-12T16:37:25.999785+00:00",
+  "elapsed_seconds": 2.6275036329752766,
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r3d76d3673bef483c9d05b2d50c088ce3.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "exit_code": 0,
+  "peak_child_rss_kib": 241676
+}

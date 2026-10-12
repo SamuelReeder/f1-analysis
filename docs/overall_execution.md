@@ -17,7 +17,7 @@ open until the full acceptance checklist has direct evidence.
 | Ability/outcome/numerical uncertainty | Nested simulation, MCSE and rank/ESS diagnostics; saved-draw diagnosis finds qualifying-contrast failures in the final confounded attempt | Resolve inference and check ranking functionals under converged posteriors with fixed simulation precision |
 | Chronological development comparison | Plan defines information horizons and baseline roles; scoring utilities preserve joint draws, conditional panel/condition weights and required events; outcome-free catalogue, joint states and observation kernels have synthetic checks; unseen-circuit extensions and unknown-condition simulation; explicit legacy/grid-only arithmetic and a race-only evidence ablation | Complete source verification, final condition/circuit registration and calibration, uncertainty in learned training factors, classification-conditioning policy and baseline fitting/forecast integration; freeze event inventory, calibration and stopping rules; run every fold |
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
-| Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence, common field and matching explanation draws/scenario | Producer/export, pairwise comparisons, and matching component explanations from accepted draws; full contract validation |
+| Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence; bounded paired aggregation and explanatory interventions have direct-array and simulator checks | Accepted-posterior/scenario integration, full simulation resources and precision, evidence-backed exporter and matching explanation/pairwise payload; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
 | Software and runner readiness | Batched states and observation kernels; bounded checked archive loading; capped synthetic resource and software records, including historical condition integration under `development/overall-condition-checks/` | Accepted-fit integration and end-to-end fitting/refresh resources; workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
 | Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
@@ -99,6 +99,23 @@ about expected points from simulated season outcomes, and explanations identify
 their posterior and common scenario. Synthetic browser fixtures are interface
 checks only. The producer has not yet emitted an accepted successor artifact;
 the public payload remains unchanged.
+
+The [paired summary definition](overall_summary.md) now has an implementation
+that retains grouped posterior coverage, conditional driver covariance and
+paired explanatory losses without storing the full season cube. Sporting ties
+retain their complete rank intervals and shared title mass. Every required
+replicate must be present; source changes, inconsistent point/rank inputs and
+failed simulated seasons stop the calculation. The paired generator neutralizes
+only the selected driver's declared persistent components, using the same
+scenario and random inputs as its baseline. The
+[verification record](../outputs/championship/development/overall-summary-checks/verification.json)
+covers direct arithmetic, known ties, paired errors, permutations, source and
+coverage rejection, fixed precision bounds and the connected simulator path.
+No accepted posterior, real ranking or scientific success flag was produced.
+The controller must still bind the full scenario and stream inventory, verify
+accepted evidence, measure the full nested workload and supply the canonical
+export. These checks do not resolve the failed numerical profile or complete
+the producer/publication requirement.
 
 Interface verification is recorded under
 [`overall-interface-checks`](../outputs/championship/development/overall-interface-checks/verification.json).

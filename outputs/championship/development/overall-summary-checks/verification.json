@@ -1,0 +1,90 @@
+{
+  "purpose": "canonical_overall_paired_summary_development_verification",
+  "definition": "docs/overall_summary.md",
+  "definition_before_implementation_commit": "505442a83d67521f128fcf8d9d39cbd3ec2bce3f",
+  "checks": {
+    "initial": {
+      "source_commit": "7811949af1ea7a4cefa69d647eb4266d45b80dbf",
+      "run": "initial-run.json",
+      "report": "initial.xml",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "source_hashes": {
+        "analysis/overall_summary.py": "f9fd9a9ce9a1ba0c470637e415dec3f5d849122cb419ad768bb0ca7a3b26456b",
+        "tests/test_overall_summary.py": "a85d9891a26ae25f5ab3f99ecc0ad1d1c3ae88b4b42af1ea2da54b6fbf51fa40",
+        "tests/test_overall_contract.py": "34ddb89f614895e7c4e48a16f3b3bf8488d828e715fd09bbaf340c45b6f482b3",
+        "docs/overall_summary.md": "fa2a0b80cfe9348a035492cf750352d7b9b801e238473dbfea75ba5806998974",
+        "contracts/overall.json": "804c3cb2543de91416b73ede82891f7a76a5da69e93804300b4a653703ed1f35",
+        "f1rank/overall/simulation.py": "57d31ee69f2f6b36fe551c9b6bcb51f0894e5cfbd03e1403adf77e7920c61ff9",
+        "f1rank/overall/scoring.py": "8fc3051432ff7f5e00038a336923fe7c1fce114115b3a87b889079728db33aae",
+        "f1rank/overall/order.py": "812af3dac1f6ad8fa016919332511a24fc99d53eef947edc1eeec55dd48cd95d"
+      }
+    },
+    "connected": {
+      "source_commit": "1b43df4c3d25f30425b59e56f95aa57409fda663",
+      "run": "connected-run.json",
+      "report": "connected.xml",
+      "tests": 41,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "source_hashes": {
+        "analysis/overall_summary.py": "89d267087b2f81b3bb782a09fc8b20e686c01cd2c5c90d1a3f7dd6b551387dd4",
+        "tests/test_overall_summary.py": "6ac3f84a28976d23747e5812c4f9fa7ba5374d46a0f9bcee30a5b1e77af32767",
+        "tests/test_overall_contract.py": "34ddb89f614895e7c4e48a16f3b3bf8488d828e715fd09bbaf340c45b6f482b3",
+        "docs/overall_summary.md": "ca9a7fe55a2d5b59d2e42eeafa0316e4238fb9e937f60c6eb9565c7fca0b8595",
+        "contracts/overall.json": "804c3cb2543de91416b73ede82891f7a76a5da69e93804300b4a653703ed1f35",
+        "f1rank/overall/simulation.py": "57d31ee69f2f6b36fe551c9b6bcb51f0894e5cfbd03e1403adf77e7920c61ff9",
+        "f1rank/overall/scoring.py": "8fc3051432ff7f5e00038a336923fe7c1fce114115b3a87b889079728db33aae",
+        "f1rank/overall/order.py": "812af3dac1f6ad8fa016919332511a24fc99d53eef947edc1eeec55dd48cd95d"
+      }
+    }
+  },
+  "checks_overlap_do_not_sum": true,
+  "covers": [
+    "Complete chain/draw/replicate inventory and bounded input blocks",
+    "Direct versus streamed moments, pair covariance and paired explanatory losses",
+    "Sporting ties, countback, point consistency and exact empirical rank quantiles",
+    "Field, posterior and block permutations of the same simulation inputs",
+    "Fixed workload bounds keep low-variance small samples from claiming precision",
+    "Source-change rejection and retained simulation failures",
+    "Existing simulator to paired interventions to grouped summary connection",
+    "Common random inputs within a probe block; distinct declared block stream addresses"
+  ],
+  "unchanged_from": "4b5fa5bee8cc322a613b5eb2c0c4c500ec6ed6ad",
+  "unchanged_paths": [
+    "f1rank",
+    "extract",
+    "data",
+    "docs/overall_rotation_profile_proposal.json",
+    "dashboard",
+    "contracts"
+  ],
+  "pending_numerical_proposal_user_approved": false,
+  "caveats": [
+    "Synthetic arrays and small simulation blocks only; no accepted posterior or real ranking",
+    "The final controller must bind source provenance, common scenario, block layout and seeds",
+    "Full-size nested simulation runtime and memory have not been measured for this generator",
+    "Conditional simulation precision does not establish MCMC or near-tie rank precision",
+    "Official-grid, completion, lapping, shortened-event and incident assumptions remain open",
+    "No real-data fit, recovery/calibration acceptance, predictive score or public payload was produced"
+  ],
+  "accepted_fit_loaded": false,
+  "mcmc_run": false,
+  "real_predictions_scored": false,
+  "canonical_producer_complete": false,
+  "scientific_evidence_verified": false,
+  "intended_ci_runner_verified": false,
+  "publication_allowed": false,
+  "evidence_sha256": {
+    "connected-run.json": "2734dbc47a5cb1fd4d770d625e18a6fbd8f348a0993de984718678e194db4bc9",
+    "connected.txt": "f447cec85f0b2698b5b9c608ddfaa78048a713c47946c22d558dfd8cb9c3b4fb",
+    "connected.xml": "a53f17462b743c33acf774337c9b4a1317875b8da66aa1c2a0de1a1145156f3d",
+    "initial-run.json": "bbb07a1a9255877661d719b457e24ede3761dd54263e42ba8ba97fa241733957",
+    "initial.txt": "ef8dcc2e9f36d90cbbde693a8ed465b3f391495a1c1189740d7e4d9c55c8ada8",
+    "initial.xml": "b195a1e9a74c1f733d4e826496f624b9ebbc8fcf6f4848635b1bc1b95561a217",
+    "run.py": "6bcbb9e504df4554d76da655539e6ca342a358e3dcf55eb9c0f7991356172ce3"
+  }
+}
