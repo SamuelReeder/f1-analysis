@@ -1,0 +1,69 @@
+{
+  "purpose": "conditional_weekend_coordinate_equivalence_and_registration_checks",
+  "proposal": "docs/overall_weekend_profile_proposal.json",
+  "proposal_sha256": "fbf83d4593bad68ea59d66b77a62186ae82cf6477c3a78737f6b893b8350e60b",
+  "method": "conditional_weekend_with_control_rotation_v1",
+  "sources": {
+    "analysis/overall_control_rotation.py": "49e4dbef148b7206634655532294a31f650542b8960d1f7d55fedc1755097a84",
+    "analysis/overall_profile_geometry.py": "714ba47c374f68c616d2453d0df9b677b5faa55c299e4e866771e30a41f4c4f2",
+    "analysis/overall_weekend_coordinates.py": "4f2e05020fc1a2cb1c38bc9a1f7ccadec83bc83b09a2a6402c8a38180e4ca972",
+    "analysis/overall_weekend_profile.py": "d65af5bb85b99a226c3b3993dce107b2154bf3baf3550612818f6a21f6b54a52",
+    "docs/overall_weekend_coordinates.md": "1f8c0f22f120b183b255045d1c3a07c6f9039b7f5c866171d05acdc9c76ec7bf"
+  },
+  "tests": {
+    "software": {
+      "source_commit": "ca4363fcf9dac6bfa1130e83ec9dadd3ffb3590a",
+      "report": "outputs/championship/development/overall-weekend-coordinate-checks/software.xml",
+      "sha256": "b5eb8f8948d73c3b8027bbc54658e1e037d3b33579712d6439319d9d586053d2",
+      "tests": 49,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "connected": {
+      "source_commit": "0feb9ac49ef69be5d4b5fea37619941d53f9c54a",
+      "report": "outputs/championship/development/overall-weekend-coordinate-checks/connected.xml",
+      "sha256": "78abafe29128cead288f3a7f448b4d1c807446408d227ae44d35aea8e17fcfd1",
+      "tests": 60,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "reports_overlap_do_not_sum": true,
+  "checks": [
+    "conditional orthogonality and covariance",
+    "complete hyperparameter-dependent Jacobian absolute determinant",
+    "invertibility and all original latent directions",
+    "full original joint density with and without control rotation",
+    "every original observation factor and state",
+    "original prior families and parameters",
+    "finite unconstrained gradients",
+    "pending approval and altered seeds/settings/gates/source/truth identities rejected",
+    "approved-form read-only preflight with source fingerprints",
+    "existing experiment cannot be overwritten",
+    "all driver comparisons recorded on a failed attempt without changing its convergence verdict"
+  ],
+  "resources": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "slice": "f1.slice",
+    "Nice": 19
+  },
+  "unchanged_since": "712360d",
+  "unchanged_paths": [
+    "f1rank",
+    "extract",
+    "data",
+    "docs/overall_rotation_profile_protocol.json",
+    "dashboard/public/data/latest.json",
+    "dashboard/public/data/releases"
+  ],
+  "model_inputs_key": "eae65767fe29bedcf396beeddbd8bf19b5bdc2a5769dd70f10fda50ef22bad18",
+  "user_approved": false,
+  "registration_frozen": false,
+  "mcmc_performed": false,
+  "numerical_success_established": false,
+  "full_recovery_established": false,
+  "publication_allowed": false
+}
