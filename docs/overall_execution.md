@@ -10,8 +10,8 @@ open until the full acceptance checklist has direct evidence.
 | Shared current qualifying/race model | Joint model and synthetic interface/gradient tests | Fit, recover and calibrate its shared uncertainty |
 | Scientific specification | Executable likelihood/prior definitions and candidate contract | Final numerical/evaluation/prospective protocol before real-data fitting |
 | Complete entrant/cutoff catalog | Missing-qualifier, team-transfer, era and future-row tests; data preflight | Recovery on the real transfer network and forecast catalog for unseen entrants/events |
-| Reproducible fit engine | `fitting.py`; fixed retry, source-change, cache-corruption and terminal-failure tests | Registered numerical profile, full recovery fits and measured resource use |
-| Known-truth recovery and simulation-based calibration | Generative qualifying/lap/order/completion responses and fixture inventory | Complete registered SBC and stress studies, every truth/failure accounted for |
+| Reproducible fit engine | `fitting.py`; fixed retry, source-change, cache-corruption and terminal-failure tests; completed numerical profile preserves an exhausted confounded case | Diagnose failed inference without retuning; fresh registered evidence after source correction; full recovery and runner resource measurements |
+| Known-truth recovery and simulation-based calibration | Generative responses and complete numerical-profile inventory: connected and sparse-rookie fits converged after retries; confounded fit exhausted its ladder | Complete registered SBC and stress studies, including the unresolved confounded case; no failed case may be discarded |
 | Coherent weekend simulation | Student-t elimination, current total race pace, shared weekend uncertainty | Common operations/conditions calibration, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Classification, points, race/qualifying countback and exchangeable-tie fixtures | Final complete event-rule fixtures and calibrated end-to-end simulation |
 | Ability/outcome/numerical uncertainty | Nested simulation, MCSE and rank/ESS diagnostics | Check ranking functionals under converged posteriors and fixed simulation precision |
@@ -68,7 +68,14 @@ A data-boundary regression has reproduced an unknown-weather bug: an event whose
 rainfall rows are all null is treated as dry by the current aggregation. The
 intended exclusion policy is already documented in the candidate contract.
 `development/weather-boundary-checks/` preserves the failing checks and an audit
-of the committed weather inputs. The fix is pending completion of the live
-profile; model source must stay frozen until then, and the correction requires
-regeneration with the earlier results preserved. This unresolved bug prevents a
-claim that the successor's full software acceptance is complete.
+of the committed weather inputs. After the profile service terminated, the
+aggregation was corrected to use only observed rainfall readings. The dated
+candidate-contract note preserves the evidence boundary. The correction requires
+regeneration; the old profile cannot be relabeled as current evidence.
+
+The completed [profile review](../outputs/championship/development/overall-computation-profile-v1/review.json)
+records every attempt and service resources. Its confounded case failed after
+the complete fixed ladder. This was a numerical profile on synthetic designs,
+not a real-driver ranking, complete recovery study or calibration success.
+The failure and tree-depth saturation remain part of the record. No sampler
+setting or acceptance threshold has been changed in response to them.

@@ -166,6 +166,23 @@ behavior, or successful recovery over the complete required inventory. Current
 progress and missing acceptance evidence are tracked in the
 [execution ledger](overall_execution.md).
 
+## Data-boundary correction after the numerical profile
+
+Dated 2026-10-12, after the registered profile service finished. A regression
+fixture showed that aggregating entirely null rainfall readings with `any()`
+treated unknown weather as dry. The correction aggregates observed readings
+only; events with no known reading are excluded from dry-lap cleaning and from
+the outcome context, as this contract already required. This changes neither
+priors, numerical settings, gates nor the intended missing-data policy.
+
+The [input audit](../outputs/championship/development/weather-boundary-checks/audit.json)
+found no all-null rainfall event in the committed inputs. The
+[profile](../outputs/championship/development/overall-computation-profile-v1/review.json)
+remains a record of its original source, including its exhausted confounded
+case. The correction is not an explanation or rescue for that failure.
+It changes the source fingerprint, so subsequent work requires fresh registered
+evidence; old receipts must not be relabeled as fits of corrected source.
+
 ## Remaining acceptance work
 
 - Complete synthetic recovery and simulation-based calibration, including the

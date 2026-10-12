@@ -49,9 +49,15 @@ def bounded_tables(tables, cutoff):
     return out
 
 
+def known_rainfall(weather):
+    """An event with no observed rainfall readings has unknown context."""
+    observed = weather.dropna(subset=["rainfall"])
+    return observed.groupby("event_id").rainfall.any()
+
+
 def clean_training_laps(tables):
     raw, weather, timeline = (tables[k] for k in ("race_laps", "race_weather", "timeline"))
-    rain = weather.groupby("event_id").rainfall.any()
+    rain = known_rainfall(weather)
     chunks = []
     for event, frame in raw.groupby("event_id", sort=True):
         if (int(event[:4]) < FIRST_LAP_SEASON or event not in rain.index
@@ -101,7 +107,7 @@ def build(cutoff, *, tables=None, clean=None):
     # Context is circuit x wet/dry x neutralised/green. Missing weather is excluded,
     # never silently relabelled dry. Old lap archives do not supply this likelihood.
     races = t["race"].loc[t["race"].event_id >= f"{FIRST_LAP_SEASON}-01"].copy()
-    weather = t["race_weather"].groupby("event_id").rainfall.any()
+    weather = known_rainfall(t["race_weather"])
     covered = set(t["race_laps"].event_id) & set(weather.index)
     wet_tyres = t["race_laps"].groupby("event_id").compound.agg(lambda s: s.isin(WET).any())
     excluded_events = sorted(set(races.event_id) - covered)
