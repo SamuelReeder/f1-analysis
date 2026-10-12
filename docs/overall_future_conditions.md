@@ -65,6 +65,13 @@ links the committed specification, implementation and focused synthetic checks.
 It covers exact sequence probabilities, Dirichlet means, missing and future
 data rejection, no-finisher events, equivalence to explicit conditional
 weekends, unseen circuits, input permutations, batching and condition-weighted
-panel scoring. No real-event condition counts or forecast scores were evaluated.
+panel scoring. Those focused checks use synthetic history only.
+The later [resource record](../outputs/championship/development/overall-condition-checks/resources.json)
+uses the committed training-data dimensions and historical context counts with
+arbitrary synthetic race parameters. Its hypothetical path contains familiar,
+unseen and repeated circuits. It verifies complete draw coverage, persistent
+circuit probabilities and finite outputs through checked compressed-archive
+loading under the enforced local cap. It evaluates no real-event forecast score,
+accepted posterior, MCMC fit or intended-runner performance.
 The full integration suite remains pending the running race-pace regeneration;
 its source files and input data were kept unchanged during this work.
