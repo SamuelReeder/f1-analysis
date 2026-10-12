@@ -20,6 +20,16 @@ PROBES = tuple(CONTRACT["required_explanations"])
 MAX_BLOCK_DRAWS = 128
 MAX_BLOCK_REPLICATES = 128
 IDENTITY_KEYS = {"fit_id", "posterior_key", "scenario_key", "simulation_key"}
+IMPLEMENTATION_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+
+
+def _source_fingerprints():
+    contract_bytes = (ROOT / "contracts/overall.json").read_bytes()
+    implementation = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    if implementation != IMPLEMENTATION_SHA256 or json.loads(contract_bytes) != CONTRACT:
+        raise ValueError("Summary implementation or contract changed after import")
+    return dict(definition_sha256=hashlib.sha256(DEFINITION.read_bytes()).hexdigest(),
+        implementation_sha256=implementation, contract_sha256=hashlib.sha256(contract_bytes).hexdigest())
 
 
 def _integer(value, minimum=0):
@@ -90,6 +100,7 @@ class OverallSummary:
         self.drivers, self.shape = tuple(drivers), tuple(posterior_shape)
         self.replicates, self.n_races = replicates, n_races
         self.identity = copy.deepcopy(identity)
+        self._sources = _source_fingerprints()
         self._counts = np.zeros(self.shape, dtype=np.int64)
         n = len(drivers)
         self._means = np.zeros(self.shape + (n,))
@@ -137,6 +148,9 @@ class OverallSummary:
         if (not np.isfinite(bound) or (points < 0).any() or (points > bound).any()
                 or (probes < 0).any() or (probes > bound).any()):
             raise ValueError("Baseline and probe points exceed the common scoring bounds")
+        field_bound = float(np.sum(POINTS[:n])) * self.n_races
+        if (points.sum(axis=-1) > field_bound).any():
+            raise ValueError("Baseline field points exceed the common scoring allocation")
         low = _numeric(result.get("rank_low"), shape, "lower season ranks")
         high = _numeric(result.get("rank_high"), shape, "upper season ranks")
         title = _numeric(result.get("title_share"), shape, "title shares")
@@ -152,6 +166,12 @@ class OverallSummary:
         if ((np.take_along_axis(low, order, axis=-1) > positions).any()
                 or (np.take_along_axis(high, order, axis=-1) < positions).any()):
             raise ValueError("Sporting rank groups overlap or omit positions")
+        ordered_points = np.take_along_axis(points, order, axis=-1)
+        ordered_low = np.take_along_axis(low, order, axis=-1)
+        point_difference = np.diff(ordered_points, axis=-1)
+        if ((point_difference > 0).any()
+                or ((np.diff(ordered_low, axis=-1) == 0) & (point_difference != 0)).any()):
+            raise ValueError("Sporting ranks contradict championship points")
         expected_title = np.where(low == 1, 1 / (high - low + 1), 0.)
         if not np.array_equal(title, expected_title):
             raise ValueError("Title mass must follow the complete sporting ties")
@@ -184,6 +204,8 @@ class OverallSummary:
             raise ValueError("Summary is already finalized")
         if not np.all(self._counts == self.replicates):
             raise ValueError("Every declared posterior draw must have its complete replicate inventory")
+        if self._sources != _source_fingerprints():
+            raise ValueError("Summary definition or source changed during accumulation")
         n, count = len(self.drivers), int(np.prod(self.shape))
         means = self._means.reshape(count, n)
         covariance = self._covariance_sum.reshape(count, n, n) / (self.replicates - 1)
@@ -220,6 +242,8 @@ class OverallSummary:
                     rank_precision_established=False))
         rows.sort(key=lambda row: (-row["expected_points"]["mean"], row["driver_id"]))
         explanations.sort(key=lambda row: row["driver_id"])
+        if self._sources != _source_fingerprints():
+            raise ValueError("Summary definition or source changed during accumulation")
         self._closed = True
         return dict(purpose="development_canonical_overall_summary", model_version=CONTRACT["model_version"],
             target=CONTRACT["target"], identity=copy.deepcopy(self.identity), field=list(self.drivers),
@@ -229,8 +253,6 @@ class OverallSummary:
             expected_points_precision_passed=all(row["expected_points"]["conditional_precision_passed"] for row in rows),
             explanation_precision_passed=all(loss["conditional_precision_passed"] for row in explanations for loss in row["losses"].values()),
             pairwise_points_precision_passed=all(row["points_difference"]["conditional_precision_passed"] for row in pairs),
-            definition_sha256=hashlib.sha256(DEFINITION.read_bytes()).hexdigest(),
-            implementation_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-            contract_sha256=hashlib.sha256((ROOT / "contracts/overall.json").read_bytes()).hexdigest(),
+            **self._sources,
             conditional_simulation_error_only=True, mcmc_precision_verified=False,
             rank_precision_established=False, scientific_evidence_verified=False, publication_allowed=False)

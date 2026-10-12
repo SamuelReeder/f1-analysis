@@ -226,6 +226,59 @@ def test_storage_does_not_grow_with_declared_replicate_count():
     assert small.storage_bytes == large.storage_bytes
 
 
+@pytest.mark.parametrize("case", ["reversed_points", "unequal_tied_points", "excess_field_points"])
+def test_rank_and_points_cannot_contradict_the_common_sporting_scenario(case):
+    summary = OverallSummary(drivers=FIELD, posterior_shape=(2, 2), replicates=2,
+                             n_races=2, identity=IDENTITY)
+    row = result_for(np.array([[[40., 30., 20.]]]))
+    if case == "reversed_points":
+        row["points"][0, 0] = [20., 30., 40.]
+    elif case == "unequal_tied_points":
+        row["rank_low"][0, 0] = [1, 1, 3]
+        row["rank_high"][0, 0] = [2, 2, 3]
+        row["title_share"][0, 0] = [.5, .5, 0]
+    else:
+        row = result_for(np.full((1, 1, 3), 50.))
+    probes = np.repeat(row["points"][..., None], len(PROBES), axis=-1)
+    with pytest.raises(ValueError, match="scoring allocation|contradict championship points"):
+        summary.add(row, probes, chain=0, draw_start=0, replicate_start=0, identity=IDENTITY)
+    assert summary._counts.sum() == 0
+
+
+def test_equal_points_may_be_separated_by_sporting_countback():
+    summary = OverallSummary(drivers=FIELD, posterior_shape=(2, 2), replicates=2,
+                             n_races=2, identity=IDENTITY)
+    row = result_for(np.full((2, 2, 3), 20.))
+    row["rank_low"][:] = [1, 2, 3]
+    row["rank_high"][:] = [1, 2, 3]
+    row["title_share"][:] = [1, 0, 0]
+    probes = np.repeat(row["points"][..., None], len(PROBES), axis=-1)
+    for chain in range(2):
+        summary.add(row, probes, chain=chain, draw_start=0, replicate_start=0, identity=IDENTITY)
+    actual = summary.finalize()
+    assert {r["driver_id"]: r["p_title"] for r in actual["standings"]} == dict(zip(FIELD, [1., 0., 0.]))
+    assert all(pair["finite_mean_probability_equal"] == 1 for pair in actual["pairwise"])
+
+
+def test_changed_definition_cannot_label_an_existing_summary(monkeypatch, tmp_path):
+    from analysis import overall_summary as module
+    definition = tmp_path / "definition.md"
+    original = module.DEFINITION.read_text()
+    definition.write_text(original)
+    monkeypatch.setattr(module, "DEFINITION", definition)
+    points, probes = fixture()
+    summary = OverallSummary(drivers=FIELD, posterior_shape=(2, 3), replicates=5,
+                             n_races=2, identity=IDENTITY)
+    for chain in range(2):
+        summary.add(result_for(points[chain]), probes[chain], chain=chain,
+                    draw_start=0, replicate_start=0, identity=IDENTITY)
+    definition.write_text(original + "\nChanged scenario interpretation.\n")
+    with pytest.raises(ValueError, match="changed during accumulation"):
+        summary.finalize()
+    definition.write_text(original)
+    assert summary.finalize()["complete_draw_and_replicate_inventory"]
+
+
 @pytest.mark.parametrize("override", [dict(drivers=["a", "a"]), dict(posterior_shape=(1, 3)),
     dict(replicates=True), dict(n_races=0), dict(identity={}), dict(identity={**IDENTITY, "scenario_key":"wrong"})])
 def test_invalid_declared_inventory_rejected(override):

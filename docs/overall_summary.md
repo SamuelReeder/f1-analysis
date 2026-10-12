@@ -19,10 +19,15 @@ declared draw has its full workload. Each block must identify the same fit,
 posterior, scenario, simulation procedure and field as the accumulator. These
 identity checks establish consistency, not authentic scientific provenance;
 the future canonical controller must verify the artifacts behind them.
+Bind the summary implementation, definition and display contract before
+accumulation and reject source changes before finalizing a result.
 
 The baseline input includes paired season points, title shares and sporting rank
 intervals. Validate tied rank groups and their fractional title shares. A tied
 group occupies its full sporting interval and splits title probability equally.
+Rank groups must agree with championship points, and the field cannot receive
+more points than the common scoring allocation. Equal points may still be
+separated by sporting countback; unequal points cannot share a tied rank group.
 Names or input order never resolve a sporting tie. Use lower-rank samples for
 the lower season-rank endpoint, upper-rank samples for the upper endpoint, and
 tie midpoints for the reported median. Quantiles use the same linear convention
