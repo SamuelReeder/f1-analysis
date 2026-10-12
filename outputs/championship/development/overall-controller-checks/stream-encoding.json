@@ -1,0 +1,32 @@
+{
+  "purpose": "out_of_domain_stream_encoding_diagnostic",
+  "source_commit": "e4c79660a76d177cd30d3cbc454636802de0576a",
+  "numpy": "2.5.3",
+  "addresses": [
+    [
+      4294967296,
+      2,
+      0,
+      0
+    ],
+    [
+      0,
+      8589934593,
+      0,
+      0
+    ]
+  ],
+  "distinct_addresses": true,
+  "generated_seed_states_identical": true,
+  "seed_state_sha256": [
+    "9481a07ba5cfe316515c96373d5147bd8c8ff299dad227f38bf83bdfa84deb30",
+    "9481a07ba5cfe316515c96373d5147bd8c8ff299dad227f38bf83bdfa84deb30"
+  ],
+  "maximum_allowed_word": 4294967295,
+  "limits": {
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "valid_registered_run_affected": false,
+  "note": "Both example addresses are outside the newly enforced fixed-word domain. This probes seed encoding only; no simulation or model fit was run."
+}

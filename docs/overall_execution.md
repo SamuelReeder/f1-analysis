@@ -17,7 +17,7 @@ open until the full acceptance checklist has direct evidence.
 | Ability/outcome/numerical uncertainty | Nested simulation, MCSE and rank/ESS diagnostics; saved-draw diagnosis finds qualifying-contrast failures in the final confounded attempt | Resolve inference and check ranking functionals under converged posteriors with fixed simulation precision |
 | Chronological development comparison | Plan defines information horizons and baseline roles; scoring utilities preserve joint draws, conditional panel/condition weights and required events; outcome-free catalogue, joint states and observation kernels have synthetic checks; unseen-circuit extensions and unknown-condition simulation; explicit legacy/grid-only arithmetic and a race-only evidence ablation | Complete source verification, final condition/circuit registration and calibration, uncertainty in learned training factors, classification-conditioning policy and baseline fitting/forecast integration; freeze event inventory, calibration and stopping rules; run every fold |
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
-| Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence; bounded paired aggregation and explanatory interventions have direct-array and simulator checks | Accepted-posterior/scenario integration, full simulation resources and precision, evidence-backed exporter and matching explanation/pairwise payload; full contract validation |
+| Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence; bounded paired summaries and a fixed synthetic archive-to-summary controller have checked integration paths | Accepted real-data protocol/scenario integration, full simulation resources and precision, evidence-backed exporter and matching explanation/pairwise payload; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
 | Software and runner readiness | Batched states and observation kernels; bounded checked archive loading; capped synthetic resource and software records, including historical condition integration under `development/overall-condition-checks/` | Accepted-fit integration and end-to-end fitting/refresh resources; workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
 | Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
@@ -89,8 +89,9 @@ has equal weight; all drivers face the same contexts. Its virtual GP lengths are
 defined by the reference winners' completed distances. This is a fixed comparison
 scenario, not a forecast of a future calendar or a claim about shortened-event
 scoring. Missing reference inputs stop construction instead of dropping an event.
-It is not yet connected to the posterior simulator; its remaining assumptions
-are explicit in the artifact.
+The development controller can translate its named conditions into a checked
+synthetic fit's context ordering. Its use with an accepted real-data posterior
+and its remaining scientific assumptions are still unverified.
 
 The successor frontend uses `contracts/overall.json` and the same canonical
 Overall route as the legacy release. It cannot accept the legacy combined gate
@@ -116,6 +117,24 @@ The controller must still bind the full scenario and stream inventory, verify
 accepted evidence, measure the full nested workload and supply the canonical
 export. These checks do not resolve the failed numerical profile or complete
 the producer/publication requirement.
+
+The [simulation controller](overall_simulation_controller.md) now binds a
+committed protocol to the exact fit receipt, archive, training arrays, catalog,
+reference bytes and source files. It translates circuit names and conditions
+using that fit's context ordering and connects matching posterior slices to the
+paired generator and accumulator on a complete fixed block schedule. An existing
+execution directory cannot be overwritten; failures retain their progress and
+never produce a completed summary. The
+[controller verification](../outputs/championship/development/overall-controller-checks/verification.json)
+covers synthetic archive integration, exact schedule coverage, changed inputs,
+invalid unused archive members, preserved interruptions and the real-data
+boundary. A fixed-word stream guard also rejects oversized addresses; a separate
+recorded encoding probe demonstrates why distinct variable-width addresses can
+otherwise alias without implying that any valid registered run was affected.
+This controller accepts only synthetic development fits. The complete real-data
+scientific protocols, calibrated scenario, full-workload measurement, accepted
+export and refresh integration remain required. It produced no real-driver
+ranking, MCMC fit or publication and did not change the pending numerical study.
 
 Interface verification is recorded under
 [`overall-interface-checks`](../outputs/championship/development/overall-interface-checks/verification.json).
