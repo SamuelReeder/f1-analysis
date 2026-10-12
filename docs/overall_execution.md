@@ -11,7 +11,7 @@ open until the full acceptance checklist has direct evidence.
 | Scientific specification | Executable likelihood/prior definitions and candidate contract | Final numerical/evaluation/prospective protocol before real-data fitting |
 | Complete entrant/cutoff catalog | Cutoff-first data design; outcome-free forecast catalogue; development state propagation reconstructs uncentred history and retains unseen entrants with population uncertainty | Verified as-of source/calendar inventory, accepted-posterior integration and recovery on the real transfer network |
 | Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks for full and bounded loaders; corrected race-order arithmetic has known-probability/gradient checks; the exhausted confounded case and geometry diagnosis are preserved | Separate approval and registration before the proposed post-failure numerical study on corrected source; fresh recovery and runner resource measurements |
-| Known-truth recovery and simulation-based calibration | Generative responses and complete numerical-profile inventory: connected and sparse-rookie fits converged after retries; confounded fit exhausted its ladder | Complete registered SBC and stress studies, including the unresolved confounded case; no failed case may be discarded |
+| Known-truth recovery and simulation-based calibration | Generative responses and complete numerical-profile inventory: connected and sparse-rookie fits converged after retries; confounded fit exhausted its ladder; development evaluator covers state contrasts and observation likelihoods, distinguishes fixed-truth stress cases and requires a complete inventory | Full study registration, power justification and execution, including ranking functionals and the unresolved confounded case; no failed case may be discarded |
 | Coherent weekend simulation | Student-t elimination and shared weekend uncertainty; conditional kernels preserve teammate effects, context, order and completion within each joint draw; compensated race-order generation has controlled, exact-sum and compiled checks | Forecast-time conditions, official-grid eligibility/penalties, common operations calibration, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |
 | Ability/outcome/numerical uncertainty | Nested simulation, MCSE and rank/ESS diagnostics; saved-draw diagnosis finds qualifying-contrast failures in the final confounded attempt | Resolve inference and check ranking functionals under converged posteriors with fixed simulation precision |
@@ -229,3 +229,12 @@ checks because `outputs/ratings/manifest.json` still records the previous
 `f1rank/design.py` hash. The source change requires artifact regeneration; no
 manifest is rewritten to hide that dependency and no check is weakened. Fresh
 affected artifacts and a passing full suite remain explicit rollout requirements.
+
+The [recovery evaluator](overall_recovery_checks.md) prepares all-current-field
+state contrasts and data-dependent likelihood quantities without changing the
+generator. It retains complete study accounting, separates fixed-truth stress
+cases, and can consume source-matched immutable archives. Its rank policy uses
+value-independent selections from separate chains and needs a prespecified
+study-size/power justification. This is evaluation machinery, not a completed
+SBC study, accepted inference or a ranking. Full registration, ranking recovery,
+the pending numerical approval and stale-publication regeneration remain open.
