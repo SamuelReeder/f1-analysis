@@ -41,7 +41,7 @@ def mixture_fixture(n=2):
         catalog=dict(information_set="prequalifying",origin_at="2026-03-01T00:00:00Z",snapshot_sha256="a"*64))
     forecast = bind_grids(dict(purpose="development_legacy_prequalifying",prequalifying_policy=pre.POLICY,
         grid_policy=pre.GRID_POLICY,feature_policy="median_of_paired_persistent_states_without_future_transients",
-        posterior_shape=[2,3],events=[event],consumed_posterior_key="synthetic-qualifying",
+        posterior_shape=[2,3],events=[event],consumed_posterior_key="synthetic-qualifying",training_arrays_key="b"*64,
         qualifying_observation_key="synthetic-observations"))
     beta = dict(c_grid=np.array([[1.,1.],[0.,0.]]),a_car=np.array([[.2,-.3],[.7,1.1]]),
                 b_driver=np.array([[1.2,-.1],[.3,.8]]))
@@ -135,6 +135,7 @@ def test_generated_grid_forecast_connects_to_each_baseline_for_complete_path():
     for arm in ("legacy_grid_qualifying","grid_only"):
         result=integrate(forecast,beta,panels,arm=arm)
         assert result["event_ids"]==[e["event_id"] for e in forecast["events"]]
+        assert result["qualifying_training_arrays_key"]==forecast["training_arrays_key"]
         for i,event in enumerate(forecast["events"]):
             expected=direct_probability(dict(forecast,events=[event]),beta,panels,arm)
             np.testing.assert_allclose(np.exp(result["log_probabilities"][i]),expected,rtol=1e-14)

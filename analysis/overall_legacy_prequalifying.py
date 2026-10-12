@@ -156,6 +156,7 @@ def integrate_legacy_prequalifying(forecast, coefficient_posterior, running_posi
         integration="full_empirical_product",unique_grid_counts=unique_counts,
         qualifying_posterior_shape=shape,coefficient_posterior_shape=list(coefficient_shape),
         qualifying_parameter_key=forecast["consumed_posterior_key"],
+        qualifying_training_arrays_key=forecast["training_arrays_key"],
         qualifying_observation_key=forecast["qualifying_observation_key"],grid_draws_key=key,
         future_features_key=feature_key,
         coefficient_parameter_key=arrays_digest(dict(coefficients=parameters)),
