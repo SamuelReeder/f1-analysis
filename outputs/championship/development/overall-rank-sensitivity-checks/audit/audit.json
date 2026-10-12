@@ -1,0 +1,195 @@
+{
+ "purpose": "saved_fixture_rank_sensitivity_audit",
+ "status": "complete",
+ "started_at": "2026-10-12T22:18:01.706915+00:00",
+ "new_random_draws": false,
+ "mcmc_run": false,
+ "canonical_simulator_run": false,
+ "publication_allowed": false,
+ "limits": {
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r1230851d90484505b55e3d8f0ca8a8a9.scope",
+  "memory_max": "3221225472",
+  "cpu_max": "200000 100000"
+ },
+ "source_commit": "3c28c3c7b50b5158dddd416676ca899ddb294763",
+ "input_and_source_sha256": {
+  "analysis/overall_rank_sensitivity.py": "b7dbe3646bf7db69050c0199e2fe9791341f8168857b8f53642d56939288959c",
+  "docs/overall_rank_sensitivity.md": "7a5a1b63cf44b82721095de9b404b317942abd5a6684ef74bcff964b4ca53fe5",
+  "analysis/overall_simulation_moments.py": "aa3f246e018afbc86e914d6949d0c98eabc946a45af71ee07a67803e388c2072",
+  "contracts/overall.json": "804c3cb2543de91416b73ede82891f7a76a5da69e93804300b4a653703ed1f35",
+  "analysis/overall_rank_sensitivity_audit.py": "6efba4904b3c7b5ea0464bbb226866c4429f230701a234fe6f8e490e2779dd32",
+  "analysis/overall_ranking_resources.py": "cf03d0001c83635cb6c8d28d4d0bf43f7c999f3f1fd09b8672d3fdccda9faa75",
+  "f1rank/artifacts.py": "2e9b0b2171d3fb2db3fecea14c944ed3b2d4865ea87c853535bc80e245ee9bbb",
+  "outputs/championship/development/overall-functional-diagnostic-checks/noise-audit/audit.json": "6dce9eaf0d3d319ef6d13cacab69229109e9f20bacb2503145bd165a3e3565fa",
+  "outputs/championship/development/overall-functional-diagnostic-checks/noise-audit/constructed_traces.npz": "68f211fb8c2127a44d3f59d675a57ec3fb116bf890ace7e64504f20276c57f8b",
+  "outputs/championship/development/overall-functional-diagnostic-checks/storage/resources.json": "9b6754f8ed837af82e9abb80aebcbd27f2b4ce668ad536ec030d4b39bf13adf0"
+ },
+ "error_probability": 0.09999999999999998,
+ "cases": {
+  "separated_chain": {
+   "result_file": "separated_chain.json",
+   "result_sha256": "4ae9ab5dc187e1d15dbf1154c6f7eaffd120b2805dc1f2d72134c7b73cf0cb90",
+   "original_exact_checker_passed": false,
+   "original_noisy_checker_passed": true,
+   "family_size": 6400,
+   "point_radius_min": 0.12124245101707408,
+   "point_radius_max": 0.12124245101707408,
+   "exact_means_inside_declared_intervals_this_fixture": true,
+   "exact_empirical_pair_fractions": {
+    "a_greater": 0.5,
+    "b_greater": 0.5,
+    "equal": 0.0
+   },
+   "empirical_pair_fraction_bounds": {
+    "a_greater": {
+     "lower": 0.0,
+     "upper": 1.0,
+     "lower_by_chain": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "upper_by_chain": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ]
+    },
+    "b_greater": {
+     "lower": 0.0,
+     "upper": 1.0,
+     "lower_by_chain": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "upper_by_chain": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ]
+    },
+    "equal": {
+     "lower": 0.0,
+     "upper": 1.0,
+     "lower_by_chain": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "upper_by_chain": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ]
+    }
+   },
+   "interpretation": "Recorded fixture containment is not proof of general coverage or MCMC convergence."
+  },
+  "mixed_control": {
+   "result_file": "mixed_control.json",
+   "result_sha256": "d3b19b38909dc46d87c4fb8bf4f4bff39b88effc8f246e5447e0497bb0eb2508",
+   "original_exact_checker_passed": true,
+   "original_noisy_checker_passed": true,
+   "family_size": 6400,
+   "point_radius_min": 0.12124245101707408,
+   "point_radius_max": 0.12124245101707408,
+   "exact_means_inside_declared_intervals_this_fixture": true,
+   "exact_empirical_pair_fractions": {
+    "a_greater": 0.496875,
+    "b_greater": 0.503125,
+    "equal": 0.0
+   },
+   "empirical_pair_fraction_bounds": {
+    "a_greater": {
+     "lower": 0.0,
+     "upper": 1.0,
+     "lower_by_chain": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "upper_by_chain": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ]
+    },
+    "b_greater": {
+     "lower": 0.0,
+     "upper": 1.0,
+     "lower_by_chain": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "upper_by_chain": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ]
+    },
+    "equal": {
+     "lower": 0.0,
+     "upper": 1.0,
+     "lower_by_chain": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "upper_by_chain": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ]
+    }
+   },
+   "interpretation": "Recorded fixture containment is not proof of general coverage or MCMC convergence."
+  }
+ },
+ "resource_workload": {
+  "posterior_shape": [
+   4,
+   3200
+  ],
+  "field_size": 22,
+  "replicates": 250000,
+  "family_size": 1126400,
+  "seconds_including_input_construction": 0.2587261670269072,
+  "output_file": "full_size_resource.json",
+  "output_sha256": "f71844bca58d53195234eb81a45bde797224aa5e1e0a07d781542bfdde2e5632",
+  "output_bytes": 814975,
+  "full_trace_diagnostic_only": true,
+  "fitted_posterior": false,
+  "nested_simulation_executed": false
+ },
+ "all_original_cases_retained": true,
+ "mcmc_precision_verified": false,
+ "rank_precision_established": false,
+ "scientific_evidence_verified": false,
+ "runtime": {
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "numpy": "2.5.3"
+ },
+ "limitations": [
+  "Saved synthetic examples, not real drivers or new independent evidence",
+  "Concentration assumes independent replicated seasons conditional on each draw",
+  "Intervals cover simulation error for the fixed trace, not posterior or MCMC uncertainty",
+  "Resource measurement covers this diagnostic alone, not the nested simulator or intended runner"
+ ],
+ "finished_at": "2026-10-12T22:18:02.053359+00:00",
+ "seconds": 0.3464577550184913,
+ "process_max_rss_kib": 256220
+}
