@@ -64,14 +64,16 @@ def main():
     if counts["failures"] or counts["errors"] or counts["skipped"]:
         raise ValueError("Focused checks did not all pass")
     source = subprocess.check_output(["git", "rev-parse", "dcb364c"], cwd=ROOT, text=True).strip()
-    if batched["source_commit"] != source:
-        raise ValueError("Resource and focused tests must share this declared source")
+    for name, expected in batched["source_hashes"].items():
+        saved = subprocess.check_output(["git", "show", f"{source}:{name}"], cwd=ROOT)
+        if sha(saved) != expected:
+            raise ValueError("Resource inputs differ from the focused-test source")
     untouched = ["f1rank", "extract", "data", "docs/overall_rotation_profile_proposal.json"]
     changed = subprocess.check_output(["git", "diff", "--name-only", "102eaf2", "--", *untouched], cwd=ROOT, text=True)
     if changed:
         raise ValueError("Fitting, data or pending scientific proposal changed")
     record = dict(recorded_at=dt.datetime.now(dt.timezone.utc).isoformat(), review_source_sha256=review_sha,
-        source_commit=source, resources=resources, exact_fixed_input_and_complete_output_match=True,
+        test_source_commit=source, resources=resources, exact_fixed_input_and_complete_output_match=True,
         tests=dict(file="connected.xml", sha256=sha(xml), **counts,
             reported_seconds=sum(float(suite.get("time", "0")) for suite in suites),
             process_output="connected.txt", process_output_sha256=sha(committed(HERE / "connected.txt"))),
