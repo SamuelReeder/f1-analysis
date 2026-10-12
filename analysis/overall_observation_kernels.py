@@ -16,6 +16,7 @@ from f1rank.overall.order import numpy_perturbed_order
 
 Q_PARAMETERS = ("sigma0", "sigma_tau", "nu", "sd_car_segment")
 CONTEXT_NAMES = ("grid", "pace", "hazard")
+UNSEEN_CIRCUIT_POLICY = "independent_gaussian_with_training_reference"
 
 
 def _finite(name, value):
@@ -141,17 +142,35 @@ def qualifying_segments(event, parameters, noise, *, advancing, full_df):
                 interpretation="qualifying_positions_conditional_on_all_entrants_setting_times")
 
 
-def context_coefficients(parameters, circuit, *, wet, neutralised):
-    """Known-circuit coefficients in the existing training centring convention."""
+def context_coefficients(parameters, circuit, *, wet, neutralised, new_circuit_z=None):
+    """Coefficients relative to the unchanged training-circuit reference.
+
+    A missing circuit index requires explicit independent population coordinates
+    for every coefficient family. Raw fitted circuit coordinates retain their
+    unobserved common mean; dropping it would understate unseen-circuit uncertainty.
+    """
     if type(wet) is not bool or type(neutralised) is not bool:
         raise ValueError("Explicit conditional wet/neutralised booleans are required")
+    if circuit is None:
+        if not isinstance(new_circuit_z, dict) or set(new_circuit_z) != set(CONTEXT_NAMES):
+            raise ValueError("Unseen circuit requires explicit population coordinates for every coefficient")
+    elif new_circuit_z is not None:
+        raise ValueError("Known circuit cannot consume replacement population coordinates")
     result = {}
     for name in CONTEXT_NAMES:
         z = parameters[f"overall_{name}_circuit_z"]
-        if type(circuit) is not int or not 0 <= circuit < z.shape[-1]:
+        if circuit is not None and (type(circuit) is not int or not 0 <= circuit < z.shape[-1]):
             raise ValueError("Unseen circuit coefficients require a registered extension policy")
         effect = parameters[f"overall_sd_{name}_circuit"][..., None] * z
-        eta = (parameters[f"overall_{name}_base"] + effect[..., circuit] - effect.mean(axis=-1)
+        if circuit is None:
+            coordinate = np.asarray(new_circuit_z[name])
+            _finite(name + " population coordinate", coordinate)
+            if coordinate.shape != effect.shape[:-1]:
+                raise ValueError("Population coordinates must retain the fitted chain/draw axes")
+            selected = parameters[f"overall_sd_{name}_circuit"] * coordinate
+        else:
+            selected = effect[..., circuit]
+        eta = (parameters[f"overall_{name}_base"] + selected - effect.mean(axis=-1)
                + parameters[f"overall_{name}_wet"] * wet + parameters[f"overall_{name}_sc"] * neutralised)
         _finite(name + " context", eta)
         if name == "hazard":
@@ -264,7 +283,9 @@ def draw_running_order(event, strength, running, noise):
     return np.where(running, np.argsort(order, axis=-1) + 1, 0)
 
 
-def _scenarios(design, snapshots, scenarios, advancing):
+def _scenarios(design, snapshots, scenarios, advancing, unseen_circuit_policy):
+    if unseen_circuit_policy not in (None, UNSEEN_CIRCUIT_POLICY):
+        raise ValueError("Unsupported unseen-circuit policy")
     if not isinstance(scenarios, dict) or set(scenarios) != {s["event"]["event_id"] for s in snapshots}:
         raise ValueError("An explicit conditional scenario for every forecast event is required")
     circuits = set(design.catalog["circuits"])
@@ -275,7 +296,7 @@ def _scenarios(design, snapshots, scenarios, advancing):
             raise ValueError("Scenario requires wet, neutralised, exposure_laps and grid_policy")
         if type(scenario["wet"]) is not bool or type(scenario["neutralised"]) is not bool:
             raise ValueError("Unknown conditions cannot be silently labelled dry or green")
-        if event["circuit_id"] not in circuits:
+        if event["circuit_id"] not in circuits and unseen_circuit_policy is None:
             raise ValueError("Unseen circuit coefficients require a registered extension policy")
         exposure = scenario["exposure_laps"]
         if (not isinstance(exposure, dict) or set(exposure) != {r["driver_id"] for r in entrants}
@@ -290,7 +311,8 @@ def _scenarios(design, snapshots, scenarios, advancing):
 
 
 def iter_conditional_weekends(design, snapshots, posterior, scenarios, *, advancing, seed,
-                              training_arrays_key, draw_batch_size=DEFAULT_DRAW_BATCH):
+                              training_arrays_key, draw_batch_size=DEFAULT_DRAW_BATCH,
+                              unseen_circuit_policy=None):
     """One conditional future trajectory per joint posterior draw, in batches.
 
     The SAME posterior mapping supplies states and observation coefficients. The
@@ -298,10 +320,12 @@ def iter_conditional_weekends(design, snapshots, posterior, scenarios, *, advanc
     every batch before recording a complete output. This utility certifies neither
     convergence nor scenario/source validity. Repeated trajectories need a frozen
     replication/precision policy; this is not a new ranking producer.
+    Unseen circuits require an explicit population policy; the output records
+    its identity without certifying that a predictive registration selected it.
     """
     if type(draw_batch_size) is not int or draw_batch_size < 1:
         raise ValueError("Draw batch size must be a positive integer")
-    _scenarios(design, snapshots, scenarios, advancing)
+    _scenarios(design, snapshots, scenarios, advancing, unseen_circuit_policy)
     p, shape, parameter_key = _observation_parameters(design, posterior, draw_batch_size)
     ObservationNoise(seed, shape, (0, shape[1]))
     scenario_key = hashlib.sha256(json.dumps(scenarios, sort_keys=True,
@@ -315,8 +339,15 @@ def iter_conditional_weekends(design, snapshots, posterior, scenarios, *, advanc
         for event in batch["events"]:
             scenario = scenarios[event["event_id"]]
             qualifying = qualifying_segments(event, part, noise, advancing=advancing, full_df=p["nu"])
+            new_coordinates = None
+            if event["catalog"]["new_circuit"]:
+                # Permanent circuit deviations: reuse across all future visits,
+                # independent of event id, field order and draw batch boundaries.
+                new_coordinates = {name: noise.draw("unseen_context_circuit",
+                    [name, event["catalog"]["circuit_id"]]) for name in CONTEXT_NAMES}
             coefficients = context_coefficients(part, event["catalog"]["circuit_index"],
-                wet=scenario["wet"], neutralised=scenario["neutralised"])
+                wet=scenario["wet"], neutralised=scenario["neutralised"],
+                new_circuit_z=new_coordinates)
             if scenario["grid_policy"] == "actual_grid":
                 slots = {r["driver_id"]: r["grid_feature_slot"] for r in event["catalog"]["entries"]}
                 grid = np.array([slots[driver] for driver in event["drivers"]])
@@ -336,6 +367,7 @@ def iter_conditional_weekends(design, snapshots, posterior, scenarios, *, advanc
             events=events, posterior_shape=list(shape), draw_range=[start, stop], seed=seed,
             training_arrays_key=training_arrays_key, state_parameter_key=batch["consumed_posterior_key"],
             observation_parameter_key=parameter_key, scenario_sha256=scenario_key,
+            unseen_circuit_policy=unseen_circuit_policy,
             state_implementation_sha256=batch["implementation_sha256"], implementation_sha256=source_hash,
             qualifying_advancing=list(advancing), conditional_outcomes_available=True,
             conditions_forecast=False, official_grid_generated=False, classification_generated=False,
