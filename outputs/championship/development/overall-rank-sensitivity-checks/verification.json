@@ -1,0 +1,221 @@
+{
+  "purpose": "conditional_simulation_ordering_sensitivity_software_and_saved_fixture_review",
+  "tests": {
+    "software": {
+      "source_commit": "538e2292a47393bc88174ea67ff42485801a298d",
+      "xml": "outputs/championship/development/overall-rank-sensitivity-checks/software.xml",
+      "xml_sha256": "a98f3ce0574835549a9e0583186e643ea66b1f4b20785ca634dd9f2fce35accb",
+      "tests": 82,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "verified": {
+      "source_commit": "3c28c3c7b50b5158dddd416676ca899ddb294763",
+      "xml": "outputs/championship/development/overall-rank-sensitivity-checks/verified.xml",
+      "xml_sha256": "9c6f40e15b2adf9e4090c69f549d37c312ca8b895499e19ae7a765f1e5cd743e",
+      "tests": 84,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "focused_suites_overlap": true,
+  "full_repository_suite_rerun": false,
+  "audit_path": "outputs/championship/development/overall-rank-sensitivity-checks/audit/audit.json",
+  "audit_sha256": "0afed3ec37398110e3be938a9d7cb680e71a020acbf91acd806625adc6c150a6",
+  "audit_source": "3c28c3c7b50b5158dddd416676ca899ddb294763",
+  "cases": {
+    "separated_chain": {
+      "result_file": "separated_chain.json",
+      "result_sha256": "4ae9ab5dc187e1d15dbf1154c6f7eaffd120b2805dc1f2d72134c7b73cf0cb90",
+      "original_exact_checker_passed": false,
+      "original_noisy_checker_passed": true,
+      "family_size": 6400,
+      "point_radius_min": 0.12124245101707408,
+      "point_radius_max": 0.12124245101707408,
+      "exact_means_inside_declared_intervals_this_fixture": true,
+      "exact_empirical_pair_fractions": {
+        "a_greater": 0.5,
+        "b_greater": 0.5,
+        "equal": 0.0
+      },
+      "empirical_pair_fraction_bounds": {
+        "a_greater": {
+          "lower": 0.0,
+          "upper": 1.0,
+          "lower_by_chain": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "upper_by_chain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "b_greater": {
+          "lower": 0.0,
+          "upper": 1.0,
+          "lower_by_chain": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "upper_by_chain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "equal": {
+          "lower": 0.0,
+          "upper": 1.0,
+          "lower_by_chain": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "upper_by_chain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "interpretation": "Recorded fixture containment is not proof of general coverage or MCMC convergence."
+    },
+    "mixed_control": {
+      "result_file": "mixed_control.json",
+      "result_sha256": "d3b19b38909dc46d87c4fb8bf4f4bff39b88effc8f246e5447e0497bb0eb2508",
+      "original_exact_checker_passed": true,
+      "original_noisy_checker_passed": true,
+      "family_size": 6400,
+      "point_radius_min": 0.12124245101707408,
+      "point_radius_max": 0.12124245101707408,
+      "exact_means_inside_declared_intervals_this_fixture": true,
+      "exact_empirical_pair_fractions": {
+        "a_greater": 0.496875,
+        "b_greater": 0.503125,
+        "equal": 0.0
+      },
+      "empirical_pair_fraction_bounds": {
+        "a_greater": {
+          "lower": 0.0,
+          "upper": 1.0,
+          "lower_by_chain": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "upper_by_chain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "b_greater": {
+          "lower": 0.0,
+          "upper": 1.0,
+          "lower_by_chain": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "upper_by_chain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "equal": {
+          "lower": 0.0,
+          "upper": 1.0,
+          "lower_by_chain": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "upper_by_chain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "interpretation": "Recorded fixture containment is not proof of general coverage or MCMC convergence."
+    }
+  },
+  "resource_workload": {
+    "posterior_shape": [
+      4,
+      3200
+    ],
+    "field_size": 22,
+    "replicates": 250000,
+    "family_size": 1126400,
+    "seconds_including_input_construction": 0.2587261670269072,
+    "output_file": "full_size_resource.json",
+    "output_sha256": "f71844bca58d53195234eb81a45bde797224aa5e1e0a07d781542bfdde2e5632",
+    "output_bytes": 814975,
+    "full_trace_diagnostic_only": true,
+    "fitted_posterior": false,
+    "nested_simulation_executed": false
+  },
+  "process_max_rss_kib": 256220,
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r1230851d90484505b55e3d8f0ca8a8a9.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "protected_sources_unchanged_since": "0acabfc",
+  "protected_paths": [
+    "f1rank",
+    "extract",
+    "data",
+    "analysis/overall_weekend_coordinates.py",
+    "analysis/overall_weekend_profile.py",
+    "docs/overall_weekend_coordinates.md",
+    "docs/overall_weekend_profile_proposal.json",
+    "dashboard/public/data/latest.json",
+    "dashboard/public/data/releases"
+  ],
+  "source_model_or_gate_changed": false,
+  "refit_performed": false,
+  "new_random_draws": false,
+  "pending_experiment_approval_unchanged": true,
+  "mcmc_precision_verified": false,
+  "rank_precision_established": false,
+  "scientific_evidence_verified": false,
+  "publication_allowed": false,
+  "full_goal_complete": false,
+  "checks": [
+    "Exact binomial count-law tail inventory meets the declared union bound",
+    "Every vertex of a grouped interval box remains within all comparison and rank bounds",
+    "Exact ties, chain disagreement and field permutations preserve the declared meaning",
+    "A well-separated case resolves simulation ordering without claiming MCMC acceptance",
+    "All baseline and required explanation means share the simultaneous family",
+    "Completed controller output feeds a source/input-bound diagnostic; failed or changed inputs are rejected",
+    "Both complete saved noise cases remain unresolved at the fixed original replication",
+    "Largest recorded grouped dimensions complete under the local caps; no full nested simulator or real posterior is measured"
+  ],
+  "limitations": [
+    "Saved synthetic examples, not real drivers or new independent evidence",
+    "Concentration assumes independent replicated seasons conditional on each draw",
+    "Intervals cover simulation error for the fixed trace, not posterior or MCMC uncertainty",
+    "Resource measurement covers this diagnostic alone, not the nested simulator or intended runner"
+  ]
+}
