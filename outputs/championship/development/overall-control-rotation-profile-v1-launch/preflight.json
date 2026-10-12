@@ -1,0 +1,38 @@
+{
+  "purpose": "approved_matched_experiment_launch_preflight",
+  "source_commit": "b5a0a8d9dd22982602b028941691f28c8ca1145e",
+  "recorded_at": "2026-10-12T16:26:35.816404-04:00",
+  "registration": "docs/overall_rotation_profile_protocol.json",
+  "registration_sha256": "ca1c8a599e81f9b664fbbe2cd5ff264c17e788065a42141648a4d3f24903372f",
+  "proposal_sha256": "47cdffa46f9be3547a0ee23e1554edbb735121c7a71cc41402a625c8cb0fc860",
+  "approved": true,
+  "registration_checked": true,
+  "model_inputs_key": "eae65767fe29bedcf396beeddbd8bf19b5bdc2a5769dd70f10fda50ef22bad18",
+  "protected_proposal_fields_unchanged": true,
+  "changed_fields": [
+    "approval",
+    "approval_note",
+    "registered_local_date",
+    "status",
+    "user_approved"
+  ],
+  "committed_model_inputs_checked": true,
+  "original_truth_files_checked": true,
+  "existing_experiment_output_or_cache": false,
+  "other_running_f1_services": [],
+  "shared_slice_properties": [
+    "CPUWeight=10",
+    "CPUQuotaPerSecUSec=8s"
+  ],
+  "planned_resources": {
+    "slice": "f1.slice",
+    "MemoryMax": "6G",
+    "slice_CPUQuota": "800%",
+    "CPUWeight": 10,
+    "Nice": 19
+  },
+  "monitor_interval_seconds": 1200,
+  "mcmc_run": false,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}
