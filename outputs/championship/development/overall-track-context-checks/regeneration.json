@@ -1,0 +1,1801 @@
+{
+  "source_commit": "b134652e3c35e286d78774f122606b806fbf84ef",
+  "baseline_commit": "51b5724da152dc4d7d7624cc65cee6f2523c4b03",
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r3b448d39946e4d0da52a6586f3ae9e5d.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "source_hashes": {
+    "analysis/overall_track_context_audit.py": "3acc5e8a7463c5f56bbfd945778c012869fced49625153cb34ef1e9d04d321a5",
+    "f1rank/timeline.py": "15b054ed396ad32460e7f0529db72896d660fc76e0406982cefd417e4fa2f9af",
+    "f1rank/overall/design.py": "acb76be3a2754a2f354a4a70b728c7d17aa2915318a0ff778e6e9ed8f8439092",
+    "f1rank/overall/recovery.py": "f0a9ad4d7f8fb57a2ef24a72ce68230ea67dc71371ab95653c090df28c836a57",
+    "docs/overall_candidate.md": "83a75c8145cca42385a03548aee57bbc001ef26c96688bbacf302fc011aaed9f"
+  },
+  "input_hashes": {
+    "data/processed/race_laps.parquet": "ec207fe6188a5d664b8554bd7f171f2ed30425ed2a5216dc701e67c20ce44d96",
+    "data/processed/race_messages.parquet": "9f0ef318e780673f14c926010411aa89ddb5477c1308eede4c4bee403b1c93a7",
+    "data/processed/race_track_status.parquet": "56aa14c2687ca4cc4b748ccc68dbdbd742a8ffddd6f5ef6ff776e921a54fac3c",
+    "data/processed/race_weather.parquet": "ee5609b61f3a9020c29f6fff9cd68fc05dd21e2607127819e97150c3e63445b5",
+    "data/processed/race_classification.parquet": "3600e360c706c06fb38a5391be106e79b6170d30bcdda8d7c38f01d34c28bc11",
+    "data/processed/race.parquet": "150a0ade6f32c82e54d648a2c1d72a382e2c831e3736691c94e9ef6905f9b0f3",
+    "data/processed/race_sources.json": "9a54f3fae3164bbd7bdb261fefe5a7c5ddf5df70215bad7d0c2ae08c629eae87",
+    "data/overrides/timeline_overrides.csv": "a1e2095256a90e732a638e53aba2801f25c54e56e80104b2979a2f19c3580ffa"
+  },
+  "output_hashes": {
+    "data/processed/timeline.parquet": "b6cb2b15a59c2f5fc90ff2648a21cc2adc9351a8f093b1c26333519a49e48922",
+    "outputs/timeline/AUDIT.md": "412ad804584947274c20139be395b931738dbec192116eafbbacb19104bdea51",
+    "outputs/timeline/retirements.csv": "8383cd86e57af13e431d8ed5df416e06d5288184600e947fd9cebe41b5e45674",
+    "outputs/timeline/audit.json": "e30639fbf7fb0324c52249c378d97e9193a9c5b610411af342082bccd80d4f35"
+  },
+  "original_timeline_sha256": "7a723d269bbd09036b2e307d3aa6494c0f587f3fa0086bc40abc1d7ba764b7d1",
+  "changed_vsc_events": [
+    {
+      "event_id": "2018-02",
+      "original": [
+        {
+          "lap_start": 2.0,
+          "lap_end": 4.0,
+          "detail": "vsc from 641s to 858s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 2.0,
+          "lap_end": 4.0,
+          "detail": "vsc from 641s to 869s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2018-05",
+      "original": [
+        {
+          "lap_start": 41.0,
+          "lap_end": 42.0,
+          "detail": "vsc from 4026s to 4226s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 41.0,
+          "lap_end": 43.0,
+          "detail": "vsc from 4026s to 4240s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2018-06",
+      "original": [
+        {
+          "lap_start": 73.0,
+          "lap_end": 74.0,
+          "detail": "vsc from 6079s to 6203s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 73.0,
+          "lap_end": 74.0,
+          "detail": "vsc from 6079s to 6215s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2018-08",
+      "original": [
+        {
+          "lap_start": 52.0,
+          "lap_end": 53.0,
+          "detail": "vsc from 5628s to 5772s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 52.0,
+          "lap_end": 53.0,
+          "detail": "vsc from 5628s to 5784s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2018-09",
+      "original": [
+        {
+          "lap_start": 15.0,
+          "lap_end": 16.0,
+          "detail": "vsc from 1404s to 1517s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 15.0,
+          "lap_end": 16.0,
+          "detail": "vsc from 1404s to 1527s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2018-12",
+      "original": [
+        {
+          "lap_start": 6.0,
+          "lap_end": 7.0,
+          "detail": "vsc from 915s to 962s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 51.0,
+          "lap_end": 52.0,
+          "detail": "vsc from 4656s to 4727s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 6.0,
+          "lap_end": 7.0,
+          "detail": "vsc from 915s to 976s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 51.0,
+          "lap_end": 52.0,
+          "detail": "vsc from 4656s to 4742s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2018-17",
+      "original": [
+        {
+          "lap_start": 41.0,
+          "lap_end": 42.0,
+          "detail": "vsc from 5168s to 5229s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 41.0,
+          "lap_end": 42.0,
+          "detail": "vsc from 5168s to 5239s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2018-18",
+      "original": [
+        {
+          "lap_start": 11.0,
+          "lap_end": 12.0,
+          "detail": "vsc from 3024s to 3188s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 11.0,
+          "lap_end": 12.0,
+          "detail": "vsc from 3024s to 3202s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2018-19",
+      "original": [
+        {
+          "lap_start": 5.0,
+          "lap_end": 5.0,
+          "detail": "vsc from 2339s to 2395s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 31.0,
+          "lap_end": 32.0,
+          "detail": "vsc from 4481s to 4658s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 62.0,
+          "lap_end": 64.0,
+          "detail": "vsc from 7093s to 7243s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 5.0,
+          "lap_end": 6.0,
+          "detail": "vsc from 2339s to 2407s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 31.0,
+          "lap_end": 32.0,
+          "detail": "vsc from 4481s to 4670s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 62.0,
+          "lap_end": 64.0,
+          "detail": "vsc from 7093s to 7257s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2018-21",
+      "original": [
+        {
+          "lap_start": 7.0,
+          "lap_end": 8.0,
+          "detail": "vsc from 2885s to 3082s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 7.0,
+          "lap_end": 8.0,
+          "detail": "vsc from 2885s to 3094s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2019-03",
+      "original": [
+        {
+          "lap_start": 1.0,
+          "lap_end": 2.0,
+          "detail": "vsc from 2092s to 2144s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 1.0,
+          "lap_end": 2.0,
+          "detail": "vsc from 2092s to 2156s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2019-04",
+      "original": [
+        {
+          "lap_start": 40.0,
+          "lap_end": 41.0,
+          "detail": "vsc from 6224s to 6415s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 40.0,
+          "lap_end": 41.0,
+          "detail": "vsc from 6224s to 6430s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2019-08",
+      "original": [
+        {
+          "lap_start": 50.0,
+          "lap_end": 50.0,
+          "detail": "vsc from 6772s to 6791s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 50.0,
+          "lap_end": 51.0,
+          "detail": "vsc from 6772s to 6805s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2019-11",
+      "original": [
+        {
+          "lap_start": 15.0,
+          "lap_end": 16.0,
+          "detail": "vsc from 3828s to 3899s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 28.0,
+          "lap_end": 28.0,
+          "detail": "vsc from 4997s to 5086s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 15.0,
+          "lap_end": 16.0,
+          "detail": "vsc from 3828s to 3913s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 28.0,
+          "lap_end": 28.0,
+          "detail": "vsc from 4997s to 5098s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2019-14",
+      "original": [
+        {
+          "lap_start": 29.0,
+          "lap_end": 29.0,
+          "detail": "vsc from 4407s to 4448s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 31.0,
+          "lap_end": 31.0,
+          "detail": "vsc from 4590s to 4655s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 29.0,
+          "lap_end": 29.0,
+          "detail": "vsc from 4407s to 4461s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 31.0,
+          "lap_end": 31.0,
+          "detail": "vsc from 4590s to 4669s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2019-16",
+      "original": [
+        {
+          "lap_start": 28.0,
+          "lap_end": 29.0,
+          "detail": "vsc from 4880s to 5010s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 28.0,
+          "lap_end": 29.0,
+          "detail": "vsc from 4880s to 5020s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2019-18",
+      "original": [
+        {
+          "lap_start": 1.0,
+          "lap_end": 3.0,
+          "detail": "vsc from 2054s to 2185s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 1.0,
+          "lap_end": 3.0,
+          "detail": "vsc from 2054s to 2204s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2020-10",
+      "original": [
+        {
+          "lap_start": 43.0,
+          "lap_end": 43.0,
+          "detail": "vsc from 6593s to 6619s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 43.0,
+          "lap_end": 43.0,
+          "detail": "vsc from 6593s to 6634s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2020-11",
+      "original": [
+        {
+          "lap_start": 16.0,
+          "lap_end": 17.0,
+          "detail": "vsc from 1447s to 1511s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 16.0,
+          "lap_end": 17.0,
+          "detail": "vsc from 1447s to 1524s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2020-13",
+      "original": [
+        {
+          "lap_start": 30.0,
+          "lap_end": 31.0,
+          "detail": "vsc from 4358s to 4382s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 30.0,
+          "lap_end": 31.0,
+          "detail": "vsc from 4358s to 4396s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2020-14",
+      "original": [
+        {
+          "lap_start": 13.0,
+          "lap_end": 15.0,
+          "detail": "vsc from 3480s to 3659s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 13.0,
+          "lap_end": 15.0,
+          "detail": "vsc from 3480s to 3673s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2020-16",
+      "original": [
+        {
+          "lap_start": 55.0,
+          "lap_end": 56.0,
+          "detail": "vsc from 5334s to 5376s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 62.0,
+          "lap_end": 62.0,
+          "detail": "vsc from 5718s to 5779s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 55.0,
+          "lap_end": 56.0,
+          "detail": "vsc from 5334s to 5389s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 62.0,
+          "lap_end": 62.0,
+          "detail": "vsc from 5718s to 5779s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2021-01",
+      "original": [
+        {
+          "lap_start": 4.0,
+          "lap_end": 5.0,
+          "detail": "vsc from 2733s to 2776s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 4.0,
+          "lap_end": 5.0,
+          "detail": "vsc from 2733s to 2790s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2021-14",
+      "original": [
+        {
+          "lap_start": 1.0,
+          "lap_end": 2.0,
+          "detail": "vsc from 3802s to 3840s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 44.0,
+          "lap_end": 44.0,
+          "detail": "vsc from 7804s to 7859s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 1.0,
+          "lap_end": 2.0,
+          "detail": "vsc from 3802s to 3851s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 44.0,
+          "lap_end": 44.0,
+          "detail": "vsc from 7804s to 7871s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2021-17",
+      "original": [
+        {
+          "lap_start": 28.0,
+          "lap_end": 28.0,
+          "detail": "vsc from 6514s to 6534s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 28.0,
+          "lap_end": 28.0,
+          "detail": "vsc from 6514s to 6546s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2021-19",
+      "original": [
+        {
+          "lap_start": 12.0,
+          "lap_end": 14.0,
+          "detail": "vsc from 4750s to 4949s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 30.0,
+          "lap_end": 31.0,
+          "detail": "vsc from 6190s to 6238s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 12.0,
+          "lap_end": 14.0,
+          "detail": "vsc from 4750s to 4960s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 30.0,
+          "lap_end": 31.0,
+          "detail": "vsc from 6190s to 6251s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2021-20",
+      "original": [
+        {
+          "lap_start": 55.0,
+          "lap_end": 57.0,
+          "detail": "vsc from 8590s to 8747s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 55.0,
+          "lap_end": 57.0,
+          "detail": "vsc from 8590s to 8760s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2021-21",
+      "original": [
+        {
+          "lap_start": 23.0,
+          "lap_end": 24.0,
+          "detail": "vsc from 8590s to 8699s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 28.0,
+          "lap_end": 28.0,
+          "detail": "vsc from 9008s to 9043s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 29.0,
+          "lap_end": 33.0,
+          "detail": "vsc from 9183s to 9613s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 36.0,
+          "lap_end": 36.0,
+          "detail": "vsc from 9892s to 9927s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 23.0,
+          "lap_end": 24.0,
+          "detail": "vsc from 8590s to 8710s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 28.0,
+          "lap_end": 28.0,
+          "detail": "vsc from 9008s to 9058s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 29.0,
+          "lap_end": 33.0,
+          "detail": "vsc from 9183s to 9624s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 36.0,
+          "lap_end": 36.0,
+          "detail": "vsc from 9892s to 9939s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2021-22",
+      "original": [
+        {
+          "lap_start": 36.0,
+          "lap_end": 37.0,
+          "detail": "vsc from 6903s to 7074s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 36.0,
+          "lap_end": 38.0,
+          "detail": "vsc from 6903s to 7086s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2022-02",
+      "original": [
+        {
+          "lap_start": 16.0,
+          "lap_end": 16.0,
+          "detail": "vsc from 5253s to 5272s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 38.0,
+          "lap_end": 41.0,
+          "detail": "vsc from 7581s to 7884s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 16.0,
+          "lap_end": 16.0,
+          "detail": "vsc from 5253s to 5272s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 38.0,
+          "lap_end": 41.0,
+          "detail": "vsc from 7581s to 7897s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2022-03",
+      "original": [
+        {
+          "lap_start": 3.0,
+          "lap_end": 3.0,
+          "detail": "vsc from 3948s to 3995s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 39.0,
+          "lap_end": 40.0,
+          "detail": "vsc from 7378s to 7483s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 3.0,
+          "lap_end": 3.0,
+          "detail": "vsc from 3948s to 3995s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 39.0,
+          "lap_end": 40.0,
+          "detail": "vsc from 7378s to 7496s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2022-08",
+      "original": [
+        {
+          "lap_start": 9.0,
+          "lap_end": 10.0,
+          "detail": "vsc from 4749s to 4866s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 33.0,
+          "lap_end": 35.0,
+          "detail": "vsc from 7402s to 7648s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 9.0,
+          "lap_end": 10.0,
+          "detail": "vsc from 4749s to 4881s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 33.0,
+          "lap_end": 35.0,
+          "detail": "vsc from 7402s to 7661s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2022-09",
+      "original": [
+        {
+          "lap_start": 9.0,
+          "lap_end": 10.0,
+          "detail": "vsc from 4392s to 4555s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 20.0,
+          "lap_end": 20.0,
+          "detail": "vsc from 5290s to 5376s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 9.0,
+          "lap_end": 10.0,
+          "detail": "vsc from 4392s to 4570s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 20.0,
+          "lap_end": 21.0,
+          "detail": "vsc from 5290s to 5390s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2022-11",
+      "original": [
+        {
+          "lap_start": 58.0,
+          "lap_end": 59.0,
+          "detail": "vsc from 7818s to 7966s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 58.0,
+          "lap_end": 60.0,
+          "detail": "vsc from 7818s to 7978s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2022-12",
+      "original": [
+        {
+          "lap_start": 50.0,
+          "lap_end": 50.0,
+          "detail": "vsc from 7547s to 7606s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 50.0,
+          "lap_end": 50.0,
+          "detail": "vsc from 7547s to 7664s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2022-13",
+      "original": [
+        {
+          "lap_start": 2.0,
+          "lap_end": 3.0,
+          "detail": "vsc from 3816s to 3943s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 68.0,
+          "lap_end": 69.0,
+          "detail": "vsc from 9457s to 9568s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 2.0,
+          "lap_end": 3.0,
+          "detail": "vsc from 3816s to 3953s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 68.0,
+          "lap_end": 69.0,
+          "detail": "vsc from 9457s to 9582s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2022-15",
+      "original": [
+        {
+          "lap_start": 48.0,
+          "lap_end": 50.0,
+          "detail": "vsc from 7348s to 7563s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 48.0,
+          "lap_end": 50.0,
+          "detail": "vsc from 7348s to 7577s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2022-16",
+      "original": [
+        {
+          "lap_start": 12.0,
+          "lap_end": 12.0,
+          "detail": "vsc from 4731s to 4801s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 12.0,
+          "lap_end": 13.0,
+          "detail": "vsc from 4731s to 4815s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2022-17",
+      "original": [
+        {
+          "lap_start": 22.0,
+          "lap_end": 23.0,
+          "detail": "vsc from 10328s to 10501s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 26.0,
+          "lap_end": 27.0,
+          "detail": "vsc from 10922s to 11006s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 28.0,
+          "lap_end": 30.0,
+          "detail": "vsc from 11216s to 11456s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 22.0,
+          "lap_end": 23.0,
+          "detail": "vsc from 10328s to 10511s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 26.0,
+          "lap_end": 27.0,
+          "detail": "vsc from 10922s to 11018s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 28.0,
+          "lap_end": 30.0,
+          "detail": "vsc from 11216s to 11470s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2022-20",
+      "original": [
+        {
+          "lap_start": 65.0,
+          "lap_end": 66.0,
+          "detail": "vsc from 9117s to 9171s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 65.0,
+          "lap_end": 66.0,
+          "detail": "vsc from 9117s to 9182s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2023-01",
+      "original": [
+        {
+          "lap_start": 41.0,
+          "lap_end": 42.0,
+          "detail": "vsc from 7758s to 7854s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 41.0,
+          "lap_end": 42.0,
+          "detail": "vsc from 7758s to 7866s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2023-03",
+      "original": [
+        {
+          "lap_start": 18.0,
+          "lap_end": 19.0,
+          "detail": "vsc from 6455s to 6577s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 18.0,
+          "lap_end": 19.0,
+          "detail": "vsc from 6455s to 6591s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2023-08",
+      "original": [
+        {
+          "lap_start": 8.0,
+          "lap_end": 8.0,
+          "detail": "vsc from 4288s to 4323s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 8.0,
+          "lap_end": 8.0,
+          "detail": "vsc from 4288s to 4334s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2023-09",
+      "original": [
+        {
+          "lap_start": 14.0,
+          "lap_end": 16.0,
+          "detail": "vsc from 4791s to 4919s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 14.0,
+          "lap_end": 16.0,
+          "detail": "vsc from 4791s to 4931s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2023-15",
+      "original": [
+        {
+          "lap_start": 44.0,
+          "lap_end": 45.0,
+          "detail": "vsc from 8226s to 8429s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 44.0,
+          "lap_end": 45.0,
+          "detail": "vsc from 8226s to 8444s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2023-16",
+      "original": [
+        {
+          "lap_start": 14.0,
+          "lap_end": 14.0,
+          "detail": "vsc from 5313s to 5375s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 14.0,
+          "lap_end": 14.0,
+          "detail": "vsc from 5313s to 5390s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2023-19",
+      "original": [
+        {
+          "lap_start": 5.0,
+          "lap_end": 5.0,
+          "detail": "vsc from 4085s to 4162s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 5.0,
+          "lap_end": 5.0,
+          "detail": "vsc from 4085s to 4174s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2023-21",
+      "original": [
+        {
+          "lap_start": 1.0,
+          "lap_end": 2.0,
+          "detail": "vsc from 947s to 1064s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 1.0,
+          "lap_end": 2.0,
+          "detail": "vsc from 947s to 1076s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2024-03",
+      "original": [
+        {
+          "lap_start": 17.0,
+          "lap_end": 18.0,
+          "detail": "vsc from 4902s to 4966s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 58.0,
+          "lap_end": null,
+          "detail": "vsc from 8240s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 17.0,
+          "lap_end": 18.0,
+          "detail": "vsc from 4902s to 4981s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 58.0,
+          "lap_end": null,
+          "detail": "vsc from 8240s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2024-06",
+      "original": [
+        {
+          "lap_start": 23.0,
+          "lap_end": 23.0,
+          "detail": "vsc from 5417s to 5457s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 23.0,
+          "lap_end": 23.0,
+          "detail": "vsc from 5417s to 5468s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2024-11",
+      "original": [
+        {
+          "lap_start": 66.0,
+          "lap_end": 66.0,
+          "detail": "vsc from 7972s to 8018s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 66.0,
+          "lap_end": 66.0,
+          "detail": "vsc from 7972s to 8030s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2024-21",
+      "original": [
+        {
+          "lap_start": 28.0,
+          "lap_end": 28.0,
+          "detail": "vsc from 6619s to 6708s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 28.0,
+          "lap_end": 29.0,
+          "detail": "vsc from 6619s to 6722s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2024-24",
+      "original": [
+        {
+          "lap_start": 2.0,
+          "lap_end": 3.0,
+          "detail": "vsc from 3547s to 3653s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 2.0,
+          "lap_end": 3.0,
+          "detail": "vsc from 3547s to 3664s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2025-06",
+      "original": [
+        {
+          "lap_start": 2.0,
+          "lap_end": 3.0,
+          "detail": "vsc from 3577s to 3748s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 29.0,
+          "lap_end": 30.0,
+          "detail": "vsc from 6098s to 6225s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 33.0,
+          "lap_end": 34.0,
+          "detail": "vsc from 6522s to 6604s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 2.0,
+          "lap_end": 3.0,
+          "detail": "vsc from 3577s to 3761s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 29.0,
+          "lap_end": 30.0,
+          "detail": "vsc from 6098s to 6238s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 33.0,
+          "lap_end": 34.0,
+          "detail": "vsc from 6522s to 6617s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2025-07",
+      "original": [
+        {
+          "lap_start": 29.0,
+          "lap_end": 31.0,
+          "detail": "vsc from 5700s to 5909s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 29.0,
+          "lap_end": 31.0,
+          "detail": "vsc from 5700s to 5920s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2025-08",
+      "original": [
+        {
+          "lap_start": 2.0,
+          "lap_end": 4.0,
+          "detail": "vsc from 3462s to 3735s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 2.0,
+          "lap_end": 4.0,
+          "detail": "vsc from 3462s to 3748s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2025-12",
+      "original": [
+        {
+          "lap_start": 2.0,
+          "lap_end": 4.0,
+          "detail": "vsc from 3487s to 3757s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 5.0,
+          "lap_end": 7.0,
+          "detail": "vsc from 3958s to 4163s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 2.0,
+          "lap_end": 4.0,
+          "detail": "vsc from 3487s to 3770s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 5.0,
+          "lap_end": 7.0,
+          "detail": "vsc from 3958s to 4177s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2025-15",
+      "original": [
+        {
+          "lap_start": 31.0,
+          "lap_end": 32.0,
+          "detail": "vsc from 5868s to 5938s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 31.0,
+          "lap_end": 32.0,
+          "detail": "vsc from 5868s to 5950s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2025-19",
+      "original": [
+        {
+          "lap_start": 7.0,
+          "lap_end": 8.0,
+          "detail": "vsc from 4060s to 4260s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 7.0,
+          "lap_end": 9.0,
+          "detail": "vsc from 4060s to 4273s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2025-20",
+      "original": [
+        {
+          "lap_start": 70.0,
+          "lap_end": 71.0,
+          "detail": "vsc from 9187s to 9276s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 70.0,
+          "lap_end": 71.0,
+          "detail": "vsc from 9187s to 9288s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2025-21",
+      "original": [
+        {
+          "lap_start": 7.0,
+          "lap_end": 8.0,
+          "detail": "vsc from 4032s to 4207s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 7.0,
+          "lap_end": 8.0,
+          "detail": "vsc from 4032s to 4219s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2025-22",
+      "original": [
+        {
+          "lap_start": 2.0,
+          "lap_end": 4.0,
+          "detail": "vsc from 3641s to 3807s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 16.0,
+          "lap_end": 16.0,
+          "detail": "vsc from 4993s to 5056s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 2.0,
+          "lap_end": 4.0,
+          "detail": "vsc from 3641s to 3820s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 16.0,
+          "lap_end": 16.0,
+          "detail": "vsc from 4993s to 5070s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2026-01",
+      "original": [
+        {
+          "lap_start": 12.0,
+          "lap_end": 14.0,
+          "detail": "vsc from 4682s to 4921s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 18.0,
+          "lap_end": 20.0,
+          "detail": "vsc from 5329s to 5479s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 34.0,
+          "lap_end": 34.0,
+          "detail": "vsc from 6674s to 6712s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 12.0,
+          "lap_end": 14.0,
+          "detail": "vsc from 4682s to 4933s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 18.0,
+          "lap_end": 20.0,
+          "detail": "vsc from 5329s to 5493s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 34.0,
+          "lap_end": 34.0,
+          "detail": "vsc from 6674s to 6724s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2026-05",
+      "original": [
+        {
+          "lap_start": 31.0,
+          "lap_end": 32.0,
+          "detail": "vsc from 6070s to 6257s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 46.0,
+          "lap_end": 46.0,
+          "detail": "vsc from 7293s to 7337s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 53.0,
+          "lap_end": 54.0,
+          "detail": "vsc from 7812s to 7931s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 31.0,
+          "lap_end": 32.0,
+          "detail": "vsc from 6070s to 6269s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 46.0,
+          "lap_end": 46.0,
+          "detail": "vsc from 7293s to 7350s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 53.0,
+          "lap_end": 54.0,
+          "detail": "vsc from 7812s to 7945s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2026-07",
+      "original": [
+        {
+          "lap_start": 41.0,
+          "lap_end": 42.0,
+          "detail": "vsc from 6556s to 6693s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 63.0,
+          "lap_end": 65.0,
+          "detail": "vsc from 8405s to 8628s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 41.0,
+          "lap_end": 42.0,
+          "detail": "vsc from 6556s to 6704s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 63.0,
+          "lap_end": 65.0,
+          "detail": "vsc from 8405s to 8638s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2026-08",
+      "original": [
+        {
+          "lap_start": 25.0,
+          "lap_end": 26.0,
+          "detail": "vsc from 5203s to 5359s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 52.0,
+          "lap_end": 53.0,
+          "detail": "vsc from 7251s to 7285s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 25.0,
+          "lap_end": 26.0,
+          "detail": "vsc from 5203s to 5372s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 52.0,
+          "lap_end": 53.0,
+          "detail": "vsc from 7251s to 7296s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2026-09",
+      "original": [
+        {
+          "lap_start": 22.0,
+          "lap_end": 22.0,
+          "detail": "vsc from 5361s to 5384s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 39.0,
+          "lap_end": 39.0,
+          "detail": "vsc from 6948s to 7020s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 22.0,
+          "lap_end": 22.0,
+          "detail": "vsc from 5361s to 5399s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 39.0,
+          "lap_end": 39.0,
+          "detail": "vsc from 6948s to 7035s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2026-10",
+      "original": [
+        {
+          "lap_start": 18.0,
+          "lap_end": 18.0,
+          "detail": "vsc from 5477s to 5510s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 20.0,
+          "lap_end": 21.0,
+          "detail": "vsc from 5722s to 5816s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 18.0,
+          "lap_end": 18.0,
+          "detail": "vsc from 5477s to 5523s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 20.0,
+          "lap_end": 21.0,
+          "detail": "vsc from 5722s to 5830s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2026-11",
+      "original": [
+        {
+          "lap_start": 56.0,
+          "lap_end": 57.0,
+          "detail": "vsc from 8025s to 8103s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 56.0,
+          "lap_end": 57.0,
+          "detail": "vsc from 8025s to 8114s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2026-12",
+      "original": [
+        {
+          "lap_start": 55.0,
+          "lap_end": 57.0,
+          "detail": "vsc from 9472s to 9719s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 70.0,
+          "lap_end": 70.0,
+          "detail": "vsc from 10659s to 10711s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 55.0,
+          "lap_end": 57.0,
+          "detail": "vsc from 9472s to 9730s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        },
+        {
+          "lap_start": 70.0,
+          "lap_end": 70.0,
+          "detail": "vsc from 10659s to 10723s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2026-13",
+      "original": [
+        {
+          "lap_start": 28.0,
+          "lap_end": 29.0,
+          "detail": "vsc from 7869s to 7976s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 28.0,
+          "lap_end": 29.0,
+          "detail": "vsc from 7869s to 7987s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    },
+    {
+      "event_id": "2026-14",
+      "original": [
+        {
+          "lap_start": 14.0,
+          "lap_end": 15.0,
+          "detail": "vsc from 4888s to 5011s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ],
+      "regenerated": [
+        {
+          "lap_start": 14.0,
+          "lap_end": 15.0,
+          "detail": "vsc from 4888s to 5021s",
+          "evidence": "[{\"source\": \"fastf1 track status\", \"status\": \"6\"}]"
+        }
+      ]
+    }
+  ],
+  "changed_vsc_event_count": 72,
+  "original_timeline_rows": 8141,
+  "regenerated_timeline_rows": 8141,
+  "outcome_context_changes": [],
+  "eligible_event_count": 187,
+  "eligible_events_without_known_track_context": [],
+  "normal_builder_stdout": "8141 rows over 341 races; retirements 1214 ({'status code': 939, 'inferred from evidence': 228, 'class base rates': 47})\ncause model, leave-one-season-out on 315 coded retirements: log loss 0.761 vs base rates 0.879; accuracy 0.65 vs 0.43\n{\"previous_build\": \"timeline-v1\", \"added\": 100, \"removed\": 100, \"cause_changed_by_0.05_plus\": []}\n",
+  "elapsed_seconds": 11.42766358400695,
+  "peak_rss_kib": 555208,
+  "status_definition_source": "https://raw.githubusercontent.com/theOehrly/Fast-F1/v3.8.3/fastf1/_api.py",
+  "downstream_regeneration_required": true,
+  "mcmc_run": false,
+  "predictive_improvement_established": false,
+  "publication_allowed": false
+}
