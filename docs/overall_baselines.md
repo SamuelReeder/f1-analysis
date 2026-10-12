@@ -85,7 +85,10 @@ outside the running panel. It rejects a pre-qualifying origin instead of inventi
 a grid. It keeps qualifying-fit and race-coefficient identities separately: the
 legacy fixed feature medians do not require equal posterior draw counts or
 arbitrary pairing between those fits. End-to-end pre-qualifying grid integration
-remains a separate open requirement.
+remains a separate open requirement. Its
+[development probability definition](overall_legacy_prequalifying.md) specifies
+how to integrate the grid and coefficient distributions without arbitrary
+pairing, while retaining the remaining official-grid and precision requirements.
 
 The [forecast verification record](../outputs/championship/development/overall-legacy-forecast-checks/verification.json)
 links synthetic original-model trace comparisons, lineage persistence, newcomer
