@@ -1,0 +1,22 @@
+{
+  "source_commit": "ba246130239e3c96196d9108dd00bd518ca8d201",
+  "command": [
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_overall_legacy_archive.py",
+    "tests/test_overall_posterior_archive.py",
+    "tests/test_overall_legacy_fit_export.py",
+    "tests/test_overall_legacy_forecast.py",
+    "--junitxml=/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-legacy-archive-checks/focused.xml"
+  ],
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r6901402a7ffa44a39535606ad5cf2eca.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "exit_code": 0,
+  "elapsed_seconds": 18.0112089739996,
+  "peak_child_rss_kib": 613244
+}

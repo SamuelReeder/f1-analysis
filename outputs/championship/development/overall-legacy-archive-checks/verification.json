@@ -1,0 +1,46 @@
+{
+  "purpose": "legacy_archive_and_forecast_development_verification",
+  "checks": {
+    "focused": {
+      "source_commit": "ba246130239e3c96196d9108dd00bd518ca8d201",
+      "run": "focused-run.json",
+      "report": "focused.xml",
+      "tests": 81,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "source_hashes": {
+        "analysis/overall_legacy_archive.py": "29b7490fee8b62eda2339b9e4c97dae18f95b893029202e2b0867f6c8c31406b",
+        "analysis/overall_posterior_archive.py": "bcd0a84eeb64393591b0fee77c3422c92b4455d05f4ac3fa65a1ec81fb1a6af0",
+        "analysis/overall_legacy_forecast.py": "1ff46104b10d7c88ed642acb865ad3f4ccdffdf4f8c37d8263bdcc8504d64a2b",
+        "tests/test_overall_legacy_archive.py": "9ca115d18a93d027b9d06de5422c0c5f1be42b2c81ec12716e417d331b22b28b",
+        "tests/test_overall_posterior_archive.py": "8d705f1871cc767941a027c014bfdea85e1bcf85fdf969b2fe9b123eb547d8a5",
+        "tests/test_overall_legacy_fit_export.py": "3582a903e203ad0cf273c5cd9babb25f8469ea922cdaacaa6b0b6dd169d21ea5",
+        "tests/test_overall_legacy_forecast.py": "7953b76838230576b36ae85eefb9d3accabef81061d60ec456028c8ad4fed13a"
+      }
+    },
+    "resource": {
+      "source_commit": "937478a33cd572fcd5812d429d4da27b54f230cd",
+      "run": "resource-run.json",
+      "report": "resource.json",
+      "scope": "Synthetic archive of current legacy state dimensions; original metadata/save format; complete validation and forecast equality before/after bounded decompression"
+    }
+  },
+  "fitting_sources_and_data_unchanged_from": "8f1208b239978afb51cb37cd4c61187e1ea3525e",
+  "compared_paths": [
+    "f1rank",
+    "extract",
+    "data",
+    "docs/overall_candidate.md",
+    "docs/overall_rotation_profile_proposal.json"
+  ],
+  "pending_numerical_proposal_user_approved": false,
+  "full_integration_suite": "pending separate race-pace regeneration",
+  "real_model_fit_accepted": false,
+  "legacy_fit_source_verified": false,
+  "real_event_scores_evaluated": false,
+  "forecast_median_precision_established": false,
+  "independent_evidence_established": false,
+  "intended_ci_runner_verified": false,
+  "publication_allowed": false
+}

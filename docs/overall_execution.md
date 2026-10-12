@@ -37,8 +37,19 @@ registered baseline fit must explicitly retain `FORECAST_EXTRA_SITES`. The
 adapter identifies missing coordinates and rejects an incomplete archive. The
 [record](../outputs/championship/development/overall-legacy-forecast-checks/verification.json)
 preserves this software check separately from accepted-fit integration. No fit
-was run by it; bounded legacy archive loading, forecast resource measurement,
-source/convergence acceptance and actual baseline evaluation remain open.
+was run by it; source/convergence acceptance and actual baseline evaluation
+remain open.
+
+The [legacy archive verification](../outputs/championship/development/overall-legacy-archive-checks/verification.json)
+adds bounded whole-archive numeric validation using the original sidecar format.
+It preserves the legacy/successor acceptance boundary and rejects changed input
+identities, invalid unselected arrays and incomplete draw axes. The local
+resource workload includes historical blocks at the committed legacy data
+dimensions. Under the enforced memory/CPU caps, forecasts from uncompressed
+synthetic maps and their compressed archive agree exactly, use the complete draw
+set and leave no temporary maps. This measures archive I/O and forecast resources;
+it does not establish accepted baseline fits, forecast-median precision,
+real-event prediction, source availability or intended-runner readiness.
 
 No model fit or real-data predictive score has been used to choose the profile
 settings. Previous finite-gradient tests, software checks and data-shape checks

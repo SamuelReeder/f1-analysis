@@ -44,6 +44,8 @@ order probabilities before and after compressed loading. Its draw shape comes
 from the existing largest Overall retry solely to size the workload; it does not
 choose future baseline fitting settings. The workload measures the local archive
 and forecast path, not MCMC, accepted-fit diagnostics or intended-runner capacity.
+The [archive and resource record](../outputs/championship/development/overall-legacy-archive-checks/verification.json)
+links its local measurement and synthetic I/O checks to their committed source.
 
 Propagate the original uncentred driver and persistent-car walks from their last
 training states, then centre on the complete announced future field. Retain the

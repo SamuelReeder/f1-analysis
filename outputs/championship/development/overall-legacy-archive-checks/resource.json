@@ -1,0 +1,97 @@
+{
+  "purpose": "synthetic_legacy_archive_forecast_resource_check",
+  "source_commit": "937478a33cd572fcd5812d429d4da27b54f230cd",
+  "source_hashes": {
+    "analysis/overall_legacy_resources.py": "afdf1602b5823507260d3aa27be1a5683077478fc004e0014a147e1362fefe7f",
+    "analysis/overall_legacy_archive.py": "29b7490fee8b62eda2339b9e4c97dae18f95b893029202e2b0867f6c8c31406b",
+    "analysis/overall_legacy_forecast.py": "1ff46104b10d7c88ed642acb865ad3f4ccdffdf4f8c37d8263bdcc8504d64a2b",
+    "analysis/overall_posterior_archive.py": "bcd0a84eeb64393591b0fee77c3422c92b4455d05f4ac3fa65a1ec81fb1a6af0",
+    "analysis/overall_forecast_resources.py": "13efa0e9bfbb69899608f71d2aaa03b0d5ded9e831c55088ae0580bfabb73d09",
+    "analysis/overall_forecast_catalog.py": "7144a87398aea4e3435d4f87118ca3da6f475ca86f7b2710737f6be413abaf39",
+    "analysis/overall_forecast_states.py": "450a80b8c293d765ee2b9b8ae76e3c7e02dcc72774c4f328c9a93b0e68a1fd48",
+    "analysis/overall_baselines.py": "8ce51f6634d74942cdc20b90a76b1ba3ab03979ed885470ac560e8a3d4b9b17d",
+    "f1rank/fit.py": "e655df046123f62a13e9d0001c091d46c97b0551b3506ffec2f8db701fbcb6b1",
+    "f1rank/design.py": "4fc124f37db9ad14ef67d42ef6cb46000e4b7914588e3cf91a5841094125712c",
+    "f1rank/model.py": "a92d3c965fa80cc57213b8aa607d232d4196aab2ea76f55e4f4e28e363341d2b",
+    "f1rank/lineage.py": "17a6af0cd00fd1f171aac23766d79c2337f0905a8e39289b279dbf4f27fc634a",
+    "f1rank/artifacts.py": "2e9b0b2171d3fb2db3fecea14c944ed3b2d4865ea87c853535bc80e245ee9bbb",
+    "f1rank/overall/fitting.py": "302ad0d46d286cf7f869c4d002433eb4da9a0b024d30de7c20b660cdb81f91ac",
+    "f1rank/overall/order.py": "812af3dac1f6ad8fa016919332511a24fc99d53eef947edc1eeec55dd48cd95d",
+    "outputs/championship/development/interface_preflight.json": "722d431cfb3237c9920c8d2b81734abbe521a752a01b95b67c1eb9d171159afb",
+    "data/processed/events.parquet": "8ee0985bd11b0962168ac02353b6dee1361ad0526f2a9d4933f901f32016a2f8",
+    "data/processed/drivers.parquet": "0cd1efedc831515d51cce8217a6f6968f1d355be92a91175ef12f52b36c700db",
+    "data/processed/entries.parquet": "b3b39c63dcf372b945a027a639c6d587f961593e1fe391db7fef6a802c580673",
+    "data/processed/quali_times.parquet": "4ca966349ce047fce097c9aae0f71dc411f95998408554bf94e6db01c938b1e6",
+    "data/processed/race.parquet": "150a0ade6f32c82e54d648a2c1d72a382e2c831e3736691c94e9ef6905f9b0f3"
+  },
+  "recorded_at": "2026-10-12T15:18:28.804203+00:00",
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r14e755d2e9f3445b9ee6a196d5a9b44f.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "cutoff": "2026-15",
+  "training_arrays_key": "a4dc713e80aed73c0c3937b35424e9c552bb06e001e6f10efc0c276fb42fe747",
+  "counts": {
+    "entries": 7246,
+    "cars": 3624,
+    "drivers": 84
+  },
+  "workload": {
+    "seed": 20261012,
+    "posterior_shape": [
+      4,
+      3200
+    ],
+    "dtype": "float32",
+    "parameter_bytes": 2995353600,
+    "compressed_bytes": 2773319756,
+    "draw_batch_size": 128,
+    "historical_members_validated": [
+      "car",
+      "car_event",
+      "car_segment",
+      "car_track",
+      "compat",
+      "driver_form",
+      "mu",
+      "sigma_u",
+      "skill",
+      "track_load"
+    ],
+    "posterior_members": 35,
+    "construction": "Arbitrary synthetic values at legacy archive state dimensions; no fitted posterior",
+    "draw_shape_reference": "Largest existing Overall retry shape; not future baseline sampler settings"
+  },
+  "forecast": {
+    "output_sha256": "fbe084ed3afea2aad0c5da57af0435c3c7fdc6a52022487e4e59f9f3c0667fce",
+    "consumed_posterior_key": "158c21af131356bd273173693ec5fb119609118b7d54918aadad09926261f41d",
+    "coefficient_parameter_key": "2c40f8da41a143957251bf720e8dfd47148d45ffb303b71c03ceb0b7a7525455",
+    "every_output_finite": true,
+    "posterior_shape": [
+      4,
+      3200
+    ],
+    "full_draw_coverage": true,
+    "output_bytes": 12493152,
+    "field_size": 22
+  },
+  "compressed_and_direct_forecasts_identical": true,
+  "temporary_maps_removed": true,
+  "seconds": {
+    "build_design": 0.3040247070020996,
+    "generate_workload": 11.247785848972853,
+    "direct_forecast": 2.72573037201073,
+    "compress_workload": 75.86880438099615,
+    "load_and_validate": 11.831696033012122,
+    "forecast": 3.7076174660469405,
+    "close_and_recheck": 1.5252855030121282,
+    "total": 109.77637548703933
+  },
+  "process_max_rss_kib": 2564876,
+  "mcmc_run": false,
+  "accepted_fit_loaded": false,
+  "real_predictions_scored": false,
+  "intended_ci_runner_verified": false,
+  "publication_allowed": false
+}
