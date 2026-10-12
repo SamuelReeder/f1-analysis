@@ -1,0 +1,90 @@
+{
+  "purpose": "synthetic_forecast_resource_check",
+  "source_commit": "78d255a2d51a06bd794a250beb9e4f726b023d34",
+  "source_hashes": {
+    "analysis/overall_forecast_states.py": "6f892cd83f5f18c7df392d5b969941e72583008210d38a62490261483643dd59",
+    "analysis/overall_forecast_catalog.py": "342d2e1ad61022617964280a07f29131c9807312f4cd1e3b6e6ba00975f33a85",
+    "analysis/overall_forecast_resources.py": "e58a658f63fca0254490ab36b8a6d5a94a00278d253bc93cfcaca7b1015bec26",
+    "f1rank/overall/design.py": "34fcc7707cfae7e6feb1b5e495b2c645958c8203e463b8dc04e93046c8a127f9",
+    "f1rank/overall/fitting.py": "302ad0d46d286cf7f869c4d002433eb4da9a0b024d30de7c20b660cdb81f91ac",
+    "f1rank/model.py": "a92d3c965fa80cc57213b8aa607d232d4196aab2ea76f55e4f4e28e363341d2b",
+    "f1rank/overall/model.py": "83d97eb193495fc5ea2d7203b10ebd10f9fa1ef14f10bafe5ba86a868035b1ac",
+    "docs/overall_rotation_profile_proposal.json": "3f6921b695a0e102fd67df3a8e73237b3f9acb56ff73f1ff6965575cbc4659fb",
+    "analysis/overall_posterior_archive.py": "d963d652dc9711f7a39ea279e9a9a406c902a54be4a588de0922a6d1442f34c5",
+    "analysis/overall_observation_kernels.py": "4213b88be1a4445bbcf08ad87191b9ec992b049e09dd23115d793522c33bb6f4",
+    "f1rank/overall/order.py": "812af3dac1f6ad8fa016919332511a24fc99d53eef947edc1eeec55dd48cd95d",
+    "f1rank/overall/simulation.py": "57d31ee69f2f6b36fe551c9b6bcb51f0894e5cfbd03e1403adf77e7920c61ff9"
+  },
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rab3ce2afd84643d499b7eede68bd1ec4.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "recorded_at": "2026-10-12T13:22:33.459326+00:00",
+  "cutoff": "2026-15",
+  "preflight_reference_sha256": "722d431cfb3237c9920c8d2b81734abbe521a752a01b95b67c1eb9d171159afb",
+  "training_arrays_key": "35c0b9948bb0873045179b7abae6121baa29a736d5a49ae077ee85912e1923a7",
+  "counts": {
+    "entries": 7246,
+    "cars": 3624,
+    "drivers": 84,
+    "forecast_field": 22
+  },
+  "workload": {
+    "posterior_shape": [
+      4,
+      3200
+    ],
+    "dtype": "float32",
+    "seed": 20261012,
+    "parameter_bytes": 1169612800,
+    "parameters_sha256": "7ef96a76e62652ec2c867ecf177447a3142107c54da850d3c8f6904c3f99a8a4",
+    "draws_from_fixed_retry_ladder": true,
+    "archive_io": "Temporary compressed cache-format fixture with checked source and checksum",
+    "compressed_bytes": 1424937632,
+    "synthetic_receipt_fixture": true,
+    "unused_archive_site_validated": true,
+    "construction": "Arbitrary finite synthetic parameter values; not fitted values or a recovery experiment"
+  },
+  "forecast": {
+    "kind": "conditional_weekend",
+    "circuit_id": "synthetic_unseen_circuit",
+    "unseen_circuit": true,
+    "unseen_circuit_policy": "independent_gaussian_with_training_reference",
+    "batches": 25,
+    "draws_per_chain": 3200,
+    "max_batch_output_bytes": 1589936,
+    "observation_parameters_sha256": "b628f989a73960728adbd8db39436d6dcc66fa9302485341d7a543f77a1ffefb",
+    "batch_stream_sha256": "8984058175f617275d77f34e4a987d4bf6c75a7714b42a8132210b5a968d5e27",
+    "every_output_finite": true,
+    "conditions_forecast": false,
+    "classification_generated": false
+  },
+  "baseline_lower_bound": {
+    "source_revision": "deb276e",
+    "entry_states": [
+      "qualifying_walk",
+      "race_residual",
+      "qualifying_skill",
+      "race_skill"
+    ],
+    "entry_state_bytes": 2967961600,
+    "parameter_plus_entry_state_bytes": 4137574400,
+    "interpretation": "Calculated lower bound, not a measured baseline peak; omits other history arrays, transients and process overhead"
+  },
+  "seconds": {
+    "build_design": 2.057029487041291,
+    "generate_workload": 4.474794887006283,
+    "compress_workload": 37.27187690802384,
+    "load_and_validate": 7.451982153987046,
+    "forecast": 8.228486475010868,
+    "close_and_recheck": 0.7339257100247778,
+    "total": 60.41221082501579
+  },
+  "process_max_rss_kib": 1804436,
+  "mcmc_run": false,
+  "fitted_parameters_used": false,
+  "real_predictions_scored": false,
+  "intended_ci_runner_verified": false,
+  "publication_allowed": false
+}
