@@ -1,0 +1,306 @@
+{
+ "purpose": "fixed_constructed_trace_noise_audit",
+ "status": "complete",
+ "started_at": "2026-10-12T18:59:54.145690+00:00",
+ "mcmc_run": false,
+ "canonical_simulator_run": false,
+ "publication_allowed": false,
+ "original_failures_changed": false,
+ "limits": {
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r4114ae20ad6f42608bd9330d88c42eb7.scope",
+  "memory_max": "3221225472",
+  "cpu_max": "200000 100000"
+ },
+ "source_commit": "924bf821d21e818b4568cf9d13dd01071f33c745",
+ "source_hashes": {
+  "analysis/overall_functional_noise_audit.py": "da57569ac11eb081429c329ac9cf63210646abfee8c4e57f94deb3d04c4e6287",
+  "analysis/overall_ranking_resources.py": "cf03d0001c83635cb6c8d28d4d0bf43f7c999f3f1fd09b8672d3fdccda9faa75",
+  "analysis/overall_simulation_controller.py": "1d2ef3a4dee3115e10c5967ea090b5dd005dae785796dfa9965bf437a11d2acb",
+  "docs/overall_functional_diagnostics.md": "4af5c0a297d4d24668574504e143fe52cd731b47fce2862231d2b021e3eb8c42",
+  "docs/overall_rotation_profile_proposal.json": "3de78b55e5e53e395fe19738d825c6228b7b2e8a6e9c24933d9e9bd3ced818da",
+  "f1rank/artifacts.py": "2e9b0b2171d3fb2db3fecea14c944ed3b2d4865ea87c853535bc80e245ee9bbb",
+  "f1rank/overall/fitting.py": "302ad0d46d286cf7f869c4d002433eb4da9a0b024d30de7c20b660cdb81f91ac",
+  "f1rank/overall/diagnostics.py": "7dff41cc89046160269424c1ab47ede26eb7dc8b8d0a107cf1e68fc1c7e2a791",
+  "f1rank/overall/simulation.py": "57d31ee69f2f6b36fe551c9b6bcb51f0894e5cfbd03e1403adf77e7920c61ff9",
+  "f1rank/overall/scoring.py": "8fc3051432ff7f5e00038a336923fe7c1fce114115b3a87b889079728db33aae"
+ },
+ "runtime": {
+  "python": "3.12.3",
+  "implementation": "CPython",
+  "numpy": "2.5.3",
+  "bit_generator": "PCG64",
+  "platform": "linux",
+  "machine": "x86_64",
+  "byteorder": "little"
+ },
+ "posterior_shape": [
+  4,
+  800
+ ],
+ "replicates": 250000,
+ "fixture": {
+  "trace_seed": 20261012,
+  "simulation_seed": 20261013,
+  "separated_offset": 1e-05,
+  "separated_jitter": 1e-06,
+  "mixed_scale": 0.001,
+  "winning_points": 25.0,
+  "runner_up_points": 18.0,
+  "diagnostic_api_divergences": 0,
+  "diagnostic_api_divergences_are_not_observed_sampler_data": true
+ },
+ "cases": {
+  "separated_chain": {
+   "exact_diagnostics": {
+    "converged": false,
+    "failures": [
+     "expected_points: convergence/precision threshold failed"
+    ],
+    "parameters": [
+     {
+      "parameter": "expected_points",
+      "passed": false,
+      "rhat_max": 2.8419822413857196,
+      "bulk_ess_min": 4.638101109680227,
+      "tail_ess_min": 28.294034459882816,
+      "mcse_sd_max": 0.4933761751798557,
+      "constant_coordinates": 0
+     }
+    ],
+    "constants": [],
+    "empty_sites": [],
+    "n_draws": 3200,
+    "n_chains": 4,
+    "divergences": 0
+   },
+   "noisy_diagnostics": {
+    "converged": true,
+    "failures": [],
+    "parameters": [
+     {
+      "parameter": "expected_points",
+      "passed": true,
+      "rhat_max": 0.9995310149777734,
+      "bulk_ess_min": 3209.775328426475,
+      "tail_ess_min": 3087.645761268973,
+      "mcse_sd_max": 0.017637155157653444,
+      "constant_coordinates": 0
+     }
+    ],
+    "constants": [],
+    "empty_sites": [],
+    "n_draws": 3200,
+    "n_chains": 4,
+    "divergences": 0
+   },
+   "max_exact_conditional_points_mcse": 0.006999999999999691,
+   "max_exact_conditional_difference_mcse": 0.013999999999999383,
+   "points_mcse_bound": 0.025,
+   "difference_mcse_bound": 0.05,
+   "inherited_conditional_precision_passed": true,
+   "exact_chain_means": [
+    [
+     21.499930013627754,
+     21.500069986372246
+    ],
+    [
+     21.499976903628752,
+     21.500023096371248
+    ],
+    [
+     21.500023349779614,
+     21.499976650220386
+    ],
+    [
+     21.5000694179481,
+     21.4999305820519
+    ]
+   ],
+   "noisy_chain_means": [
+    [
+     21.50027086500002,
+     21.49972913499998
+    ],
+    [
+     21.500156310000012,
+     21.499843689999988
+    ],
+    [
+     21.49998302499996,
+     21.50001697500004
+    ],
+    [
+     21.50061904500002,
+     21.49938095499998
+    ]
+   ],
+   "exact_chain_sd": [
+    [
+     7.121702631513644e-06,
+     7.121702631513644e-06
+    ],
+    [
+     7.269217231308145e-06,
+     7.269217231308145e-06
+    ],
+    [
+     6.927596542618018e-06,
+     6.927596542618018e-06
+    ],
+    [
+     7.029010994399949e-06,
+     7.029010994399949e-06
+    ]
+   ],
+   "noisy_chain_sd": [
+    [
+     0.007434015713516504,
+     0.007434015713516504
+    ],
+    [
+     0.007134166847267777,
+     0.007134166847267777
+    ],
+    [
+     0.0071603963188973975,
+     0.0071603963188973975
+    ],
+    [
+     0.007104489039587399,
+     0.007104489039587399
+    ]
+   ],
+   "diagnostic_failure_masked": true
+  },
+  "mixed_control": {
+   "exact_diagnostics": {
+    "converged": true,
+    "failures": [],
+    "parameters": [
+     {
+      "parameter": "expected_points",
+      "passed": true,
+      "rhat_max": 0.9996837150910345,
+      "bulk_ess_min": 3235.256381047647,
+      "tail_ess_min": 2864.9037304637545,
+      "mcse_sd_max": 0.017572089717943464,
+      "constant_coordinates": 0
+     }
+    ],
+    "constants": [],
+    "empty_sites": [],
+    "n_draws": 3200,
+    "n_chains": 4,
+    "divergences": 0
+   },
+   "noisy_diagnostics": {
+    "converged": true,
+    "failures": [],
+    "parameters": [
+     {
+      "parameter": "expected_points",
+      "passed": true,
+      "rhat_max": 1.0004580004318497,
+      "bulk_ess_min": 3142.7526299066503,
+      "tail_ess_min": 2975.1333452037484,
+      "mcse_sd_max": 0.017845915573341097,
+      "constant_coordinates": 0
+     }
+    ],
+    "constants": [],
+    "empty_sites": [],
+    "n_draws": 3200,
+    "n_chains": 4,
+    "divergences": 0
+   },
+   "max_exact_conditional_points_mcse": 0.006999999999998349,
+   "max_exact_conditional_difference_mcse": 0.013999999999996697,
+   "points_mcse_bound": 0.025,
+   "difference_mcse_bound": 0.05,
+   "inherited_conditional_precision_passed": true,
+   "exact_chain_means": [
+    [
+     21.500456411465425,
+     21.499543588534575
+    ],
+    [
+     21.50009182316543,
+     21.49990817683457
+    ],
+    [
+     21.49990478563806,
+     21.50009521436194
+    ],
+    [
+     21.500051039333638,
+     21.499948960666362
+    ]
+   ],
+   "noisy_chain_means": [
+    [
+     21.501354044999974,
+     21.498645955000026
+    ],
+    [
+     21.500139545000014,
+     21.499860454999986
+    ],
+    [
+     21.500081935000008,
+     21.499918064999992
+    ],
+    [
+     21.500359275,
+     21.499640725
+    ]
+   ],
+   "exact_chain_sd": [
+    [
+     0.0067411560618676715,
+     0.0067411560618676715
+    ],
+    [
+     0.006802909549704926,
+     0.006802909549704926
+    ],
+    [
+     0.006699858058560851,
+     0.006699858058560851
+    ],
+    [
+     0.006896511464369152,
+     0.006896511464369152
+    ]
+   ],
+   "noisy_chain_sd": [
+    [
+     0.009837408254689727,
+     0.009837408254689727
+    ],
+    [
+     0.009588615902027926,
+     0.009588615902027926
+    ],
+    [
+     0.009660470878159086,
+     0.009660470878159086
+    ],
+    [
+     0.00958013295621195,
+     0.00958013295621195
+    ]
+   ],
+   "diagnostic_failure_masked": false
+  }
+ },
+ "constructed_traces_sha256": "68f211fb8c2127a44d3f59d675a57ec3fb116bf890ace7e64504f20276c57f8b",
+ "limitations": [
+  "Constructed trace stress case and independent control, not sampler output or evidence about any F1 driver",
+  "The solvable strict-order law uses the original points values but is not the canonical weekend simulator",
+  "Conditional noise bounds and checker thresholds are unchanged; no result establishes convergence of the latent model",
+  "Grouped diagnostic moments and a registered functional-precision procedure are still required for acceptance"
+ ],
+ "finished_at": "2026-10-12T19:00:02.530197+00:00",
+ "seconds": 0.9394451640546322,
+ "process_max_rss_kib": 304672
+}
