@@ -46,6 +46,28 @@
         "docs/overall_summary.md": "456570807f20dafc34fc71bde81a55294a0f752325804555c3fbd2475e0f1b42",
         "contracts/overall.json": "804c3cb2543de91416b73ede82891f7a76a5da69e93804300b4a653703ed1f35"
       }
+    },
+    "runtime": {
+      "source_commit": "ec946129b5f83e3ac231e1fa50be60c884d0bb77",
+      "run": "runtime-run.json",
+      "report": "runtime.xml",
+      "tests": 110,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "source_hashes": {
+        "analysis/overall_simulation_controller.py": "cae650a61d3c0a2bcb5ed2c58a0bb1b3d67dcf6cc56a577e2255ac99c0cfa5b6",
+        "analysis/overall_summary.py": "b226862d7d59b9a7982217258baea3ab329bbf25a53509fff3119949c4f1d522",
+        "analysis/overall_posterior_archive.py": "bcd0a84eeb64393591b0fee77c3422c92b4455d05f4ac3fa65a1ec81fb1a6af0",
+        "analysis/overall_ranking_recovery.py": "a4cd959a80107646afa69609b946e20efda905dc0ad254e2972d27a80a79f5b7",
+        "tests/test_overall_simulation_controller.py": "5d35e97b83e327d4750c911571c4e597c9e724d4100dc0e8510826538464f672",
+        "tests/test_overall_summary.py": "b9093eeeaf28224dc3b874b1cbdef96ea87519dcbd605179a08374855585287d",
+        "tests/test_overall_posterior_archive.py": "8d705f1871cc767941a027c014bfdea85e1bcf85fdf969b2fe9b123eb547d8a5",
+        "tests/test_overall_contract.py": "34ddb89f614895e7c4e48a16f3b3bf8488d828e715fd09bbaf340c45b6f482b3",
+        "docs/overall_simulation_controller.md": "9941c564f97af02f8e40b428f251150ba73fe00c7aaf68ef07a533cfb79bd232",
+        "docs/overall_summary.md": "456570807f20dafc34fc71bde81a55294a0f752325804555c3fbd2475e0f1b42",
+        "contracts/overall.json": "804c3cb2543de91416b73ede82891f7a76a5da69e93804300b4a653703ed1f35"
+      }
     }
   },
   "checks_overlap_do_not_sum": true,
@@ -62,7 +84,8 @@
     "Archive-to-paired-generator-to-summary equality with direct accumulation",
     "Immutable execution directories and preserved interrupted progress",
     "Input mutation, failed fits, incompatible catalogs and invalid unselected archive members",
-    "Refusal of real-data archives at the current synthetic-only development boundary"
+    "Refusal of real-data archives at the current synthetic-only development boundary",
+    "Registered Python, NumPy, bit-generator and platform identities are checked and recorded"
   ],
   "unchanged_from": "e4c6da135cedc431b6fcbd78fc64c86e74e36b1b",
   "unchanged_paths": [
@@ -93,6 +116,9 @@
     "initial.txt": "04d0048544cd235b80857ef53c170c29bcd394509ccf9a5a63a01d8b626fdd9b",
     "initial.xml": "4a3ee5383e3141fbf76526afe6b908fd606a4c7513f03464c0a0729ee47b83ab",
     "run.py": "0ff1bf838adef845065ecfa5f5465635013e77c56e0ce1af732a3ad49ee1fba7",
+    "runtime-run.json": "fc5d983c79ceccf49551f8f9251c66a6ac91e3f54805586db715e3038e91ecdd",
+    "runtime.txt": "b5ecd8ee94717524eb1c2f72388363e20f8a18552993a80313f1b6963399e323",
+    "runtime.xml": "4605b107f7c8d3382b14d5069e639bc5f07337c02b35f2f38ba3064669a08456",
     "stream-encoding.json": "b3b21a7643febc963e4a3e724c003d4b65e8ec52d56b25fd978b176d5cf45969",
     "stream_encoding.py": "a9a11953383787cae5da1591737cedc4fa9cd1a21d2ef71ee7a3ef9ddb90cb60",
     "streams-run.json": "4acd9e4e39041143fdc5a719bafcc23d9a7e23f957c7823d5b488eb19df608a8",

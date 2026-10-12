@@ -1,0 +1,24 @@
+{
+  "source_commit": "ec946129b5f83e3ac231e1fa50be60c884d0bb77",
+  "command": [
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_overall_simulation_controller.py",
+    "tests/test_overall_summary.py",
+    "tests/test_overall_posterior_archive.py",
+    "tests/test_overall_contract.py",
+    "--junitxml=outputs/logs/overall-controller-checks/runtime.xml"
+  ],
+  "started_at": "2026-10-12T17:11:11.172122+00:00",
+  "finished_at": "2026-10-12T17:11:18.149921+00:00",
+  "elapsed_seconds": 7.477431217033882,
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-rb124a364cc3c49f0bb300bcada54c899.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "exit_code": 0,
+  "peak_child_rss_kib": 327524
+}

@@ -120,7 +120,7 @@ the producer/publication requirement.
 
 The [simulation controller](overall_simulation_controller.md) now binds a
 committed protocol to the exact fit receipt, archive, training arrays, catalog,
-reference bytes and source files. It translates circuit names and conditions
+reference bytes, source files and numerical runtime. It translates circuit names and conditions
 using that fit's context ordering and connects matching posterior slices to the
 paired generator and accumulator on a complete fixed block schedule. An existing
 execution directory cannot be overwritten; failures retain their progress and
