@@ -1,0 +1,534 @@
+{
+  "source_commit": "4d8ab5b1740a4424c91d29c4bd539691b95558c9",
+  "baseline_commit": "51b5724da152dc4d7d7624cc65cee6f2523c4b03",
+  "cutoff": "2026-15",
+  "limits": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r46baad49a9a64d5e8f0359587cd7f47d.scope",
+    "memory_max": "3221225472",
+    "cpu_max": "200000 100000"
+  },
+  "source_hashes": {
+    "analysis/overall_track_context_audit.py": "03def66e258d4c779cf70257ed20af32f50cad62b875383ab4a3d46acea282d1",
+    "f1rank/overall/design.py": "acb76be3a2754a2f354a4a70b728c7d17aa2915318a0ff778e6e9ed8f8439092",
+    "f1rank/racepace.py": "2acd02207e5f58aab73752e8f7cec36d1ba31f289313b0cf0b152fd8d6fd8e0c",
+    "f1rank/timeline.py": "15b054ed396ad32460e7f0529db72896d660fc76e0406982cefd417e4fa2f9af"
+  },
+  "table_hashes": {
+    "events": "8ee0985bd11b0962168ac02353b6dee1361ad0526f2a9d4933f901f32016a2f8",
+    "drivers": "0cd1efedc831515d51cce8217a6f6968f1d355be92a91175ef12f52b36c700db",
+    "entries": "b3b39c63dcf372b945a027a639c6d587f961593e1fe391db7fef6a802c580673",
+    "quali_times": "4ca966349ce047fce097c9aae0f71dc411f95998408554bf94e6db01c938b1e6",
+    "race": "150a0ade6f32c82e54d648a2c1d72a382e2c831e3736691c94e9ef6905f9b0f3",
+    "race_laps": "ec207fe6188a5d664b8554bd7f171f2ed30425ed2a5216dc701e67c20ce44d96",
+    "race_weather": "ee5609b61f3a9020c29f6fff9cd68fc05dd21e2607127819e97150c3e63445b5",
+    "race_track_status": "56aa14c2687ca4cc4b748ccc68dbdbd742a8ffddd6f5ef6ff776e921a54fac3c",
+    "timeline": "b6cb2b15a59c2f5fc90ff2648a21cc2adc9351a8f093b1c26333519a49e48922"
+  },
+  "original_design_sha256": "34fcc7707cfae7e6feb1b5e495b2c645958c8203e463b8dc04e93046c8a127f9",
+  "other_cleaning_dependencies_unchanged": true,
+  "original_clean_laps": 122648,
+  "corrected_clean_laps": 122556,
+  "original_clean_events": 139,
+  "corrected_clean_events": 139,
+  "removed": [
+    {
+      "event_id": "2018-19",
+      "driver_id": "bottas",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "brendon_hartley",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "ericsson",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "grosjean",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "hamilton",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "hulkenberg",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "kevin_magnussen",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "leclerc",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "max_verstappen",
+      "lap_number": 7.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "ocon",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "perez",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "raikkonen",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "ricciardo",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "sainz",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "sirotkin",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "stroll",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "vandoorne",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "vettel",
+      "lap_number": 6.0
+    },
+    {
+      "event_id": "2019-08",
+      "driver_id": "albon",
+      "lap_number": 50.0
+    },
+    {
+      "event_id": "2019-08",
+      "driver_id": "bottas",
+      "lap_number": 51.0
+    },
+    {
+      "event_id": "2019-08",
+      "driver_id": "giovinazzi",
+      "lap_number": 50.0
+    },
+    {
+      "event_id": "2019-08",
+      "driver_id": "hamilton",
+      "lap_number": 52.0
+    },
+    {
+      "event_id": "2019-08",
+      "driver_id": "kevin_magnussen",
+      "lap_number": 50.0
+    },
+    {
+      "event_id": "2019-08",
+      "driver_id": "kubica",
+      "lap_number": 49.0
+    },
+    {
+      "event_id": "2019-08",
+      "driver_id": "kvyat",
+      "lap_number": 50.0
+    },
+    {
+      "event_id": "2019-08",
+      "driver_id": "leclerc",
+      "lap_number": 51.0
+    },
+    {
+      "event_id": "2019-08",
+      "driver_id": "max_verstappen",
+      "lap_number": 51.0
+    },
+    {
+      "event_id": "2019-08",
+      "driver_id": "perez",
+      "lap_number": 50.0
+    },
+    {
+      "event_id": "2019-08",
+      "driver_id": "russell",
+      "lap_number": 49.0
+    },
+    {
+      "event_id": "2019-08",
+      "driver_id": "sainz",
+      "lap_number": 51.0
+    },
+    {
+      "event_id": "2019-08",
+      "driver_id": "stroll",
+      "lap_number": 50.0
+    },
+    {
+      "event_id": "2021-22",
+      "driver_id": "bottas",
+      "lap_number": 38.0
+    },
+    {
+      "event_id": "2021-22",
+      "driver_id": "gasly",
+      "lap_number": 38.0
+    },
+    {
+      "event_id": "2021-22",
+      "driver_id": "hamilton",
+      "lap_number": 39.0
+    },
+    {
+      "event_id": "2021-22",
+      "driver_id": "latifi",
+      "lap_number": 37.0
+    },
+    {
+      "event_id": "2021-22",
+      "driver_id": "leclerc",
+      "lap_number": 38.0
+    },
+    {
+      "event_id": "2021-22",
+      "driver_id": "max_verstappen",
+      "lap_number": 38.0
+    },
+    {
+      "event_id": "2021-22",
+      "driver_id": "mick_schumacher",
+      "lap_number": 37.0
+    },
+    {
+      "event_id": "2021-22",
+      "driver_id": "norris",
+      "lap_number": 38.0
+    },
+    {
+      "event_id": "2021-22",
+      "driver_id": "ocon",
+      "lap_number": 38.0
+    },
+    {
+      "event_id": "2021-22",
+      "driver_id": "perez",
+      "lap_number": 38.0
+    },
+    {
+      "event_id": "2021-22",
+      "driver_id": "ricciardo",
+      "lap_number": 38.0
+    },
+    {
+      "event_id": "2021-22",
+      "driver_id": "sainz",
+      "lap_number": 38.0
+    },
+    {
+      "event_id": "2021-22",
+      "driver_id": "vettel",
+      "lap_number": 38.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "albon",
+      "lap_number": 21.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "alonso",
+      "lap_number": 21.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "bottas",
+      "lap_number": 21.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "gasly",
+      "lap_number": 21.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "hamilton",
+      "lap_number": 21.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "kevin_magnussen",
+      "lap_number": 21.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "latifi",
+      "lap_number": 21.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "leclerc",
+      "lap_number": 21.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "max_verstappen",
+      "lap_number": 22.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "norris",
+      "lap_number": 21.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "ocon",
+      "lap_number": 21.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "ricciardo",
+      "lap_number": 21.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "russell",
+      "lap_number": 21.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "stroll",
+      "lap_number": 21.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "tsunoda",
+      "lap_number": 21.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "vettel",
+      "lap_number": 21.0
+    },
+    {
+      "event_id": "2022-09",
+      "driver_id": "zhou",
+      "lap_number": 21.0
+    },
+    {
+      "event_id": "2022-11",
+      "driver_id": "leclerc",
+      "lap_number": 61.0
+    },
+    {
+      "event_id": "2022-11",
+      "driver_id": "stroll",
+      "lap_number": 59.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "alonso",
+      "lap_number": 13.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "bottas",
+      "lap_number": 13.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "de_vries",
+      "lap_number": 13.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "gasly",
+      "lap_number": 13.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "hamilton",
+      "lap_number": 13.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "kevin_magnussen",
+      "lap_number": 13.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "latifi",
+      "lap_number": 13.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "max_verstappen",
+      "lap_number": 14.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "mick_schumacher",
+      "lap_number": 13.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "norris",
+      "lap_number": 13.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "ocon",
+      "lap_number": 13.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "perez",
+      "lap_number": 13.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "ricciardo",
+      "lap_number": 13.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "sainz",
+      "lap_number": 13.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "stroll",
+      "lap_number": 13.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "tsunoda",
+      "lap_number": 13.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "zhou",
+      "lap_number": 13.0
+    },
+    {
+      "event_id": "2025-19",
+      "driver_id": "albon",
+      "lap_number": 9.0
+    },
+    {
+      "event_id": "2025-19",
+      "driver_id": "alonso",
+      "lap_number": 9.0
+    },
+    {
+      "event_id": "2025-19",
+      "driver_id": "antonelli",
+      "lap_number": 9.0
+    },
+    {
+      "event_id": "2025-19",
+      "driver_id": "bearman",
+      "lap_number": 9.0
+    },
+    {
+      "event_id": "2025-19",
+      "driver_id": "bortoleto",
+      "lap_number": 9.0
+    },
+    {
+      "event_id": "2025-19",
+      "driver_id": "colapinto",
+      "lap_number": 9.0
+    },
+    {
+      "event_id": "2025-19",
+      "driver_id": "gasly",
+      "lap_number": 9.0
+    },
+    {
+      "event_id": "2025-19",
+      "driver_id": "hadjar",
+      "lap_number": 9.0
+    },
+    {
+      "event_id": "2025-19",
+      "driver_id": "hulkenberg",
+      "lap_number": 9.0
+    },
+    {
+      "event_id": "2025-19",
+      "driver_id": "lawson",
+      "lap_number": 9.0
+    },
+    {
+      "event_id": "2025-19",
+      "driver_id": "max_verstappen",
+      "lap_number": 10.0
+    },
+    {
+      "event_id": "2025-19",
+      "driver_id": "ocon",
+      "lap_number": 9.0
+    },
+    {
+      "event_id": "2025-19",
+      "driver_id": "russell",
+      "lap_number": 9.0
+    },
+    {
+      "event_id": "2025-19",
+      "driver_id": "stroll",
+      "lap_number": 9.0
+    },
+    {
+      "event_id": "2025-19",
+      "driver_id": "tsunoda",
+      "lap_number": 9.0
+    }
+  ],
+  "added": [
+    {
+      "event_id": "2018-19",
+      "driver_id": "hamilton",
+      "lap_number": 4.0
+    },
+    {
+      "event_id": "2018-19",
+      "driver_id": "ricciardo",
+      "lap_number": 4.0
+    },
+    {
+      "event_id": "2022-16",
+      "driver_id": "max_verstappen",
+      "lap_number": 11.0
+    }
+  ],
+  "shared_laps_with_changed_transformed_pace": 5101,
+  "max_absolute_transformed_pace_difference": 0.06027350028359563,
+  "elapsed_seconds": 3.0264892210252583,
+  "peak_rss_kib": 695304,
+  "real_predictions_scored": false,
+  "downstream_regeneration_required": true,
+  "publication_allowed": false
+}
