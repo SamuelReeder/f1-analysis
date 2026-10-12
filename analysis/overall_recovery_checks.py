@@ -53,7 +53,7 @@ def generate_with_parameters(case, seed):
                 truth_key=arrays_digest({"truth": truth}))
 
 
-def quantity_specs(blocks, catalog):
+def quantity_specs(blocks, catalog, *, ranking_protocol=None):
     """All declared current-field contrasts and contexts, selected without values."""
     field, indices = catalog["field"], catalog["field_entries"]
     if len(field) != len(indices) or len(field) < 2 or len(set(field)) != len(field):
@@ -76,10 +76,14 @@ def quantity_specs(blocks, catalog):
             result.append(dict(id=json.dumps([site, "context", index], separators=(",", ":")),
                                site=site, indices=[index]))
     result.extend(dict(id="likelihood:" + site, site=site, likelihood=True) for site in (*OBSERVATIONS, "joint"))
+    if ranking_protocol is not None:
+        from analysis.overall_ranking_recovery import specs, validate_protocol
+        validate_protocol(ranking_protocol, field_size=len(field), n_contexts=len(o["context_circuit"]))
+        result.extend(specs(field))
     return result
 
 
-def quantity_values(blocks, catalog, parameters):
+def quantity_values(blocks, catalog, parameters, *, ranking_protocol=None, with_numerics=False):
     """Evaluate the SAME generated responses at truth or a posterior parameter.
 
     The joint-likelihood quantity sums observation factors, not priors. Supplying
@@ -110,7 +114,12 @@ def quantity_values(blocks, catalog, parameters):
             value = np.asarray(trace[spec["site"]]["value"])[spec["indices"]]
             value = value[0] - value[1] if len(value) == 2 else value[0]
         values[spec["id"]] = float(_finite(value, spec["id"]))
-    return values
+    numerics = None
+    if ranking_protocol is not None:
+        from analysis.overall_ranking_recovery import SITES, from_states
+        extra, numerics = from_states({s: trace[s]["value"] for s in SITES.values()}, catalog, ranking_protocol)
+        values.update(extra)
+    return (values, numerics) if with_numerics else values
 
 
 def rank_statistic(draws, truth, *, tie_uniform):
@@ -170,7 +179,7 @@ def recovery_intervals(generated, posterior):
     return rows
 
 
-def evaluate(generated, posterior, *, study_id, randomization_seed):
+def evaluate(generated, posterior, *, study_id, randomization_seed, ranking_protocol=None):
     """One value-independent draw per chain, shared across every test quantity.
 
     This avoids using correlated iterations within a chain as independent SBC
@@ -202,17 +211,27 @@ def evaluate(generated, posterior, *, study_id, randomization_seed):
             for start in range(0, shape[1], 128):
                 _finite(values[chain, start:start + 128], name)
     blocks, catalog = generated["blocks"], generated["catalog"]
-    truth = quantity_values(blocks, catalog, truth_parameters)
-    samples = [quantity_values(blocks, catalog,
-        {name: np.asarray(posterior[name])[chain, draw] for name in truth_parameters})
+    quantity_specs(blocks, catalog, ranking_protocol=ranking_protocol)
+    truth, true_numerics = quantity_values(blocks, catalog, truth_parameters,
+        ranking_protocol=ranking_protocol, with_numerics=True)
+    evaluated = [quantity_values(blocks, catalog,
+        {name: np.asarray(posterior[name])[chain, draw] for name in truth_parameters},
+        ranking_protocol=ranking_protocol, with_numerics=True)
         for chain, draw in enumerate(selected)]
+    samples = [value for value, _ in evaluated]
+    numerics = ([dict(role="truth", numerics=true_numerics)] +
+        [dict(role="posterior", chain=chain, draw=int(selected[chain]), numerics=report)
+         for chain, (_, report) in enumerate(evaluated)]) if ranking_protocol is not None else []
+    precise = all(row["numerics"]["points_precision_passed"] for row in numerics)
     ranks = {}
     for name, value in truth.items():
         random = _rng(randomization_seed, [study_id, "tie", name]).random()
         ranks[name] = rank_statistic([sample[name] for sample in samples], value, tie_uniform=random)
         ranks[name]["truth"] = value
     return dict(study_id=study_id, case=generated["case"], generation_seed=generated["seed"],
-        role=generated["role"], state="evaluated", arrays_key=generated["arrays_key"],
+        role=generated["role"], state="evaluated" if precise else "failed_evaluation", arrays_key=generated["arrays_key"],
+        evaluation_failure=None if precise else "ranking_functional_simulation_precision",
+        ranking_numerics=numerics,
         quantities=ranks, selection_policy="one_draw_per_chain", randomization_seed=randomization_seed,
         recovery_intervals=recovery_intervals(generated, posterior),
         selected_indices=[[chain, int(draw)] for chain, draw in enumerate(selected)],
@@ -247,6 +266,11 @@ def validate_inventory(registration):
         raise ValueError("Every case needs a fixed quantity inventory")
     if any("likelihood:joint" not in ids for ids in expected.values()):
         raise ValueError("Data-dependent joint likelihood must be a required quantity")
+    ranking = registration.get("ranking_functionals")
+    if ranking is not None and (not isinstance(ranking, dict) or set(ranking) != {"source_sha256", "by_case"}
+            or not isinstance(ranking["by_case"], dict) or set(ranking["by_case"]) != set(ROLES)
+            or not isinstance(ranking["source_sha256"], str) or len(ranking["source_sha256"]) != 64):
+        raise ValueError("Ranking functionals require a fixed source and every case protocol")
     if (registration.get("selection_policy") != "one_draw_per_chain"
             or type(registration.get("randomization_seed")) is not int or registration["randomization_seed"] < 0):
         raise ValueError("Unregistered draw-selection policy")
@@ -267,11 +291,19 @@ def evaluate_checked(generated, run_dir, registration_path, *, study_id):
     from f1rank.artifacts import digest
     registration = committed_registration(registration_path)
     validate_inventory(registration)
+    ranking = registration.get("ranking_functionals")
+    ranking_protocol, ranking_path = None, None
+    if ranking is not None:
+        from analysis import overall_ranking_recovery
+        ranking_path = Path(overall_ranking_recovery.__file__)
+        if digest(ranking_path) != ranking["source_sha256"]:
+            raise ValueError("Ranking functionals use unregistered source")
+        ranking_protocol = ranking["by_case"][generated["case"]]
     spec = registration["synthetic"].get(study_id)
     if spec != dict(case=generated["case"], seed=generated["seed"], role=generated["role"]):
         raise ValueError("Generated case is not the registered replicate")
     if set(registration["quantities_by_case"][generated["case"]]) != {
-            s["id"] for s in quantity_specs(generated["blocks"], generated["catalog"])}:
+            s["id"] for s in quantity_specs(generated["blocks"], generated["catalog"], ranking_protocol=ranking_protocol)}:
         raise ValueError("Registration omits or changes the required model quantities")
     evaluator_sha = digest(Path(__file__))
     if registration.get("evaluator_sha256") != evaluator_sha:
@@ -289,12 +321,14 @@ def evaluate_checked(generated, run_dir, registration_path, *, study_id):
                 or receipt["settings"] != registration["fit_settings"]):
             raise ValueError("Posterior belongs to a different experiment")
         result = evaluate(generated, posterior, study_id=study_id,
-                          randomization_seed=registration["randomization_seed"])
+                          randomization_seed=registration["randomization_seed"], ranking_protocol=ranking_protocol)
         result.update(fit_verified=True, run_key=receipt["run_key"],
                       registration_sha256=registration_sha, evaluator_sha256=evaluator_sha)
     # The archive context rechecks immutability before this result can escape.
     if digest(registration_path) != registration_sha or digest(Path(__file__)) != evaluator_sha:
         raise ValueError("Recovery registration or evaluator changed during evaluation")
+    if ranking_path is not None and digest(ranking_path) != ranking["source_sha256"]:
+        raise ValueError("Ranking functional source changed during evaluation")
     return result
 
 
@@ -336,6 +370,22 @@ def summarize(records, registration, *, registration_sha256):
             if (result.get("posterior_draws") != chains or type(result.get("rank")) is not int
                     or not 0 <= result["rank"] <= chains):
                 raise ValueError("Invalid rank support")
+        ranking = registration.get("ranking_functionals")
+        if ranking is not None:
+            policy = ranking["by_case"][spec["case"]]
+            protocol_sha = hashlib.sha256(json.dumps(policy, sort_keys=True).encode()).hexdigest()
+            reports = row.get("ranking_numerics", [])
+            if (len(reports) != chains + 1 or reports[0].get("role") != "truth"
+                    or any(r.get("role") != "posterior" or r.get("chain") != c
+                           for c, r in enumerate(reports[1:]))):
+                raise ValueError("Missing truth or posterior ranking precision reports")
+            for r in reports:
+                info = r["numerics"]
+                if info.get("protocol_sha256") != protocol_sha:
+                    raise ValueError("Ranking precision uses a different protocol")
+                if info.get("points_precision_passed") is not True:
+                    problems.append(dict(study=identity, reason="ranking_functional_simulation_precision"))
+                    break
     complete = not problems
     terminal = {"evaluated", "failed_generation", "failed_fit", "failed_evaluation"}
     result = dict(all_required_processed=all(s in indexed and indexed[s].get("state") in terminal for s in planned),

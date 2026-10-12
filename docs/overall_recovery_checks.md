@@ -80,6 +80,13 @@ that study. Resource measurements, the unresolved numerical case, expected-point
 and ranking recovery, chronological predictive comparisons and prospective
 evidence remain required by the plan.
 
+The [ranking-functional extension](overall_ranking_recovery.md) now connects
+known joint parameter values to the existing equal-car simulator. A future
+registration can require fixed finite-simulation points and rank quantities for
+every case, together with their numerical-error reports. This extension supplies
+neither exact expected-point recovery nor close-rank precision; it preserves the
+simulator's unresolved scientific assumptions and failure conditions.
+
 Software fixtures use explicit generated values and cache-format receipts. They
 are not fitted evidence, including when a fixture exercises the successful
 archive-reader path. Existing stale-publication failures also remain open; this

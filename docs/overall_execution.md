@@ -244,3 +244,12 @@ earlier development output. It includes exact probability fixtures, joint-state
 interval checks and archive/registration mismatch rejection. Model inputs and
 the pending proposal remain unchanged. No MCMC or full SBC study was run, and
 the previous full-suite publication failures remain unresolved.
+
+The [ranking-functional extension](overall_ranking_recovery.md) connects known
+truths and joint posterior parameters to the existing common-scenario simulator.
+It reports fixed finite-simulation points, paired differences and shared ranks,
+with a bounded-error check that cannot pass from an accidentally constant tiny
+sample. Registered functionals require matching source and complete numerical
+reports; precision failures remain failed evaluations. This is machinery for
+the unfinished study, not an accepted ranking. Exact-target sensitivity, full
+recovery, weekend assumptions, predictive evidence and rollout remain open.
