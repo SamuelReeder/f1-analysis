@@ -1,0 +1,22 @@
+{
+  "source_commit": "6c7668eb443d11d1ebc073dd7cf102787996191f",
+  "recorded_at": "2026-10-12T07:18:28.813666+00:00",
+  "inputs": {
+    "data/processed/race_weather.parquet": "ee5609b61f3a9020c29f6fff9cd68fc05dd21e2607127819e97150c3e63445b5",
+    "data/processed/race.parquet": "150a0ade6f32c82e54d648a2c1d72a382e2c831e3736691c94e9ef6905f9b0f3",
+    "data/processed/race_laps.parquet": "ec207fe6188a5d664b8554bd7f171f2ed30425ed2a5216dc701e67c20ce44d96",
+    "f1rank/overall/design.py": "b903e978f60378a573fc31beb88a49b026e75c9e59ca5015245c672772aa98ed",
+    "tests/test_overall_missing_weather.py": "e1f72e2ac6e1af0a09863060ff0891c7f15d73bc65b6a723b707f2b2ee6e3f40"
+  },
+  "scope": "Missing-weather data boundary audit only; no fit or predictive score was run.",
+  "rainfall_dtype": "bool",
+  "weather_events": 187,
+  "all_null_rainfall_events": [],
+  "affected_current_outcome_context_events": [],
+  "context_events_without_weather_rows": [
+    "2018-14"
+  ],
+  "synthetic_regressions": "before-fix.xml",
+  "source_correction_pending": true,
+  "explanation": "The regression fixtures show that all-null rows are collapsed to false by groupby.any. The intended policy already excludes unknown weather. Source remains frozen while the registered numerical profile runs."
+}

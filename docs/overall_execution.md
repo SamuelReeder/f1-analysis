@@ -15,7 +15,7 @@ open until the full acceptance checklist has direct evidence.
 | Coherent weekend simulation | Student-t elimination, current total race pace, shared weekend uncertainty | Common operations/conditions calibration, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Classification, points, race/qualifying countback and exchangeable-tie fixtures | Final complete event-rule fixtures and calibrated end-to-end simulation |
 | Ability/outcome/numerical uncertainty | Nested simulation, MCSE and rank/ESS diagnostics | Check ranking functionals under converged posteriors and fixed simulation precision |
-| Chronological development comparison | Plan defines information horizons and baseline roles | Freeze all folds, arms, primary metrics, calibration and stopping rules; run every fold |
+| Chronological development comparison | Plan defines information horizons and baseline roles; `overall_scoring_contract.json` and blind scoring utilities preserve joint draws, required events and the inherited primary comparison | Complete forecast design and baseline implementations; freeze event inventory, calibration and stopping rules; run every fold |
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence, common field and matching explanation draws/scenario | Producer/export, pairwise comparisons, and matching component explanations from accepted draws; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
@@ -59,3 +59,16 @@ URL and passed the browser suite on committed source. Earlier test-harness
 failures are retained alongside the corrected run. The dependency advisories and
 post-update audit are also preserved. These checks do not validate the model,
 replace an end-to-end publishing run, or establish intended-runner readiness.
+
+The [scoring contract](overall_scoring.md) defines arithmetic and complete-event
+comparison safeguards, without authorizing fitting or setting a calibration gate.
+Its synthetic checks are separate from the registered computational profile.
+
+A data-boundary regression has reproduced an unknown-weather bug: an event whose
+rainfall rows are all null is treated as dry by the current aggregation. The
+intended exclusion policy is already documented in the candidate contract.
+`development/weather-boundary-checks/` preserves the failing checks and an audit
+of the committed weather inputs. The fix is pending completion of the live
+profile; model source must stay frozen until then, and the correction requires
+regeneration with the earlier results preserved. This unresolved bug prevents a
+claim that the successor's full software acceptance is complete.
