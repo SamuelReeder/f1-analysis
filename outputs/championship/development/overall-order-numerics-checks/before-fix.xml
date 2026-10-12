@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="8" time="3.900" timestamp="2026-10-12T06:34:19.192285-04:00" hostname="DESKTOP-M9I22TH"><testcase classname="tests.test_overall_order_numerics" name="test_equal_strength_order_has_known_probability_with_padding[0.0]" time="0.143" /><testcase classname="tests.test_overall_order_numerics" name="test_equal_strength_order_has_known_probability_with_padding[-2000000000.0]" time="0.001"><failure message="AssertionError: &#10;Not equal to tolerance rtol=1e-06, atol=1e-06&#10;&#10;Mismatched elements: 1 / 1 (100%)&#10;Mismatch at index:&#10; [0]: -3000000000.0 (ACTUAL), -1.7917594692280554 (DESIRED)&#10;Max absolute difference among violations: 3.e+09&#10;Max relative difference among violations: 1.67433188e+09&#10; ACTUAL: array([-3.e+09], dtype=float32)&#10; DESIRED: array([-1.791759])">offset = -2000000000.0
+
+    @pytest.mark.parametrize("offset", [0., -2e9, 2e9])
+    def test_equal_strength_order_has_known_probability_with_padding(offset):
+        strength = jnp.full((1, 5), offset)
+        mask = jnp.array([[True, True, True, False, False]])
+        actual = plackett_luce(strength, mask)
+&gt;       np.testing.assert_allclose(actual, [-math.lgamma(4)], rtol=1e-6, atol=1e-6)
+E       AssertionError: 
+E       Not equal to tolerance rtol=1e-06, atol=1e-06
+E       
+E       Mismatched elements: 1 / 1 (100%)
+E       Mismatch at index:
+E        [0]: -3000000000.0 (ACTUAL), -1.7917594692280554 (DESIRED)
+E       Max absolute difference among violations: 3.e+09
+E       Max relative difference among violations: 1.67433188e+09
+E        ACTUAL: array([-3.e+09], dtype=float32)
+E        DESIRED: array([-1.791759])
+
+tests/test_overall_order_numerics.py:19: AssertionError</failure></testcase><testcase classname="tests.test_overall_order_numerics" name="test_equal_strength_order_has_known_probability_with_padding[2000000000.0]" time="0.001"><failure message="AssertionError: &#10;Not equal to tolerance rtol=1e-06, atol=1e-06&#10;&#10;Mismatched elements: 1 / 1 (100%)&#10;Mismatch at index:&#10; [0]: 0.0 (ACTUAL), -1.7917594692280554 (DESIRED)&#10;Max absolute difference among violations: 1.79175947&#10;Max relative difference among violations: 1.&#10; ACTUAL: array([0.], dtype=float32)&#10; DESIRED: array([-1.791759])">offset = 2000000000.0
+
+    @pytest.mark.parametrize("offset", [0., -2e9, 2e9])
+    def test_equal_strength_order_has_known_probability_with_padding(offset):
+        strength = jnp.full((1, 5), offset)
+        mask = jnp.array([[True, True, True, False, False]])
+        actual = plackett_luce(strength, mask)
+&gt;       np.testing.assert_allclose(actual, [-math.lgamma(4)], rtol=1e-6, atol=1e-6)
+E       AssertionError: 
+E       Not equal to tolerance rtol=1e-06, atol=1e-06
+E       
+E       Mismatched elements: 1 / 1 (100%)
+E       Mismatch at index:
+E        [0]: 0.0 (ACTUAL), -1.7917594692280554 (DESIRED)
+E       Max absolute difference among violations: 1.79175947
+E       Max relative difference among violations: 1.
+E        ACTUAL: array([0.], dtype=float32)
+E        DESIRED: array([-1.791759])
+
+tests/test_overall_order_numerics.py:19: AssertionError</failure></testcase><testcase classname="tests.test_overall_order_numerics" name="test_widely_separated_groups_retain_uncertainty_within_a_tied_suffix" time="0.104"><failure message="AssertionError: &#10;Not equal to tolerance rtol=1e-06, atol=1e-06&#10;&#10;Mismatched elements: 1 / 1 (100%)&#10;Mismatch at index:&#10; [0]: 0.0 (ACTUAL), -0.6931471805599453 (DESIRED)&#10;Max absolute difference among violations: 0.69314718&#10;Max relative difference among violations: 1.&#10; ACTUAL: array([0.], dtype=float32)&#10; DESIRED: array([-0.693147])">def test_widely_separated_groups_retain_uncertainty_within_a_tied_suffix():
+        strength = jnp.array([[1e9, 0., -1e9, -1e9]])
+        actual = plackett_luce(strength, jnp.ones_like(strength, bool))
+&gt;       np.testing.assert_allclose(actual, [-np.log(2.)], rtol=1e-6, atol=1e-6)
+E       AssertionError: 
+E       Not equal to tolerance rtol=1e-06, atol=1e-06
+E       
+E       Mismatched elements: 1 / 1 (100%)
+E       Mismatch at index:
+E        [0]: 0.0 (ACTUAL), -0.6931471805599453 (DESIRED)
+E       Max absolute difference among violations: 0.69314718
+E       Max relative difference among violations: 1.
+E        ACTUAL: array([0.], dtype=float32)
+E        DESIRED: array([-0.693147])
+
+tests/test_overall_order_numerics.py:25: AssertionError</failure></testcase><testcase classname="tests.test_overall_order_numerics" name="test_padding_and_empty_panels_have_no_probability_mass_or_gradient" time="0.928" /><testcase classname="tests.test_overall_order_numerics" name="test_shifted_equal_strength_gradients_match_the_analytical_score" time="1.069"><failure message="AssertionError: &#10;Not equal to tolerance rtol=2e-06, atol=2e-06&#10;&#10;Mismatched elements: 3 / 5 (60%)&#10;Mismatch at indices:&#10; [0, 0]: 1.0 (ACTUAL), 0.6666666666666667 (DESIRED)&#10; [0, 1]: 1.0 (ACTUAL), 0.16666666666666674 (DESIRED)&#10; [0, 2]: 1.0 (ACTUAL), -0.8333333333333333 (DESIRED)&#10;Max absolute difference among violations: 1.83333333&#10;Max relative difference among violations: 5.&#10; ACTUAL: array([[1., 1., 1., 0., 0.]], dtype=float32)&#10; DESIRED: array([[ 0.666667,  0.166667, -0.833333,  0.      ,  0.      ]])">def test_shifted_equal_strength_gradients_match_the_analytical_score():
+        mask = jnp.array([[True, True, True, False, False]])
+        expected = np.array([[1 - 1/3, 1 - 1/3 - 1/2, 1 - 1/3 - 1/2 - 1, 0., 0.]])
+        for offset in (0., -2e9, 2e9):
+            s = jnp.full(mask.shape, offset)
+            gradient = jax.grad(lambda v:plackett_luce(v, mask).sum())(s)
+&gt;           np.testing.assert_allclose(gradient, expected, atol=2e-6, rtol=2e-6)
+E           AssertionError: 
+E           Not equal to tolerance rtol=2e-06, atol=2e-06
+E           
+E           Mismatched elements: 3 / 5 (60%)
+E           Mismatch at indices:
+E            [0, 0]: 1.0 (ACTUAL), 0.6666666666666667 (DESIRED)
+E            [0, 1]: 1.0 (ACTUAL), 0.16666666666666674 (DESIRED)
+E            [0, 2]: 1.0 (ACTUAL), -0.8333333333333333 (DESIRED)
+E           Max absolute difference among violations: 1.83333333
+E           Max relative difference among violations: 5.
+E            ACTUAL: array([[1., 1., 1., 0., 0.]], dtype=float32)
+E            DESIRED: array([[ 0.666667,  0.166667, -0.833333,  0.      ,  0.      ]])
+
+tests/test_overall_order_numerics.py:42: AssertionError</failure></testcase><testcase classname="tests.test_overall_order_numerics" name="test_noncontiguous_mask_agrees_with_deleting_unobserved_entries" time="0.262" /><testcase classname="tests.test_overall_order_numerics" name="test_all_small_field_permutations_normalise" time="0.127" /></testsuite></testsuites>
