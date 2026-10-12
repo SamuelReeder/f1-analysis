@@ -41,3 +41,8 @@ boundaries, insufficient racing laps, classification/countback distance,
 classified retirees, dead heats across the points cutoff, field permutations,
 championship countback and invalid inputs. Software fixtures are distinct from
 posterior recovery, real-data calibration and evidence of driver ability.
+
+The [verification record](../outputs/championship/development/overall-event-rule-checks/verification.json)
+links the committed implementation to the targeted and full local Python test
+reports. These checks passed under the recorded resource caps. They do not
+establish intended-runner resource use or change the failed profile's status.

@@ -1,0 +1,48 @@
+{
+  "source_commit": "dd7df3c869cb93fb41e21c9a3b938631dbb04b77",
+  "recorded_at": "2026-10-12T08:02:04.655924+00:00",
+  "rules_id": "fia-f1-2026-a03-b09-gp",
+  "commands": {
+    "targeted": "python -m pytest tests/test_overall_event_rules.py tests/test_overall.py tests/test_overall_contract.py -q",
+    "full": "python -m pytest -q"
+  },
+  "resources": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "execution": "Sequential systemd user scopes"
+  },
+  "full_suite_exit_code": 0,
+  "reports": {
+    "targeted.xml": {
+      "tests": 59,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 18.892,
+      "sha256": "7f93cb73326f373504ad09e7220e32126ca804c01b25e36022b4eb7a56d1e47e"
+    },
+    "full-software.xml": {
+      "tests": 266,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 64.751,
+      "sha256": "354d9dc05c59145843ea0c09e3e5212bfe3cd00e71dd355c1dd57ddd6c262c1c"
+    }
+  },
+  "source_hashes": {
+    "f1rank/overall/scoring.py": "8fc3051432ff7f5e00038a336923fe7c1fce114115b3a87b889079728db33aae",
+    "f1rank/overall/simulation.py": "ed8020ba07aa6a5454f36722aed35c4fc15fb67a47e4c9fc8fb3fcf8214772fb",
+    "tests/test_overall.py": "b3bb033b792f3dc2807be65c82003c87ace6c5fbdc110030b2c0ad1b5b69a338",
+    "tests/test_overall_event_rules.py": "9de6343375bbc02edc95ea5dae46aad1ae6c5c80868e5dba0c6dd73e657191c2",
+    "tests/test_overall_contract.py": "34ddb89f614895e7c4e48a16f3b3bf8488d828e715fd09bbaf340c45b6f482b3",
+    "docs/overall_candidate.md": "2f20b7566102f36a006c9480ffa8dbb8df27a6c10f01710f57279b8eda696c4f",
+    "docs/overall_event_rules.json": "f7c34e2e9104dce25115c5affbc8fe2f5643c493ad5560c8d47b472838c89c4e"
+  },
+  "scope": "Deterministic GP scoring and synthetic simulator integration; the full local Python suite passed. No fit, model recovery, real-data calibration or shortened-event generator is established by these checks.",
+  "model_fit_run": false,
+  "profile_failure_preserved": true,
+  "regeneration_required_before_publication": true,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}
