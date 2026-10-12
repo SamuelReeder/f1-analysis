@@ -224,11 +224,12 @@ numerical study remains pending approval. This supplies no fitted baseline,
 predictive improvement or publication evidence.
 The [race-only verification](../outputs/championship/development/overall-race-only-checks/verification.json)
 records passing focused checks and exact reproduction of the original study's
-observations and truths. Its full local suite fails the publication integration
-checks because `outputs/ratings/manifest.json` still records the previous
+observations and truths. At that revision, its full local suite failed the publication
+integration checks because `outputs/ratings/manifest.json` recorded the previous
 `f1rank/design.py` hash. The source change requires artifact regeneration; no
-manifest is rewritten to hide that dependency and no check is weakened. Fresh
-affected artifacts and a passing full suite remain explicit rollout requirements.
+manifest was rewritten to hide that dependency and no check was weakened. The
+qualifying-only re-export below resolves that dependency; regeneration of other
+affected artifacts remains a rollout requirement.
 
 The [recovery evaluator](overall_recovery_checks.md) prepares all-current-field
 state contrasts and data-dependent likelihood quantities without changing the
@@ -237,13 +238,13 @@ cases, and can consume source-matched immutable archives. Its rank policy uses
 value-independent selections from separate chains and needs a prespecified
 study-size/power justification. This is evaluation machinery, not a completed
 SBC study, accepted inference or a ranking. Full registration, ranking recovery,
-the pending numerical approval and stale-publication regeneration remain open.
+the pending numerical approval and full publication regeneration remain open.
 The [recovery-check verification](../outputs/championship/development/overall-recovery-checks/verification.json)
 records passing focused software tests on committed source and preserves the
 earlier development output. It includes exact probability fixtures, joint-state
 interval checks and archive/registration mismatch rejection. Model inputs and
 the pending proposal remain unchanged. No MCMC or full SBC study was run, and
-the previous full-suite publication failures remain unresolved.
+the previous full-suite publication failures were unresolved at that revision.
 
 The [ranking-functional extension](overall_ranking_recovery.md) connects known
 truths and joint posterior parameters to the existing common-scenario simulator.
@@ -258,7 +259,7 @@ records the passing focused suite and a measured local synthetic workload at
 the reference field/calendar dimensions. It distinguishes conditional simulation
 cost from fitting, full-study and intended-runner resources. No new fit or driver
 table was produced. Model inputs and the pending study are unchanged, and the
-previous stale-export failures remain publication blockers.
+previous stale-export failures were publication blockers at that revision.
 
 Preparing the power analysis identified a missing full-SBC prerequisite:
 independent replicates cannot reuse the numerical profile's common sampling
@@ -295,3 +296,28 @@ probability-roundoff correction leaves the planning choices, rejection regions
 and earliest grid sizes unchanged. No full-study size is selected, no fitted
 SBC ranks were inspected and no gates are relaxed. Feasibility, full registration
 and model acceptance remain open.
+
+## Qualifying export regeneration (2026-10-12)
+
+The [input audit](../outputs/championship/development/overall-qualifying-export-checks/input-audit.json)
+verifies the original qualifying fit's clean source identity, unchanged model and
+sampling functions, exact original data bytes, exact model arrays and state order.
+The empty-qualifying correction does not change this populated qualifying design.
+The normal exporter therefore reused that fit, rechecked convergence and
+regenerated its manifest. No fit was rerun, provenance check bypassed or manifest
+hand-edited. Every ratings table, exported draw file and pairwise comparison is
+byte-identical to the previous export; its immutable snapshot is preserved.
+
+The [verification record](../outputs/championship/development/overall-qualifying-export-checks/verification.json)
+records the full local Python suite: 589 passed, with no failures or skips. Both
+previously failing publication integration checks now pass. The
+[export record](../outputs/championship/development/overall-qualifying-export-checks/export.json)
+records the capped export's elapsed time and peak memory separately from the
+original fit diagnostics. Earlier failed test reports remain historical evidence.
+
+This resolves the qualifying source-manifest dependency only. Other affected
+racing artifacts, the dashboard publication receipt and end-to-end deployment
+checks still require regeneration or validation on the final publication source.
+It does not accept the successor Overall model, resolve its failed numerical
+case, establish calibration or produce a new best-driver ranking. The separate
+coordinate experiment remains pending approval; no push or deployment occurred.

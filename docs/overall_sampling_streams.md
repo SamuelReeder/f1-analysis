@@ -53,8 +53,10 @@ fixtures cannot establish calibration, ranking recovery or publication readiness
 
 The [verification record](../outputs/championship/development/overall-sampling-stream-checks/verification.json)
 links the failing regression, passing focused checks, full local suite and exact
-original-input audit. The full suite still fails the previously recorded
-stale-qualifying-export integration checks. The sampler implementation, base
+original-input audit. At that revision, the full suite failed the previously
+recorded stale-qualifying-export integration checks; the later
+[checked re-export](overall_execution.md#qualifying-export-regeneration-2026-10-12)
+resolves those failures. The sampler implementation, base
 settings, probability-model sources and gates are verified unchanged; only the
 new calibration path uses a separately declared seed inventory. The original
 profile's observations and truths reproduce exactly. Its failure is preserved,
