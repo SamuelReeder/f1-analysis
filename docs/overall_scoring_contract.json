@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "overall-scoring-v1",
+  "purpose": "scoring_definition",
+  "authorizes_fitting": false,
+  "authorizes_publication": false,
+  "candidate_arm": "joint_current",
+  "primary_baseline": "legacy_grid_qualifying",
+  "secondary_baselines": ["grid_only", "current_race_only"],
+  "primary_target": "conditional_running_finish_order",
+  "primary_score": "posterior_predictive_log_probability_per_race",
+  "log_score_orientation": "higher_is_better",
+  "secondary_success_rescues_primary_failure": false,
+  "paired_comparison": {
+    "inherited_from": "f1rank/championship.py:paired_seasons",
+    "resample_unit": "whole_season",
+    "bootstrap_replicates": 2000,
+    "seed": 0,
+    "interval_probability": 0.95,
+    "percentiles": [2.5, 97.5],
+    "minimum_seasons": 3,
+    "rule": "lower_bound_strictly_above_zero"
+  },
+  "ordinal_diagnostics": ["log_probability", "ranked_probability_score", "randomized_probability_integral_transform"],
+  "retirement_diagnostics": ["bernoulli_log_probability", "brier_score"],
+  "probability_sum_absolute_tolerance": 1e-10,
+  "zero_probability_policy": "Keep negative-infinite log scores; never clip or silently omit them. An infinite primary comparison remains unresolved and cannot pass the comparison rule.",
+  "failure_policy": "Account for every required event and arm. Missing, duplicate, failed, mismatched-origin, mismatched-field or future-trained records prevent a complete comparison.",
+  "remaining_registration": ["candidate and baseline implementations", "frozen event inventory", "forecast origins and unknown-condition policy", "calibration acceptance rules", "complete recovery inventory", "independent future horizon and stopping rule"]
+}
