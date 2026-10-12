@@ -23,6 +23,7 @@ from .provenance import ROOT, snapshot, require_snapshot
 FIT_SETTINGS = {"warmup": 800, "samples": 800, "chains": 4, "target_accept": .9,
                 "max_tree_depth": 10, "init_median_samples": 15, "seed": 0}
 RUN_SCHEMA = 1
+MAX_SEED = 2**32 - 1
 
 
 def arrays_digest(blocks):
@@ -35,6 +36,53 @@ def arrays_digest(blocks):
             h.update(f"{block_name}:{name}:{a.dtype.str}:{a.shape}".encode())
             h.update(np.ascontiguousarray(a).tobytes())
     return h.hexdigest()
+
+
+def sampling_seeds(registration):
+    """Separate predeclared SBC streams; preserve the original profile schedule.
+
+    The entire retry inventory is fixed before the first fit. Generation and
+    fitting keys cannot overlap or alias outside the sampler's unsigned key
+    range. This is not a way to change an exhausted profile's seeds.
+    """
+    studies = registration.get("studies")
+    if (not isinstance(studies, list) or not studies
+            or any(not isinstance(s, str) or not s for s in studies)
+            or len(set(studies)) != len(studies)):
+        raise ValueError("Sampling requires a complete unique study inventory")
+    if registration.get("purpose") != "recovery_calibration":
+        if "sampling_seeds" in registration:
+            raise ValueError("Per-study sampling streams are restricted to a new calibration registration")
+        return {study:[FIT_SETTINGS["seed"] + i for i in range(len(RETRY))] for study in studies}
+    declared, synthetic = registration.get("sampling_seeds"), registration.get("synthetic")
+    if (not isinstance(declared, dict) or set(declared) != set(studies)
+            or not isinstance(synthetic, dict) or set(synthetic) != set(studies)):
+        raise ValueError("Calibration requires every generating and sampling seed in advance")
+    used = set()
+    def reserve(seed):
+        if type(seed) is not int or not 0 <= seed <= MAX_SEED or seed in used:
+            raise ValueError("Generation and sampling seeds must be unique valid unsigned keys")
+        used.add(seed)
+    for study in studies:
+        if not isinstance(synthetic[study], dict):
+            raise ValueError("Each calibration replicate needs its generating seed")
+        reserve(synthetic[study].get("seed"))
+    result = {}
+    for study in studies:
+        seeds = declared[study]
+        if not isinstance(seeds, list) or len(seeds) != len(RETRY):
+            raise ValueError("Every fixed retry needs a preregistered sampling seed")
+        for seed in seeds:
+            reserve(seed)
+        result[study] = seeds.copy()
+    return result
+
+
+def study_settings(registration, study):
+    seeds = sampling_seeds(registration)
+    if study not in seeds:
+        raise ValueError("Study is not in the registered inventory")
+    return dict(FIT_SETTINGS, seed=seeds[study][0])
 
 
 def committed_registration(path, root=ROOT):
@@ -53,6 +101,7 @@ def committed_registration(path, root=ROOT):
                      divergences_per_draw_upper=MAX_DIVERGENCE_RATE)
     if registration.get("diagnostics") != numerical:
         raise ValueError("Registered diagnostics do not match the checker")
+    sampling_seeds(registration)
     return registration
 
 
@@ -152,11 +201,13 @@ def run(blocks, catalog, run_dir, registration_path, *, study, synthetic, sample
         raise ValueError("Study is not in the registered inventory")
     if not synthetic and registration.get("purpose") != "real_data_acceptance":
         raise ValueError("This registration cannot authorize real-data fits")
+    seeds = sampling_seeds(registration)[study]
+    base_settings = study_settings(registration, study)
     inputs = snapshot()
     require_clean_inputs(inputs)
     specification = dict(source_key=inputs["key"], arrays_key=arrays_digest(blocks), catalog=catalog,
                          registration_sha256=digest(registration_path), study=study,
-                         synthetic=synthetic, settings=FIT_SETTINGS)
+                         synthetic=synthetic, settings=base_settings)
     run_key = hashlib.sha256(json.dumps(specification, sort_keys=True).encode()).hexdigest()
     if run_dir.exists():
         # A terminal failure is not rerun. An interrupted run is not guessed dead
@@ -164,7 +215,7 @@ def run(blocks, catalog, run_dir, registration_path, *, study, synthetic, sample
         return load_checked(run_dir, run_key)
     run_dir.mkdir(parents=True, exist_ok=False)
     receipt = dict(schema_version=RUN_SCHEMA, run_key=run_key, specification=specification,
-                   source=inputs, catalog=catalog, settings=FIT_SETTINGS, attempts=[],
+                   source=inputs, catalog=catalog, settings=base_settings, attempts=[],
                    state="running", publication_allowed=False,
                    source_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
                    started_at=dt.datetime.now(dt.timezone.utc).isoformat(), pid=os.getpid())
@@ -173,8 +224,8 @@ def run(blocks, catalog, run_dir, registration_path, *, study, synthetic, sample
     try:
         for attempt, (warm, draws, accept) in enumerate(RETRY):
             require_snapshot(inputs)
-            settings = dict(FIT_SETTINGS, warmup=warm * FIT_SETTINGS["warmup"],
-                samples=draws * FIT_SETTINGS["samples"], seed=FIT_SETTINGS["seed"] + attempt,
+            settings = dict(base_settings, warmup=warm * FIT_SETTINGS["warmup"],
+                samples=draws * FIT_SETTINGS["samples"], seed=seeds[attempt],
                 target_accept=accept if accept is not None else FIT_SETTINGS["target_accept"])
             begun = time.monotonic()
             print(json.dumps(dict(study=study, attempt=attempt + 1, state="sampling", settings=settings)), flush=True)

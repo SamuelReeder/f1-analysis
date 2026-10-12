@@ -162,6 +162,7 @@ def test_invalid_truth_or_posterior_cannot_leave_a_selected_success(generated, c
 
 
 def study_fixture(replicates=25):
+    from f1rank.overall.fitting import FIT_SETTINGS, RETRY
     studies, synthetic, records = [], {}, []
     for ci, (case, role) in enumerate(ROLES.items()):
         for index in range(replicates):
@@ -177,7 +178,9 @@ def study_fixture(replicates=25):
     registration = dict(purpose="recovery_calibration", studies=studies, synthetic=synthetic,
         replicates_per_case={case: replicates for case in ROLES},
         quantities_by_case={case: ["theta", "likelihood:joint"] for case in ROLES},
-        fit_settings=dict(chains=4), selection_policy="one_draw_per_chain", randomization_seed=17,
+        fit_settings=FIT_SETTINGS.copy(), selection_policy="one_draw_per_chain", randomization_seed=17,
+        sampling_seeds={s:[len(studies) + i * len(RETRY) + j for j in range(len(RETRY))]
+                        for i, s in enumerate(studies)},
         family_error_probability=.05, recovery_interval_probability=.9)
     return registration, records
 
@@ -261,11 +264,12 @@ def recovery_archive(archive, generated, tmp_path, monkeypatch):
     path = tmp_path / "registration.json"
     path.write_text(json.dumps(reg))
     registration_sha = hashlib.sha256(path.read_bytes()).hexdigest()
+    settings = checks.study_settings(reg, study_id)
     spec = dict(source_key="fixture-source", arrays_key=generated["arrays_key"],
         catalog=generated["catalog"], registration_sha256=registration_sha,
-        study=study_id, synthetic=True, settings=reg["fit_settings"])
+        study=study_id, synthetic=True, settings=settings)
     run_key = hashlib.sha256(json.dumps(spec, sort_keys=True).encode()).hexdigest()
-    receipt = save(posterior_fixture(generated), settings=reg["fit_settings"],
+    receipt = save(posterior_fixture(generated), settings=settings,
         attempts=[dict(samples=3)], catalog=generated["catalog"], specification=spec, run_key=run_key)
     monkeypatch.setattr(checks, "committed_registration", lambda p: json.loads(Path(p).read_text()))
     return directory, path, study_id, copy.deepcopy(receipt)

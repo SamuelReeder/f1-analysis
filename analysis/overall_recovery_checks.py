@@ -11,7 +11,7 @@ from pathlib import Path
 import numpy as np
 from scipy.stats import binomtest
 
-from f1rank.overall.fitting import arrays_digest, committed_registration
+from f1rank.overall.fitting import arrays_digest, committed_registration, sampling_seeds, study_settings
 from f1rank.overall.recovery import SYNTHETIC_CASES, TRUTH_SITES, generate
 
 
@@ -242,6 +242,7 @@ def validate_inventory(registration):
     """A complete, fixed inventory includes stress cases and every prior design."""
     if registration.get("purpose") != "recovery_calibration":
         raise ValueError("The numerical profile is not a recovery/calibration registration")
+    sampling_seeds(registration)
     studies, synthetic = registration.get("studies"), registration.get("synthetic")
     if (not isinstance(studies, list) or not studies or len(set(studies)) != len(studies)
             or not all(isinstance(s, str) and s for s in studies)
@@ -314,11 +315,11 @@ def evaluate_checked(generated, run_dir, registration_path, *, study_id):
         saved = receipt["specification"]
         expected = dict(source_key=receipt["source"]["key"], arrays_key=generated["arrays_key"],
             catalog=generated["catalog"], registration_sha256=registration_sha,
-            study=study_id, synthetic=True, settings=registration["fit_settings"])
+            study=study_id, synthetic=True, settings=study_settings(registration, study_id))
         expected_key = hashlib.sha256(json.dumps(expected, sort_keys=True).encode()).hexdigest()
         if (saved != expected or receipt["run_key"] != expected_key
                 or receipt["catalog"] != generated["catalog"]
-                or receipt["settings"] != registration["fit_settings"]):
+                or receipt["settings"] != expected["settings"]):
             raise ValueError("Posterior belongs to a different experiment")
         result = evaluate(generated, posterior, study_id=study_id,
                           randomization_seed=registration["randomization_seed"], ranking_protocol=ranking_protocol)

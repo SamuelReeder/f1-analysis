@@ -51,6 +51,11 @@ and sensitivity before fitting. Passing convergence diagnostics does not prove
 exact posterior sampling. Likelihood quantities improve the range of checks;
 they do not detect every possible failure.
 
+Independent replicates also need [separate predeclared sampling streams](overall_sampling_streams.md).
+The future calibration registration must list distinct generation and sampling
+keys for every study and retry. Reusing the numerical profile's common seed
+schedule is not a full calibration design. The original profile is unchanged.
+
 The checked archive consumer requires a committed, frozen recovery-calibration
 registration, a complete case/quantity inventory, and the registered evaluator
 source. It verifies the generated-array identity, experiment specification,

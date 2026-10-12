@@ -27,7 +27,7 @@ def audit():
     from f1rank.overall.recovery import generate, TRUTH_SITES
 
     source = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
-    tracked = ["f1rank/design.py", "f1rank/overall/diagnostics.py",
+    tracked = ["f1rank/design.py", "f1rank/overall/diagnostics.py", "f1rank/overall/fitting.py",
         "f1rank/overall/model.py", "f1rank/overall/order.py", "f1rank/overall/recovery.py",
         "f1rank/overall/simulation.py",
         "analysis/overall_observation_kernels.py", "analysis/overall_order_numerics_audit.py",

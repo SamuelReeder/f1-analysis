@@ -292,6 +292,23 @@ profile remains failed and its arrays and truths must still reproduce exactly.
 Updating the pending study's source identity does not grant its outstanding
 approval or authorize a race-only fit.
 
+## Independent sampling streams for full calibration
+
+Dated 2026-10-12, with no fits running. The fixed numerical profile is not a
+full SBC study: reusing its sampling seeds across calibration replicates would
+not supply the required independent inference streams. The fitter now requires
+a complete, distinct generation/sampling seed inventory for a new
+`recovery_calibration` registration. Every retry seed is committed in advance,
+used explicitly and recorded in the receipt; collisions and out-of-range keys
+fail before sampling. The original numerical-profile schedule is unchanged.
+
+This adds a missing experimental-design requirement before any full calibration
+study is registered or fitted. It does not change priors, likelihoods, original
+seeds, numerical thresholds or the retry ladder, and cannot rescue the failed
+profile. The source fingerprint changes; affected evidence needs regeneration.
+The pending coordinate proposal must retain its original observations, truths,
+settings and seeds under the updated fingerprint. Its approval remains pending.
+
 ## Remaining acceptance work
 
 - Complete synthetic recovery and simulation-based calibration, including the
