@@ -1,0 +1,135 @@
+{
+  "recorded_at": "2026-10-12T18:32:57.221551+00:00",
+  "review_source_sha256": "6d71e1481ec8145b55b594e4c6b2fcb674def2b9a102a5c04cdbf8cd2a1182db",
+  "test_source_commit": "dcb364c30b5dc6e7ff50896130a0948d70ac1157",
+  "resources": {
+    "original": {
+      "file": "overall-paired-simulation-resource-checks/resources.json",
+      "sha256": "a83dad1ce2d10bd5b5ce49692bba74b9fbe8dc60a6261c2d4341ac0a5ac48ef8",
+      "source_commit": "ebca96cff91c5ce6acaef403dd166ec6661d511b",
+      "limits": {
+        "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r2682d591003a47fabef77b0c57ac4708.scope",
+        "memory_max": "3221225472",
+        "cpu_max": "200000 100000"
+      },
+      "paired_block_seconds": 300.74536686501233,
+      "accumulation_seconds": 0.04626210796413943,
+      "total_monotonic_seconds": 300.9264580869931,
+      "timestamp_interval_seconds": 273.379239,
+      "process_max_rss_kib": 353952,
+      "input_sha256": "b136cd5dcbd1832ad0a58a13a5d8793e6437c94788b60a6fc328e54b05f59c99",
+      "output_sha256": "8b0e07da6c7d2b1a152cf4f8417068fa53ac0867c36aedc58aec4ac9c31d05ee"
+    },
+    "shared_randomness": {
+      "file": "overall-paired-simulation-resource-checks/optimized/resources.json",
+      "sha256": "f13d0457f05d9da74cc5e6833c59b71033be673a441f042fc8cdbf1a19b5502f",
+      "source_commit": "237fc495fb6fe8dc61dff0dc2b27051a4c6c72be",
+      "limits": {
+        "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r7cde58762b214de3941088b2ba476e6d.scope",
+        "memory_max": "3221225472",
+        "cpu_max": "200000 100000"
+      },
+      "paired_block_seconds": 155.79613651597174,
+      "accumulation_seconds": 0.046888536016922444,
+      "total_monotonic_seconds": 155.97199001995614,
+      "timestamp_interval_seconds": 141.949319,
+      "process_max_rss_kib": 365992,
+      "input_sha256": "b136cd5dcbd1832ad0a58a13a5d8793e6437c94788b60a6fc328e54b05f59c99",
+      "output_sha256": "8b0e07da6c7d2b1a152cf4f8417068fa53ac0867c36aedc58aec4ac9c31d05ee"
+    },
+    "batched_interventions": {
+      "file": "overall-paired-batch-checks/resource/resources.json",
+      "sha256": "7944dd2eca1a0d310254c9e202bcfef0285108cac78c8676797284a2e6c64f37",
+      "source_commit": "dcb364c30b5dc6e7ff50896130a0948d70ac1157",
+      "limits": {
+        "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/f1.slice/run-r77428bd91e27447ab3e804de9f210d82.scope",
+        "memory_max": "3221225472",
+        "cpu_max": "200000 100000"
+      },
+      "paired_block_seconds": 101.36434178700438,
+      "accumulation_seconds": 0.04455949197290465,
+      "total_monotonic_seconds": 101.53398613497848,
+      "timestamp_interval_seconds": 92.518545,
+      "process_max_rss_kib": 369196,
+      "input_sha256": "b136cd5dcbd1832ad0a58a13a5d8793e6437c94788b60a6fc328e54b05f59c99",
+      "output_sha256": "8b0e07da6c7d2b1a152cf4f8417068fa53ac0867c36aedc58aec4ac9c31d05ee"
+    }
+  },
+  "exact_fixed_input_and_complete_output_match": true,
+  "tests": {
+    "file": "connected.xml",
+    "sha256": "1da9d73c49ca4ea555063aad6f1f736212bbe663ffc6d639de2c13d88b8e7908",
+    "tests": 206,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "reported_seconds": 24.065,
+    "process_output": "connected.txt",
+    "process_output_sha256": "ed76970201eb730a397ce78648fa3d9570caea447c01a745c32a621501a22d9c"
+  },
+  "full_repository_suite_rerun": false,
+  "fixed_workload": {
+    "draws": 128,
+    "replicates": 128,
+    "seed": 20261012,
+    "chain": 0,
+    "draw_start": 0,
+    "replicate_start": 0,
+    "explanations": [
+      "qualifying_pace",
+      "total_race_pace",
+      "all"
+    ],
+    "baseline_and_probe_panels": 67,
+    "baseline_seasons": 16384,
+    "baseline_and_probe_seasons": 1097728
+  },
+  "hypothetical_complete_schedules": {
+    "initial": {
+      "posterior_shape": [
+        4,
+        800
+      ],
+      "replicates": 250000,
+      "blocks": 54712,
+      "baseline_seasons": 800000000,
+      "baseline_and_probe_seasons": 53600000000,
+      "executed": false,
+      "conditional_difference_mcse_bound": 0.05
+    },
+    "largest_retry": {
+      "posterior_shape": [
+        4,
+        3200
+      ],
+      "replicates": 250000,
+      "blocks": 195400,
+      "baseline_seasons": 3200000000,
+      "baseline_and_probe_seasons": 214400000000,
+      "executed": false,
+      "conditional_difference_mcse_bound": 0.05
+    }
+  },
+  "recorded_duration_ratio_to_original": 2.9669740025241302,
+  "recorded_duration_ratio_to_shared_randomness": 1.5369915472182931,
+  "checks": [
+    "Replay preserves original qualifying grids, following Gumbels and retirement uniforms in each tested lane",
+    "Changed replay method, shape, degrees of freedom and incomplete/excess requests are rejected",
+    "Complete baseline and all own-driver probe points match the original separate simulator calls",
+    "Existing failure, source, grouped-posterior and summary-controller checks remain passing"
+  ],
+  "fitting_sources_data_and_pending_proposal_unchanged": true,
+  "mcmc_run": false,
+  "full_posterior_workload_executed": false,
+  "simulation_precision_established": false,
+  "scientific_evidence_verified": false,
+  "publication_allowed": false,
+  "full_goal_complete": false,
+  "limitations": [
+    "A local maximum-size synthetic block with zero retirement hazard and full racing distance, not a fitted driver table",
+    "Smaller exact comparisons include retirements, no-points contexts, input permutations, both saved floating precisions and original failures",
+    "Record monotonic durations and UTC intervals separately; earlier records disagree between clocks and no cause is established",
+    "Duration ratios describe only these measured blocks; no full-run or intended-runner runtime is inferred",
+    "Full simulation resources and precision, the failed numerical case, recovery and independent validation remain unresolved"
+  ]
+}

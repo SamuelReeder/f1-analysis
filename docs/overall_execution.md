@@ -590,3 +590,14 @@ these clocks, without an identified cause or a claimed exact wall-clock runtime.
 The resource fixture has zero retirement hazard and explicit full racing
 distance. Smaller exact comparisons exercise retirement behavior; neither
 measurement calibrates those assumptions or supplies accepted driver rankings.
+
+The subsequent [batching record](../outputs/championship/development/overall-paired-batch-checks/verification.json)
+checks a kernel that processes the intervened-driver axis together. It records
+the original qualifying random values and repeats each draw lane's values and
+parameters across that axis. The original qualifying, race-order and full-field
+scoring functions remain in use. Replay verifies the requested method, shape,
+degrees of freedom and complete request inventory. Direct comparisons check
+qualifying grids and the following race/retirement random values, in addition
+to the existing complete season and controller checks. This changes computation
+only; all fixed draws, replicates, events, entrants and explanations remain
+required. Complete-run practicality and scientific acceptance remain open.
