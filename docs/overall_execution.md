@@ -568,10 +568,11 @@ property before Python started; the corrected launcher applies priority to the
 child command, retaining the same memory and CPU caps.
 
 The first [paired kernel](overall_paired_simulation.md) retained the original baseline
-simulator and replays its event randomness for explanations. It shares a
+simulator and replayed its event randomness for explanations. It shared a
 qualifying intervention's grid between the qualifying-only and combined probes,
-and omits their unused championship countback. That version computed every
-explanatory point total through the existing full-field race-order and points functions. The
+and omitted their unused championship countback. That version computed every
+explanatory point total through the existing full-field race-order and points
+functions. The
 summary and controller bind the kernel and its definition in their source
 identities. Fitting sources, data and the pending numerical proposal are unchanged.
 
