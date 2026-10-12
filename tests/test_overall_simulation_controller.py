@@ -194,6 +194,21 @@ def test_failure_preserves_progress_and_does_not_create_partial_summary(case, mo
     assert calls == 2
 
 
+def test_inputs_changed_while_writing_diagnostic_companion_cannot_complete(case, monkeypatch):
+    writer = controller.write_moments
+    def change_after_write(*args, **kwargs):
+        metadata = writer(*args, **kwargs)
+        case.path.write_text(case.path.read_text()+"\n")
+        return metadata
+    monkeypatch.setattr(controller, "write_moments", change_after_write)
+    with pytest.raises(ValueError, match="changed during execution"):
+        execute(case)
+    receipt = json.loads((case.output/"receipt.json").read_text())
+    assert receipt["state"] == "failed_exception"
+    assert (case.output/"diagnostic_moments.npz").exists()
+    assert not (case.output/"summary.json").exists()
+
+
 @pytest.mark.parametrize("change", ["protocol", "reference", "catalog", "receipt", "archive"])
 def test_mutated_inputs_cannot_produce_a_completed_summary(case, monkeypatch, change):
     generator = controller.paired_simulation_block

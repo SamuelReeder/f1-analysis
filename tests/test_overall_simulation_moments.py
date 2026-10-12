@@ -10,7 +10,8 @@ from test_overall_simulation_controller import case, execute
 
 
 @pytest.mark.parametrize("change", ["failed_receipt", "missing_block", "receipt_flag", "summary_bytes",
-    "archive_bytes", "simulation_key", "expected_archive", "metadata_field", "metadata_units", "metadata_identity"])
+    "archive_bytes", "simulation_key", "expected_archive", "metadata_field", "metadata_units", "metadata_identity",
+    "unsupported_acceptance"])
 def test_changed_or_failed_companion_is_rejected(case, change):
     result, receipt = execute(case)
     simulation_key = receipt["simulation_key"]
@@ -27,7 +28,10 @@ def test_changed_or_failed_companion_is_rejected(case, change):
     else:
         if change == "metadata_field": result["diagnostic_moments"]["field"] = ["changed"]
         elif change == "metadata_units": result["diagnostic_moments"]["units"] = "season_points"
-        else: result["diagnostic_moments"]["identity"]["scenario_key"] = "0"*64
+        elif change == "metadata_identity": result["diagnostic_moments"]["identity"]["scenario_key"] = "0"*64
+        else:
+            result["diagnostic_moments"]["mcmc_precision_verified"] = True
+            result["mcmc_precision_verified"] = True
         (case.output/"summary.json").write_text(json.dumps(result))
         receipt["summary_sha256"] = digest(case.output/"summary.json")
     (case.output/"receipt.json").write_text(json.dumps(receipt))

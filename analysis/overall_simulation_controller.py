@@ -255,6 +255,13 @@ def execute(run_dir, design, protocol_path, reference_path, output_dir, *, regis
     (output_dir / "reference.json").write_bytes(reference_bytes)
     atomic_json(output_dir / "receipt.json", receipt)
     started, inventory = time.monotonic(), hashlib.sha256()
+    def require_unchanged_inputs():
+        if (digest(protocol_path) != protocol_key or reference_path.read_bytes() != reference_bytes
+                or protocol["sources"] != source_fingerprints() or design_identity(design) != identity
+                or protocol["runtime"] != runtime_identity()
+                or digest(run_dir / "receipt.json") != protocol["fit"]["receipt_sha256"]
+                or receipt["completed_blocks"] != schedule["blocks"]):
+            raise ValueError("Simulation inputs or complete schedule changed during execution")
     try:
         fit = protocol["fit"]
         if digest(run_dir / "receipt.json") != fit["receipt_sha256"]:
@@ -296,12 +303,7 @@ def execute(run_dir, design, protocol_path, reference_path, output_dir, *, regis
             result = summary.finalize()
             moment_metadata, moment_arrays = summary.grouped_moments()
         # A result stays private until the archive's exit checks have passed.
-        if (digest(protocol_path) != protocol_key or reference_path.read_bytes() != reference_bytes
-                or protocol["sources"] != source_fingerprints() or design_identity(design) != identity
-                or protocol["runtime"] != runtime_identity()
-                or digest(run_dir / "receipt.json") != fit["receipt_sha256"]
-                or receipt["completed_blocks"] != schedule["blocks"]):
-            raise ValueError("Simulation inputs or complete schedule changed during execution")
+        require_unchanged_inputs()
         result.update(controller_sources=protocol["sources"], protocol_sha256=protocol_key,
             simulation_runtime=protocol["runtime"],
             reference_scenario_id=reference["scenario_id"],
@@ -309,6 +311,7 @@ def execute(run_dir, design, protocol_path, reference_path, output_dir, *, regis
             synthetic=True, reference_source_availability_verified=False)
         result["diagnostic_moments"] = write_moments(output_dir, moment_metadata, moment_arrays)
         receipt["diagnostic_moments"] = result["diagnostic_moments"]
+        require_unchanged_inputs()
         atomic_json(output_dir / "summary.json", result)
         receipt.update(state="complete", summary_sha256=digest(output_dir / "summary.json"),
             conditional_simulation_precision_passed=all(result[name] for name in (
