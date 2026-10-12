@@ -10,6 +10,11 @@ preserves the prepared inputs, settings, gates and inventory. The original
 state and cannot itself pass the runner's registration checks. Approval to run
 the experiment does not establish a successful correction or authorize a ranking.
 
+The experiment is now complete. Its [result report](overall_rotation_profile_results.md)
+records that the confounded study again exhausted the fixed retry ladder. The
+connected and sparse-rookie studies converged after retries. The failure is
+preserved, and this procedure is not accepted for production.
+
 ## Evidence for investigating the sampling coordinates
 
 The [geometry diagnosis](../outputs/championship/development/overall-profile-geometry-v1/review.json)
