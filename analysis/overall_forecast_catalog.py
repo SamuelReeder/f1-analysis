@@ -137,12 +137,25 @@ def build_catalog(design, snapshot):
     centre on the forecast field. It must never compare separately centred past
     event ratings directly or replace missing entries with zero ability.
     """
-    q = design.qualifying
     cutoff = _event(design.catalog["cutoff"])
+    if design.catalog["last_lap_event"] > cutoff or any(e > cutoff for e in design.catalog["outcome_events"]):
+        raise ValueError("Lap/outcome catalogue reaches beyond training cutoff")
+    return _build_catalog(design.qualifying, snapshot, cutoff,
+        dict(qualifying=design.qualifying.arrays(), laps=design.laps, outcomes=design.outcomes),
+        "current_race_only" if design.catalog.get("likelihood_arm") == "current_race_only" else "joint_current")
+
+
+def build_qualifying_catalog(design, snapshot, *, cutoff):
+    """Legacy qualifying-only history has its own arrays and explicit arm identity."""
+    return _build_catalog(design, snapshot, _event(cutoff),
+                          dict(qualifying=design.arrays()), "legacy_qualifying")
+
+
+def _build_catalog(q, snapshot, cutoff, blocks, likelihood_arm):
     for frame in (q.events, q.entries):
         if frame.empty or frame.event_id.isna().any() or (frame.event_id > cutoff).any():
             raise ValueError("Training catalogue reaches beyond its declared cutoff")
-    race_only = design.catalog.get("likelihood_arm") == "current_race_only"
+    race_only = likelihood_arm == "current_race_only"
     if q.obs.empty:
         if not race_only:
             raise ValueError("Absent qualifying observations require the explicit race-only arm")
@@ -150,8 +163,6 @@ def build_catalog(design, snapshot):
         raise ValueError("Qualifying observations contradict the arm or declared cutoff")
     if race_only and np.any(q.circuit_factor):
         raise ValueError("Race-only forecast cannot reuse a qualifying-derived circuit factor")
-    if design.catalog["last_lap_event"] > cutoff or any(e > cutoff for e in design.catalog["outcome_events"]):
-        raise ValueError("Lap/outcome catalogue reaches beyond training cutoff")
     if q.entries.duplicated(["event_id", "driver_id"]).any() or q.cars.duplicated(["event_idx", "team"]).any():
         raise ValueError("Training state identities are not unique")
     request = validate_snapshot(snapshot, cutoff)
@@ -213,12 +224,11 @@ def build_catalog(design, snapshot):
                         grid_feature_slot=row["grid_position"] or len(request["entrants"]))
         rows.append(item)
     circuits = q.events.loc[q.events.circuit_id == event["circuit_id"], "circuit_idx"].unique()
-    blocks = dict(qualifying=q.arrays(), laps=design.laps, outcomes=design.outcomes)
     result = dict(schema_version=SCHEMA, purpose="forecast_catalogue_only",
         training_cutoff=cutoff, training_arrays_key=arrays_digest(blocks),
         information_set=request["information_set"], origin_at=request["origin_at"],
         event_id=event["event_id"], event_index=future_index, era=era,
-        likelihood_arm="current_race_only" if race_only else "joint_current",
+        likelihood_arm=likelihood_arm,
         calendar_after_cutoff=request["calendar_after_cutoff"],
         circuit_id=event["circuit_id"], circuit_index=int(circuits[0]) if len(circuits) else None,
         new_circuit=not len(circuits), scheduled_laps=event["scheduled_laps"],

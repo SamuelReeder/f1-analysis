@@ -155,8 +155,15 @@ def _catalogs(design, snapshots, training_arrays_key):
     if not isinstance(snapshots, (list, tuple)) or not snapshots:
         raise ValueError("A complete future field path is required")
     catalogs = [build_catalog(design, s) for s in snapshots]
+    return validate_catalog_path(snapshots, catalogs, training_arrays_key)
+
+
+def validate_catalog_path(snapshots, catalogs, training_arrays_key):
+    """Shared announced-path checks for separately identified model catalogues."""
+    if not catalogs or len(catalogs) != len(snapshots):
+        raise ValueError("A complete matching future catalogue path is required")
     if any(c["training_arrays_key"] != training_arrays_key for c in catalogs):
-        raise ValueError("Joint posterior and forecast training arrays do not match")
+        raise ValueError("Posterior and forecast training arrays do not match")
     origins = {c["origin_at"] for c in catalogs}
     if len(origins) != 1:
         raise ValueError("A forecast path must use one information origin")
