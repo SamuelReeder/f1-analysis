@@ -56,10 +56,12 @@ still produces a single trajectory per joint draw and does not establish the
 final nested replication or Monte Carlo precision policy.
 
 This addresses outcome coefficients, not the whole unseen-circuit problem.
-The qualifying-derived track factor still uses its existing no-adjustment
-convention, which needs a final scientific policy. Unknown future weather and
-neutralisation, official grid rules, completion/classification assumptions,
-accepted-posterior integration and calibration also remain required. An accepted
+The separate [qualifying track-factor extension](overall_unseen_track_factor.md)
+now propagates a shared new-circuit coordinate through paired car effects when
+explicitly selected. The [historical condition law](overall_future_conditions.md)
+supplies development integration of unknown wetness and neutralisation. Final
+registration of those assumptions, official grid rules, completion/classification,
+accepted-posterior integration and calibration remain required. An accepted
 driver ranking cannot be inferred from this extension's software checks.
 
 ## Verification

@@ -57,21 +57,25 @@ requirements. The catalogue's cross-season completeness limitation still applies
 Checking training event dates alone also cannot establish when archived results
 became available; source verification must establish that information boundary.
 
-The circuit loading uses the frozen training factor. For an unseen circuit it
-inherits the existing qualifying design's no-adjustment convention. This does
-not estimate circuit-factor uncertainty or supply the future outcome model's
-circuit coefficients. Those limitations must be included in the final predictive
-specification, alongside future weather, neutralisation and operations.
+The circuit loading uses the frozen factor for a known training circuit. At an
+unseen joint-model circuit, the caller must explicitly select the
+[population track-factor policy](overall_unseen_track_factor.md). A shared
+uncertain circuit coordinate then multiplies the paired team-season loadings
+and persists across visits. The race-only ablation retains its removed axis.
+This extrapolation does not estimate uncertainty in learned training factors;
+its calibration and final registration remain required. Future outcome
+coefficients have their separate [population policy](overall_unseen_circuits.md).
 
 The result contains latent qualifying/race components and their observed-state
 totals for the announced cars and teams. Those totals are for predictive work;
 they are not the equal-machinery driver ranking. The
 [conditional observation kernels](overall_observation_kernels.md) now connect
-these states to qualifying segments, known-circuit coefficients, running order
-and fixed-exposure completion under explicit scenarios. Condition integration,
-official grids, final classification, calibration and baseline predictors remain
-to be completed and validated. The canonical counterfactual also still needs its
-accepted producer and common scenario.
+these states to qualifying segments, circuit coefficients, running order
+and fixed-exposure completion. The [historical condition law](overall_future_conditions.md)
+can integrate unknown race conditions in development forecasts. Official grids,
+final classification, calibration and baseline integration remain to be completed
+and validated. The canonical counterfactual also still needs its accepted
+producer and common scenario.
 
 No fit is loaded or certified here. Every result leaves convergence, source
 verification, independent evidence and publication flags false. It records the

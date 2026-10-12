@@ -6,20 +6,20 @@ open until the full acceptance checklist has direct evidence.
 
 | Requirement | Current evidence | Remaining work |
 |---|---|---|
-| Stable equal-machinery/team target | `overall_candidate.md`; driver-only state export interface; `overall_reference_calendar.json` fixes the common calendar, distances and context | Forecast-time condition policy; completion/reliability, lapping and shortened-event assumptions |
+| Stable equal-machinery/team target | `overall_candidate.md`; driver-only state export interface; `overall_reference_calendar.json` fixes the common calendar, distances and context; a separate historical condition law supports development forecasts | Final forecast condition registration/calibration; completion/reliability, lapping and shortened-event assumptions |
 | Shared current qualifying/race model | Joint model and synthetic interface/gradient tests | Fit, recover and calibrate its shared uncertainty |
 | Scientific specification | Executable likelihood/prior definitions and candidate contract | Final numerical/evaluation/prospective protocol before real-data fitting |
 | Complete entrant/cutoff catalog | Cutoff-first data design; outcome-free forecast catalogue; development state propagation reconstructs uncentred history and retains unseen entrants with population uncertainty | Verified as-of source/calendar inventory, accepted-posterior integration and recovery on the real transfer network |
 | Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks for full and bounded loaders; corrected race-order arithmetic has known-probability/gradient checks; the exhausted confounded case and geometry diagnosis are preserved | Separate approval and registration before the proposed post-failure numerical study on corrected source; fresh recovery and runner resource measurements |
 | Known-truth recovery and simulation-based calibration | Generative responses and complete numerical-profile inventory: connected and sparse-rookie fits converged after retries; confounded fit exhausted its ladder; development evaluator covers state contrasts and observation likelihoods, distinguishes fixed-truth stress cases and requires a complete inventory | Full study registration, power justification and execution, including ranking functionals and the unresolved confounded case; no failed case may be discarded |
-| Coherent weekend simulation | Student-t elimination and shared weekend uncertainty; conditional kernels preserve teammate effects, context, order and completion within each joint draw; compensated race-order generation has controlled, exact-sum and compiled checks | Forecast-time conditions, official-grid eligibility/penalties, common operations calibration, lapping, shortened-race and incident assumptions |
+| Coherent weekend simulation | Student-t elimination and shared weekend uncertainty; observation kernels preserve teammate effects, context, order and completion within each joint draw; historical joint condition integration; explicit unseen-circuit outcome and qualifying track-factor extensions | Condition/circuit calibration and final registration, qualifying weather, official-grid eligibility/penalties, common operations, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |
 | Ability/outcome/numerical uncertainty | Nested simulation, MCSE and rank/ESS diagnostics; saved-draw diagnosis finds qualifying-contrast failures in the final confounded attempt | Resolve inference and check ranking functionals under converged posteriors with fixed simulation precision |
-| Chronological development comparison | Plan defines information horizons and baseline roles; blind scoring utilities preserve joint draws, conditional weights and required events; outcome-free catalogue, joint states and conditional observation kernels have synthetic checks; unseen-circuit outcome extension; explicit legacy/grid-only arithmetic and a race-only evidence ablation | Complete source verification, unknown-condition integration, registration of circuit treatment (including unseen qualifying track factors), classification-conditioning policy and baseline fitting/forecast integration; freeze event inventory, calibration and stopping rules; run every fold |
+| Chronological development comparison | Plan defines information horizons and baseline roles; scoring utilities preserve joint draws, conditional panel/condition weights and required events; outcome-free catalogue, joint states and observation kernels have synthetic checks; unseen-circuit extensions and unknown-condition simulation; explicit legacy/grid-only arithmetic and a race-only evidence ablation | Complete source verification, final condition/circuit registration and calibration, uncertainty in learned training factors, classification-conditioning policy and baseline fitting/forecast integration; freeze event inventory, calibration and stopping rules; run every fold |
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence, common field and matching explanation draws/scenario | Producer/export, pairwise comparisons, and matching component explanations from accepted draws; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
-| Software and runner readiness | Batched states and conditional observation kernels; bounded checked archive loading; capped synthetic resource and software records under `development/overall-archive-checks/` and `development/overall-observation-checks/` | Accepted-fit integration and end-to-end fitting/refresh resources; workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
+| Software and runner readiness | Batched states and observation kernels; bounded checked archive loading; capped synthetic resource and software records, including historical condition integration under `development/overall-condition-checks/` | Accepted-fit integration and end-to-end fitting/refresh resources; workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
 | Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
 
 The numerical profile is registered separately in
@@ -382,3 +382,27 @@ coverage assumptions still need calibration and final registration. Qualifying
 weather, official grids, exposure and classification, the failed numerical case,
 full recovery, independent predictive evidence and canonical publication remain
 open. The separate coordinate experiment remains pending user approval.
+
+## Unseen qualifying track factors
+
+The [track-factor policy](overall_unseen_track_factor.md) specifies an explicit
+population extrapolation before forecast evaluation. An unseen circuit now
+requires that policy and receives a shared uncertain factor in the training
+axis's fixed units. It multiplies paired team-season loadings and passes through
+the paired qualifying/race car link. Known factors and the race-only ablation's
+removed axis retain their definitions. Uncertainty in the learned training
+factors remains an unresolved approximation.
+
+The [verification record](../outputs/championship/development/overall-track-factor-checks/verification.json)
+covers model-trace equivalence, exact shared moments, paired effects, invariance,
+batch collection and policy rejection. Its separate compressed resource workload
+exercises the combined historical-condition and unseen-circuit forecast path at
+the committed training-data dimensions. It uses synthetic parameters and a
+hypothetical schedule, with no real-event accuracy or ranking outcome evaluated.
+
+This advances forecast implementation; it does not complete scientific
+acceptance, recovery or independent validation. The original failed profile,
+fitting source, data and pending numerical proposal remain unchanged. The
+legacy race-pace regeneration and its existing waiter continue separately.
+The full integration suite, canonical accepted producer and deployment remain
+open; no push, merge or release occurred.

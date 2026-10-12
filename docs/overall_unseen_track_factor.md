@@ -39,3 +39,26 @@ Normal extrapolation is calibrated. Those limitations, together with the known
 short-history convention, must remain explicit in the final protocol. Synthetic
 equivalence, moment and invariance checks can verify implementation but cannot
 accept this model or produce a driver ranking.
+
+## Verification
+
+The [verification record](../outputs/championship/development/overall-track-factor-checks/verification.json)
+links the specification, source and capped checks. Synthetic tests compare the
+propagated car effects with the joint model trace at the same supplied factor.
+Exact Gaussian moment fixtures check shared covariance and relative uncertainty;
+the paired race-car link is tested without averaging its draws. Other checks
+cover fixed known factors, persistence across visits, distinct new circuits,
+field permutations, forecast prefixes, complete batch collection, explicit
+policy rejection and the race-only ablation's removed axis.
+
+The [resource record](../outputs/championship/development/overall-track-factor-checks/resources.json)
+exercises the complete condition/weekend path through a temporary compressed
+synthetic posterior at the committed training-data dimensions. It includes
+familiar and unseen circuits and retains every draw under the enforced local
+cap. The earlier condition workload predates this track-factor extension and
+remains a separate historical record.
+
+No fitting source, input data or pending numerical-study setting changed. The
+running legacy race-pace regeneration remains separate; the full integration
+suite awaits its completion. These checks establish neither accepted-posterior
+behavior nor calibration, independent evidence or intended-runner resources.

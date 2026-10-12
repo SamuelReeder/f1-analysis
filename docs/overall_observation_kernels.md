@@ -101,8 +101,9 @@ round them away. It does not add a random draw or replace the existing streams.
   and inclusion in the final predictive registration remain open.
 - An unseen circuit requires an explicitly selected outcome-coefficient policy;
   omission still rejects the prediction. The population extension has development
-  checks, but the qualifying-derived track factor's current no-adjustment
-  convention needs a final scientific policy. The final evaluation must retain
+  checks. A separate [qualifying track-factor policy](overall_unseen_track_factor.md)
+  now propagates new-circuit uncertainty when explicitly selected; both
+  extrapolations still require calibration and final registration. The final evaluation must retain
   every required event, including an unresolved prediction, rather than drop it.
 - Missing qualifying times, penalties and grid eligibility need the complete
   grid-generation policy. The current conditional qualifying positions are not
