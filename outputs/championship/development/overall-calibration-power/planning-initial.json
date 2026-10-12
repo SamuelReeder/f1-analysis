@@ -1,0 +1,6048 @@
+{
+  "purpose": "pre_fit_calibration_power_planning",
+  "recorded_at": "2026-10-12T12:49:51.586069+00:00",
+  "source_commit": "ab521c92cb4aea302b8f6ccf2e8c1f6a2892fe53",
+  "source_hashes": {
+    "analysis/overall_calibration_power.py": "93cd60539b5f6285d23abd47d836fb21b22731a2541a2811259ff1f3596117e3",
+    "analysis/overall_recovery_checks.py": "5f3711c3a9ac14cc193429477be5bceb9a2a8ac2eff5c1f6176e52d4d280fd82",
+    "analysis/overall_ranking_recovery.py": "a4cd959a80107646afa69609b946e20efda905dc0ad254e2972d27a80a79f5b7"
+  },
+  "model_inputs_key": "bd006936348cc74d848ec2d08c8836556801a0e6511866ad2b0f64b2103e824f",
+  "inventory": [
+    {
+      "case": "connected",
+      "role": "prior_predictive",
+      "field_size": 6,
+      "base_quantities": 107,
+      "ranking_quantities": 39,
+      "quantities": 146,
+      "quantity_inventory_sha256": "b5a9f1b98369c30c00ce5b7f6dd46e441ff1f962934c89f532b08f84ba70fa68"
+    },
+    {
+      "case": "confounded",
+      "role": "prior_predictive",
+      "field_size": 6,
+      "base_quantities": 107,
+      "ranking_quantities": 39,
+      "quantities": 146,
+      "quantity_inventory_sha256": "b5a9f1b98369c30c00ce5b7f6dd46e441ff1f962934c89f532b08f84ba70fa68"
+    },
+    {
+      "case": "sparse_rookie",
+      "role": "prior_predictive",
+      "field_size": 6,
+      "base_quantities": 107,
+      "ranking_quantities": 39,
+      "quantities": 146,
+      "quantity_inventory_sha256": "b5a9f1b98369c30c00ce5b7f6dd46e441ff1f962934c89f532b08f84ba70fa68"
+    },
+    {
+      "case": "dominant_teammate",
+      "role": "stress",
+      "field_size": 6,
+      "base_quantities": 107,
+      "ranking_quantities": 39,
+      "quantities": 146,
+      "quantity_inventory_sha256": "b5a9f1b98369c30c00ce5b7f6dd46e441ff1f962934c89f532b08f84ba70fa68"
+    },
+    {
+      "case": "era_boundary",
+      "role": "prior_predictive",
+      "field_size": 6,
+      "base_quantities": 107,
+      "ranking_quantities": 39,
+      "quantities": 146,
+      "quantity_inventory_sha256": "b5a9f1b98369c30c00ce5b7f6dd46e441ff1f962934c89f532b08f84ba70fa68"
+    },
+    {
+      "case": "real_network",
+      "role": "prior_predictive",
+      "field_size": 22,
+      "base_quantities": 1471,
+      "ranking_quantities": 319,
+      "quantities": 1790,
+      "quantity_inventory_sha256": "87cf4b9364477657f679f201d1e173a68f1262c7be4d07341c8dc80d084ba00b"
+    }
+  ],
+  "chains": 4,
+  "family_size": 9496,
+  "assumed_family_error_probability": 0.05,
+  "illustrative_power_target": 0.8,
+  "replicate_grid": [
+    25,
+    50,
+    100,
+    200,
+    400,
+    800,
+    1600,
+    3200,
+    6400
+  ],
+  "alternatives": [
+    {
+      "alternative": "uniform_reference",
+      "rank_probabilities": [
+        0.2,
+        0.2,
+        0.2,
+        0.2,
+        0.2
+      ],
+      "calculations": [
+        {
+          "replicates": 25,
+          "rank_probabilities": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.2,
+              "null_rejection_probability": 2.063915407729966e-06,
+              "rejection_probability": 2.063915407729966e-06,
+              "rejection_count_intervals": [
+                [
+                  16,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 3.797341564032787e-06,
+              "rejection_probability": 3.797341564032787e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  22,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6000000000000001,
+              "null_rejection_probability": 3.7973415640327777e-06,
+              "rejection_probability": 3.7973415640327857e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  25,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8,
+              "null_rejection_probability": 2.0639154077299602e-06,
+              "rejection_probability": 2.0639154077299602e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  9
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 3.797341564032787e-06,
+          "affected_quantity_power_upper_bound": 1.17225139435255e-05
+        },
+        {
+          "replicates": 50,
+          "rank_probabilities": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.2,
+              "null_rejection_probability": 2.094854855528934e-06,
+              "rejection_probability": 2.094854855528934e-06,
+              "rejection_count_intervals": [
+                [
+                  25,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 3.7995624412280022e-06,
+              "rejection_probability": 3.7995624412280022e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  5
+                ],
+                [
+                  37,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6000000000000001,
+              "null_rejection_probability": 3.799562441228002e-06,
+              "rejection_probability": 3.799562441228013e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  13
+                ],
+                [
+                  45,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8,
+              "null_rejection_probability": 2.0948548555289173e-06,
+              "rejection_probability": 2.0948548555289173e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  25
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 3.799562441228013e-06,
+          "affected_quantity_power_upper_bound": 1.1788834593513866e-05
+        },
+        {
+          "replicates": 100,
+          "rank_probabilities": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.2,
+              "null_rejection_probability": 4.191407079592953e-06,
+              "rejection_probability": 4.191407079592953e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  40,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 4.8673324536074715e-06,
+              "rejection_probability": 4.8673324536074715e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  18
+                ],
+                [
+                  63,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6000000000000001,
+              "null_rejection_probability": 4.867332453607472e-06,
+              "rejection_probability": 4.867332453607444e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  37
+                ],
+                [
+                  82,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8,
+              "null_rejection_probability": 4.191407079592921e-06,
+              "rejection_probability": 4.191407079592921e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  60
+                ],
+                [
+                  97,
+                  100
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 4.8673324536074715e-06,
+          "affected_quantity_power_upper_bound": 1.811747906640079e-05
+        },
+        {
+          "replicates": 200,
+          "rank_probabilities": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.2,
+              "null_rejection_probability": 5.01027665164056e-06,
+              "rejection_probability": 5.01027665164056e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  16
+                ],
+                [
+                  68,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 4.666739024997748e-06,
+              "rejection_probability": 4.666739024997748e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  49
+                ],
+                [
+                  113,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6000000000000001,
+              "null_rejection_probability": 4.666739024997749e-06,
+              "rejection_probability": 4.666739024997753e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  87
+                ],
+                [
+                  151,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8,
+              "null_rejection_probability": 5.010276651640535e-06,
+              "rejection_probability": 5.010276651640535e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  132
+                ],
+                [
+                  184,
+                  200
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 5.01027665164056e-06,
+          "affected_quantity_power_upper_bound": 1.9354031353276595e-05
+        },
+        {
+          "replicates": 400,
+          "rank_probabilities": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.2,
+              "null_rejection_probability": 4.415200288843308e-06,
+              "rejection_probability": 4.415200288843308e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  45
+                ],
+                [
+                  119,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 5.177222959494259e-06,
+              "rejection_probability": 5.177222959494259e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  116
+                ],
+                [
+                  206,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6000000000000001,
+              "null_rejection_probability": 5.177222959494257e-06,
+              "rejection_probability": 5.177222959494275e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  194
+                ],
+                [
+                  284,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8,
+              "null_rejection_probability": 4.415200288843287e-06,
+              "rejection_probability": 4.415200288843287e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  281
+                ],
+                [
+                  355,
+                  400
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 5.177222959494275e-06,
+          "affected_quantity_power_upper_bound": 1.9184846496675128e-05
+        },
+        {
+          "replicates": 800,
+          "rank_probabilities": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.2,
+              "null_rejection_probability": 4.981258744354678e-06,
+              "rejection_probability": 4.981258744354678e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  110
+                ],
+                [
+                  214,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 5.206420684037695e-06,
+              "rejection_probability": 5.206420684037695e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  257
+                ],
+                [
+                  384,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6000000000000001,
+              "null_rejection_probability": 5.206420684037684e-06,
+              "rejection_probability": 5.206420684037665e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  416
+                ],
+                [
+                  543,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8,
+              "null_rejection_probability": 4.981258744354697e-06,
+              "rejection_probability": 4.981258744354697e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  586
+                ],
+                [
+                  690,
+                  800
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 5.206420684037695e-06,
+          "affected_quantity_power_upper_bound": 2.0375358856784736e-05
+        },
+        {
+          "replicates": 1600,
+          "rank_probabilities": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.2,
+              "null_rejection_probability": 4.9029661701779305e-06,
+              "rejection_probability": 4.9029661701779305e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  248
+                ],
+                [
+                  395,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 4.848582689824418e-06,
+              "rejection_probability": 4.848582689824418e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  551
+                ],
+                [
+                  731,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6000000000000001,
+              "null_rejection_probability": 4.8485826898244195e-06,
+              "rejection_probability": 4.8485826898244475e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  869
+                ],
+                [
+                  1049,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8,
+              "null_rejection_probability": 4.9029661701778915e-06,
+              "rejection_probability": 4.9029661701778915e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1205
+                ],
+                [
+                  1352,
+                  1600
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 4.9029661701779305e-06,
+          "affected_quantity_power_upper_bound": 1.9503097720004688e-05
+        },
+        {
+          "replicates": 3200,
+          "rank_probabilities": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.2,
+              "null_rejection_probability": 5.233614697401076e-06,
+              "rejection_probability": 5.233614697401076e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  538
+                ],
+                [
+                  745,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 4.956020267648521e-06,
+              "rejection_probability": 4.956020267648521e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1154
+                ],
+                [
+                  1408,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6000000000000001,
+              "null_rejection_probability": 4.956020267648524e-06,
+              "rejection_probability": 4.9560202676485464e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1792
+                ],
+                [
+                  2046,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8,
+              "null_rejection_probability": 5.233614697401056e-06,
+              "rejection_probability": 5.233614697401056e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  2455
+                ],
+                [
+                  2662,
+                  3200
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 5.233614697401076e-06,
+          "affected_quantity_power_upper_bound": 2.03792699300992e-05
+        },
+        {
+          "replicates": 6400,
+          "rank_probabilities": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.2,
+              "null_rejection_probability": 5.016456001392549e-06,
+              "rejection_probability": 5.016456001392549e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1135
+                ],
+                [
+                  1428,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 5.2263788548942485e-06,
+              "rejection_probability": 5.2263788548942485e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  2382
+                ],
+                [
+                  2740,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6000000000000001,
+              "null_rejection_probability": 5.226378854894235e-06,
+              "rejection_probability": 5.226378854894288e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3660
+                ],
+                [
+                  4018,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8,
+              "null_rejection_probability": 5.016456001392535e-06,
+              "rejection_probability": 5.016456001392535e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  4972
+                ],
+                [
+                  5265,
+                  6400
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 5.226378854894288e-06,
+          "affected_quantity_power_upper_bound": 2.048566971257362e-05
+        }
+      ],
+      "first_grid_size_meeting_illustrative_power": null
+    },
+    {
+      "alternative": "lower_end_mixture_0.1",
+      "rank_probabilities": [
+        0.28,
+        0.18000000000000002,
+        0.18000000000000002,
+        0.18000000000000002,
+        0.18000000000000002
+      ],
+      "calculations": [
+        {
+          "replicates": 25,
+          "rank_probabilities": [
+            0.27999999999999997,
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.27999999999999997,
+              "null_rejection_probability": 2.063915407729966e-06,
+              "rejection_probability": 0.00018911538068695075,
+              "rejection_count_intervals": [
+                [
+                  16,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.45999999999999996,
+              "null_rejection_probability": 3.797341564032787e-06,
+              "rejection_probability": 1.5639407134221844e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  22,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 3.7973415640327777e-06,
+              "rejection_probability": 1.4384961396581697e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  25,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 2.0639154077299602e-06,
+              "rejection_probability": 4.6931149243241866e-07,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  9
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.00018911538068695075,
+          "affected_quantity_power_upper_bound": 0.00021960906071018672
+        },
+        {
+          "replicates": 50,
+          "rank_probabilities": [
+            0.27999999999999997,
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.27999999999999997,
+              "null_rejection_probability": 2.094854855528934e-06,
+              "rejection_probability": 0.0008081000719940412,
+              "rejection_count_intervals": [
+                [
+                  25,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.45999999999999996,
+              "null_rejection_probability": 3.7995624412280022e-06,
+              "rejection_probability": 5.4533117776613306e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  5
+                ],
+                [
+                  37,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 3.799562441228002e-06,
+              "rejection_probability": 2.984752610822326e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  13
+                ],
+                [
+                  45,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 2.0948548555289173e-06,
+              "rejection_probability": 2.6897061307727456e-07,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  25
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.0008081000719940412,
+          "affected_quantity_power_upper_bound": 0.000892749686491955
+        },
+        {
+          "replicates": 100,
+          "rank_probabilities": [
+            0.27999999999999997,
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.27999999999999997,
+              "null_rejection_probability": 4.191407079592953e-06,
+              "rejection_probability": 0.006403564366914694,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  40,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.45999999999999996,
+              "null_rejection_probability": 4.8673324536074715e-06,
+              "rejection_probability": 0.00046385874173971695,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  18
+                ],
+                [
+                  63,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 4.867332453607472e-06,
+              "rejection_probability": 6.436555646057842e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  37
+                ],
+                [
+                  82,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 4.191407079592921e-06,
+              "rejection_probability": 4.965265419783837e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  60
+                ],
+                [
+                  97,
+                  100
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.006403564366914694,
+          "affected_quantity_power_upper_bound": 0.006936753930534774
+        },
+        {
+          "replicates": 200,
+          "rank_probabilities": [
+            0.27999999999999997,
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.27999999999999997,
+              "null_rejection_probability": 5.01027665164056e-06,
+              "rejection_probability": 0.03689741931785297,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  16
+                ],
+                [
+                  68,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.45999999999999996,
+              "null_rejection_probability": 4.666739024997748e-06,
+              "rejection_probability": 0.0018456206024026432,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  49
+                ],
+                [
+                  113,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 4.666739024997749e-06,
+              "rejection_probability": 0.0003317987595279063,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  87
+                ],
+                [
+                  151,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 5.010276651640535e-06,
+              "rejection_probability": 4.5874727354134436e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  132
+                ],
+                [
+                  184,
+                  200
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.03689741931785297,
+          "affected_quantity_power_upper_bound": 0.03912071340713765
+        },
+        {
+          "replicates": 400,
+          "rank_probabilities": [
+            0.27999999999999997,
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.27999999999999997,
+              "null_rejection_probability": 4.415200288843308e-06,
+              "rejection_probability": 0.23340681517051554,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  45
+                ],
+                [
+                  119,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.45999999999999996,
+              "null_rejection_probability": 5.177222959494259e-06,
+              "rejection_probability": 0.01563247612488919,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  116
+                ],
+                [
+                  206,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 5.177222959494257e-06,
+              "rejection_probability": 0.0018318195629695672,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  194
+                ],
+                [
+                  284,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 4.415200288843287e-06,
+              "rejection_probability": 0.00013943030830322752,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  281
+                ],
+                [
+                  355,
+                  400
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.23340681517051554,
+          "affected_quantity_power_upper_bound": 0.25101054116667754
+        },
+        {
+          "replicates": 800,
+          "rank_probabilities": [
+            0.27999999999999997,
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.27999999999999997,
+              "null_rejection_probability": 4.981258744354678e-06,
+              "rejection_probability": 0.7953025478096183,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  110
+                ],
+                [
+                  214,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.45999999999999996,
+              "null_rejection_probability": 5.206420684037695e-06,
+              "rejection_probability": 0.13580383745196808,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  257
+                ],
+                [
+                  384,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 5.206420684037684e-06,
+              "rejection_probability": 0.011855981697671169,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  416
+                ],
+                [
+                  543,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 4.981258744354697e-06,
+              "rejection_probability": 0.0007433088535041106,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  586
+                ],
+                [
+                  690,
+                  800
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.7953025478096183,
+          "affected_quantity_power_upper_bound": 0.9437056758127617
+        },
+        {
+          "replicates": 1600,
+          "rank_probabilities": [
+            0.27999999999999997,
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.27999999999999997,
+              "null_rejection_probability": 4.9029661701779305e-06,
+              "rejection_probability": 0.9987084069570192,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  248
+                ],
+                [
+                  395,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.45999999999999996,
+              "null_rejection_probability": 4.848582689824418e-06,
+              "rejection_probability": 0.6084389707996337,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  551
+                ],
+                [
+                  731,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 4.8485826898244195e-06,
+              "rejection_probability": 0.10068915677968221,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  869
+                ],
+                [
+                  1049,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 4.9029661701778915e-06,
+              "rejection_probability": 0.004498471994522231,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1205
+                ],
+                [
+                  1352,
+                  1600
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.9987084069570192,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 3200,
+          "rank_probabilities": [
+            0.27999999999999997,
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.27999999999999997,
+              "null_rejection_probability": 5.233614697401076e-06,
+              "rejection_probability": 0.9999999993811012,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  538
+                ],
+                [
+                  745,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.45999999999999996,
+              "null_rejection_probability": 4.956020267648521e-06,
+              "rejection_probability": 0.9889897645048858,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1154
+                ],
+                [
+                  1408,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 4.956020267648524e-06,
+              "rejection_probability": 0.5373552234609358,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1792
+                ],
+                [
+                  2046,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 5.233614697401056e-06,
+              "rejection_probability": 0.04132021468674138,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  2455
+                ],
+                [
+                  2662,
+                  3200
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.9999999993811012,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 6400,
+          "rank_probabilities": [
+            0.27999999999999997,
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.27999999999999997,
+              "null_rejection_probability": 5.016456001392549e-06,
+              "rejection_probability": 1.0000000000000007,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1135
+                ],
+                [
+                  1428,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.45999999999999996,
+              "null_rejection_probability": 5.2263788548942485e-06,
+              "rejection_probability": 0.9999998620078518,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  2382
+                ],
+                [
+                  2740,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 5.226378854894235e-06,
+              "rejection_probability": 0.9793506669373854,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3660
+                ],
+                [
+                  4018,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 5.016456001392535e-06,
+              "rejection_probability": 0.2965428659931178,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  4972
+                ],
+                [
+                  5265,
+                  6400
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 1.0000000000000007,
+          "affected_quantity_power_upper_bound": 1.0
+        }
+      ],
+      "first_grid_size_meeting_illustrative_power": 1600
+    },
+    {
+      "alternative": "both_ends_mixture_0.1",
+      "rank_probabilities": [
+        0.23000000000000004,
+        0.18000000000000002,
+        0.18000000000000002,
+        0.18000000000000002,
+        0.23000000000000004
+      ],
+      "calculations": [
+        {
+          "replicates": 25,
+          "rank_probabilities": [
+            0.22999999999999998,
+            0.18,
+            0.18,
+            0.18,
+            0.22999999999999998
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.22999999999999998,
+              "null_rejection_probability": 2.063915407729966e-06,
+              "rejection_probability": 1.4086995080238449e-05,
+              "rejection_count_intervals": [
+                [
+                  16,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.41,
+              "null_rejection_probability": 3.797341564032787e-06,
+              "rejection_probability": 3.435697664366877e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  22,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.59,
+              "null_rejection_probability": 3.7973415640327777e-06,
+              "rejection_probability": 3.4356976643668745e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  25,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.77,
+              "null_rejection_probability": 2.0639154077299602e-06,
+              "rejection_probability": 1.408699508023845e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  9
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 1.408699508023845e-05,
+          "affected_quantity_power_upper_bound": 3.504538548921065e-05
+        },
+        {
+          "replicates": 50,
+          "rank_probabilities": [
+            0.22999999999999998,
+            0.18,
+            0.18,
+            0.18,
+            0.22999999999999998
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.22999999999999998,
+              "null_rejection_probability": 2.094854855528934e-06,
+              "rejection_probability": 2.81504551090911e-05,
+              "rejection_count_intervals": [
+                [
+                  25,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.41,
+              "null_rejection_probability": 3.7995624412280022e-06,
+              "rejection_probability": 3.691275906093708e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  5
+                ],
+                [
+                  37,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.59,
+              "null_rejection_probability": 3.799562441228002e-06,
+              "rejection_probability": 3.6912759060936854e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  13
+                ],
+                [
+                  45,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.77,
+              "null_rejection_probability": 2.0948548555289173e-06,
+              "rejection_probability": 2.8150455109091096e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  25
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 2.81504551090911e-05,
+          "affected_quantity_power_upper_bound": 6.368346203036959e-05
+        },
+        {
+          "replicates": 100,
+          "rank_probabilities": [
+            0.22999999999999998,
+            0.18,
+            0.18,
+            0.18,
+            0.22999999999999998
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.22999999999999998,
+              "null_rejection_probability": 4.191407079592953e-06,
+              "rejection_probability": 0.00010894889157210721,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  40,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.41,
+              "null_rejection_probability": 4.8673324536074715e-06,
+              "rejection_probability": 8.292743252946329e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  18
+                ],
+                [
+                  63,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.59,
+              "null_rejection_probability": 4.867332453607472e-06,
+              "rejection_probability": 8.292743252946315e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  37
+                ],
+                [
+                  82,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.77,
+              "null_rejection_probability": 4.191407079592921e-06,
+              "rejection_probability": 0.00010894889157210721,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  60
+                ],
+                [
+                  97,
+                  100
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.00010894889157210721,
+          "affected_quantity_power_upper_bound": 0.00023448326965010708
+        },
+        {
+          "replicates": 200,
+          "rank_probabilities": [
+            0.22999999999999998,
+            0.18,
+            0.18,
+            0.18,
+            0.22999999999999998
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.22999999999999998,
+              "null_rejection_probability": 5.01027665164056e-06,
+              "rejection_probability": 0.00026412556395557845,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  16
+                ],
+                [
+                  68,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.41,
+              "null_rejection_probability": 4.666739024997748e-06,
+              "rejection_probability": 7.83623141006733e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  49
+                ],
+                [
+                  113,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.59,
+              "null_rejection_probability": 4.666739024997749e-06,
+              "rejection_probability": 7.836231410067443e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  87
+                ],
+                [
+                  151,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.77,
+              "null_rejection_probability": 5.010276651640535e-06,
+              "rejection_probability": 0.0002641255639555787,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  132
+                ],
+                [
+                  184,
+                  200
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.0002641255639555787,
+          "affected_quantity_power_upper_bound": 0.000543923590731292
+        },
+        {
+          "replicates": 400,
+          "rank_probabilities": [
+            0.22999999999999998,
+            0.18,
+            0.18,
+            0.18,
+            0.22999999999999998
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.22999999999999998,
+              "null_rejection_probability": 4.415200288843308e-06,
+              "rejection_probability": 0.0010856901623998761,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  45
+                ],
+                [
+                  119,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.41,
+              "null_rejection_probability": 5.177222959494259e-06,
+              "rejection_probability": 1.4796208302566915e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  116
+                ],
+                [
+                  206,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.59,
+              "null_rejection_probability": 5.177222959494257e-06,
+              "rejection_probability": 1.479620830256664e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  194
+                ],
+                [
+                  284,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.77,
+              "null_rejection_probability": 4.415200288843287e-06,
+              "rejection_probability": 0.0010856901623998764,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  281
+                ],
+                [
+                  355,
+                  400
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.0010856901623998764,
+          "affected_quantity_power_upper_bound": 0.002200972741404886
+        },
+        {
+          "replicates": 800,
+          "rank_probabilities": [
+            0.22999999999999998,
+            0.18,
+            0.18,
+            0.18,
+            0.22999999999999998
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.22999999999999998,
+              "null_rejection_probability": 4.981258744354678e-06,
+              "rejection_probability": 0.0072910611979980135,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  110
+                ],
+                [
+                  214,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.41,
+              "null_rejection_probability": 5.206420684037695e-06,
+              "rejection_probability": 3.698374435696129e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  257
+                ],
+                [
+                  384,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.59,
+              "null_rejection_probability": 5.206420684037684e-06,
+              "rejection_probability": 3.6983744356962056e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  416
+                ],
+                [
+                  543,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.77,
+              "null_rejection_probability": 4.981258744354697e-06,
+              "rejection_probability": 0.007291061197997996,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  586
+                ],
+                [
+                  690,
+                  800
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.0072910611979980135,
+          "affected_quantity_power_upper_bound": 0.014656089884709933
+        },
+        {
+          "replicates": 1600,
+          "rank_probabilities": [
+            0.22999999999999998,
+            0.18,
+            0.18,
+            0.18,
+            0.22999999999999998
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.22999999999999998,
+              "null_rejection_probability": 4.9029661701779305e-06,
+              "rejection_probability": 0.058592511086515454,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  248
+                ],
+                [
+                  395,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.41,
+              "null_rejection_probability": 4.848582689824418e-06,
+              "rejection_probability": 8.18759246430794e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  551
+                ],
+                [
+                  731,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.59,
+              "null_rejection_probability": 4.8485826898244195e-06,
+              "rejection_probability": 8.187592464308128e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  869
+                ],
+                [
+                  1049,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.77,
+              "null_rejection_probability": 4.9029661701778915e-06,
+              "rejection_probability": 0.058592511086515454,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1205
+                ],
+                [
+                  1352,
+                  1600
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.058592511086515454,
+          "affected_quantity_power_upper_bound": 0.11734877402231707
+        },
+        {
+          "replicates": 3200,
+          "rank_probabilities": [
+            0.22999999999999998,
+            0.18,
+            0.18,
+            0.18,
+            0.22999999999999998
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.22999999999999998,
+              "null_rejection_probability": 5.233614697401076e-06,
+              "rejection_probability": 0.35929554073308567,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  538
+                ],
+                [
+                  745,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.41,
+              "null_rejection_probability": 4.956020267648521e-06,
+              "rejection_probability": 0.00031089995469047577,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1154
+                ],
+                [
+                  1408,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.59,
+              "null_rejection_probability": 4.956020267648524e-06,
+              "rejection_probability": 0.00031089995469048656,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1792
+                ],
+                [
+                  2046,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.77,
+              "null_rejection_probability": 5.233614697401056e-06,
+              "rejection_probability": 0.35929554073308567,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  2455
+                ],
+                [
+                  2662,
+                  3200
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.35929554073308567,
+          "affected_quantity_power_upper_bound": 0.7192128813755523
+        },
+        {
+          "replicates": 6400,
+          "rank_probabilities": [
+            0.22999999999999998,
+            0.18,
+            0.18,
+            0.18,
+            0.22999999999999998
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.22999999999999998,
+              "null_rejection_probability": 5.016456001392549e-06,
+              "rejection_probability": 0.9072197926191393,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1135
+                ],
+                [
+                  1428,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.41,
+              "null_rejection_probability": 5.2263788548942485e-06,
+              "rejection_probability": 0.0016950276488190538,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  2382
+                ],
+                [
+                  2740,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.59,
+              "null_rejection_probability": 5.226378854894235e-06,
+              "rejection_probability": 0.0016950276488191126,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3660
+                ],
+                [
+                  4018,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.77,
+              "null_rejection_probability": 5.016456001392535e-06,
+              "rejection_probability": 0.9072197926191394,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  4972
+                ],
+                [
+                  5265,
+                  6400
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.9072197926191394,
+          "affected_quantity_power_upper_bound": 1.0
+        }
+      ],
+      "first_grid_size_meeting_illustrative_power": 6400
+    },
+    {
+      "alternative": "middle_mixture_0.1",
+      "rank_probabilities": [
+        0.18000000000000002,
+        0.18000000000000002,
+        0.28,
+        0.18000000000000002,
+        0.18000000000000002
+      ],
+      "calculations": [
+        {
+          "replicates": 25,
+          "rank_probabilities": [
+            0.18,
+            0.18,
+            0.27999999999999997,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.18,
+              "null_rejection_probability": 2.063915407729966e-06,
+              "rejection_probability": 4.6931149243241167e-07,
+              "rejection_count_intervals": [
+                [
+                  16,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.36,
+              "null_rejection_probability": 3.797341564032787e-06,
+              "rejection_probability": 1.4384961396581761e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  22,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 3.7973415640327777e-06,
+              "rejection_probability": 1.4384961396581697e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  25,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 2.0639154077299602e-06,
+              "rejection_probability": 4.6931149243241866e-07,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  9
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 1.4384961396581761e-05,
+          "affected_quantity_power_upper_bound": 2.970854577802829e-05
+        },
+        {
+          "replicates": 50,
+          "rank_probabilities": [
+            0.18,
+            0.18,
+            0.27999999999999997,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.18,
+              "null_rejection_probability": 2.094854855528934e-06,
+              "rejection_probability": 2.689706130772688e-07,
+              "rejection_count_intervals": [
+                [
+                  25,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.36,
+              "null_rejection_probability": 3.7995624412280022e-06,
+              "rejection_probability": 2.9847526108223614e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  5
+                ],
+                [
+                  37,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 3.799562441228002e-06,
+              "rejection_probability": 2.984752610822326e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  13
+                ],
+                [
+                  45,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 2.0948548555289173e-06,
+              "rejection_probability": 2.6897061307727456e-07,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  25
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 2.9847526108223614e-05,
+          "affected_quantity_power_upper_bound": 6.023299344260142e-05
+        },
+        {
+          "replicates": 100,
+          "rank_probabilities": [
+            0.18,
+            0.18,
+            0.27999999999999997,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.18,
+              "null_rejection_probability": 4.191407079592953e-06,
+              "rejection_probability": 4.965265419783913e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  40,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.36,
+              "null_rejection_probability": 4.8673324536074715e-06,
+              "rejection_probability": 6.436555646057954e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  18
+                ],
+                [
+                  63,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 4.867332453607472e-06,
+              "rejection_probability": 6.436555646057842e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  37
+                ],
+                [
+                  82,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 4.191407079592921e-06,
+              "rejection_probability": 4.965265419783837e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  60
+                ],
+                [
+                  97,
+                  100
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 6.436555646057954e-05,
+          "affected_quantity_power_upper_bound": 0.0001386616437607257
+        },
+        {
+          "replicates": 200,
+          "rank_probabilities": [
+            0.18,
+            0.18,
+            0.27999999999999997,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.18,
+              "null_rejection_probability": 5.01027665164056e-06,
+              "rejection_probability": 4.5874727354135785e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  16
+                ],
+                [
+                  68,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.36,
+              "null_rejection_probability": 4.666739024997748e-06,
+              "rejection_probability": 0.0003317987595279091,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  49
+                ],
+                [
+                  113,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 4.666739024997749e-06,
+              "rejection_probability": 0.0003317987595279063,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  87
+                ],
+                [
+                  151,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 5.010276651640535e-06,
+              "rejection_probability": 4.5874727354134436e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  132
+                ],
+                [
+                  184,
+                  200
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.0003317987595279091,
+          "affected_quantity_power_upper_bound": 0.0007553469737640856
+        },
+        {
+          "replicates": 400,
+          "rank_probabilities": [
+            0.18,
+            0.18,
+            0.27999999999999997,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.18,
+              "null_rejection_probability": 4.415200288843308e-06,
+              "rejection_probability": 0.00013943030830323224,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  45
+                ],
+                [
+                  119,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.36,
+              "null_rejection_probability": 5.177222959494259e-06,
+              "rejection_probability": 0.0018318195629695947,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  116
+                ],
+                [
+                  206,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 5.177222959494257e-06,
+              "rejection_probability": 0.0018318195629695672,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  194
+                ],
+                [
+                  284,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 4.415200288843287e-06,
+              "rejection_probability": 0.00013943030830322752,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  281
+                ],
+                [
+                  355,
+                  400
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.0018318195629695947,
+          "affected_quantity_power_upper_bound": 0.003942499742545622
+        },
+        {
+          "replicates": 800,
+          "rank_probabilities": [
+            0.18,
+            0.18,
+            0.27999999999999997,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.18,
+              "null_rejection_probability": 4.981258744354678e-06,
+              "rejection_probability": 0.0007433088535041399,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  110
+                ],
+                [
+                  214,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.36,
+              "null_rejection_probability": 5.206420684037695e-06,
+              "rejection_probability": 0.011855981697671332,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  257
+                ],
+                [
+                  384,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 5.206420684037684e-06,
+              "rejection_probability": 0.011855981697671169,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  416
+                ],
+                [
+                  543,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 4.981258744354697e-06,
+              "rejection_probability": 0.0007433088535041106,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  586
+                ],
+                [
+                  690,
+                  800
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.011855981697671332,
+          "affected_quantity_power_upper_bound": 0.02519858110235075
+        },
+        {
+          "replicates": 1600,
+          "rank_probabilities": [
+            0.18,
+            0.18,
+            0.27999999999999997,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.18,
+              "null_rejection_probability": 4.9029661701779305e-06,
+              "rejection_probability": 0.0044984719945224665,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  248
+                ],
+                [
+                  395,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.36,
+              "null_rejection_probability": 4.848582689824418e-06,
+              "rejection_probability": 0.10068915677968385,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  551
+                ],
+                [
+                  731,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 4.8485826898244195e-06,
+              "rejection_probability": 0.10068915677968221,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  869
+                ],
+                [
+                  1049,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 4.9029661701778915e-06,
+              "rejection_probability": 0.004498471994522231,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1205
+                ],
+                [
+                  1352,
+                  1600
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.10068915677968385,
+          "affected_quantity_power_upper_bound": 0.21037525754841074
+        },
+        {
+          "replicates": 3200,
+          "rank_probabilities": [
+            0.18,
+            0.18,
+            0.27999999999999997,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.18,
+              "null_rejection_probability": 5.233614697401076e-06,
+              "rejection_probability": 0.04132021468674367,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  538
+                ],
+                [
+                  745,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.36,
+              "null_rejection_probability": 4.956020267648521e-06,
+              "rejection_probability": 0.5373552234609414,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1154
+                ],
+                [
+                  1408,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 4.956020267648524e-06,
+              "rejection_probability": 0.5373552234609358,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1792
+                ],
+                [
+                  2046,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 5.233614697401056e-06,
+              "rejection_probability": 0.04132021468674138,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  2455
+                ],
+                [
+                  2662,
+                  3200
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.5373552234609414,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 6400,
+          "rank_probabilities": [
+            0.18,
+            0.18,
+            0.27999999999999997,
+            0.18,
+            0.18
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.18,
+              "null_rejection_probability": 5.016456001392549e-06,
+              "rejection_probability": 0.2965428659931306,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1135
+                ],
+                [
+                  1428,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.36,
+              "null_rejection_probability": 5.2263788548942485e-06,
+              "rejection_probability": 0.9793506669373859,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  2382
+                ],
+                [
+                  2740,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.6399999999999999,
+              "null_rejection_probability": 5.226378854894235e-06,
+              "rejection_probability": 0.9793506669373854,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3660
+                ],
+                [
+                  4018,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8199999999999998,
+              "null_rejection_probability": 5.016456001392535e-06,
+              "rejection_probability": 0.2965428659931178,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  4972
+                ],
+                [
+                  5265,
+                  6400
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.9793506669373859,
+          "affected_quantity_power_upper_bound": 1.0
+        }
+      ],
+      "first_grid_size_meeting_illustrative_power": 6400
+    },
+    {
+      "alternative": "lower_end_mixture_0.25",
+      "rank_probabilities": [
+        0.4,
+        0.15000000000000002,
+        0.15000000000000002,
+        0.15000000000000002,
+        0.15000000000000002
+      ],
+      "calculations": [
+        {
+          "replicates": 25,
+          "rank_probabilities": [
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 2.063915407729966e-06,
+              "rejection_probability": 0.013169073488885857,
+              "rejection_count_intervals": [
+                [
+                  16,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.55,
+              "null_rejection_probability": 3.797341564032787e-06,
+              "rejection_probability": 0.0004785424459501953,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  22,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 3.7973415640327777e-06,
+              "rejection_probability": 0.00013410948103590798,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  25,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 2.0639154077299602e-06,
+              "rejection_probability": 3.422801749841471e-08,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  9
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.013169073488885857,
+          "affected_quantity_power_upper_bound": 0.013781759643889458
+        },
+        {
+          "replicates": 50,
+          "rank_probabilities": [
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 2.094854855528934e-06,
+              "rejection_probability": 0.09780736415324949,
+              "rejection_count_intervals": [
+                [
+                  25,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.55,
+              "null_rejection_probability": 3.7995624412280022e-06,
+              "rejection_probability": 0.004492928515432616,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  5
+                ],
+                [
+                  37,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 3.799562441228002e-06,
+              "rejection_probability": 0.000722861902064666,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  13
+                ],
+                [
+                  45,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 2.0948548555289173e-06,
+              "rejection_probability": 6.591581936640289e-09,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  25
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.09780736415324949,
+          "affected_quantity_power_upper_bound": 0.10302316116232871
+        },
+        {
+          "replicates": 100,
+          "rank_probabilities": [
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 4.191407079592953e-06,
+              "rejection_probability": 0.5379246591140376,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  40,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.55,
+              "null_rejection_probability": 4.8673324536074715e-06,
+              "rejection_probability": 0.0650695192319658,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  18
+                ],
+                [
+                  63,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 4.867332453607472e-06,
+              "rejection_probability": 0.0045226392327489375,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  37
+                ],
+                [
+                  82,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 4.191407079592921e-06,
+              "rejection_probability": 9.285264211187169e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  60
+                ],
+                [
+                  97,
+                  100
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.5379246591140376,
+          "affected_quantity_power_upper_bound": 0.6076096702208642
+        },
+        {
+          "replicates": 200,
+          "rank_probabilities": [
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 5.01027665164056e-06,
+              "rejection_probability": 0.9654055092609284,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  16
+                ],
+                [
+                  68,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.55,
+              "null_rejection_probability": 4.666739024997748e-06,
+              "rejection_probability": 0.3619965395056125,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  49
+                ],
+                [
+                  113,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 4.666739024997749e-06,
+              "rejection_probability": 0.050591794029902035,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  87
+                ],
+                [
+                  151,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 5.010276651640535e-06,
+              "rejection_probability": 0.002136469684037026,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  132
+                ],
+                [
+                  184,
+                  200
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.9654055092609284,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 400,
+          "rank_probabilities": [
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 4.415200288843308e-06,
+              "rejection_probability": 0.9999919181372168,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  45
+                ],
+                [
+                  119,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.55,
+              "null_rejection_probability": 5.177222959494259e-06,
+              "rejection_probability": 0.9272726533430997,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  116
+                ],
+                [
+                  206,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 5.177222959494257e-06,
+              "rejection_probability": 0.35361592265688374,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  194
+                ],
+                [
+                  284,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 4.415200288843287e-06,
+              "rejection_probability": 0.018363954818208992,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  281
+                ],
+                [
+                  355,
+                  400
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.9999919181372168,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 800,
+          "rank_probabilities": [
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 4.981258744354678e-06,
+              "rejection_probability": 0.9999999999999981,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  110
+                ],
+                [
+                  214,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.55,
+              "null_rejection_probability": 5.206420684037695e-06,
+              "rejection_probability": 0.999968829313566,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  257
+                ],
+                [
+                  384,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 5.206420684037684e-06,
+              "rejection_probability": 0.9108740563659671,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  416
+                ],
+                [
+                  543,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 4.981258744354697e-06,
+              "rejection_probability": 0.17375114946859127,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  586
+                ],
+                [
+                  690,
+                  800
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.9999999999999981,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 1600,
+          "rank_probabilities": [
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 4.9029661701779305e-06,
+              "rejection_probability": 0.9999999999999996,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  248
+                ],
+                [
+                  395,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.55,
+              "null_rejection_probability": 4.848582689824418e-06,
+              "rejection_probability": 0.9999999999999649,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  551
+                ],
+                [
+                  731,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 4.8485826898244195e-06,
+              "rejection_probability": 0.9999417614026214,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  869
+                ],
+                [
+                  1049,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 4.9029661701778915e-06,
+              "rejection_probability": 0.7258716008478983,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1205
+                ],
+                [
+                  1352,
+                  1600
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.9999999999999996,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 3200,
+          "rank_probabilities": [
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 5.233614697401076e-06,
+              "rejection_probability": 0.9999999999999999,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  538
+                ],
+                [
+                  745,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.55,
+              "null_rejection_probability": 4.956020267648521e-06,
+              "rejection_probability": 1.0,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1154
+                ],
+                [
+                  1408,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 4.956020267648524e-06,
+              "rejection_probability": 0.9999999999999195,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1792
+                ],
+                [
+                  2046,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 5.233614697401056e-06,
+              "rejection_probability": 0.9978538480837572,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  2455
+                ],
+                [
+                  2662,
+                  3200
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 1.0,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 6400,
+          "rank_probabilities": [
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.4,
+              "null_rejection_probability": 5.016456001392549e-06,
+              "rejection_probability": 1.0,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1135
+                ],
+                [
+                  1428,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.55,
+              "null_rejection_probability": 5.2263788548942485e-06,
+              "rejection_probability": 1.0000000000000004,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  2382
+                ],
+                [
+                  2740,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 5.226378854894235e-06,
+              "rejection_probability": 1.0000000000000009,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3660
+                ],
+                [
+                  4018,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 5.016456001392535e-06,
+              "rejection_probability": 0.9999999990435299,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  4972
+                ],
+                [
+                  5265,
+                  6400
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 1.0000000000000009,
+          "affected_quantity_power_upper_bound": 1.0
+        }
+      ],
+      "first_grid_size_meeting_illustrative_power": 200
+    },
+    {
+      "alternative": "both_ends_mixture_0.25",
+      "rank_probabilities": [
+        0.275,
+        0.15000000000000002,
+        0.15000000000000002,
+        0.15000000000000002,
+        0.275
+      ],
+      "calculations": [
+        {
+          "replicates": 25,
+          "rank_probabilities": [
+            0.275,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.275
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.275,
+              "null_rejection_probability": 2.063915407729966e-06,
+              "rejection_probability": 0.0001499840156166987,
+              "rejection_count_intervals": [
+                [
+                  16,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.42500000000000004,
+              "null_rejection_probability": 3.797341564032787e-06,
+              "rejection_probability": 4.199721402887475e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  22,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.5750000000000001,
+              "null_rejection_probability": 3.7973415640327777e-06,
+              "rejection_probability": 4.199721402887455e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  25,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.7250000000000001,
+              "null_rejection_probability": 2.0639154077299602e-06,
+              "rejection_probability": 0.00014998401561669818,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  9
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.0001499840156166987,
+          "affected_quantity_power_upper_bound": 0.00030836747403917183
+        },
+        {
+          "replicates": 50,
+          "rank_probabilities": [
+            0.275,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.275
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.275,
+              "null_rejection_probability": 2.094854855528934e-06,
+              "rejection_probability": 0.0006043931812167339,
+              "rejection_count_intervals": [
+                [
+                  25,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.42500000000000004,
+              "null_rejection_probability": 3.7995624412280022e-06,
+              "rejection_probability": 6.80776481290156e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  5
+                ],
+                [
+                  37,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.5750000000000001,
+              "null_rejection_probability": 3.799562441228002e-06,
+              "rejection_probability": 6.807764812901526e-06,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  13
+                ],
+                [
+                  45,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.7250000000000001,
+              "null_rejection_probability": 2.0948548555289173e-06,
+              "rejection_probability": 0.0006043931812167325,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  25
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.0006043931812167339,
+          "affected_quantity_power_upper_bound": 0.0012224018920592695
+        },
+        {
+          "replicates": 100,
+          "rank_probabilities": [
+            0.275,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.275
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.275,
+              "null_rejection_probability": 4.191407079592953e-06,
+              "rejection_probability": 0.004592415855988977,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  40,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.42500000000000004,
+              "null_rejection_probability": 4.8673324536074715e-06,
+              "rejection_probability": 2.9235352486577307e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  18
+                ],
+                [
+                  63,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.5750000000000001,
+              "null_rejection_probability": 4.867332453607472e-06,
+              "rejection_probability": 2.9235352486576847e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  37
+                ],
+                [
+                  82,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.7250000000000001,
+              "null_rejection_probability": 4.191407079592921e-06,
+              "rejection_probability": 0.004592415855988935,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  60
+                ],
+                [
+                  97,
+                  100
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.004592415855988977,
+          "affected_quantity_power_upper_bound": 0.009243302416951066
+        },
+        {
+          "replicates": 200,
+          "rank_probabilities": [
+            0.275,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.275
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.275,
+              "null_rejection_probability": 5.01027665164056e-06,
+              "rejection_probability": 0.025634818225899678,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  16
+                ],
+                [
+                  68,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.42500000000000004,
+              "null_rejection_probability": 4.666739024997748e-06,
+              "rejection_probability": 4.7005829193647625e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  49
+                ],
+                [
+                  113,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.5750000000000001,
+              "null_rejection_probability": 4.666739024997749e-06,
+              "rejection_probability": 4.700582919364729e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  87
+                ],
+                [
+                  151,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.7250000000000001,
+              "null_rejection_probability": 5.010276651640535e-06,
+              "rejection_probability": 0.025634818225899584,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  132
+                ],
+                [
+                  184,
+                  200
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.025634818225899678,
+          "affected_quantity_power_upper_bound": 0.05136364811018656
+        },
+        {
+          "replicates": 400,
+          "rank_probabilities": [
+            0.275,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.275
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.275,
+              "null_rejection_probability": 4.415200288843308e-06,
+              "rejection_probability": 0.17037670870731147,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  45
+                ],
+                [
+                  119,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.42500000000000004,
+              "null_rejection_probability": 5.177222959494259e-06,
+              "rejection_probability": 0.00017868077721006293,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  116
+                ],
+                [
+                  206,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.5750000000000001,
+              "null_rejection_probability": 5.177222959494257e-06,
+              "rejection_probability": 0.0001786807772100595,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  194
+                ],
+                [
+                  284,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.7250000000000001,
+              "null_rejection_probability": 4.415200288843287e-06,
+              "rejection_probability": 0.1703767087073104,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  281
+                ],
+                [
+                  355,
+                  400
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.17037670870731147,
+          "affected_quantity_power_upper_bound": 0.341110778969042
+        },
+        {
+          "replicates": 800,
+          "rank_probabilities": [
+            0.275,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.275
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.275,
+              "null_rejection_probability": 4.981258744354678e-06,
+              "rejection_probability": 0.6950650424904768,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  110
+                ],
+                [
+                  214,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.42500000000000004,
+              "null_rejection_probability": 5.206420684037695e-06,
+              "rejection_probability": 0.0009723590266248464,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  257
+                ],
+                [
+                  384,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.5750000000000001,
+              "null_rejection_probability": 5.206420684037684e-06,
+              "rejection_probability": 0.0009723590266248239,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  416
+                ],
+                [
+                  543,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.7250000000000001,
+              "null_rejection_probability": 4.981258744354697e-06,
+              "rejection_probability": 0.6950650424904741,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  586
+                ],
+                [
+                  690,
+                  800
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.6950650424904768,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 1600,
+          "rank_probabilities": [
+            0.275,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.275
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.275,
+              "null_rejection_probability": 4.9029661701779305e-06,
+              "rejection_probability": 0.9949451897300081,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  248
+                ],
+                [
+                  395,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.42500000000000004,
+              "null_rejection_probability": 4.848582689824418e-06,
+              "rejection_probability": 0.005421864475638914,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  551
+                ],
+                [
+                  731,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.5750000000000001,
+              "null_rejection_probability": 4.8485826898244195e-06,
+              "rejection_probability": 0.0054218644756387595,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  869
+                ],
+                [
+                  1049,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.7250000000000001,
+              "null_rejection_probability": 4.9029661701778915e-06,
+              "rejection_probability": 0.994945189730007,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1205
+                ],
+                [
+                  1352,
+                  1600
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.9949451897300081,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 3200,
+          "rank_probabilities": [
+            0.275,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.275
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.275,
+              "null_rejection_probability": 5.233614697401076e-06,
+              "rejection_probability": 0.9999999754921873,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  538
+                ],
+                [
+                  745,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.42500000000000004,
+              "null_rejection_probability": 4.956020267648521e-06,
+              "rejection_probability": 0.044848133324665064,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1154
+                ],
+                [
+                  1408,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.5750000000000001,
+              "null_rejection_probability": 4.956020267648524e-06,
+              "rejection_probability": 0.04484813332466403,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1792
+                ],
+                [
+                  2046,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.7250000000000001,
+              "null_rejection_probability": 5.233614697401056e-06,
+              "rejection_probability": 0.9999999754921862,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  2455
+                ],
+                [
+                  2662,
+                  3200
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.9999999754921873,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 6400,
+          "rank_probabilities": [
+            0.275,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.15000000000000002,
+            0.275
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.275,
+              "null_rejection_probability": 5.016456001392549e-06,
+              "rejection_probability": 1.0000000000000004,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1135
+                ],
+                [
+                  1428,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.42500000000000004,
+              "null_rejection_probability": 5.2263788548942485e-06,
+              "rejection_probability": 0.31081121035407855,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  2382
+                ],
+                [
+                  2740,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.5750000000000001,
+              "null_rejection_probability": 5.226378854894235e-06,
+              "rejection_probability": 0.3108112103540718,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3660
+                ],
+                [
+                  4018,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.7250000000000001,
+              "null_rejection_probability": 5.016456001392535e-06,
+              "rejection_probability": 0.9999999999999996,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  4972
+                ],
+                [
+                  5265,
+                  6400
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 1.0000000000000004,
+          "affected_quantity_power_upper_bound": 1.0
+        }
+      ],
+      "first_grid_size_meeting_illustrative_power": 1600
+    },
+    {
+      "alternative": "middle_mixture_0.25",
+      "rank_probabilities": [
+        0.15000000000000002,
+        0.15000000000000002,
+        0.4,
+        0.15000000000000002,
+        0.15000000000000002
+      ],
+      "calculations": [
+        {
+          "replicates": 25,
+          "rank_probabilities": [
+            0.15000000000000002,
+            0.15000000000000002,
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.15000000000000002,
+              "null_rejection_probability": 2.063915407729966e-06,
+              "rejection_probability": 3.422801749841504e-08,
+              "rejection_count_intervals": [
+                [
+                  16,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.30000000000000004,
+              "null_rejection_probability": 3.797341564032787e-06,
+              "rejection_probability": 0.00013410948103590744,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  22,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 3.7973415640327777e-06,
+              "rejection_probability": 0.00013410948103590798,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  25,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 2.0639154077299602e-06,
+              "rejection_probability": 3.422801749841471e-08,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  9
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.00013410948103590798,
+          "affected_quantity_power_upper_bound": 0.0002682874181068122
+        },
+        {
+          "replicates": 50,
+          "rank_probabilities": [
+            0.15000000000000002,
+            0.15000000000000002,
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.15000000000000002,
+              "null_rejection_probability": 2.094854855528934e-06,
+              "rejection_probability": 6.5915819366403675e-09,
+              "rejection_count_intervals": [
+                [
+                  25,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.30000000000000004,
+              "null_rejection_probability": 3.7995624412280022e-06,
+              "rejection_probability": 0.0007228619020646619,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  5
+                ],
+                [
+                  37,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 3.799562441228002e-06,
+              "rejection_probability": 0.000722861902064666,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  13
+                ],
+                [
+                  45,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 2.0948548555289173e-06,
+              "rejection_probability": 6.591581936640289e-09,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  25
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.000722861902064666,
+          "affected_quantity_power_upper_bound": 0.0014457369872932012
+        },
+        {
+          "replicates": 100,
+          "rank_probabilities": [
+            0.15000000000000002,
+            0.15000000000000002,
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.15000000000000002,
+              "null_rejection_probability": 4.191407079592953e-06,
+              "rejection_probability": 9.285264211187093e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  40,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.30000000000000004,
+              "null_rejection_probability": 4.8673324536074715e-06,
+              "rejection_probability": 0.004522639232748897,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  18
+                ],
+                [
+                  63,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 4.867332453607472e-06,
+              "rejection_probability": 0.0045226392327489375,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  37
+                ],
+                [
+                  82,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 4.191407079592921e-06,
+              "rejection_probability": 9.285264211187169e-05,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  60
+                ],
+                [
+                  97,
+                  100
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.0045226392327489375,
+          "affected_quantity_power_upper_bound": 0.009230983749721576
+        },
+        {
+          "replicates": 200,
+          "rank_probabilities": [
+            0.15000000000000002,
+            0.15000000000000002,
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.15000000000000002,
+              "null_rejection_probability": 5.01027665164056e-06,
+              "rejection_probability": 0.0021364696840369983,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  16
+                ],
+                [
+                  68,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.30000000000000004,
+              "null_rejection_probability": 4.666739024997748e-06,
+              "rejection_probability": 0.05059179402990163,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  49
+                ],
+                [
+                  113,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 4.666739024997749e-06,
+              "rejection_probability": 0.050591794029902035,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  87
+                ],
+                [
+                  151,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 5.010276651640535e-06,
+              "rejection_probability": 0.002136469684037026,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  132
+                ],
+                [
+                  184,
+                  200
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.050591794029902035,
+          "affected_quantity_power_upper_bound": 0.10545652742787769
+        },
+        {
+          "replicates": 400,
+          "rank_probabilities": [
+            0.15000000000000002,
+            0.15000000000000002,
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.15000000000000002,
+              "null_rejection_probability": 4.415200288843308e-06,
+              "rejection_probability": 0.01836395481820873,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  45
+                ],
+                [
+                  119,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.30000000000000004,
+              "null_rejection_probability": 5.177222959494259e-06,
+              "rejection_probability": 0.35361592265688147,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  116
+                ],
+                [
+                  206,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 5.177222959494257e-06,
+              "rejection_probability": 0.35361592265688374,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  194
+                ],
+                [
+                  284,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 4.415200288843287e-06,
+              "rejection_probability": 0.018363954818208992,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  281
+                ],
+                [
+                  355,
+                  400
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.35361592265688374,
+          "affected_quantity_power_upper_bound": 0.743959754950183
+        },
+        {
+          "replicates": 800,
+          "rank_probabilities": [
+            0.15000000000000002,
+            0.15000000000000002,
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.15000000000000002,
+              "null_rejection_probability": 4.981258744354678e-06,
+              "rejection_probability": 0.17375114946858897,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  110
+                ],
+                [
+                  214,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.30000000000000004,
+              "null_rejection_probability": 5.206420684037695e-06,
+              "rejection_probability": 0.9108740563659651,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  257
+                ],
+                [
+                  384,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 5.206420684037684e-06,
+              "rejection_probability": 0.9108740563659671,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  416
+                ],
+                [
+                  543,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 4.981258744354697e-06,
+              "rejection_probability": 0.17375114946859127,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  586
+                ],
+                [
+                  690,
+                  800
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.9108740563659671,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 1600,
+          "rank_probabilities": [
+            0.15000000000000002,
+            0.15000000000000002,
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.15000000000000002,
+              "null_rejection_probability": 4.9029661701779305e-06,
+              "rejection_probability": 0.7258716008478944,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  248
+                ],
+                [
+                  395,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.30000000000000004,
+              "null_rejection_probability": 4.848582689824418e-06,
+              "rejection_probability": 0.9999417614026206,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  551
+                ],
+                [
+                  731,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 4.8485826898244195e-06,
+              "rejection_probability": 0.9999417614026214,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  869
+                ],
+                [
+                  1049,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 4.9029661701778915e-06,
+              "rejection_probability": 0.7258716008478983,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1205
+                ],
+                [
+                  1352,
+                  1600
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.9999417614026214,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 3200,
+          "rank_probabilities": [
+            0.15000000000000002,
+            0.15000000000000002,
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.15000000000000002,
+              "null_rejection_probability": 5.233614697401076e-06,
+              "rejection_probability": 0.9978538480837577,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  538
+                ],
+                [
+                  745,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.30000000000000004,
+              "null_rejection_probability": 4.956020267648521e-06,
+              "rejection_probability": 0.9999999999999191,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1154
+                ],
+                [
+                  1408,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 4.956020267648524e-06,
+              "rejection_probability": 0.9999999999999195,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1792
+                ],
+                [
+                  2046,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 5.233614697401056e-06,
+              "rejection_probability": 0.9978538480837572,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  2455
+                ],
+                [
+                  2662,
+                  3200
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.9999999999999195,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 6400,
+          "rank_probabilities": [
+            0.15000000000000002,
+            0.15000000000000002,
+            0.4,
+            0.15000000000000002,
+            0.15000000000000002
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.15000000000000002,
+              "null_rejection_probability": 5.016456001392549e-06,
+              "rejection_probability": 0.9999999990435295,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1135
+                ],
+                [
+                  1428,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.30000000000000004,
+              "null_rejection_probability": 5.2263788548942485e-06,
+              "rejection_probability": 1.0000000000000002,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  2382
+                ],
+                [
+                  2740,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.7000000000000001,
+              "null_rejection_probability": 5.226378854894235e-06,
+              "rejection_probability": 1.0000000000000009,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3660
+                ],
+                [
+                  4018,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.8500000000000001,
+              "null_rejection_probability": 5.016456001392535e-06,
+              "rejection_probability": 0.9999999990435299,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  4972
+                ],
+                [
+                  5265,
+                  6400
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 1.0000000000000009,
+          "affected_quantity_power_upper_bound": 1.0
+        }
+      ],
+      "first_grid_size_meeting_illustrative_power": 800
+    },
+    {
+      "alternative": "binary_prior_only_inference",
+      "rank_probabilities": [
+        0.049999999999999996,
+        0.1,
+        0.20000000000000004,
+        0.3,
+        0.35000000000000003
+      ],
+      "calculations": [
+        {
+          "replicates": 25,
+          "rank_probabilities": [
+            0.049999999999999996,
+            0.1,
+            0.20000000000000004,
+            0.3,
+            0.35000000000000003
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.049999999999999996,
+              "null_rejection_probability": 2.063915407729966e-06,
+              "rejection_probability": 2.020746605861686e-15,
+              "rejection_count_intervals": [
+                [
+                  16,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.15,
+              "null_rejection_probability": 3.797341564032787e-06,
+              "rejection_probability": 0.017197809852209,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  22,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.35000000000000003,
+              "null_rejection_probability": 3.7973415640327777e-06,
+              "rejection_probability": 0.009684707661173351,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  25,
+                  25
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.65,
+              "null_rejection_probability": 2.0639154077299602e-06,
+              "rejection_probability": 0.002938167893573779,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  9
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.017197809852209,
+          "affected_quantity_power_upper_bound": 0.02982068540695815
+        },
+        {
+          "replicates": 50,
+          "rank_probabilities": [
+            0.049999999999999996,
+            0.1,
+            0.20000000000000004,
+            0.3,
+            0.35000000000000003
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.049999999999999996,
+              "null_rejection_probability": 2.094854855528934e-06,
+              "rejection_probability": 1.1004890634145492e-19,
+              "rejection_count_intervals": [
+                [
+                  25,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.15,
+              "null_rejection_probability": 3.7995624412280022e-06,
+              "rejection_probability": 0.2193533354014383,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  5
+                ],
+                [
+                  37,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.35000000000000003,
+              "null_rejection_probability": 3.799562441228002e-06,
+              "rejection_probability": 0.11633314334765142,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  13
+                ],
+                [
+                  45,
+                  50
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.65,
+              "null_rejection_probability": 2.0948548555289173e-06,
+              "rejection_probability": 0.020668389657599123,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  25
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.2193533354014383,
+          "affected_quantity_power_upper_bound": 0.35635486840668884
+        },
+        {
+          "replicates": 100,
+          "rank_probabilities": [
+            0.049999999999999996,
+            0.1,
+            0.20000000000000004,
+            0.3,
+            0.35000000000000003
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.049999999999999996,
+              "null_rejection_probability": 4.191407079592953e-06,
+              "rejection_probability": 0.25783865911601633,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  40,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.15,
+              "null_rejection_probability": 4.8673324536074715e-06,
+              "rejection_probability": 0.837174563170392,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  18
+                ],
+                [
+                  63,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.35000000000000003,
+              "null_rejection_probability": 4.867332453607472e-06,
+              "rejection_probability": 0.7024489946732261,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  37
+                ],
+                [
+                  82,
+                  100
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.65,
+              "null_rejection_probability": 4.191407079592921e-06,
+              "rejection_probability": 0.17241500425125444,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  60
+                ],
+                [
+                  97,
+                  100
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.837174563170392,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 200,
+          "rank_probabilities": [
+            0.049999999999999996,
+            0.1,
+            0.20000000000000004,
+            0.3,
+            0.35000000000000003
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.049999999999999996,
+              "null_rejection_probability": 5.01027665164056e-06,
+              "rejection_probability": 0.976200540252826,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  16
+                ],
+                [
+                  68,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.15,
+              "null_rejection_probability": 4.666739024997748e-06,
+              "rejection_probability": 0.9998483301646066,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  49
+                ],
+                [
+                  113,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.35000000000000003,
+              "null_rejection_probability": 4.666739024997749e-06,
+              "rejection_probability": 0.9947597545533033,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  87
+                ],
+                [
+                  151,
+                  200
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.65,
+              "null_rejection_probability": 5.010276651640535e-06,
+              "rejection_probability": 0.6420943909184997,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  132
+                ],
+                [
+                  184,
+                  200
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.9998483301646066,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 400,
+          "rank_probabilities": [
+            0.049999999999999996,
+            0.1,
+            0.20000000000000004,
+            0.3,
+            0.35000000000000003
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.049999999999999996,
+              "null_rejection_probability": 4.415200288843308e-06,
+              "rejection_probability": 0.9999998149964135,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  45
+                ],
+                [
+                  119,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.15,
+              "null_rejection_probability": 5.177222959494259e-06,
+              "rejection_probability": 0.9999999999996864,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  116
+                ],
+                [
+                  206,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.35000000000000003,
+              "null_rejection_probability": 5.177222959494257e-06,
+              "rejection_probability": 0.9999999887274009,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  194
+                ],
+                [
+                  284,
+                  400
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.65,
+              "null_rejection_probability": 4.415200288843287e-06,
+              "rejection_probability": 0.9886377822916406,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  281
+                ],
+                [
+                  355,
+                  400
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 0.9999999999996864,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 800,
+          "rank_probabilities": [
+            0.049999999999999996,
+            0.1,
+            0.20000000000000004,
+            0.3,
+            0.35000000000000003
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.049999999999999996,
+              "null_rejection_probability": 4.981258744354678e-06,
+              "rejection_probability": 1.0000000000000002,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  110
+                ],
+                [
+                  214,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.15,
+              "null_rejection_probability": 5.206420684037695e-06,
+              "rejection_probability": 0.9999999999999996,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  257
+                ],
+                [
+                  384,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.35000000000000003,
+              "null_rejection_probability": 5.206420684037684e-06,
+              "rejection_probability": 1.0000000000000004,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  416
+                ],
+                [
+                  543,
+                  800
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.65,
+              "null_rejection_probability": 4.981258744354697e-06,
+              "rejection_probability": 0.9999997593671706,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  586
+                ],
+                [
+                  690,
+                  800
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 1.0000000000000004,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 1600,
+          "rank_probabilities": [
+            0.049999999999999996,
+            0.1,
+            0.20000000000000004,
+            0.3,
+            0.35000000000000003
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.049999999999999996,
+              "null_rejection_probability": 4.9029661701779305e-06,
+              "rejection_probability": 1.0000000000000004,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  248
+                ],
+                [
+                  395,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.15,
+              "null_rejection_probability": 4.848582689824418e-06,
+              "rejection_probability": 0.9999999999999998,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  551
+                ],
+                [
+                  731,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.35000000000000003,
+              "null_rejection_probability": 4.8485826898244195e-06,
+              "rejection_probability": 1.0000000000000004,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  869
+                ],
+                [
+                  1049,
+                  1600
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.65,
+              "null_rejection_probability": 4.9029661701778915e-06,
+              "rejection_probability": 1.0000000000000002,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1205
+                ],
+                [
+                  1352,
+                  1600
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 1.0000000000000004,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 3200,
+          "rank_probabilities": [
+            0.049999999999999996,
+            0.1,
+            0.20000000000000004,
+            0.3,
+            0.35000000000000003
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.049999999999999996,
+              "null_rejection_probability": 5.233614697401076e-06,
+              "rejection_probability": 1.0000000000000002,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  538
+                ],
+                [
+                  745,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.15,
+              "null_rejection_probability": 4.956020267648521e-06,
+              "rejection_probability": 1.0000000000000007,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1154
+                ],
+                [
+                  1408,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.35000000000000003,
+              "null_rejection_probability": 4.956020267648524e-06,
+              "rejection_probability": 1.0000000000000007,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1792
+                ],
+                [
+                  2046,
+                  3200
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.65,
+              "null_rejection_probability": 5.233614697401056e-06,
+              "rejection_probability": 1.0000000000000004,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  2455
+                ],
+                [
+                  2662,
+                  3200
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 1.0000000000000007,
+          "affected_quantity_power_upper_bound": 1.0
+        },
+        {
+          "replicates": 6400,
+          "rank_probabilities": [
+            0.049999999999999996,
+            0.1,
+            0.20000000000000004,
+            0.3,
+            0.35000000000000003
+          ],
+          "cutoffs": [
+            {
+              "cutoff": 0,
+              "null_probability": 0.2,
+              "alternative_probability": 0.049999999999999996,
+              "null_rejection_probability": 5.016456001392549e-06,
+              "rejection_probability": 1.0,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  1135
+                ],
+                [
+                  1428,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 1,
+              "null_probability": 0.4,
+              "alternative_probability": 0.15,
+              "null_rejection_probability": 5.2263788548942485e-06,
+              "rejection_probability": 1.0,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  2382
+                ],
+                [
+                  2740,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 2,
+              "null_probability": 0.6,
+              "alternative_probability": 0.35000000000000003,
+              "null_rejection_probability": 5.226378854894235e-06,
+              "rejection_probability": 1.0000000000000007,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  3660
+                ],
+                [
+                  4018,
+                  6400
+                ]
+              ]
+            },
+            {
+              "cutoff": 3,
+              "null_probability": 0.8,
+              "alternative_probability": 0.65,
+              "null_rejection_probability": 5.016456001392535e-06,
+              "rejection_probability": 0.9999999999999998,
+              "rejection_count_intervals": [
+                [
+                  0,
+                  4972
+                ],
+                [
+                  5265,
+                  6400
+                ]
+              ]
+            }
+          ],
+          "affected_quantity_power_lower_bound": 1.0000000000000007,
+          "affected_quantity_power_upper_bound": 1.0
+        }
+      ],
+      "first_grid_size_meeting_illustrative_power": 100
+    }
+  ],
+  "balanced_workload": [
+    {
+      "replicates_per_case": 25,
+      "total_studies": 150,
+      "prior_predictive_studies": 125,
+      "maximum_fit_attempts": 600,
+      "functional_evaluations_if_all_fits_converge": 750
+    },
+    {
+      "replicates_per_case": 50,
+      "total_studies": 300,
+      "prior_predictive_studies": 250,
+      "maximum_fit_attempts": 1200,
+      "functional_evaluations_if_all_fits_converge": 1500
+    },
+    {
+      "replicates_per_case": 100,
+      "total_studies": 600,
+      "prior_predictive_studies": 500,
+      "maximum_fit_attempts": 2400,
+      "functional_evaluations_if_all_fits_converge": 3000
+    },
+    {
+      "replicates_per_case": 200,
+      "total_studies": 1200,
+      "prior_predictive_studies": 1000,
+      "maximum_fit_attempts": 4800,
+      "functional_evaluations_if_all_fits_converge": 6000
+    },
+    {
+      "replicates_per_case": 400,
+      "total_studies": 2400,
+      "prior_predictive_studies": 2000,
+      "maximum_fit_attempts": 9600,
+      "functional_evaluations_if_all_fits_converge": 12000
+    },
+    {
+      "replicates_per_case": 800,
+      "total_studies": 4800,
+      "prior_predictive_studies": 4000,
+      "maximum_fit_attempts": 19200,
+      "functional_evaluations_if_all_fits_converge": 24000
+    },
+    {
+      "replicates_per_case": 1600,
+      "total_studies": 9600,
+      "prior_predictive_studies": 8000,
+      "maximum_fit_attempts": 38400,
+      "functional_evaluations_if_all_fits_converge": 48000
+    },
+    {
+      "replicates_per_case": 3200,
+      "total_studies": 19200,
+      "prior_predictive_studies": 16000,
+      "maximum_fit_attempts": 76800,
+      "functional_evaluations_if_all_fits_converge": 96000
+    },
+    {
+      "replicates_per_case": 6400,
+      "total_studies": 38400,
+      "prior_predictive_studies": 32000,
+      "maximum_fit_attempts": 153600,
+      "functional_evaluations_if_all_fits_converge": 192000
+    }
+  ],
+  "scope": "Power bounds for rejection within one affected quantity, with the complete-family Bonferroni threshold. Rank-CDF cutoffs are dependent; other quantity dependence is unspecified.",
+  "assumptions": [
+    "Independent complete replicates and the stated rank distribution",
+    "The current fixed-design quantity inventory, including finite-simulation ranking functions",
+    "No missing or failed study and no seed reuse"
+  ],
+  "limitations": [
+    "Synthetic rank alternatives are not measured inference errors in the F1 model",
+    "Bounds do not specify the joint whole-family power or detect every possible error",
+    "The first grid size meeting an illustrative target is not a selected or approved study size",
+    "No fit runtime, full-study cost or intended-runner feasibility is established",
+    "Original numerical failure and pending sampling approval remain unresolved"
+  ],
+  "selected_study_size": null,
+  "full_registration_frozen": false,
+  "posterior_ranks_read": false,
+  "model_fits_run": false,
+  "establishes_model_calibration": false,
+  "publication_allowed": false
+}

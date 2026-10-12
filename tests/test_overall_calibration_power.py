@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 from scipy.stats import binom, binomtest
 
-from analysis.overall_calibration_power import binary_likelihood_ranks, power_bounds, rejection_regions
+from analysis.overall_calibration_power import alternatives, binary_likelihood_ranks, power_bounds, rejection_regions
 
 
 def test_rejection_regions_match_the_actual_adjusted_test():
@@ -36,6 +36,15 @@ def test_uniform_reference_respects_the_declared_error_budget():
     result = power_bounds(np.full(5, .2), replicates=25, family_size=40, alpha=.05)
     assert all(row["null_rejection_probability"] <= .05 / 40 for row in result["cutoffs"])
     assert result["affected_quantity_power_upper_bound"] <= .05
+
+
+def test_saturated_power_remains_a_probability():
+    # Reproduced in the fixed planning grid: summing binomial PMFs can round
+    # above unity. Keep the mathematical probability bounds without retuning.
+    result = power_bounds(alternatives(4)["binary_prior_only_inference"],
+                          replicates=800, family_size=9496, alpha=.05)
+    assert all(0 <= row["rejection_probability"] <= 1 for row in result["cutoffs"])
+    assert 0 <= result["affected_quantity_power_lower_bound"] <= result["affected_quantity_power_upper_bound"] <= 1
 
 
 def test_binary_example_matches_uniform_exact_inference_and_detects_prior_only_sampler():

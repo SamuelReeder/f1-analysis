@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.674" timestamp="2026-10-12T08:54:58.506637-04:00" hostname="DESKTOP-M9I22TH"><testcase classname="tests.test_overall_calibration_power" name="test_saturated_power_remains_a_probability" time="0.997"><failure message="assert False&#10; +  where False = all(&lt;generator object test_saturated_power_remains_a_probability.&lt;locals&gt;.&lt;genexpr&gt; at 0x7c86a46b7c60&gt;)">def test_saturated_power_remains_a_probability():
+        # Reproduced in the fixed planning grid: summing binomial PMFs can round
+        # above unity. Keep the mathematical probability bounds without retuning.
+        result = power_bounds(alternatives(4)["binary_prior_only_inference"],
+                              replicates=800, family_size=9496, alpha=.05)
+&gt;       assert all(0 &lt;= row["rejection_probability"] &lt;= 1 for row in result["cutoffs"])
+E       assert False
+E        +  where False = all(&lt;generator object test_saturated_power_remains_a_probability.&lt;locals&gt;.&lt;genexpr&gt; at 0x7c86a46b7c60&gt;)
+
+tests/test_overall_calibration_power.py:46: AssertionError</failure></testcase></testsuite></testsuites>
