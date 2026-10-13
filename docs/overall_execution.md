@@ -74,9 +74,11 @@ collector. All available saved-attempt inventories match. Its logical storage
 sizes motivate bounded coordinate-wise diagnostic computation; they do not
 measure full sampler memory. The [complete-design inference definition](overall_complete_profile.md)
 preserves the model, original preflight truths, sampling settings and fixed
-retry/diagnostic rules. Its runner is prepared for registration after the full
-bounded-diagnostic verification. No additional fit has been launched by these
-preparations.
+retry/diagnostic rules. Its runner is prepared, and the
+[bounded-diagnostic verification](overall_bounded_diagnostic_results.md) is complete:
+every saved report matches exactly and the full retained-array workload finishes
+within its local cap. Full sampler memory remains unmeasured. No additional fit
+has been launched by these preparations.
 
 | Requirement | Current evidence | Remaining work |
 |---|---|---|

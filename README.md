@@ -692,6 +692,10 @@ for every retained field and fixed retry. The largest real-network attempt has
 this is not a measured peak-memory requirement. The next
 [complete-design inference profile](docs/overall_complete_profile.md) preserves
 the original model and numerical procedure while measuring actual fitting.
+Its [bounded diagnostic check](docs/overall_bounded_diagnostic_results.md) reproduces
+every saved attempt's report exactly and completes the full retained-array
+workload within the local cap. This measures diagnostics with disk-backed inputs;
+full sampler memory remains a separate requirement.
 
 The qualifying folds for **2014 and 2021** failed every prescribed attempt, so
 those seasons are excluded wherever season-ahead qualifying features are needed.
