@@ -96,3 +96,34 @@ def test_parent_preserves_failures_and_completes_fixed_inventory(monkeypatch,tmp
     assert all('MemoryMax=3G' in c and 'CPUQuota=200%' in c and '--slice=f1.slice' in c for c in commands)
     monkeypatch.setattr(storage.subprocess,'run',lambda *a,**k:pytest.fail('Existing inventory relaunched'))
     with pytest.raises(FileExistsError):storage.execute(path)
+
+
+@pytest.mark.parametrize('change',['none','missing','axes','role','extra'])
+def test_bound_review_requires_every_original_attempt(monkeypatch,tmp_path,change):
+    (tmp_path/'analysis').mkdir()
+    source=tmp_path/'analysis/overall_fit_storage.py'
+    source.write_bytes(Path(storage.__file__).read_bytes())
+    studies=[dict(case='connected',seed=42)]
+    preflight=tmp_path/'preflight.json';preflight.write_text(json.dumps(dict(studies=studies)))
+    fit=tmp_path/'fit.json';fit.write_text('{}')
+    original=[dict(attempt=i,archive=f'failed_{i}.npz',archive_sha256=str(i)*64,
+                   settings=dict(chains=4,samples=100*i),archive_role='failed_diagnostic_only') for i in (1,2)]
+    review=tmp_path/'review.json';review.write_text(json.dumps(dict(studies=[dict(study='connected',attempts=original)])))
+    comparisons=[dict(case='connected',attempt=a['attempt'],path=a['archive'],sha256=a['archive_sha256'],
+                      axes=[4,a['settings']['samples']],role=a['archive_role']) for a in original]
+    if change=='missing':comparisons.pop()
+    elif change=='axes':comparisons[-1]['axes']=[4,100]
+    elif change=='role':comparisons[0]['role']='accepted'
+    elif change=='extra':comparisons.append(copy.deepcopy(comparisons[-1]))
+    p=dict(id='fixture',purpose='complete_retained_fit_storage_inventory',status='frozen',mcmc_allowed=False,
+        publication_allowed=False,resources=dict(slice='f1.slice',MemoryMax='3G',CPUQuota='200%',Nice=19),
+        source_sha256={'analysis/overall_fit_storage.py':storage.LOADED_SHA},
+        input_sha256={f.name:storage.sha(f) for f in (preflight,fit,review)},runtime_source_sha256={},
+        preflight_protocol=preflight.name,fit_registration=fit.name,archive_review=review.name,
+        studies=studies,archive_comparisons=comparisons)
+    path=tmp_path/'protocol.json';path.write_text(json.dumps(p))
+    monkeypatch.setattr(storage,'ROOT',tmp_path)
+    monkeypatch.setattr(storage.subprocess,'check_output',lambda cmd,**kw:(tmp_path/cmd[-1].removeprefix('HEAD:')).read_bytes())
+    if change=='none':assert storage.checked_protocol(path)==p
+    else:
+        with pytest.raises(ValueError,match='every saved attempt'):storage.checked_protocol(path)
