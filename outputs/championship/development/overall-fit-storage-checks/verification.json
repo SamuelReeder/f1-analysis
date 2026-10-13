@@ -1,0 +1,23 @@
+{
+  "purpose": "retained_fit_storage_inventory_software_checks",
+  "initial": {
+    "source_commit": "6801a09",
+    "output": "pytest.txt",
+    "exit_code": 0
+  },
+  "final": {
+    "source_commit": "9d50b47",
+    "output": "pytest-final.txt",
+    "exit_code": 0
+  },
+  "overlapping_checks_do_not_sum": true,
+  "command": "python -m pytest -q tests/test_overall_fit_storage.py tests/test_overall_posterior_archive.py",
+  "resources": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "slice": "f1.slice",
+    "Nice": 19
+  },
+  "mcmc_run": false,
+  "publication_allowed": false
+}
