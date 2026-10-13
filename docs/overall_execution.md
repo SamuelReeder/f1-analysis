@@ -34,9 +34,22 @@ Current authorization: the user has now approved the prepared conditional
 weekend-coordinate experiment with “yes continue”. Its separate
 [frozen registration](overall_weekend_profile_protocol.json) records that
 approval and retains the complete reviewed proposal. The original proposal and
-earlier pending-approval statements remain historical evidence. Preflight and
-the complete registered run are next; this approval supplies no result and does
-not authorize real-data fitting, ranking publication or deployment.
+earlier pending-approval statements remain historical evidence. The
+[preflight](../outputs/championship/development/overall-weekend-coordinate-profile-v1-launch/preflight.json)
+checked the original observations and complete generating truths against every
+registered study. The capped service has
+[launched](../outputs/championship/development/overall-weekend-coordinate-profile-v1-launch/launch.json)
+under the unchanged resource limits. One waiter checks at the requested interval;
+the whole-run review is pending. This approval supplies no result and does not
+authorize real-data fitting, ranking publication or deployment.
+
+The separate read-only [review collector](../analysis/overall_matched_profile_review.py)
+checks complete study, retry, comparison and archive identities. Its
+[verification](../outputs/championship/development/overall-matched-review-checks/verification.json)
+reproduces every shared field from the previous complete experiment review.
+It changes no fitting source or decision, and has not read the running
+experiment's results. The portable publication receipt will be refreshed after
+the new run and its evidence are complete; the public payload is unchanged.
 
 | Requirement | Current evidence | Remaining work |
 |---|---|---|
