@@ -93,6 +93,14 @@ The portable dashboard receipt will be refreshed after the new output inventory
 is complete; running development outputs must not be presented as a verified
 publication. The public payload and pointer remain unchanged.
 
+During this run the user requested a lower CPU limit. The
+[resource-change record](../outputs/championship/development/overall-complete-design-profile-v1-resource-changes/20261013T170054Z-cpu-reduction.json)
+records the shared cap changing from 800% to 400%, with the live service
+preserved and its memory limit and priority unchanged. The original registration
+and launch record remain immutable. Runtime measurements for this profile span
+different CPU limits; they must not be described as a run entirely under either
+cap. This resource change does not alter model inputs, sampling or acceptance.
+
 Before freezing the full scientific acceptance runs, finish the required
 production integration behind its acceptance guards and freeze the resulting
 source bundle. Both `f1rank/overall/provenance.py` and the racing artifact rules
