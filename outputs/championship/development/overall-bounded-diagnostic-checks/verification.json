@@ -1,0 +1,31 @@
+{
+  "purpose": "unchanged_bounded_diagnostic_verification",
+  "checker_source_commit": "adcb893",
+  "audit_source_commit": "23efbb8",
+  "focused_tests": {
+    "command": "python -m pytest -q tests/test_overall_bounded_diagnostics.py",
+    "output": "pytest.txt",
+    "exit_code": 0
+  },
+  "audit": {
+    "output": "audit/audit.json",
+    "exit_code": 0,
+    "stdout": "audit.txt",
+    "resources": "audit-resources.txt"
+  },
+  "resources": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "slice": "f1.slice",
+    "Nice": 19
+  },
+  "files": {
+    "pytest.txt": "3788eb8e9ccc798b3448a9acab7b099f31dc0b9cd9dfec8049ed7cb5b200e931",
+    "audit.txt": "7104ab98f7acfc6ee14edc7951dc8a60f7ba4d151e4c5fcb68fe9d4b9e6606e1",
+    "audit-resources.txt": "15f9fab8cc3d8cbfeda4bfa61025ddbb291a54db9f2ce4e53d9b522d683ef15a",
+    "audit/audit.json": "18fe787cbecca4f02ffd4fb4894f1daab856244cd07ba30da13c0974176cc890"
+  },
+  "mcmc_run": false,
+  "full_fit_peak_memory_verified": false,
+  "publication_allowed": false
+}
