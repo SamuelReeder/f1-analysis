@@ -80,6 +80,19 @@ every saved report matches exactly and the full retained-array workload finishes
 within its local cap. Full sampler memory remains unmeasured. No additional fit
 has been launched by these preparations.
 
+The subsequent [complete-design registration](overall_complete_profile_protocol.json)
+is now frozen and its [capped service has launched](../outputs/championship/development/overall-complete-design-profile-v1-launch/launch.json).
+It fits the complete original preflight inventory with unchanged model inputs,
+coordinate method, settings and retry rules, using fresh sequential child
+processes. The initial launcher rejected an unsupported systemd property before
+any fit started; the preserved launch record documents its correction and the
+verified kernel memory-group setting. This is an active computational study,
+not completed convergence, recovery or calibration evidence. A single waiter
+checks for completion or a terminal case failure at the requested interval.
+The portable dashboard receipt will be refreshed after the new output inventory
+is complete; running development outputs must not be presented as a verified
+publication. The public payload and pointer remain unchanged.
+
 | Requirement | Current evidence | Remaining work |
 |---|---|---|
 | Stable equal-machinery/team target | `overall_candidate.md`; driver-only state export interface; `overall_reference_calendar.json` fixes the common calendar, distances and context; a separate historical condition law supports development forecasts | Final forecast condition registration/calibration; completion/reliability, lapping and shortened-event assumptions |
