@@ -1,0 +1,33 @@
+{
+  "recorded_at": "2026-10-13T05:03:04.944845+00:00",
+  "source_commit": "5556261d6556e19fb5f68f49f333f309b8ef2978",
+  "registration": "docs/overall_complete_profile_protocol.json",
+  "unit": "f1-overall-complete-design-profile-v1.service",
+  "service": {
+    "Restart": "no",
+    "MainPID": "919112",
+    "Result": "success",
+    "OOMPolicy": "continue",
+    "ExecMainStartTimestamp": "Tue 2026-10-13 01:02:46 EDT",
+    "Slice": "f1.slice",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-overall-complete-design-profile-v1.service",
+    "MemoryCurrent": "1709146112",
+    "CPUWeight": "10",
+    "MemoryMax": "13958643712",
+    "Environment": "XLA_FLAGS=--xla_force_host_platform_device_count=4",
+    "Nice": "19",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "kernel_memory_oom_group": "0",
+  "monitor_interval_seconds": 1200,
+  "scripts": {
+    "outputs/logs/overall-complete-design-profile-v1/run.sh": "033cb1baa1bbf5a6e6695fe430039db89e0ac206a6f3dcd0ac714206dac43e67",
+    "outputs/logs/overall-complete-design-profile-v1/wait.py": "4f41b89e7806be35433b50a4dfd40465d447471eb54dd5bfc2c837eb9e90c4bc"
+  },
+  "log": "outputs/logs/overall-complete-design-profile-v1/profile.log",
+  "completion_status": "outputs/logs/overall-complete-design-profile-v1/exit.status",
+  "full_recovery_complete": false,
+  "sbc_complete": false,
+  "publication_allowed": false
+}

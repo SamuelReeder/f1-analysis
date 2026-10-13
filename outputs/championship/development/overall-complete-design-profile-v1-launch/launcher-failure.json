@@ -1,0 +1,13 @@
+{
+  "recorded_at": "2026-10-13T05:02:46.326535+00:00",
+  "source_commit": "5556261d6556e19fb5f68f49f333f309b8ef2978",
+  "action": "systemd-run transient service launch",
+  "exit_code": 1,
+  "error": "Unknown assignment: MemoryOOMGroup=no",
+  "fit_started": false,
+  "service_MainPID": 0,
+  "service_ActiveState": "inactive",
+  "correction": "Omit the unsupported systemd assignment. Retain OOMPolicy=continue and verify the actual cgroup memory.oom.group value before accepting launch. MemoryMax, CPU, all model/sampler settings and registration remain unchanged.",
+  "prematurely_started_waiter_terminated": true,
+  "publication_allowed": false
+}
