@@ -7,7 +7,7 @@ running complete-design profile keeps its original implementation and registrati
 This preparation does not authorize replacing or restarting that run.
 
 Keep every original block, eigenbasis, sign convention, scale, latent index and
-output coordinate. Group blocks only by their matrix dimensions. Evaluate their
+output coordinate. Group blocks by matching matrix dimensions and numeric dtypes. Evaluate their
 matrix-vector products together, multiply by their original scales, and gather
 the resulting coefficients into the original site shapes. Preserve the complete
 original map fingerprint and log absolute determinant. No observation, generating
