@@ -1,0 +1,1417 @@
+{
+  "case": "real_network",
+  "generation_seed": 20261025,
+  "state": "complete",
+  "started_at": "2026-10-13T01:33:02.004788+00:00",
+  "protocol_sha256": "73a664a8f789175d6e11329bcb6974a133a72ac5fcc59de80baa9f751dbbf50a",
+  "source_commit": "bcb1db3c09b1ec1b5ac06db214f5790d12cd9ee5",
+  "stage": "source_recheck",
+  "phases": [
+    {
+      "stage": "scope",
+      "seconds": 0.008757399977184832
+    },
+    {
+      "stage": "imports",
+      "seconds": 0.9879426989937201
+    },
+    {
+      "stage": "generation",
+      "seconds": 16.76167197804898
+    },
+    {
+      "stage": "coordinate_map",
+      "seconds": 0.23501693195430562
+    },
+    {
+      "stage": "density_equivalence",
+      "seconds": 4.902370943047572
+    },
+    {
+      "stage": "unconstrained_coordinates",
+      "seconds": 0.46245230396743864
+    },
+    {
+      "stage": "compiled_potential_and_gradient",
+      "seconds": 19.282858650025446
+    },
+    {
+      "stage": "source_recheck",
+      "seconds": 0.46172894700430334
+    }
+  ],
+  "mcmc_run": false,
+  "full_recovery_complete": false,
+  "sbc_complete": false,
+  "publication_allowed": false,
+  "actual_scope": {
+    "Slice": "f1.slice",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "Nice": 19
+  },
+  "runtime": {
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "numpy": "2.5.3",
+    "jax": "0.11.2",
+    "numpyro": "0.22.0",
+    "backend": "cpu",
+    "x64": false
+  },
+  "arrays_key": "208662dda10c26f92ea26ebff0a85b48f5591b492c98d98cbe09ca6cd7772e51",
+  "parameters_key": "bad9e8d9cb9f25647d0a2186cd5d0fd04025501db16005ac614eb6a93955520a",
+  "truth_key": "24ce460b9e029ca8f011ccbc91ab389a30c964e9f76c042369bdfddc86482f16",
+  "role": "prior_predictive",
+  "field_size": 22,
+  "blocks": {
+    "qualifying": {
+      "n_drivers": 84,
+      "n_entries": 7246,
+      "n_cars": 3624,
+      "n_sessions": 1031,
+      "n_events": 344,
+      "n_circuits": 36,
+      "n_team_seasons": 180,
+      "entry_event": {
+        "shape": [
+          7246
+        ],
+        "dtype": "int64",
+        "bytes": 57968
+      },
+      "car_event": {
+        "shape": [
+          3624
+        ],
+        "dtype": "int64",
+        "bytes": 28992
+      },
+      "car_team_season": {
+        "shape": [
+          3624
+        ],
+        "dtype": "int64",
+        "bytes": 28992
+      },
+      "car_circuit": {
+        "shape": [
+          3624
+        ],
+        "dtype": "int64",
+        "bytes": 28992
+      },
+      "circuit_factor": {
+        "shape": [
+          36
+        ],
+        "dtype": "float64",
+        "bytes": 288
+      },
+      "entry_driver": {
+        "shape": [
+          7246
+        ],
+        "dtype": "int64",
+        "bytes": 57968
+      },
+      "entry_stint": {
+        "shape": [
+          7246
+        ],
+        "dtype": "int64",
+        "bytes": 57968
+      },
+      "entry_spell": {
+        "shape": [
+          7246
+        ],
+        "dtype": "int64",
+        "bytes": 57968
+      },
+      "n_spells": 164,
+      "entry_era_stint": {
+        "shape": [
+          7246
+        ],
+        "dtype": "int64",
+        "bytes": 57968
+      },
+      "n_era_stints": 222,
+      "entry_placebo": {
+        "shape": [
+          7246
+        ],
+        "dtype": "int64",
+        "bytes": 57968
+      },
+      "n_placebo": 250,
+      "n_stints": 154,
+      "entry_first": {
+        "shape": [
+          7246
+        ],
+        "dtype": "bool",
+        "bytes": 7246
+      },
+      "entry_same_season": {
+        "shape": [
+          7246
+        ],
+        "dtype": "bool",
+        "bytes": 7246
+      },
+      "entry_event_gap": {
+        "shape": [
+          7246
+        ],
+        "dtype": "float64",
+        "bytes": 57968
+      },
+      "entry_season_gap": {
+        "shape": [
+          7246
+        ],
+        "dtype": "float64",
+        "bytes": 57968
+      },
+      "entry_experience": {
+        "shape": [
+          7246
+        ],
+        "dtype": "float64",
+        "bytes": 57968
+      },
+      "entry_age_over": {
+        "shape": [
+          7246
+        ],
+        "dtype": "float64",
+        "bytes": 57968
+      },
+      "car_first": {
+        "shape": [
+          3624
+        ],
+        "dtype": "bool",
+        "bytes": 3624
+      },
+      "car_season_start": {
+        "shape": [
+          3624
+        ],
+        "dtype": "bool",
+        "bytes": 3624
+      },
+      "car_reset": {
+        "shape": [
+          3624
+        ],
+        "dtype": "bool",
+        "bytes": 3624
+      },
+      "obs_session": {
+        "shape": [
+          15656
+        ],
+        "dtype": "int64",
+        "bytes": 125248
+      },
+      "obs_entry": {
+        "shape": [
+          15656
+        ],
+        "dtype": "int64",
+        "bytes": 125248
+      },
+      "obs_car": {
+        "shape": [
+          15656
+        ],
+        "dtype": "int64",
+        "bytes": 125248
+      },
+      "obs_car_segment": {
+        "shape": [
+          15656
+        ],
+        "dtype": "int64",
+        "bytes": 125248
+      },
+      "n_car_segments": 8720,
+      "car_segment_session": {
+        "shape": [
+          8720
+        ],
+        "dtype": "int64",
+        "bytes": 69760
+      },
+      "y": {
+        "shape": [
+          15656
+        ],
+        "dtype": "float32",
+        "bytes": 62624
+      },
+      "train": {
+        "shape": [
+          15656
+        ],
+        "dtype": "bool",
+        "bytes": 15656
+      }
+    },
+    "laps": {
+      "y": {
+        "shape": [
+          122556
+        ],
+        "dtype": "float32",
+        "bytes": 490224
+      },
+      "race": {
+        "shape": [
+          122556
+        ],
+        "dtype": "int32",
+        "bytes": 490224
+      },
+      "driver": {
+        "shape": [
+          122556
+        ],
+        "dtype": "int32",
+        "bytes": 490224
+      },
+      "ds": {
+        "shape": [
+          122556
+        ],
+        "dtype": "int32",
+        "bytes": 490224
+      },
+      "car": {
+        "shape": [
+          122556
+        ],
+        "dtype": "int32",
+        "bytes": 490224
+      },
+      "cr": {
+        "shape": [
+          122556
+        ],
+        "dtype": "int32",
+        "bytes": 490224
+      },
+      "dr": {
+        "shape": [
+          122556
+        ],
+        "dtype": "int32",
+        "bytes": 490224
+      },
+      "rc": {
+        "shape": [
+          122556
+        ],
+        "dtype": "int32",
+        "bytes": 490224
+      },
+      "age": {
+        "shape": [
+          122556
+        ],
+        "dtype": "float32",
+        "bytes": 490224
+      },
+      "lap": {
+        "shape": [
+          122556
+        ],
+        "dtype": "float32",
+        "bytes": 490224
+      },
+      "nonref": {
+        "shape": [
+          122556
+        ],
+        "dtype": "bool",
+        "bytes": 122556
+      },
+      "traffic": {
+        "shape": [
+          122556,
+          3
+        ],
+        "dtype": "float32",
+        "bytes": 1470672
+      },
+      "prev": {
+        "shape": [
+          122556
+        ],
+        "dtype": "bool",
+        "bytes": 122556
+      },
+      "ds_year": {
+        "shape": [
+          196
+        ],
+        "dtype": "int32",
+        "bytes": 784
+      },
+      "ds_driver": {
+        "shape": [
+          196
+        ],
+        "dtype": "int32",
+        "bytes": 784
+      },
+      "car_year": {
+        "shape": [
+          91
+        ],
+        "dtype": "int32",
+        "bytes": 364
+      },
+      "cr_race": {
+        "shape": [
+          1392
+        ],
+        "dtype": "int32",
+        "bytes": 5568
+      },
+      "dr_race": {
+        "shape": [
+          2615
+        ],
+        "dtype": "int32",
+        "bytes": 10460
+      },
+      "n_year": 9,
+      "n_race": 139,
+      "n_driver": 44,
+      "n_ds": 196,
+      "n_car": 91,
+      "n_cr": 1392,
+      "n_dr": 2615,
+      "n_rc": 393,
+      "car_basis": {
+        "shape": [
+          91,
+          82
+        ],
+        "dtype": "float32",
+        "bytes": 29848
+      },
+      "entry": {
+        "shape": [
+          122556
+        ],
+        "dtype": "int64",
+        "bytes": 980448
+      }
+    },
+    "outcomes": {
+      "entry": {
+        "shape": [
+          187,
+          20
+        ],
+        "dtype": "int64",
+        "bytes": 29920
+      },
+      "log_grid": {
+        "shape": [
+          187,
+          20
+        ],
+        "dtype": "float64",
+        "bytes": 29920
+      },
+      "mask": {
+        "shape": [
+          187,
+          20
+        ],
+        "dtype": "bool",
+        "bytes": 3740
+      },
+      "context": {
+        "shape": [
+          187
+        ],
+        "dtype": "int64",
+        "bytes": 1496
+      },
+      "risk_entry": {
+        "shape": [
+          3732
+        ],
+        "dtype": "int64",
+        "bytes": 29856
+      },
+      "risk_context": {
+        "shape": [
+          3732
+        ],
+        "dtype": "int64",
+        "bytes": 29856
+      },
+      "risk_distance": {
+        "shape": [
+          3732
+        ],
+        "dtype": "float64",
+        "bytes": 29856
+      },
+      "completed": {
+        "shape": [
+          3732
+        ],
+        "dtype": "float32",
+        "bytes": 14928
+      },
+      "failed": {
+        "shape": [
+          3732
+        ],
+        "dtype": "bool",
+        "bytes": 3732
+      },
+      "entry_car": {
+        "shape": [
+          7246
+        ],
+        "dtype": "int64",
+        "bytes": 57968
+      },
+      "n_circuits": 36,
+      "context_circuit": {
+        "shape": [
+          144
+        ],
+        "dtype": "int64",
+        "bytes": 1152
+      },
+      "context_wet": {
+        "shape": [
+          144
+        ],
+        "dtype": "int64",
+        "bytes": 1152
+      },
+      "context_sc": {
+        "shape": [
+          144
+        ],
+        "dtype": "int64",
+        "bytes": 1152
+      },
+      "car_basis": {
+        "shape": [
+          180,
+          163
+        ],
+        "dtype": "float64",
+        "bytes": 234720
+      }
+    }
+  },
+  "original_parameter_shapes": {
+    "sd_level": [],
+    "level_z": [
+      84
+    ],
+    "sd_skill_race": [],
+    "sd_skill_season": [],
+    "skill_z": [
+      7246
+    ],
+    "exp_gain": [],
+    "exp_scale": [],
+    "age_slope": [],
+    "rho": [],
+    "rho_reset": [],
+    "sd_car_race": [],
+    "sd_car_season": [],
+    "sd_car_reset": [],
+    "car_step_z": [
+      3624
+    ],
+    "car_jump_z": [
+      3624
+    ],
+    "sd_car_event": [],
+    "car_total_decentered": [
+      3624
+    ],
+    "sd_track_load": [],
+    "track_load_z": [
+      180
+    ],
+    "mu": [
+      1031
+    ],
+    "sigma0": [],
+    "sigma_tau": [],
+    "sigma_u": [
+      1031
+    ],
+    "nu": [],
+    "sd_compat": [],
+    "compat_z": [
+      222
+    ],
+    "sd_driver_form": [],
+    "driver_form_z": [
+      7246
+    ],
+    "sd_car_segment": [],
+    "car_segment_z": [
+      8720
+    ],
+    "overall_qualifying_link": [],
+    "overall_sd_level": [],
+    "overall_level_z": [
+      84
+    ],
+    "overall_sd_drift_race": [],
+    "overall_sd_drift_season": [],
+    "overall_walk_z": [
+      7246
+    ],
+    "overall_team_link": [],
+    "overall_sd_team": [],
+    "overall_team_z": [
+      222
+    ],
+    "overall_car_link": [],
+    "overall_car_contrast": [
+      163
+    ],
+    "overall_sd_car_day": [],
+    "overall_car_day_z": [
+      3624
+    ],
+    "overall_shared_weekend": [],
+    "overall_sd_day": [],
+    "overall_day_z": [
+      7246
+    ],
+    "overall_intercept": [
+      139
+    ],
+    "overall_trend": [
+      139
+    ],
+    "overall_compound": [
+      393
+    ],
+    "overall_sd_wear": [],
+    "overall_wear_z": [
+      2615
+    ],
+    "overall_tyre_slope": [
+      393
+    ],
+    "overall_traffic": [
+      139,
+      3
+    ],
+    "overall_lap_rho": [],
+    "overall_sd_lap": [],
+    "overall_lap_nu": [],
+    "overall_grid_base": [],
+    "overall_sd_grid_circuit": [],
+    "overall_grid_circuit_z": [
+      36
+    ],
+    "overall_grid_wet": [],
+    "overall_grid_sc": [],
+    "overall_pace_base": [],
+    "overall_sd_pace_circuit": [],
+    "overall_pace_circuit_z": [
+      36
+    ],
+    "overall_pace_wet": [],
+    "overall_pace_sc": [],
+    "overall_hazard_base": [],
+    "overall_sd_hazard_circuit": [],
+    "overall_hazard_circuit_z": [
+      36
+    ],
+    "overall_hazard_wet": [],
+    "overall_hazard_sc": []
+  },
+  "original_parameter_coordinates": 59466,
+  "control_rotation_sha256": "cb1d4a21cdf1d0b639851733c2d4747d1e3d7337e946c6e97745e4d55cff07c8",
+  "transformed_parameter_shapes": {
+    "sd_level": [],
+    "level_z": [
+      84
+    ],
+    "sd_skill_race": [],
+    "sd_skill_season": [],
+    "skill_z": [
+      7246
+    ],
+    "exp_gain": [],
+    "exp_scale": [],
+    "age_slope": [],
+    "rho": [],
+    "rho_reset": [],
+    "sd_car_race": [],
+    "sd_car_season": [],
+    "sd_car_reset": [],
+    "car_step_z": [
+      3624
+    ],
+    "car_jump_z": [
+      3624
+    ],
+    "sd_car_event": [],
+    "car_total_decentered": [
+      3624
+    ],
+    "sd_track_load": [],
+    "track_load_z": [
+      180
+    ],
+    "mu": [
+      1031
+    ],
+    "sigma0": [],
+    "sigma_tau": [],
+    "sigma_u": [
+      1031
+    ],
+    "nu": [],
+    "sd_compat": [],
+    "compat_z": [
+      222
+    ],
+    "sd_car_segment": [],
+    "car_segment_z": [
+      8720
+    ],
+    "overall_qualifying_link": [],
+    "overall_sd_level": [],
+    "overall_level_z": [
+      84
+    ],
+    "overall_sd_drift_race": [],
+    "overall_sd_drift_season": [],
+    "overall_walk_z": [
+      7246
+    ],
+    "overall_team_link": [],
+    "overall_sd_team": [],
+    "overall_team_z": [
+      222
+    ],
+    "overall_car_link": [],
+    "overall_car_contrast": [
+      163
+    ],
+    "overall_sd_car_day": [],
+    "overall_car_day_z": [
+      3624
+    ],
+    "overall_sd_wear": [],
+    "overall_wear_z": [
+      2615
+    ],
+    "overall_lap_rho": [],
+    "overall_sd_lap": [],
+    "overall_lap_nu": [],
+    "overall_grid_base": [],
+    "overall_sd_grid_circuit": [],
+    "overall_grid_circuit_z": [
+      36
+    ],
+    "overall_grid_wet": [],
+    "overall_grid_sc": [],
+    "overall_pace_base": [],
+    "overall_sd_pace_circuit": [],
+    "overall_pace_circuit_z": [
+      36
+    ],
+    "overall_pace_wet": [],
+    "overall_pace_sc": [],
+    "overall_hazard_base": [],
+    "overall_sd_hazard_circuit": [],
+    "overall_hazard_circuit_z": [
+      36
+    ],
+    "overall_hazard_wet": [],
+    "overall_hazard_sc": [],
+    "overall_weekend_qualifying_scale": [],
+    "overall_weekend_race_scale": [],
+    "overall_weekend_loading": [],
+    "overall_weekend_total_z": [
+      7246
+    ],
+    "overall_weekend_complement_z": [
+      7246
+    ],
+    "overall_lap_controls_rotated": [
+      1481
+    ]
+  },
+  "transformed_parameter_coordinates": 59466,
+  "joint_density": {
+    "original": -355675.875,
+    "transformed": -355468.1875,
+    "control_log_abs_det": 207.6478835691745,
+    "absolute_discrepancy": 0.03961643082550381
+  },
+  "all_original_state_and_factor_checks": [
+    {
+      "site": "sd_level",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "level_z",
+      "observation_factor": false,
+      "shape": [
+        84
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_skill_race",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_skill_season",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "skill_z",
+      "observation_factor": false,
+      "shape": [
+        7246
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "exp_gain",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "exp_scale",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "age_slope",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "skill",
+      "observation_factor": false,
+      "shape": [
+        7246
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "rho",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "rho_reset",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_car_race",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_car_season",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_car_reset",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_step_z",
+      "observation_factor": false,
+      "shape": [
+        3624
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_jump_z",
+      "observation_factor": false,
+      "shape": [
+        3624
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_car_event",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_total_decentered",
+      "observation_factor": false,
+      "shape": [
+        3624
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_total",
+      "observation_factor": false,
+      "shape": [
+        3624
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_event_prior",
+      "observation_factor": true,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car",
+      "observation_factor": false,
+      "shape": [
+        3624
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_event",
+      "observation_factor": false,
+      "shape": [
+        3624
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_track_load",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "track_load_z",
+      "observation_factor": false,
+      "shape": [
+        180
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "track_load",
+      "observation_factor": false,
+      "shape": [
+        180
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_track",
+      "observation_factor": false,
+      "shape": [
+        3624
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "mu",
+      "observation_factor": false,
+      "shape": [
+        1031
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sigma0",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sigma_tau",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sigma_u",
+      "observation_factor": false,
+      "shape": [
+        1031
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "nu",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_compat",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "compat_z",
+      "observation_factor": false,
+      "shape": [
+        222
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "compat",
+      "observation_factor": false,
+      "shape": [
+        7246
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_driver_form",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "driver_form_z",
+      "observation_factor": false,
+      "shape": [
+        7246
+      ],
+      "max_absolute_discrepancy": 4.76837158203125e-07
+    },
+    {
+      "site": "driver_form",
+      "observation_factor": false,
+      "shape": [
+        7246
+      ],
+      "max_absolute_discrepancy": 2.9802322387695312e-08
+    },
+    {
+      "site": "sd_car_segment",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_segment_z",
+      "observation_factor": false,
+      "shape": [
+        8720
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_segment",
+      "observation_factor": false,
+      "shape": [
+        8720
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "y",
+      "observation_factor": true,
+      "shape": [
+        15656
+      ],
+      "max_absolute_discrepancy": 3.814697265625e-06
+    },
+    {
+      "site": "overall_qualifying_link",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_level",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_level_z",
+      "observation_factor": false,
+      "shape": [
+        84
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_drift_race",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_drift_season",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_walk_z",
+      "observation_factor": false,
+      "shape": [
+        7246
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_race_skill",
+      "observation_factor": false,
+      "shape": [
+        7246
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_team_link",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_team",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_team_z",
+      "observation_factor": false,
+      "shape": [
+        222
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_team",
+      "observation_factor": false,
+      "shape": [
+        7246
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_car_link",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_car_contrast",
+      "observation_factor": false,
+      "shape": [
+        163
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_car_day",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_car_day_z",
+      "observation_factor": false,
+      "shape": [
+        3624
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_car",
+      "observation_factor": false,
+      "shape": [
+        3624
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_shared_weekend",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_day",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_day_z",
+      "observation_factor": false,
+      "shape": [
+        7246
+      ],
+      "max_absolute_discrepancy": 4.76837158203125e-07
+    },
+    {
+      "site": "overall_day",
+      "observation_factor": false,
+      "shape": [
+        7246
+      ],
+      "max_absolute_discrepancy": 1.7881393432617188e-07
+    },
+    {
+      "site": "overall_intercept",
+      "observation_factor": false,
+      "shape": [
+        139
+      ],
+      "max_absolute_discrepancy": 4.76837158203125e-07
+    },
+    {
+      "site": "overall_trend",
+      "observation_factor": false,
+      "shape": [
+        139
+      ],
+      "max_absolute_discrepancy": 4.76837158203125e-07
+    },
+    {
+      "site": "overall_compound",
+      "observation_factor": false,
+      "shape": [
+        393
+      ],
+      "max_absolute_discrepancy": 9.5367431640625e-07
+    },
+    {
+      "site": "overall_sd_wear",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_wear_z",
+      "observation_factor": false,
+      "shape": [
+        2615
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_tyre_slope",
+      "observation_factor": false,
+      "shape": [
+        393
+      ],
+      "max_absolute_discrepancy": 1.1920928955078125e-07
+    },
+    {
+      "site": "overall_traffic",
+      "observation_factor": false,
+      "shape": [
+        139,
+        3
+      ],
+      "max_absolute_discrepancy": 2.384185791015625e-07
+    },
+    {
+      "site": "overall_lap_rho",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_lap",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_lap_nu",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_laps",
+      "observation_factor": true,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_grid_base",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_grid_circuit",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_grid_circuit_z",
+      "observation_factor": false,
+      "shape": [
+        36
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_grid_wet",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_grid_sc",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_grid",
+      "observation_factor": false,
+      "shape": [
+        144
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_pace_base",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_pace_circuit",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_pace_circuit_z",
+      "observation_factor": false,
+      "shape": [
+        36
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_pace_wet",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_pace_sc",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_pace",
+      "observation_factor": false,
+      "shape": [
+        144
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_finish_order",
+      "observation_factor": true,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_hazard_base",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_hazard_circuit",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_hazard_circuit_z",
+      "observation_factor": false,
+      "shape": [
+        36
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_hazard_wet",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_hazard_sc",
+      "observation_factor": false,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_hazard",
+      "observation_factor": false,
+      "shape": [
+        144
+      ],
+      "max_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_completion",
+      "observation_factor": true,
+      "shape": [],
+      "max_absolute_discrepancy": 0.0
+    }
+  ],
+  "unconstrained_coordinates": 59466,
+  "potential_energy": 355513.375,
+  "all_gradient_coordinates_finite": true,
+  "gradient_coordinate_count": 59466,
+  "finished_at": "2026-10-13T01:33:41.602067+00:00",
+  "seconds": 43.10281834600028,
+  "process_max_rss_kib": 1768420
+}
