@@ -682,6 +682,10 @@ and tree-depth saturation remain documented limitations. This clears the immedia
 computational profile; full recovery, calibration and ranking precision remain
 open in the [execution ledger](docs/overall_execution.md). Earlier failures are
 preserved, and this result does not enable the production Overall ranking.
+The later [complete-design preflight](docs/overall_recovery_preflight_results.md)
+also checks probability equivalence and finite gradients on every required
+recovery design, including the full real transfer network. It measures a fixed
+computation under local caps; full inference and calibration remain unverified.
 
 The qualifying folds for **2014 and 2021** failed every prescribed attempt, so
 those seasons are excluded wherever season-ahead qualifying features are needed.

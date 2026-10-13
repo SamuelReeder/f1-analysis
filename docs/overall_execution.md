@@ -60,13 +60,21 @@ failed attempts. The sparse-rookie truth-interval misses and tree-depth saturati
 remain explicit limitations. The public payload is unchanged, and full recovery,
 calibration, functional precision and accepted publication remain open.
 
+The subsequent [complete-design preflight](overall_recovery_preflight_results.md)
+now checks every required recovery design, including the real transfer network,
+under the exact same coordinate method. All fixed density/state/factor checks
+and complete gradients pass at the supplied generating parameters within the
+declared local scope caps. The initial reporting failure and its metadata-only
+correction are preserved. This supplies full-design computation evidence without
+new MCMC, convergence claims for untested designs, or calibration acceptance.
+
 | Requirement | Current evidence | Remaining work |
 |---|---|---|
 | Stable equal-machinery/team target | `overall_candidate.md`; driver-only state export interface; `overall_reference_calendar.json` fixes the common calendar, distances and context; a separate historical condition law supports development forecasts | Final forecast condition registration/calibration; completion/reliability, lapping and shortened-event assumptions |
 | Shared current qualifying/race model | Joint model and synthetic interface/gradient tests | Fit, recover and calibrate its shared uncertainty |
 | Scientific specification | Executable likelihood/prior definitions and candidate contract | Final numerical/evaluation/prospective protocol before real-data fitting |
 | Complete entrant/cutoff catalog | Cutoff-first data design; outcome-free forecast catalogue; development state propagation reconstructs uncentred history and retains unseen entrants with population uncertainty | Verified as-of source/calendar inventory, accepted-posterior integration and recovery on the real transfer network |
-| Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks; original failed profiles preserved; approved conditional weekend-coordinate experiment converges on every registered case, with every saved diagnostic reproduced | Integrate the exact computational method under the full recovery protocol; no automatic retuning; full recovery and intended-runner resource measurements remain open |
+| Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks; original failed profiles preserved; approved conditional weekend-coordinate profile converges on its complete inventory; full-design density/gradient preflight also completes | Integrate the exact method under the full recovery protocol; measure inference on the remaining required designs; no automatic retuning; full recovery and intended-runner resource measurements remain open |
 | Known-truth recovery and simulation-based calibration | Complete numerical-profile inventory now converges; descriptive truth checks preserve sparse-rookie interval misses; development evaluator covers state contrasts and observation likelihoods, distinguishes fixed-truth stress cases and requires a complete inventory | Full study registration, power justification and execution, including ranking functionals, confounding and the real transfer network; no failed case or missed truth may be discarded |
 | Coherent weekend simulation | Student-t elimination and shared weekend uncertainty; observation kernels preserve teammate effects, context, order and completion within each joint draw; historical joint condition integration; explicit unseen-circuit outcome and qualifying track-factor extensions | Condition/circuit calibration and final registration, qualifying weather, official-grid eligibility/penalties, common operations, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |
