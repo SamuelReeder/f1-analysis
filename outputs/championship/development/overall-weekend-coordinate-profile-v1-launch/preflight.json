@@ -1,0 +1,54 @@
+{
+  "purpose": "approved_matched_experiment_launch_preflight",
+  "source_commit": "793200fea15e78af54ff777fa0e1ad06a9455b78",
+  "recorded_at": "2026-10-12T20:19:16.637499-04:00",
+  "registration": "docs/overall_weekend_profile_protocol.json",
+  "registration_sha256": "87bf4e2f1a656644820c5d714f9ca5b4e9f343a5222927b8e2845476313e026e",
+  "proposal_sha256": "fbf83d4593bad68ea59d66b77a62186ae82cf6477c3a78737f6b893b8350e60b",
+  "approved": true,
+  "registration_checked": true,
+  "model_inputs_key": "eae65767fe29bedcf396beeddbd8bf19b5bdc2a5769dd70f10fda50ef22bad18",
+  "protected_proposal_fields_unchanged": true,
+  "changed_fields": [
+    "approval",
+    "approval_note",
+    "registered_local_date",
+    "status",
+    "user_approved"
+  ],
+  "committed_model_inputs_checked": true,
+  "matched_original_studies": {
+    "connected": {
+      "arrays_key": "4ac5ab7125adfa2fc8a0ca18829fbe941be0ec94b5e857fc54a16751bba3a948",
+      "original_truth_sha256": "0effa6798e618d269e44912a2dbf4c760e12aeb64f607660b6b288b5cac25931",
+      "all_original_truth_values_match": true
+    },
+    "confounded": {
+      "arrays_key": "4d50cfb60b150f68abac84c2bc1619c649e76ebff8212884c52bcb1b88b6891b",
+      "original_truth_sha256": "d9af54f7cb9865b0ecf607b56bf1e1e01d7f199e24fa547d5b57daa75945f3df",
+      "all_original_truth_values_match": true
+    },
+    "sparse_rookie": {
+      "arrays_key": "ca20697300ef8607dc61590f9a00bc8d304142c525997aa90608b2aabb7d9196",
+      "original_truth_sha256": "48b4c7587e111de5018eade208ae830261f84a3c221b1270eba2bb713b68769b",
+      "all_original_truth_values_match": true
+    }
+  },
+  "existing_experiment_output_or_cache": false,
+  "other_running_f1_services": [],
+  "shared_slice_properties": [
+    "CPUWeight=10",
+    "CPUQuotaPerSecUSec=8s"
+  ],
+  "planned_resources": {
+    "slice": "f1.slice",
+    "MemoryMax": "6G",
+    "slice_CPUQuota": "800%",
+    "CPUWeight": 10,
+    "Nice": 19
+  },
+  "monitor_interval_seconds": 1200,
+  "mcmc_run": false,
+  "publication_allowed": false,
+  "full_goal_complete": false
+}
