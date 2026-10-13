@@ -8,6 +8,24 @@ import pytest
 from analysis import overall_recovery_preflight as runner
 
 
+def test_all_generated_array_metadata_can_be_saved_without_response_values(tmp_path):
+    import numpy as np
+    from analysis.overall_recovery_checks import generate_with_parameters
+    # Reproduce the already recorded failure's data; no new seed or fit.
+    generated = generate_with_parameters('connected', 20261020)
+    metadata = runner.block_metadata(generated['blocks'])
+    target = tmp_path / 'metadata.json'
+    runner.save(target, metadata)
+    assert json.loads(target.read_text()) == metadata
+    for name, block in generated['blocks'].items():
+        for key, value in block.items():
+            actual = metadata[name][key]
+            if hasattr(value, 'shape') and hasattr(value, 'dtype'):
+                assert actual == dict(shape=list(value.shape), dtype=str(value.dtype), bytes=np.asarray(value).nbytes)
+            else:
+                assert actual == value
+
+
 def setup(monkeypatch, tmp_path):
     protocol = dict(id='preflight-fixture', studies=[dict(case=c, seed=i) for i, c in enumerate(
         ('connected', 'confounded', 'sparse_rookie', 'dominant_teammate', 'era_boundary', 'real_network'))])

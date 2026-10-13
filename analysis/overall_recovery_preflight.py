@@ -24,6 +24,19 @@ def sha(path):
 SELF_SHA = sha(__file__)
 
 
+def block_metadata(blocks):
+    """Describe NumPy and JAX arrays alike; never serialize response values."""
+    import numpy as np
+    def describe(value):
+        if hasattr(value, 'shape') and hasattr(value, 'dtype'):
+            array = np.asarray(value)
+            return dict(shape=list(array.shape), dtype=str(array.dtype), bytes=int(array.nbytes))
+        if value is None or type(value) in (int, float, bool, str):
+            return value
+        raise TypeError(f'Unsupported input metadata type: {type(value).__name__}')
+    return {name: {key: describe(value) for key, value in block.items()} for name, block in blocks.items()}
+
+
 def save(path, value):
     temporary = path.with_suffix('.tmp')
     temporary.write_text(json.dumps(value, indent=2, allow_nan=False) + '\n')
@@ -120,9 +133,7 @@ def child(protocol_path, case, output, scope):
         blocks, catalog, parameters = (generated[k] for k in ('blocks', 'catalog', 'parameters'))
         record.update(arrays_key=generated['arrays_key'], parameters_key=generated['parameters_key'],
             truth_key=generated['truth_key'], role=generated['role'], field_size=len(catalog['field']),
-            blocks={name: {key: dict(shape=list(value.shape), dtype=str(value.dtype), bytes=value.nbytes)
-                           if isinstance(value, np.ndarray) else value for key, value in block.items()}
-                    for name, block in blocks.items()},
+            blocks=block_metadata(blocks),
             original_parameter_shapes={k: list(v.shape) for k, v in parameters.items()},
             original_parameter_coordinates=sum(v.size for v in parameters.values()))
         phase('coordinate_map')
