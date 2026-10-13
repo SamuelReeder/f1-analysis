@@ -289,9 +289,15 @@ regeneration. Preserve frozen experiments at their recorded revisions and rebuil
 every affected racing artifact before promoting the new publication. Do not edit
 hashed sources while their fits run.
 
-Use the recorded resource policy: fitting lanes share the **800%** CPU quota,
+Use the current resource policy: fitting lanes share the **400%** CPU quota,
 weight **10**, nice **19**, with aggregate memory caps no greater than **13G**.
-Other heavy checks run separately at **3G** and **200%** CPU. Sources are
+The user requested the lower shared cap during the active numerical profile;
+the [resource-change record](../outputs/championship/development/overall-complete-design-profile-v1-resource-changes/20261013T170054Z-cpu-reduction.json)
+preserves the earlier cap and the live change. Keep that lower limit for subsequent
+work unless the user changes it again. Historical registrations and runtime
+records retain their original limits; do not silently reset the shared cap to
+match an older registration.
+Other heavy checks run separately at **3G** and **200%** CPU. The remaining policy sources are
 [`racing_regeneration/run.json`](../outputs/analysis/racing_regeneration/run.json)
 and [`audit/verification.json`](../outputs/analysis/championship_model_audit/verification.json).
 Measure runtime, resident memory, cache size and restart behavior on the intended
