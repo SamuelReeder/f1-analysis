@@ -37,3 +37,34 @@ Only successful complete equivalence and resource checks can support integrating
 this implementation in a subsequent frozen runner. A faster map alone would not
 prove a proportional fitting speedup, convergence, recovery, ranking precision
 or production readiness. Earlier runs and their source identities remain intact.
+
+## Prepared complete-model audit
+
+The [audit runner](../analysis/overall_batched_rotation_audit.py) prepares a fixed
+workload for after the active profile finishes. It remains unexecuted. Run its
+focused software checks before freezing and committing a measurement registration.
+The registration binds both implementations and every original preflight design,
+generation seed, data/truth fingerprint and model source.
+
+Each implementation runs in a fresh capped process for each complete design.
+Both use the original map's inverse and the original generating parameters, so
+the supplied coordinates are identical. Save every traced state, every sample
+site's probability factor, the joint density, the unconstrained potential and its
+complete gradient. A separate capped comparison checks the entire inventories,
+numeric dtypes and shapes, exact unconstrained inputs and every numeric coordinate.
+Keep the existing density and state tolerances; the gradient comparison uses
+the state tolerance. A discrepancy remains a failure, with no tolerance change.
+
+The runner records preparation and compilation with the first synchronized full
+potential/gradient call separately. It then measures **8** synchronized complete
+evaluations at that same point, as fixed by `REPEATS` in the committed runner.
+Both arms use the same explicit CPU environment with persistent compilation
+caching disabled. Each process records its peak resident memory and an external
+resource log under the existing scope policy. Do not replace the full network
+with a smaller timing fixture. Preserve every required case and both methods
+after failures; saved comparison arrays live in the ignored cache, while their
+fingerprints and full comparison reports belong to the reviewable outputs.
+
+This is a local, single-point calculation benchmark. It cannot establish typical
+posterior gradient cost, NUTS trajectory length or an equivalent fitting speedup.
+It supplies no additional sampling, recovery, ranking or publication evidence.
