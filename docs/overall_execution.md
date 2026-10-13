@@ -101,6 +101,13 @@ and launch record remain immutable. Runtime measurements for this profile span
 different CPU limits; they must not be described as a run entirely under either
 cap. This resource change does not alter model inputs, sampling or acceptance.
 
+A [complete-profile review collector](overall_complete_profile_review.md) is now
+prepared for the current child-result layout. It preserves every case and its
+original failure records, checks the fixed retry and comparison inventories, and
+includes the committed resource-change record. Its tests and execution remain
+pending while the fit holds the resource budget. It does not replace numerical
+diagnostic reproduction or scientific acceptance.
+
 Before freezing the full scientific acceptance runs, finish the required
 production integration behind its acceptance guards and freeze the resulting
 source bundle. Both `f1rank/overall/provenance.py` and the racing artifact rules
