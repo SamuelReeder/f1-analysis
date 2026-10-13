@@ -1,0 +1,97 @@
+"""Whole-inventory comparisons and accounting, without running a fit."""
+import copy
+import json
+from pathlib import Path
+from types import SimpleNamespace
+
+import numpy as np
+import pytest
+
+from analysis import overall_batched_rotation_audit as audit
+
+
+def fixture():
+    arrays = {'state/empty':np.zeros((0,), dtype='f4'),
+        'coordinate/vector':np.arange(6, dtype='f4').reshape(2, 3),
+        'gradient/vector':np.ones((2, 3), dtype='f4'),
+        'factor/observation':np.array([-.3, -.7], dtype='f4'),
+        'potential_energy':np.array(2., dtype='f4')}
+    kinds = ['state', 'coordinate', 'gradient', 'density', 'density']
+    inventory = {k:dict(kind=t, shape=list(v.shape), dtype=v.dtype.str) for (k,v),t in zip(arrays.items(),kinds)}
+    record = dict(case='fixture', protocol_sha256='fixed-workload', arrays_key='a', parameters_key='p',
+        truth_key='t', control_rotation_sha256='r', control_log_abs_det=0., runtime={'fixture':True},
+        parameter_coordinates=6, payload_inventory=inventory)
+    p = dict(density_tolerance=dict(atol=.005, rtol=.000002),
+        state_tolerance=dict(atol=.000003, rtol=.000003), gradient_tolerance=dict(atol=.000003, rtol=.000003))
+    return dict(record, method='original'), dict(record, method='batched'), arrays, copy.deepcopy(arrays), p
+
+
+def test_complete_arrays_and_derivatives_including_empty_sites_are_checked():
+    a,b,left,right,p = fixture()
+    result = audit.compare_records(a,b,left,right,p)
+    assert {r['site'] for r in result} == set(left)
+    assert sum(r['coordinates'] for r in result if r['kind']=='gradient') == a['parameter_coordinates']
+    assert all(r['max_absolute_discrepancy']==0. for r in result)
+
+
+@pytest.mark.parametrize('change', ['identity', 'runtime', 'case', 'method', 'protocol', 'missing',
+    'extra', 'shape', 'dtype', 'nan', 'gradient', 'factor', 'coordinate', 'inventory'])
+def test_incomplete_or_changed_probability_and_derivative_payloads_fail(change):
+    a,b,left,right,p = fixture()
+    if change=='identity': b['parameters_key']='changed'
+    elif change=='runtime': b['runtime']={}
+    elif change=='case': b['case']='other'
+    elif change=='method': b['method']='original'
+    elif change=='protocol': b['protocol_sha256']='other'
+    elif change=='missing': right.pop('gradient/vector')
+    elif change=='extra': right['extra']=np.ones(1)
+    elif change=='shape': right['gradient/vector']=np.ones(6, dtype='f4')
+    elif change=='dtype': right['gradient/vector']=right['gradient/vector'].astype('f8')
+    elif change=='nan': right['gradient/vector'][1,2]=np.nan
+    elif change=='gradient': right['gradient/vector'][1,2]+=.01
+    elif change=='factor': right['factor/observation'][1]+=.1
+    elif change=='coordinate': right['coordinate/vector'][0,0]=np.finfo('f4').tiny
+    else:
+        b['payload_inventory']=copy.deepcopy(b['payload_inventory'])
+        b['payload_inventory'].pop('gradient/vector')
+    with pytest.raises((ValueError, AssertionError)):
+        audit.compare_records(a,b,left,right,p)
+
+
+@pytest.mark.parametrize('failed_return', [1, 137, 0])
+def test_every_full_design_and_both_arms_still_accounted_for_after_failure(monkeypatch, tmp_path, failed_return):
+    studies=[dict(case=c, seed=i) for i,c in enumerate(
+        ('connected','confounded','sparse_rookie','dominant_teammate','era_boundary','real_network'))]
+    p=dict(id='audit-fixture', studies=studies)
+    path=tmp_path/'protocol.json'; path.write_text(json.dumps(p))
+    (tmp_path/'outputs/championship/development').mkdir(parents=True)
+    (tmp_path/'outputs/championship/cache').mkdir()
+    monkeypatch.setattr(audit,'ROOT',tmp_path)
+    monkeypatch.setattr(audit,'checked_protocol',lambda path:p)
+    calls=[]
+
+    def run(command, **kwargs):
+        calls.append(command)
+        case=command[command.index('--case')+1]
+        method=command[command.index('--method')+1]
+        out=Path(command[command.index('--output')+1]); out.mkdir()
+        Path(command[command.index('-o')+1]).write_text('resource fixture')
+        kwargs['stdout'].write('orchestration fixture; no numerical evaluation')
+        assert all(kwargs['env'][k]==v for k,v in audit.ENVIRONMENT.items())
+        failed=case=='confounded' and method=='original'
+        if not failed: (out/'result.json').write_text(json.dumps(dict(state='complete')))
+        return SimpleNamespace(returncode=failed_return if failed else 0)
+
+    monkeypatch.setattr(audit.subprocess,'run',run)
+    result=audit.execute(path)
+    assert result['all_processed'] and not result['all_complete']
+    assert [(r['case'],r['method']) for r in result['rows']]==[
+        (s['case'],m) for s in studies for m in (*audit.METHODS,'compare')]
+    assert [(r['case'],r['method']) for r in result['rows'] if r['state']=='failed']==[('confounded','original')]
+    for command in calls:
+        assert command[:3]==['systemd-run','--user','--scope']
+        assert '--slice=f1.slice' in command and 'MemoryMax=3G' in command and 'CPUQuota=200%' in command
+        i=command.index('/usr/bin/nice'); assert command[i:i+3]==['/usr/bin/nice','-n','19']
+    assert not result['mcmc_run'] and not result['publication_allowed']
+    with pytest.raises(FileExistsError): audit.execute(path)
+
