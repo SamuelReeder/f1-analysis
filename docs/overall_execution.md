@@ -103,6 +103,14 @@ outputs when that integration changes the hashed source. Do not postpone those
 edits until after expensive calibration, chronological or prospective acceptance
 runs and then silently treat their old source identities as current.
 
+A separate [batched-map preparation](overall_batched_rotation.md) now replaces
+the control conversion's individual array updates with grouped matrix products
+and gathers in an unused development implementation. It keeps the existing
+coordinate map and its fingerprint. Its software, complete-model equivalence
+and resource checks are still pending and must wait for the active fit's budget
+to be released. It has not changed the running profile, and no speed improvement
+or permission to use it in inference is claimed.
+
 | Requirement | Current evidence | Remaining work |
 |---|---|---|
 | Stable equal-machinery/team target | `overall_candidate.md`; driver-only state export interface; `overall_reference_calendar.json` fixes the common calendar, distances and context; a separate historical condition law supports development forecasts | Final forecast condition registration/calibration; completion/reliability, lapping and shortened-event assumptions |
