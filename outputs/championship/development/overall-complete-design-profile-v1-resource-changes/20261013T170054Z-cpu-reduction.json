@@ -1,0 +1,46 @@
+{
+  "requested_at": "2026-10-13T17:00:54.634602+00:00",
+  "user_request": "lower the cpu cores",
+  "decision": "Halve the existing shared CPU time limit without restarting the live fit.",
+  "previous_quota_percent": 800,
+  "new_quota_percent": 400,
+  "logical_core_equivalent_before": 8,
+  "logical_core_equivalent_after": 4,
+  "service": "f1-overall-complete-design-profile-v1.service",
+  "before": {
+    "observed_at": "2026-10-13T17:00:54.685819+00:00",
+    "shared_slice": {
+      "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice",
+      "CPUWeight": "10",
+      "CPUQuotaPerSecUSec": "8s"
+    },
+    "service": {
+      "MainPID": "919112",
+      "MemoryMax": "13958643712",
+      "Nice": "19",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "kernel_cpu_max": "800000 100000"
+  },
+  "config_before": "[Unit]\nDescription=f1-analysis fitting lanes (all together at most 8 of the 16 cores)\n\n[Slice]\nCPUQuota=800%\nCPUWeight=10\n",
+  "state": "applied",
+  "interpretation": "User-requested resource change during the ongoing computational profile. Preserve the original registration and launch resource record. Runtime measurements span different shared CPU caps. No model, data, sampler, retry, seed or acceptance setting was changed.",
+  "after": {
+    "observed_at": "2026-10-13T17:00:55.211027+00:00",
+    "shared_slice": {
+      "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice",
+      "CPUWeight": "10",
+      "CPUQuotaPerSecUSec": "4s"
+    },
+    "service": {
+      "MainPID": "919112",
+      "MemoryMax": "13958643712",
+      "Nice": "19",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "kernel_cpu_max": "400000 100000"
+  },
+  "config_after": "[Unit]\nDescription=f1-analysis fitting lanes (shared CPU limit)\n\n[Slice]\nCPUQuota=400%\nCPUWeight=10\n"
+}
