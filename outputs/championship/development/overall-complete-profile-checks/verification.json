@@ -1,0 +1,15 @@
+{
+  "source_commit": "0646a7269a090ffa4975edc57ebb108f482b0a36",
+  "command": "python -m pytest -q tests/test_overall_complete_profile.py tests/test_overall_bounded_diagnostics.py tests/test_overall_weekend_profile.py tests/test_overall_fitting.py",
+  "exit_code": 0,
+  "output": "pytest.txt",
+  "resources": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "slice": "f1.slice",
+    "Nice": 19
+  },
+  "overlapping_prior_checks": true,
+  "mcmc_run": false,
+  "publication_allowed": false
+}
