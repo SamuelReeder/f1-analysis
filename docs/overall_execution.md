@@ -93,6 +93,16 @@ The portable dashboard receipt will be refreshed after the new output inventory
 is complete; running development outputs must not be presented as a verified
 publication. The public payload and pointer remain unchanged.
 
+Before freezing the full scientific acceptance runs, finish the required
+production integration behind its acceptance guards and freeze the resulting
+source bundle. Both `f1rank/overall/provenance.py` and the racing artifact rules
+bind the fitting sources broadly; a later producer or refresh edit inside
+`f1rank/` can invalidate otherwise unchanged fits. Preserve this computational
+profile at its recorded source, and announce and regenerate affected racing
+outputs when that integration changes the hashed source. Do not postpone those
+edits until after expensive calibration, chronological or prospective acceptance
+runs and then silently treat their old source identities as current.
+
 | Requirement | Current evidence | Remaining work |
 |---|---|---|
 | Stable equal-machinery/team target | `overall_candidate.md`; driver-only state export interface; `overall_reference_calendar.json` fixes the common calendar, distances and context; a separate historical condition law supports development forecasts | Final forecast condition registration/calibration; completion/reliability, lapping and shortened-event assumptions |
