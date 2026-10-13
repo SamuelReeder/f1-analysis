@@ -1,0 +1,874 @@
+{
+  "case": "sparse_rookie",
+  "state": "complete",
+  "stage": "source_recheck",
+  "started_at": "2026-10-13T01:54:55.649132+00:00",
+  "source_commit": "227471a644fbbf239a6813d3fbcbc85ec7191149",
+  "protocol_sha256": "7122ad819fc5f965a6851410500fa0403d19a2d5665755c59aef353f5b22fcbb",
+  "mcmc_run": false,
+  "publication_allowed": false,
+  "actual_scope": {
+    "Slice": "f1.slice",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "Nice": 19
+  },
+  "generation_seed": 20261022,
+  "runtime": {
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "numpy": "2.5.3",
+    "jax": "0.11.2",
+    "numpyro": "0.22.0",
+    "backend": "cpu",
+    "x64": false
+  },
+  "arrays_key": "f4050d37e37e589426a1537de88470a8a1461d0eb91df2c97cfe5c6326089f7a",
+  "parameters_key": "23d93ee28cc4fec83e1353b5a40da97206f8fc08f5e69dc07b25cd443e534d47",
+  "truth_key": "879013d5799ea5c7268370c83e6b46be25d6031fb946a29f21e15dd9ef021d27",
+  "sites": {
+    "overall_weekend_qualifying_scale": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_weekend_race_scale": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_weekend_loading": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_weekend_total_z": {
+      "shape": [
+        62
+      ],
+      "dtype": "<f4",
+      "coordinates": 62,
+      "itemsize": 4,
+      "bytes_per_draw": 248
+    },
+    "overall_weekend_complement_z": {
+      "shape": [
+        62
+      ],
+      "dtype": "<f4",
+      "coordinates": 62,
+      "itemsize": 4,
+      "bytes_per_draw": 248
+    },
+    "overall_lap_controls_rotated": {
+      "shape": [
+        108
+      ],
+      "dtype": "<f4",
+      "coordinates": 108,
+      "itemsize": 4,
+      "bytes_per_draw": 432
+    },
+    "sd_level": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "level_z": {
+      "shape": [
+        6
+      ],
+      "dtype": "<f4",
+      "coordinates": 6,
+      "itemsize": 4,
+      "bytes_per_draw": 24
+    },
+    "sd_skill_race": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "sd_skill_season": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "skill_z": {
+      "shape": [
+        62
+      ],
+      "dtype": "<f4",
+      "coordinates": 62,
+      "itemsize": 4,
+      "bytes_per_draw": 248
+    },
+    "exp_gain": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "exp_scale": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "age_slope": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "skill": {
+      "shape": [
+        62
+      ],
+      "dtype": "<f4",
+      "coordinates": 62,
+      "itemsize": 4,
+      "bytes_per_draw": 248
+    },
+    "rho": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "rho_reset": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "sd_car_race": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "sd_car_season": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "sd_car_reset": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "car_step_z": {
+      "shape": [
+        36
+      ],
+      "dtype": "<f4",
+      "coordinates": 36,
+      "itemsize": 4,
+      "bytes_per_draw": 144
+    },
+    "car_jump_z": {
+      "shape": [
+        36
+      ],
+      "dtype": "<f4",
+      "coordinates": 36,
+      "itemsize": 4,
+      "bytes_per_draw": 144
+    },
+    "sd_car_event": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "car_total_decentered": {
+      "shape": [
+        36
+      ],
+      "dtype": "<f4",
+      "coordinates": 36,
+      "itemsize": 4,
+      "bytes_per_draw": 144
+    },
+    "car_total": {
+      "shape": [
+        36
+      ],
+      "dtype": "<f4",
+      "coordinates": 36,
+      "itemsize": 4,
+      "bytes_per_draw": 144
+    },
+    "car": {
+      "shape": [
+        36
+      ],
+      "dtype": "<f4",
+      "coordinates": 36,
+      "itemsize": 4,
+      "bytes_per_draw": 144
+    },
+    "car_event": {
+      "shape": [
+        36
+      ],
+      "dtype": "<f4",
+      "coordinates": 36,
+      "itemsize": 4,
+      "bytes_per_draw": 144
+    },
+    "sd_track_load": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "track_load_z": {
+      "shape": [
+        9
+      ],
+      "dtype": "<f4",
+      "coordinates": 9,
+      "itemsize": 4,
+      "bytes_per_draw": 36
+    },
+    "track_load": {
+      "shape": [
+        9
+      ],
+      "dtype": "<f4",
+      "coordinates": 9,
+      "itemsize": 4,
+      "bytes_per_draw": 36
+    },
+    "car_track": {
+      "shape": [
+        36
+      ],
+      "dtype": "<f4",
+      "coordinates": 36,
+      "itemsize": 4,
+      "bytes_per_draw": 144
+    },
+    "mu": {
+      "shape": [
+        36
+      ],
+      "dtype": "<f4",
+      "coordinates": 36,
+      "itemsize": 4,
+      "bytes_per_draw": 144
+    },
+    "sigma0": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "sigma_tau": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "sigma_u": {
+      "shape": [
+        36
+      ],
+      "dtype": "<f4",
+      "coordinates": 36,
+      "itemsize": 4,
+      "bytes_per_draw": 144
+    },
+    "nu": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "sd_compat": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "compat_z": {
+      "shape": [
+        13
+      ],
+      "dtype": "<f4",
+      "coordinates": 13,
+      "itemsize": 4,
+      "bytes_per_draw": 52
+    },
+    "compat": {
+      "shape": [
+        62
+      ],
+      "dtype": "<f4",
+      "coordinates": 62,
+      "itemsize": 4,
+      "bytes_per_draw": 248
+    },
+    "sd_driver_form": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "driver_form_z": {
+      "shape": [
+        62
+      ],
+      "dtype": "<f4",
+      "coordinates": 62,
+      "itemsize": 4,
+      "bytes_per_draw": 248
+    },
+    "driver_form": {
+      "shape": [
+        62
+      ],
+      "dtype": "<f4",
+      "coordinates": 62,
+      "itemsize": 4,
+      "bytes_per_draw": 248
+    },
+    "sd_car_segment": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "car_segment_z": {
+      "shape": [
+        108
+      ],
+      "dtype": "<f4",
+      "coordinates": 108,
+      "itemsize": 4,
+      "bytes_per_draw": 432
+    },
+    "car_segment": {
+      "shape": [
+        108
+      ],
+      "dtype": "<f4",
+      "coordinates": 108,
+      "itemsize": 4,
+      "bytes_per_draw": 432
+    },
+    "overall_qualifying_link": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_sd_level": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_level_z": {
+      "shape": [
+        6
+      ],
+      "dtype": "<f4",
+      "coordinates": 6,
+      "itemsize": 4,
+      "bytes_per_draw": 24
+    },
+    "overall_sd_drift_race": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_sd_drift_season": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_walk_z": {
+      "shape": [
+        62
+      ],
+      "dtype": "<f4",
+      "coordinates": 62,
+      "itemsize": 4,
+      "bytes_per_draw": 248
+    },
+    "overall_race_skill": {
+      "shape": [
+        62
+      ],
+      "dtype": "<f4",
+      "coordinates": 62,
+      "itemsize": 4,
+      "bytes_per_draw": 248
+    },
+    "overall_team_link": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_sd_team": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_team_z": {
+      "shape": [
+        13
+      ],
+      "dtype": "<f4",
+      "coordinates": 13,
+      "itemsize": 4,
+      "bytes_per_draw": 52
+    },
+    "overall_team": {
+      "shape": [
+        62
+      ],
+      "dtype": "<f4",
+      "coordinates": 62,
+      "itemsize": 4,
+      "bytes_per_draw": 248
+    },
+    "overall_car_link": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_car_contrast": {
+      "shape": [
+        6
+      ],
+      "dtype": "<f4",
+      "coordinates": 6,
+      "itemsize": 4,
+      "bytes_per_draw": 24
+    },
+    "overall_sd_car_day": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_car_day_z": {
+      "shape": [
+        36
+      ],
+      "dtype": "<f4",
+      "coordinates": 36,
+      "itemsize": 4,
+      "bytes_per_draw": 144
+    },
+    "overall_car": {
+      "shape": [
+        36
+      ],
+      "dtype": "<f4",
+      "coordinates": 36,
+      "itemsize": 4,
+      "bytes_per_draw": 144
+    },
+    "overall_shared_weekend": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_sd_day": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_day_z": {
+      "shape": [
+        62
+      ],
+      "dtype": "<f4",
+      "coordinates": 62,
+      "itemsize": 4,
+      "bytes_per_draw": 248
+    },
+    "overall_day": {
+      "shape": [
+        62
+      ],
+      "dtype": "<f4",
+      "coordinates": 62,
+      "itemsize": 4,
+      "bytes_per_draw": 248
+    },
+    "overall_intercept": {
+      "shape": [
+        12
+      ],
+      "dtype": "<f4",
+      "coordinates": 12,
+      "itemsize": 4,
+      "bytes_per_draw": 48
+    },
+    "overall_trend": {
+      "shape": [
+        12
+      ],
+      "dtype": "<f4",
+      "coordinates": 12,
+      "itemsize": 4,
+      "bytes_per_draw": 48
+    },
+    "overall_compound": {
+      "shape": [
+        24
+      ],
+      "dtype": "<f4",
+      "coordinates": 24,
+      "itemsize": 4,
+      "bytes_per_draw": 96
+    },
+    "overall_sd_wear": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_wear_z": {
+      "shape": [
+        62
+      ],
+      "dtype": "<f4",
+      "coordinates": 62,
+      "itemsize": 4,
+      "bytes_per_draw": 248
+    },
+    "overall_tyre_slope": {
+      "shape": [
+        24
+      ],
+      "dtype": "<f4",
+      "coordinates": 24,
+      "itemsize": 4,
+      "bytes_per_draw": 96
+    },
+    "overall_traffic": {
+      "shape": [
+        12,
+        3
+      ],
+      "dtype": "<f4",
+      "coordinates": 36,
+      "itemsize": 4,
+      "bytes_per_draw": 144
+    },
+    "overall_lap_rho": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_sd_lap": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_lap_nu": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_grid_base": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_sd_grid_circuit": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_grid_circuit_z": {
+      "shape": [
+        3
+      ],
+      "dtype": "<f4",
+      "coordinates": 3,
+      "itemsize": 4,
+      "bytes_per_draw": 12
+    },
+    "overall_grid_wet": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_grid_sc": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_grid": {
+      "shape": [
+        12
+      ],
+      "dtype": "<f4",
+      "coordinates": 12,
+      "itemsize": 4,
+      "bytes_per_draw": 48
+    },
+    "overall_pace_base": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_sd_pace_circuit": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_pace_circuit_z": {
+      "shape": [
+        3
+      ],
+      "dtype": "<f4",
+      "coordinates": 3,
+      "itemsize": 4,
+      "bytes_per_draw": 12
+    },
+    "overall_pace_wet": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_pace_sc": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_pace": {
+      "shape": [
+        12
+      ],
+      "dtype": "<f4",
+      "coordinates": 12,
+      "itemsize": 4,
+      "bytes_per_draw": 48
+    },
+    "overall_hazard_base": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_sd_hazard_circuit": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_hazard_circuit_z": {
+      "shape": [
+        3
+      ],
+      "dtype": "<f4",
+      "coordinates": 3,
+      "itemsize": 4,
+      "bytes_per_draw": 12
+    },
+    "overall_hazard_wet": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_hazard_sc": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_hazard": {
+      "shape": [
+        12
+      ],
+      "dtype": "<f4",
+      "coordinates": 12,
+      "itemsize": 4,
+      "bytes_per_draw": 48
+    }
+  },
+  "accounting": {
+    "site_count": 93,
+    "coordinates_per_draw": 1789,
+    "posterior_bytes_per_draw": 7156,
+    "attempts": [
+      {
+        "attempt": 1,
+        "chains": 4,
+        "samples_per_chain": 800,
+        "warmup_per_chain": 800,
+        "target_accept": 0.9,
+        "posterior_payload_bytes": 22899200,
+        "largest_single_site_float64_bytes": 2764800
+      },
+      {
+        "attempt": 2,
+        "chains": 4,
+        "samples_per_chain": 1600,
+        "warmup_per_chain": 1600,
+        "target_accept": 0.9,
+        "posterior_payload_bytes": 45798400,
+        "largest_single_site_float64_bytes": 5529600
+      },
+      {
+        "attempt": 3,
+        "chains": 4,
+        "samples_per_chain": 3200,
+        "warmup_per_chain": 2400,
+        "target_accept": 0.9,
+        "posterior_payload_bytes": 91596800,
+        "largest_single_site_float64_bytes": 11059200
+      },
+      {
+        "attempt": 4,
+        "chains": 4,
+        "samples_per_chain": 3200,
+        "warmup_per_chain": 2400,
+        "target_accept": 0.98,
+        "posterior_payload_bytes": 91596800,
+        "largest_single_site_float64_bytes": 11059200
+      }
+    ],
+    "maximum_attempt_payload_bytes": 91596800,
+    "whole_retry_ladder_payload_bytes": 251891200,
+    "largest_sites": [
+      "overall_lap_controls_rotated",
+      "car_segment_z",
+      "car_segment"
+    ],
+    "physical_peak_memory_measured": false,
+    "compressed_storage_estimated": false
+  },
+  "complete_collector_matches_postprocessing": true,
+  "archive_comparisons": [
+    {
+      "case": "sparse_rookie",
+      "attempt": 1,
+      "path": "outputs/championship/cache/overall-weekend-coordinate-profile-v1/sparse_rookie/failed_1.npz",
+      "sha256": "78eaa36dd2bd55af6ff3c03ddee09d8e0d3146645eff8763166780c7e4785d71",
+      "axes": [
+        4,
+        800
+      ],
+      "role": "failed_diagnostic_only",
+      "inventory": {
+        "axes": [
+          4,
+          800
+        ],
+        "site_count": 93,
+        "payload_bytes": 22899200,
+        "npy_members_bytes": 22911104,
+        "archive_file_bytes": 20056377,
+        "complete_headers_match": true
+      }
+    },
+    {
+      "case": "sparse_rookie",
+      "attempt": 2,
+      "path": "outputs/championship/cache/overall-weekend-coordinate-profile-v1/sparse_rookie/posterior.npz",
+      "sha256": "f8c49d15e553ef713bcb79a8229cae0c6de4e2d252649f1a863951403f2214a6",
+      "axes": [
+        4,
+        1600
+      ],
+      "role": "converged_profile_only",
+      "inventory": {
+        "axes": [
+          4,
+          1600
+        ],
+        "site_count": 93,
+        "payload_bytes": 45798400,
+        "npy_members_bytes": 45810304,
+        "archive_file_bytes": 40100233,
+        "complete_headers_match": true
+      }
+    }
+  ],
+  "finished_at": "2026-10-13T01:55:08.381504+00:00",
+  "seconds": 13.736247260007076,
+  "process_max_rss_kib": 759028
+}
