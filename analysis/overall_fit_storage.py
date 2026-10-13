@@ -130,6 +130,14 @@ def checked_protocol(path):
         raise ValueError('Bind both original frozen registrations')
     if p['studies'] != json.loads((ROOT / p['preflight_protocol']).read_text())['studies']:
         raise ValueError('Preserve the complete preflight inventory before starting')
+    if p['archive_review'] not in p['input_sha256']:
+        raise ValueError('Bind the complete previous archive review')
+    review = json.loads((ROOT / p['archive_review']).read_text())
+    expected = [dict(case=s['study'], attempt=a['attempt'], path=a['archive'], sha256=a['archive_sha256'],
+                     axes=[a['settings']['chains'], a['settings']['samples']], role=a['archive_role'])
+                for s in review['studies'] for a in s['attempts']]
+    if p['archive_comparisons'] != expected:
+        raise ValueError('Keep every saved attempt in the comparison inventory')
     return p
 
 
