@@ -686,6 +686,12 @@ The later [complete-design preflight](docs/overall_recovery_preflight_results.md
 also checks probability equivalence and finite gradients on every required
 recovery design, including the full real transfer network. It measures a fixed
 computation under local caps; full inference and calibration remain unverified.
+The [complete storage inventory](docs/overall_fit_storage_results.md) also accounts
+for every retained field and fixed retry. The largest real-network attempt has
+7,494,144,000 bytes of logical array values, before temporary working memory;
+this is not a measured peak-memory requirement. The next
+[complete-design inference profile](docs/overall_complete_profile.md) preserves
+the original model and numerical procedure while measuring actual fitting.
 
 The qualifying folds for **2014 and 2021** failed every prescribed attempt, so
 those seasons are excluded wherever season-ahead qualifying features are needed.

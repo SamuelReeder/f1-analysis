@@ -68,6 +68,16 @@ declared local scope caps. The initial reporting failure and its metadata-only
 correction are preserved. This supplies full-design computation evidence without
 new MCMC, convergence claims for untested designs, or calibration acceptance.
 
+The [complete retained-fit inventory](overall_fit_storage_results.md) now accounts
+for every required design and every fixed attempt using the actual NumPyro
+collector. All available saved-attempt inventories match. Its logical storage
+sizes motivate bounded coordinate-wise diagnostic computation; they do not
+measure full sampler memory. The [complete-design inference definition](overall_complete_profile.md)
+preserves the model, original preflight truths, sampling settings and fixed
+retry/diagnostic rules. Its runner is prepared for registration after the full
+bounded-diagnostic verification. No additional fit has been launched by these
+preparations.
+
 | Requirement | Current evidence | Remaining work |
 |---|---|---|
 | Stable equal-machinery/team target | `overall_candidate.md`; driver-only state export interface; `overall_reference_calendar.json` fixes the common calendar, distances and context; a separate historical condition law supports development forecasts | Final forecast condition registration/calibration; completion/reliability, lapping and shortened-event assumptions |
