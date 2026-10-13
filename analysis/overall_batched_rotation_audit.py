@@ -29,6 +29,14 @@ AUDIT_SOURCES = ('analysis/overall_batched_rotation.py',
     'tests/test_overall_batched_rotation_audit.py', 'docs/overall_batched_rotation.md')
 
 
+class ComparisonFailure(ValueError):
+    """Retain the complete comparison report when numerical equivalence fails."""
+    def __init__(self, checks):
+        self.checks = checks
+        failed = [row['site'] for row in checks if not row['passed']]
+        super().__init__('Complete-model comparison failed at: '+', '.join(failed))
+
+
 def freeze(path):
     """Write the fixed workload; execution additionally requires its commit."""
     from analysis.overall_recovery_preflight import checked_protocol as checked_preflight
@@ -123,11 +131,16 @@ def collect(case, method, protocol, record, payload_path, phase):
         devices=[str(d) for d in jax.devices()], environment=ENVIRONMENT)
     phase('matched_generation')
     generated = generate_with_parameters(case, spec['seed'])
-    for key in ('arrays_key', 'parameters_key', 'truth_key'):
+    identity_keys = ('arrays_key', 'parameters_key', 'truth_key')
+    record['original_input_identities'] = {k:previous[k] for k in identity_keys}
+    record['regenerated_input_identities'] = {k:generated[k] for k in identity_keys}
+    for key in identity_keys:
         if generated[key] != previous[key]: raise ValueError('Original generating input changed')
         record[key] = generated[key]
     blocks, params = generated['blocks'], generated['parameters']
     original = build_rotation(blocks['laps'])
+    record['original_rotation_sha256'] = previous['control_rotation_sha256']
+    record['regenerated_rotation_sha256'] = original.fingerprint()
     if original.fingerprint() != previous['control_rotation_sha256']:
         raise ValueError('Original coordinate map changed')
     # Use the original inverse even in the batched arm: identical supplied coordinates.
@@ -208,14 +221,24 @@ def compare_records(original, batched, left, right, protocol):
         if (a.shape != tuple(spec['shape']) or b.shape != a.shape
                 or a.dtype.str != spec['dtype'] or b.dtype != a.dtype
                 or not np.isfinite(a).all() or not np.isfinite(b).all()):
-            raise ValueError(f'Incomplete or nonfinite comparison array: {key}')
-        if spec['kind'] == 'coordinate': np.testing.assert_array_equal(a, b, err_msg=key)
-        else:
-            tolerance = protocol[spec['kind']+'_tolerance']
-            np.testing.assert_allclose(b, a, err_msg=key, **tolerance)
+            checks.append(dict(site=key, kind=spec['kind'], passed=False,
+                error='Incomplete or nonfinite comparison array',
+                original_shape=list(a.shape), batched_shape=list(b.shape),
+                original_dtype=a.dtype.str, batched_dtype=b.dtype.str))
+            continue
         delta = np.abs(b.astype(float)-a.astype(float))
-        checks.append(dict(site=key, kind=spec['kind'], coordinates=int(a.size),
-            max_absolute_discrepancy=float(delta.max()) if delta.size else 0.))
+        row = dict(site=key, kind=spec['kind'], coordinates=int(a.size),
+            max_absolute_discrepancy=float(delta.max()) if delta.size else 0., passed=True)
+        try:
+            if spec['kind'] == 'coordinate': np.testing.assert_array_equal(a, b, err_msg=key)
+            else:
+                tolerance = protocol[spec['kind']+'_tolerance']
+                np.testing.assert_allclose(b, a, err_msg=key, **tolerance)
+        except AssertionError as exc:
+            row.update(passed=False, error=str(exc))
+        checks.append(row)
+    if not all(row['passed'] for row in checks):
+        raise ComparisonFailure(checks)
     return checks
 
 
@@ -250,6 +273,7 @@ def child(path, case, method, output, cache, scope):
         record['state'] = 'complete'
     except BaseException as exc:
         record.update(state='failed', error=type(exc).__name__, message=str(exc), traceback=traceback.format_exc())
+        if isinstance(exc, ComparisonFailure): record['comparisons'] = exc.checks
         raise
     finally:
         record.update(finished_at=datetime.now(timezone.utc).isoformat(), seconds=time.monotonic()-start,

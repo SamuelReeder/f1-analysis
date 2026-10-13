@@ -32,6 +32,35 @@ def test_complete_arrays_and_derivatives_including_empty_sites_are_checked():
     assert {r['site'] for r in result} == set(left)
     assert sum(r['coordinates'] for r in result if r['kind']=='gradient') == a['parameter_coordinates']
     assert all(r['max_absolute_discrepancy']==0. for r in result)
+    assert all(r['passed'] for r in result)
+
+
+def test_a_failed_case_preserves_every_numeric_discrepancy_and_later_checks():
+    a,b,left,right,p = fixture()
+    right['coordinate/vector'][0,0] = np.finfo('f4').tiny
+    right['gradient/vector'][1,2] += .01
+    right['factor/observation'][1] += .1
+    with pytest.raises(audit.ComparisonFailure) as caught:
+        audit.compare_records(a,b,left,right,p)
+    rows = caught.value.checks
+    assert [r['site'] for r in rows] == list(left)
+    assert {r['site'] for r in rows if not r['passed']} == {
+        'coordinate/vector', 'gradient/vector', 'factor/observation'}
+    assert next(r for r in rows if r['site']=='potential_energy')['passed']
+    assert next(r for r in rows if r['site']=='state/empty')['passed']
+    json.dumps(rows, allow_nan=False)
+
+
+def test_nonfinite_and_wrong_shape_arrays_do_not_hide_other_comparison_failures():
+    a,b,left,right,p = fixture()
+    right['coordinate/vector'] = np.zeros(6, dtype='f4')
+    right['gradient/vector'][1,2] = np.nan
+    right['factor/observation'][1] += .1
+    with pytest.raises(audit.ComparisonFailure) as caught:
+        audit.compare_records(a,b,left,right,p)
+    assert len(caught.value.checks) == len(left)
+    assert sum(not r['passed'] for r in caught.value.checks) == 3
+    json.dumps(caught.value.checks, allow_nan=False)
 
 
 @pytest.mark.parametrize('change', ['identity', 'runtime', 'case', 'method', 'protocol', 'missing',
