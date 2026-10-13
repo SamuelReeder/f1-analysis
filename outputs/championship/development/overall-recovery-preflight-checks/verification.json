@@ -1,0 +1,16 @@
+{
+  "purpose": "complete_design_preflight_software_checks",
+  "source_commit": "ea4849eccf6f89815be082c54d550a1a58bed0b8",
+  "command": "python -m pytest -q tests/test_overall_recovery_preflight.py tests/test_overall_weekend_coordinates.py tests/test_overall_weekend_profile.py",
+  "exit_code": 0,
+  "raw_output": "pytest.txt",
+  "scope": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "slice": "f1.slice",
+    "Nice": 19
+  },
+  "numerical_preflight_run": false,
+  "new_fit": false,
+  "publication_allowed": false
+}
