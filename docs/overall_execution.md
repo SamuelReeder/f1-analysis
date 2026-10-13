@@ -39,17 +39,26 @@ earlier pending-approval statements remain historical evidence. The
 checked the original observations and complete generating truths against every
 registered study. The capped service has
 [launched](../outputs/championship/development/overall-weekend-coordinate-profile-v1-launch/launch.json)
-under the unchanged resource limits. One waiter checks at the requested interval;
-the whole-run review is pending. This approval supplies no result and does not
-authorize real-data fitting, ranking publication or deployment.
+under the unchanged resource limits. It has now completed, and the single waiter
+is terminal. The [result report](overall_weekend_profile_results.md) records
+convergence for every registered case under the original retry and diagnostic
+rules, including the previously failing confounded case. The immediate numerical
+profile is satisfied; the earlier failed experiments remain failed historical
+records. No real-data fitting, ranking publication or deployment follows from
+this computational result.
 
 The separate read-only [review collector](../analysis/overall_matched_profile_review.py)
 checks complete study, retry, comparison and archive identities. Its
 [verification](../outputs/championship/development/overall-matched-review-checks/verification.json)
 reproduces every shared field from the previous complete experiment review.
-It changes no fitting source or decision, and has not read the running
-experiment's results. The portable publication receipt will be refreshed after
-the new run and its evidence are complete; the public payload is unchanged.
+It changes no fitting source or decision. The new
+[complete review](../outputs/championship/development/overall-weekend-coordinate-profile-v1/review.json)
+checks every attempt, original truth and archive identity. Separate
+[saved-draw verification](../outputs/championship/development/overall-weekend-coordinate-profile-v1/archive-verification.json)
+reproduces all retained parameter and driver-comparison diagnostics, including
+failed attempts. The sparse-rookie truth-interval misses and tree-depth saturation
+remain explicit limitations. The public payload is unchanged, and full recovery,
+calibration, functional precision and accepted publication remain open.
 
 | Requirement | Current evidence | Remaining work |
 |---|---|---|
@@ -57,11 +66,11 @@ the new run and its evidence are complete; the public payload is unchanged.
 | Shared current qualifying/race model | Joint model and synthetic interface/gradient tests | Fit, recover and calibrate its shared uncertainty |
 | Scientific specification | Executable likelihood/prior definitions and candidate contract | Final numerical/evaluation/prospective protocol before real-data fitting |
 | Complete entrant/cutoff catalog | Cutoff-first data design; outcome-free forecast catalogue; development state propagation reconstructs uncentred history and retains unseen entrants with population uncertainty | Verified as-of source/calendar inventory, accepted-posterior integration and recovery on the real transfer network |
-| Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks for full and bounded loaders; failed original and coordinate profiles plus complete saved-draw diagnosis; conditional weekend-coordinate prototype passes equivalence and registration checks and now has an approved frozen registration | Execute and evaluate the complete registered computational experiment; no automatic retuning; full recovery and intended-runner resource measurements remain open |
-| Known-truth recovery and simulation-based calibration | Generative responses and complete numerical-profile inventory: connected and sparse-rookie fits converged after retries; confounded fit exhausted its ladder; development evaluator covers state contrasts and observation likelihoods, distinguishes fixed-truth stress cases and requires a complete inventory | Full study registration, power justification and execution, including ranking functionals and the unresolved confounded case; no failed case may be discarded |
+| Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks; original failed profiles preserved; approved conditional weekend-coordinate experiment converges on every registered case, with every saved diagnostic reproduced | Integrate the exact computational method under the full recovery protocol; no automatic retuning; full recovery and intended-runner resource measurements remain open |
+| Known-truth recovery and simulation-based calibration | Complete numerical-profile inventory now converges; descriptive truth checks preserve sparse-rookie interval misses; development evaluator covers state contrasts and observation likelihoods, distinguishes fixed-truth stress cases and requires a complete inventory | Full study registration, power justification and execution, including ranking functionals, confounding and the real transfer network; no failed case or missed truth may be discarded |
 | Coherent weekend simulation | Student-t elimination and shared weekend uncertainty; observation kernels preserve teammate effects, context, order and completion within each joint draw; historical joint condition integration; explicit unseen-circuit outcome and qualifying track-factor extensions | Condition/circuit calibration and final registration, qualifying weather, official-grid eligibility/penalties, common operations, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |
-| Ability/outcome/numerical uncertainty | Nested simulation, grouped moments and complete conditional ordering-sensitivity bounds; saved noise examples show that a passing noisy checker cannot establish functional convergence; saved-draw diagnosis retains qualifying-contrast failures | Resolve inference; register and validate functional MCMC diagnostics and near-tie precision under converged posteriors; measure the complete nested workload |
+| Ability/outcome/numerical uncertainty | Nested simulation, grouped moments and conditional ordering-sensitivity bounds; saved noise examples show that a passing noisy checker cannot establish functional convergence; final qualifying/race contrasts pass in every new profile case | Register and validate functional MCMC diagnostics and near-tie precision under converged posteriors; measure the complete nested workload; numerical profile convergence does not establish ranking precision |
 | Chronological development comparison | Plan defines information horizons and baseline roles; scoring utilities preserve joint draws, conditional panel/condition weights and required events; outcome-free catalogue, joint states and observation kernels have synthetic checks; unseen-circuit extensions and unknown-condition simulation; explicit legacy/grid-only arithmetic and a race-only evidence ablation | Complete source verification, final condition/circuit registration and calibration, uncertainty in learned training factors, classification-conditioning policy and baseline fitting/forecast integration; freeze event inventory, calibration and stopping rules; run every fold |
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence; bounded paired summaries and a fixed synthetic archive-to-summary controller have checked integration paths | Accepted real-data protocol/scenario integration, full simulation resources and precision, evidence-backed exporter and matching explanation/pairwise payload; full contract validation |
