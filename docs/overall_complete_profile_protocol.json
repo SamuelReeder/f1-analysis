@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "id": "overall-complete-design-profile-v1",
+  "status": "frozen",
+  "purpose": "numerical_profile",
+  "profile": "complete_design_inference",
+  "registered_at": "2026-10-13T05:00:52.423461+00:00",
+  "source_commit": "8bc982685de3e3efd13aed5141ce3c054e50bf78",
+  "definition": "docs/overall_complete_profile.md",
+  "method": "conditional_weekend_with_control_rotation_v1",
+  "fit_settings": {
+    "warmup": 800,
+    "samples": 800,
+    "chains": 4,
+    "target_accept": 0.9,
+    "max_tree_depth": 10,
+    "init_median_samples": 15,
+    "seed": 0
+  },
+  "retry": [
+    [
+      1,
+      1,
+      null
+    ],
+    [
+      2,
+      2,
+      null
+    ],
+    [
+      3,
+      4,
+      null
+    ],
+    [
+      3,
+      4,
+      0.98
+    ]
+  ],
+  "diagnostics": {
+    "rank_rhat_strict_upper": 1.01,
+    "bulk_ess_min": 400,
+    "tail_ess_min": 400,
+    "mean_mcse_sd_upper": 0.05,
+    "divergences_per_draw_upper": 0.001
+  },
+  "studies": [
+    "connected",
+    "confounded",
+    "sparse_rookie",
+    "dominant_teammate",
+    "era_boundary",
+    "real_network"
+  ],
+  "synthetic": {
+    "connected": {
+      "case": "connected",
+      "seed": 20261020
+    },
+    "confounded": {
+      "case": "confounded",
+      "seed": 20261021
+    },
+    "sparse_rookie": {
+      "case": "sparse_rookie",
+      "seed": 20261022
+    },
+    "dominant_teammate": {
+      "case": "dominant_teammate",
+      "seed": 20261023
+    },
+    "era_boundary": {
+      "case": "era_boundary",
+      "seed": 20261024
+    },
+    "real_network": {
+      "case": "real_network",
+      "seed": 20261025
+    }
+  },
+  "resources": {
+    "slice": "f1.slice",
+    "MemoryMax": "13G",
+    "slice_CPUQuota": "800%",
+    "CPUWeight": 10,
+    "Nice": 19
+  },
+  "registered_model_inputs_key": "eae65767fe29bedcf396beeddbd8bf19b5bdc2a5769dd70f10fda50ef22bad18",
+  "parent_registration": "docs/overall_weekend_profile_protocol.json",
+  "preflight_registration": "docs/overall_recovery_preflight_v2_protocol.json",
+  "bounded_diagnostic_audit": "outputs/championship/development/overall-bounded-diagnostic-checks/audit/audit.json",
+  "storage_summary": "outputs/championship/development/overall-fit-storage-v1/summary.json",
+  "preflight_results": {
+    "connected": "outputs/championship/development/overall-recovery-preflight-v2/connected/result.json",
+    "confounded": "outputs/championship/development/overall-recovery-preflight-v2/confounded/result.json",
+    "sparse_rookie": "outputs/championship/development/overall-recovery-preflight-v2/sparse_rookie/result.json",
+    "dominant_teammate": "outputs/championship/development/overall-recovery-preflight-v2/dominant_teammate/result.json",
+    "era_boundary": "outputs/championship/development/overall-recovery-preflight-v2/era_boundary/result.json",
+    "real_network": "outputs/championship/development/overall-recovery-preflight-v2/real_network/result.json"
+  },
+  "storage_results": {
+    "connected": "outputs/championship/development/overall-fit-storage-v1/connected/result.json",
+    "confounded": "outputs/championship/development/overall-fit-storage-v1/confounded/result.json",
+    "sparse_rookie": "outputs/championship/development/overall-fit-storage-v1/sparse_rookie/result.json",
+    "dominant_teammate": "outputs/championship/development/overall-fit-storage-v1/dominant_teammate/result.json",
+    "era_boundary": "outputs/championship/development/overall-fit-storage-v1/era_boundary/result.json",
+    "real_network": "outputs/championship/development/overall-fit-storage-v1/real_network/result.json"
+  },
+  "source_sha256": {
+    "analysis/overall_bounded_diagnostic_audit.py": "68fb21e2ca53c979fcc7b6a7567fbaef3e5f6b607eb75be30b4b74f385f2c4c6",
+    "analysis/overall_bounded_diagnostics.py": "bbfb2a670cacee13acaa8809aebe2a8ecfd24a01439ba6cb6666227885dc5fb5",
+    "analysis/overall_complete_profile.py": "008c530af42ee9bad16f6214c80540b4fcef5ceb8850cea869250c5a7a55cfb4",
+    "analysis/overall_control_rotation.py": "49e4dbef148b7206634655532294a31f650542b8960d1f7d55fedc1755097a84",
+    "analysis/overall_posterior_archive.py": "bcd0a84eeb64393591b0fee77c3422c92b4455d05f4ac3fa65a1ec81fb1a6af0",
+    "analysis/overall_profile_geometry.py": "714ba47c374f68c616d2453d0df9b677b5faa55c299e4e866771e30a41f4c4f2",
+    "analysis/overall_recovery_checks.py": "5f3711c3a9ac14cc193429477be5bceb9a2a8ac2eff5c1f6176e52d4d280fd82",
+    "analysis/overall_recovery_preflight.py": "96d7c0cde3dc412f5cf947772d92eb16ea7a45583abf8c74f74ee8cd93eeba61",
+    "analysis/overall_weekend_coordinates.py": "4f2e05020fc1a2cb1c38bc9a1f7ccadec83bc83b09a2a6402c8a38180e4ca972",
+    "analysis/overall_weekend_profile.py": "d65af5bb85b99a226c3b3993dce107b2154bf3baf3550612818f6a21f6b54a52",
+    "docs/overall_bounded_diagnostics.md": "2205aaf130871500c8dbaa3f9a5c825d2c8b6f43356e7acf9812faeb048032c0",
+    "docs/overall_complete_profile.md": "d3a2fbce0393013b146202afa9b4ad53a9bb74d89e00bfc65e377fb5278bfef5",
+    "docs/overall_recovery_preflight.md": "25d9a8f7af59f42decbfbc90817049f104bab71f422d1054e955db751c2f6f8e",
+    "docs/overall_weekend_coordinates.md": "1f8c0f22f120b183b255045d1c3a07c6f9039b7f5c866171d05acdc9c76ec7bf",
+    "tests/test_overall_bounded_diagnostics.py": "48b1184fa60808640a157dd502597637da89e38e7258534e9f5013d287f1ead0",
+    "tests/test_overall_complete_profile.py": "f44ea83f4df601ae610028f448af3f77edcc913cbeb4a0f718050be59dda027e",
+    "tests/test_overall_weekend_coordinates.py": "1b2843d86b9f0d0fce1c58ec149a23409d45e544cee3c1ded6e611fe3a067b1c"
+  },
+  "evidence_sha256": {
+    "docs/overall_fit_storage_protocol.json": "7122ad819fc5f965a6851410500fa0403d19a2d5665755c59aef353f5b22fcbb",
+    "docs/overall_recovery_preflight_v2_protocol.json": "73a664a8f789175d6e11329bcb6974a133a72ac5fcc59de80baa9f751dbbf50a",
+    "docs/overall_weekend_profile_protocol.json": "87bf4e2f1a656644820c5d714f9ca5b4e9f343a5222927b8e2845476313e026e",
+    "outputs/championship/development/overall-bounded-diagnostic-checks/audit-resources.txt": "15f9fab8cc3d8cbfeda4bfa61025ddbb291a54db9f2ce4e53d9b522d683ef15a",
+    "outputs/championship/development/overall-bounded-diagnostic-checks/audit/audit.json": "18fe787cbecca4f02ffd4fb4894f1daab856244cd07ba30da13c0974176cc890",
+    "outputs/championship/development/overall-bounded-diagnostic-checks/verification.json": "6c9aa11dee6f02352ecbeca22a889ff3fc6ec4425af5b0011b088006eba66100",
+    "outputs/championship/development/overall-complete-profile-checks/pytest.txt": "b4e08d165bd4f10d867822f2ed5a0da60d22b6ad2eb880f40d9cb1db36885ab6",
+    "outputs/championship/development/overall-complete-profile-checks/verification.json": "9b8cbdb5d04b1a448b65f71f6c480481207d7a15a73fbef2cbed0099d1a56a52",
+    "outputs/championship/development/overall-fit-storage-v1/confounded/result.json": "56fc62997ef834b90a32cdfae1d6ae9654a4c41cbace79279ba5e1635deba7bd",
+    "outputs/championship/development/overall-fit-storage-v1/connected/result.json": "387ac235aee603eeb55df488df21cd9f30ffefcdbc23d5e966c95b3b8640723c",
+    "outputs/championship/development/overall-fit-storage-v1/dominant_teammate/result.json": "bc3d1653267711927dc6378619310a30addcd75b653b817b5a14634b6e990984",
+    "outputs/championship/development/overall-fit-storage-v1/era_boundary/result.json": "2ec38b2e5d3efa106a499ef9e122867f515df6d3daeb42977bb34d5607977e19",
+    "outputs/championship/development/overall-fit-storage-v1/real_network/result.json": "16f2c61444f06e2ce0b03465b07195e00f03cc4c3e41f009ddc8ba8117abceaf",
+    "outputs/championship/development/overall-fit-storage-v1/sparse_rookie/result.json": "636cf87415a0cb2e8fbf2674a9bc78888da69e662007f403e76bfcb590d64df2",
+    "outputs/championship/development/overall-fit-storage-v1/summary.json": "48cf4e0269180fac8db39e7082f93292de1cd4cd05156897bea7da7858bbc016",
+    "outputs/championship/development/overall-recovery-preflight-v2/confounded/result.json": "07d027c59490bd6e94fabec8c87962fa0beecd9cc2e4152d84635e090b927938",
+    "outputs/championship/development/overall-recovery-preflight-v2/connected/result.json": "5fc8f73a02d5f098aefe148aeb8ce571f5c29b0425530bdbcd918410cf92e3a3",
+    "outputs/championship/development/overall-recovery-preflight-v2/dominant_teammate/result.json": "b60fb065725b763fee3e46949d94a0788f4530afc9ac93d63984be4b11dac89d",
+    "outputs/championship/development/overall-recovery-preflight-v2/era_boundary/result.json": "88c0c08c7b2212e09bb10efdc91051959efd92dab8d7759f5d4e0aa2555bf8b0",
+    "outputs/championship/development/overall-recovery-preflight-v2/real_network/result.json": "2a7a3b2b41261415963d24b02c87a46270d493c50fa2d520729d55b1e371016c",
+    "outputs/championship/development/overall-recovery-preflight-v2/sparse_rookie/result.json": "3c87b1022907ee7db2ad1222f0b83b6faf2593484451c29196147829fc4f783b"
+  },
+  "runtime_source_sha256": {
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/numpyro/infer/mcmc.py": "85385c5e52441e72310dd7328993514acb5400d1b5a4d005e9437c887d37c8da",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/numpyro/infer/hmc.py": "995416932344dab67935608fadde5c8ce00696a84769d369ca22394588d86ec9",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/numpyro/infer/util.py": "1c68d72229c374d6094f36041661c2ddc5a2cdaaf1224f349c984d57b07ee7c5"
+  },
+  "sampling_stream": "Original numerical-profile seed schedule, independently restarted for each case. Not independent-replicate SBC evidence.",
+  "service_behavior": {
+    "sequential_fresh_children": true,
+    "Restart": "no",
+    "OOMPolicy": "continue",
+    "MemoryOOMGroup": false,
+    "concurrent_heavy_work": false
+  },
+  "authorization": "Continuation of the user instruction to complete the plan. The previously approved successful coordinate method is unchanged; no post-failure retuning or deployment action.",
+  "stopping": "Process every declared design. Only the original fixed convergence retries apply. Preserve OOM, exception and exhausted-convergence failures without workload reduction, redrawing or extra attempts.",
+  "full_recovery_complete": false,
+  "sbc_complete": false,
+  "publication_allowed": false
+}
