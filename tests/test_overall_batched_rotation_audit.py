@@ -124,3 +124,62 @@ def test_every_full_design_and_both_arms_still_accounted_for_after_failure(monke
     assert not result['mcmc_run'] and not result['publication_allowed']
     with pytest.raises(FileExistsError): audit.execute(path)
 
+
+def frozen_fixture(monkeypatch, tmp_path):
+    from analysis import overall_recovery_preflight
+    previous=dict(studies=[dict(case='connected',seed=42)], source_sha256={}, model_source=dict(inputs={}))
+    monkeypatch.setattr(overall_recovery_preflight,'checked_protocol',lambda path:copy.deepcopy(previous))
+    monkeypatch.setattr(audit,'ROOT',tmp_path)
+    sources={}
+    for name in audit.AUDIT_SOURCES:
+        target=tmp_path/name; target.parent.mkdir(parents=True,exist_ok=True)
+        content=Path(audit.__file__).read_bytes() if name=='analysis/overall_batched_rotation_audit.py' else b'source fixture'
+        target.write_bytes(content); sources[name]=audit.sha(target)
+    inputs={}
+    for name in (audit.PREFLIGHT,f'{audit.PREFLIGHT_OUTPUT}/connected/result.json'):
+        target=tmp_path/name; target.parent.mkdir(parents=True,exist_ok=True)
+        target.write_text('{}'); inputs[name]=audit.sha(target)
+    p=dict(id='fixed-audit-fixture', status='frozen', purpose='unchanged_complete_model_batched_control_evaluation',
+        mcmc_allowed=False, publication_allowed=False, methods=list(audit.METHODS),
+        resources=copy.deepcopy(audit.RESOURCES), environment=copy.deepcopy(audit.ENVIRONMENT),
+        repeat_evaluations=audit.REPEATS, density_tolerance=dict(atol=.005,rtol=.000002),
+        state_tolerance=dict(atol=.000003,rtol=.000003), gradient_tolerance=dict(atol=.000003,rtol=.000003),
+        preflight_protocol=audit.PREFLIGHT, preflight_output=audit.PREFLIGHT_OUTPUT,
+        studies=copy.deepcopy(previous['studies']), source_sha256=sources, input_sha256=inputs)
+    monkeypatch.setattr(audit.subprocess,'check_output',lambda command,**kwargs:
+        (tmp_path/command[-1].removeprefix('HEAD:')).read_bytes())
+    return p,tmp_path/'workload.json'
+
+
+def test_unchanged_committed_workload_is_required_before_computation(monkeypatch,tmp_path):
+    p,path=frozen_fixture(monkeypatch,tmp_path)
+    path.write_text(json.dumps(p))
+    assert audit.checked_protocol(path)==p
+    monkeypatch.setattr(audit.subprocess,'check_output',lambda *a,**kw:b'older committed workload')
+    with pytest.raises(ValueError,match='Commit'):
+        audit.checked_protocol(path)
+
+
+@pytest.mark.parametrize('change',['status','mcmc','publication','method','repeats','density','state','gradient',
+    'resource','environment','generation','study_inventory','source_inventory','input_inventory',
+    'source_bytes','input_bytes','loaded_source'])
+def test_changed_settings_inputs_and_required_cases_cannot_silently_enter_the_audit(monkeypatch,tmp_path,change):
+    p,path=frozen_fixture(monkeypatch,tmp_path)
+    if change=='status': p['status']='proposal'
+    elif change=='mcmc': p['mcmc_allowed']=True
+    elif change=='publication': p['publication_allowed']=True
+    elif change=='method': p['methods']=['batched']
+    elif change=='repeats': p['repeat_evaluations']+=1
+    elif change in ('density','state','gradient'): p[change+'_tolerance']['atol']*=2
+    elif change=='resource': p['resources']['MemoryMax']='6G'
+    elif change=='environment': p['environment']['JAX_ENABLE_X64']='true'
+    elif change=='generation': p['studies'][0]['seed']+=1
+    elif change=='study_inventory': p['studies']=[]
+    elif change=='source_inventory': p['source_sha256'].pop('analysis/overall_batched_rotation.py')
+    elif change=='input_inventory': p['input_sha256'].pop(f'{audit.PREFLIGHT_OUTPUT}/connected/result.json')
+    elif change=='source_bytes': (tmp_path/'analysis/overall_batched_rotation.py').write_text('changed source')
+    elif change=='input_bytes': (tmp_path/f'{audit.PREFLIGHT_OUTPUT}/connected/result.json').write_text('changed input')
+    else: p['source_sha256']['analysis/overall_batched_rotation_audit.py']='a'*64
+    path.write_text(json.dumps(p))
+    with pytest.raises(ValueError): audit.checked_protocol(path)
+
