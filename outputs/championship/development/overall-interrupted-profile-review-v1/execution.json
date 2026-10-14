@@ -1,0 +1,29 @@
+{
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "outputs/championship/development/overall-interrupted-profile-review-v1/resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "analysis/overall_complete_profile_review.py",
+    "--registration",
+    "docs/overall_complete_profile_protocol.json",
+    "--interruption",
+    "outputs/championship/development/overall-complete-design-profile-v1-interruption/interruption.json",
+    "--output",
+    "outputs/championship/development/overall-interrupted-profile-review-v1/review.json"
+  ],
+  "source_commit": "126281aef3174cfaa2395e6c7ca48fc8388e6946",
+  "started_at": "2026-10-14T22:50:12.506485+00:00",
+  "resources": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "Slice": "f1.slice",
+    "Nice": 19
+  },
+  "mcmc_run": false,
+  "publication_allowed": false,
+  "exit_code": 0,
+  "seconds": 8.598312218000046,
+  "finished_at": "2026-10-14T22:50:21.104818+00:00"
+}
