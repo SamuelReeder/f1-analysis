@@ -1,0 +1,37 @@
+{
+  "source_commit": "1e095d7a3a344023f2d8dd064004dabf237bcfe4",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "outputs/championship/development/overall-prepared-profile-checks-v1/resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_overall_complete_profile_review.py",
+    "tests/test_overall_complete_profile_diagnostics.py",
+    "tests/test_overall_batched_rotation.py",
+    "tests/test_overall_batched_rotation_audit.py"
+  ],
+  "started_at": "2026-10-14T22:42:35.331544+00:00",
+  "mcmc_run": false,
+  "publication_allowed": false,
+  "resources": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "Slice": "f1.slice",
+    "Nice": 19
+  },
+  "environment": {
+    "JAX_PLATFORMS": "cpu",
+    "JAX_ENABLE_X64": "false",
+    "OMP_NUM_THREADS": "2",
+    "OPENBLAS_NUM_THREADS": "2",
+    "MKL_NUM_THREADS": "2",
+    "XLA_FLAGS": "--xla_force_host_platform_device_count=4"
+  },
+  "exit_code": 0,
+  "finished_at": "2026-10-14T22:42:40.143962+00:00",
+  "seconds": 5.325630288999946
+}
