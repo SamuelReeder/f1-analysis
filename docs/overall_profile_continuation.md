@@ -3,7 +3,11 @@
 This is an execution-recovery definition for the
 [preserved interruption](../outputs/championship/development/overall-complete-design-profile-v1-interruption/interruption.json),
 not a new statistical experiment or a change to the model. Implementation and a
-frozen continuation registration are required before it can run. The original
+frozen continuation registration are required before it can run. The
+[planner](../analysis/overall_profile_continuation.py) and
+[execution controller](../analysis/overall_profile_continuation_run.py) are now
+prepared; their focused checks remain queued behind the saved-archive audit.
+The original
 profile remains immutable and incomplete; its history must never be rewritten
 to look uninterrupted.
 
