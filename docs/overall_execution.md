@@ -119,16 +119,18 @@ and reproduces coordinate and driver-contrast reports while retaining failures
 and missing attempts. Sampler extras were not saved; the verifier explicitly
 reuses the recorded divergence count and does not claim to independently verify
 that count, tree-depth counts or acceptance probabilities. It grants no new fit,
-acceptance decision or publication permission. Execution on the original archives
-is now running in a separate capped scope against the committed interruption
-review. No complete-run summary is fabricated.
+acceptance decision or publication permission. The
+[completed archive audit](../outputs/championship/development/overall-interrupted-profile-diagnostics-v1/audit.json)
+reproduces every recorded coordinate and driver-contrast report exactly from the
+complete saved arrays, including failed attempts. The original run remains
+incomplete, and no complete-run summary is fabricated.
 
 The [execution-recovery definition](overall_profile_continuation.md) requires
 verified saved reports before restarting only the unfinished registered attempt.
 Its original sampler checkpoint was not saved, so it must start from its original
-seed. Earlier attempts and failed results remain immutable. A continuation
-implementation, software checks and frozen execution registration are still
-required; no recovery fit has started.
+seed. Earlier attempts and failed results remain immutable. The planner and
+execution controller now have passing focused software checks. A frozen execution
+registration and service launch are still required; no recovery fit has started.
 
 Before freezing the full scientific acceptance runs, finish the required
 production integration behind its acceptance guards and freeze the resulting

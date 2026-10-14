@@ -6,7 +6,11 @@ not a new statistical experiment or a change to the model. Implementation and a
 frozen continuation registration are required before it can run. The
 [planner](../analysis/overall_profile_continuation.py) and
 [execution controller](../analysis/overall_profile_continuation_run.py) are now
-prepared; their focused checks remain queued behind the saved-archive audit.
+prepared; their [focused software checks pass](../outputs/championship/development/overall-profile-continuation-checks-v1/verification.json).
+The [saved-archive audit](../outputs/championship/development/overall-interrupted-profile-diagnostics-v1/audit.json)
+has also completed with every recorded coordinate and driver-contrast report
+reproduced exactly. The original failed attempts remain failed. A frozen
+execution registration and service launch are still required.
 The original
 profile remains immutable and incomplete; its history must never be rewritten
 to look uninterrupted.

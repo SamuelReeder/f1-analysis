@@ -10,8 +10,10 @@ restarted or prove that the fit caused an OOM.
 The completed cases record convergence under the frozen parameter gate. The
 real-network case records failed attempts followed by an interrupted attempt.
 The following values come from the committed original receipts, copied unchanged
-into the interruption inventory. They have not yet been independently reproduced
-from the saved archives. Durations are the fitter's recorded monotonic seconds
+into the interruption inventory. Their coordinate and driver-contrast reports
+have subsequently been reproduced exactly from the saved archives, as recorded
+below. Divergence counts remain original recorded inputs to that check.
+Durations are the fitter's recorded monotonic seconds
 for each attempt, including its diagnostics; they are not total-run wall time.
 
 | Case and original receipt | Attempt | Recorded decision | Maximum R-hat | Divergences | Recorded seconds |
@@ -54,15 +56,29 @@ It covers the prepared metadata collector, saved-draw verifier and batching
 software under the ordinary capped scope. It does not reproduce the real saved
 archives or execute the full-model batching benchmark.
 
-The normal complete-profile collector correctly requires a terminal whole-run
-summary and cannot be used to label this interruption as completion. Recovery
-needs explicit interruption-aware evidence and a separately recorded execution
-continuation. Preserve the original files and failed attempts. Verify the saved
-archives before reusing them, retain the original model and all numerical settings,
-and restart only the unfinished attempt from its original seed if recovery is
-implemented. The existing runner cannot resume partial receipts, so it has not
-been blindly relaunched. No new fit, altered gate or substituted batched sampler
-has been authorized by these results.
+The [interruption-aware metadata review](../outputs/championship/development/overall-interrupted-profile-review-v1/review.json)
+finds the original records consistent while retaining the missing child
+completion and incomplete whole-run status. The
+[saved-archive audit](../outputs/championship/development/overall-interrupted-profile-diagnostics-v1/audit.json)
+verifies all retained fields, dtypes and grouped axes, and reproduces every
+coordinate and driver-contrast report exactly. All **10** saved attempts remain
+in the audit, including the failed attempts. No discrepancy or case was discarded.
+The audit records **1864.483** monotonic seconds and a process peak of
+**2,464,652 KiB** under its separate capped scope. These are local archive-check
+measurements, not fitting throughput or CI-runner measurements. Sampler extras
+were not saved; divergence counts, tree-depth counts and acceptance probabilities
+remain recorded values rather than independently recovered evidence.
+
+The [execution-recovery definition](overall_profile_continuation.md) preserves
+the original files and numerical settings. Its new controller restarts only the
+unfinished registered attempt from its original seed, retaining the earlier
+attempts unchanged and stopping according to the same fixed ladder. Its
+[software checks](../outputs/championship/development/overall-profile-continuation-checks-v1/verification.json)
+pass **44** tests in **0.18 seconds**, as recorded in the
+[test output](../outputs/championship/development/overall-profile-continuation-checks-v1/pytest.txt).
+The separate execution registration and service launch remain pending. The
+original runner has not been blindly relaunched, and the prepared batching
+implementation is not substituted into the continuation.
 
 The complete computational profile remains incomplete. Full recovery,
 simulation-based calibration, functional precision, predictive validation,
