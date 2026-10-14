@@ -102,13 +102,55 @@ def checked_protocol(path):
     return p
 
 
+def unit_properties(unit, fields):
+    command = ['systemctl', '--user', 'show', unit]
+    for field in fields:
+        command += ['-p', field]
+    return dict(line.split('=', 1) for line in subprocess.check_output(command, text=True).splitlines())
+
+
+def idle_children(group, own_group=None):
+    """Check live cgroup membership, including processes left after a launcher exits."""
+    for child in group.iterdir():
+        if child.is_dir() and child != own_group:
+            events = dict(line.split() for line in (child / 'cgroup.events').read_text().splitlines())
+            if events.get('populated') != '0':
+                raise ValueError('Wait for every other f1 fit or heavy scope to stop')
+
+
+def check_idle_slice():
+    """Refuse to allocate another capped scope while the shared budget is occupied."""
+    state = unit_properties('f1.slice', ('LoadState', 'ActiveState', 'ControlGroup'))
+    if state.get('LoadState') != 'loaded':
+        raise ValueError('The configured shared f1 slice must exist')
+    if state.get('ActiveState') == 'inactive' and not state.get('ControlGroup'):
+        return state
+    if state.get('ActiveState') != 'active' or not state.get('ControlGroup'):
+        raise ValueError('Cannot establish the shared resource budget is idle')
+    group = Path('/sys/fs/cgroup') / state['ControlGroup'].lstrip('/')
+    # A process directly attached to the slice is outside every child inspected
+    # below; it also means the budget is not free.
+    if (group / 'cgroup.procs').read_text().strip():
+        raise ValueError('The shared f1 slice still contains an active process')
+    idle_children(group)
+    return state
+
+
 def check_scope(scope):
-    properties = subprocess.check_output(['systemctl', '--user', 'show', scope,
-        '-p', 'Slice', '-p', 'MemoryMax', '-p', 'CPUQuotaPerSecUSec'], text=True)
-    actual = dict(line.split('=', 1) for line in properties.splitlines())
-    if (actual != dict(Slice='f1.slice', MemoryMax=str(3*1024**3), CPUQuotaPerSecUSec='2s')
-            or os.getpriority(os.PRIO_PROCESS, 0) != 19):
-        raise ValueError('Use the fixed capped scope and priority')
+    actual = unit_properties(scope, ('Slice', 'MemoryMax', 'CPUQuotaPerSecUSec',
+                                     'LoadState', 'ActiveState', 'ControlGroup'))
+    if (actual.get('Slice') != 'f1.slice' or actual.get('MemoryMax') != str(3*1024**3)
+            or actual.get('CPUQuotaPerSecUSec') != '2s' or actual.get('LoadState') != 'loaded'
+            or actual.get('ActiveState') != 'active' or os.getpriority(os.PRIO_PROCESS, 0) != 19):
+        raise ValueError('Use the fixed active capped scope and priority')
+    membership = next((line[3:] for line in Path('/proc/self/cgroup').read_text().splitlines()
+                       if line.startswith('0::')), None)
+    if not actual.get('ControlGroup') or membership != actual['ControlGroup']:
+        raise ValueError('This process must belong to the named capped scope')
+    group = Path('/sys/fs/cgroup') / actual['ControlGroup'].lstrip('/')
+    idle_children(group.parent, own_group=group)
+    if (group.parent / 'cgroup.procs').read_text().strip():
+        raise ValueError('The shared f1 slice contains a process outside the capped scopes')
     if any(os.environ.get(k) != v for k, v in ENVIRONMENT.items()):
         raise ValueError('Use the same explicit numerical environment for every child')
     return dict(actual, Nice=19)
@@ -243,6 +285,7 @@ def compare_records(original, batched, left, right, protocol):
 
 
 def child(path, case, method, output, cache, scope):
+    actual = check_scope(scope)
     p = checked_protocol(path)
     output, cache = Path(output), Path(cache)
     output.mkdir(exist_ok=False)
@@ -250,12 +293,11 @@ def child(path, case, method, output, cache, scope):
     record = dict(case=case, method=method, state='running', stage='scope',
         started_at=datetime.now(timezone.utc).isoformat(), protocol_sha256=sha(path),
         source_commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
-        mcmc_run=False, publication_allowed=False)
+        actual_scope=actual, mcmc_run=False, publication_allowed=False)
     def phase(stage):
         record['stage'] = stage
         save(output/'progress.json', record)
     try:
-        record['actual_scope'] = check_scope(scope)
         if method in METHODS:
             collect(case, method, p, record, cache/f'{case}-{method}.npz', phase)
         else:
@@ -282,6 +324,7 @@ def child(path, case, method, output, cache, scope):
 
 
 def execute(path):
+    check_idle_slice()
     p = checked_protocol(path)
     output = ROOT/'outputs/championship/development'/p['id']
     cache = ROOT/'outputs/championship/cache'/p['id']
@@ -292,6 +335,7 @@ def execute(path):
         case = study['case']
         (output/case).mkdir()
         for method in (*METHODS, 'compare'):
+            check_idle_slice()
             checked_protocol(path)
             scope = f"f1-batch-audit-{case.replace('_', '-')}-{method}.scope"
             log, resources = output/case/f'{method}.output.txt', output/case/f'{method}.resources.txt'

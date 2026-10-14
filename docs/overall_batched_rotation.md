@@ -41,12 +41,21 @@ or production readiness. Earlier runs and their source identities remain intact.
 ## Prepared complete-model audit
 
 The [audit runner](../analysis/overall_batched_rotation_audit.py) prepares a fixed
-workload for a separate capped measurement. It remains unexecuted. Its focused
-software checks pass in the
+workload for a separate capped measurement. It remains unexecuted. Earlier focused
+software checks passed in the
 [prepared-check record](../outputs/championship/development/overall-prepared-profile-checks-v1/verification.json).
 Freeze and commit the measurement registration before executing the benchmark.
 The registration binds both implementations and every original preflight design,
 generation seed, data/truth fingerprint and model source.
+
+The prepared runner now also checks the shared slice is idle before allocating
+each child scope. Each child verifies its own live cgroup membership and rejects
+active sibling jobs or processes directly attached to the shared slice before
+reading the workload or doing numerical work. A named scope's configured limits
+alone cannot establish that the worker is actually capped. The additional guard
+fixtures have only been syntax-checked; their execution and the connected tests
+wait for the running continuation to release the memory budget. The numerical
+workload, model comparisons and existing tolerances are unchanged.
 
 Each implementation runs in a fresh capped process for each complete design.
 Both use the original map's inverse and the original generating parameters, so

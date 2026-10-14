@@ -158,8 +158,14 @@ runs and then silently treat their old source identities as current.
 A separate [batched-map preparation](overall_batched_rotation.md) now replaces
 the control conversion's individual array updates with grouped matrix products
 and gathers in an unused development implementation. It keeps the existing
-coordinate map and its fingerprint. Its focused software checks pass; complete-model
-equivalence and resource measurements remain pending. It has not changed the
+coordinate map and its fingerprint. Its earlier focused software checks pass;
+additional live-scope membership and exclusive-budget guards are prepared with
+execution tests still pending. A lightweight
+[live budget-refusal check](../outputs/championship/development/overall-batch-resource-guard-preparation-v1/verification.json)
+confirms the launcher rejects occupied resources before reading its workload or
+dispatching a child; no numerical libraries or test runner were loaded.
+Complete-model equivalence and resource
+measurements remain pending. It has not changed the
 original profile, and no speed improvement or permission to use it in inference
 is claimed.
 

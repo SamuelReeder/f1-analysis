@@ -97,6 +97,7 @@ def test_every_full_design_and_both_arms_still_accounted_for_after_failure(monke
     (tmp_path/'outputs/championship/cache').mkdir()
     monkeypatch.setattr(audit,'ROOT',tmp_path)
     monkeypatch.setattr(audit,'checked_protocol',lambda path:p)
+    monkeypatch.setattr(audit,'check_idle_slice',lambda:None)
     calls=[]
 
     def run(command, **kwargs):
@@ -182,4 +183,104 @@ def test_changed_settings_inputs_and_required_cases_cannot_silently_enter_the_au
     else: p['source_sha256']['analysis/overall_batched_rotation_audit.py']='a'*64
     path.write_text(json.dumps(p))
     with pytest.raises(ValueError): audit.checked_protocol(path)
+
+
+@pytest.fixture
+def resource_context(monkeypatch, tmp_path):
+    shared = tmp_path / 'f1.slice'
+    shared.mkdir()
+    own = shared / 'audit.scope'
+    own.mkdir()
+    sibling = shared / 'fit.service'
+    sibling.mkdir()
+    (shared / 'cgroup.procs').write_text('')
+    (own / 'cgroup.events').write_text('populated 1\n')
+    (sibling / 'cgroup.events').write_text('populated 0\n')
+    group = '/user/f1.slice/audit.scope'
+    actual = dict(Slice='f1.slice', MemoryMax=str(3*1024**3), CPUQuotaPerSecUSec='2s',
+                  LoadState='loaded', ActiveState='active', ControlGroup=group)
+    shared_state = dict(LoadState='loaded', ActiveState='active', ControlGroup='/user/f1.slice')
+    state = dict(membership='0::' + group + '\n', nice=19)
+    monkeypatch.setattr(audit, 'unit_properties', lambda unit, fields:
+                        shared_state if unit == 'f1.slice' else actual)
+    monkeypatch.setattr(audit.os, 'getpriority', lambda *args: state['nice'])
+    for key, value in audit.ENVIRONMENT.items():
+        monkeypatch.setenv(key, value)
+    read, iterdir = Path.read_text, Path.iterdir
+
+    def mapped(path):
+        prefix = '/sys/fs/cgroup/user/f1.slice'
+        if str(path) == prefix or str(path).startswith(prefix + '/'):
+            return shared / str(path).removeprefix(prefix).lstrip('/')
+        return path
+
+    monkeypatch.setattr(Path, 'read_text', lambda path, *args, **kwargs:
+        state['membership'] if str(path) == '/proc/self/cgroup' else read(mapped(path), *args, **kwargs))
+    monkeypatch.setattr(Path, 'iterdir', lambda path: iter(
+        Path('/sys/fs/cgroup/user/f1.slice') / child.name for child in iterdir(shared))
+        if str(path) == '/sys/fs/cgroup/user/f1.slice' else iterdir(path))
+    is_dir = Path.is_dir
+    monkeypatch.setattr(Path, 'is_dir', lambda path: is_dir(mapped(path)))
+    return shared, own, sibling, actual, shared_state, state
+
+
+def test_actual_process_in_capped_scope_with_idle_siblings_is_accepted(resource_context):
+    assert audit.check_scope('audit.scope')['ControlGroup'] == '/user/f1.slice/audit.scope'
+
+
+@pytest.mark.parametrize('change', ['other_membership', 'empty_membership', 'missing_group',
+    'inactive', 'unloaded', 'wrong_slice', 'memory', 'cpu', 'priority', 'busy_sibling',
+    'parent_process', 'environment'])
+def test_resource_guard_rejects_uncapped_or_overlapping_work(resource_context, monkeypatch, change):
+    shared, own, sibling, actual, shared_state, state = resource_context
+    if change == 'other_membership': state['membership'] = '0::/unlimited.scope\n'
+    elif change == 'empty_membership': state['membership'] = ''
+    elif change == 'missing_group': actual['ControlGroup'] = ''
+    elif change == 'inactive': actual['ActiveState'] = 'inactive'
+    elif change == 'unloaded': actual['LoadState'] = 'not-found'
+    elif change == 'wrong_slice': actual['Slice'] = 'app.slice'
+    elif change == 'memory': actual['MemoryMax'] = 'max'
+    elif change == 'cpu': actual['CPUQuotaPerSecUSec'] = 'infinity'
+    elif change == 'priority': state['nice'] = 0
+    elif change == 'busy_sibling': (sibling / 'cgroup.events').write_text('populated 1\n')
+    elif change == 'parent_process': (shared / 'cgroup.procs').write_text('123\n')
+    else: monkeypatch.setenv('JAX_ENABLE_X64', 'true')
+    with pytest.raises(ValueError):
+        audit.check_scope('audit.scope')
+
+
+@pytest.mark.parametrize('change', ['idle', 'inactive_empty', 'fit', 'direct_process', 'unknown_state', 'missing_slice'])
+def test_parent_checks_budget_before_allocating_scope(resource_context, change):
+    shared, own, sibling, actual, shared_state, state = resource_context
+    (own / 'cgroup.events').write_text('populated 0\n')
+    if change == 'inactive_empty': shared_state.update(ActiveState='inactive', ControlGroup='')
+    elif change == 'fit': (sibling / 'cgroup.events').write_text('populated 1\n')
+    elif change == 'direct_process': (shared / 'cgroup.procs').write_text('123\n')
+    elif change == 'unknown_state': shared_state['ActiveState'] = 'activating'
+    elif change == 'missing_slice': shared_state['LoadState'] = 'not-found'
+    if change in ('idle', 'inactive_empty'):
+        assert audit.check_idle_slice() == shared_state
+    else:
+        with pytest.raises(ValueError): audit.check_idle_slice()
+
+
+def test_busy_budget_prevents_output_creation_and_any_child_dispatch(monkeypatch, tmp_path):
+    def busy():
+        raise ValueError('resource budget is occupied')
+    monkeypatch.setattr(audit, 'check_idle_slice', busy)
+    monkeypatch.setattr(audit, 'checked_protocol', lambda path: pytest.fail('Must check budget first'))
+    with pytest.raises(ValueError, match='occupied'):
+        audit.execute(tmp_path / 'not_yet_read.json')
+    assert not list(tmp_path.iterdir())
+
+
+def test_child_checks_actual_membership_before_workload_or_numerical_work(monkeypatch, tmp_path):
+    def uncapped(_):
+        raise ValueError('process is not in the capped scope')
+    monkeypatch.setattr(audit, 'check_scope', uncapped)
+    monkeypatch.setattr(audit, 'checked_protocol', lambda path: pytest.fail('Must check membership first'))
+    monkeypatch.setattr(audit, 'collect', lambda *args: pytest.fail('No numerical work outside scope'))
+    with pytest.raises(ValueError, match='capped scope'):
+        audit.child(tmp_path / 'protocol', 'fixture', 'original', tmp_path / 'out', tmp_path, 'scope')
+    assert not list(tmp_path.iterdir())
 
