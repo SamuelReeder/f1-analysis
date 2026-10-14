@@ -2,8 +2,11 @@
 
 The current profile records separate child results and completion records. The
 [review collector](../analysis/overall_complete_profile_review.py) is prepared for
-that layout. Its software checks and execution remain pending until the active
-fit releases its resource budget.
+that layout. Its focused software checks pass in the
+[prepared-check record](../outputs/championship/development/overall-prepared-profile-checks-v1/verification.json).
+The actual run was [interrupted](overall_complete_profile_results.md), leaving no
+whole-run summary. This collector cannot treat that missing summary as completion;
+an interruption-aware review remains required.
 
 Run the focused tests in the normal capped scope first. After the original
 service is authoritatively terminal, commit its complete raw output inventory
@@ -30,8 +33,8 @@ remain separate requirements. The collector explicitly records that its archive
 arrays and numerical diagnostics have not been independently verified.
 
 A separate [saved-draw verifier](overall_complete_profile_diagnostics.md) is now
-prepared for the complete profile. Its focused tests and execution also remain
-pending. It checks every available retained archive and reproduces the original
+prepared for the complete profile. Its focused tests pass; actual archive
+verification remains pending. It checks every available retained archive and reproduces the original
 coordinate and driver-contrast reports, preserving failed and unavailable attempts.
 Sampler extras were not archived, so their recorded counts cannot be independently
 verified from the saved draws.

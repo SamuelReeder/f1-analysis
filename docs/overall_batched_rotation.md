@@ -3,7 +3,7 @@
 The registered control-coordinate map evaluates each race's small matrix product
 and writes each resulting coefficient into its original site separately. Prepare
 a batched evaluation of that exact map for subsequent source integration. The
-running complete-design profile keeps its original implementation and registration.
+original complete-design profile keeps its original implementation and registration.
 This preparation does not authorize replacing or restarting that run.
 
 Keep every original block, eigenbasis, sign convention, scale, latent index and
@@ -31,7 +31,7 @@ Measure compilation and repeated complete potential/gradient evaluations for
 both implementations on that full inventory. Freeze that measurement's workload
 before execution; do not use a reduced network or timed matrix kernel alone as
 evidence of a full-model speed improvement. Retain both results and all resource
-limits. These checks must wait until the active fit releases its resource budget.
+limits. These checks must run separately from any fit holding the resource budget.
 
 Only successful complete equivalence and resource checks can support integrating
 this implementation in a subsequent frozen runner. A faster map alone would not
@@ -41,8 +41,10 @@ or production readiness. Earlier runs and their source identities remain intact.
 ## Prepared complete-model audit
 
 The [audit runner](../analysis/overall_batched_rotation_audit.py) prepares a fixed
-workload for after the active profile finishes. It remains unexecuted. Run its
-focused software checks before freezing and committing a measurement registration.
+workload for a separate capped measurement. It remains unexecuted. Its focused
+software checks pass in the
+[prepared-check record](../outputs/championship/development/overall-prepared-profile-checks-v1/verification.json).
+Freeze and commit the measurement registration before executing the benchmark.
 The registration binds both implementations and every original preflight design,
 generation seed, data/truth fingerprint and model source.
 

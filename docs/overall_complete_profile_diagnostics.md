@@ -1,8 +1,12 @@
 # Saved-draw checks for the complete computational profile
 
 The [diagnostic verifier](../analysis/overall_complete_profile_diagnostics.py)
-is prepared but has not been tested or run. It must wait for the active profile
-to release its memory budget. It does not modify the frozen fit or its settings.
+has passing focused software checks in the
+[prepared-check record](../outputs/championship/development/overall-prepared-profile-checks-v1/verification.json).
+It has not run on the original archives. The profile was
+[interrupted](overall_complete_profile_results.md), leaving no whole-run summary;
+an interruption-aware review is needed before using that evidence. This verifier
+does not modify the frozen fit or its settings.
 
 First commit the complete original profile outputs, run the focused software
 checks, and produce and commit the [metadata review](overall_complete_profile_review.md).

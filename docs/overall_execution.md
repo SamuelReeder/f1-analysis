@@ -86,12 +86,14 @@ It fits the complete original preflight inventory with unchanged model inputs,
 coordinate method, settings and retry rules, using fresh sequential child
 processes. The initial launcher rejected an unsupported systemd property before
 any fit started; the preserved launch record documents its correction and the
-verified kernel memory-group setting. This is an active computational study,
-not completed convergence, recovery or calibration evidence. A single waiter
-checks for completion or a terminal case failure at the requested interval.
-The portable dashboard receipt will be refreshed after the new output inventory
-is complete; running development outputs must not be presented as a verified
-publication. The public payload and pointer remain unchanged.
+verified kernel memory-group setting. The study was subsequently interrupted
+by a WSL restart before the real-network case and whole run wrote final records.
+The [partial-results report](overall_complete_profile_results.md) preserves the
+original completed cases, failed attempts and unknown restart cause. The original
+service and waiter are gone; the partial run has not been restarted. This is not
+completed convergence, recovery or calibration evidence. The portable dashboard
+receipt will be refreshed after the new output inventory stabilizes. The public
+payload and pointer remain unchanged.
 
 During this run the user requested a lower CPU limit. The
 [resource-change record](../outputs/championship/development/overall-complete-design-profile-v1-resource-changes/20261013T170054Z-cpu-reduction.json)
@@ -104,17 +106,18 @@ cap. This resource change does not alter model inputs, sampling or acceptance.
 A [complete-profile review collector](overall_complete_profile_review.md) is now
 prepared for the current child-result layout. It preserves every case and its
 original failure records, checks the fixed retry and comparison inventories, and
-includes the committed resource-change record. Its tests and execution remain
-pending while the fit holds the resource budget. It does not replace numerical
-diagnostic reproduction or scientific acceptance.
+includes the committed resource-change record. Its focused software checks now
+pass, but the interrupted run lacks the complete summary this collector requires.
+It does not replace numerical diagnostic reproduction or scientific acceptance.
 
 The [complete-profile saved-draw verifier](overall_complete_profile_diagnostics.md)
-is also prepared, with tests still pending. It checks the complete archived arrays
+is also prepared, with passing focused software checks. It checks the complete archived arrays
 and reproduces coordinate and driver-contrast reports while retaining failures
 and missing attempts. Sampler extras were not saved; the verifier explicitly
 reuses the recorded divergence count and does not claim to independently verify
 that count, tree-depth counts or acceptance probabilities. It grants no new fit,
-acceptance decision or publication permission.
+acceptance decision or publication permission. Execution on the original archives
+still requires an interruption-aware review; no complete-run summary is fabricated.
 
 Before freezing the full scientific acceptance runs, finish the required
 production integration behind its acceptance guards and freeze the resulting
@@ -129,10 +132,10 @@ runs and then silently treat their old source identities as current.
 A separate [batched-map preparation](overall_batched_rotation.md) now replaces
 the control conversion's individual array updates with grouped matrix products
 and gathers in an unused development implementation. It keeps the existing
-coordinate map and its fingerprint. Its software, complete-model equivalence
-and resource checks are still pending and must wait for the active fit's budget
-to be released. It has not changed the running profile, and no speed improvement
-or permission to use it in inference is claimed.
+coordinate map and its fingerprint. Its focused software checks pass; complete-model
+equivalence and resource measurements remain pending. It has not changed the
+original profile, and no speed improvement or permission to use it in inference
+is claimed.
 
 | Requirement | Current evidence | Remaining work |
 |---|---|---|
@@ -141,7 +144,7 @@ or permission to use it in inference is claimed.
 | Scientific specification | Executable likelihood/prior definitions and candidate contract | Final numerical/evaluation/prospective protocol before real-data fitting |
 | Complete entrant/cutoff catalog | Cutoff-first data design; outcome-free forecast catalogue; development state propagation reconstructs uncentred history and retains unseen entrants with population uncertainty | Verified as-of source/calendar inventory, accepted-posterior integration and recovery on the real transfer network |
 | Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks; original failed profiles preserved; approved conditional weekend-coordinate profile converges on its complete inventory; full-design density/gradient preflight also completes | Integrate the exact method under the full recovery protocol; measure inference on the remaining required designs; no automatic retuning; full recovery and intended-runner resource measurements remain open |
-| Known-truth recovery and simulation-based calibration | The earlier conditional weekend-coordinate profile converged on its registered connected, confounded and sparse-rookie cases; descriptive truth checks preserve interval misses. The complete-design profile is still running. The development evaluator covers state contrasts and observation likelihoods, distinguishes fixed-truth stress cases and requires a complete inventory | Full study registration, power justification and execution, including ranking functionals, confounding and the real transfer network; no failed case or missed truth may be discarded |
+| Known-truth recovery and simulation-based calibration | The earlier conditional weekend-coordinate profile converged on its registered connected, confounded and sparse-rookie cases; descriptive truth checks preserve interval misses. The complete-design profile was interrupted during the real-network case and remains incomplete. The development evaluator covers state contrasts and observation likelihoods, distinguishes fixed-truth stress cases and requires a complete inventory | Full study registration, power justification and execution, including ranking functionals, confounding and the real transfer network; no failed case or missed truth may be discarded |
 | Coherent weekend simulation | Student-t elimination and shared weekend uncertainty; observation kernels preserve teammate effects, context, order and completion within each joint draw; historical joint condition integration; explicit unseen-circuit outcome and qualifying track-factor extensions | Condition/circuit calibration and final registration, qualifying weather, official-grid eligibility/penalties, common operations, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |
 | Ability/outcome/numerical uncertainty | Nested simulation, grouped moments and conditional ordering-sensitivity bounds; saved noise examples show that a passing noisy checker cannot establish functional convergence; final qualifying/race contrasts pass in the earlier conditional weekend-coordinate profile; the complete-design profile remains pending | Register and validate functional MCMC diagnostics and near-tie precision under converged posteriors; measure the complete nested workload; numerical profile convergence does not establish ranking precision |
