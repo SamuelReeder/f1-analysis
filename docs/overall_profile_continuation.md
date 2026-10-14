@@ -9,8 +9,8 @@ frozen continuation registration are required before it can run. The
 prepared; their [focused software checks pass](../outputs/championship/development/overall-profile-continuation-checks-v1/verification.json).
 The [saved-archive audit](../outputs/championship/development/overall-interrupted-profile-diagnostics-v1/audit.json)
 has also completed with every recorded coordinate and driver-contrast report
-reproduced exactly. The original failed attempts remain failed. A frozen
-execution registration and service launch are still required.
+reproduced exactly. The original failed attempts remain failed. Before execution,
+freeze and commit a registration binding the implementation and its prerequisites.
 The original
 profile remains immutable and incomplete; its history must never be rewritten
 to look uninterrupted.
