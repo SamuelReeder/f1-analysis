@@ -1,0 +1,26 @@
+{
+  "case": "era_boundary",
+  "exit_code": 0,
+  "state": "converged",
+  "result_present": true,
+  "result_sha256": "151ff329186e9e83bf88aa0f9327a17a0a22b0318d046ba06680612b817f5565",
+  "log_sha256": "33e268d84748c70ab1e5ac5169afd36c11be79231bcd2ffd52e91d729381ca49",
+  "resources_sha256": "a85c9b4b72dea3c745388b571f773a5ffe62661720add73f416437e3992a3a34",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/era_boundary.resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-u",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/analysis/overall_complete_profile.py",
+    "--registration",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/docs/overall_complete_profile_protocol.json",
+    "--unit",
+    "f1-overall-complete-design-profile-v1.service",
+    "--case",
+    "era_boundary",
+    "--output",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/era_boundary"
+  ]
+}

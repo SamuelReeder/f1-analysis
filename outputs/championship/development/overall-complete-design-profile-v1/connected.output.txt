@@ -1,0 +1,20 @@
+An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not installed. Falling back to cpu.
+{"study": "connected", "attempt": 1, "state": "sampling", "settings": {"warmup": 800, "samples": 800, "chains": 4, "target_accept": 0.9, "max_tree_depth": 10, "init_median_samples": 15, "seed": 0}}
+E1013 01:03:15.107082  919329 slow_operation_alarm.cc:73] Constant folding an instruction is taking > 1s:
+
+  %slice.16649 = f32[36]{0} slice(%constant.35316..sunk.1), slice={[1:72:2]}, metadata={op_name="jit(_fun)/shard_map/while/body/jvp()/slice" stack_frame_id=12189}
+
+This isn't necessarily a bug; constant-folding is inherently a trade-off between compilation time and speed at runtime. XLA has some guards that attempt to keep constant folding from taking too long, but fundamentally you'll always be able to come up with an input program that takes a long time.
+
+If you'd like to file a bug, run with envvar XLA_FLAGS=--xla_dump_to=/tmp/foo and attach the results.
+E1013 01:03:15.107235  919212 slow_operation_alarm.cc:140] The operation took 8.062189522s
+Constant folding an instruction is taking > 1s:
+
+  %slice.16649 = f32[36]{0} slice(%constant.35316..sunk.1), slice={[1:72:2]}, metadata={op_name="jit(_fun)/shard_map/while/body/jvp()/slice" stack_frame_id=12189}
+
+This isn't necessarily a bug; constant-folding is inherently a trade-off between compilation time and speed at runtime. XLA has some guards that attempt to keep constant folding from taking too long, but fundamentally you'll always be able to come up with an input program that takes a long time.
+
+If you'd like to file a bug, run with envvar XLA_FLAGS=--xla_dump_to=/tmp/foo and attach the results.
+{"study": "connected", "attempt": 1, "seconds": 92.41401919798227, "converged": false, "divergences": 0, "worst_rhat": 1.010747885878463}
+{"study": "connected", "attempt": 2, "state": "sampling", "settings": {"warmup": 1600, "samples": 1600, "chains": 4, "target_accept": 0.9, "max_tree_depth": 10, "init_median_samples": 15, "seed": 1}}
+{"study": "connected", "attempt": 2, "seconds": 140.35701910802163, "converged": true, "divergences": 0, "worst_rhat": 1.005343299986231}

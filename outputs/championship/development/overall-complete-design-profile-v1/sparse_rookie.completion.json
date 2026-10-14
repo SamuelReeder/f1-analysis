@@ -1,0 +1,26 @@
+{
+  "case": "sparse_rookie",
+  "exit_code": 0,
+  "state": "converged",
+  "result_present": true,
+  "result_sha256": "593400fdd14c95d271edfb0dba96cf901d50586c79a3b56193cc5f43747eda89",
+  "log_sha256": "6b3d9f10ceab4f6f649a2f2ab5b455e89b1e6955fa9a0979dde87af8a0ee419c",
+  "resources_sha256": "62ac7393c6dc8678109dee806a0f95e56c40062e6598830d713a5f3431119c48",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/sparse_rookie.resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-u",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/analysis/overall_complete_profile.py",
+    "--registration",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/docs/overall_complete_profile_protocol.json",
+    "--unit",
+    "f1-overall-complete-design-profile-v1.service",
+    "--case",
+    "sparse_rookie",
+    "--output",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/sparse_rookie"
+  ]
+}

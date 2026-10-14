@@ -1,0 +1,31 @@
+{
+  "case": "connected",
+  "state": "running",
+  "stage": "fitting",
+  "started_at": "2026-10-13T05:02:46.759918+00:00",
+  "source_commit": "5556261d6556e19fb5f68f49f333f309b8ef2978",
+  "registration_sha256": "70151a5836702f485857edf712d489817b5aa93e3fca0c26af372dd9900141bf",
+  "full_recovery_complete": false,
+  "sbc_complete": false,
+  "publication_allowed": false,
+  "actual_resources": {
+    "service": {
+      "Slice": "f1.slice",
+      "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-overall-complete-design-profile-v1.service",
+      "CPUWeight": "10",
+      "MemoryMax": "13958643712",
+      "Nice": "19"
+    },
+    "shared_slice": {
+      "CPUWeight": "10",
+      "CPUQuotaPerSecUSec": "8s"
+    }
+  },
+  "original_inputs": {
+    "seed": 20261020,
+    "role": "prior_predictive",
+    "arrays_key": "ce71f10aec8a47f84ff27489bacfa626581a4f10c369f3012962f6e88f5957f2",
+    "parameters_key": "8b65dedb642561c8ebde7fc38d6517027dc5b268ac240fd75b9a2d2187f00765",
+    "truth_key": "5b620150d842b530ee35e3a5ed781360b4f85009ccf0eafb9f6b6ad7049c4934"
+  }
+}

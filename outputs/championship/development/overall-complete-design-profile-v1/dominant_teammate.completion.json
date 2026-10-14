@@ -1,0 +1,26 @@
+{
+  "case": "dominant_teammate",
+  "exit_code": 0,
+  "state": "converged",
+  "result_present": true,
+  "result_sha256": "1c235b26b72a45a1ed9c6ad27b73444cb50a1ced21228acddd7d9426f31f795d",
+  "log_sha256": "a3d43901282a199934c25957a400291f7caaa578952ee15e1b1980c50143e74c",
+  "resources_sha256": "26b06d04ad7c55ad7125bf873e94fa1e334f8db3a24d942da95a3bfd4784b18e",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/dominant_teammate.resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-u",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/analysis/overall_complete_profile.py",
+    "--registration",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/docs/overall_complete_profile_protocol.json",
+    "--unit",
+    "f1-overall-complete-design-profile-v1.service",
+    "--case",
+    "dominant_teammate",
+    "--output",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/dominant_teammate"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "case": "confounded",
+  "exit_code": 0,
+  "state": "converged",
+  "result_present": true,
+  "result_sha256": "28fb8fee2a7cbe66386f5d04b252b9204690d78aac71a6a80485081f97e8da44",
+  "log_sha256": "b4faa9ce70198a00fc390bb4692872744e12ad29628237cbbf821a3278489c93",
+  "resources_sha256": "ae9f7f896a2f8c402c43861a0769fb637fff25375a487a19f9c590ea631b6cb4",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/confounded.resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-u",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/analysis/overall_complete_profile.py",
+    "--registration",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/docs/overall_complete_profile_protocol.json",
+    "--unit",
+    "f1-overall-complete-design-profile-v1.service",
+    "--case",
+    "confounded",
+    "--output",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/confounded"
+  ]
+}

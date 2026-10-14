@@ -1,0 +1,529 @@
+{
+  "state": "interrupted_without_final_record",
+  "observed_at": "2026-10-14T22:41:25.026027+00:00",
+  "source_commit": "b31b38af46ccb2b0fdd7760a1183e07ac7916788",
+  "registration": "docs/overall_complete_profile_protocol.json",
+  "registration_sha256": "70151a5836702f485857edf712d489817b5aa93e3fca0c26af372dd9900141bf",
+  "terminal_unit_observation": {
+    "command": [
+      "systemctl",
+      "--user",
+      "show",
+      "f1-overall-complete-design-profile-v1.service",
+      "-p",
+      "LoadState",
+      "-p",
+      "ActiveState",
+      "-p",
+      "SubState",
+      "-p",
+      "MainPID",
+      "-p",
+      "Result"
+    ],
+    "exit_code": 0,
+    "stdout": "MainPID=0\nResult=success\nLoadState=not-found\nActiveState=inactive\nSubState=dead\n",
+    "stderr": ""
+  },
+  "boot_id": "aff5587b-40cc-4cc0-8b01-86243382f036",
+  "boot_inventory": {
+    "command": [
+      "journalctl",
+      "--list-boots",
+      "--no-pager"
+    ],
+    "exit_code": 0,
+    "stdout": "IDX BOOT ID                          FIRST ENTRY                 LAST ENTRY\n -1 887a98e332e7452bab6bc98ee81c0545 Tue 2026-10-13 05:31:46 EDT Wed 2026-10-14 18:23:34 EDT\n  0 aff5587b40cc4cc08b0186243382f036 Wed 2026-10-14 18:30:56 EDT Wed 2026-10-14 18:41:24 EDT\n",
+    "stderr": ""
+  },
+  "shared_cpu": {
+    "command": [
+      "systemctl",
+      "--user",
+      "show",
+      "f1.slice",
+      "-p",
+      "CPUQuotaPerSecUSec",
+      "-p",
+      "CPUWeight"
+    ],
+    "exit_code": 0,
+    "stdout": "CPUWeight=10\nCPUQuotaPerSecUSec=4s\n",
+    "stderr": ""
+  },
+  "classification_reason": "The original service and worker are absent after a new WSL boot; no final summary or service exit record was written.",
+  "restart_cause": "unknown",
+  "model_settings_changed": false,
+  "recovery_started": false,
+  "archive_arrays_verified": false,
+  "publication_allowed": false,
+  "full_goal_complete": false,
+  "raw_output_inventory": {
+    "outputs/championship/development/overall-complete-design-profile-v1/confounded/progress.json": {
+      "sha256": "2d494715a27bb0d942fc150e61b7a3cb91d1e539833cb1816e07696db67db484",
+      "bytes": 1083
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/confounded/result.json": {
+      "sha256": "28fb8fee2a7cbe66386f5d04b252b9204690d78aac71a6a80485081f97e8da44",
+      "bytes": 239742
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/confounded/truth.json": {
+      "sha256": "d3a7bda9ce994f84ad8ac6ffe8a90132cc28d8a43ff4f02b78b0e6beae1f9896",
+      "bytes": 11403
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/confounded.completion.json": {
+      "sha256": "bb93b8874a562f737083dca513de9bd8d54bff8d01dfe41ecda71517fe0637ac",
+      "bytes": 1122
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/confounded.output.txt": {
+      "sha256": "b4faa9ce70198a00fc390bb4692872744e12ad29628237cbbf821a3278489c93",
+      "bytes": 790
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/confounded.resources.txt": {
+      "sha256": "ae9f7f896a2f8c402c43861a0769fb637fff25375a487a19f9c590ea631b6cb4",
+      "bytes": 1215
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/connected/progress.json": {
+      "sha256": "c03a5267dc436d2bd4b7c7dabc74a93eb476937e2ad958912853556077193247",
+      "bytes": 1082
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/connected/result.json": {
+      "sha256": "416c9ba11be289c4d60d94e04fbff43c54f7b7e10ae163d1f666e80916f54963",
+      "bytes": 239944
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/connected/truth.json": {
+      "sha256": "72108de8697e16a55dea86c4a8af48b47556e56319ddb5e5d73b01bc8d401af4",
+      "bytes": 11312
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/connected.completion.json": {
+      "sha256": "8f4060063de79c144e6605e7f21e92876dfc45c1d6c5a508d891ffe9b8532cef",
+      "bytes": 1118
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/connected.output.txt": {
+      "sha256": "6b33ba511787b4e20db959a7bf85a1ab7bb12d72a7bbb2cba4f1f1f38728f3af",
+      "bytes": 2160
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/connected.resources.txt": {
+      "sha256": "156d7a21274c8e9daaa491d5530858dea88fda884cd3bd3a0255b8c3e7dcba94",
+      "bytes": 1212
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/dominant_teammate/progress.json": {
+      "sha256": "0c284146de756f40a0268d34c3d8587ecea859e804daf737df9975e096873465",
+      "bytes": 1080
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/dominant_teammate/result.json": {
+      "sha256": "1c235b26b72a45a1ed9c6ad27b73444cb50a1ced21228acddd7d9426f31f795d",
+      "bytes": 166932
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/dominant_teammate/truth.json": {
+      "sha256": "2ae098bb1d1fb8010258bfc97596c63d5de96ed2b5a22084fc3867a0cf7e20f8",
+      "bytes": 11336
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/dominant_teammate.completion.json": {
+      "sha256": "482482ef89065fd66f6e13b28528afdf2250abb5fccb8373a00e9d37abe86b34",
+      "bytes": 1150
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/dominant_teammate.output.txt": {
+      "sha256": "a3d43901282a199934c25957a400291f7caaa578952ee15e1b1980c50143e74c",
+      "bytes": 463
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/dominant_teammate.resources.txt": {
+      "sha256": "26b06d04ad7c55ad7125bf873e94fa1e334f8db3a24d942da95a3bfd4784b18e",
+      "bytes": 1226
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/era_boundary/progress.json": {
+      "sha256": "32b56b75b3cee696edc315df84b3a9a129039e0c237946c4ba3c09be5f7c84fc",
+      "bytes": 1085
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/era_boundary/result.json": {
+      "sha256": "151ff329186e9e83bf88aa0f9327a17a0a22b0318d046ba06680612b817f5565",
+      "bytes": 166868
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/era_boundary/truth.json": {
+      "sha256": "07145c2544e1cd5ff6fea0ffee57e2edd591dc909e424ee1abec696dd8f15c65",
+      "bytes": 11377
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/era_boundary.completion.json": {
+      "sha256": "f49a8dd70d20f5bd0ea1e9388a080c396d9cb7d763ec3a884f8f13cad1af1348",
+      "bytes": 1130
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/era_boundary.output.txt": {
+      "sha256": "33e268d84748c70ab1e5ac5169afd36c11be79231bcd2ffd52e91d729381ca49",
+      "bytes": 453
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/era_boundary.resources.txt": {
+      "sha256": "a85c9b4b72dea3c745388b571f773a5ffe62661720add73f416437e3992a3a34",
+      "bytes": 1214
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/progress.json": {
+      "sha256": "2bbc2e927018b30c515d225942e5242e99e6ce1437957d3666a25effb09bd0b6",
+      "bytes": 6259
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/real_network/progress.json": {
+      "sha256": "29548b066abdcc67ab4aae3ceeddbc16f0edb7c5dced5d2cf10b95036d2751f1",
+      "bytes": 1085
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/real_network/truth.json": {
+      "sha256": "82f173fbce0c85520d7facf6e2b583b64913d574f4b7e5194a00fa0118bf50e5",
+      "bytes": 993320
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/real_network.output.txt": {
+      "sha256": "a82fbf007c8966def328ee9defdcc272b9bc3f031d234d4bd2b3cfdbeae1b02d",
+      "bytes": 1003
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/real_network.resources.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/sparse_rookie/progress.json": {
+      "sha256": "fe05b3af3a555b3e5f99ac85491c6060f06785e9025c0bdcd63343cd67a6c67d",
+      "bytes": 1086
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/sparse_rookie/result.json": {
+      "sha256": "593400fdd14c95d271edfb0dba96cf901d50586c79a3b56193cc5f43747eda89",
+      "bytes": 239800
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/sparse_rookie/truth.json": {
+      "sha256": "24606ca48345e567808b2a3486ae4fb35bc8cedd9f1a8a02e49a3a6458b729b2",
+      "bytes": 10147
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/sparse_rookie.completion.json": {
+      "sha256": "09456ec104fb81aca8d9bb49584683f9356ce436b5b52388a303458c55671d90",
+      "bytes": 1134
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/sparse_rookie.output.txt": {
+      "sha256": "6b3d9f10ceab4f6f649a2f2ab5b455e89b1e6955fa9a0979dde87af8a0ee419c",
+      "bytes": 801
+    },
+    "outputs/championship/development/overall-complete-design-profile-v1/sparse_rookie.resources.txt": {
+      "sha256": "62ac7393c6dc8678109dee806a0f95e56c40062e6598830d713a5f3431119c48",
+      "bytes": 1220
+    }
+  },
+  "cached_archive_inventory": {
+    "outputs/championship/cache/overall-complete-design-profile-v1/connected/failed_1.npz": {
+      "sha256": "8aebc3ea76cea32d90352d8850fd9ff97123f19b33495362b072c732b74340f0",
+      "bytes": 21353726
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/connected/posterior.npz": {
+      "sha256": "b543952525d6bf48dac3d02243dbe5d32c0661bb305abd78f5b89148a4b0c2d5",
+      "bytes": 42685707
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/confounded/failed_1.npz": {
+      "sha256": "e342bd35d0039836f0215ce0dc28ee812e3096e3b8e2f1c6454a9438237b4808",
+      "bytes": 21142573
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/confounded/posterior.npz": {
+      "sha256": "725577ccfdc809efc4a95caf4e870e8360ec1c49177bfd5ebfe645551dace606",
+      "bytes": 42255232
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/sparse_rookie/failed_1.npz": {
+      "sha256": "f8a376409df1c8e1fd1b1b79471252374e77a0ddd745903fc2032cd3d90d96c3",
+      "bytes": 20102032
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/sparse_rookie/posterior.npz": {
+      "sha256": "1b2751703124bca02a40c44aa4cce0bcadd5c2d34943e819899d67d948e6f2fc",
+      "bytes": 40183057
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/dominant_teammate/posterior.npz": {
+      "sha256": "a9db2f8b97898f49d0d67ad3a7d44af2c8d060b1620612613b5d1a95d4c6c453",
+      "bytes": 21355572
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/era_boundary/posterior.npz": {
+      "sha256": "ee695b5441e35444f0f1333b761e7489443cd7dbb508f83a90f7fd914d7914fb",
+      "bytes": 21466560
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/real_network/failed_1.npz": {
+      "sha256": "3abd5712cf3e8e683d0459a3017804843a45ae25f4304ff1a7503e39212d1e67",
+      "bytes": 1354855001
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/real_network/failed_2.npz": {
+      "sha256": "6b258ab8e2ef1df36e1f92e35814511c31d02b88493c092fa9fb1dda7f984b28",
+      "bytes": 2782910068
+    }
+  },
+  "copied_cache_metadata": {
+    "outputs/championship/cache/overall-complete-design-profile-v1/connected/attempt_1.json": {
+      "snapshot": "outputs/championship/development/overall-complete-design-profile-v1-interruption/cache-metadata/connected/attempt_1.json",
+      "sha256": "7d2aea3f5c0fe9ebe9cabd4271969a539b64ab5b7cbca22ddba8171dbce72f13"
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/connected/attempt_2.json": {
+      "snapshot": "outputs/championship/development/overall-complete-design-profile-v1-interruption/cache-metadata/connected/attempt_2.json",
+      "sha256": "d5f7be6e421a59b9e7e0ab8fbb36af32aafbf0f731ab3eede5f59a8a0af7584a"
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/connected/receipt.json": {
+      "snapshot": "outputs/championship/development/overall-complete-design-profile-v1-interruption/cache-metadata/connected/receipt.json",
+      "sha256": "9b07e9547acd5736b955c09e6aefc26831d2e111820f748cdb62751b75f89751"
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/confounded/attempt_1.json": {
+      "snapshot": "outputs/championship/development/overall-complete-design-profile-v1-interruption/cache-metadata/confounded/attempt_1.json",
+      "sha256": "3875f538ae5fecfdec58e83e6198c13f73be0dabd50e1969f036f52ea2f53c19"
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/confounded/attempt_2.json": {
+      "snapshot": "outputs/championship/development/overall-complete-design-profile-v1-interruption/cache-metadata/confounded/attempt_2.json",
+      "sha256": "af3be6eaf99aad34f8ed356f4cf65276e3d1901311a7100ee908e135ae532445"
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/confounded/receipt.json": {
+      "snapshot": "outputs/championship/development/overall-complete-design-profile-v1-interruption/cache-metadata/confounded/receipt.json",
+      "sha256": "549413de75eb2aa93a6de2ba20b24a26567913c1ca8420f60aadb5bc37f40472"
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/sparse_rookie/attempt_1.json": {
+      "snapshot": "outputs/championship/development/overall-complete-design-profile-v1-interruption/cache-metadata/sparse_rookie/attempt_1.json",
+      "sha256": "b8b25324f25e79507a3111f0099ef2face9cae2a77b9509be9e17eda91eb5d4d"
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/sparse_rookie/attempt_2.json": {
+      "snapshot": "outputs/championship/development/overall-complete-design-profile-v1-interruption/cache-metadata/sparse_rookie/attempt_2.json",
+      "sha256": "0991106b48a9c773480b7f63afa32eafcb9999e19fed883f9538f26b8b944af8"
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/sparse_rookie/receipt.json": {
+      "snapshot": "outputs/championship/development/overall-complete-design-profile-v1-interruption/cache-metadata/sparse_rookie/receipt.json",
+      "sha256": "45208987b38a0eed4c7c51afe933062c72061dcc380fa4b0fcbff4cbd44eb590"
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/dominant_teammate/attempt_1.json": {
+      "snapshot": "outputs/championship/development/overall-complete-design-profile-v1-interruption/cache-metadata/dominant_teammate/attempt_1.json",
+      "sha256": "42db21ccfaab6579d5bf2716d80849f34477d8a2c16cc6944d306db66c41f42e"
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/dominant_teammate/receipt.json": {
+      "snapshot": "outputs/championship/development/overall-complete-design-profile-v1-interruption/cache-metadata/dominant_teammate/receipt.json",
+      "sha256": "7e4d86b345cfb27b9e2b1387592f5bf95451e3f4c6fb7dda541f311dc2e76a91"
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/era_boundary/attempt_1.json": {
+      "snapshot": "outputs/championship/development/overall-complete-design-profile-v1-interruption/cache-metadata/era_boundary/attempt_1.json",
+      "sha256": "7ca75566337099d0a32fca584808b4a130125aa5040fa42f4c2f5b3154d6f675"
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/era_boundary/receipt.json": {
+      "snapshot": "outputs/championship/development/overall-complete-design-profile-v1-interruption/cache-metadata/era_boundary/receipt.json",
+      "sha256": "9114cea89f7f2a2350f1ca7aeefc1dfe5524cb9fa50a76de3beed050be3fc1df"
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/real_network/attempt_1.json": {
+      "snapshot": "outputs/championship/development/overall-complete-design-profile-v1-interruption/cache-metadata/real_network/attempt_1.json",
+      "sha256": "2e6184d9fffffcf620a567dabd3fc2fbcfca6f2fbf3ed398b66df460f66c642a"
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/real_network/attempt_2.json": {
+      "snapshot": "outputs/championship/development/overall-complete-design-profile-v1-interruption/cache-metadata/real_network/attempt_2.json",
+      "sha256": "c0933253570fd166bad70a08d4045c4d86943c8f8de98f6c62aba22750167342"
+    },
+    "outputs/championship/cache/overall-complete-design-profile-v1/real_network/receipt.json": {
+      "snapshot": "outputs/championship/development/overall-complete-design-profile-v1-interruption/cache-metadata/real_network/receipt.json",
+      "sha256": "9c513f8c517ddc86df29c4751fdaa117012c9c8bde38e7e68e3c8a791312f488"
+    }
+  },
+  "cases": [
+    {
+      "case": "connected",
+      "completion_present": true,
+      "result_present": true,
+      "receipt_present": true,
+      "original_completion": {
+        "case": "connected",
+        "exit_code": 0,
+        "state": "converged",
+        "result_present": true,
+        "result_sha256": "416c9ba11be289c4d60d94e04fbff43c54f7b7e10ae163d1f666e80916f54963",
+        "log_sha256": "6b33ba511787b4e20db959a7bf85a1ab7bb12d72a7bbb2cba4f1f1f38728f3af",
+        "resources_sha256": "156d7a21274c8e9daaa491d5530858dea88fda884cd3bd3a0255b8c3e7dcba94",
+        "command": [
+          "/usr/bin/time",
+          "-v",
+          "-o",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/connected.resources.txt",
+          "/home/sreeder/f1-analysis/.venv/bin/python",
+          "-u",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/analysis/overall_complete_profile.py",
+          "--registration",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/docs/overall_complete_profile_protocol.json",
+          "--unit",
+          "f1-overall-complete-design-profile-v1.service",
+          "--case",
+          "connected",
+          "--output",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/connected"
+        ]
+      },
+      "receipt_state": "converged",
+      "recorded_attempt_count": 2
+    },
+    {
+      "case": "confounded",
+      "completion_present": true,
+      "result_present": true,
+      "receipt_present": true,
+      "original_completion": {
+        "case": "confounded",
+        "exit_code": 0,
+        "state": "converged",
+        "result_present": true,
+        "result_sha256": "28fb8fee2a7cbe66386f5d04b252b9204690d78aac71a6a80485081f97e8da44",
+        "log_sha256": "b4faa9ce70198a00fc390bb4692872744e12ad29628237cbbf821a3278489c93",
+        "resources_sha256": "ae9f7f896a2f8c402c43861a0769fb637fff25375a487a19f9c590ea631b6cb4",
+        "command": [
+          "/usr/bin/time",
+          "-v",
+          "-o",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/confounded.resources.txt",
+          "/home/sreeder/f1-analysis/.venv/bin/python",
+          "-u",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/analysis/overall_complete_profile.py",
+          "--registration",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/docs/overall_complete_profile_protocol.json",
+          "--unit",
+          "f1-overall-complete-design-profile-v1.service",
+          "--case",
+          "confounded",
+          "--output",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/confounded"
+        ]
+      },
+      "receipt_state": "converged",
+      "recorded_attempt_count": 2
+    },
+    {
+      "case": "sparse_rookie",
+      "completion_present": true,
+      "result_present": true,
+      "receipt_present": true,
+      "original_completion": {
+        "case": "sparse_rookie",
+        "exit_code": 0,
+        "state": "converged",
+        "result_present": true,
+        "result_sha256": "593400fdd14c95d271edfb0dba96cf901d50586c79a3b56193cc5f43747eda89",
+        "log_sha256": "6b3d9f10ceab4f6f649a2f2ab5b455e89b1e6955fa9a0979dde87af8a0ee419c",
+        "resources_sha256": "62ac7393c6dc8678109dee806a0f95e56c40062e6598830d713a5f3431119c48",
+        "command": [
+          "/usr/bin/time",
+          "-v",
+          "-o",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/sparse_rookie.resources.txt",
+          "/home/sreeder/f1-analysis/.venv/bin/python",
+          "-u",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/analysis/overall_complete_profile.py",
+          "--registration",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/docs/overall_complete_profile_protocol.json",
+          "--unit",
+          "f1-overall-complete-design-profile-v1.service",
+          "--case",
+          "sparse_rookie",
+          "--output",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/sparse_rookie"
+        ]
+      },
+      "receipt_state": "converged",
+      "recorded_attempt_count": 2
+    },
+    {
+      "case": "dominant_teammate",
+      "completion_present": true,
+      "result_present": true,
+      "receipt_present": true,
+      "original_completion": {
+        "case": "dominant_teammate",
+        "exit_code": 0,
+        "state": "converged",
+        "result_present": true,
+        "result_sha256": "1c235b26b72a45a1ed9c6ad27b73444cb50a1ced21228acddd7d9426f31f795d",
+        "log_sha256": "a3d43901282a199934c25957a400291f7caaa578952ee15e1b1980c50143e74c",
+        "resources_sha256": "26b06d04ad7c55ad7125bf873e94fa1e334f8db3a24d942da95a3bfd4784b18e",
+        "command": [
+          "/usr/bin/time",
+          "-v",
+          "-o",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/dominant_teammate.resources.txt",
+          "/home/sreeder/f1-analysis/.venv/bin/python",
+          "-u",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/analysis/overall_complete_profile.py",
+          "--registration",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/docs/overall_complete_profile_protocol.json",
+          "--unit",
+          "f1-overall-complete-design-profile-v1.service",
+          "--case",
+          "dominant_teammate",
+          "--output",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/dominant_teammate"
+        ]
+      },
+      "receipt_state": "converged",
+      "recorded_attempt_count": 1
+    },
+    {
+      "case": "era_boundary",
+      "completion_present": true,
+      "result_present": true,
+      "receipt_present": true,
+      "original_completion": {
+        "case": "era_boundary",
+        "exit_code": 0,
+        "state": "converged",
+        "result_present": true,
+        "result_sha256": "151ff329186e9e83bf88aa0f9327a17a0a22b0318d046ba06680612b817f5565",
+        "log_sha256": "33e268d84748c70ab1e5ac5169afd36c11be79231bcd2ffd52e91d729381ca49",
+        "resources_sha256": "a85c9b4b72dea3c745388b571f773a5ffe62661720add73f416437e3992a3a34",
+        "command": [
+          "/usr/bin/time",
+          "-v",
+          "-o",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/era_boundary.resources.txt",
+          "/home/sreeder/f1-analysis/.venv/bin/python",
+          "-u",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/analysis/overall_complete_profile.py",
+          "--registration",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/docs/overall_complete_profile_protocol.json",
+          "--unit",
+          "f1-overall-complete-design-profile-v1.service",
+          "--case",
+          "era_boundary",
+          "--output",
+          "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/era_boundary"
+        ]
+      },
+      "receipt_state": "converged",
+      "recorded_attempt_count": 1
+    },
+    {
+      "case": "real_network",
+      "completion_present": false,
+      "result_present": false,
+      "receipt_present": true,
+      "receipt_state": "running",
+      "recorded_attempt_count": 2
+    }
+  ],
+  "previous_boot_kernel_matches": {
+    "command": [
+      "journalctl",
+      "-k",
+      "-b",
+      "-1",
+      "--no-pager",
+      "-o",
+      "short-iso"
+    ],
+    "exit_code": 0,
+    "stderr": "",
+    "matched_lines": [
+      "2026-10-13T13:23:02-04:00 DESKTOP-M9I22TH kernel: weston: weston: potentially unexpected fatal signal 11.",
+      "2026-10-14T18:23:34-04:00 DESKTOP-M9I22TH kernel: codex: tokio-rt-worker: potentially unexpected fatal signal 7."
+    ],
+    "interpretation": "Selected logged events only. Absence of an OOM message does not establish the restart cause; a Codex crash does not establish why WSL restarted."
+  },
+  "last_recorded_sampling_start": {
+    "study": "real_network",
+    "attempt": 3,
+    "state": "sampling",
+    "settings": {
+      "warmup": 2400,
+      "samples": 3200,
+      "chains": 4,
+      "target_accept": 0.9,
+      "max_tree_depth": 10,
+      "init_median_samples": 15,
+      "seed": 2
+    }
+  },
+  "missing_terminal_records": [
+    "outputs/championship/development/overall-complete-design-profile-v1/summary.json",
+    "outputs/championship/development/overall-complete-design-profile-v1/real_network/result.json",
+    "outputs/championship/development/overall-complete-design-profile-v1/real_network.completion.json",
+    "outputs/logs/overall-complete-design-profile-v1/exit.status"
+  ]
+}

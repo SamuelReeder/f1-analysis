@@ -1,0 +1,26 @@
+{
+  "case": "connected",
+  "exit_code": 0,
+  "state": "converged",
+  "result_present": true,
+  "result_sha256": "416c9ba11be289c4d60d94e04fbff43c54f7b7e10ae163d1f666e80916f54963",
+  "log_sha256": "6b33ba511787b4e20db959a7bf85a1ab7bb12d72a7bbb2cba4f1f1f38728f3af",
+  "resources_sha256": "156d7a21274c8e9daaa491d5530858dea88fda884cd3bd3a0255b8c3e7dcba94",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/connected.resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-u",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/analysis/overall_complete_profile.py",
+    "--registration",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/docs/overall_complete_profile_protocol.json",
+    "--unit",
+    "f1-overall-complete-design-profile-v1.service",
+    "--case",
+    "connected",
+    "--output",
+    "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/outputs/championship/development/overall-complete-design-profile-v1/connected"
+  ]
+}
