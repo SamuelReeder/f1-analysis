@@ -1,0 +1,27 @@
+{
+  "source_commit": "84068edeea2e4afd65ef9b1f02b1ca6aaf9ca228",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "outputs/championship/development/overall-profile-continuation-checks-v1/resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_overall_profile_continuation.py",
+    "tests/test_overall_profile_continuation_run.py"
+  ],
+  "started_at": "2026-10-14T23:22:42.221247+00:00",
+  "resources": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "Slice": "f1.slice",
+    "Nice": 19
+  },
+  "mcmc_run": false,
+  "publication_allowed": false,
+  "exit_code": 0,
+  "seconds": 0.35148534800009656,
+  "finished_at": "2026-10-14T23:22:42.572748+00:00"
+}
