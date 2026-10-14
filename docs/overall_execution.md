@@ -137,6 +137,14 @@ Earlier original outputs and failed draws remain unchanged. The continuation
 keeps the lower shared CPU cap and occupies the full fit memory budget, so other
 heavy work waits. No convergence or completed recovery is claimed while it runs.
 
+The [continuation reviewer](overall_continuation_review.md) is prepared outside
+the frozen fit inputs. It keeps the interrupted profile incomplete, combines the
+separate continuation with every earlier case, and reproduces only newly saved
+attempt reports after checking the earlier audited bytes. Its syntax has been
+checked; software execution tests and review of terminal fit evidence remain
+pending until the fit releases the memory budget. This preparation does not
+establish convergence, scientific acceptance or ranking publication.
+
 Before freezing the full scientific acceptance runs, finish the required
 production integration behind its acceptance guards and freeze the resulting
 source bundle. Both `f1rank/overall/provenance.py` and the racing artifact rules
