@@ -108,6 +108,14 @@ includes the committed resource-change record. Its tests and execution remain
 pending while the fit holds the resource budget. It does not replace numerical
 diagnostic reproduction or scientific acceptance.
 
+The [complete-profile saved-draw verifier](overall_complete_profile_diagnostics.md)
+is also prepared, with tests still pending. It checks the complete archived arrays
+and reproduces coordinate and driver-contrast reports while retaining failures
+and missing attempts. Sampler extras were not saved; the verifier explicitly
+reuses the recorded divergence count and does not claim to independently verify
+that count, tree-depth counts or acceptance probabilities. It grants no new fit,
+acceptance decision or publication permission.
+
 Before freezing the full scientific acceptance runs, finish the required
 production integration behind its acceptance guards and freeze the resulting
 source bundle. Both `f1rank/overall/provenance.py` and the racing artifact rules

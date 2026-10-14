@@ -28,3 +28,10 @@ failed fit remains failed. Archive-array validation, diagnostic reproduction,
 truth regeneration, full recovery, calibration, ranking precision and publication
 remain separate requirements. The collector explicitly records that its archive
 arrays and numerical diagnostics have not been independently verified.
+
+A separate [saved-draw verifier](overall_complete_profile_diagnostics.md) is now
+prepared for the complete profile. Its focused tests and execution also remain
+pending. It checks every available retained archive and reproduces the original
+coordinate and driver-contrast reports, preserving failed and unavailable attempts.
+Sampler extras were not archived, so their recorded counts cannot be independently
+verified from the saved draws.
