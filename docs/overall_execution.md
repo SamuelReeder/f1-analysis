@@ -129,8 +129,13 @@ The [execution-recovery definition](overall_profile_continuation.md) requires
 verified saved reports before restarting only the unfinished registered attempt.
 Its original sampler checkpoint was not saved, so it must start from its original
 seed. Earlier attempts and failed results remain immutable. The planner and
-execution controller now have passing focused software checks. A frozen execution
-registration and service launch are still required; no recovery fit has started.
+execution controller now have passing focused software checks. The
+[execution registration](overall_profile_continuation_protocol.json) is frozen,
+and the [separate capped service](../outputs/championship/development/overall-complete-design-continuation-v1-launch/sampling-start.json)
+has restarted the original unfinished attempt with its registered seed and settings.
+Earlier original outputs and failed draws remain unchanged. The continuation
+keeps the lower shared CPU cap and occupies the full fit memory budget, so other
+heavy work waits. No convergence or completed recovery is claimed while it runs.
 
 Before freezing the full scientific acceptance runs, finish the required
 production integration behind its acceptance guards and freeze the resulting

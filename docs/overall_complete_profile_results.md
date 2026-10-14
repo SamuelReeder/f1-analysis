@@ -76,9 +76,12 @@ attempts unchanged and stopping according to the same fixed ladder. Its
 [software checks](../outputs/championship/development/overall-profile-continuation-checks-v1/verification.json)
 pass **44** tests in **0.18 seconds**, as recorded in the
 [test output](../outputs/championship/development/overall-profile-continuation-checks-v1/pytest.txt).
-The separate execution registration and service launch remain pending. The
-original runner has not been blindly relaunched, and the prepared batching
-implementation is not substituted into the continuation.
+The separate [execution registration](overall_profile_continuation_protocol.json)
+is frozen, and the [launch observation](../outputs/championship/development/overall-complete-design-continuation-v1-launch/sampling-start.json)
+confirms the unfinished original attempt is sampling in its new capped service.
+Earlier attempts and original files remain unchanged. The original runner has
+not been blindly relaunched, and the prepared batching implementation is not
+substituted into the continuation. Its final result remains pending.
 
 The complete computational profile remains incomplete. Full recovery,
 simulation-based calibration, functional precision, predictive validation,
