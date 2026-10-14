@@ -1,0 +1,44 @@
+{
+  "recorded_at": "2026-10-14T23:30:40.004841+00:00",
+  "source_commit": "9798c4e34afa9f802dba4f22dbcb31fad117cf67",
+  "unit": "f1-overall-complete-design-continuation-v1.service",
+  "service": {
+    "Restart": "no",
+    "MainPID": "9058",
+    "Result": "success",
+    "OOMPolicy": "continue",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-overall-complete-design-continuation-v1.service",
+    "MemoryCurrent": "11959492608",
+    "CPUWeight": "10",
+    "MemoryMax": "13958643712",
+    "Environment": "XLA_FLAGS=--xla_force_host_platform_device_count=4 JAX_PLATFORMS=cpu JAX_ENABLE_X64=false",
+    "Nice": "19",
+    "LoadState": "loaded",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "shared_slice": {
+    "CPUWeight": "10",
+    "CPUQuotaPerSecUSec": "4s"
+  },
+  "kernel_memory_oom_group": "0",
+  "sampling_start": {
+    "study": "real_network",
+    "attempt": 3,
+    "state": "sampling",
+    "settings": {
+      "warmup": 2400,
+      "samples": 3200,
+      "chains": 4,
+      "target_accept": 0.9,
+      "max_tree_depth": 10,
+      "init_median_samples": 15,
+      "seed": 2
+    },
+    "execution_segment": "continuation"
+  },
+  "monitor_interval_seconds": 1200,
+  "waiter_sha256": "fe6e84964da5c454cd37f921bb713ac449de40cff341ededf69722702c660d00",
+  "original_outputs_preserved": true,
+  "publication_allowed": false
+}
