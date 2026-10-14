@@ -1,0 +1,28 @@
+{
+  "started_at": "2026-10-14T22:49:06.601808+00:00",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "outputs/championship/development/overall-interrupted-review-checks-v1/resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_overall_complete_profile_review.py",
+    "tests/test_overall_complete_profile_diagnostics.py"
+  ],
+  "source_commit": "74b010553ded44155aa51d5ef59d42db22b8db9a",
+  "local_diff": " analysis/overall_complete_profile_diagnostics.py   |   9 +-\n analysis/overall_complete_profile_review.py        | 199 +++++++++++++++++----\n tests/test_overall_complete_profile_diagnostics.py |  25 ++-\n tests/test_overall_complete_profile_review.py      | 108 +++++++++++\n 4 files changed, 300 insertions(+), 41 deletions(-)\n",
+  "resources": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "Slice": "f1.slice",
+    "Nice": 19
+  },
+  "mcmc_run": false,
+  "publication_allowed": false,
+  "exit_code": 0,
+  "seconds": 2.6038835869999275,
+  "finished_at": "2026-10-14T22:49:09.205662+00:00"
+}

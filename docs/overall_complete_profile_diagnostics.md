@@ -5,7 +5,7 @@ has passing focused software checks in the
 [prepared-check record](../outputs/championship/development/overall-prepared-profile-checks-v1/verification.json).
 It has not run on the original archives. The profile was
 [interrupted](overall_complete_profile_results.md), leaving no whole-run summary;
-an interruption-aware review is needed before using that evidence. This verifier
+an explicit interruption-aware review is needed before using that evidence. This verifier
 does not modify the frozen fit or its settings.
 
 First commit the complete original profile outputs, run the focused software
@@ -14,6 +14,9 @@ Then run this verifier in a separate capped scope under the existing resource
 policy. The command accepts the committed review, a new output directory and
 the name of the scope containing its process. It refuses to overwrite a previous
 audit and independently requires the original fitting service to be terminal.
+For an interrupted review it replays the stricter recorded-interruption checks,
+including the current missing-service and boot observations, and retains every
+absent terminal record for its final input recheck.
 
 The verifier replays the metadata collector and requires its stable evidence to
 match the committed review. It retains every case and every recorded attempt,
@@ -48,3 +51,10 @@ The original resource registration and mid-run CPU-change records accompany the
 audit. Its own capped runtime is measured separately. Report reproduction is an
 engineering check; it establishes neither recovery, simulation-based calibration,
 ranking precision, predictive improvement nor permission to publish.
+
+`all_recorded_reports_reproduced` describes only the recorded completed attempts.
+It cannot assert anything about the interrupted attempt, for which no draws or
+report exist. The audit separately retains `original_run_complete`, the
+interruption-record identity and the last sampling start. A completed audit can
+therefore reproduce the available records while the original profile remains
+incomplete and ineligible for publication.

@@ -165,11 +165,14 @@ def test_empty_inventory_cannot_pass():
 
 
 @pytest.mark.parametrize('input_changed', [False, True])
-def test_final_audit_preserves_failed_inference_and_rejects_changed_inputs(monkeypatch, tmp_path, posterior, input_changed):
+@pytest.mark.parametrize('interrupted', [False, True])
+def test_final_audit_preserves_failed_inference_and_rejects_changed_inputs(monkeypatch, tmp_path, posterior, input_changed, interrupted):
     original, registration, _ = study_fixture(monkeypatch, tmp_path, posterior)
     original.update(issues=[], records_consistent=True, recorded_all_converged=False,
         terminal_service={'state': 'exited'}, registered_resources={'historical': True},
-        resource_changes=[{'user_requested_cpu_reduction': True}], runtime_spans_changed_resources=True)
+        resource_changes=[{'user_requested_cpu_reduction': True}], runtime_spans_changed_resources=True,
+        original_run_complete=not interrupted, interruption_record='interruption.json' if interrupted else None,
+        last_recorded_sampling_start={'state': 'sampling'} if interrupted else None)
     monkeypatch.setattr(audit, 'actual_scope', lambda _: {'test_scope': True})
     monkeypatch.setattr(audit, 'evidence', lambda _: (original, registration, {}, []))
     monkeypatch.setattr(audit, 'changed_inputs', lambda *a:
@@ -181,6 +184,8 @@ def test_final_audit_preserves_failed_inference_and_rejects_changed_inputs(monke
     assert result['all_recorded_reports_reproduced'] is (not input_changed)
     assert result['state'] == ('incomplete' if input_changed else 'complete')
     assert result['recorded_all_converged'] is False
+    assert result['original_run_complete'] is (not interrupted)
+    assert result['interruption_record'] == original['interruption_record']
     assert all(s['original_receipt_state'] == 'failed_convergence' for s in result['studies'])
     assert result['original_runtime_spans_changed_resources'] is True
     assert result['original_resource_changes'] == original['resource_changes']
@@ -205,24 +210,28 @@ def test_input_recheck_covers_removed_changed_and_previously_absent_files(monkey
     assert len(audit.changed_inputs(fingerprint, [])) == 1
 
 
-def test_evidence_replays_collector_and_rejects_a_changed_review(monkeypatch, tmp_path):
+@pytest.mark.parametrize('interrupted', [False, True])
+def test_evidence_replays_collector_and_rejects_a_changed_review(monkeypatch, tmp_path, interrupted):
     monkeypatch.setattr(audit, 'ROOT', tmp_path)
     monkeypatch.setattr(audit, 'SOURCES', ())
     monkeypatch.setattr(audit.review, 'committed', lambda _: None)
     registration = tmp_path / 'registration.json'
     registration.write_text(json.dumps(dict(id='fixture')))
     current = dict(registration=registration.name, input_sha256={}, studies=[],
-        records_consistent=True, recorded_at='later', terminal_service={'state': 'exited'})
+        records_consistent=True, recorded_at='later', terminal_service={'state': 'exited'},
+        interruption_record='interruption.json' if interrupted else None,
+        absent_terminal_records=['never_written.json'] if interrupted else [])
     saved = dict(current, recorded_at='earlier', terminal_service={'state': 'inactive'})
     path = tmp_path / 'review.json'
     path.write_text(json.dumps(saved))
     calls = []
-    def collect(path):
-        calls.append(path)
+    def collect(path, **kwargs):
+        calls.append((path, kwargs))
         return current
     monkeypatch.setattr(audit.review, 'collect', collect)
-    audit.evidence(path)
-    assert calls == [registration]
+    _, _, _, absent = audit.evidence(path)
+    assert calls == [(registration, {'interruption': tmp_path / 'interruption.json'} if interrupted else {})]
+    assert absent == current['absent_terminal_records']
     current['studies'].append(dict(case='new'))
     with pytest.raises(ValueError, match='no longer matches'):
         audit.evidence(path)

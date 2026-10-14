@@ -78,7 +78,9 @@ def evidence(review_path):
         review.committed(ROOT / name)
         review.require(review.sha(ROOT / name) == LOADED[name], 'Loaded verification source changed')
         fingerprints[name] = LOADED[name]
-    current = review.collect(ROOT / original['registration'])
+    interruption = original.get('interruption_record')
+    current = (review.collect(ROOT / original['registration'], interruption=ROOT / interruption)
+               if interruption else review.collect(ROOT / original['registration']))
     # Timestamps and live terminal-unit properties can change between reviews.
     # All evidence, attempts, failures, byte identities and resource changes must match.
     stable = lambda value: {k: v for k, v in value.items()
@@ -86,7 +88,7 @@ def evidence(review_path):
     review.require(stable(original) == stable(current), 'The committed review no longer matches original evidence')
     fingerprints.update(original['input_sha256'])
     registration = review.read(ROOT / original['registration'])
-    absent = []
+    absent = list(original.get('absent_terminal_records', []))
     for study in original['studies']:
         cache = ROOT / 'outputs/championship/cache' / registration['id'] / study['case']
         receipt = cache / 'receipt.json'
@@ -258,6 +260,9 @@ def run(review_path, output, scope):
             diagnostic_runtime=dict(python=sys.version,
                 packages={name: version(name) for name in ('numpy', 'arviz-stats', 'jax', 'numpyro')}),
             recorded_all_converged=original['recorded_all_converged'],
+            original_run_complete=original.get('original_run_complete', False),
+            interruption_record=original.get('interruption_record'),
+            last_recorded_sampling_start=original.get('last_recorded_sampling_start'),
             terminal_service=original['terminal_service'],
             original_records_consistent=original['records_consistent'],
             original_registered_resources=original['registered_resources'],

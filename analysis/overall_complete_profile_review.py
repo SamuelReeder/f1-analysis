@@ -30,22 +30,135 @@ def committed(path):
         raise ValueError(f'Commit the complete original evidence first: {name}')
 
 
-def terminal_service(identifier):
+def service_state(identifier):
     unit = f'f1-{identifier}.service'
     fields = ('LoadState', 'ActiveState', 'SubState', 'MainPID', 'Result', 'MemoryMax', 'Nice')
     command = ['systemctl', '--user', 'show', unit]
     for field in fields:
         command += ['-p', field]
     state = dict(line.split('=', 1) for line in subprocess.check_output(command, text=True).splitlines())
+    return dict(unit=unit, properties=state)
+
+
+def terminal_service(identifier):
+    observed = service_state(identifier)
+    state = observed['properties']
     if (state.get('LoadState') != 'loaded' or state.get('MainPID') != '0'
             or not (state.get('ActiveState') in ('inactive', 'failed') or state.get('SubState') == 'exited')):
         raise ValueError('Review only after the original service is authoritatively terminal')
-    return dict(unit=unit, properties=state)
+    return observed
 
 
 def require(condition, message):
     if not condition:
         raise ValueError(message)
+
+
+def interrupted_service(identifier, record):
+    observed = service_state(identifier)
+    old = record['terminal_unit_observation']
+    expected_command = ['systemctl', '--user', 'show', observed['unit']]
+    require(old['exit_code'] == 0 and old['command'][:4] == expected_command,
+            'Interruption must bind the original service observation')
+    prior = dict(line.split('=', 1) for line in old['stdout'].splitlines())
+    for state in (prior, observed['properties']):
+        require(state.get('LoadState') == 'not-found' and state.get('MainPID') == '0'
+                and state.get('ActiveState') == 'inactive' and state.get('SubState') == 'dead',
+                'The original service must still be absent; inspect any new execution separately')
+    require(Path('/proc/sys/kernel/random/boot_id').read_text().strip() == record['boot_id'],
+            'The environment changed again; capture a fresh interruption observation')
+    return observed
+
+
+def interrupted_inventory(path, registration, reg, output):
+    """Read a committed interruption without fabricating child exit records."""
+    path = Path(path).resolve()
+    committed(path)
+    record = read(path)
+    require(record['state'] == 'interrupted_without_final_record'
+            and record['registration'] == str(registration.relative_to(ROOT))
+            and record['registration_sha256'] == sha(registration)
+            and record['publication_allowed'] is False and record['recovery_started'] is False,
+            'Need the original committed interruption observation')
+    service = interrupted_service(reg['id'], record)
+    require(not (output / 'summary.json').exists(), 'Do not substitute an interruption for a completed summary')
+    fingerprints = {str(path.relative_to(ROOT)): sha(path)}
+    raw = record['raw_output_inventory']
+    require({str(p.relative_to(ROOT)) for p in output.rglob('*') if p.is_file()} == set(raw),
+            'Original interrupted output inventory changed')
+    for name, expected in raw.items():
+        source = ROOT / name
+        require(source.resolve().is_relative_to(output.resolve()), 'Raw record escaped its profile')
+        committed(source)
+        require(sha(source) == expected['sha256'] and source.stat().st_size == expected['bytes'],
+                f'Original interrupted output changed: {name}')
+        fingerprints[name] = expected['sha256']
+    cache = ROOT / 'outputs/championship/cache' / reg['id']
+    metadata, archives = record['copied_cache_metadata'], record['cached_archive_inventory']
+    require({str(p.relative_to(ROOT)) for p in cache.rglob('*') if p.is_file()}
+            == set(metadata) | set(archives), 'Original interrupted cache inventory changed')
+    for name, expected in metadata.items():
+        source, saved = ROOT / name, ROOT / expected['snapshot']
+        require(source.resolve().is_relative_to(cache.resolve())
+                and saved.resolve().is_relative_to(path.parent / 'cache-metadata'),
+                'Cached metadata escaped its original snapshot')
+        committed(saved)
+        require(sha(source) == sha(saved) == expected['sha256'], f'Original cached metadata changed: {name}')
+        fingerprints[name] = fingerprints[expected['snapshot']] = expected['sha256']
+    for name, expected in archives.items():
+        source = ROOT / name
+        require(source.resolve().is_relative_to(cache.resolve()), 'Archive escaped its original profile')
+        require(sha(source) == expected['sha256'] and source.stat().st_size == expected['bytes'],
+                f'Original retained archive changed: {name}')
+        fingerprints[name] = expected['sha256']
+    require([r['case'] for r in record['cases']] == reg['studies'], 'Interrupted case inventory differs')
+    rows, absent = [], [str((output / 'summary.json').relative_to(ROOT)),
+                       f"outputs/logs/{reg['id']}/exit.status"]
+    for case_record in record['cases']:
+        case = case_record['case']
+        completion_path, result_path = output / f'{case}.completion.json', output / case / 'result.json'
+        receipt_path = cache / case / 'receipt.json'
+        for key, source in (('completion_present', completion_path), ('result_present', result_path),
+                            ('receipt_present', receipt_path)):
+            require(source.is_file() == case_record[key], 'Interrupted file presence changed')
+        completion = read(completion_path) if case_record['completion_present'] else None
+        require(completion == case_record.get('original_completion'), 'Original completion differs from interruption')
+        for source in (completion_path, result_path):
+            if not source.exists():
+                absent.append(str(source.relative_to(ROOT)))
+        if receipt_path.exists():
+            receipt = read(receipt_path)
+            require(receipt['state'] == case_record['receipt_state']
+                    and len(receipt['attempts']) == case_record['recorded_attempt_count'],
+                    'Interrupted receipt inventory differs')
+        hashes = {suffix: raw.get(str((output / f'{case}.{suffix}').relative_to(ROOT)), {}).get('sha256')
+                  for suffix in ('output.txt', 'resources.txt')}
+        rows.append(dict(case=case, completion=completion, file_hashes=hashes,
+            result_present=case_record['result_present'],
+            result_sha256=raw.get(str(result_path.relative_to(ROOT)), {}).get('sha256')))
+    require(set(absent) == set(record['missing_terminal_records'])
+            and all(not (ROOT / name).exists() for name in absent), 'Missing terminal record inventory changed')
+    event = record['last_recorded_sampling_start']
+    if event is not None:
+        require(event['study'] in reg['studies'] and event['state'] == 'sampling'
+                and type(event['attempt']) is int and 1 <= event['attempt'] <= len(reg['retry']),
+                'Last sampling event differs from the registered inventory')
+        events = []
+        for line in (output / f"{event['study']}.output.txt").read_text().splitlines():
+            try:
+                item = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if isinstance(item, dict) and item.get('state') == 'sampling':
+                events.append(item)
+        require(bool(events) and events[-1] == event, 'Sampling start differs from the original log')
+        warm, draws, accept = reg['retry'][event['attempt'] - 1]
+        base = reg['fit_settings']
+        expected = dict(base, warmup=warm * base['warmup'], samples=draws * base['samples'],
+            seed=base['seed'] + event['attempt'] - 1,
+            target_accept=base['target_accept'] if accept is None else accept)
+        require(event['settings'] == expected, 'Interrupted sampling settings changed')
+    return rows, fingerprints, service, record, absent
 
 
 def attempt_review(receipt, reg, cache):
@@ -110,7 +223,7 @@ def attempt_review(receipt, reg, cache):
     return rows
 
 
-def collect(registration):
+def collect(registration, *, interruption=None):
     registration = Path(registration).resolve()
     committed(Path(__file__))
     committed(registration)
@@ -121,19 +234,30 @@ def collect(registration):
     identifier = reg['id']
     require(isinstance(identifier, str) and identifier and Path(identifier).name == identifier,
             'Invalid profile identifier')
-    service = terminal_service(identifier)
     output = ROOT / 'outputs/championship/development' / identifier
-    summary_path = output / 'summary.json'
-    committed(summary_path)
-    summary = read(summary_path)
-    require(summary['all_processed'] is True and summary['registration'] == str(registration.relative_to(ROOT))
-            and summary['registration_sha256'] == sha(registration)
-            and summary['publication_allowed'] is False, 'The whole original profile is not complete')
-    require([r['case'] for r in summary['studies']] == reg['studies']
-            and len(set(reg['studies'])) == len(reg['studies']), 'The required study inventory differs')
+    require(bool(reg['studies']) and len(set(reg['studies'])) == len(reg['studies']),
+            'The required study inventory differs')
     fingerprints = {str(Path(__file__).resolve().relative_to(ROOT)): sha(__file__),
-                    str(registration.relative_to(ROOT)): sha(registration),
-                    str(summary_path.relative_to(ROOT)): sha(summary_path)}
+                    str(registration.relative_to(ROOT)): sha(registration)}
+    interruption_record, absent = None, []
+    if interruption is not None:
+        inventory, original_files, service, interruption_record, absent = interrupted_inventory(
+            interruption, registration, reg, output)
+        fingerprints.update(original_files)
+        summary = None
+    else:
+        service = terminal_service(identifier)
+        summary_path = output / 'summary.json'
+        committed(summary_path)
+        summary = read(summary_path)
+        require(summary['all_processed'] is True and summary['registration'] == str(registration.relative_to(ROOT))
+                and summary['registration_sha256'] == sha(registration)
+                and summary['publication_allowed'] is False, 'The whole original profile is not complete')
+        require([r['case'] for r in summary['studies']] == reg['studies'], 'The required study inventory differs')
+        fingerprints[str(summary_path.relative_to(ROOT))] = sha(summary_path)
+        inventory = [dict(case=c['case'], completion=c,
+            file_hashes={'output.txt': c['log_sha256'], 'resources.txt': c['resources_sha256']},
+            result_present=c['result_present'], result_sha256=c['result_sha256']) for c in summary['studies']]
     issues, studies = [], []
     for group in ('source_sha256', 'evidence_sha256'):
         for name, expected in reg[group].items():
@@ -156,37 +280,43 @@ def collect(registration):
         fingerprints[str(path.relative_to(ROOT))] = sha(path)
         changes.append(dict(path=str(path.relative_to(ROOT)), sha256=sha(path), record=read(path)))
 
-    for completion in summary['studies']:
-        case = completion['case']
-        row = dict(case=case, completion=completion, issues=[], attempts=[])
+    for item in inventory:
+        case, completion = item['case'], item['completion']
+        row = dict(case=case, completion=completion, issues=[], attempts=[],
+            completion_record_present=completion is not None)
         studies.append(row)
         cache = ROOT / 'outputs/championship/cache' / identifier / case
         result_path = output / case / 'result.json'
         try:
             path = output / f'{case}.completion.json'
-            committed(path)
-            require(read(path) == completion, 'Completion record differs from the complete summary')
-            fingerprints[str(path.relative_to(ROOT))] = sha(path)
-            for suffix, field in (('output.txt', 'log_sha256'), ('resources.txt', 'resources_sha256')):
+            if completion is not None:
+                committed(path)
+                require(read(path) == completion, 'Completion record differs from original inventory')
+                fingerprints[str(path.relative_to(ROOT))] = sha(path)
+            else:
+                require(not path.exists(), 'A missing completion record appeared')
+            for suffix, expected in item['file_hashes'].items():
                 path = output / f'{case}.{suffix}'
-                if completion[field] is None:
+                if expected is None:
                     require(not path.exists(), 'Unbound resource record appeared')
                     continue
                 committed(path)
-                require(sha(path) == completion[field], f'Original {suffix} changed')
+                require(sha(path) == expected, f'Original {suffix} changed')
                 fingerprints[str(path.relative_to(ROOT))] = sha(path)
-            require(result_path.is_file() == completion['result_present'], 'Result presence differs')
+            require(result_path.is_file() == item['result_present'], 'Result presence differs')
             result = None
             if result_path.is_file():
                 committed(result_path)
-                require(sha(result_path) == completion['result_sha256'], 'Original result changed')
+                require(sha(result_path) == item['result_sha256'], 'Original result changed')
                 fingerprints[str(result_path.relative_to(ROOT))] = sha(result_path)
                 result = read(result_path)
                 row['result'] = result
                 require(result['case'] == case and result['registration_sha256'] == sha(registration),
                         'Result identity differs')
-            passed = completion['exit_code'] == 0 and result is not None and result['state'] == 'converged'
-            require(completion['state'] == ('converged' if passed else 'failed'), 'Child completion decision differs')
+            passed = (completion is not None and completion['exit_code'] == 0
+                      and result is not None and result['state'] == 'converged')
+            if completion is not None:
+                require(completion['state'] == ('converged' if passed else 'failed'), 'Child completion decision differs')
             receipt_path = cache / 'receipt.json'
             if receipt_path.exists():
                 receipt = read(receipt_path)
@@ -217,19 +347,25 @@ def collect(registration):
                 require(not passed, 'Successful child has no fit receipt')
         except (ValueError, KeyError, OSError, TypeError, subprocess.CalledProcessError) as exc:
             row['issues'].append(f'{type(exc).__name__}: {exc}')
-    recorded_convergence = all(s['state'] == 'converged' for s in summary['studies'])
-    if summary['all_converged'] != recorded_convergence:
+    recorded_convergence = all(s['completion'] is not None and s['completion']['state'] == 'converged' for s in inventory)
+    if summary is not None and summary['all_converged'] != recorded_convergence:
         issues.append('Whole-profile convergence decision differs from its recorded cases')
     for name, expected in fingerprints.items():
         if sha(ROOT / name) != expected:
             issues.append(f'Original source or evidence changed during review: {name}')
+    if any((ROOT / name).exists() for name in absent):
+        issues.append('A missing terminal record appeared during review')
     return dict(purpose='complete_design_profile_evidence_review',
         recorded_at=datetime.now(timezone.utc).isoformat(),
         reviewer_sha256=sha(__file__), terminal_service=service, input_sha256=fingerprints,
         registration=str(registration.relative_to(ROOT)), registered_resources=reg['resources'],
         resource_changes=changes, runtime_spans_changed_resources=bool(changes),
         studies=studies, issues=issues, all_required_cases_accounted=True,
-        recorded_all_converged=summary['all_converged'],
+        recorded_all_converged=recorded_convergence,
+        original_run_complete=summary is not None,
+        interruption_record=str(Path(interruption).resolve().relative_to(ROOT)) if interruption is not None else None,
+        last_recorded_sampling_start=interruption_record['last_recorded_sampling_start'] if interruption_record else None,
+        absent_terminal_records=absent,
         records_consistent=not issues and not any(row['issues'] for row in studies),
         archive_arrays_verified=False, diagnostics_recomputed=False, full_recovery_complete=False,
         sbc_complete=False, publication_allowed=False, full_goal_complete=False)
@@ -239,10 +375,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--registration', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--interruption', type=Path)
     args = parser.parse_args()
     if args.output.exists():
         raise FileExistsError('Preserve the existing review')
-    result = collect(args.registration)
+    result = collect(args.registration, interruption=args.interruption)
     with args.output.open('x') as handle:
         handle.write(json.dumps(result, indent=2, allow_nan=False) + '\n')
     raise SystemExit(0 if result['records_consistent'] else 1)
