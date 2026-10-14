@@ -1,0 +1,31 @@
+{
+  "source_commit": "26894c8d3a99ad30f4428a9763f46dfd3c10ebc3",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "outputs/championship/development/overall-profile-continuation-freeze-v1/resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "analysis/overall_profile_continuation_run.py",
+    "--freeze",
+    "docs/overall_profile_continuation_protocol.json",
+    "--review",
+    "outputs/championship/development/overall-interrupted-profile-review-v1/review.json",
+    "--audit",
+    "outputs/championship/development/overall-interrupted-profile-diagnostics-v1/audit.json",
+    "--scope-name",
+    "f1-overall-continuation-freeze.scope"
+  ],
+  "started_at": "2026-10-14T23:25:20.361830+00:00",
+  "resources": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "Slice": "f1.slice",
+    "Nice": 19
+  },
+  "mcmc_run": false,
+  "publication_allowed": false,
+  "exit_code": 0,
+  "seconds": 8.30641257499974,
+  "finished_at": "2026-10-14T23:25:27.975717+00:00"
+}
