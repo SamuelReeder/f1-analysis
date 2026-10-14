@@ -106,9 +106,12 @@ cap. This resource change does not alter model inputs, sampling or acceptance.
 A [complete-profile review collector](overall_complete_profile_review.md) is now
 prepared for the current child-result layout. It preserves every case and its
 original failure records, checks the fixed retry and comparison inventories, and
-includes the committed resource-change record. Its focused software checks now
-pass, but the interrupted run lacks the complete summary this collector requires.
-It does not replace numerical diagnostic reproduction or scientific acceptance.
+includes the committed resource-change record. Its explicit interruption mode
+now has passing focused checks and a
+[completed metadata review](../outputs/championship/development/overall-interrupted-profile-review-v1/review.json).
+All original records are consistent; the missing child completion remains null
+and the original whole run remains incomplete. This does not replace numerical
+diagnostic reproduction or scientific acceptance.
 
 The [complete-profile saved-draw verifier](overall_complete_profile_diagnostics.md)
 is also prepared, with passing focused software checks. It checks the complete archived arrays
@@ -117,7 +120,15 @@ and missing attempts. Sampler extras were not saved; the verifier explicitly
 reuses the recorded divergence count and does not claim to independently verify
 that count, tree-depth counts or acceptance probabilities. It grants no new fit,
 acceptance decision or publication permission. Execution on the original archives
-still requires an interruption-aware review; no complete-run summary is fabricated.
+is now running in a separate capped scope against the committed interruption
+review. No complete-run summary is fabricated.
+
+The [execution-recovery definition](overall_profile_continuation.md) requires
+verified saved reports before restarting only the unfinished registered attempt.
+Its original sampler checkpoint was not saved, so it must start from its original
+seed. Earlier attempts and failed results remain immutable. A continuation
+implementation, software checks and frozen execution registration are still
+required; no recovery fit has started.
 
 Before freezing the full scientific acceptance runs, finish the required
 production integration behind its acceptance guards and freeze the resulting
