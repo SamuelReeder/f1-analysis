@@ -89,8 +89,12 @@ any fit started; the preserved launch record documents its correction and the
 verified kernel memory-group setting. The study was subsequently interrupted
 by a WSL restart before the real-network case and whole run wrote final records.
 The [partial-results report](overall_complete_profile_results.md) preserves the
-original completed cases, failed attempts and unknown restart cause. The original
-service and waiter are gone; the partial run has not been restarted. This is not
+original completed cases and failed attempts. The restart's origin was unknown
+when the interruption was recorded; the user subsequently
+[confirmed initiating it](../outputs/championship/development/overall-complete-design-profile-v1-restart-report/user-report.json).
+That confirmation does not establish the cause of the separately reported
+earlier OOM. The original service and waiter are gone; the partial run has not
+been restarted. This is not
 completed convergence, recovery or calibration evidence. The portable dashboard
 receipt will be refreshed after the new output inventory stabilizes. The public
 payload and pointer remain unchanged.

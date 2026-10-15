@@ -3,9 +3,13 @@
 The [interruption record](../outputs/championship/development/overall-complete-design-profile-v1-interruption/interruption.json)
 preserves the original outputs and cache metadata after a new WSL boot. The
 original service is missing, and the final case, whole-profile summary and
-service exit record are absent. The cause of the restart is unknown. The previous
-boot contains a Codex fatal-signal record; that does not establish why WSL
-restarted or prove that the fit caused an OOM.
+service exit record are absent. The restart's origin was unknown when that
+record was written. The user has since
+[confirmed initiating the restart](../outputs/championship/development/overall-complete-design-profile-v1-restart-report/user-report.json),
+without specifying Windows versus WSL, its exact time or their reason for
+restarting. The original interruption record remains unchanged. The previous
+boot's Codex fatal-signal record does not establish that the fit caused an OOM;
+the cause of the separately reported earlier OOM remains unverified.
 
 The completed cases record convergence under the frozen parameter gate. The
 real-network case records failed attempts followed by an interrupted attempt.
