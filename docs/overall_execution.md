@@ -735,6 +735,14 @@ vintages, preserved input artifacts and the full evaluation controller remain
 required. No real scores, fit settings or acceptance thresholds were changed.
 The running fit and pending numerical-study proposal are unaffected.
 
+The subsequent [source-vintage inventory](overall_source_vintages.md) binds the
+committed provenance manifests and their generators, preserves the recorded
+retrieval timestamps and distinguishes explicit file-time fallbacks. Its repeated
+collection matches exactly. These records alone do not establish the input
+versions available at historical forecast origins. Raw/archive content checks,
+supplemental and official-grid provenance, and origin-specific controller
+verification remain required. No observation arrays or forecast scores were read.
+
 ## Legacy qualifying forecast and race-stage integration
 
 The [baseline forecast definition](overall_baselines.md) was committed before
