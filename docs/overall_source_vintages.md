@@ -35,7 +35,20 @@ The inspected [race extractor](../extract/race_extract.py),
 time and output hashes. These identify the recorded extraction versions without
 establishing their availability before an earlier historical forecast origin.
 The [Jolpica fetcher](../f1rank/fetch.py) also has an archive path for changed
-responses. The contents and coverage of that archive remain to be audited.
+responses.
+
+A subsequent [local metadata inspection](../outputs/championship/development/overall-local-source-vintage-inventory-v1/record/inventory.json)
+on 2026-10-18 found no Jolpica archive directory in either the active worktree or
+the primary checkout's raw cache. The primary cache contains all 42 raw files
+referenced by the processed qualifying/results manifest, but its raw retrieval
+manifest contains no entries for those files. The worktree has no local Jolpica
+raw directory. The [verification record](../outputs/championship/development/overall-local-source-vintage-inventory-v1/record/verification.json)
+checks every filename and local presence observation against the committed
+processed metadata and preserves a copy of the primary cache's raw manifest.
+This inspection reads provenance metadata only. It does not hash raw responses,
+search other archive locations or establish that older versions cannot exist
+elsewhere. These inspected local paths supply no archived retrieval evidence
+for the required historical forecast origins.
 
 The [comparison-origin checks](overall_comparison_origins.md) already require
 exact forecast times and common content identities. The remaining controller
