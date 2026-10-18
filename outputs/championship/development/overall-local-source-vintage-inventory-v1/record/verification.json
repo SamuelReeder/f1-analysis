@@ -1,0 +1,42 @@
+{
+  "checks": {
+    "all_processed_filename_records_and_counts": true,
+    "committed_collector_bytes": true,
+    "committed_source_manifest_bytes": true,
+    "historical_availability_and_publication_remain_unverified": true,
+    "local_directory_and_file_presence_rechecked": true,
+    "no_numerical_or_test_libraries_loaded": true,
+    "snapshot_matches_local_raw_manifest": true
+  },
+  "collector_revision": "d17d00fb8f305286341dad930d4b806894ea9b7e",
+  "collector_sha256": "03abd78a7027bed16c8fdd233da911c363ea134a064ec60dd16b9ed81999ee23",
+  "inventory_sha256": "e13e533e1977085286c41dc20070b2b4a26303df1a32c5606622b38780cae421",
+  "limitations": [
+    "Absence is a local observation at the recorded time, not proof that no copy exists elsewhere.",
+    "A raw file's presence or a manifest hash match does not establish availability before a forecast origin.",
+    "Copied manifest timestamps and hashes are recorded claims, not independently authenticated retrieval evidence.",
+    "This inspection does not audit FastF1 caches, supplementary inputs, provider histories, or official-grid provenance."
+  ],
+  "observed_counts": [
+    {
+      "archive_exists": false,
+      "processed_sources": 42,
+      "raw_files_present": 0,
+      "raw_manifest_entries_present": 0,
+      "raw_manifest_hashes_agree": 0,
+      "raw_manifest_records": null,
+      "root": "/home/sreeder/.codex/worktrees/overall-model/f1-analysis/data/raw/jolpica"
+    },
+    {
+      "archive_exists": false,
+      "processed_sources": 42,
+      "raw_files_present": 42,
+      "raw_manifest_entries_present": 0,
+      "raw_manifest_hashes_agree": 0,
+      "raw_manifest_records": 66,
+      "root": "/home/sreeder/f1-analysis/data/raw/jolpica"
+    }
+  ],
+  "processed_source_manifest_sha256": "3b3b9f2a2b4b8abe813f9ab5a2629d4259e0066e21385447213471095d6d1874",
+  "verified_at": "2026-10-18T22:51:31.087168+00:00"
+}
