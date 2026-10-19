@@ -1,0 +1,59 @@
+{
+  "review": "review.json",
+  "review_sha256": "8f78223d528a66d1e3c501112186c9db68bdb41bb31550bfdb7bb42ff4b2fdd2",
+  "state": "complete",
+  "case_inventory": [
+    "connected",
+    "confounded",
+    "sparse_rookie",
+    "dominant_teammate",
+    "era_boundary",
+    "real_network"
+  ],
+  "preserved_original_attempts": 10,
+  "new_attempts": [
+    {
+      "attempt": 3,
+      "state": "verified",
+      "archive_arrays_verified": true,
+      "coordinate_report_equal": true,
+      "comparison_reports_equal": true,
+      "coordinate_converged": false,
+      "seconds": 2459.386678634968
+    },
+    {
+      "attempt": 4,
+      "state": "verified",
+      "archive_arrays_verified": true,
+      "coordinate_report_equal": true,
+      "comparison_reports_equal": true,
+      "coordinate_converged": false,
+      "seconds": 2457.330594727013
+    }
+  ],
+  "cache_inventory_complete": true,
+  "seconds": 4947.702400629991,
+  "process_max_rss_kib": 2435152,
+  "actual_scope": {
+    "Slice": "f1.slice",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-overall-continuation-review-v1.scope",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "ActiveState": "active",
+    "Nice": 19
+  },
+  "records_consistent": true,
+  "all_new_reports_reproduced": true,
+  "combined_recorded_convergence": false,
+  "combined_computational_evidence_verified": false,
+  "original_run_complete": false,
+  "full_recovery_complete": false,
+  "sbc_complete": false,
+  "publication_allowed": false,
+  "full_goal_complete": false,
+  "limitations": [
+    "Recorded sampler extra fields were not saved and cannot be independently reproduced.",
+    "Audit execution success does not change the failed convergence decisions.",
+    "Internal and external clocks remain distinct recorded measurements; intended-runner performance is not established."
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "state": "running",
+  "source_commit": "ecaea2b27105d88592241a4e12d79896083cca0c",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "outputs/championship/development/overall-continuation-review-v1-execution/resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "analysis/overall_continuation_review.py",
+    "--registration",
+    "docs/overall_profile_continuation_protocol.json",
+    "--exit-record",
+    "outputs/championship/development/overall-complete-design-continuation-v1-terminal/exit.status",
+    "--output",
+    "outputs/championship/development/overall-continuation-review-v1",
+    "--scope-name",
+    "f1-overall-continuation-review-v1.scope"
+  ],
+  "actual_scope": {
+    "Slice": "f1.slice",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-overall-continuation-review-v1.scope",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "nice": 19,
+    "worker_cgroup": "0::/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-overall-continuation-review-v1.scope"
+  },
+  "environment": {
+    "JAX_PLATFORMS": "cpu",
+    "JAX_ENABLE_X64": "0",
+    "XLA_FLAGS": "--xla_force_host_platform_device_count=4",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "started_at": "2026-10-19T22:12:41.182640+00:00",
+  "mcmc_run": false,
+  "publication_allowed": false
+}
