@@ -138,23 +138,27 @@ execution controller now have passing focused software checks. The
 and the [separate capped service](../outputs/championship/development/overall-complete-design-continuation-v1-launch/sampling-start.json)
 has restarted the original unfinished attempt with its registered seed and settings.
 Earlier original outputs and failed draws remain unchanged. The continuation
-keeps the lower shared CPU cap and occupies the full fit memory budget, so other
-heavy work waits. No convergence or completed recovery is claimed while it runs.
+kept the lower shared CPU cap and occupied the full fit memory budget until its
+terminal result. Its completion does not establish convergence or recovery.
 
 The subsequent [partial continuation observation](../outputs/championship/development/overall-complete-design-continuation-v1-observations/20261019-status/observation.json)
 records failure of the third registered real-network attempt and sampling of the
 fourth, final attempt. The [results report](overall_complete_profile_results.md)
 preserves its recorded diagnostics and duration, including the clock limitation.
-The new saved-array audit and final continuation result remain pending. The
-original failure records, numerical settings and acceptance rules are unchanged.
+The later [terminal record](../outputs/championship/development/overall-complete-design-continuation-v1-terminal/terminal.json)
+preserves failure of the final attempt and exhaustion of the unchanged ladder.
+The continuation ended with `failed_convergence`; combined recorded convergence
+is false. The new saved-array audit remains pending. Original failure records,
+numerical settings and acceptance rules are unchanged.
 
 The [continuation reviewer](overall_continuation_review.md) is prepared outside
 the frozen fit inputs. It keeps the interrupted profile incomplete, combines the
 separate continuation with every earlier case, and reproduces only newly saved
-attempt reports after checking the earlier audited bytes. Its syntax has been
-checked; software execution tests and review of terminal fit evidence remain
-pending until the fit releases the memory budget. This preparation does not
-establish convergence, scientific acceptance or ranking publication.
+attempt reports after checking the earlier audited bytes. The
+[focused execution checks](../outputs/championship/development/overall-continuation-software-checks-v1/verification.json)
+now pass, including the batching resource guards. Review of the terminal fit's
+saved arrays remains pending. Software-check success does not establish
+convergence, scientific acceptance or ranking publication.
 
 Before freezing the full scientific acceptance runs, finish the required
 production integration behind its acceptance guards and freeze the resulting
@@ -170,8 +174,8 @@ A separate [batched-map preparation](overall_batched_rotation.md) now replaces
 the control conversion's individual array updates with grouped matrix products
 and gathers in an unused development implementation. It keeps the existing
 coordinate map and its fingerprint. Its earlier focused software checks pass;
-additional live-scope membership and exclusive-budget guards are prepared with
-execution tests still pending. A lightweight
+additional live-scope membership and exclusive-budget guard tests have now passed
+in the focused continuation and batching checks above. A lightweight
 [live budget-refusal check](../outputs/championship/development/overall-batch-resource-guard-preparation-v1/verification.json)
 confirms the launcher rejects occupied resources before reading its workload or
 dispatching a child; no numerical libraries or test runner were loaded.

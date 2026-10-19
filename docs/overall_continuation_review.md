@@ -1,9 +1,9 @@
 # Reviewing the interrupted profile's continuation
 
-The [reviewer](../analysis/overall_continuation_review.py) is prepared for use
-after the separately registered continuation stops. Its software tests and
-execution against terminal evidence remain pending while the fit occupies the
-memory budget. It does not change the running fit or its registration.
+The [reviewer](../analysis/overall_continuation_review.py) runs after the
+separately registered continuation stops. Software-check results and execution
+evidence are tracked in the [profile results report](overall_complete_profile_results.md).
+It does not change the fit or its registration.
 
 Before using it, preserve and commit the continuation's raw results, generated
 truth, wrapper resource output and a copy of its exit-status file. Preserve its

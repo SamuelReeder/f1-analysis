@@ -1,4 +1,4 @@
-# Complete-design profile: interrupted
+# Complete-design profile: interrupted run and exhausted continuation
 
 The [interruption record](../outputs/championship/development/overall-complete-design-profile-v1-interruption/interruption.json)
 preserves the original outputs and cache metadata after a new WSL boot. The
@@ -44,14 +44,15 @@ is real-network attempt **3**, with warmup **2400**, samples per chain **3200**,
 **4** chains, target acceptance **0.9** and seed **2**, exactly as specified by the
 fixed ladder. It has no completed diagnostic report or saved draw archive. It
 must not be assigned the preceding attempt's failure or an invented final status.
-The full retry ladder has not been exhausted.
+At the original interruption, the full retry ladder had not been exhausted.
+The separate continuation below subsequently exhausted it.
 
 The [resource-change record](../outputs/championship/development/overall-complete-design-profile-v1-resource-changes/20261013T170054Z-cpu-reduction.json)
 records the user's shared CPU reduction from **800%** to **400%** during the run.
 The lower cap remains in force after the restart. The original **13G** memory cap
 is a limit, not an observed final peak. Measurements spanning the cap change
 cannot be attributed entirely to either CPU limit. No complete run duration or
-final resource measurement is available.
+final resource measurement is available for the original interrupted run.
 
 The separate [software check](../outputs/championship/development/overall-prepared-profile-checks-v1/verification.json)
 passes **103** tests in **4.94 seconds**, as recorded in its
@@ -85,7 +86,7 @@ is frozen, and the [launch observation](../outputs/championship/development/over
 records the unfinished original attempt starting in its new capped service.
 Earlier attempts and original files remain unchanged. The original runner has
 not been blindly relaunched, and the prepared batching implementation is not
-substituted into the continuation. Its final result remains pending.
+substituted into the continuation. Its terminal result is recorded below.
 
 A [partial observation dated 2026-10-19](../outputs/championship/development/overall-complete-design-continuation-v1-observations/20261019-status/observation.json)
 preserves the continuation's completed attempt **3**, which failed convergence.
@@ -105,7 +106,42 @@ estimate. This partial observation preserves the failure without replacing the
 original interrupted run's missing completion records or declaring the
 continuation complete.
 
-The complete computational profile remains incomplete. Full recovery,
+The [terminal continuation record](../outputs/championship/development/overall-complete-design-continuation-v1-terminal/terminal.json)
+preserves its completion on 2026-10-19 with `failed_convergence` and wrapper exit
+status **1**. The [raw result](../outputs/championship/development/overall-complete-design-continuation-v1/result.json)
+records `combined_recorded_convergence: false`. The final registered attempt
+failed; the fixed ladder is now exhausted. There was no execution exception.
+
+| Continuation attempt | Maximum R-hat | Minimum bulk ESS | Divergences | Recorded seconds, including diagnostics |
+|---|---:|---:|---:|---:|
+| 3 | 6.122893e15 | 4.010025 | 0 | 225539.501 |
+| 4 | 5.909770 | 4.137888 | 0 | 235920.495 |
+
+Both new attempts record a tree-depth-limit fraction of **1.0** and failed
+current-driver contrast checks. The terminal snapshot preserves every earlier
+attempt and its original settings. These newly saved reports still require
+independent reproduction from the retained arrays; the recorded sampler extras
+cannot be independently reconstructed from the saved posterior files.
+
+The continuation records **461927.568** internal elapsed seconds and a process
+peak of **13,369,612 KiB**. Its separate
+[external resource report](../outputs/championship/development/overall-complete-design-continuation-v1-launch/resources.txt)
+records **118:22:26** elapsed wall-clock time. These clocks disagree; neither
+duration is presented as an interchangeable or independently verified measure
+of the other. They cover this continuation only, not the original interrupted
+execution or its earlier completed cases.
+
+The [focused software checks](../outputs/championship/development/overall-continuation-software-checks-v1/verification.json)
+pass **105** tests in **3.24 seconds**, as recorded in the
+[test output](../outputs/championship/development/overall-continuation-software-checks-v1/pytest.txt).
+They cover continuation aggregation, failed-evidence handling, batching and its
+resource guards in the separate capped scope. They do not reproduce the newly
+saved real-network arrays or establish complete-model batching equivalence.
+That array audit and the full-model batching measurement remain pending.
+
+The combined profile does not satisfy convergence, and the original interrupted
+run remains incomplete. This candidate cannot support an accepted Overall
+ranking. Full recovery,
 simulation-based calibration, functional precision, predictive validation,
 production integration and publication remain outstanding. The dashboard still
 has no accepted successor Overall ranking.
