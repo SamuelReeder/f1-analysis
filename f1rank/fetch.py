@@ -4,7 +4,7 @@ Raw JSON pages are cached under data/raw/jolpica/ so reruns only fetch what is
 missing. The current season is always refetched because new rounds appear, and
 `--refresh-all` refetches every season (sources revise past data, e.g. retirement
 statuses). When a refetch changes a file, the previous version is kept in
-data/raw/jolpica/archive/ under its retrieval time. manifest.json records each file's
+data/raw/jolpica/archive/ under its content hash. manifest.json records each file's
 retrieval time and sha256; `build` copies the entries it used to data/processed/sources.json.
 
 Stage 2 adds sprint results (per season) and, with `--laps FIRST LAST`, lap-by-lap times and
@@ -16,6 +16,8 @@ import argparse
 import datetime as dt
 import hashlib
 import json
+import os
+import tempfile
 import time
 from pathlib import Path
 
@@ -36,22 +38,53 @@ def _now() -> str:
     return dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def _atomic_text(path: Path, text: str, *, exclusive=False) -> None:
+    """Replace only complete files; an archive's content address is immutable."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, name = tempfile.mkstemp(dir=path.parent, prefix=path.name + ".", suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as stream:
+            stream.write(text)
+            stream.flush()
+            os.fsync(stream.fileno())
+        if exclusive:
+            try:
+                os.link(name, path)
+            except FileExistsError:
+                if path.read_bytes() != text.encode("utf-8"):
+                    raise ValueError("Existing immutable raw archive is corrupt; do not replace it")
+        else:
+            os.replace(name, path)
+    finally:
+        Path(name).unlink(missing_ok=True)
+
+
 def save_versioned(out: Path, text: str) -> None:
-    """Write a raw response; archive the previous version if the content changed."""
+    """Preserve old bytes even without an authenticated original retrieval time."""
     manifest = json.loads(MANIFEST.read_text()) if MANIFEST.exists() else {}
     digest = hashlib.sha256(text.encode()).hexdigest()
     old = manifest.get(out.name)
-    if out.exists() and old and old["sha256"] != digest:
-        archive = RAW / "archive" / f"{out.stem}.{old['retrieved_utc'].replace(':', '')}.json"
-        archive.parent.mkdir(parents=True, exist_ok=True)
-        out.replace(archive)
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(text)
-    if not old or old["sha256"] != digest:
+    if out.exists():
+        previous = out.read_bytes()
+        previous_digest = hashlib.sha256(previous).hexdigest()
+        if previous_digest != digest:
+            archive = RAW / "archive" / f"{out.stem}.{previous_digest}.json"
+            _atomic_text(archive, previous.decode("utf-8"), exclusive=True)
+            name = archive.relative_to(RAW).as_posix()
+            # Missing/mismatched historical metadata does not authenticate the
+            # old file's retrieval time. Preserve that uncertainty explicitly.
+            retrieved = old.get("retrieved_utc") if old and old.get("sha256") == previous_digest else None
+            manifest.setdefault(name, {"sha256": previous_digest, "retrieved_utc": retrieved,
+                                       "retrieval_time_unknown": retrieved is None, "archived_utc": _now()})
+            # Record preservation before advancing the active response. An
+            # interrupted replacement still leaves the old response available.
+            _atomic_text(MANIFEST, json.dumps(manifest, indent=1, sort_keys=True))
+    _atomic_text(out, text)
+    if not old or old.get("sha256") != digest:
         manifest[out.name] = {"retrieved_utc": _now(), "sha256": digest}
     else:
         manifest[out.name]["checked_utc"] = _now()  # refetched, unchanged
-    MANIFEST.write_text(json.dumps(manifest, indent=1, sort_keys=True))
+    _atomic_text(MANIFEST, json.dumps(manifest, indent=1, sort_keys=True))
 
 
 def _get(url: str, interval: float = MIN_INTERVAL) -> dict:
@@ -76,20 +109,61 @@ def fetch_table(season: int, endpoint: str, refresh: bool = False) -> list[dict]
     if out.exists() and not refresh:
         return json.loads(out.read_text())
 
+    merged = download_table(season, endpoint)
+    save_versioned(out, json.dumps(merged))
+    return merged
+
+
+def download_table(season: int, endpoint: str) -> list[dict]:
+    """Read a complete season without changing the cache or its source history.
+
+    A refresh check uses this same reader. Incomplete/changing pagination is an
+    error, not an apparent correction that can overwrite a complete raw file.
+    """
     list_key = {"qualifying": "QualifyingResults", "results": "Results", "sprint": "SprintResults"}[endpoint]
     races: dict[str, dict] = {}
-    offset, total = 0, None
+    offset, total, received = 0, None, 0
     while total is None or offset < total:
         data = _get(f"{BASE}/{season}/{endpoint}.json?limit={PAGE}&offset={offset}")
-        total = int(data["total"])
+        page_total = int(data["total"])
+        if page_total < 0 or (total is not None and total != page_total):
+            raise ValueError("Jolpica result count changed during pagination; retry the complete download")
+        total = page_total
+        page_rows = 0
         for race in data["RaceTable"]["Races"]:
-            rows = race.pop(list_key)
-            races.setdefault(race["round"], {**race, list_key: []})[list_key].extend(rows)
+            rows = race[list_key]
+            if int(race["season"]) != season or int(race["round"]) < 1 or not isinstance(rows, list):
+                raise ValueError("Invalid season or race in Jolpica response")
+            rnd = str(int(race["round"]))
+            metadata = {k: v for k, v in race.items() if k != list_key}
+            current = races.setdefault(rnd, {**metadata, list_key: []})
+            if metadata != {k: v for k, v in current.items() if k != list_key}:
+                raise ValueError("Race metadata changed during pagination; retry the complete download")
+            current[list_key].extend(rows)
+            page_rows += len(rows)
+        if page_rows != min(PAGE, total - offset):
+            raise ValueError("Incomplete Jolpica page; cached results were not replaced")
+        received += page_rows
         offset += PAGE
 
     merged = sorted(races.values(), key=lambda r: int(r["round"]))
-    save_versioned(out, json.dumps(merged))
+    if received != total:
+        raise ValueError("Incomplete Jolpica season")
+    for race in merged:
+        drivers = [row["Driver"]["driverId"] for row in race[list_key]]
+        if len(set(drivers)) != len(drivers):
+            raise ValueError("Duplicate driver rows in Jolpica season")
     return merged
+
+
+def latest_processed_season() -> int | None:
+    """The most recently fitted season can precede the current calendar year."""
+    path = RAW.parent.parent / "processed" / "race.parquet"
+    if not path.exists():
+        return None
+    import pandas as pd
+    events = pd.read_parquet(path, columns=["event_id"]).event_id
+    return max((int(str(event).split("-")[0]) for event in events), default=None)
 
 
 def fetch_race(season: int, rnd: int, endpoint: str) -> dict | None:
@@ -136,6 +210,8 @@ def main() -> None:
     parser.add_argument("--first", type=int, default=2010)
     parser.add_argument("--last", type=int, default=dt.date.today().year)
     parser.add_argument("--refresh-all", action="store_true", help="refetch every season")
+    parser.add_argument("--refresh-latest", action="store_true",
+                        help="also refetch the most recently processed season, including across New Year")
     parser.add_argument("--laps", type=int, nargs=2, metavar=("FIRST", "LAST"),
                         help="only fetch lap times and pit stops for these seasons (slow)")
     args = parser.parse_args()
@@ -152,8 +228,9 @@ def main() -> None:
         return
 
     driver_ids = set()
+    latest = latest_processed_season() if args.refresh_latest else None
     for season in range(args.first, args.last + 1):
-        refresh = args.refresh_all or season == dt.date.today().year
+        refresh = args.refresh_all or season in (dt.date.today().year, latest)
         for endpoint in ("qualifying", "results") + (("sprint",) if season >= 2021 else ()):
             races = fetch_table(season, endpoint, refresh=refresh)
             if endpoint == "sprint":

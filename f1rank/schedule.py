@@ -12,6 +12,7 @@ The decision is printed as JSON and, under GitHub Actions, written to $GITHUB_OU
 """
 import argparse
 import datetime as dt
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -23,6 +24,82 @@ PROCESSED = ROOT / "data" / "processed"
 TABLES = ROOT / "data" / "raw" / "fastf1_tables"
 FIRST_TIMING_SEASON = 2018
 RETRY_DAYS = 10
+
+
+def unpublished_input_change(root: Path) -> str | None:
+    """Compare with the published receipt, not an intermediate failed refresh.
+
+    Fetch/build may have succeeded before a later fit failed. Comparing remote
+    data only with that updated cache would otherwise incorrectly skip the retry.
+    """
+    from dashboard.verify_publication import digest, sources
+    directory = root / "dashboard/public/data"
+    path = directory / "publication.json"
+    if not path.exists():
+        return "the published source receipt is missing"
+    receipt = json.loads(path.read_text())
+    if (receipt.get("schema_version") != 1 or not isinstance(receipt.get("sources"), dict)
+            or receipt.get("pointer_sha256") != digest(directory / "latest.json")):
+        raise ValueError("Invalid published source receipt; inspect publication before refreshing")
+    # Editorial reports invalidate a portable receipt but do not need a refit.
+    # These are the input namespaces used by the fitting/export pipeline.
+    def input_name(name):
+        return name.startswith(("data/", "f1rank/", "extract/", "contracts/")) or name == "docs/overall_candidate.md"
+    expected = {name: value for name, value in receipt["sources"].items() if input_name(name)}
+    actual = {name for name in sources(root) if input_name(name)}
+    if set(expected) != actual:
+        return "the published source inventory changed"
+    for name, value in sorted(expected.items()):
+        if digest(root / name) != value:
+            return f"a published input changed: {name}"
+    return None
+
+
+def _completed_rows(races: list[dict], season: int, last_round: int, endpoint: str) -> dict:
+    """Ignore future qualifying, and ignore JSON or driver-row ordering only."""
+    key = {"qualifying": "QualifyingResults", "results": "Results"}[endpoint]
+    result = {}
+    for race in races:
+        rnd = int(race["round"])
+        if int(race["season"]) != season or rnd < 1 or rnd in result:
+            raise ValueError("Invalid or duplicate race in correction check")
+        if rnd > last_round:
+            continue
+        rows = race[key]
+        drivers = [r["Driver"]["driverId"] for r in rows]
+        if len(set(drivers)) != len(drivers):
+            raise ValueError("Duplicate driver rows in correction check")
+        result[rnd] = {**race, key: sorted(rows, key=lambda r: r["Driver"]["driverId"])}
+    return result
+
+
+def result_revisions(event: str, processed: Path) -> list[str]:
+    """Read-only comparison of the latest season's completed qualifying/results.
+
+    Raw hashes must still agree with the processed inputs. A previous failed run
+    or a locally corrected cache must not hide a correction from the scheduler.
+    Older seasons and revised FastF1 timing need an explicit source refresh.
+    """
+    from .fetch import RAW, download_table
+    season, rnd = event_key(event)
+    path = processed / "sources.json"
+    used = json.loads(path.read_text()).get("jolpica", {}) if path.exists() else {}
+    changed = []
+    for endpoint in ("qualifying", "results"):
+        name = f"{season}_{endpoint}.json"
+        path = RAW / name
+        if not path.exists():
+            changed.append(name)
+            continue
+        saved = path.read_bytes()
+        if used.get(name, {}).get("sha256") != hashlib.sha256(saved).hexdigest():
+            changed.append(name)
+            continue
+        before = _completed_rows(json.loads(saved), season, rnd, endpoint)
+        after = _completed_rows(download_table(season, endpoint), season, rnd, endpoint)
+        if before != after:
+            changed.append(name)
+    return changed
 
 
 def event_key(event_id: str) -> tuple[int, int]:
@@ -65,6 +142,14 @@ def check(force: bool = False) -> dict:
                     lambda e: (TABLES / f"{e}_R" / "manifest.json").exists(), dt.date.today())
     if force and not result["due"]:
         result = dict(result, due=True, reason="forced: " + result["reason"])
+    if not result["due"]:
+        change = unpublished_input_change(ROOT)
+        if change:
+            result = dict(result, due=True, reason=change)
+        else:
+            revised = result_revisions(result["event"], PROCESSED)
+            if revised:
+                result = dict(result, due=True, reason="revised completed-race sources: " + ", ".join(revised))
     return result
 
 

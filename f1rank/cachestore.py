@@ -34,7 +34,8 @@ def members(root: Path = ROOT) -> list[Path]:
     for base in PATHS:
         for path in sorted((root / base).rglob("*")):
             name = path.relative_to(root).as_posix()
-            if path.is_file() and not name.startswith(EXCLUDE) and ".failed_" not in path.name:
+            if (path.is_file() and not name.startswith(EXCLUDE) and ".failed_" not in path.name
+                    and path.suffix != ".tmp"):
                 files.append(path)
     return files
 

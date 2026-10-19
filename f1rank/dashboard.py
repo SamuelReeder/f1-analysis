@@ -455,7 +455,7 @@ def refresh_steps(with_races=False, race_python=None, extract_python=None):
     """Keep both exports current when their shared entry/event inputs change."""
     def module(name, *args, python=sys.executable):
         return name, [python, "-m", f"f1rank.{name}", *args]
-    steps = [module("fetch"), module("build")]
+    steps = [module("fetch", "--refresh-latest"), module("build")]
     if with_races:
         extract = [extract_python or sys.executable, str(ROOT / "extract/race_extract.py")]
         steps += [("race timing", extract), ("sprint timing", extract + ["--sprint"]),
