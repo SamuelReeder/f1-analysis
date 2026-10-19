@@ -1,0 +1,29 @@
+{
+  "state": "running",
+  "case": "real_network",
+  "actual_resources": {
+    "service": {
+      "Restart": "no",
+      "OOMPolicy": "continue",
+      "Slice": "f1.slice",
+      "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-overall-complete-design-continuation-v1.service",
+      "MemoryMax": "13958643712",
+      "Nice": "19",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "shared_slice": {
+      "CPUWeight": "10",
+      "CPUQuotaPerSecUSec": "4s"
+    },
+    "kernel_memory_oom_group": "0"
+  },
+  "registration": "docs/overall_profile_continuation_protocol.json",
+  "registration_sha256": "a2c4ec7bbf2a768f3a05e7cdabc3ef95ec47f65400f8d770d077e0651aef36c3",
+  "started_at": "2026-10-14T23:28:05.018322+00:00",
+  "original_profile_complete": false,
+  "original_records_replaced": false,
+  "full_recovery_complete": false,
+  "sbc_complete": false,
+  "publication_allowed": false
+}
