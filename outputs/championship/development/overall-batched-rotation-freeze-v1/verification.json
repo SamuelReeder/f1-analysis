@@ -1,0 +1,29 @@
+{
+  "source_commit": "23ba902846c330b5f67402d8895d6851ec52fcb2",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "outputs/championship/development/overall-batched-rotation-freeze-v1/resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "analysis/overall_batched_rotation_audit.py",
+    "--freeze",
+    "docs/overall_batched_rotation_audit_protocol.json"
+  ],
+  "actual_scope": {
+    "Slice": "f1.slice",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-overall-batch-freeze-v1.scope",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "nice": 19,
+    "worker_cgroup": "0::/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-overall-batch-freeze-v1.scope"
+  },
+  "started_at": "2026-10-19T23:29:35.478809+00:00",
+  "mcmc_run": false,
+  "benchmark_run": false,
+  "publication_allowed": false,
+  "exit_code": 0,
+  "seconds": 0.5558043990167789,
+  "finished_at": "2026-10-19T23:29:35.533898+00:00",
+  "registration_sha256": "2bedaa882dd6dc18641ed1aa9ed73a4e215ff3e027ae9c7048b17cd6e349bf98"
+}
