@@ -1,0 +1,30 @@
+{
+  "source_commit": "44c11e6abe1413507e333ab469ac7f7a07ecbb0e",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "outputs/championship/development/overall-continuation-software-checks-v1/resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_overall_continuation_review.py",
+    "tests/test_overall_batched_rotation_audit.py",
+    "tests/test_overall_batched_rotation.py"
+  ],
+  "actual_scope": {
+    "Slice": "f1.slice",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-overall-continuation-software-checks-v1.scope",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "nice": 19,
+    "worker_cgroup": "0::/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-overall-continuation-software-checks-v1.scope"
+  },
+  "started_at": "2026-10-19T22:10:14.612761+00:00",
+  "mcmc_run": false,
+  "publication_allowed": false,
+  "exit_code": 0,
+  "seconds": 3.573648043035064,
+  "finished_at": "2026-10-19T22:10:23.505346+00:00"
+}
