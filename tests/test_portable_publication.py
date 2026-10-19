@@ -62,3 +62,42 @@ def test_new_data_requires_new_publication(exported):
     (root / "data/new_input.json").write_text("{}")
     with pytest.raises(ValueError, match="source inventory changed"):
         publication.verify(root)
+
+
+@pytest.mark.parametrize("name", [
+    "contracts/overall.json", "docs/overall_candidate.md",
+    "docs/overall_complete_profile_protocol.json", "analysis/overall_summary.py",
+    "f1rank/overall/model.py",
+])
+def test_scientific_source_changes_require_a_new_receipt(exported, name):
+    root, _, _ = exported
+    source = root / name
+    source.parent.mkdir(parents=True, exist_ok=True)
+    source.write_text("original definition\n")
+    with pytest.raises(ValueError, match="source inventory changed"):
+        publication.verify(root)
+
+    receipt_path = root / "dashboard/public/data/publication.json"
+    receipt = json.loads(receipt_path.read_text())
+    receipt["sources"] = {p: publication.digest(root / p) for p in publication.sources(root)}
+    receipt_path.write_text(json.dumps(receipt))
+    publication.verify(root)
+
+    source.write_text("changed definition\n")
+    with pytest.raises(ValueError, match="Publication source changed"):
+        publication.verify(root)
+
+    source.unlink()
+    with pytest.raises(ValueError, match="source inventory changed"):
+        publication.verify(root)
+
+
+def test_ignored_fits_and_unrelated_editor_files_do_not_enter_receipt(exported):
+    root, _, _ = exported
+    (root / ".gitignore").write_text("outputs/championship/cache/\n__pycache__/\n")
+    for name in ("outputs/championship/cache/failed.npz", "analysis/__pycache__/module.pyc",
+                 "dashboard/src/notes.txt"):
+        path = root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(b"not a scientific input")
+    publication.verify(root)

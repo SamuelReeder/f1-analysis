@@ -12,6 +12,12 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 
+# Scientific definitions and the development producers are inputs too. A clean
+# deployment cannot inspect ignored posterior caches, so its portable receipt
+# must not stay valid after a contract, protocol or producer changes.
+SOURCE_PATHS = ("data", "f1rank", "extract", "outputs", "analysis", "contracts", "docs",
+                "dashboard/verify_publication.py")
+
 
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -20,7 +26,7 @@ def digest(path):
 def sources(root):
     files = subprocess.check_output(
         ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard",
-         "--", "data", "f1rank", "extract", "outputs", "dashboard/verify_publication.py"], cwd=root,
+         "--", *SOURCE_PATHS], cwd=root,
     ).decode().split("\0")
     return sorted({p for p in files if p and not p.startswith("outputs/analysis/")
                    and p != "outputs/REPORT.md" and not p.endswith(".log")})
