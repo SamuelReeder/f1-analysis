@@ -209,8 +209,21 @@ another attempt in the exhausted profile or establish inference acceptance.
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence; bounded paired summaries and a fixed synthetic archive-to-summary controller have checked integration paths | Accepted real-data protocol/scenario integration, full simulation resources and precision, evidence-backed exporter and matching explanation/pairwise payload; full contract validation |
 | Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
-| Software and runner readiness | Batched states and observation kernels; bounded checked archive loading; capped synthetic resource and software records, including historical condition integration under `development/overall-condition-checks/` | Accepted-fit integration and end-to-end fitting/refresh resources; workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
+| Software and runner readiness | Batched states and observation kernels; bounded checked archive loading; capped synthetic resource and software records, including historical condition integration under `development/overall-condition-checks/`; portable receipts now bind scientific contracts, protocols and analysis producers | Accepted-fit integration and end-to-end fitting/refresh resources; workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
 | Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
+
+Production integration continues on the separate `overall-production-integration`
+branch, preserving the completed profile and benchmark source checkout. Its first
+change closes a portable-publication provenance gap: the receipt now includes
+`contracts/`, `docs/` and `analysis/`, alongside the existing source, data and
+output inventory. A changed scientific definition or producer therefore
+invalidates the receipt on a clean deployment as well as on the fitting machine.
+The [regression record](../outputs/championship/development/overall-publication-source-checks-v1/verification.json)
+contains **10 passing tests**, including added, modified and deleted scientific
+inputs and exclusion of ignored posterior caches. This is publication software
+evidence, not scientific acceptance. Record the portable receipt only after the
+final source, documentation and output inventory is settled and publication has
+been fully verified; the existing receipt is not current for this branch.
 
 The numerical profile is registered separately in
 [`overall_profile_protocol.json`](overall_profile_protocol.json). It answers
