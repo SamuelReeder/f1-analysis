@@ -208,7 +208,7 @@ another attempt in the exhausted profile or establish inference acceptance.
 | Chronological development comparison | Plan defines information horizons and baseline roles; scoring utilities preserve joint draws, conditional panel/condition weights and required events; outcome-free catalogue, joint states and observation kernels have synthetic checks; unseen-circuit extensions and unknown-condition simulation; explicit legacy/grid-only arithmetic and a race-only evidence ablation | Complete source verification, final condition/circuit registration and calibration, uncertainty in learned training factors, classification-conditioning policy and baseline fitting/forecast integration; freeze event inventory, calibration and stopping rules; run every fold |
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
 | Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence; bounded paired summaries and a fixed synthetic archive-to-summary controller have checked integration paths | Accepted real-data protocol/scenario integration, full simulation resources and precision, evidence-backed exporter and matching explanation/pairwise payload; full contract validation |
-| Refresh, caches and rollback | Existing last-good publication behavior remains | Wire accepted Overall dependencies; demonstrate new, unchanged, corrected and failed refreshes |
+| Refresh, caches and rollback | Last-good publication behavior; latest-season result revision detection; tested corrected fetch/build followed by fit failure and retry; immutable raw-history preservation and cache restore | Wire accepted Overall dependencies and demonstrate their complete new, unchanged, corrected, interrupted and failed refreshes; older-season and timing revision policy |
 | Software and runner readiness | Batched states and observation kernels; bounded checked archive loading; capped synthetic resource and software records, including historical condition integration under `development/overall-condition-checks/`; portable receipts now bind scientific contracts, protocols and analysis producers | Accepted-fit integration and end-to-end fitting/refresh resources; workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
 | Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
 
@@ -224,6 +224,21 @@ inputs and exclusion of ignored posterior caches. This is publication software
 evidence, not scientific acceptance. Record the portable receipt only after the
 final source, documentation and output inventory is settled and publication has
 been fully verified; the existing receipt is not current for this branch.
+
+The [correction-refresh changes](refresh_corrections.md) now detect revised
+completed qualifying/race results and compare fitting inputs against the last
+published receipt. A failed fit after a successful corrected fetch and table
+build stays due, rather than treating the updated raw cache as already published.
+The fetch stage also refreshes the latest processed season across a calendar-year
+change. Raw response archives now preserve distinct content even when retrieval
+timestamps coincide or are missing; missing historical retrieval times remain
+unknown. Cache round trips preserve that history and exclude abandoned temporary
+files. The [focused verification](../outputs/championship/development/overall-refresh-correction-checks-v1/verification.json)
+records **89 passing checks** and names the **2 deselected** checks requiring local
+fit/export artifacts. These tests use synthetic API responses and a deliberately
+failed fit after the real fetch/build path. They neither run inference nor verify
+the complete accepted Overall refresh. The changed hashed source requires
+regeneration before publication; the frozen computation checkout is preserved.
 
 The numerical profile is registered separately in
 [`overall_profile_protocol.json`](overall_profile_protocol.json). It answers

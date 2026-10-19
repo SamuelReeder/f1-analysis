@@ -303,9 +303,11 @@ standard GitHub-hosted runner. No GPU is needed: every model in the refresh runs
 CPU (JAX's CPU backend, four chains in parallel). Each run:
 
 1. restores the raw-data and race-fit cache from the `refresh-cache` release asset;
-2. checks Jolpica for a race newer than the processed data
-   (`python -m f1rank.schedule check`). Without one, the run stops here. A race whose
-   FastF1 timing was not yet available is retried by later runs for up to 10 days;
+2. checks for a new race, revised qualifying or race results in the latest
+   processed season, or fitting inputs that have not reached the published
+   snapshot (`python -m f1rank.schedule check`). An unchanged run stops here.
+   A race whose FastF1 timing was not yet available is retried by later runs for
+   up to 10 days;
 3. runs `python -m f1rank.dashboard refresh --races`: fetch and build, FastF1 race
    and sprint timing, race tables and timeline, the qualifying fit with the
    published sampler settings (1,500 warm-up and 1,500 draws per chain, 4 chains),
@@ -323,6 +325,16 @@ CPU (JAX's CPU backend, four chains in parallel). Each run:
 
 It can also be started from the Actions tab (**Refresh after race weekends → Run
 workflow**), optionally with *force* to refit without a new race.
+
+The [correction-refresh implementation](docs/refresh_corrections.md) compares
+completed events only and refetches the latest processed season even across New
+Year. A failed fit after corrected data were downloaded leaves the published
+snapshot in place and remains due on the next check. Distinct raw responses are
+preserved by content hash, including responses whose original retrieval time is
+unknown. Automatic upstream revision polling currently covers qualifying and
+race results in that latest season; older seasons, sprint revisions and revised
+FastF1 timing require an explicit source refresh. These production-branch changes
+still require regenerated outputs and approved deployment before becoming live.
 
 The refresh does not refit the racing qualities (qualifying-adjusted race pace and tyre
 management, starts, consistency, reliability, pit stops, wet pace, overtaking) or the
