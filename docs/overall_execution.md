@@ -758,6 +758,13 @@ used by the processed metadata. Other storage locations and provider histories
 remain uninspected. This narrows the available local evidence without resolving
 forecast-time availability or changing the running profile.
 
+A subsequent [raw-source identity check](../outputs/championship/development/overall-raw-source-identity-v1/record/identity.json)
+reproduces every referenced qualifying/results file hash in the primary cache,
+with agreement from an independent `sha256sum` verification. The
+[source-vintage report](overall_source_vintages.md) separates this completed byte
+check from the still-unverified historical availability. No observation values
+were parsed, and the live profile's inputs and settings remain unchanged.
+
 ## Legacy qualifying forecast and race-stage integration
 
 The [baseline forecast definition](overall_baselines.md) was committed before

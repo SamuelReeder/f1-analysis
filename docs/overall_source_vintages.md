@@ -50,6 +50,16 @@ search other archive locations or establish that older versions cannot exist
 elsewhere. These inspected local paths supply no archived retrieval evidence
 for the required historical forecast origins.
 
+A separate [bounded byte-identity check](../outputs/championship/development/overall-raw-source-identity-v1/record/identity.json)
+on 2026-10-19 reproduced the processed manifest's hashes for all 42 referenced
+raw qualifying/results files in the primary cache. An
+[independent verification](../outputs/championship/development/overall-raw-source-identity-v1/record/verification.json)
+using `sha256sum` agrees for every file. The collector streams raw bytes without
+parsing racing observations and checks file metadata for changes during collection.
+This confirms the current local files' content identities against the selected
+committed manifest. It neither recovers missing retrieval records nor establishes
+that these versions were available at an earlier forecast origin.
+
 The [comparison-origin checks](overall_comparison_origins.md) already require
 exact forecast times and common content identities. The remaining controller
 work must bind those identities to preserved input bytes and evidence of their
@@ -59,10 +69,11 @@ grid announcements and other forecast inputs need the same origin-specific
 review. Their inclusion in a current manifest is insufficient evidence of prior
 availability.
 
-This inventory leaves historical forecast availability unverified. It has not
-reproduced raw content hashes, inspected observation arrays or provider revision
-histories, or evaluated any forecast origin. It supplies neither a leakage
-finding nor a passing as-of replay. Historical development, the separate
+These inspections leave historical forecast availability unverified. They have
+not inspected observation arrays or provider revision histories, or evaluated
+any forecast origin. The byte-identity check covers the referenced raw
+qualifying/results files only. It supplies neither a leakage finding nor a
+passing as-of replay. Historical development, the separate
 independent-evidence registration and scientific acceptance retain their
 existing requirements. The running fit, frozen inputs and acceptance rules are
 unchanged.
