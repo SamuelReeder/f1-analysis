@@ -1,0 +1,54 @@
+{
+  "completed_attempt_sha256": "937916548ed1138b6862dcfe85c3547c26b9121409a2fcdfa9162ab6fbaa3c11",
+  "completed_attempt_source": "outputs/championship/cache/overall-complete-design-continuation-v1/real_network/attempt_3.json",
+  "fit_complete": false,
+  "kind": "partial_continuation_status",
+  "last_logged_event": {
+    "attempt": 4,
+    "execution_segment": "continuation",
+    "settings": {
+      "chains": 4,
+      "init_median_samples": 15,
+      "max_tree_depth": 10,
+      "samples": 3200,
+      "seed": 3,
+      "target_accept": 0.98,
+      "warmup": 2400
+    },
+    "state": "sampling",
+    "study": "real_network"
+  },
+  "limitations": [
+    "Last logged sampling stage supplies no within-attempt iteration progress or reliable remaining duration.",
+    "Recorded attempt seconds include diagnostics; earlier engineering evidence has UTC/monotonic clock disagreement, so these are not an independently verified wall-clock duration.",
+    "This is a partial snapshot; original and continuation final records are not replaced.",
+    "This computational profile does not complete recovery, calibration, predictive evaluation or production rollout."
+  ],
+  "log_snapshot_sha256": "ee4a1d2fced2ba0f4af920fef82d21e86bbd1c6e6a249d96c04fb2fd51ab2f94",
+  "log_source": "outputs/logs/overall-complete-design-continuation-v1/profile.log",
+  "new_saved_arrays_independently_audited": false,
+  "observed_at": "2026-10-19T03:27:56.814115+00:00",
+  "previous_attempt": {
+    "attempt": 3,
+    "bulk_ess_min": 4.010025062656641,
+    "converged": false,
+    "divergences": 0,
+    "recorded_hours_including_diagnostics": 62.64986128398473,
+    "recorded_seconds_including_diagnostics": 225539.50062234502,
+    "rhat_max": 6122892948476162.0
+  },
+  "publication_allowed": false,
+  "registration": "docs/overall_profile_continuation_protocol.json",
+  "registration_sha256": "a2c4ec7bbf2a768f3a05e7cdabc3ef95ec47f65400f8d770d077e0651aef36c3",
+  "remaining_time_estimate": null,
+  "service": {
+    "ActiveState": "active",
+    "CPUUsageNSec": "1548845092600000",
+    "LoadState": "loaded",
+    "MainPID": "9058",
+    "MemoryMax": "13958643712",
+    "Result": "success",
+    "SubState": "running"
+  },
+  "source_commit": "cc9e672eaa8f33aed87e5712b6cee1e9426aaadf"
+}
