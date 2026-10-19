@@ -1,0 +1,35 @@
+{
+  "purpose": "portable_publication_scientific_source_checks",
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--slice=f1.slice",
+    "-q",
+    "-p",
+    "MemoryMax=3G",
+    "-p",
+    "CPUQuota=200%",
+    "--",
+    "/usr/bin/nice",
+    "-n",
+    "19",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_portable_publication.py"
+  ],
+  "exit_code": 0,
+  "pytest_output_sha256": "1d4a967e99132fbcd2482f66d3283a827653f80cb000f49956a5b5ff1408d39c",
+  "tested_source_sha256": {
+    "dashboard/verify_publication.py": "d407fd7b10c57a53e34d0a57c870cd5cdbf10e889f8db7d0b9d0a37d7c8352d8",
+    "tests/test_portable_publication.py": "1e29972378a84561b0c72d8e90f69eaae4bc93248cb41522d659a3c8d065910f"
+  },
+  "matching_source_commit": "0d94429e5353a18575931108f8212f29c426debf",
+  "source_note": "These exact source bytes were tested before committing them. This record was collected afterwards from the completed command output.",
+  "scope_note": "The command applies the recorded scope limits; no separate resource telemetry was collected.",
+  "real_fit_run": false,
+  "scientific_acceptance_established": false,
+  "publication_allowed": false
+}
