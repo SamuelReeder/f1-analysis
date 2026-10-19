@@ -150,7 +150,9 @@ records **4947.702** internal elapsed seconds and a process peak of
 **2,435,152 KiB** in its separate capped scope. The external resource log is also
 preserved with the same clock limitation. Audit execution is complete and the
 records are consistent; combined convergence and computational acceptance remain
-false. The full-model batching measurement is still pending.
+false. The separate [full-model batching comparison](overall_batched_rotation_results.md)
+has since passed its fixed calculation-equivalence checks and recorded computation
+costs. It performed no new fit and does not change this failed profile.
 
 The combined profile does not satisfy convergence, and the original interrupted
 run remains incomplete. This candidate cannot support an accepted Overall
