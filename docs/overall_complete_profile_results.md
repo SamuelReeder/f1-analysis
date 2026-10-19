@@ -96,8 +96,8 @@ reports a maximum R-hat of approximately **6.122893e15**, minimum bulk ESS
 seconds**, including diagnostics, or approximately **62.650 internal-timer
 hours**. Earlier engineering evidence contains UTC/monotonic clock disagreement;
 this is not an independently verified wall-clock duration or a forecast of the
-next attempt's cost. The newly saved reports still require independent
-reproduction from the retained arrays.
+next attempt's cost. Independent reproduction from the retained arrays was
+still pending at this partial observation; the completed audit is recorded below.
 
 The [log snapshot](../outputs/championship/development/overall-complete-design-continuation-v1-observations/20261019-status/profile-log.txt)
 then records attempt **4**, the final attempt in the unchanged registered ladder,
@@ -119,9 +119,10 @@ failed; the fixed ladder is now exhausted. There was no execution exception.
 
 Both new attempts record a tree-depth-limit fraction of **1.0** and failed
 current-driver contrast checks. The terminal snapshot preserves every earlier
-attempt and its original settings. These newly saved reports still require
-independent reproduction from the retained arrays; the recorded sampler extras
-cannot be independently reconstructed from the saved posterior files.
+attempt and its original settings. The new coordinate and driver-contrast reports
+have now been reproduced independently from the retained arrays, as recorded
+below. The sampler extras cannot be independently reconstructed from the saved
+posterior files.
 
 The continuation records **461927.568** internal elapsed seconds and a process
 peak of **13,369,612 KiB**. Its separate
@@ -137,7 +138,19 @@ pass **105** tests in **3.24 seconds**, as recorded in the
 They cover continuation aggregation, failed-evidence handling, batching and its
 resource guards in the separate capped scope. They do not reproduce the newly
 saved real-network arrays or establish complete-model batching equivalence.
-That array audit and the full-model batching measurement remain pending.
+
+The separate [continuation array audit](../outputs/championship/development/overall-continuation-review-v1/verification.json)
+subsequently reproduced every coordinate and driver-contrast diagnostic in
+attempts **3** and **4** exactly, including their failed convergence decisions.
+It verifies their complete array inventories and reuses the earlier **10**
+audited attempts only after checking their bound identities. All original cases
+remain present; no cache entry is missing or unreferenced. The
+[full review](../outputs/championship/development/overall-continuation-review-v1/review.json)
+records **4947.702** internal elapsed seconds and a process peak of
+**2,435,152 KiB** in its separate capped scope. The external resource log is also
+preserved with the same clock limitation. Audit execution is complete and the
+records are consistent; combined convergence and computational acceptance remain
+false. The full-model batching measurement is still pending.
 
 The combined profile does not satisfy convergence, and the original interrupted
 run remains incomplete. This candidate cannot support an accepted Overall

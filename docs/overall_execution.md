@@ -148,17 +148,21 @@ preserves its recorded diagnostics and duration, including the clock limitation.
 The later [terminal record](../outputs/championship/development/overall-complete-design-continuation-v1-terminal/terminal.json)
 preserves failure of the final attempt and exhaustion of the unchanged ladder.
 The continuation ended with `failed_convergence`; combined recorded convergence
-is false. The new saved-array audit remains pending. Original failure records,
-numerical settings and acceptance rules are unchanged.
+is false. The [new saved-array audit](../outputs/championship/development/overall-continuation-review-v1/verification.json)
+has since reproduced both new coordinate and driver-contrast reports exactly,
+retaining their failed decisions. Original failure records, numerical settings
+and acceptance rules are unchanged.
 
 The [continuation reviewer](overall_continuation_review.md) is prepared outside
 the frozen fit inputs. It keeps the interrupted profile incomplete, combines the
 separate continuation with every earlier case, and reproduces only newly saved
 attempt reports after checking the earlier audited bytes. The
 [focused execution checks](../outputs/championship/development/overall-continuation-software-checks-v1/verification.json)
-now pass, including the batching resource guards. Review of the terminal fit's
-saved arrays remains pending. Software-check success does not establish
-convergence, scientific acceptance or ranking publication.
+now pass, including the batching resource guards. The completed terminal review
+accounts for every original case and new attempt, verifies the complete saved
+arrays and finds no inconsistent record or unreferenced cache entry. Its successful
+execution confirms the recorded failures; combined computational acceptance,
+scientific acceptance and ranking publication remain unestablished.
 
 Before freezing the full scientific acceptance runs, finish the required
 production integration behind its acceptance guards and freeze the resulting
