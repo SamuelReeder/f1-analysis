@@ -141,6 +141,13 @@ Earlier original outputs and failed draws remain unchanged. The continuation
 keeps the lower shared CPU cap and occupies the full fit memory budget, so other
 heavy work waits. No convergence or completed recovery is claimed while it runs.
 
+The subsequent [partial continuation observation](../outputs/championship/development/overall-complete-design-continuation-v1-observations/20261019-status/observation.json)
+records failure of the third registered real-network attempt and sampling of the
+fourth, final attempt. The [results report](overall_complete_profile_results.md)
+preserves its recorded diagnostics and duration, including the clock limitation.
+The new saved-array audit and final continuation result remain pending. The
+original failure records, numerical settings and acceptance rules are unchanged.
+
 The [continuation reviewer](overall_continuation_review.md) is prepared outside
 the frozen fit inputs. It keeps the interrupted profile incomplete, combines the
 separate continuation with every earlier case, and reproduces only newly saved

@@ -82,10 +82,28 @@ pass **44** tests in **0.18 seconds**, as recorded in the
 [test output](../outputs/championship/development/overall-profile-continuation-checks-v1/pytest.txt).
 The separate [execution registration](overall_profile_continuation_protocol.json)
 is frozen, and the [launch observation](../outputs/championship/development/overall-complete-design-continuation-v1-launch/sampling-start.json)
-confirms the unfinished original attempt is sampling in its new capped service.
+records the unfinished original attempt starting in its new capped service.
 Earlier attempts and original files remain unchanged. The original runner has
 not been blindly relaunched, and the prepared batching implementation is not
 substituted into the continuation. Its final result remains pending.
+
+A [partial observation dated 2026-10-19](../outputs/championship/development/overall-complete-design-continuation-v1-observations/20261019-status/observation.json)
+preserves the continuation's completed attempt **3**, which failed convergence.
+Its [saved diagnostic record](../outputs/championship/development/overall-complete-design-continuation-v1-observations/20261019-status/attempt_3.json)
+reports a maximum R-hat of approximately **6.122893e15**, minimum bulk ESS
+**4.010025**, and **0** divergences. Its recorded duration is **225539.501
+seconds**, including diagnostics, or approximately **62.650 internal-timer
+hours**. Earlier engineering evidence contains UTC/monotonic clock disagreement;
+this is not an independently verified wall-clock duration or a forecast of the
+next attempt's cost. The newly saved reports still require independent
+reproduction from the retained arrays.
+
+The [log snapshot](../outputs/championship/development/overall-complete-design-continuation-v1-observations/20261019-status/profile-log.txt)
+then records attempt **4**, the final attempt in the unchanged registered ladder,
+as sampling. It provides no iteration-level progress or reliable remaining-time
+estimate. This partial observation preserves the failure without replacing the
+original interrupted run's missing completion records or declaring the
+continuation complete.
 
 The complete computational profile remains incomplete. Full recovery,
 simulation-based calibration, functional precision, predictive validation,
