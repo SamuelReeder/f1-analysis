@@ -1,0 +1,293 @@
+{
+  "registration": "docs/overall_batched_rotation_audit_protocol.json",
+  "registration_sha256": "2bedaa882dd6dc18641ed1aa9ed73a4e215ff3e027ae9c7048b17cd6e349bf98",
+  "summary_sha256": "0f2c8317170112f9820e7321635d02b32ab6ca209145f71ce7ea14815769025e",
+  "all_fixed_cases_and_methods_accounted_for": true,
+  "result_and_resource_fingerprints_verified": true,
+  "complete_inventories_shapes_dtypes_and_gradient_coordinates_accounted_for": true,
+  "original_generating_identities_and_maps_preserved": true,
+  "fixed_equivalence_checks_passed": true,
+  "case_results": [
+    {
+      "case": "connected",
+      "parameter_coordinates": 903,
+      "comparison_sites": 306,
+      "all_comparisons_passed": true,
+      "max_absolute_discrepancy_by_kind": {
+        "coordinate": 0.0,
+        "density": 0.0,
+        "gradient": 0.0,
+        "state": 0.0
+      },
+      "methods": {
+        "original": {
+          "preparation_seconds": 3.970344550907612e-07,
+          "compile_and_first_evaluation_seconds": 3.699851101031527,
+          "repeated_evaluation_seconds": [
+            0.0006048179930076003,
+            0.0006703260005451739,
+            0.0006078480510041118,
+            0.0006314439815469086,
+            0.000712603039573878,
+            0.0007550590089522302,
+            0.0006255190237425268,
+            0.0005535500240512192
+          ],
+          "process_max_rss_kib": 910432,
+          "seconds": 18.467699869011994
+        },
+        "batched": {
+          "preparation_seconds": 0.0007997890352271497,
+          "compile_and_first_evaluation_seconds": 2.992225287016481,
+          "repeated_evaluation_seconds": [
+            0.0007441449561156332,
+            0.0006232709856703877,
+            0.0007444050279445946,
+            0.0006038559949956834,
+            0.0006268169963732362,
+            0.0005767580005340278,
+            0.0005851380410604179,
+            0.0006034899852238595
+          ],
+          "process_max_rss_kib": 900012,
+          "seconds": 16.876553203968797
+        }
+      }
+    },
+    {
+      "case": "confounded",
+      "parameter_coordinates": 897,
+      "comparison_sites": 306,
+      "all_comparisons_passed": true,
+      "max_absolute_discrepancy_by_kind": {
+        "coordinate": 0.0,
+        "density": 0.0,
+        "gradient": 0.0,
+        "state": 0.0
+      },
+      "methods": {
+        "original": {
+          "preparation_seconds": 4.7404319047927856e-07,
+          "compile_and_first_evaluation_seconds": 3.654810820997227,
+          "repeated_evaluation_seconds": [
+            0.0007075650501064956,
+            0.0007811970426701009,
+            0.0007598059601150453,
+            0.0006743150297552347,
+            0.0007085579563863575,
+            0.0006464659818448126,
+            0.0006686619599349797,
+            0.0006850059726275504
+          ],
+          "process_max_rss_kib": 911492,
+          "seconds": 17.4485847959877
+        },
+        "batched": {
+          "preparation_seconds": 0.0007874459843151271,
+          "compile_and_first_evaluation_seconds": 3.067071956000291,
+          "repeated_evaluation_seconds": [
+            0.0005742899957112968,
+            0.0007452569552697241,
+            0.0007919970084913075,
+            0.0007446840172633529,
+            0.000670966983307153,
+            0.0006252509774640203,
+            0.0006203899974934757,
+            0.0006533529958687723
+          ],
+          "process_max_rss_kib": 895164,
+          "seconds": 16.888014494033996
+        }
+      }
+    },
+    {
+      "case": "sparse_rookie",
+      "parameter_coordinates": 849,
+      "comparison_sites": 306,
+      "all_comparisons_passed": true,
+      "max_absolute_discrepancy_by_kind": {
+        "coordinate": 0.0,
+        "density": 0.0,
+        "gradient": 0.0,
+        "state": 0.0
+      },
+      "methods": {
+        "original": {
+          "preparation_seconds": 4.520406946539879e-07,
+          "compile_and_first_evaluation_seconds": 3.663862472982146,
+          "repeated_evaluation_seconds": [
+            0.000639435020275414,
+            0.0006870669894851744,
+            0.0007082719821482897,
+            0.0007396619766950607,
+            0.0005739219486713409,
+            0.0006618630141019821,
+            0.0006595139857381582,
+            0.0006688170251436532
+          ],
+          "process_max_rss_kib": 924760,
+          "seconds": 18.100593730981927
+        },
+        "batched": {
+          "preparation_seconds": 0.001073725987225771,
+          "compile_and_first_evaluation_seconds": 3.112332210992463,
+          "repeated_evaluation_seconds": [
+            0.0007091760053299367,
+            0.000658865028526634,
+            0.000596611003857106,
+            0.0006286959978751838,
+            0.0005986280157230794,
+            0.0006433140370063484,
+            0.0006183480145409703,
+            0.0006359959952533245
+          ],
+          "process_max_rss_kib": 914952,
+          "seconds": 17.50473993399646
+        }
+      }
+    },
+    {
+      "case": "dominant_teammate",
+      "parameter_coordinates": 903,
+      "comparison_sites": 306,
+      "all_comparisons_passed": true,
+      "max_absolute_discrepancy_by_kind": {
+        "coordinate": 0.0,
+        "density": 0.0,
+        "gradient": 0.0,
+        "state": 0.0
+      },
+      "methods": {
+        "original": {
+          "preparation_seconds": 3.530294634401798e-07,
+          "compile_and_first_evaluation_seconds": 3.7041994080063887,
+          "repeated_evaluation_seconds": [
+            0.0007088000420480967,
+            0.0008883640402927995,
+            0.0006883669993840158,
+            0.000643578008748591,
+            0.0006876839906908572,
+            0.0006624240195378661,
+            0.000678184034768492,
+            0.0006479090079665184
+          ],
+          "process_max_rss_kib": 911832,
+          "seconds": 17.50094443798298
+        },
+        "batched": {
+          "preparation_seconds": 0.0008079779800027609,
+          "compile_and_first_evaluation_seconds": 3.0953655659686774,
+          "repeated_evaluation_seconds": [
+            0.0006305509596131742,
+            0.0006613869918510318,
+            0.000709870015271008,
+            0.0006337150116451085,
+            0.0006083670305088162,
+            0.0005745539674535394,
+            0.0005979069974273443,
+            0.000598815968260169
+          ],
+          "process_max_rss_kib": 906424,
+          "seconds": 17.141994033998344
+        }
+      }
+    },
+    {
+      "case": "era_boundary",
+      "parameter_coordinates": 909,
+      "comparison_sites": 306,
+      "all_comparisons_passed": true,
+      "max_absolute_discrepancy_by_kind": {
+        "coordinate": 0.0,
+        "density": 0.0,
+        "gradient": 0.0,
+        "state": 0.0
+      },
+      "methods": {
+        "original": {
+          "preparation_seconds": 3.420282155275345e-07,
+          "compile_and_first_evaluation_seconds": 3.6779426620341837,
+          "repeated_evaluation_seconds": [
+            0.0006770149921067059,
+            0.000741336029022932,
+            0.0007737139821983874,
+            0.0007147950236685574,
+            0.0007108039571903646,
+            0.0006551090045832098,
+            0.0005902620032429695,
+            0.0006920990417711437
+          ],
+          "process_max_rss_kib": 912204,
+          "seconds": 17.57200551900314
+        },
+        "batched": {
+          "preparation_seconds": 0.0009982979972846806,
+          "compile_and_first_evaluation_seconds": 3.0161329609691165,
+          "repeated_evaluation_seconds": [
+            0.0006229810533113778,
+            0.0006173159927129745,
+            0.0006811490166001022,
+            0.0005860609817318618,
+            0.0006554480060003698,
+            0.0006383209838531911,
+            0.0005954939988441765,
+            0.0006320609827525914
+          ],
+          "process_max_rss_kib": 902120,
+          "seconds": 16.96500137000112
+        }
+      }
+    },
+    {
+      "case": "real_network",
+      "parameter_coordinates": 59466,
+      "comparison_sites": 306,
+      "all_comparisons_passed": true,
+      "max_absolute_discrepancy_by_kind": {
+        "coordinate": 0.0,
+        "density": 0.0,
+        "gradient": 0.0,
+        "state": 0.0
+      },
+      "methods": {
+        "original": {
+          "preparation_seconds": 4.849862307310104e-07,
+          "compile_and_first_evaluation_seconds": 18.664039366005454,
+          "repeated_evaluation_seconds": [
+            0.00967269903048873,
+            0.009616900002583861,
+            0.01046924403635785,
+            0.01070867496309802,
+            0.010423982981592417,
+            0.012983377964701504,
+            0.009639094001613557,
+            0.014037398039363325
+          ],
+          "process_max_rss_kib": 1675952,
+          "seconds": 41.51526038494194
+        },
+        "batched": {
+          "preparation_seconds": 0.007102439005393535,
+          "compile_and_first_evaluation_seconds": 5.382343376986682,
+          "repeated_evaluation_seconds": [
+            0.006008502037730068,
+            0.004125487990677357,
+            0.004752070992253721,
+            0.003865581995341927,
+            0.003925380005966872,
+            0.004113319970201701,
+            0.003453871002420783,
+            0.0036962450249120593
+          ],
+          "process_max_rss_kib": 1278808,
+          "seconds": 27.796089594019577
+        }
+      }
+    }
+  ],
+  "mcmc_run": false,
+  "fit_convergence_established": false,
+  "recovery_established": false,
+  "publication_allowed": false,
+  "interpretation": "A local full-model calculation benchmark at the original generating point. Raw repeat durations are preserved; no inference-throughput or convergence claim follows."
+}

@@ -1,0 +1,17 @@
+{
+  "state": "running",
+  "source_commit": "0bf0de23b6242c3a2d143fedcffd949ac953420d",
+  "registration": "docs/overall_batched_rotation_audit_protocol.json",
+  "registration_sha256": "2bedaa882dd6dc18641ed1aa9ed73a4e215ff3e027ae9c7048b17cd6e349bf98",
+  "command": [
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-u",
+    "analysis/overall_batched_rotation_audit.py",
+    "--protocol",
+    "docs/overall_batched_rotation_audit_protocol.json"
+  ],
+  "started_at": "2026-10-19T23:30:34.864725+00:00",
+  "resource_policy": "The metadata-only controller launches one numerical child at a time in the registered f1.slice scope; every child verifies actual membership, MemoryMax=3G, CPUQuota=200%, Nice=19 and an otherwise idle slice.",
+  "mcmc_run": false,
+  "publication_allowed": false
+}

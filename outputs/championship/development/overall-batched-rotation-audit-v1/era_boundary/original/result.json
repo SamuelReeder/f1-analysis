@@ -1,0 +1,1837 @@
+{
+  "case": "era_boundary",
+  "method": "original",
+  "state": "complete",
+  "stage": "source_recheck",
+  "started_at": "2026-10-19T23:33:09.232681+00:00",
+  "protocol_sha256": "2bedaa882dd6dc18641ed1aa9ed73a4e215ff3e027ae9c7048b17cd6e349bf98",
+  "source_commit": "0bf0de23b6242c3a2d143fedcffd949ac953420d",
+  "actual_scope": {
+    "Slice": "f1.slice",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-batch-audit-era-boundary-original.scope",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "LoadState": "loaded",
+    "ActiveState": "active",
+    "Nice": 19
+  },
+  "mcmc_run": false,
+  "publication_allowed": false,
+  "runtime": {
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "numpy": "2.5.3",
+    "jax": "0.11.2",
+    "numpyro": "0.22.0",
+    "backend": "cpu",
+    "x64": false,
+    "devices": [
+      "cpu:0"
+    ],
+    "environment": {
+      "JAX_ENABLE_X64": "false",
+      "JAX_PLATFORMS": "cpu",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "OMP_NUM_THREADS": "2",
+      "OPENBLAS_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1"
+    }
+  },
+  "original_input_identities": {
+    "arrays_key": "5cdb3a3719ecdb04b6ed00c51d511831e2313a5106be4384938a25e921e28f92",
+    "parameters_key": "466555e5f7cd6acb7784b9f6d614d17c339ac19c011be4a869152087ba31287a",
+    "truth_key": "2a6c5a790d2d3841348abbb1a3c74cb7317a0bbb8011d70dd23b0a20ddfc4c57"
+  },
+  "regenerated_input_identities": {
+    "arrays_key": "5cdb3a3719ecdb04b6ed00c51d511831e2313a5106be4384938a25e921e28f92",
+    "parameters_key": "466555e5f7cd6acb7784b9f6d614d17c339ac19c011be4a869152087ba31287a",
+    "truth_key": "2a6c5a790d2d3841348abbb1a3c74cb7317a0bbb8011d70dd23b0a20ddfc4c57"
+  },
+  "arrays_key": "5cdb3a3719ecdb04b6ed00c51d511831e2313a5106be4384938a25e921e28f92",
+  "parameters_key": "466555e5f7cd6acb7784b9f6d614d17c339ac19c011be4a869152087ba31287a",
+  "truth_key": "2a6c5a790d2d3841348abbb1a3c74cb7317a0bbb8011d70dd23b0a20ddfc4c57",
+  "original_rotation_sha256": "fd8235b6254ee2b2ab28bd164df64fcd9c5a920bb2ee0ac77934c4d4f9442bd0",
+  "regenerated_rotation_sha256": "fd8235b6254ee2b2ab28bd164df64fcd9c5a920bb2ee0ac77934c4d4f9442bd0",
+  "preparation_seconds": 3.420282155275345e-07,
+  "control_rotation_sha256": "fd8235b6254ee2b2ab28bd164df64fcd9c5a920bb2ee0ac77934c4d4f9442bd0",
+  "control_log_abs_det": 18.97246125494883,
+  "compile_and_first_evaluation_seconds": 3.6779426620341837,
+  "repeated_evaluation_seconds": [
+    0.0006770149921067059,
+    0.000741336029022932,
+    0.0007737139821983874,
+    0.0007147950236685574,
+    0.0007108039571903646,
+    0.0006551090045832098,
+    0.0005902620032429695,
+    0.0006920990417711437
+  ],
+  "parameter_coordinates": 909,
+  "payload_inventory": {
+    "joint_density": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_weekend_qualifying_scale": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_weekend_qualifying_scale": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_weekend_race_scale": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_weekend_race_scale": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_weekend_loading": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_weekend_loading": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_weekend_total_z": {
+      "kind": "state",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "factor/overall_weekend_total_z": {
+      "kind": "density",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_weekend_complement_z": {
+      "kind": "state",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "factor/overall_weekend_complement_z": {
+      "kind": "density",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_lap_controls_rotated": {
+      "kind": "state",
+      "shape": [
+        108
+      ],
+      "dtype": "<f4"
+    },
+    "factor/overall_lap_controls_rotated": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/sd_level": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/sd_level": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/level_z": {
+      "kind": "state",
+      "shape": [
+        6
+      ],
+      "dtype": "<f4"
+    },
+    "factor/level_z": {
+      "kind": "density",
+      "shape": [
+        6
+      ],
+      "dtype": "<f4"
+    },
+    "state/sd_skill_race": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/sd_skill_race": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/sd_skill_season": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/sd_skill_season": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/skill_z": {
+      "kind": "state",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "factor/skill_z": {
+      "kind": "density",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "state/exp_gain": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/exp_gain": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/exp_scale": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/exp_scale": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/age_slope": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/age_slope": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/skill": {
+      "kind": "state",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "state/rho": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/rho": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/rho_reset": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/rho_reset": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/sd_car_race": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/sd_car_race": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/sd_car_season": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/sd_car_season": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/sd_car_reset": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/sd_car_reset": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/car_step_z": {
+      "kind": "state",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "factor/car_step_z": {
+      "kind": "density",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "state/car_jump_z": {
+      "kind": "state",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "factor/car_jump_z": {
+      "kind": "density",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "state/sd_car_event": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/sd_car_event": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/car_total_decentered": {
+      "kind": "state",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "factor/car_total_decentered": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/car_total": {
+      "kind": "state",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "state/car_event_prior": {
+      "kind": "state",
+      "shape": [
+        0
+      ],
+      "dtype": "<f4"
+    },
+    "factor/car_event_prior": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/car": {
+      "kind": "state",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "state/car_event": {
+      "kind": "state",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "state/sd_track_load": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/sd_track_load": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/track_load_z": {
+      "kind": "state",
+      "shape": [
+        9
+      ],
+      "dtype": "<f4"
+    },
+    "factor/track_load_z": {
+      "kind": "density",
+      "shape": [
+        9
+      ],
+      "dtype": "<f4"
+    },
+    "state/track_load": {
+      "kind": "state",
+      "shape": [
+        9
+      ],
+      "dtype": "<f4"
+    },
+    "state/car_track": {
+      "kind": "state",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "state/mu": {
+      "kind": "state",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "factor/mu": {
+      "kind": "density",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "state/sigma0": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/sigma0": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/sigma_tau": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/sigma_tau": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/sigma_u": {
+      "kind": "state",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "factor/sigma_u": {
+      "kind": "density",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "state/nu": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/nu": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/sd_compat": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/sd_compat": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/compat_z": {
+      "kind": "state",
+      "shape": [
+        18
+      ],
+      "dtype": "<f4"
+    },
+    "factor/compat_z": {
+      "kind": "density",
+      "shape": [
+        18
+      ],
+      "dtype": "<f4"
+    },
+    "state/compat": {
+      "kind": "state",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "state/sd_driver_form": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/driver_form_z": {
+      "kind": "state",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "state/driver_form": {
+      "kind": "state",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "state/sd_car_segment": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/sd_car_segment": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/car_segment_z": {
+      "kind": "state",
+      "shape": [
+        108
+      ],
+      "dtype": "<f4"
+    },
+    "factor/car_segment_z": {
+      "kind": "density",
+      "shape": [
+        108
+      ],
+      "dtype": "<f4"
+    },
+    "state/car_segment": {
+      "kind": "state",
+      "shape": [
+        108
+      ],
+      "dtype": "<f4"
+    },
+    "state/y": {
+      "kind": "state",
+      "shape": [
+        216
+      ],
+      "dtype": "<f4"
+    },
+    "factor/y": {
+      "kind": "density",
+      "shape": [
+        216
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_qualifying_link": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_qualifying_link": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_sd_level": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_sd_level": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_level_z": {
+      "kind": "state",
+      "shape": [
+        6
+      ],
+      "dtype": "<f4"
+    },
+    "factor/overall_level_z": {
+      "kind": "density",
+      "shape": [
+        6
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_sd_drift_race": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_sd_drift_race": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_sd_drift_season": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_sd_drift_season": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_walk_z": {
+      "kind": "state",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "factor/overall_walk_z": {
+      "kind": "density",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_race_skill": {
+      "kind": "state",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_team_link": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_team_link": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_sd_team": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_sd_team": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_team_z": {
+      "kind": "state",
+      "shape": [
+        18
+      ],
+      "dtype": "<f4"
+    },
+    "factor/overall_team_z": {
+      "kind": "density",
+      "shape": [
+        18
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_team": {
+      "kind": "state",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_car_link": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_car_link": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_car_contrast": {
+      "kind": "state",
+      "shape": [
+        6
+      ],
+      "dtype": "<f4"
+    },
+    "factor/overall_car_contrast": {
+      "kind": "density",
+      "shape": [
+        6
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_sd_car_day": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_sd_car_day": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_car_day_z": {
+      "kind": "state",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "factor/overall_car_day_z": {
+      "kind": "density",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_car": {
+      "kind": "state",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_shared_weekend": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_sd_day": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_day_z": {
+      "kind": "state",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_day": {
+      "kind": "state",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_intercept": {
+      "kind": "state",
+      "shape": [
+        12
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_trend": {
+      "kind": "state",
+      "shape": [
+        12
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_compound": {
+      "kind": "state",
+      "shape": [
+        24
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_sd_wear": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_sd_wear": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_wear_z": {
+      "kind": "state",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "factor/overall_wear_z": {
+      "kind": "density",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_tyre_slope": {
+      "kind": "state",
+      "shape": [
+        24
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_traffic": {
+      "kind": "state",
+      "shape": [
+        12,
+        3
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_lap_rho": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_lap_rho": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_sd_lap": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_sd_lap": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_lap_nu": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_lap_nu": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_laps": {
+      "kind": "state",
+      "shape": [
+        0
+      ],
+      "dtype": "<f4"
+    },
+    "factor/overall_laps": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_grid_base": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_grid_base": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_sd_grid_circuit": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_sd_grid_circuit": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_grid_circuit_z": {
+      "kind": "state",
+      "shape": [
+        3
+      ],
+      "dtype": "<f4"
+    },
+    "factor/overall_grid_circuit_z": {
+      "kind": "density",
+      "shape": [
+        3
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_grid_wet": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_grid_wet": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_grid_sc": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_grid_sc": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_grid": {
+      "kind": "state",
+      "shape": [
+        12
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_pace_base": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_pace_base": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_sd_pace_circuit": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_sd_pace_circuit": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_pace_circuit_z": {
+      "kind": "state",
+      "shape": [
+        3
+      ],
+      "dtype": "<f4"
+    },
+    "factor/overall_pace_circuit_z": {
+      "kind": "density",
+      "shape": [
+        3
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_pace_wet": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_pace_wet": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_pace_sc": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_pace_sc": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_pace": {
+      "kind": "state",
+      "shape": [
+        12
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_finish_order": {
+      "kind": "state",
+      "shape": [
+        0
+      ],
+      "dtype": "<f4"
+    },
+    "factor/overall_finish_order": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_hazard_base": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_hazard_base": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_sd_hazard_circuit": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_sd_hazard_circuit": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_hazard_circuit_z": {
+      "kind": "state",
+      "shape": [
+        3
+      ],
+      "dtype": "<f4"
+    },
+    "factor/overall_hazard_circuit_z": {
+      "kind": "density",
+      "shape": [
+        3
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_hazard_wet": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_hazard_wet": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_hazard_sc": {
+      "kind": "state",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "factor/overall_hazard_sc": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "state/overall_hazard": {
+      "kind": "state",
+      "shape": [
+        12
+      ],
+      "dtype": "<f4"
+    },
+    "state/overall_completion": {
+      "kind": "state",
+      "shape": [
+        0
+      ],
+      "dtype": "<f4"
+    },
+    "factor/overall_completion": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/sd_level": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/level_z": {
+      "kind": "coordinate",
+      "shape": [
+        6
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/sd_skill_race": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/sd_skill_season": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/skill_z": {
+      "kind": "coordinate",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/exp_gain": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/exp_scale": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/age_slope": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/rho": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/rho_reset": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/sd_car_race": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/sd_car_season": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/sd_car_reset": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/car_step_z": {
+      "kind": "coordinate",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/car_jump_z": {
+      "kind": "coordinate",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/sd_car_event": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/car_total_decentered": {
+      "kind": "coordinate",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/sd_track_load": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/track_load_z": {
+      "kind": "coordinate",
+      "shape": [
+        9
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/mu": {
+      "kind": "coordinate",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/sigma0": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/sigma_tau": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/sigma_u": {
+      "kind": "coordinate",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/nu": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/sd_compat": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/compat_z": {
+      "kind": "coordinate",
+      "shape": [
+        18
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/sd_car_segment": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/car_segment_z": {
+      "kind": "coordinate",
+      "shape": [
+        108
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_qualifying_link": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_sd_level": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_level_z": {
+      "kind": "coordinate",
+      "shape": [
+        6
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_sd_drift_race": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_sd_drift_season": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_walk_z": {
+      "kind": "coordinate",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_team_link": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_sd_team": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_team_z": {
+      "kind": "coordinate",
+      "shape": [
+        18
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_car_link": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_car_contrast": {
+      "kind": "coordinate",
+      "shape": [
+        6
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_sd_car_day": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_car_day_z": {
+      "kind": "coordinate",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_sd_wear": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_wear_z": {
+      "kind": "coordinate",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_lap_rho": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_sd_lap": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_lap_nu": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_grid_base": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_sd_grid_circuit": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_grid_circuit_z": {
+      "kind": "coordinate",
+      "shape": [
+        3
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_grid_wet": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_grid_sc": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_pace_base": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_sd_pace_circuit": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_pace_circuit_z": {
+      "kind": "coordinate",
+      "shape": [
+        3
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_pace_wet": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_pace_sc": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_hazard_base": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_sd_hazard_circuit": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_hazard_circuit_z": {
+      "kind": "coordinate",
+      "shape": [
+        3
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_hazard_wet": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_hazard_sc": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_weekend_qualifying_scale": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_weekend_race_scale": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_weekend_loading": {
+      "kind": "coordinate",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_weekend_total_z": {
+      "kind": "coordinate",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_weekend_complement_z": {
+      "kind": "coordinate",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "coordinate/overall_lap_controls_rotated": {
+      "kind": "coordinate",
+      "shape": [
+        108
+      ],
+      "dtype": "<f4"
+    },
+    "potential_energy": {
+      "kind": "density",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/age_slope": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/car_jump_z": {
+      "kind": "gradient",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/car_segment_z": {
+      "kind": "gradient",
+      "shape": [
+        108
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/car_step_z": {
+      "kind": "gradient",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/car_total_decentered": {
+      "kind": "gradient",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/compat_z": {
+      "kind": "gradient",
+      "shape": [
+        18
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/exp_gain": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/exp_scale": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/level_z": {
+      "kind": "gradient",
+      "shape": [
+        6
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/mu": {
+      "kind": "gradient",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/nu": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_car_contrast": {
+      "kind": "gradient",
+      "shape": [
+        6
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/overall_car_day_z": {
+      "kind": "gradient",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/overall_car_link": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_grid_base": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_grid_circuit_z": {
+      "kind": "gradient",
+      "shape": [
+        3
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/overall_grid_sc": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_grid_wet": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_hazard_base": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_hazard_circuit_z": {
+      "kind": "gradient",
+      "shape": [
+        3
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/overall_hazard_sc": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_hazard_wet": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_lap_controls_rotated": {
+      "kind": "gradient",
+      "shape": [
+        108
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/overall_lap_nu": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_lap_rho": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_level_z": {
+      "kind": "gradient",
+      "shape": [
+        6
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/overall_pace_base": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_pace_circuit_z": {
+      "kind": "gradient",
+      "shape": [
+        3
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/overall_pace_sc": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_pace_wet": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_qualifying_link": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_sd_car_day": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_sd_drift_race": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_sd_drift_season": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_sd_grid_circuit": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_sd_hazard_circuit": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_sd_lap": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_sd_level": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_sd_pace_circuit": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_sd_team": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_sd_wear": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_team_link": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_team_z": {
+      "kind": "gradient",
+      "shape": [
+        18
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/overall_walk_z": {
+      "kind": "gradient",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/overall_wear_z": {
+      "kind": "gradient",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/overall_weekend_complement_z": {
+      "kind": "gradient",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/overall_weekend_loading": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_weekend_qualifying_scale": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_weekend_race_scale": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/overall_weekend_total_z": {
+      "kind": "gradient",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/rho": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/rho_reset": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/sd_car_event": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/sd_car_race": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/sd_car_reset": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/sd_car_season": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/sd_car_segment": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/sd_compat": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/sd_level": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/sd_skill_race": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/sd_skill_season": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/sd_track_load": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/sigma0": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/sigma_tau": {
+      "kind": "gradient",
+      "shape": [],
+      "dtype": "<f4"
+    },
+    "gradient/sigma_u": {
+      "kind": "gradient",
+      "shape": [
+        36
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/skill_z": {
+      "kind": "gradient",
+      "shape": [
+        72
+      ],
+      "dtype": "<f4"
+    },
+    "gradient/track_load_z": {
+      "kind": "gradient",
+      "shape": [
+        9
+      ],
+      "dtype": "<f4"
+    }
+  },
+  "payload_sha256": "5f8017a79b837abb0967d2ceb4274a174a02e4cbe75aef56785187aefb26f44d",
+  "finished_at": "2026-10-19T23:33:25.297963+00:00",
+  "seconds": 17.57200551900314,
+  "process_max_rss_kib": 912204
+}
