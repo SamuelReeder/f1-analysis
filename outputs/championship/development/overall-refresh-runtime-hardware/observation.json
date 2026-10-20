@@ -1,0 +1,125 @@
+{
+  "observed_at": "2026-10-20T13:04:50.345255+00:00",
+  "command": [
+    "/usr/lib/wsl/lib/nvidia-smi",
+    "--query-gpu=name,memory.total,memory.used,driver_version",
+    "--format=csv,noheader"
+  ],
+  "stdout": "NVIDIA GeForce RTX 5080, 16303 MiB, 4768 MiB, 617.42\n",
+  "stderr": "",
+  "gpu_environment_packages": [
+    {
+      "name": "jax",
+      "version": "0.11.2",
+      "metadata_sha256": "c5b555876b5bebca82b4338a2754ef33afcd7932e5eeba2e300bb8c5ad5e10c8"
+    },
+    {
+      "name": "jax-cuda13-pjrt",
+      "version": "0.11.2",
+      "metadata_sha256": "48702935aab66fe41ea7e300ffb172078130c83e91c879a86f6eb172750357b8"
+    },
+    {
+      "name": "jax-cuda13-plugin",
+      "version": "0.11.2",
+      "metadata_sha256": "064bcd81d6b3531171f8e793e525ad8d9cdee61470a4ecf81fa8be38dda19b5e"
+    },
+    {
+      "name": "jaxlib",
+      "version": "0.11.2",
+      "metadata_sha256": "e4dc641e32319949e1dcc4ad823a9ab4dd690e33e691f5d5ace89d474030447b"
+    },
+    {
+      "name": "numpyro",
+      "version": "0.22.0",
+      "metadata_sha256": "adddaf425b9217b50da7911b395a78898d26c79aa60b3bbac6bd9e62de917a42"
+    },
+    {
+      "name": "nvidia-cublas",
+      "version": "13.8.0.4",
+      "metadata_sha256": "024c05ffb7133985105821ee9f92adebac1f21d1db44579251d04eeee273add4"
+    },
+    {
+      "name": "nvidia-cuda-cccl",
+      "version": "13.3.4.3.1",
+      "metadata_sha256": "50a74195e2d533c4475dd129ffda9b8f678d21eb527f8c1176139bbc88b344e3"
+    },
+    {
+      "name": "nvidia-cuda-crt",
+      "version": "13.4.92",
+      "metadata_sha256": "b531c5f031e3b04f9d1547eafc92d1c02d3eae5124c12e8fc0b14124eb76bb13"
+    },
+    {
+      "name": "nvidia-cuda-cupti",
+      "version": "13.4.92",
+      "metadata_sha256": "5e79685f0df4b1c21945ded720d68d568a4ec75ea5333c0b59f05262caa49a6e"
+    },
+    {
+      "name": "nvidia-cuda-nvcc",
+      "version": "13.4.92",
+      "metadata_sha256": "7613334339f4c242c0144afc140a8f57a13fb3d3103a85b42f864c6709648f35"
+    },
+    {
+      "name": "nvidia-cuda-nvrtc",
+      "version": "13.4.92",
+      "metadata_sha256": "567a20443d78f9f2d829283f041332564d5bbd78ca5f7d4b96722785010c0dbf"
+    },
+    {
+      "name": "nvidia-cuda-runtime",
+      "version": "13.4.92",
+      "metadata_sha256": "657aa972e018b0f32df86cca99ff11eb111f65584ad469795003145f3a7d6e3a"
+    },
+    {
+      "name": "nvidia-cudnn-cu13",
+      "version": "9.26.0.51",
+      "metadata_sha256": "3c18a94cb2c9eb8d10327bc07fa1d26dc252e4a749cb7952fc6ef1e5fb66762c"
+    },
+    {
+      "name": "nvidia-cufft",
+      "version": "12.4.0.43",
+      "metadata_sha256": "04ab40c8b26a42f4acc746c084aa7a8ea9152c5b474d2c994d07d40d5d207c20"
+    },
+    {
+      "name": "nvidia-cusolver",
+      "version": "12.3.4.7",
+      "metadata_sha256": "02164c387358a3d8e768a5cf4fc9b2566a536bc26a2097d79f80003371df62f9"
+    },
+    {
+      "name": "nvidia-cusparse",
+      "version": "12.8.6.72",
+      "metadata_sha256": "226de5fccb24d87cc1a8d8a360f95697e1d64fe972c80d679f084c0897c2143b"
+    },
+    {
+      "name": "nvidia-nccl-cu13",
+      "version": "2.32.3",
+      "metadata_sha256": "e7306348788ec25d7b6bc1ff8d626a76c4876d3cec3148d8117d8f5517c1c03e"
+    },
+    {
+      "name": "nvidia-nvjitlink",
+      "version": "13.4.92",
+      "metadata_sha256": "01600042bf5d720d60c812b6eac495b4aef127622b684745748ebf5f42d51475"
+    },
+    {
+      "name": "nvidia-nvshmem-cu13",
+      "version": "3.8.0",
+      "metadata_sha256": "5e9042f749fed71a2543b116fa82df713e933f4bfc139c9ec60fde1791aaf8b8"
+    },
+    {
+      "name": "nvidia-nvvm",
+      "version": "13.4.92",
+      "metadata_sha256": "bef731c2b2f9188e62e6fcb5acfb19e32a8feed898bbea55cf47dd5c082e5947"
+    }
+  ],
+  "active_profile_environment": {
+    "JAX_PLATFORMS": "cpu",
+    "JAX_ENABLE_X64": "false",
+    "JAX_ENABLE_COMPILATION_CACHE": "false",
+    "XLA_FLAGS": "--xla_force_host_platform_device_count=4",
+    "OPENBLAS_NUM_THREADS": "2",
+    "OMP_NUM_THREADS": "2",
+    "MKL_NUM_THREADS": "2"
+  },
+  "active_profile_registration_sha256": "87b30c60922d705d955db8cddbec249f31781ca70540f06146967fdcf9bb0eb6",
+  "benchmark_performed": false,
+  "speedup_established": false,
+  "note": "Read-only device/package inventory. Memory use is a point-in-time observation, not an allocation or benchmark. No scientific libraries were imported and no GPU workload was launched."
+}

@@ -68,6 +68,19 @@ memory limits retained. Changed argument shapes can still require compilation.
 [JAX documentation](https://docs.jax.dev/en/latest/persistent_compilation_cache.html),
 [shape-dependent compilation](https://docs.jax.dev/en/latest/201/jit.html).
 
+**Benchmark the existing GPU before committing to a larger algorithm redesign.**
+The [device and environment observation](../outputs/championship/development/overall-refresh-runtime-hardware/observation.json)
+confirms a local NVIDIA device and a separate environment with CUDA-enabled JAX
+packages. The active profile explicitly selects CPU. Package presence and device
+memory observations do not demonstrate that this model can execute correctly or
+fit in available GPU memory. First compare the registered fixed density/gradient
+inventory; then measure a matched complete sampling workload with the same model,
+chain/draw inventory and diagnostics. A different chain execution strategy needs
+its own implementation evidence. Keep host-memory and CPU limits, bound device
+allocation, and account for other device use. This must not change the live
+profile's backend. Local GPU performance also would not establish the resource
+requirements of the current scheduled workflow or authorize a runner migration.
+
 **Benchmark initialization from the previous accepted joint fit.** Map original
 latent variables by stable driver, event, team and circuit identities; reconstruct
 the new coordinate transforms and initialize added states coherently. Use distinct
