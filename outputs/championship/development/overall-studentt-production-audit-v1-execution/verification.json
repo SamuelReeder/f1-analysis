@@ -1,0 +1,102 @@
+{
+  "purpose": "complete_production_arithmetic_migration_verification",
+  "mcmc_executed": false,
+  "scientific_acceptance_established": false,
+  "publication_allowed": false,
+  "precisions": {
+    "float32": {
+      "state": "complete",
+      "seconds": 6.814189471944701,
+      "process_max_rss_kib": 769080,
+      "actual_scope": {
+        "Slice": "f1.slice",
+        "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-studentt-production-network32.scope",
+        "CPUQuotaPerSecUSec": "2s",
+        "MemoryMax": "3221225472",
+        "ActiveState": "active",
+        "Nice": 19,
+        "environment": {
+          "JAX_PLATFORMS": "cpu",
+          "JAX_ENABLE_COMPILATION_CACHE": "false",
+          "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+          "OPENBLAS_NUM_THREADS": "2",
+          "OMP_NUM_THREADS": "2",
+          "MKL_NUM_THREADS": "2",
+          "JAX_ENABLE_X64": "false"
+        }
+      },
+      "model_inputs_key": "9515a2b3c481d834396e7980d4fabb52e9ea1c89ff2eb471dcea31d38c094154",
+      "inference_method": "conditional_weekend_batched_controls_stable_studentt_v1",
+      "all_points_identical": true,
+      "protocol_sha256": "d3bbf3f6e947f88f69d99450be9349633c8d4ee199ee8ca5cd6ca759e203dfc6",
+      "result": "outputs/championship/development/overall-studentt-production-audit-v1/float32/result.json",
+      "result_sha256": "5cc3b026b44d8eed190b1cedc2b7a09dc6c6029b6bca20c417050de51c47a729",
+      "point_count": 33,
+      "gradient_coordinates_per_point": [
+        59466
+      ],
+      "external_resource_lines": [
+        "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:07.77",
+        "Maximum resident set size (kbytes): 769080",
+        "Exit status: 0"
+      ]
+    },
+    "float64": {
+      "state": "complete",
+      "seconds": 6.796649600029923,
+      "process_max_rss_kib": 821276,
+      "actual_scope": {
+        "Slice": "f1.slice",
+        "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-studentt-production-network64.scope",
+        "CPUQuotaPerSecUSec": "2s",
+        "MemoryMax": "3221225472",
+        "ActiveState": "active",
+        "Nice": 19,
+        "environment": {
+          "JAX_PLATFORMS": "cpu",
+          "JAX_ENABLE_COMPILATION_CACHE": "false",
+          "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+          "OPENBLAS_NUM_THREADS": "2",
+          "OMP_NUM_THREADS": "2",
+          "MKL_NUM_THREADS": "2",
+          "JAX_ENABLE_X64": "true"
+        }
+      },
+      "model_inputs_key": "9515a2b3c481d834396e7980d4fabb52e9ea1c89ff2eb471dcea31d38c094154",
+      "inference_method": "conditional_weekend_batched_controls_stable_studentt_v1",
+      "all_points_identical": true,
+      "protocol_sha256": "d3bbf3f6e947f88f69d99450be9349633c8d4ee199ee8ca5cd6ca759e203dfc6",
+      "result": "outputs/championship/development/overall-studentt-production-audit-v1/float64/result.json",
+      "result_sha256": "fe0eb5e516911ae742853c350a5d568e08421a19269c918487b4763c7396361f",
+      "point_count": 33,
+      "gradient_coordinates_per_point": [
+        59466
+      ],
+      "external_resource_lines": [
+        "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:06.73",
+        "Maximum resident set size (kbytes): 821276",
+        "Exit status: 0"
+      ]
+    }
+  },
+  "checks": {
+    "float32": {
+      "output": ".......                                                                  [100%]\n7 passed in 11.59s\n",
+      "sha256": "f62e04769f31dc70373dd65e44b731b89c437de268319d1360a4a428832d0a56"
+    },
+    "float64": {
+      "output": ".......                                                                  [100%]\n7 passed in 11.80s\n",
+      "sha256": "a87901e39d7e34f441ffa6661ad27d0e5784d29f071c5ceaf49e4446243b95fc"
+    }
+  },
+  "prior_check_output": {
+    "path": "outputs/championship/development/overall-studentt-production-checks-v1/float32.stdout.txt",
+    "note": "Retains the failed improper-prior test fixture and successful unchanged integration checks; do not add overlapping test counts."
+  },
+  "record_sha256": {
+    "outputs/championship/development/overall-studentt-production-audit-v1/float32/progress.json": "274b21c787f41accd1fa161d446c2ee1b6b245824cea729ceed486cefa5831e7",
+    "outputs/championship/development/overall-studentt-production-audit-v1/float32/result.json": "5cc3b026b44d8eed190b1cedc2b7a09dc6c6029b6bca20c417050de51c47a729",
+    "outputs/championship/development/overall-studentt-production-audit-v1/float64/progress.json": "48a7ea68ee90cd27a2407a5eee3c23aed7950e40dae61c51132b0bc4e225dd75",
+    "outputs/championship/development/overall-studentt-production-audit-v1/float64/result.json": "fe0eb5e516911ae742853c350a5d568e08421a19269c918487b4763c7396361f"
+  }
+}
