@@ -1,0 +1,51 @@
+{
+  "source_commit": "06f574af4c93b4552df63d9ac165a4bbcaa6906a",
+  "purpose": "failed_network_diagnostic_reader_and_summary_software_checks",
+  "result": {
+    "passed": 15,
+    "pytest_seconds": 0.81,
+    "exit_code": 0,
+    "external_elapsed": "0:01.06",
+    "peak_rss_kib": 116620
+  },
+  "scope_snapshot_note": "Captured after this short scope exited; inactive properties do not establish active limits.",
+  "command_prefix": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--slice=f1.slice",
+    "--unit=f1-overall-network-diagnosis-checks",
+    "-q",
+    "-p",
+    "MemoryMax=3G",
+    "-p",
+    "CPUQuota=200%",
+    "--",
+    "/usr/bin/nice",
+    "-n",
+    "19",
+    "/usr/bin/time",
+    "-v"
+  ],
+  "coverage": [
+    "Complete fixed endpoint extraction for scalar, vector, empty and matrix arrays with native and nonnative byte order.",
+    "Truncated and extra bytes rejected.",
+    "Constant and separated scalar chains retained.",
+    "Every gradient block contributes to complete norms.",
+    "Actual compressed archive inventory and selected-parameter extraction.",
+    "Nonfinite inputs and changed archive identity rejected."
+  ],
+  "mcmc_executed": false,
+  "scientific_acceptance_established": false,
+  "publication_allowed": false,
+  "source_sha256": {
+    "analysis/overall_network_diagnosis.py": "9ff099e2f74b15308edbc3dad53ec7c94703be2ee4c89110a2f77fec1a7d25d6",
+    "tests/test_overall_network_diagnosis.py": "1f4a486f7247e6e69e810be3901f87c9a50fcca8a9f9e80989e1b9d7ab29db07",
+    "docs/overall_network_diagnosis.md": "adbde7b4819550bd944dd5a2bf94a544491fec15fa646f3b301c5ee17f0d989e"
+  },
+  "output_sha256": {
+    "pytest.txt": "77d02a8c261fe541351d3f012194aa7ebb9cee9684abd9176edf9f80f13368a0",
+    "resources.txt": "f2170332eeb342f6a5d98e734fa01f023a6f34bfad734d8c4da2a5af24e76268",
+    "scope.txt": "3558de85b610e2c819dcb3131c0fbe6394516beb1b36baf057d9535877ecf3f0"
+  }
+}
