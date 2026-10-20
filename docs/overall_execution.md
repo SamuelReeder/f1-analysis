@@ -303,6 +303,15 @@ precision comparison on the same observations and fixed parameter points, before
 another fitting proposal. No fit, prior, retry rule, gate or public payload was
 changed by this read-only analysis.
 
+The [matched precision comparison](overall_network_precision_results.md) is now
+complete. Its fixed float32 baseline reproduces the original potential and full
+gradient reports exactly; the float64 calculation uses the same unconstrained
+values, observations and numeric rotation. Substantial discrepancies at some
+stuck-chain points motivate isolating the Student-t probability calculation and
+its derivatives against an independent reference. This is evidence for a
+numerical investigation, not proof of a cause, a successful fit or publication
+readiness. The original exhausted sequence remains terminal.
+
 The numerical profile is registered separately in
 [`overall_profile_protocol.json`](overall_profile_protocol.json). It answers
 whether the inference machinery can run on the specified synthetic designs, and
