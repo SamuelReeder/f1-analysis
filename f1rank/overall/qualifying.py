@@ -11,6 +11,7 @@ from numpyro.infer.reparam import LocScaleReparam
 from numpyro.primitives import Messenger
 
 from ..model import CAR_FIRST_SD, linear_recurrence, model as legacy_model
+from .studentt import StableStudentT
 
 
 class ProperCarPrior(Messenger):
@@ -42,7 +43,7 @@ class ProperCarPrior(Messenger):
 def qualifying(q, *, generate=False, noncentred=True):
     def run():
         with ProperCarPrior(q, generate=generate):
-            legacy_model(q, compat_unit="era")
+            legacy_model(q, compat_unit="era", student_t=StableStudentT)
     if noncentred:
         with handlers.reparam(config={"car_total": LocScaleReparam(centered=0.)}):
             run()

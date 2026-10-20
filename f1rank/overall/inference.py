@@ -10,7 +10,7 @@ import numpy as np
 
 from .bounded_diagnostics import check
 
-METHOD = "conditional_weekend_batched_controls_v1"
+METHOD = "conditional_weekend_batched_controls_stable_studentt_v1"
 EXTRA_FIELDS = ("diverging", "num_steps", "accept_prob")
 
 

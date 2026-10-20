@@ -11,6 +11,7 @@ from numpyro import handlers
 from ..model import centre, linear_recurrence
 from .order import plackett_luce, perturbed_order
 from .qualifying import qualifying
+from .studentt import StableStudentT
 
 
 def normal(name, size, scale=1.):
@@ -70,11 +71,11 @@ def model(q, laps, outcomes, *, generate=False):
     location = jnp.where(r["prev"], rho * previous, 0)
     noise_scale = jnp.where(r["prev"], sigma, sigma / jnp.sqrt(1 - rho ** 2))
     if generate:
-        innovation = numpyro.sample("generated_lap_innovation", dist.StudentT(nu, 0., noise_scale))
+        innovation = numpyro.sample("generated_lap_innovation", StableStudentT(nu, 0., noise_scale))
         simulated = mean + linear_recurrence(jnp.where(r["prev"], rho, 0.), innovation)
         numpyro.deterministic("generated_laps", simulated)
     else:
-        numpyro.factor("overall_laps", dist.StudentT(nu, location, noise_scale).log_prob(residual_lap).sum())
+        numpyro.factor("overall_laps", StableStudentT(nu, location, noise_scale).log_prob(residual_lap).sum())
 
     # Partial pooling keeps a rare circuit/condition from getting its own free fit.
     o = outcomes

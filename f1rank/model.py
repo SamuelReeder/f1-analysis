@@ -47,7 +47,7 @@ def centre(x, group, n_groups):
 
 def model(d, car_track=True, car_step_df=CAR_STEP_DF, skill_drift=None, car_transient=True,
           likelihood="t", car_segment=True, driver_form=True, compat=True,
-          compat_unit="lineage", placebo=False):
+          compat_unit="lineage", placebo=False, *, student_t=dist.StudentT):
     """car_track: include car x circuit term. car_step_df: tail weight of car steps
     (large = Gaussian). skill_drift: None to estimate driver drift, or a fixed
     (per-race sd, per-season sd) pair for sensitivity runs. car_transient: add a
@@ -108,7 +108,7 @@ def model(d, car_track=True, car_step_df=CAR_STEP_DF, skill_drift=None, car_tran
         # effect shared by both teammates that does not carry over. The event
         # total is well informed by data, so it is sampled directly; the
         # persistent walk is weakly informed per event, so it is non-centred.
-        z_t = numpyro.sample("car_step_z", dist.StudentT(car_step_df).expand([d["n_cars"]]))
+        z_t = numpyro.sample("car_step_z", student_t(car_step_df).expand([d["n_cars"]]))
         z_n = numpyro.sample("car_jump_z", dist.Normal(0, 1).expand([d["n_cars"]]))
         a = jnp.where(cfirst, 0.0, carry)
         b = jnp.where(cfirst | cstart, jump_sd * z_n, sd_car_race * z_t)
@@ -133,7 +133,7 @@ def model(d, car_track=True, car_step_df=CAR_STEP_DF, skill_drift=None, car_tran
         numpyro.factor("car_prior", jnp.sum(jnp.where(
             cfirst | cstart,
             dist.Normal(0, jump_sd).log_prob(innov),
-            dist.StudentT(car_step_df, 0, sd_car_race).log_prob(innov))))
+            student_t(car_step_df, 0, sd_car_race).log_prob(innov))))
         car = centre(state, d["car_event"], d["n_events"])
         numpyro.deterministic("car", car)
 
@@ -186,7 +186,7 @@ def model(d, car_track=True, car_step_df=CAR_STEP_DF, skill_drift=None, car_tran
     scale = sigma[d["obs_session"]]
     if likelihood == "split_t":
         skew = numpyro.sample("slow_scale_ratio", dist.LogNormal(0.0, 0.5))
-        noise = SplitStudentT(nu, loc, scale, scale * skew)
+        noise = SplitStudentT(nu, loc, scale, scale * skew, student_t=student_t)
     elif likelihood == "mixture":
         # clean laps: Normal(loc, scale); compromised laps (traffic, mistakes,
         # yellow flags): slower on average and wider, heavy-tailed
@@ -196,9 +196,9 @@ def model(d, car_track=True, car_step_df=CAR_STEP_DF, skill_drift=None, car_tran
         noise = dist.MixtureGeneral(
             dist.Categorical(probs=jnp.array([1 - p_bad, p_bad])),
             [dist.Normal(loc, scale),
-             dist.StudentT(COMPROMISED_DF, loc - shift * scale, wide * scale)])
+             student_t(COMPROMISED_DF, loc - shift * scale, wide * scale)])
     else:
-        noise = dist.StudentT(nu, loc, scale)
+        noise = student_t(nu, loc, scale)
     with numpyro.handlers.mask(mask=d["train"]):
         numpyro.sample("y", noise, obs=d["y"])
 
@@ -206,21 +206,23 @@ def model(d, car_track=True, car_step_df=CAR_STEP_DF, skill_drift=None, car_tran
 class SplitStudentT(dist.Distribution):
     """Student-t with scale `fast` above the mode and `slow` below it (two-piece)."""
     support = dist.constraints.real
+    pytree_aux_fields = ("student_t",)
 
-    def __init__(self, df, loc, fast, slow, validate_args=None):
+    def __init__(self, df, loc, fast, slow, validate_args=None, *, student_t=dist.StudentT):
         self.df, self.loc, self.fast, self.slow = df, loc, fast, slow
+        self.student_t = student_t
         shape = jnp.broadcast_shapes(jnp.shape(loc), jnp.shape(fast), jnp.shape(slow))
         super().__init__(batch_shape=shape, validate_args=validate_args)
 
     def log_prob(self, value):
         r = value - self.loc
         side = jnp.where(r < 0, self.slow, self.fast)
-        std = dist.StudentT(self.df).log_prob(r / side)
+        std = self.student_t(self.df).log_prob(r / side)
         return std + jnp.log(2.0) - jnp.log(self.fast + self.slow)
 
     def sample(self, key, sample_shape=()):
         k1, k2 = jax.random.split(key)
         shape = sample_shape + self.batch_shape
-        t = jnp.abs(dist.StudentT(self.df).sample(k1, shape))
+        t = jnp.abs(self.student_t(self.df).sample(k1, shape))
         slow_side = jax.random.uniform(k2, shape) < self.slow / (self.fast + self.slow)
         return self.loc + jnp.where(slow_side, -self.slow * t, self.fast * t)

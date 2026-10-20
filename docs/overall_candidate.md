@@ -40,10 +40,30 @@ car-segment effects, segment intercepts and Student-t observation noise. Its
 existing priors and centering constraints are inherited verbatim. In the successor,
 the car-event prior is expressed as a proper Normal and sampled in noncentred
 coordinates. This replaces the legacy improper site plus Normal factor with the
-same distribution; the old model itself is unchanged. Density-equivalence tests
+same distribution. The legacy entry point retains its original arithmetic by
+default; Overall explicitly supplies the verified equivalent Student-t
+calculation described below. Density-equivalence tests
 protect this transformation, and a proper generator permits known-truth studies.
 This is a
 starting likelihood, not a claim that every existing structural choice is proven.
+
+### Student-t arithmetic implementation amendment
+
+The [independent arithmetic study](overall_studentt_stable.md) preserves the
+failed earlier calculations and tests the same density and derivatives against
+an arbitrary-precision reference. Overall now selects `StableStudentT` for its
+qualifying observation, car-step prior and lap innovation densities. It inherits
+the original random sampler, support and parameterization; no prior, observation
+model, tail weight, retry setting or scientific gate changes. The implementation
+uses a stable half-argument gamma ratio and an equivalent residual derivative.
+
+This correction has a distinct production inference-method identity and enters
+the recursive source snapshot. A new registration must bind that identity and
+the full source/data key. Earlier failed profiles and exhausted retries remain
+terminal. Any subsequent numerical profile is a new implementation experiment,
+not an additional retry or independent scientific validation. Existing affected
+outputs must be regenerated before publication. Arithmetic accuracy does not
+establish convergence, recovery or an accepted ranking.
 
 Total current race ability is `r[i] = centre(a*q[i] + u[i])`. The coefficient `a`
 has a Normal prior centered on unity. The residual `u` has a partially pooled
