@@ -1,0 +1,84 @@
+{
+  "id": "overall-studentt-stable-v1",
+  "methods": [
+    "original",
+    "log_beta",
+    "corrected_normalizer",
+    "stable"
+  ],
+  "precisions": [
+    "float32",
+    "float64"
+  ],
+  "error_eps_multipliers": {
+    "float32": 32,
+    "float64": 256
+  },
+  "reference_digits": [
+    80,
+    120
+  ],
+  "gamma_ratio_min_b": 8.0,
+  "stirling_coefficients": [
+    [
+      1,
+      12
+    ],
+    [
+      -1,
+      360
+    ],
+    [
+      1,
+      1260
+    ],
+    [
+      -1,
+      1680
+    ],
+    [
+      1,
+      1188
+    ],
+    [
+      -691,
+      360360
+    ],
+    [
+      1,
+      156
+    ],
+    [
+      -3617,
+      122400
+    ],
+    [
+      43867,
+      244188
+    ],
+    [
+      -174611,
+      125400
+    ]
+  ],
+  "tail_series_max_q": 0.125,
+  "tail_series_last_power": 16,
+  "boundary_policy": "append_signed_float32_residual_and_adjacent_values_at_tail_series_boundary_for_each_original_parameter_point",
+  "sampling_allowed": false,
+  "scientific_acceptance_established": false,
+  "publication_allowed": false,
+  "registered_at": "2026-10-20T01:36:42.173392+00:00",
+  "status": "frozen",
+  "source_commit": "c1158403fd832da9302dac269b8ac9cfde808109",
+  "source_sha256": {
+    "analysis/overall_studentt_stable.py": "cb58f6ef6df9a37f0ab4d55f9a581e2c5c3491d0870e512dbf14a4232c108ede",
+    "analysis/overall_studentt_stable_audit.py": "b1cb7003d38d9308089e2f2ae561aadc77e8e590d44c6f878e2a69f1694d7454",
+    "tests/test_overall_studentt_stable.py": "c9c2fdf2768f1cc0f4614a3691728ddd757693fd0a3ef5d8eca6dd180df60fb9",
+    "docs/overall_studentt_stable.md": "51c58db16a11f136211155c1343b7ddf52536d727bab77bc2f4911388445fb8a"
+  },
+  "input_sha256": {
+    "docs/overall_studentt_numerics_v2_protocol.json": "c4f3d0e6326b3ac179ba0749cb6ffc65ccd17a68241986a904ed42e5acd98b99",
+    "outputs/championship/development/overall-studentt-numerics-v2/primitive32/result.json": "ed21ea11c9a42b40fc20c8052e7820620557fb3f731ef9b29ab8ff04139b21d6",
+    "outputs/championship/development/overall-studentt-numerics-v2/primitive64/result.json": "7a053754374ac81f8e4e5368364b53e97f1c1cd4fa634762b050159e71fdeac7"
+  }
+}
