@@ -1,0 +1,499 @@
+{
+  "case": "era_boundary",
+  "state": "running",
+  "protocol_sha256": "a4ef931fdac84e4acfc0cc988e434bb14ea9749d9f41432aa133606bd5815de7",
+  "model_inputs_key": "9515a2b3c481d834396e7980d4fabb52e9ea1c89ff2eb471dcea31d38c094154",
+  "generation_seed": 20261024,
+  "started_at": "2026-10-20T01:56:37.504754+00:00",
+  "mcmc_executed": false,
+  "publication_allowed": false,
+  "actual_scope": {
+    "Slice": "f1.slice",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-stable-preflight-era-boundary.scope",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "ActiveState": "active",
+    "Nice": 19,
+    "environment": {
+      "JAX_PLATFORMS": "cpu",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_ENABLE_X64": "false"
+    }
+  },
+  "stage": "actual_collector_and_complete_gradient",
+  "arrays_key": "5cdb3a3719ecdb04b6ed00c51d511831e2313a5106be4384938a25e921e28f92",
+  "parameters_key": "466555e5f7cd6acb7784b9f6d614d17c339ac19c011be4a869152087ba31287a",
+  "truth_key": "2a6c5a790d2d3841348abbb1a3c74cb7317a0bbb8011d70dd23b0a20ddfc4c57",
+  "role": "prior_predictive",
+  "joint_density": {
+    "original": -3927.76123046875,
+    "transformed": -3908.78857421875,
+    "control_log_abs_det": 18.97246125494883
+  },
+  "state_and_factor_checks": [
+    {
+      "site": "sd_level",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "level_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_skill_race",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_skill_season",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "skill_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "exp_gain",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "exp_scale",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "age_slope",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "skill",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "rho",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "rho_reset",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_car_race",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_car_season",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_car_reset",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_step_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_jump_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_car_event",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_total_decentered",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_total",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_event_prior",
+      "observation_factor": true,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_event",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_track_load",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "track_load_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "track_load",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_track",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "mu",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sigma0",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sigma_tau",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sigma_u",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "nu",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_compat",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "compat_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "compat",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "sd_driver_form",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "driver_form_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 2.384185791015625e-07
+    },
+    {
+      "site": "driver_form",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 5.960464477539063e-08
+    },
+    {
+      "site": "sd_car_segment",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_segment_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "car_segment",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "y",
+      "observation_factor": true,
+      "maximum_absolute_discrepancy": 2.384185791015625e-07
+    },
+    {
+      "site": "overall_qualifying_link",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_level",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_level_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_drift_race",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_drift_season",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_walk_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_race_skill",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_team_link",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_team",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_team_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_team",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_car_link",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_car_contrast",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_car_day",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_car_day_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_car",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_shared_weekend",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_day",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_day_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 2.384185791015625e-07
+    },
+    {
+      "site": "overall_day",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 1.7881393432617188e-07
+    },
+    {
+      "site": "overall_intercept",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 2.384185791015625e-07
+    },
+    {
+      "site": "overall_trend",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 2.384185791015625e-07
+    },
+    {
+      "site": "overall_compound",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 4.76837158203125e-07
+    },
+    {
+      "site": "overall_sd_wear",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_wear_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_tyre_slope",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 8.940696716308594e-08
+    },
+    {
+      "site": "overall_traffic",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 1.1920928955078125e-07
+    },
+    {
+      "site": "overall_lap_rho",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_lap",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_lap_nu",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_laps",
+      "observation_factor": true,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_grid_base",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_grid_circuit",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_grid_circuit_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_grid_wet",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_grid_sc",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_grid",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_pace_base",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_pace_circuit",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_pace_circuit_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_pace_wet",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_pace_sc",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_pace",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_finish_order",
+      "observation_factor": true,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_hazard_base",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_sd_hazard_circuit",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_hazard_circuit_z",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_hazard_wet",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_hazard_sc",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_hazard",
+      "observation_factor": false,
+      "maximum_absolute_discrepancy": 0.0
+    },
+    {
+      "site": "overall_completion",
+      "observation_factor": true,
+      "maximum_absolute_discrepancy": 0.0
+    }
+  ]
+}
