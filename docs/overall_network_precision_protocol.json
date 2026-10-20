@@ -1,0 +1,42 @@
+{
+  "id": "overall-network-precision-v1",
+  "purpose": "fixed_network_coordinate_precision_comparison",
+  "status": "frozen",
+  "registered_at": "2026-10-20T01:09:36.005508+00:00",
+  "source_commit": "291fb42eefaf30d33fd7488c0721accdad7d24e7",
+  "source_sha256": {
+    "analysis/overall_network_precision.py": "6cef90f3b3f0f6cb51485b07136b33b0c2748955e8f1c5b4ad69118536cef559",
+    "analysis/overall_network_diagnosis.py": "9ff099e2f74b15308edbc3dad53ec7c94703be2ee4c89110a2f77fec1a7d25d6",
+    "tests/test_overall_network_precision.py": "1e7a0a1ae02966a4296657e9eba42e1676fef7aaaab3c3d1a2568935e5320179",
+    "docs/overall_network_precision.md": "63db8bd651efa24cde62c91efbd62185b4b4542300c4655c2efd3285921484bf"
+  },
+  "diagnostic_sha256": "f451a8652ea7af34c2f0cef375d5ab81f0dd7c276193cb1506bda01d0191835a",
+  "reference_root": "/home/sreeder/.codex/worktrees/overall-model/f1-analysis",
+  "reference_commit": "4bfb1351562974202fbe702640e21cf8b9f85e5c",
+  "reference_input_sha256": {
+    "outputs/championship/development/overall-continuation-review-v1/review.json": "8f78223d528a66d1e3c501112186c9db68bdb41bb31550bfdb7bb42ff4b2fdd2",
+    "outputs/championship/development/overall-recovery-preflight-v2/real_network/result.json": "2a7a3b2b41261415963d24b02c87a46270d493c50fa2d520729d55b1e371016c",
+    "docs/overall_batched_rotation_audit_protocol.json": "2bedaa882dd6dc18641ed1aa9ed73a4e215ff3e027ae9c7048b17cd6e349bf98",
+    "docs/overall_complete_profile_protocol.json": "70151a5836702f485857edf712d489817b5aa93e3fca0c26af372dd9900141bf",
+    "outputs/championship/development/overall-fit-storage-v1/real_network/result.json": "16f2c61444f06e2ce0b03465b07195e00f03cc4c3e41f009ddc8ba8117abceaf"
+  },
+  "precisions": [
+    "float32",
+    "float64"
+  ],
+  "environment": {
+    "JAX_PLATFORMS": "cpu",
+    "JAX_ENABLE_COMPILATION_CACHE": "false",
+    "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+    "OPENBLAS_NUM_THREADS": "2",
+    "OMP_NUM_THREADS": "2",
+    "MKL_NUM_THREADS": "2"
+  },
+  "point_policy": "original_generating_point_then_first_and_last_draw_of_every_chain_of_every_exhausted_attempt",
+  "coordinate_policy": "reconstruct_once_in_float32_then_lift_the_same_unconstrained_values",
+  "data_policy": "generate_once_in_original_float32_verify_original_hashes_then_reuse_exact_arrays",
+  "rotation_policy": "build_from_original_numpy_arrays_before_any_lifting_verify_original_fingerprint",
+  "sampling_allowed": false,
+  "acceptance_gate": false,
+  "publication_allowed": false
+}
