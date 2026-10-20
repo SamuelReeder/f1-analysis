@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/analysis/overall_studentt_numerics.py", line 237, in <module>
+    result=execute(args)
+           ^^^^^^^^^^^^^
+  File "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/analysis/overall_studentt_numerics.py", line 206, in execute
+    if args.action=='primitive':primitive(args.precision,record,checkpoint)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/analysis/overall_studentt_numerics.py", line 189, in primitive
+    if not all(stable):raise ValueError('Independent reference did not stabilize at the declared precisions')
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Independent reference did not stabilize at the declared precisions
