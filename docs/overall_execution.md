@@ -207,7 +207,7 @@ another attempt in the exhausted profile or establish inference acceptance.
 | Ability/outcome/numerical uncertainty | Nested simulation, grouped moments and conditional ordering-sensitivity bounds; saved noise examples show that a passing noisy checker cannot establish functional convergence; final qualifying/race contrasts pass in the earlier conditional weekend-coordinate profile; the complete-design continuation failed convergence and its driver-comparison checks | Register and validate functional MCMC diagnostics and near-tie precision under converged posteriors; measure the complete nested workload; numerical profile convergence does not establish ranking precision |
 | Chronological development comparison | Plan defines information horizons and baseline roles; scoring utilities preserve joint draws, conditional panel/condition weights and required events; outcome-free catalogue, joint states and observation kernels have synthetic checks; unseen-circuit extensions and unknown-condition simulation; explicit legacy/grid-only arithmetic and a race-only evidence ablation | Complete source verification, final condition/circuit registration and calibration, uncertainty in learned training factors, classification-conditioning policy and baseline fitting/forecast integration; freeze event inventory, calibration and stopping rules; run every fold |
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
-| Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence; bounded paired summaries and a fixed synthetic archive-to-summary controller have checked integration paths | Accepted real-data protocol/scenario integration, full simulation resources and precision, evidence-backed exporter and matching explanation/pairwise payload; full contract validation |
+| Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence; bounded paired summaries and a fixed synthetic archive-to-summary controller have checked integration paths; the export adapter and both validators preserve complete paired comparisons, explanation uncertainty and matching identities | Authenticated acceptance controller, accepted real-data protocol/scenario integration, full simulation resources and precision, canonical producer and current artifact verification |
 | Refresh, caches and rollback | Last-good publication behavior; latest-season result revision detection; tested corrected fetch/build followed by fit failure and retry; immutable raw-history preservation and cache restore | Wire accepted Overall dependencies and demonstrate their complete new, unchanged, corrected, interrupted and failed refreshes; older-season and timing revision policy |
 | Software and runner readiness | Batched states and observation kernels; bounded checked archive loading; capped synthetic resource and software records, including historical condition integration under `development/overall-condition-checks/`; portable receipts now bind scientific contracts, protocols and analysis producers | Accepted-fit integration and end-to-end fitting/refresh resources; workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
 | Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
@@ -239,6 +239,20 @@ fit/export artifacts. These tests use synthetic API responses and a deliberately
 failed fit after the real fetch/build path. They neither run inference nor verify
 the complete accepted Overall refresh. The changed hashed source requires
 regeneration before publication; the frozen computation checkout is preserved.
+
+The [canonical export-statistics boundary](overall_publication_contract.md) now
+connects the paired summary to a checked field, explanations and complete pairwise
+inventory. It retains posterior/scenario/simulation identity, intervals and
+conditional simulation errors. The frontend displays paired comparisons and
+explanation ranges, and rejects incomplete or inconsistent successor payloads.
+The adapter itself retains scientific acceptance and publication as false; its
+payload checker supplies internal consistency, not authenticated scientific
+decisions. The [verification record](../outputs/championship/development/overall-export-contract-checks-v1/verification.json)
+preserves **155 passing focused Python checks**, the successful build and **131
+passing browser checks**, along with the initial fixture/import failures and their
+corrections. These local synthetic/legacy-payload checks do not complete accepted
+real-data export, fresh publication, clean-clone CI or intended-runner readiness.
+The acceptance controller and canonical producer remain open.
 
 The numerical profile is registered separately in
 [`overall_profile_protocol.json`](overall_profile_protocol.json). It answers
