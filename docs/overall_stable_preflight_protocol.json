@@ -1,0 +1,260 @@
+{
+  "id": "overall-stable-preflight-v1",
+  "purpose": "corrected_arithmetic_generation_and_storage_preflight",
+  "studies": [
+    "connected",
+    "confounded",
+    "sparse_rookie",
+    "dominant_teammate",
+    "era_boundary",
+    "real_network"
+  ],
+  "synthetic": {
+    "connected": {
+      "case": "connected",
+      "seed": 20261020
+    },
+    "confounded": {
+      "case": "confounded",
+      "seed": 20261021
+    },
+    "sparse_rookie": {
+      "case": "sparse_rookie",
+      "seed": 20261022
+    },
+    "dominant_teammate": {
+      "case": "dominant_teammate",
+      "seed": 20261023
+    },
+    "era_boundary": {
+      "case": "era_boundary",
+      "seed": 20261024
+    },
+    "real_network": {
+      "case": "real_network",
+      "seed": 20261025
+    }
+  },
+  "fit_settings": {
+    "warmup": 800,
+    "samples": 800,
+    "chains": 4,
+    "target_accept": 0.9,
+    "max_tree_depth": 10,
+    "init_median_samples": 15,
+    "seed": 0
+  },
+  "retry": [
+    [
+      1,
+      1,
+      null
+    ],
+    [
+      2,
+      2,
+      null
+    ],
+    [
+      3,
+      4,
+      null
+    ],
+    [
+      3,
+      4,
+      0.98
+    ]
+  ],
+  "diagnostics": {
+    "rank_rhat_strict_upper": 1.01,
+    "bulk_ess_min": 400,
+    "tail_ess_min": 400,
+    "mean_mcse_sd_upper": 0.05,
+    "divergences_per_draw_upper": 0.001
+  },
+  "preflight_results": {
+    "connected": "outputs/championship/development/overall-recovery-preflight-v2/connected/result.json",
+    "confounded": "outputs/championship/development/overall-recovery-preflight-v2/confounded/result.json",
+    "sparse_rookie": "outputs/championship/development/overall-recovery-preflight-v2/sparse_rookie/result.json",
+    "dominant_teammate": "outputs/championship/development/overall-recovery-preflight-v2/dominant_teammate/result.json",
+    "era_boundary": "outputs/championship/development/overall-recovery-preflight-v2/era_boundary/result.json",
+    "real_network": "outputs/championship/development/overall-recovery-preflight-v2/real_network/result.json"
+  },
+  "storage_results": {
+    "connected": "outputs/championship/development/overall-fit-storage-v1/connected/result.json",
+    "confounded": "outputs/championship/development/overall-fit-storage-v1/confounded/result.json",
+    "sparse_rookie": "outputs/championship/development/overall-fit-storage-v1/sparse_rookie/result.json",
+    "dominant_teammate": "outputs/championship/development/overall-fit-storage-v1/dominant_teammate/result.json",
+    "era_boundary": "outputs/championship/development/overall-fit-storage-v1/era_boundary/result.json",
+    "real_network": "outputs/championship/development/overall-fit-storage-v1/real_network/result.json"
+  },
+  "resources": {
+    "slice": "f1.slice",
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "Nice": 19
+  },
+  "sampling_allowed": false,
+  "publication_allowed": false,
+  "status": "frozen",
+  "registered_at": "2026-10-20T01:55:20.239263+00:00",
+  "source_commit": "39130d993d4230d91c016dbcfebd9e6669a615ec",
+  "model_snapshot": {
+    "key": "9515a2b3c481d834396e7980d4fabb52e9ea1c89ff2eb471dcea31d38c094154",
+    "inputs": {
+      "data/overrides/timeline_overrides.csv": "a1e2095256a90e732a638e53aba2801f25c54e56e80104b2979a2f19c3580ffa",
+      "data/processed/drivers.parquet": "0cd1efedc831515d51cce8217a6f6968f1d355be92a91175ef12f52b36c700db",
+      "data/processed/entries.parquet": "b3b39c63dcf372b945a027a639c6d587f961593e1fe391db7fef6a802c580673",
+      "data/processed/events.parquet": "8ee0985bd11b0962168ac02353b6dee1361ad0526f2a9d4933f901f32016a2f8",
+      "data/processed/jolpica_laps.parquet": "73d6f6160909571cb12ed132bd4102260778b9cf7a45a9620dfd4f592d8308f1",
+      "data/processed/jolpica_pitstops.parquet": "536857ead72e8b72ca4c9ea07f55d53edb0e2d3df7c5b18908f27620eae4f165",
+      "data/processed/practice_laps.parquet": "cdb4b8b7778c7222ffc1f354cb42ad3651275e103fce62826cbe391742cc5654",
+      "data/processed/practice_sources.json": "e648314c88a8ecfcf1b17b50b46cf9c04ba6a7148653589d17c5c27a79436e7a",
+      "data/processed/quali_times.parquet": "4ca966349ce047fce097c9aae0f71dc411f95998408554bf94e6db01c938b1e6",
+      "data/processed/race.parquet": "150a0ade6f32c82e54d648a2c1d72a382e2c831e3736691c94e9ef6905f9b0f3",
+      "data/processed/race_classification.parquet": "3600e360c706c06fb38a5391be106e79b6170d30bcdda8d7c38f01d34c28bc11",
+      "data/processed/race_conditions.parquet": "e2315a59214eb3abf01d2bc3c308776c67f5cd25baa40c64e71617e9ad8f33d6",
+      "data/processed/race_laps.parquet": "ec207fe6188a5d664b8554bd7f171f2ed30425ed2a5216dc701e67c20ce44d96",
+      "data/processed/race_messages.parquet": "9f0ef318e780673f14c926010411aa89ddb5477c1308eede4c4bee403b1c93a7",
+      "data/processed/race_sources.json": "9a54f3fae3164bbd7bdb261fefe5a7c5ddf5df70215bad7d0c2ae08c629eae87",
+      "data/processed/race_telemetry.parquet": "5ae7126b2ae9055d2201013967ab8e884f7b3357813056d11520675b6c17e47a",
+      "data/processed/race_track_status.parquet": "56aa14c2687ca4cc4b748ccc68dbdbd742a8ffddd6f5ef6ff776e921a54fac3c",
+      "data/processed/race_traffic.parquet": "fa4a62607d5f3d6d9d4750f4d8d8140828600c46cc59a9f98b1adac70cba7223",
+      "data/processed/race_weather.parquet": "ee5609b61f3a9020c29f6fff9cd68fc05dd21e2607127819e97150c3e63445b5",
+      "data/processed/sources.json": "3b3b9f2a2b4b8abe813f9ab5a2629d4259e0066e21385447213471095d6d1874",
+      "data/processed/sprint_classification.parquet": "08661b23f557e821e6c1472e4dfee2e3468ac5744c63ab6c21b3b3622da13f08",
+      "data/processed/sprint_laps.parquet": "4aff0c47a1d57a69162abc83224e99c18ae244bcb97af8092ae89b2f5dfd1dd2",
+      "data/processed/sprint_messages.parquet": "e5d32739cfb09744b718fdd58300273fa08c03b001bca64a7969dd2d30535984",
+      "data/processed/sprint_quali_times.parquet": "02b27aa7051978a28160b6f66febd092d1e41da3ffb6014d793930a310b3f835",
+      "data/processed/sprint_track_status.parquet": "57c5c6fbbd276fcc0a0c237dca34d0942b7ebf08e4109ccbf579e55da2da1cc0",
+      "data/processed/sprint_weather.parquet": "734109b97d441b4d3fa207362aef2f7df95d80628d228c94dddc2e725a996cd8",
+      "data/processed/timeline.parquet": "b6cb2b15a59c2f5fc90ff2648a21cc2adc9351a8f093b1c26333519a49e48922",
+      "data/reference/power_units.csv": "87f275b3297c8c31816af13b3a3a404eb3e0dd749146006d125bc5c265ac7a2d",
+      "docs/overall_candidate.md": "154436d6edbc62ef181f23632b32ae77c376fb9d396852d452cda862e52fc712",
+      "extract/ff1.py": "3ce08b71898de765d3396b4705dd09b12a0ab15160ab1f57dbc1bb0f47122c03",
+      "extract/fia_upgrades.py": "6e144de9135af010fc3c8832bfec1a3f222700cc58f1578c597f12883d3f6c5c",
+      "extract/practice.py": "11ab9c2e599561df932d6f2b5d4a20016e93da35f25fcfb309c15affc02a85de",
+      "extract/quali_fill.py": "2adf172a7e729c0dfe65014fccb6530fb8f26a2d8ce3edb77b5c07c9a8e39599",
+      "extract/race_extract.py": "ddda8d10e69cf8c4ad5fb9b6fdaa68b95e10b4afa32161ca033ed4fde347f3a9",
+      "extract/sprint_quali.py": "4f9f233b28c08fb7c2930701ed285567f8ca56f0e91972e2520e141933266fce",
+      "extract/telemetry.py": "83cb9d4add64a0bb73525630e82e9bc61b12548f377a438637e8c345b8b71a84",
+      "f1rank/__init__.py": "84303a24ebe90e99229b279aa91da3ec7d60e47260b03992b41eb0853e996706",
+      "f1rank/artifacts.py": "2e9b0b2171d3fb2db3fecea14c944ed3b2d4865ea87c853535bc80e245ee9bbb",
+      "f1rank/asof.py": "f6836ba9f14c9133585628881987a1b73068716feb2caa536a6cee2fdb5757ef",
+      "f1rank/battles.py": "6ba7c2bcd4cfe9a242c6b19e61b3b81de8f3fafd4d44f2e856dbfa122120df7e",
+      "f1rank/benchmark.py": "1e00429cf1a6d1b739a4196ade7ae4a90f26309f1b08d1e840ebff5edd236cf3",
+      "f1rank/build.py": "4c3effd14d47f5fab600c7739bb2302ac93bc5275869eb4aff430cfdcf950933",
+      "f1rank/cachestore.py": "607f732aee7b4979ee57ae4acd0373fd034a679b875fd8a03cb47dca47e039fd",
+      "f1rank/championship.py": "e1799e4cb86fcd46d2f85cd8d8c23f363310da7c19fc3e8425412f4846425aba",
+      "f1rank/compare.py": "b7f0dd96cc78d22dce01c8fe72ba41f951904c8262e7201c6a14cceaec88e8f6",
+      "f1rank/conditions.py": "8f1ffc8a9821343f7ed73c84005c732a6ed6aeda0ad1f88b5515be9b9ede7d77",
+      "f1rank/consistency.py": "86e6f11ce63aebc301e19690a12993a7ef4dcc1f3720036ae293922bb76c03d4",
+      "f1rank/dashboard.py": "6cf328ee03ad4f4dc45ccdb673371260cdd9e190a74af8c20e05449d895ded8c",
+      "f1rank/design.py": "4fc124f37db9ad14ef67d42ef6cb46000e4b7914588e3cf91a5841094125712c",
+      "f1rank/diagnostics.py": "322a588c2cfa039f1bd1e1a26074285e7f37f1e155e3c21070b1cd19cdd5da92",
+      "f1rank/evaluate.py": "48ebc51279679369650b3630695b45b2902300ababff060e5aaaebb6858ba26c",
+      "f1rank/export.py": "54446ffe9138dd085d786b45a2cd962040b965b7f66399cd2251b9e075470935",
+      "f1rank/fetch.py": "af4a7fefc863c120038532ac31c99959273dedfb24c3096e3e3a67d6fef73ef0",
+      "f1rank/firstlap.py": "d2e80b4d5a9a35c5b8b715d5c08be3ffea7592534a50367c865123fc6ed6fe20",
+      "f1rank/fit.py": "e655df046123f62a13e9d0001c091d46c97b0551b3506ffec2f8db701fbcb6b1",
+      "f1rank/forecast.py": "75a9e2b237b87369c4bba4cf0d54ecee20e06281d25a2a8a6ec3e86dc9396598",
+      "f1rank/jobs.py": "14e0347c9c677c77227c9d14ec6eafc29ab97afbb1788ac99631a6b76b706fc5",
+      "f1rank/lineage.py": "17a6af0cd00fd1f171aac23766d79c2337f0905a8e39289b279dbf4f27fc634a",
+      "f1rank/model.py": "106c645f841d37b5759dedb0dd9c2905238db9e0415212dfb87188db06c069f1",
+      "f1rank/oldlaps.py": "217f88169adc9703e41b62483bf00b0e30c558728176b027df80500c455ad351",
+      "f1rank/overall/__init__.py": "f3aaf54e36676813a91aa07bfe123e9d644e17f14e4224b68a72601e4708062a",
+      "f1rank/overall/acceptance.py": "a07746e966428ccdbedf8b975731fcdfb20529a233dba6a3d1bcfcf357024300",
+      "f1rank/overall/batched_rotation.py": "0110403d85602e8191b4fb356955f1ff305d2a6c48ea33441357f47c8f79da48",
+      "f1rank/overall/bounded_diagnostics.py": "3c4fc42058983f35fa71984d59441001a74e47e0646b2bc3ed4a8b0a1cb6dbad",
+      "f1rank/overall/control_rotation.py": "33babfca165dc82d40907f3cbe743167876ba2ed137ccdd3fe62f9d1f9f42f35",
+      "f1rank/overall/design.py": "acb76be3a2754a2f354a4a70b728c7d17aa2915318a0ff778e6e9ed8f8439092",
+      "f1rank/overall/diagnostics.py": "7dff41cc89046160269424c1ab47ede26eb7dc8b8d0a107cf1e68fc1c7e2a791",
+      "f1rank/overall/fitting.py": "b9d9228a5b4de148ccc5ffddeb388490ed2096b9bb86f45b05278cf10433c725",
+      "f1rank/overall/inference.py": "24a31d687f93067b05e67ad97c40dfe6809d519457cf18bbffd9e36aa2df24da",
+      "f1rank/overall/model.py": "b47d7eba3ba242da5104e622172d4e7fcc9116a1a65b1e79ff1f86cb705d81e8",
+      "f1rank/overall/order.py": "812af3dac1f6ad8fa016919332511a24fc99d53eef947edc1eeec55dd48cd95d",
+      "f1rank/overall/own_points.py": "4d6fee21f6c4cf1c27ce62c8fc75e73d649865de191a5fdf577bfc7c7f922ca9",
+      "f1rank/overall/paired_simulation.py": "362fa22c4ddff1bfd4e4b5eb6659aaef4b4cf5e3788eabc4624e958077a69304",
+      "f1rank/overall/posterior_archive.py": "7c687c67c470e82bc2bdacb436e6129bec8bce59a3dfd717c8134d66aa4fb29d",
+      "f1rank/overall/preflight.py": "a09dfd8b3faed4d1b7c5ebede92a3200f13e1ef211ad992b39719aa0b86cf399",
+      "f1rank/overall/provenance.py": "d9437b15338cb907d728483b7d93a38bddbc957d15fade120c78b3268e2e7c8a",
+      "f1rank/overall/publication.py": "4bec46f3d1896b529a9abad56d50ab80fdb7d22921aee8f8ab7769e2edb75122",
+      "f1rank/overall/qualifying.py": "80de0a521d32b1ccad52a6091857546dc5fded7f9c11252c5c5ca40af9e10a60",
+      "f1rank/overall/recovery.py": "f0a9ad4d7f8fb57a2ef24a72ce68230ea67dc71371ab95653c090df28c836a57",
+      "f1rank/overall/scoring.py": "8fc3051432ff7f5e00038a336923fe7c1fce114115b3a87b889079728db33aae",
+      "f1rank/overall/simulation.py": "b80ae0d874d669cf0dd7007c7b9e761f83ef003491255b7ed9371992abd73883",
+      "f1rank/overall/simulation_controller.py": "a7c5d8aab0d539bc6510f32a355f37dd5918800fabcb11498ef87e58a5a4f4ff",
+      "f1rank/overall/simulation_moments.py": "c5bb5955381392aa9dad51313257ae65f84c65ab6642ebcda79f8132ebfb160b",
+      "f1rank/overall/studentt.py": "0b679f5f480ca6c25ae4a0edd1661342bfca8eb7bf013cc39f704706eaebaa0b",
+      "f1rank/overall/summary.py": "b4f4201d221153cf5508441262ef2737133de910612971ebdd01f4961207500f",
+      "f1rank/overall/weekend_coordinates.py": "971ff67f82e5c7157ef9d9ecd203c7ae54dac6f06cc82187f82b1173af5f859d",
+      "f1rank/overtaking.py": "cebd56d09cd73a0168ac195d495e3143f971dba3f3ee9cff79569d1c5b591946",
+      "f1rank/pitstops.py": "96fd98e3edcc76a7ffb30851e679288c009fa5fb3294690af470d9ca8e19bc78",
+      "f1rank/powerunits.py": "2970acc21a2385224632c93c0647e33c4aecab8671fb0c1693653911d8ca499b",
+      "f1rank/qualifying.py": "16a59d96dcfebaf0eab1c2575279bc3fe0a7f2a0a72f955609d66d8701b90668",
+      "f1rank/race_car_state.py": "c976ba15efabc5f1ecd29c167e1dda8b0b5b89e86a3546e9b12ddeb441050144",
+      "f1rank/race_car_state_model.py": "7e632d5ff740e8f1d6e5d9b11ad2783bf13e77206082d600e2dbe2b5749af188",
+      "f1rank/race_features.py": "e480cc54d2ace37fca797e641e4eae78010f9c4f154151ddfdf89c1aeeba69f6",
+      "f1rank/race_features_model.py": "e0009d794f8b9ade64ffcd05edb51320f4ead2f1420cc192a80233b5812deb83",
+      "f1rank/race_publication.py": "e3bd070bd5fc97e56a0a1d782b88c05791fcdc26c27775bebe7cc871819c4383",
+      "f1rank/race_targets.py": "ececa920bb14982330e9f89584d144aa4573d39a9bb4b1203900f4c042edc9f9",
+      "f1rank/race_total.py": "5eda2ea367dc42eea8b20ba8634c607e648c7dc8d8d40d5f7f594fb679d2e204",
+      "f1rank/race_total_model.py": "d5ac8de128f21a4ba54cd10b30dfd44b388c32f60434b8df673614f318f11179",
+      "f1rank/racedata.py": "3a7e3c2762785f59cb940775559bbfa7f13d6838218327ff226451fd36268666",
+      "f1rank/racejoint.py": "1217939d988a481cea795e5d7d8c69b7ce3ed5a637dd278f918eb458d5e13cdb",
+      "f1rank/racemodel.py": "68bf3bab039820ee5a8671f76505ba5572394754aa951ffa7b617a4eda66f8d0",
+      "f1rank/racemulti.py": "4b6e8d48ca746f456739d40e20a75cf3e9989b01e20e166d24a25244dd7fb1d4",
+      "f1rank/racepace.py": "2acd02207e5f58aab73752e8f7cec36d1ba31f289313b0cf0b152fd8d6fd8e0c",
+      "f1rank/racereport.py": "4c791bc12ec52dfb661803d28db518cf0ad10408d06cff79a81f0020d50cfc6a",
+      "f1rank/ratings.py": "a144bc468d6d1f2100fc3d16cee8b4f5c7d6fcd679878417b79cff547e02057f",
+      "f1rank/reliability.py": "0e9b90f8c58464bcd73a8e8544a55295aef714f2131aa353b2cdc6a33a11085d",
+      "f1rank/report.py": "4df3973c0d43f99b12d0eb224406aa27fd63529d8513a9a89f86a97ddcc85abb",
+      "f1rank/schedule.py": "0cd639c539f7b821060b1b05b54371033d0ddccd82ae00d95009922b69abf7e7",
+      "f1rank/simulate.py": "ddd37b455d6bf396a0d2c4e234de68d2fdbe3392767e98cd69916bc1735616d4",
+      "f1rank/timeline.py": "15b054ed396ad32460e7f0529db72896d660fc76e0406982cefd417e4fa2f9af",
+      "f1rank/wetpace.py": "cbfabe0e372941857ca497473cc19b627108db7d40fe3ee5f1a12beb4bc16703"
+    }
+  },
+  "inference_method": "conditional_weekend_batched_controls_stable_studentt_v1",
+  "source_sha256": {
+    "analysis/overall_stable_preflight.py": "576a0f0e0c60d365b463e3fca8df79ae5ec8ba37dadcaa0d2108ad6e7d1740e5",
+    "analysis/overall_recovery_checks.py": "5f3711c3a9ac14cc193429477be5bceb9a2a8ac2eff5c1f6176e52d4d280fd82",
+    "analysis/overall_fit_storage.py": "d4ab02b3a295e249ed6ea07807cf3bcd93d51a4761a2731ef10025f68174fc8b",
+    "analysis/overall_network_precision.py": "6cef90f3b3f0f6cb51485b07136b33b0c2748955e8f1c5b4ad69118536cef559",
+    "tests/test_overall_stable_preflight.py": "017f1269a23bf877512f08529a248d1fa88052b76e54f8020edeec3f63cb4736",
+    "docs/overall_stable_profile.md": "230ff71ba1efebeeaf7ce0b8449f3ae9496a230b5116f7cc8e324dc149331281"
+  },
+  "input_sha256": {
+    "docs/overall_complete_profile_protocol.json": "70151a5836702f485857edf712d489817b5aa93e3fca0c26af372dd9900141bf",
+    "outputs/championship/development/overall-studentt-stable-v1-execution/verification.json": "eb8bac39e6e2068a680d2eae8c513fb3f2cd7d8ba3d5cb6df9558c626a56e899",
+    "outputs/championship/development/overall-studentt-production-audit-v1-execution/verification.json": "ca913e5352dcc7dc011a53cd3684c0e88a0ccce38f9ba022169dfcfeb1e310cc",
+    "docs/overall_studentt_production_protocol.json": "d3bbf3f6e947f88f69d99450be9349633c8d4ee199ee8ca5cd6ca759e203dfc6",
+    "docs/overall_recovery_preflight_v2_protocol.json": "73a664a8f789175d6e11329bcb6974a133a72ac5fcc59de80baa9f751dbbf50a",
+    "outputs/championship/development/overall-recovery-preflight-v2/connected/result.json": "5fc8f73a02d5f098aefe148aeb8ce571f5c29b0425530bdbcd918410cf92e3a3",
+    "outputs/championship/development/overall-recovery-preflight-v2/confounded/result.json": "07d027c59490bd6e94fabec8c87962fa0beecd9cc2e4152d84635e090b927938",
+    "outputs/championship/development/overall-recovery-preflight-v2/sparse_rookie/result.json": "3c87b1022907ee7db2ad1222f0b83b6faf2593484451c29196147829fc4f783b",
+    "outputs/championship/development/overall-recovery-preflight-v2/dominant_teammate/result.json": "b60fb065725b763fee3e46949d94a0788f4530afc9ac93d63984be4b11dac89d",
+    "outputs/championship/development/overall-recovery-preflight-v2/era_boundary/result.json": "88c0c08c7b2212e09bb10efdc91051959efd92dab8d7759f5d4e0aa2555bf8b0",
+    "outputs/championship/development/overall-recovery-preflight-v2/real_network/result.json": "2a7a3b2b41261415963d24b02c87a46270d493c50fa2d520729d55b1e371016c",
+    "outputs/championship/development/overall-fit-storage-v1/connected/result.json": "387ac235aee603eeb55df488df21cd9f30ffefcdbc23d5e966c95b3b8640723c",
+    "outputs/championship/development/overall-fit-storage-v1/confounded/result.json": "56fc62997ef834b90a32cdfae1d6ae9654a4c41cbace79279ba5e1635deba7bd",
+    "outputs/championship/development/overall-fit-storage-v1/sparse_rookie/result.json": "636cf87415a0cb2e8fbf2674a9bc78888da69e662007f403e76bfcb590d64df2",
+    "outputs/championship/development/overall-fit-storage-v1/dominant_teammate/result.json": "bc3d1653267711927dc6378619310a30addcd75b653b817b5a14634b6e990984",
+    "outputs/championship/development/overall-fit-storage-v1/era_boundary/result.json": "2ec38b2e5d3efa106a499ef9e122867f515df6d3daeb42977bb34d5607977e19",
+    "outputs/championship/development/overall-fit-storage-v1/real_network/result.json": "16f2c61444f06e2ce0b03465b07195e00f03cc4c3e41f009ddc8ba8117abceaf"
+  },
+  "runtime_source_sha256": {
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/numpyro/infer/mcmc.py": "85385c5e52441e72310dd7328993514acb5400d1b5a4d005e9437c887d37c8da",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/numpyro/infer/hmc.py": "995416932344dab67935608fadde5c8ce00696a84769d369ca22394588d86ec9",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/numpyro/infer/util.py": "1c68d72229c374d6094f36041661c2ddc5a2cdaaf1224f349c984d57b07ee7c5"
+  },
+  "density_tolerance": {
+    "atol": 0.005,
+    "rtol": 2e-06
+  },
+  "state_tolerance": {
+    "atol": 3e-06,
+    "rtol": 3e-06
+  }
+}
