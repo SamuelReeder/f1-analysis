@@ -1,0 +1,78 @@
+..................................................................F..... [ 46%]
+........................................................................ [ 92%]
+...........                                                              [100%]
+=================================== FAILURES ===================================
+_ test_adapter_preserves_actual_paired_summaries_without_granting_publication __
+
+    def test_adapter_preserves_actual_paired_summaries_without_granting_publication():
+        from analysis.overall_summary import OverallSummary
+        identity = dict(fit_id="synthetic-fit", posterior_key="a" * 64,
+                        scenario_key="b" * 64, simulation_key="c" * 64)
+        # Choose the existing worst-case precision bound's exact replicate count.
+        # These constant, invented outcomes are not inference or a resource profile.
+        replicates = int((CONTRACT["points"][0] / CONTRACT["max_conditional_points_mcse"]) ** 2)
+        accumulator = OverallSummary(drivers=["alpha", "beta"], posterior_shape=(2, 2),
+            replicates=replicates, n_races=1, identity=identity)
+        for chain in range(2):
+            points = np.broadcast_to([10. + chain, 12. + chain], (2, replicates, 2)).copy()
+            result = dict(drivers=["alpha", "beta"], n_races=1, points=points,
+                rank_low=np.broadcast_to([2, 1], points.shape), rank_high=np.broadcast_to([2, 1], points.shape),
+                title_share=np.broadcast_to([0., 1.], points.shape))
+            probes = np.stack([points - 1, points - 2, points - 3], axis=-1)
+>           accumulator.add(result, probes, chain=chain, draw_start=0, replicate_start=0, identity=identity)
+
+tests/test_overall_publication.py:122: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <analysis.overall_summary.OverallSummary object at 0x7368c02d4170>
+result = {'drivers': ['alpha', 'beta'], 'n_races': 1, 'points': array([[[10., 12.],
+        [10., 12.],
+        [10., 12.],
+   ...     [2, 1],
+        [2, 1],
+        ...,
+        [2, 1],
+        [2, 1],
+        [2, 1]]], shape=(2, 250000, 2)), ...}
+probe_points = array([[[[ 9.,  8.,  7.],
+         [11., 10.,  9.]],
+
+        [[ 9.,  8.,  7.],
+         [11., 10.,  9.]],
+
+        [[...  8.,  7.],
+         [11., 10.,  9.]],
+
+        [[ 9.,  8.,  7.],
+         [11., 10.,  9.]]]], shape=(2, 250000, 2, 3))
+chain = 0, draw_start = 0, replicate_start = 0
+identity = {'fit_id': 'synthetic-fit', 'posterior_key': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'scen...bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', 'simulation_key': 'cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc'}
+
+    def add(self, result, probe_points, *, chain, draw_start, replicate_start, identity):
+        """Add a bounded draw × replicate block after validating it completely.
+    
+        probe_points has a final probe axis in PROBES order, retaining only each
+        intervened driver's own outcome. Every value is a season points total.
+        Invalid blocks leave the accumulator unchanged.
+        """
+        if self._closed:
+            raise ValueError("Summary is already finalized")
+        if (identity != self.identity or not isinstance(result, dict)
+                or result.get("drivers") != list(self.drivers)
+                or type(result.get("n_races")) is not int or result["n_races"] != self.n_races):
+            raise ValueError("Simulation identities, field or reference calendar disagree")
+        if (not _integer(chain) or chain >= self.shape[0] or not _integer(draw_start)
+                or not _integer(replicate_start)):
+            raise ValueError("Invalid posterior or replicate indices")
+        shape = np.shape(result.get("points"))
+        n = len(self.drivers)
+        if (len(shape) != 3 or shape[2] != n
+                or not 1 <= shape[0] <= MAX_BLOCK_DRAWS or not 1 <= shape[1] <= MAX_BLOCK_REPLICATES
+                or draw_start + shape[0] > self.shape[1] or replicate_start + shape[1] > self.replicates):
+>           raise ValueError("Block exceeds declared posterior, replicate or memory bounds")
+E           ValueError: Block exceeds declared posterior, replicate or memory bounds
+
+analysis/overall_summary.py:196: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_overall_publication.py::test_adapter_preserves_actual_paired_summaries_without_granting_publication
+1 failed, 154 passed in 6.83s

@@ -1,0 +1,134 @@
+{
+  "purpose": "canonical_overall_export_components_and_display_contract",
+  "source_commit": "92c86b3a83f09b0985086e94b135f06eb9e361fd",
+  "tested_source_sha256": {
+    "f1rank/overall/publication.py": "4bec46f3d1896b529a9abad56d50ab80fdb7d22921aee8f8ab7769e2edb75122",
+    "contracts/overall.json": "804c3cb2543de91416b73ede82891f7a76a5da69e93804300b4a653703ed1f35",
+    "dashboard/src/overall.ts": "f28ae55b7598e957bdc019ccb248a2199386fd996034325f434d85f9ea6533a6",
+    "dashboard/src/types.ts": "eda8205c1bd11376f9ae03f56a7d2765af5c44bb7288d7cda56fddb1c78ff601",
+    "dashboard/src/views/CurrentOverall.tsx": "53ff532cca3ccec0efff885d9dd87367258174c3bbfab8d391f500d7be324427",
+    "dashboard/tests/overall-current.spec.ts": "4a72fa53c814d7f7f81b069532cf7d81c00413b0454c8b95342edd3dab30056e",
+    "tests/test_overall_publication.py": "43755f4be7a7a0c41b6ec21461dc32743ab593d20972f9dc3aa418624fd63b16",
+    "tests/test_overall_summary.py": "ae45958e71b56f3b2ed199be581f159aae73db55f035bc5fe5c466c5a2223232",
+    "tests/test_overall_simulation_controller.py": "53560e20f9650853850d2a4587be1f33119c7e222d6ba6a40053f90f42bdd270",
+    "tests/fixtures/overall_current_contract.json": "3321cf94bad302f6c3a6e6c72b07c7afd14b4e4954a0e6fdf75be8721b60f473",
+    ".github/workflows/dashboard.yml": "f0b486e93a6d3e0328604a5190ea9898bf255ad4543295d027b14d3ffdb8b2bb",
+    "dashboard/playwright.config.ts": "5c9e3b8ed51922327c933d585f9e6ca386146695fe8dc76a6753659e70cf8366",
+    "dashboard/package-lock.json": "d6c609ea02a228411597e64983fdac6af5e15a09132c05f6b186dadf6cfe9813"
+  },
+  "source_note": "Tested implementation and test bytes were committed unchanged after execution. The browser-only import correction did not change Python code; the final Python execution follows moving the simulator adapter fixture into its existing test module.",
+  "scope_command_prefix": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--slice=f1.slice",
+    "-q",
+    "-p",
+    "MemoryMax=3G",
+    "-p",
+    "CPUQuota=200%"
+  ],
+  "nice": 19,
+  "scope_note": "Python, build and browser commands ran sequentially in separate scopes with these configured limits. Resource logs are separate measurements.",
+  "python": {
+    "command": [
+      "/home/sreeder/f1-analysis/.venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_overall_publication.py",
+      "tests/test_overall_summary.py",
+      "tests/test_overall_simulation_controller.py"
+    ],
+    "passed": 155,
+    "seconds_reported": 7.48,
+    "exit_code": 0
+  },
+  "build": {
+    "command": [
+      "npm",
+      "run",
+      "build",
+      "--",
+      "--base=/f1-analysis/"
+    ],
+    "exit_code": 0
+  },
+  "browser": {
+    "command": [
+      "npx",
+      "playwright",
+      "test",
+      "--workers=2"
+    ],
+    "passed": 131,
+    "duration_reported": "1.8m",
+    "exit_code": 0,
+    "url": "http://127.0.0.1:4180/f1-analysis/",
+    "controller": "browser-run.sh",
+    "note": "The local preview was started and cleaned up by the controller inside the same capped scope. Playwright reused that owned listener under the repository configuration. The first execution delayed on probing an unused local port before reaching its recorded JSON import error."
+  },
+  "runtime": {
+    "node": "v22.20.0",
+    "playwright": "1.58.2",
+    "vite": "6.4.3"
+  },
+  "dependency_note": "Reused node_modules from the frozen worktree after verifying identical package-lock bytes. No dependency versions were changed.",
+  "initial_failures": [
+    {
+      "record": "initial/pytest.txt",
+      "cause": "The synthetic adapter fixture exceeded the pre-existing accumulator block-size limit.",
+      "correction": "Use the existing bounded block size; no accumulator or precision rule changed.",
+      "original_test": "initial/test_overall_publication.py.txt"
+    },
+    {
+      "record": "initial/browser.txt",
+      "cause": "Node required a JSON import attribute when the browser test imported the shared TypeScript validator.",
+      "correction": "Add the JSON type attribute, then rebuild and rerun the browser suite.",
+      "original_source": "initial/overall.ts.txt"
+    }
+  ],
+  "lightweight_check": "The synthetic payload validated with Python site packages disabled; the publication validator needs no sampler dependency.",
+  "coverage": [
+    "matching fit/posterior/scenario/simulation identities",
+    "complete entrant, explanation and unordered comparison inventories",
+    "paired means agree with standings while intervals remain directly paired",
+    "explanation ranges and conditional errors retained",
+    "existing precision bounds checked against replicate inventory",
+    "all required recorded checks must be exactly true",
+    "synthetic adapter output retains publication_allowed=false",
+    "finite-simulation ordering frequencies are not converted into rank probabilities",
+    "browser reversal swaps and negates paired interval endpoints",
+    "failed/incomplete/mixed results withhold tables",
+    "small-screen accessibility and existing dashboard regression suite"
+  ],
+  "output_sha256": {
+    "browser-run.sh": "8173fd2c127c78549ec80983d02eba5b8e8f296a9a61f88da9eafdd2cd6552bf",
+    "browser.resources.txt": "1b58920ba4119170fb37ad47740f6f0aab69439ec26ab055eae7594a0d92ac41",
+    "browser.txt": "fa8d73abe1cd9814720f89058c48e73646b7548de2b0ea3cb267d71db0029947",
+    "build.resources.txt": "eebace859e004ae32b04bb98623beef652fb5b8e7b9a5e0dfac0865a679932fe",
+    "build.txt": "876d2e0d990c68bddb9ab2be2f0a1f3989027fae36efb7393f8104685c260399",
+    "initial/browser.resources.txt": "295c40eed44352ed845b2bcef39b431bbf69cbfefdab9aa548c3b11f995b13c9",
+    "initial/browser.txt": "db86e029a342448ec4a0d648b2241719d13a7e79d464958c720b566c6e3de4b9",
+    "initial/build.resources.txt": "60cfe3967081ded2ad811a77b4c57b9292f014785e4584c77c4b07cc48891cef",
+    "initial/build.txt": "a40e701150497befdb3225e2fa7613d67a72968d570e75ae0ebf718a87cd15af",
+    "initial/overall.ts.txt": "8bba68fe26c90f7e2ac424771274b056fa10c0f8223fdf055e9222b817bba316",
+    "initial/pytest.txt": "afd57f87eb3cdb49c39f60bf0daefd04aa3314b82cadd9dd31cd13e37a13e15b",
+    "initial/python.resources.txt": "348598d8abcc631e0a6092cd6db81e227edf5e8fbed14570815992989a00a355",
+    "initial/test_overall_publication.py.txt": "ea17dde8b3164a3ead4dc08c9a16ab16fe52f976c4da28138e360bec92262674",
+    "intermediate/pytest.txt": "833a08e9a912544c561a617ffb60e261333c82f2248dd5c91147604993210dc7",
+    "intermediate/python.resources.txt": "51ad99c49a309d88915788aca58d046dcfaab03d06351f219ebef415c0379f9a",
+    "lightweight.txt": "e692f8071aa8c984d88e9c77ea6aedc50d83d84e4463a238a7ba706ec370f777",
+    "node-runtime.json": "825954247dfca160be207b6a0c6cb077f0bc910c3f05b928ff3a4780891027bd",
+    "pytest.txt": "34a32b83747cbf8bffdab4e9310359ed41b422a194b938b8eb3f20e1a2bcde47",
+    "python.resources.txt": "e165fc8ba1b7df9a67bae0c5159454bd5bff3f6b75c0438dd367e0ca942afb8d",
+    "server.txt": "4e66ddb019cf976e37fb36b85bd01952331c2419e65b708494c683a3c043ebb8"
+  },
+  "scientific_acceptance_established": false,
+  "real_posterior_exported": false,
+  "canonical_producer_complete": false,
+  "fresh_publication_verified": false,
+  "clean_clone_ci_verified": false,
+  "intended_runner_verified": false,
+  "publication_allowed": false
+}
