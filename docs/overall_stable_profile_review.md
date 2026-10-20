@@ -4,6 +4,8 @@ This collector is separate from the frozen fitting sources. Run it only after
 the registered service is authoritatively terminal and its complete raw output
 inventory has been committed. It does not poll, restart, fit, change a numerical
 criterion or authorize publication.
+Write the review outside the original profile output and cache directories;
+putting the report among its own inputs would change the inventory it verifies.
 
 The previous complete-design reviewer expects the previous registration and
 preflight formats. The corrected-profile reviewer uses the current registration
@@ -46,3 +48,7 @@ changed source identities, incomplete retained fields, missing or changed sample
 files, altered retries, skipped failed attempts and contradictory completion
 flags. They must retain later cases after a failed or killed child. Preparation
 of this reviewer is not evidence that the active experiment has finished.
+
+The prepared [saved-array audit](overall_stable_profile_diagnostics.md) extends
+this review to every attempt's complete posterior and sampler extras. Its
+numerical checks remain unrun while the registered fit is active.
