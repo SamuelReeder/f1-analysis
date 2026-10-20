@@ -12,6 +12,10 @@ from .order import numpy_perturbed_order
 
 MAX_EXPECTED_POINTS_MCSE = .05
 QUALIFYING_FIELDS = {20: (15, 10), 22: (16, 10), 24: (17, 10)}
+POSTERIOR_SITES = dict(qualifying="skill", race="overall_race_skill", q_weekend_sd="sd_driver_form",
+    r_weekend_sd="overall_sd_day", shared_weekend="overall_shared_weekend",
+    q_scale="sigma0", q_log_scale_sd="sigma_tau", q_df="nu", grid_coefficient="overall_grid",
+    pace_coefficient="overall_pace", retirement_hazard="overall_hazard")
 
 
 def _finite(name, value):
