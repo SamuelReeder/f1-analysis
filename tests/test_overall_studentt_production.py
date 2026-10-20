@@ -69,7 +69,8 @@ def test_legacy_default_stays_original_and_explicit_factory_changes_only_arithme
     from f1rank.overall.recovery import synthetic_design
     q = synthetic_design('connected').qualifying.arrays()
     def trace(**kwargs):
-        return handlers.trace(handlers.seed(model, jax.random.PRNGKey(37))).get_trace(q, likelihood=likelihood, **kwargs)
+        conditioned = handlers.substitute(model, data={'car_total':jnp.zeros(q['n_cars'])})
+        return handlers.trace(handlers.seed(conditioned, jax.random.PRNGKey(37))).get_trace(q, likelihood=likelihood, **kwargs)
     original, changed = trace(), trace(student_t=studentt.StableStudentT)
     assert original.keys() == changed.keys()
     for name in original:
