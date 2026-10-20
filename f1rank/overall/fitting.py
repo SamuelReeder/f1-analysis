@@ -23,6 +23,7 @@ from .provenance import ROOT, snapshot, require_snapshot
 FIT_SETTINGS = {"warmup": 800, "samples": 800, "chains": 4, "target_accept": .9,
                 "max_tree_depth": 10, "init_median_samples": 15, "seed": 0}
 RUN_SCHEMA = 1
+COORDINATE_RUN_SCHEMA = 2
 MAX_SEED = 2**32 - 1
 
 
@@ -92,8 +93,18 @@ def committed_registration(path, root=ROOT):
     if saved != path.read_bytes():
         raise ValueError("Fit registration must be committed without local changes")
     registration = json.loads(saved)
-    if registration.get("schema_version") != RUN_SCHEMA or registration.get("status") != "frozen":
+    schema = registration.get("schema_version")
+    if type(schema) is not int or schema not in (RUN_SCHEMA, COORDINATE_RUN_SCHEMA) or registration.get("status") != "frozen":
         raise ValueError("Fit requires a frozen supported registration")
+    if schema == COORDINATE_RUN_SCHEMA:
+        from .inference import METHOD
+        if registration.get("inference_method") != METHOD:
+            raise ValueError("Register the exact production coordinate implementation")
+        source_key = registration.get("registered_model_inputs_key")
+        if not isinstance(source_key, str) or len(source_key) != 64 or any(c not in "0123456789abcdef" for c in source_key):
+            raise ValueError("Register the complete production source/data identity")
+    elif "inference_method" in registration:
+        raise ValueError("Historical registrations cannot select a new inference implementation")
     if registration.get("fit_settings") != FIT_SETTINGS or registration.get("retry") != [list(x) for x in RETRY]:
         raise ValueError("Registered settings do not match the fixed runner")
     numerical = dict(rank_rhat_strict_upper=RHAT_LIMIT, bulk_ess_min=MIN_ESS,
@@ -116,6 +127,34 @@ def require_clean_inputs(inputs, root=ROOT):
                    stdout=subprocess.DEVNULL)
 
 
+def _save_arrays(path, arrays):
+    temporary = path.with_suffix(".tmp.npz")
+    np.savez_compressed(temporary, **arrays)
+    temporary.replace(path)
+
+
+def _check_sampler_extras(run_dir, receipt):
+    """Recount recorded sampler diagnostics from every new attempt's archive."""
+    if receipt.get("schema_version", RUN_SCHEMA) != COORDINATE_RUN_SCHEMA:
+        return
+    from .inference import validate_extras
+    for i, attempt in enumerate(receipt["attempts"], 1):
+        name = f"sampler_{i}.npz"
+        archive = run_dir / name
+        if (attempt.get("sampler_file") != name or archive.resolve().parent != run_dir
+                or digest(archive) != attempt.get("sampler_sha256")):
+            raise ValueError("Sampler archive changed or missing")
+        with np.load(archive, allow_pickle=False) as saved:
+            extras = {k: saved[k] for k in saved.files}
+        validate_extras(extras, attempt)
+        diagnostic = attempt["diagnostics"]
+        if (int(extras["diverging"].sum()) != diagnostic["divergences"]
+                or float(extras["accept_prob"].mean()) != diagnostic["mean_accept_prob"]
+                or float(np.mean(extras["num_steps"] >= 2**attempt["max_tree_depth"]-1))
+                != diagnostic["tree_depth_limit_fraction"]):
+            raise ValueError("Sampler archive disagrees with recorded diagnostics")
+
+
 @contextmanager
 def checked_archive(run_dir, expected_key=None):
     """Share fit/source/byte checks with bounded readers, without loading arrays.
@@ -133,6 +172,7 @@ def checked_archive(run_dir, expected_key=None):
     if expected_key is not None and receipt["run_key"] != expected_key:
         raise ValueError("Fit does not match requested inputs")
     require_snapshot(receipt["source"])
+    _check_sampler_extras(run_dir, receipt)
     filename = receipt["posterior_file"]
     if not isinstance(filename, str) or Path(filename).name != filename or not filename.endswith(".npz"):
         raise ValueError("Invalid posterior archive path")
@@ -154,6 +194,7 @@ def checked_archive(run_dir, expected_key=None):
         if receipt_path.read_bytes() != original_receipt:
             raise ValueError("Fit receipt changed while reading")
         require_snapshot(json.loads(original_receipt)["source"])
+        _check_sampler_extras(run_dir, json.loads(original_receipt))
         verify_bytes()
 
 
@@ -194,7 +235,7 @@ def _sample(blocks, settings):
     return post, result
 
 
-def run(blocks, catalog, run_dir, registration_path, *, study, synthetic, sample=_sample):
+def run(blocks, catalog, run_dir, registration_path, *, study, synthetic, sample=None):
     registration_path, run_dir = Path(registration_path), Path(run_dir)
     registration = committed_registration(registration_path)
     if study not in registration.get("studies", []):
@@ -205,6 +246,20 @@ def run(blocks, catalog, run_dir, registration_path, *, study, synthetic, sample
     base_settings = study_settings(registration, study)
     inputs = snapshot()
     require_clean_inputs(inputs)
+    schema = registration["schema_version"]
+    coordinate_run = schema == COORDINATE_RUN_SCHEMA
+    if coordinate_run:
+        from . import inference
+        if registration.get("inference_method") != inference.METHOD:
+            raise ValueError("Register the exact production coordinate implementation")
+        if registration.get("registered_model_inputs_key") != inputs["key"]:
+            raise ValueError("Registered production source/data identity changed")
+        if sample is not None:
+            raise ValueError("The registered production sampler cannot be overridden")
+        def sample(blocks, settings):
+            return inference.sample(blocks, settings, catalog)
+    elif sample is None:
+        sample = _sample
     specification = dict(source_key=inputs["key"], arrays_key=arrays_digest(blocks), catalog=catalog,
                          registration_sha256=digest(registration_path), study=study,
                          synthetic=synthetic, settings=base_settings)
@@ -214,7 +269,7 @@ def run(blocks, catalog, run_dir, registration_path, *, study, synthetic, sample
         # from a file: the operator checks the service before choosing recovery.
         return load_checked(run_dir, run_key)
     run_dir.mkdir(parents=True, exist_ok=False)
-    receipt = dict(schema_version=RUN_SCHEMA, run_key=run_key, specification=specification,
+    receipt = dict(schema_version=schema, run_key=run_key, specification=specification,
                    source=inputs, catalog=catalog, settings=base_settings, attempts=[],
                    state="running", publication_allowed=False,
                    source_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
@@ -229,12 +284,27 @@ def run(blocks, catalog, run_dir, registration_path, *, study, synthetic, sample
                 target_accept=accept if accept is not None else FIT_SETTINGS["target_accept"])
             begun = time.monotonic()
             print(json.dumps(dict(study=study, attempt=attempt + 1, state="sampling", settings=settings)), flush=True)
-            post, diagnostic = sample(blocks, settings)
+            sampled = sample(blocks, settings)
+            if coordinate_run:
+                if not isinstance(sampled, inference.SampleResult):
+                    raise ValueError("The production sampler must retain its complete extras")
+                post, diagnostic, extras = sampled
+                inference.validate_extras(extras, settings)
+            else:
+                post, diagnostic = sampled
             require_snapshot(inputs)
             if digest(registration_path) != specification["registration_sha256"]:
                 raise ValueError("Registration changed while fitting")
             record = dict(**settings, diagnostics=diagnostic, seconds=time.monotonic() - begun)
+            if coordinate_run:
+                extra_path = run_dir / f"sampler_{attempt + 1}.npz"
+                _save_arrays(extra_path, extras)
+                record.update(sampler_file=extra_path.name, sampler_sha256=digest(extra_path))
+                record["posterior_sites"] = {name: dict(shape=list(value.shape), dtype=value.dtype.str)
+                                             for name, value in post.items()}
             receipt["attempts"].append(record)
+            if coordinate_run:
+                _check_sampler_extras(run_dir.resolve(), receipt)
             atomic_json(run_dir / f"attempt_{attempt + 1}.json", record)
             receipt["diagnostics"] = diagnostic
             atomic_json(run_dir / "receipt.json", receipt)
@@ -254,6 +324,7 @@ def run(blocks, catalog, run_dir, registration_path, *, study, synthetic, sample
             # Keep every failed draw set for diagnosing sampler failures. It can
             # never pass load_checked or enter a ranking.
             np.savez_compressed(run_dir / f"failed_{attempt + 1}.npz", **post)
+            del sampled
             del post
         else:
             receipt["state"] = "failed_convergence"
