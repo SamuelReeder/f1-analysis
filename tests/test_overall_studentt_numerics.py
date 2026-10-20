@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 
 from analysis.overall_studentt_numerics import (assessment,beta_log_prob,beta_studentt_calculation,
-                                              inputs,load_reference,reference_row)
+                                              inputs,load_reference,reference_row,numerical_reference_row)
 
 
 def test_cauchy_density_and_log_degree_derivative_have_known_values():
@@ -47,6 +47,22 @@ def test_all_saved_parameter_points_remain_in_the_declared_cartesian_inventory()
     assert {tuple((r['point']['id'],r['parameter'])) for r in saved}=={
         ('a','nu'),('a','overall_lap_nu'),('b','nu'),('b','overall_lap_nu')}
     assert all(np.float32(r['log_df'])==r['log_df'] for r in rows)
+
+
+@pytest.mark.parametrize('log_df',[-6.907755374908447,0.,2.084352731704712,18.42068099975586])
+@pytest.mark.parametrize('residual',[-1.,1.])
+def test_exact_zero_scale_derivative_is_stable_without_tolerance(log_df,residual):
+    mp=load_reference()
+    low=reference_row(mp,log_df,residual,80)
+    high=reference_row(mp,log_df,residual,120)
+    assert low==high
+    assert high[3]==0.
+
+
+@pytest.mark.parametrize('residual',[-100.,-3.,0.,3.,100.])
+def test_analytic_reference_agrees_with_independent_numerical_derivatives(residual):
+    mp=load_reference()
+    assert reference_row(mp,2.084352731704712,residual,120)==numerical_reference_row(mp,2.084352731704712,residual,120)
 
 
 def test_error_budget_reports_failures_without_dropping_rows():

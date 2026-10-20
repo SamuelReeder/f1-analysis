@@ -3,7 +3,7 @@ import argparse
 import json
 from pathlib import Path
 
-from overall_studentt_numerics import load_reference,previous,reference_row,save
+from overall_studentt_numerics import load_reference,previous,numerical_reference_row as reference_row,save
 
 
 def analytic_reference_row(mp,log_df,residual,digits):

@@ -20,6 +20,9 @@ sha,save=previous.sha,previous.save
 DEPENDENCY='outputs/championship/development/overall-studentt-reference-dependency/dependency.json'
 PREPARED='outputs/championship/development/overall-network-precision-v1/prepare/result.json'
 ORIGINAL_PROTOCOL='docs/overall_network_precision_protocol.json'
+STUDY_ID='overall-studentt-numerics-v2'
+REFERENCE_METHOD='analytic_loggamma_digamma'
+REFERENCE_DIAGNOSIS='outputs/championship/development/overall-studentt-reference-diagnosis-v1/result.json'
 SOURCES=('analysis/overall_studentt_numerics.py','analysis/overall_network_precision.py',
          'analysis/overall_network_diagnosis.py','tests/test_overall_studentt_numerics.py','docs/overall_studentt_numerics.md')
 REFERENCE_DIGITS=(80,120)
@@ -67,7 +70,7 @@ def load_reference():
     return mpmath
 
 
-def reference_row(mp,log_df,residual,digits):
+def numerical_reference_row(mp,log_df,residual,digits):
     """Differentiate the defining log-gamma density at arbitrary precision."""
     with mp.workdps(digits):
         z,x=mp.mpf(float(log_df)),mp.mpf(float(residual))
@@ -78,6 +81,24 @@ def reference_row(mp,log_df,residual,digits):
         zero=mp.mpf(0)
         return [float(f(z,zero,zero)),float(mp.diff(lambda v:f(v,zero,zero),z)),
                 float(mp.diff(lambda v:f(z,v,zero),zero)),float(mp.diff(lambda v:f(z,zero,v),zero))]
+
+
+def reference_row(mp,log_df,residual,digits):
+    """Analytic derivatives of the independent arbitrary-precision density.
+
+    Avoid numerical differentiation's tiny residual at an exact zero. The
+    precision agreement and candidate arithmetic error criteria stay unchanged.
+    """
+    with mp.workdps(digits):
+        z,x=mp.mpf(float(log_df)),mp.mpf(float(residual))
+        df=mp.exp(z);u=x*x/df
+        value=(mp.loggamma((df+1)/2)-mp.loggamma(df/2)-mp.log(df*mp.pi)/2
+               -(df+1)*mp.log1p(u)/2)
+        dz=(df*(mp.digamma((df+1)/2)-mp.digamma(df/2))/2-mp.mpf('.5')
+            -df*mp.log1p(u)/2+(df+1)*x*x/(2*(df+x*x)))
+        dloc=(df+1)*x/(df+x*x)
+        dscale=-1+(df+1)*x*x/(df+x*x)
+        return [float(value),float(dz),float(dloc),float(dscale)]
 
 
 def inputs(prepared,arrays):
@@ -125,11 +146,11 @@ def freeze(path):
     dependency=json.loads((ROOT/DEPENDENCY).read_bytes())
     if sha(prepared['cache'])!=prepared['cache_sha256'] or sha(ROOT/dependency['wheel'])!=dependency['sha256']:
         raise ValueError('Original numerical cache or reference wheel differs')
-    p=dict(id='overall-studentt-numerics-v1',purpose='independent_studentt_primitive_and_matched_model_arithmetic',
+    p=dict(id=STUDY_ID,reference_method=REFERENCE_METHOD,purpose='independent_studentt_primitive_and_matched_model_arithmetic',
         status='frozen',registered_at=datetime.now(timezone.utc).isoformat(),
         source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
         source_sha256={name:previous.committed(ROOT,name) for name in SOURCES},
-        input_sha256={name:previous.committed(ROOT,name) for name in (DEPENDENCY,PREPARED,ORIGINAL_PROTOCOL)},
+        input_sha256={name:previous.committed(ROOT,name) for name in (DEPENDENCY,PREPARED,ORIGINAL_PROTOCOL,REFERENCE_DIAGNOSIS)},
         library_sha256=library_sources(),reference_digits=list(REFERENCE_DIGITS),residuals=list(RESIDUALS),
         df_quarter_exponents=list(DF_QUARTER_EXPONENTS),error_eps_multipliers=ERROR_EPS_MULTIPLIERS,
         methods=list(METHODS),precisions=list(previous.PRECISIONS),
@@ -141,7 +162,7 @@ def freeze(path):
 def checked(path):
     path=Path(path).resolve();previous.committed(ROOT,path.relative_to(ROOT).as_posix())
     p=json.loads(path.read_bytes())
-    expected=dict(reference_digits=list(REFERENCE_DIGITS),residuals=list(RESIDUALS),
+    expected=dict(id=STUDY_ID,reference_method=REFERENCE_METHOD,reference_digits=list(REFERENCE_DIGITS),residuals=list(RESIDUALS),
         df_quarter_exponents=list(DF_QUARTER_EXPONENTS),error_eps_multipliers=ERROR_EPS_MULTIPLIERS,
         methods=list(METHODS),precisions=list(previous.PRECISIONS),sampling_allowed=False,publication_allowed=False)
     if any(p.get(k)!=v for k,v in expected.items()):raise ValueError('Changed numerical workload or criterion')
