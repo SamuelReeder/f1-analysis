@@ -262,6 +262,14 @@ of the same product; they do not overwrite previous results.
 
 ## Publication, refresh and operational completion
 
+The user's [refresh-runtime priority](overall_refresh_runtime.md) adds a practical
+constraint to the work order: after the current registered computational profile,
+measure a resumable, warm-initialized update and evaluate sequential inference if
+needed before expanding expensive calibration workloads. Full model-development
+studies are versioned evidence, not a required recurring race-refresh workload.
+The current code has no measured successor update budget. This priority does not
+change the active fit, its gates or the scientific acceptance checklist.
+
 The canonical payload needs a model-version identifier, scenario identity, data
 cutoff, convergence/recovery/calibration evidence, acceptance state, field, point
 estimates, pairwise comparisons and separately labeled uncertainty. Component
