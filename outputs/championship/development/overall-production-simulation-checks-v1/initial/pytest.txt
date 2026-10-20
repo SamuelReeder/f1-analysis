@@ -1,0 +1,127 @@
+.....FF................................................................. [ 26%]
+........................................................................ [ 53%]
+........................................................................ [ 80%]
+......................................................                   [100%]
+=================================== FAILURES ===================================
+_ test_complete_registered_candidate_runs_and_failed_precision_stays_unpublished _
+
+candidate = namespace(design=OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  ...), save=<function case.<locals>.save at 0x7f0e6478ade0>, freeze=<function candidate.<locals>.freeze at 0x7f0e6478b4c0>)
+
+    def test_complete_registered_candidate_runs_and_failed_precision_stays_unpublished(candidate):
+        summary, receipt = execute(candidate)
+        assert receipt["state"] == "complete" and receipt["completed_blocks"] == receipt["schedule"]["blocks"]
+        assert receipt["conditional_simulation_precision_passed"] is False
+        assert receipt["components_sha256"] is None and not (candidate.output / "components.json").exists()
+        assert not receipt["publication_allowed"] and not receipt["scientific_evidence_verified"]
+>       checked, again, components = load(candidate)
+                                     ^^^^^^^^^^^^^^^
+
+tests/test_overall_production_simulation.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_overall_production_simulation.py:104: in load
+    return controller.load_candidate(case.output, case.run, case.design, case.path, case.reference_path,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+output_dir = PosixPath('/tmp/pytest-of-sreeder/pytest-14/test_complete_registered_candi0/simulation')
+run_dir = PosixPath('/tmp/pytest-of-sreeder/pytest-14/test_complete_registered_candi0/production-format-fit')
+design = OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  event_idx  circui...': [], 'outcome_events': ['2021-22', '2022-01', '2022-02'], 'first_lap_event': '2021-22', 'last_lap_event': '2022-02'})
+protocol_path = PosixPath('/tmp/pytest-of-sreeder/pytest-14/test_complete_registered_candi0/registration/protocol.json')
+reference_path = PosixPath('/tmp/pytest-of-sreeder/pytest-14/test_complete_registered_candi0/reference.json')
+registration_root = PosixPath('/tmp/pytest-of-sreeder/pytest-14/test_complete_registered_candi0/registration')
+
+    def load_candidate(output_dir, run_dir, design, protocol_path, reference_path, *, registration_root=ROOT):
+        """Recheck candidate artifacts and dependencies; return no publication decision."""
+        output_dir, run_dir = Path(output_dir), Path(run_dir)
+        receipt_path = output_dir / "receipt.json"
+        receipt_bytes = receipt_path.read_bytes()
+        receipt = json.loads(receipt_bytes)
+        protocol, key = committed_protocol(protocol_path, root=registration_root)
+        reference_bytes = Path(reference_path).read_bytes()
+        reference = json.loads(reference_bytes)
+        reference_key = hashlib.sha256(reference_bytes).hexdigest()
+        identity, scenarios, schedule = validate_protocol(protocol, reference, reference_key, design)
+        require_committed_sources(protocol["sources"])
+        scenario_key = _hash(dict(reference_sha256=reference_key, race_control=protocol["race_control"],
+                                 advancing=protocol["advancing"]))
+        simulation_key = _hash(dict(protocol_sha256=key, scenario_key=scenario_key, schedule=schedule))
+        if (receipt.get("state") != "complete" or receipt.get("purpose") != PURPOSE
+                or receipt.get("protocol_sha256") != key or receipt.get("reference_sha256") != reference_key
+                or receipt.get("simulation_key") != simulation_key or receipt.get("fit") != protocol["fit"]
+                or receipt.get("synthetic") is not protocol["synthetic"]
+                or receipt.get("schedule") != schedule or receipt.get("completed_blocks") != schedule["blocks"]
+                or receipt.get("runtime") != protocol["runtime"]
+                or receipt.get("scientific_evidence_verified") is not False
+                or receipt.get("publication_allowed") is not False
+                or digest(output_dir / "protocol.json") != key
+                or (output_dir / "reference.json").read_bytes() != reference_bytes
+                or digest(output_dir / "summary.json") != receipt.get("summary_sha256")):
+>           raise ValueError("Incomplete, changed or inconsistent candidate artifacts")
+E           ValueError: Incomplete, changed or inconsistent candidate artifacts
+
+f1rank/overall/simulation_controller.py:428: ValueError
+---------------------------- Captured stdout setup -----------------------------
+{"study": "cache_format_fixture_only", "attempt": 1, "state": "sampling", "settings": {"warmup": 800, "samples": 800, "chains": 4, "target_accept": 0.9, "max_tree_depth": 10, "init_median_samples": 15, "seed": 0}}
+{"study": "cache_format_fixture_only", "attempt": 1, "seconds": 0.00011147698387503624, "converged": true, "divergences": 0, "worst_rhat": null}
+___ test_registered_real_role_is_consumed_without_granting_acceptance[False] ___
+
+candidate = namespace(design=OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  ...), save=<function case.<locals>.save at 0x7f0e640e6980>, freeze=<function candidate.<locals>.freeze at 0x7f0e640e71a0>)
+
+    @pytest.mark.parametrize("candidate", [False], indirect=True)
+    def test_registered_real_role_is_consumed_without_granting_acceptance(candidate):
+        # The role is exercised using invented arrays and a fake sampler only.
+        summary, receipt = execute(candidate)
+        assert summary["synthetic"] is False and receipt["synthetic"] is False
+        assert summary["scientific_evidence_verified"] is False and receipt["publication_allowed"] is False
+>       assert load(candidate)[2] is None
+               ^^^^^^^^^^^^^^^
+
+tests/test_overall_production_simulation.py:126: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_overall_production_simulation.py:104: in load
+    return controller.load_candidate(case.output, case.run, case.design, case.path, case.reference_path,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+output_dir = PosixPath('/tmp/pytest-of-sreeder/pytest-14/test_registered_real_role_is_c0/simulation')
+run_dir = PosixPath('/tmp/pytest-of-sreeder/pytest-14/test_registered_real_role_is_c0/production-format-fit')
+design = OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  event_idx  circui...': [], 'outcome_events': ['2021-22', '2022-01', '2022-02'], 'first_lap_event': '2021-22', 'last_lap_event': '2022-02'})
+protocol_path = PosixPath('/tmp/pytest-of-sreeder/pytest-14/test_registered_real_role_is_c0/registration/protocol.json')
+reference_path = PosixPath('/tmp/pytest-of-sreeder/pytest-14/test_registered_real_role_is_c0/reference.json')
+registration_root = PosixPath('/tmp/pytest-of-sreeder/pytest-14/test_registered_real_role_is_c0/registration')
+
+    def load_candidate(output_dir, run_dir, design, protocol_path, reference_path, *, registration_root=ROOT):
+        """Recheck candidate artifacts and dependencies; return no publication decision."""
+        output_dir, run_dir = Path(output_dir), Path(run_dir)
+        receipt_path = output_dir / "receipt.json"
+        receipt_bytes = receipt_path.read_bytes()
+        receipt = json.loads(receipt_bytes)
+        protocol, key = committed_protocol(protocol_path, root=registration_root)
+        reference_bytes = Path(reference_path).read_bytes()
+        reference = json.loads(reference_bytes)
+        reference_key = hashlib.sha256(reference_bytes).hexdigest()
+        identity, scenarios, schedule = validate_protocol(protocol, reference, reference_key, design)
+        require_committed_sources(protocol["sources"])
+        scenario_key = _hash(dict(reference_sha256=reference_key, race_control=protocol["race_control"],
+                                 advancing=protocol["advancing"]))
+        simulation_key = _hash(dict(protocol_sha256=key, scenario_key=scenario_key, schedule=schedule))
+        if (receipt.get("state") != "complete" or receipt.get("purpose") != PURPOSE
+                or receipt.get("protocol_sha256") != key or receipt.get("reference_sha256") != reference_key
+                or receipt.get("simulation_key") != simulation_key or receipt.get("fit") != protocol["fit"]
+                or receipt.get("synthetic") is not protocol["synthetic"]
+                or receipt.get("schedule") != schedule or receipt.get("completed_blocks") != schedule["blocks"]
+                or receipt.get("runtime") != protocol["runtime"]
+                or receipt.get("scientific_evidence_verified") is not False
+                or receipt.get("publication_allowed") is not False
+                or digest(output_dir / "protocol.json") != key
+                or (output_dir / "reference.json").read_bytes() != reference_bytes
+                or digest(output_dir / "summary.json") != receipt.get("summary_sha256")):
+>           raise ValueError("Incomplete, changed or inconsistent candidate artifacts")
+E           ValueError: Incomplete, changed or inconsistent candidate artifacts
+
+f1rank/overall/simulation_controller.py:428: ValueError
+---------------------------- Captured stdout setup -----------------------------
+{"study": "cache_format_fixture_only", "attempt": 1, "state": "sampling", "settings": {"warmup": 800, "samples": 800, "chains": 4, "target_accept": 0.9, "max_tree_depth": 10, "init_median_samples": 15, "seed": 0}}
+{"study": "cache_format_fixture_only", "attempt": 1, "seconds": 9.765697177499533e-05, "converged": true, "divergences": 0, "worst_rhat": null}
+=========================== short test summary info ============================
+FAILED tests/test_overall_production_simulation.py::test_complete_registered_candidate_runs_and_failed_precision_stays_unpublished
+FAILED tests/test_overall_production_simulation.py::test_registered_real_role_is_consumed_without_granting_acceptance[False]
+2 failed, 268 passed in 19.25s
