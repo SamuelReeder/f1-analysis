@@ -1,0 +1,104 @@
+{
+  "id": "overall-studentt-numerics-v1",
+  "purpose": "independent_studentt_primitive_and_matched_model_arithmetic",
+  "status": "frozen",
+  "registered_at": "2026-10-20T01:21:54.327127+00:00",
+  "source_commit": "63fd8213bb64f578bba62fc3ec8b1440d0781b8d",
+  "source_sha256": {
+    "analysis/overall_studentt_numerics.py": "bea7a16f3c66b407988cbac5516aa6d854f47a948d60a33f78853f7c58721fdb",
+    "analysis/overall_network_precision.py": "6cef90f3b3f0f6cb51485b07136b33b0c2748955e8f1c5b4ad69118536cef559",
+    "analysis/overall_network_diagnosis.py": "9ff099e2f74b15308edbc3dad53ec7c94703be2ee4c89110a2f77fec1a7d25d6",
+    "tests/test_overall_studentt_numerics.py": "5c72dd253db01c39be3a7ddb9647ab518b7bc632e6923a4e6536aa85a33ec47d",
+    "docs/overall_studentt_numerics.md": "4ebf80154d749efd48f7c9c566cdfcbf2f2038d99e8806c14daad0c2a551e3ab"
+  },
+  "input_sha256": {
+    "outputs/championship/development/overall-studentt-reference-dependency/dependency.json": "b541be33139e14fcd04858b147d926fe843a6b7bb4c8756126773b0b0d03e1d1",
+    "outputs/championship/development/overall-network-precision-v1/prepare/result.json": "7c7374ebca9bd803f93cfea34a200288918890f392aa73826f007f05607ac3e3",
+    "docs/overall_network_precision_protocol.json": "f9ebe588a152cbbc3d670a87a50389a93ad6e4e4a467b9d147b95480b8a34824"
+  },
+  "library_sha256": {
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/numpyro/distributions/continuous.py": "062f34a027cad41f2de256ec6feff86204971a2840290882b1cdb8035fda40d4",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/numpyro/distributions/transforms.py": "811ce31f4713e3eae8f60fab0845c1b3d2ad4d16a92a327f7f12a12605034425",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/jax/_src/scipy/special.py": "fc95ff70c5a166d47192eb44bcb286f2b06000f07ed8196464cc20869a8c1871",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/jax/_src/third_party/scipy/betaln.py": "fd960fdc5a350e5b4dfd878c991d02907b44d9f0ddd9ec8e756334ff6705fe44"
+  },
+  "reference_digits": [
+    80,
+    120
+  ],
+  "residuals": [
+    -10000.0,
+    -100.0,
+    -3.0,
+    -1.0,
+    0.0,
+    1.0,
+    3.0,
+    100.0,
+    10000.0
+  ],
+  "df_quarter_exponents": [
+    -12,
+    -11,
+    -10,
+    -9,
+    -8,
+    -7,
+    -6,
+    -5,
+    -4,
+    -3,
+    -2,
+    -1,
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "error_eps_multipliers": {
+    "float32": 32,
+    "float64": 256
+  },
+  "methods": [
+    "original",
+    "log_beta"
+  ],
+  "precisions": [
+    "float32",
+    "float64"
+  ],
+  "network_coordinate_source_sha256": "3cdb421d4e42fd57556c9047ccdc6872d96490fc079689fe2f1fbb69732c774b",
+  "reference_wheel_sha256": "a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c",
+  "original_reference_commit": "4bfb1351562974202fbe702640e21cf8b9f85e5c",
+  "sampling_allowed": false,
+  "publication_allowed": false
+}
