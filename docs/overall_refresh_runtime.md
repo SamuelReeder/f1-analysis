@@ -5,6 +5,29 @@ development work is infeasible after each race. It changes the work order,
 not the running experiment, model, retry ladder or acceptance rules. No faster
 refresh has been benchmarked by this review.
 
+## User-selected turnaround
+
+The user selected **"By the next morning"** for updates after a race. The target
+is the following morning in **America/Toronto**, covering source availability,
+fetching, fitting, validation and the published dashboard. It is an operational
+requirement, not a measured capability or a reason to relax scientific gates.
+An exact local deadline must be fixed before registering a timed acceptance
+benchmark; the user has not specified a clock time.
+
+The current [refresh workflow](../.github/workflows/refresh.yml) checks on Monday
+and Tuesday. It does not cover the following local morning for every possible
+race completion day. The accepted refresh needs an intake schedule that follows
+the event calendar, uses the local deadline across daylight-saving changes, and
+leaves room for all stages through publication. A scheduled check is not proof
+that a runner starts promptly or that source data is available.
+
+Measure both race-to-publication delay and ready-input-to-publication runtime,
+recording source availability separately. The latter cannot establish the former.
+Late or incomplete source data must result in an explicit missed-deadline or
+waiting-for-data status, with the last accepted snapshot's cutoff visible;
+it cannot silently move the deadline or produce a falsely current ranking.
+The schedule and deployment remain unchanged while this requirement is prepared.
+
 ## What the current code actually does
 
 - [`inference.sample`](../f1rank/overall/inference.py) constructs a fresh sampler,
@@ -137,12 +160,12 @@ predictive calibration and difficult sparse/confounded cases. Particle-weight
 diagnostics and MCMC diagnostics serve different purposes; one cannot replace
 the other.
 
-Choose a useful operational turnaround with the user and demonstrate it before
-expanding expensive calibration workloads or scheduling recurring updates.
-No particular elapsed time or speedup is established yet. If an update cannot
-meet its registered numerical and runtime requirements, retain the last accepted
-snapshot with its cutoff and status. When no accepted snapshot exists, keep
-Overall unavailable.
+Demonstrate the user's next-morning target, including intake and publication,
+before calling the recurring update production-ready. Prioritize runtime
+feasibility before expanding expensive calibration workloads. No measured
+turnaround or speedup is established yet. If an update cannot meet its registered
+numerical and runtime requirements, retain the last accepted snapshot with its
+cutoff and status. When no accepted snapshot exists, keep Overall unavailable.
 
 The active registered run continues without source or setting changes. These
 subsequent inference changes require their own registration and regeneration of
