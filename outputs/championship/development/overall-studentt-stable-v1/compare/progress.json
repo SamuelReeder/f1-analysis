@@ -1,0 +1,29 @@
+{
+  "state": "running",
+  "action": "compare",
+  "precision": "float32",
+  "actual_scope": {
+    "Slice": "f1.slice",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-studentt-stable-compare.scope",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "ActiveState": "active",
+    "Nice": 19,
+    "environment": {
+      "JAX_PLATFORMS": "cpu",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_ENABLE_X64": "false"
+    }
+  },
+  "started_at": "2026-10-20T01:37:40.766338+00:00",
+  "stable_protocol_sha256": "5d43506532bcffd0b498c090b5d0ccd0a1979e1ce4f670d58a36b494a6e9293a",
+  "protocol_sha256": "f9ebe588a152cbbc3d670a87a50389a93ad6e4e4a467b9d147b95480b8a34824",
+  "source_commit": "46b115daa83981336583031a0b42e4cbd6aa7f46",
+  "mcmc_executed": false,
+  "scientific_acceptance_established": false,
+  "publication_allowed": false
+}
