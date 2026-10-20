@@ -6,12 +6,14 @@ import json
 from pathlib import Path
 import resource
 import subprocess
+import sys
 import time
 import traceback
 
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 spec = importlib.util.spec_from_file_location('stable_audit', ROOT/'analysis/overall_studentt_stable_audit.py')
 stable = importlib.util.module_from_spec(spec); spec.loader.exec_module(stable)
 previous, sha, save = stable.previous, stable.sha, stable.save
