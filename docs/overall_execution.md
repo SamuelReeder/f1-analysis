@@ -283,6 +283,17 @@ invented archives and a fake sampler; there was no MCMC or actual real-driver
 scoring. The complete passing-precision workload, authenticated acceptance,
 public dashboard replacement and full refresh integration remain open.
 
+The [independent convergence evaluator](overall_acceptance_results.md) now
+derives the complete retained-field inventory from the model and recomputes
+final-fit parameter and current-driver contrast diagnostics from saved arrays.
+The [verification record](../outputs/championship/development/overall-acceptance-convergence-checks-v1/verification.json)
+records **96 passing focused checks**, including misleading recorded success,
+omitted fields and failed contrasts despite passing individual parameters.
+Invented traces and fake samplers supply software evidence only. The original
+full-network failure remains failed; complete scientific acceptance, functional
+precision and accepted canonical production remain open. No new fit or public
+payload was produced.
+
 The numerical profile is registered separately in
 [`overall_profile_protocol.json`](overall_profile_protocol.json). It answers
 whether the inference machinery can run on the specified synthetic designs, and
