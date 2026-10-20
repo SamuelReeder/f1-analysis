@@ -1,0 +1,47 @@
+{
+  "purpose": "fixed_point_precision_comparison_software_verification",
+  "source_commit": "e5b12ca81eca7654c40e3873140bbaab57edf988",
+  "result": {
+    "passed": 26,
+    "pytest_seconds": 0.63,
+    "exit_code": 0,
+    "external_elapsed": "0:00.85",
+    "peak_rss_kib": 117100
+  },
+  "command_prefix": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--slice=f1.slice",
+    "--unit=f1-overall-network-precision-checks",
+    "-q",
+    "-p",
+    "MemoryMax=3G",
+    "-p",
+    "CPUQuota=200%",
+    "--",
+    "/usr/bin/nice",
+    "-n",
+    "19",
+    "/usr/bin/time",
+    "-v"
+  ],
+  "coverage": [
+    "Exact design serialization with scalar types and numeric array identities.",
+    "Float lifting preserves values and discrete dtypes.",
+    "Complete difference accounting, including zero denominators and empty fields.",
+    "Matched point, protocol, derivative inventory and actual precision checks.",
+    "Original saved-network endpoint-reader and movement-summary regressions."
+  ],
+  "limits": [
+    "No active scope snapshot was captured during this short software run.",
+    "No full-network numerical comparison or MCMC in these tests."
+  ],
+  "output_sha256": {
+    "pytest.txt": "ad6492c02399cac516bbdca3e77a80b3fbf713991fc0257c544a170441fa3b24",
+    "resources.txt": "296511f1e2976aabc10f411ea1ca8e36c32d694cf8ad7200444e24bdb81a4234"
+  },
+  "mcmc_executed": false,
+  "scientific_acceptance_established": false,
+  "publication_allowed": false
+}
