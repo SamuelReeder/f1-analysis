@@ -1,0 +1,127 @@
+{
+  "id": "overall-stable-profile-v1",
+  "schema_version": 2,
+  "purpose": "numerical_profile",
+  "profile": "corrected_studentt_complete_design",
+  "inference_method": "conditional_weekend_batched_controls_stable_studentt_v1",
+  "registered_model_inputs_key": "9515a2b3c481d834396e7980d4fabb52e9ea1c89ff2eb471dcea31d38c094154",
+  "studies": [
+    "connected",
+    "confounded",
+    "sparse_rookie",
+    "dominant_teammate",
+    "era_boundary",
+    "real_network"
+  ],
+  "synthetic": {
+    "connected": {
+      "case": "connected",
+      "seed": 20261020
+    },
+    "confounded": {
+      "case": "confounded",
+      "seed": 20261021
+    },
+    "sparse_rookie": {
+      "case": "sparse_rookie",
+      "seed": 20261022
+    },
+    "dominant_teammate": {
+      "case": "dominant_teammate",
+      "seed": 20261023
+    },
+    "era_boundary": {
+      "case": "era_boundary",
+      "seed": 20261024
+    },
+    "real_network": {
+      "case": "real_network",
+      "seed": 20261025
+    }
+  },
+  "fit_settings": {
+    "warmup": 800,
+    "samples": 800,
+    "chains": 4,
+    "target_accept": 0.9,
+    "max_tree_depth": 10,
+    "init_median_samples": 15,
+    "seed": 0
+  },
+  "retry": [
+    [
+      1,
+      1,
+      null
+    ],
+    [
+      2,
+      2,
+      null
+    ],
+    [
+      3,
+      4,
+      null
+    ],
+    [
+      3,
+      4,
+      0.98
+    ]
+  ],
+  "diagnostics": {
+    "rank_rhat_strict_upper": 1.01,
+    "bulk_ess_min": 400,
+    "tail_ess_min": 400,
+    "mean_mcse_sd_upper": 0.05,
+    "divergences_per_draw_upper": 0.001
+  },
+  "resources": {
+    "slice": "f1.slice",
+    "MemoryMax": "13G",
+    "slice_CPUQuota": "400%",
+    "CPUWeight": 10,
+    "Nice": 19
+  },
+  "environment": {
+    "JAX_PLATFORMS": "cpu",
+    "JAX_ENABLE_X64": "false",
+    "JAX_ENABLE_COMPILATION_CACHE": "false",
+    "XLA_FLAGS": "--xla_force_host_platform_device_count=4",
+    "OPENBLAS_NUM_THREADS": "2",
+    "OMP_NUM_THREADS": "2",
+    "MKL_NUM_THREADS": "2"
+  },
+  "full_recovery_complete": false,
+  "sbc_complete": false,
+  "publication_allowed": false,
+  "status": "frozen",
+  "registered_at": "2026-10-20T01:59:44.439350+00:00",
+  "source_commit": "f56c760990c99b60ac373b174e70714557087511",
+  "source_sha256": {
+    "analysis/overall_stable_profile.py": "92d2ab8616e36f76dd440f171b888f1a49ef230441107336023322713773090a",
+    "tests/test_overall_stable_profile.py": "bea90112aaaec630c8c2628616929ec970ae538e9e2227593435e2982dfe23ed",
+    "docs/overall_stable_profile.md": "230ff71ba1efebeeaf7ce0b8449f3ae9496a230b5116f7cc8e324dc149331281"
+  },
+  "evidence_sha256": {
+    "docs/overall_stable_preflight_protocol.json": "a4ef931fdac84e4acfc0cc988e434bb14ea9749d9f41432aa133606bd5815de7",
+    "docs/overall_studentt_numerics_v2_protocol.json": "c4f3d0e6326b3ac179ba0749cb6ffc65ccd17a68241986a904ed42e5acd98b99",
+    "outputs/championship/development/overall-stable-preflight-v1/summary.json": "8eb04427c7d4f360625b374c7cfbee03322800121959ec9c889d25bed5a7aef4",
+    "outputs/championship/development/overall-stable-preflight-v1/connected/result.json": "ab5d3c82d2b1f915066d168c785a6b02980c2f35c4c43fe304326a1809c6bbda",
+    "outputs/championship/development/overall-stable-preflight-v1/confounded/result.json": "098c839e872349695b25d16c047d03d078cacd547f9a54abe89e5419fb455db0",
+    "outputs/championship/development/overall-stable-preflight-v1/sparse_rookie/result.json": "e690affbed6937490a91eaaa07631d1bee147031dba5d971e3e76f343d3e486c",
+    "outputs/championship/development/overall-stable-preflight-v1/dominant_teammate/result.json": "a3bb8658c2153e047af55f7729c02163839d86396e705da3b9c8e29fa5cf2c5a",
+    "outputs/championship/development/overall-stable-preflight-v1/era_boundary/result.json": "73716074a3b29776beaf69b030383ddf621a8d304f4fe42d97fb06517509a5df",
+    "outputs/championship/development/overall-stable-preflight-v1/real_network/result.json": "abd1bd2849bbaccfeb75ddbcbc35a1039d65220a6807d86faedd8fd87e625f10"
+  },
+  "runtime_source_sha256": {
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/numpyro/infer/mcmc.py": "85385c5e52441e72310dd7328993514acb5400d1b5a4d005e9437c887d37c8da",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/numpyro/infer/hmc.py": "995416932344dab67935608fadde5c8ce00696a84769d369ca22394588d86ec9",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/numpyro/infer/util.py": "1c68d72229c374d6094f36041661c2ddc5a2cdaaf1224f349c984d57b07ee7c5",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/numpyro/distributions/continuous.py": "062f34a027cad41f2de256ec6feff86204971a2840290882b1cdb8035fda40d4",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/numpyro/distributions/transforms.py": "811ce31f4713e3eae8f60fab0845c1b3d2ad4d16a92a327f7f12a12605034425",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/jax/_src/scipy/special.py": "fc95ff70c5a166d47192eb44bcb286f2b06000f07ed8196464cc20869a8c1871",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/jax/_src/third_party/scipy/betaln.py": "fd960fdc5a350e5b4dfd878c991d02907b44d9f0ddd9ec8e756334ff6705fe44"
+  }
+}
