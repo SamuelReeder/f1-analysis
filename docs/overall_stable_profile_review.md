@@ -13,6 +13,12 @@ failed child or a child killed before writing a result. A missing whole-run
 summary is an interrupted run requiring a separate recovery decision; the
 reviewer does not manufacture completion.
 
+A current systemd query must show either a terminal loaded service or an absent
+service with no main process. A completed transient unit need not remain loaded.
+The complete committed summary and matching launcher exit record are required
+in either case. Service absence alone cannot supply a successful run or replace
+missing results. Recheck this authoritative service state before returning.
+
 Check the complete child-result inventory against the summary, then bind each
 child's log, resource record, result, generating truth and cached receipt.
 Compare the receipt's specification, method, source, original generated inputs,

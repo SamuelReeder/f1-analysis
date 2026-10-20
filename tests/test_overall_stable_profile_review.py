@@ -32,7 +32,8 @@ class CorrectedProfileReviewTests(unittest.TestCase):
                 raise ValueError('Uncommitted fixture evidence')
         change = patch.object(review.original, 'committed', committed)
         change.start(); self.addCleanup(change.stop)
-        change = patch.object(review.original, 'terminal_service', return_value={'terminal': True})
+        change = patch.object(review.original, 'service_state', return_value=dict(unit='f1-fixture.service',
+            properties=dict(LoadState='loaded', MainPID='0', ActiveState='inactive', SubState='dead')))
         self.terminal = change.start(); self.addCleanup(change.stop)
 
     def save(self, path, value, *, tracked=True):
@@ -115,6 +116,8 @@ class CorrectedProfileReviewTests(unittest.TestCase):
             registration_sha256=review.sha(self.registration), studies=completions, all_processed=True,
             all_converged=all(row['state'] == 'converged' for row in completions),
             **{k:False for k in review.FALSE_FLAGS}))
+        self.save(self.output.with_name('fixture-launch') / 'exit.status',
+                  0 if all(row['state'] == 'converged' for row in completions) else 1)
         change = patch.object(profile, 'checked', return_value=self.reg)
         self.checked = change.start(); self.addCleanup(change.stop)
         change = patch.object(profile, 'load_preflight', return_value=previous)
@@ -205,8 +208,35 @@ class CorrectedProfileReviewTests(unittest.TestCase):
 
     def test_terminal_state_rechecked_on_successful_exit(self):
         self.fixture()
-        self.terminal.side_effect = [{'terminal': True}, {'terminal': False}]
+        before = copy.deepcopy(self.terminal.return_value)
+        after = copy.deepcopy(before); after['properties']['LoadState'] = 'not-found'
+        self.terminal.side_effect = [before, after]
         with self.assertRaisesRegex(ValueError, 'Terminal service changed'):
+            review.collect(self.registration)
+
+    def test_absent_service_can_have_complete_terminal_evidence(self):
+        self.fixture()
+        self.terminal.return_value['properties']['LoadState'] = 'not-found'
+        self.assertTrue(review.collect(self.registration)['records_consistent'])
+
+    def test_service_absence_does_not_supply_a_missing_summary(self):
+        self.fixture()
+        self.terminal.return_value['properties']['LoadState'] = 'not-found'
+        (self.output / 'summary.json').unlink()
+        with self.assertRaises(FileNotFoundError):
+            review.collect(self.registration)
+
+    def test_starting_or_running_service_is_not_terminal(self):
+        for main_pid, active, sub in [('5', 'active', 'running'), ('0', 'activating', 'start-pre')]:
+            with self.subTest(sub=sub):
+                self.terminal.return_value['properties'].update(MainPID=main_pid, ActiveState=active, SubState=sub)
+                with self.assertRaisesRegex(ValueError, 'terminal or absent'):
+                    review.terminal_service('fixture')
+
+    def test_launcher_failure_cannot_be_described_as_success(self):
+        self.fixture()
+        self.save(self.output.with_name('fixture-launch') / 'exit.status', 1)
+        with self.assertRaisesRegex(ValueError, 'launcher exit status'):
             review.collect(self.registration)
 
     def test_contradictory_child_inventory_flag_does_not_count_as_success(self):

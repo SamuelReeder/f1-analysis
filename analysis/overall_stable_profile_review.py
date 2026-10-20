@@ -14,6 +14,18 @@ require, read, sha = original.require, original.read, original.sha
 FALSE_FLAGS = ('full_recovery_complete', 'sbc_complete', 'publication_allowed')
 
 
+def terminal_service(identifier):
+    """Authoritative absence is terminal; log timestamps alone never are."""
+    observed = original.service_state(identifier)
+    state = observed['properties']
+    absent = (state.get('LoadState') == 'not-found' and state.get('MainPID') == '0'
+              and state.get('ActiveState') == 'inactive' and state.get('SubState') == 'dead')
+    stopped = (state.get('LoadState') == 'loaded' and state.get('MainPID') == '0'
+               and (state.get('ActiveState') in ('inactive', 'failed') or state.get('SubState') == 'exited'))
+    require(absent or stopped, 'Review requires an authoritatively terminal or absent service')
+    return observed
+
+
 def object_key(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest()
 
@@ -95,7 +107,7 @@ def collect(registration):
     identifier = initial['id']
     require(isinstance(identifier, str) and identifier and Path(identifier).name == identifier,
             'Invalid registered profile identifier')
-    service = original.terminal_service(identifier)
+    service = terminal_service(identifier)
     from analysis import overall_stable_profile as profile
     reg = profile.checked(registration)
     p = read(ROOT / profile.PREFLIGHT_PROTOCOL)
@@ -128,6 +140,10 @@ def collect(registration):
             and summary.get('registration') == registration.relative_to(ROOT).as_posix()
             and all(summary.get(k) is False for k in FALSE_FLAGS), 'Whole-run summary is incomplete or changed')
     require([row['case'] for row in summary['studies']] == reg['studies'], 'Required case inventory differs')
+    exit_path = output.with_name(identifier + '-launch') / 'exit.status'
+    bind(exit_path)
+    require(exit_path.read_text().strip() == ('0' if summary['all_converged'] else '1'),
+            'Final launcher exit status differs from the whole-run result')
     studies, issues, cache_inventories = [], [], {}
     for completion in summary['studies']:
         case = completion['case']
@@ -210,7 +226,7 @@ def collect(registration):
         cache = cache_root / case
         require(names == {path.relative_to(cache).as_posix() for path in cache.rglob('*') if path.is_file()},
                 'Cached inventory changed during review')
-    require(original.terminal_service(identifier) == service, 'Terminal service changed during review')
+    require(terminal_service(identifier) == service, 'Terminal service changed during review')
     return dict(purpose='corrected_profile_evidence_review', recorded_at=datetime.now(timezone.utc).isoformat(),
         registration=registration.relative_to(ROOT).as_posix(), input_sha256=fingerprints,
         terminal_service=service, studies=studies, issues=issues, all_required_cases_accounted=True,
