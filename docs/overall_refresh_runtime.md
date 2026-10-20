@@ -41,9 +41,11 @@ new-race inference and publication still need their own checks.
 The isolated `overall-refresh-runtime` branch now contains an unselected
 checkpoint store and sampling implementation in
 [`checkpoints.py`](../f1rank/overall/checkpoints.py) and
-[`resumable_sampling.py`](../f1rank/overall/resumable_sampling.py). They save the
-end-of-warmup state and complete retained-sampling chunks with random keys,
-adaptation, grouped posterior draws and sampler extras. An atomic directory
+[`resumable_sampling.py`](../f1rank/overall/resumable_sampling.py). They save
+initialization, partial warmup and complete retained-sampling chunks with random
+keys, adaptation, grouped posterior draws and sampler extras. Warmup uses the
+original total adaptation schedule and saved iteration; its temporary samples
+are not retained as posterior draws. An atomic directory
 rename commits each chunk together with its following state; interrupted partial
 writes remain separate. Identity checks reject a different target or runtime.
 The prepared tests exercise corruption, interruption and numerical replay,
@@ -53,8 +55,9 @@ any registration or production runner and supplies no convergence decision.
 Restoring JAX's weak array typing uses a private conversion function whose source
 is included in the runtime identity; the replay checks must pass under the exact
 intended environment before this compatibility choice can be used.
-Mid-warmup checkpoints, integration with bounded diagnostics and final archives,
-new-race initialization, and measured runtime remain outstanding.
+Numerical replay of both warmup and retained-sampling interruptions, integration
+with bounded diagnostics and final archives, new-race initialization, and
+measured runtime remain outstanding.
 
 **Make the existing target resumable and measure where time goes.** After the
 active profile terminates, instrument compilation, warmup, sampling, diagnostics,

@@ -77,6 +77,29 @@ def test_warmup_then_chunks_round_trip_and_retains_every_draw(tmp_path):
         assert np.concatenate([p["beta"] for _, p, _ in rows], axis=1).shape == (2, 6, 3)
 
 
+def test_partial_warmup_resume_and_phase_boundaries(tmp_path):
+    def warmup_state(completed):
+        return state()._replace(i=np.full(2, completed, np.int32))
+    with Checkpoints(tmp_path, identity()) as saved:
+        saved.append(warmup_state(0))
+        saved.append(warmup_state(2))
+        assert saved.warmup_completed == 2
+        assert saved.draws == 0
+        with pytest.raises(ValueError, match="advance warmup"):
+            saved.append(warmup_state(2))
+        posterior, extras = samples(2)
+        with pytest.raises(ValueError, match="completed warmup"):
+            saved.append(state(2), posterior=posterior, extras=extras)
+    with Checkpoints(tmp_path, identity()) as saved:
+        np.testing.assert_array_equal(saved.state().i, [2, 2])
+        saved.append(warmup_state(4))
+        posterior, extras = samples(2)
+        saved.append(state(2), posterior=posterior, extras=extras)
+        with pytest.raises(ValueError, match="advance warmup"):
+            saved.append(warmup_state(4))
+        assert len(list(saved.chunks())) == 1
+
+
 def test_same_target_identity_and_exclusive_lock_are_required(tmp_path):
     with Checkpoints(tmp_path, identity()) as saved:
         saved.append(state())
@@ -263,7 +286,8 @@ def test_actual_nuts_chunks_equal_uninterrupted_sampling(tmp_path, chains):
     jax.clear_caches()
 
 
-def test_actual_process_restart_after_committed_chunk_reproduces_every_sample(tmp_path):
+@pytest.mark.parametrize("phase", ["warmup", "sampling"])
+def test_actual_process_restart_after_committed_chunk_reproduces_every_sample(tmp_path, phase):
     """Use separate interpreters so recovery cannot rely on a live sampler."""
     script = tmp_path / "sample.py"
     script.write_text('''
@@ -276,10 +300,11 @@ from test_overall_checkpoints import small_model, numerical_settings
 original = Checkpoints.append
 def interrupted(self, *args, **kwargs):
     result = original(self, *args, **kwargs)
-    if result["draws"] == 7:
+    if ((sys.argv[2] == "warmup" and result["warmup_completed"] == 7 and result["draws"] == 0)
+            or (sys.argv[2] == "sampling" and result["draws"] == 7)):
         raise SystemExit(23)
     return result
-if sys.argv[2] == "interrupt":
+if sys.argv[2] in ("warmup", "sampling"):
     Checkpoints.append = interrupted
 result = run_chunks(small_model, (jnp.array([-.3,.1,.6], dtype=jnp.float32),),
     kwargs={}, settings=numerical_settings(), chunk_draws=7,
@@ -290,7 +315,7 @@ assert result["state"] == "draws_complete"
     root = Path(__file__).resolve().parents[1]
     env = dict(os.environ, PYTHONPATH=os.pathsep.join((str(root), str(root/"tests"))))
     resumed, uninterrupted = tmp_path / "resumed", tmp_path / "uninterrupted"
-    first = subprocess.run([sys.executable, str(script), str(resumed), "interrupt"],
+    first = subprocess.run([sys.executable, str(script), str(resumed), phase],
                            env=env, capture_output=True, text=True, timeout=180)
     assert first.returncode == 23, first.stderr
     for directory in (resumed, uninterrupted):

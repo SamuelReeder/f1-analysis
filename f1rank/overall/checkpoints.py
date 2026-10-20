@@ -15,7 +15,7 @@ import re
 import tempfile
 import zipfile
 
-SCHEMA = 1
+SCHEMA = 2
 
 
 def canonical(value):
@@ -274,7 +274,8 @@ class Checkpoints:
             raise ValueError("Checkpoint history changed during use")
 
     def _read_records(self):
-        records, previous, draws, inventory = [], None, 0, None
+        records, previous, draws, warmup, inventory = [], None, 0, 0, None
+        target_warmup = self.identity["settings"]["warmup"]
         for index, directory in enumerate(sorted(self.root.glob("checkpoint-*"))):
             if directory.name != f"checkpoint-{index:06d}" or not directory.is_dir():
                 raise ValueError("Checkpoint generations are not contiguous")
@@ -283,17 +284,26 @@ class Checkpoints:
             if (record["schema"] != SCHEMA or record["identity_key"] != self.identity_key
                     or record["generation"] != index or record["previous"] != previous):
                 raise ValueError("Broken checkpoint identity or manifest chain")
-            expected = {"state.npz"} if index == 0 else {"state.npz", "posterior.npz", "extras.npz"}
+            end, completed = record["draws"], record["warmup_completed"]
+            if (type(end) is not int or type(completed) is not int
+                    or record["start_draw"] != draws or not draws <= end <= self.identity["settings"]["samples"]
+                    or not warmup <= completed <= target_warmup):
+                raise ValueError("Overlapping or missing checkpoint progress")
+            sampling = end > draws
+            if sampling:
+                if not index or warmup != target_warmup or completed != target_warmup:
+                    raise ValueError("Retained sampling cannot precede completed warmup")
+            elif end or (index and completed == warmup):
+                raise ValueError("Warmup checkpoint does not advance warmup")
+            if record["phase"] != ("sampling" if sampling else "warmup"):
+                raise ValueError("Checkpoint phase and progress disagree")
+            expected = {"state.npz", "posterior.npz", "extras.npz"} if sampling else {"state.npz"}
             if set(record["files"]) != expected or {p.name for p in directory.iterdir()} != expected | {"manifest.json"}:
                 raise ValueError("Incomplete checkpoint generation")
             for name, checksum in record["files"].items():
                 if digest(directory / name) != checksum:
                     raise ValueError("Checkpoint bytes changed")
-            end = record["draws"]
-            if (type(end) is not int or (end != 0 if index == 0 else end <= draws)
-                    or record["start_draw"] != draws or end > self.identity["settings"]["samples"]):
-                raise ValueError("Overlapping or missing checkpoint draws")
-            if index:
+            if sampling:
                 axes = [self.identity["settings"]["chains"], end-draws]
                 if (not isinstance(record["inventory"], dict) or
                         set(record["inventory"]) != {"posterior", "extras"}):
@@ -316,12 +326,16 @@ class Checkpoints:
             elif record["inventory"] is not None:
                 raise ValueError("Warmup checkpoint cannot contain posterior draws")
             records.append(record)
-            previous, draws = digest(path), end
+            previous, draws, warmup = digest(path), end, completed
         return records
 
     @property
     def draws(self):
         return self.records[-1]["draws"] if self.records else 0
+
+    @property
+    def warmup_completed(self):
+        return self.records[-1]["warmup_completed"] if self.records else 0
 
     def state(self):
         self._require_lock()
@@ -330,31 +344,41 @@ class Checkpoints:
         self._unchanged()
         directory = self.root / f"checkpoint-{len(self.records)-1:06d}"
         state = decode_state(self.records[-1]["tree"], _load_arrays(directory / "state.npz"))
-        self._validate_iteration(state, self.draws)
+        self._validate_iteration(state, self.draws, self.warmup_completed)
         self._unchanged()
         return state
 
-    def _validate_iteration(self, state, draws):
+    def _validate_iteration(self, state, draws, warmup):
         import numpy as np
         settings = self.identity["settings"]
         indices = np.asarray(state.i)
         expected_shape = () if settings["chains"] == 1 else (settings["chains"],)
         if (indices.dtype.kind not in "iu" or indices.shape != expected_shape
-                or not np.all(indices == settings["warmup"]+draws)
-                or draws > settings["samples"]):
+                or not np.all(indices == warmup+draws)
+                or not 0 <= warmup <= settings["warmup"] or draws > settings["samples"]
+                or (draws and warmup != settings["warmup"])):
             raise ValueError("Sampler iteration and committed draw counts disagree")
 
     def append(self, state, *, posterior=None, extras=None):
+        import numpy as np
         self._require_lock()
         self._unchanged()
         tree, leaves = encode_state(state)
         generation, start = len(self.records), self.draws
         inventory = None
         draws = start
-        if generation == 0:
-            if posterior is not None or extras is not None:
-                raise ValueError("Save the warmup state before retained sampling")
+        sampling = posterior is not None or extras is not None
+        if not sampling:
+            indices = np.asarray(state.i)
+            if indices.size == 0 or indices.dtype.kind not in "iu":
+                raise ValueError("Invalid warmup iteration")
+            warmup = int(indices.flat[0])
+            if start or (generation and warmup <= self.warmup_completed):
+                raise ValueError("Warmup checkpoint does not advance warmup")
         else:
+            warmup = self.identity["settings"]["warmup"]
+            if not generation or self.warmup_completed != warmup:
+                raise ValueError("Save completed warmup before retained sampling")
             if not posterior or not extras:
                 raise ValueError("Retain all posterior samples and sampler extras")
             posterior = {k: _numeric(v) for k, v in posterior.items()}
@@ -371,20 +395,21 @@ class Checkpoints:
             inventory = {kind: {k: {"shape": [v.shape[0], *v.shape[2:]], "dtype": v.dtype.str}
                                 for k, v in values.items()}
                          for kind, values in (("posterior", posterior), ("extras", extras))}
-            if generation > 1 and inventory != self.records[-1]["inventory"]:
+            if start and inventory != self.records[-1]["inventory"]:
                 raise ValueError("Posterior site inventory changed between chunks")
             draws += axes[1]
-        self._validate_iteration(state, draws)
-        if generation and axes[0] != self.identity["settings"]["chains"]:
+        self._validate_iteration(state, draws, warmup)
+        if sampling and axes[0] != self.identity["settings"]["chains"]:
             raise ValueError("Checkpoint chain count changed")
         directory = Path(tempfile.mkdtemp(prefix=".partial-", dir=self.root))
         _arrays(directory / "state.npz", leaves)
-        if generation:
+        if sampling:
             _arrays(directory / "posterior.npz", posterior)
             _arrays(directory / "extras.npz", extras)
         record = dict(schema=SCHEMA, identity_key=self.identity_key, generation=generation,
                       previous=digest(self.root / f"checkpoint-{generation-1:06d}" / "manifest.json")
                       if generation else None, start_draw=start, draws=draws, inventory=inventory,
+                      phase="sampling" if sampling else "warmup", warmup_completed=warmup,
                       tree=tree, files={p.name: digest(p) for p in sorted(directory.iterdir())})
         _json(directory / "manifest.json", record)
         _sync_directory(directory)
@@ -405,7 +430,9 @@ class Checkpoints:
         self._require_lock()
         if self._read_records() != self.records:
             raise ValueError("Checkpoint history changed during use")
-        for index, record in enumerate(self.records[1:], 1):
+        for index, record in enumerate(self.records):
+            if record["phase"] == "warmup":
+                continue
             directory = self.root / f"checkpoint-{index:06d}"
             posterior = _load_arrays(directory / "posterior.npz")
             extras = _load_arrays(directory / "extras.npz")

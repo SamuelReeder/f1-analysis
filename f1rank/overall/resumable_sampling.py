@@ -1,8 +1,8 @@
-"""Unselected development path for post-warmup, same-target continuation.
+"""Unselected development path for warmup and same-target continuation.
 
 No existing registration or production runner invokes this module. Completion
 means all declared draws were stored, not convergence or scientific acceptance.
-Warmup is checkpointed at its end; interrupted warmup still restarts in full.
+Warmup retains the original total adaptation schedule across checkpoint chunks.
 """
 import hashlib
 import inspect
@@ -10,7 +10,7 @@ import os
 import platform
 import time
 
-from .checkpoints import Checkpoints, canonical, digest
+from .checkpoints import SCHEMA, Checkpoints, canonical, digest
 
 
 def runtime_identity():
@@ -59,7 +59,7 @@ def run_chunks(model, args, *, kwargs, settings, run_key, directory, chunk_draws
     if jax.local_device_count() < settings["chains"]:
         raise ValueError("Insufficient chain devices; do not silently change execution")
     verify_inputs()
-    identity = dict(schema=1, run_key=run_key, settings=settings, chunk_draws=chunk_draws,
+    identity = dict(schema=SCHEMA, run_key=run_key, settings=settings, chunk_draws=chunk_draws,
                     runtime=runtime_identity(), implementation={
                         "resumable_sampling": digest(__file__),
                         "checkpoints": digest(inspect.getfile(Checkpoints))})
@@ -68,6 +68,7 @@ def run_chunks(model, args, *, kwargs, settings, run_key, directory, chunk_draws
         state = saved.state()
         verify_inputs()
         resumed_draws = saved.draws
+        resumed_warmup = saved.warmup_completed
         if saved.draws > settings["samples"]:
             raise ValueError("Checkpoint has more than the registered draw count")
         kernel = NUTS(model, target_accept_prob=settings["target_accept"],
@@ -76,23 +77,45 @@ def run_chunks(model, args, *, kwargs, settings, run_key, directory, chunk_draws
 
         # Reuse each collection shape's compiled sampler within this process.
         samplers = {}
-        def sampler(count):
-            if count not in samplers:
-                samplers[count] = MCMC(kernel, num_warmup=settings["warmup"],
+        def sampler(count, *, warmup=False):
+            key = (count, warmup)
+            if key not in samplers:
+                samplers[key] = MCMC(kernel, num_warmup=settings["warmup"],
                     num_samples=count, num_chains=settings["chains"],
-                    chain_method="parallel", progress_bar=False)
-            return samplers[count]
+                    chain_method="parallel", progress_bar=False,
+                    postprocess_fn=(lambda values: {}) if warmup else None)
+            return samplers[key]
 
         if state is None:
             verify_inputs()
             started = time.monotonic()
-            current = sampler(min(chunk_draws, settings["samples"]))
-            current.warmup(jax.random.PRNGKey(settings["seed"]), *args,
-                           extra_fields=EXTRA_FIELDS, **kwargs)
+            initial_key = jax.random.PRNGKey(settings["seed"])
+            def initialize(key):
+                return kernel.init(key, settings["warmup"], init_params=None,
+                                   model_args=args, model_kwargs=kwargs)
+            if settings["chains"] == 1:
+                state = initialize(initial_key)
+            else:
+                state = jax.pmap(initialize)(jax.random.split(initial_key, settings["chains"]))
+            state = jax.block_until_ready(state)
+            verify_inputs()
+            saved.append(state)
+            timings.append(dict(stage="initialization_and_checkpoint", seconds=time.monotonic()-started))
+        while saved.warmup_completed < settings["warmup"]:
+            verify_inputs()
+            count = min(chunk_draws, settings["warmup"]-saved.warmup_completed)
+            started = time.monotonic()
+            current = sampler(count, warmup=True)
+            # NumPyro's collection label does not control HMC adaptation. The
+            # kernel retains the original total warmup and its saved iteration,
+            # adaptation windows and random keys. These draws are discarded.
+            current.post_warmup_state = state
+            current.run(state.rng_key, *args, extra_fields=EXTRA_FIELDS, **kwargs)
             state = jax.block_until_ready(current.last_state)
             verify_inputs()
             saved.append(state)
-            timings.append(dict(stage="warmup_and_checkpoint", seconds=time.monotonic()-started))
+            timings.append(dict(stage="warmup_and_checkpoint", steps=count,
+                                seconds=time.monotonic()-started))
         while saved.draws < settings["samples"]:
             verify_inputs()
             count = min(chunk_draws, settings["samples"]-saved.draws)
@@ -111,5 +134,6 @@ def run_chunks(model, args, *, kwargs, settings, run_key, directory, chunk_draws
         verify_inputs()
         return dict(state="draws_complete", publication_allowed=False, convergence_evaluated=False,
                     identity_key=hashlib.sha256(canonical(identity)).hexdigest(),
-                    resumed_draws=resumed_draws, total_draws=saved.draws,
+                    resumed_draws=resumed_draws, resumed_warmup=resumed_warmup,
+                    total_draws=saved.draws, total_warmup=saved.warmup_completed,
                     checkpoints=len(saved.records), timings=timings)
