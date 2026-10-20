@@ -1,6 +1,8 @@
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import contract from "../../contracts/overall.json" with { type: "json" };
+import syntheticExport from "../../tests/fixtures/overall_current_contract.json" with { type: "json" };
+import { currentOverallAvailable, overallPair } from "../src/overall";
 import type { CurrentOverallResult, Dataset } from "../src/types";
 
 let current: Dataset;
@@ -12,33 +14,7 @@ test.beforeEach(async ({ request }) => {
 // These invented outcomes exercise the display contract. They are not model
 // results, and cannot advance the actual published pointer.
 function fixture(): CurrentOverallResult {
-  const fit_id = "synthetic-joint-fit", scenario_id = "synthetic-common-calendar";
-  return {
-    schema_version: 2, model_version: "overall-joint-v1",
-    target: "current_equal_machinery_and_team", status: "established",
-    reason: "Every required check passed in this synthetic display fixture.",
-    evidence: {
-      recorded_at: "2004-01-01T00:00:00Z", data_as_of: "2003-05", fit_id,
-      field: ["beta", "alpha"], scenario: { id: scenario_id, label: "Synthetic common calendar", races: 12 },
-      posterior_draws: 4000, replicates_per_draw: 200,
-      checks: Object.fromEntries(contract.required_checks.map(key => [key, {
-        passed: true, source: `synthetic/${key}.json`, reason: `Synthetic ${key.replaceAll("_", " ")} evidence.`,
-      }])),
-    },
-    standings: [
-      { driver_id: "beta", name: "Fixture Beta", expected_points: {
-        mean: 18.5, q05: 18.1, q95: 19.3, posterior_sd: .3, mcse: .002, max_conditional_mcse: .03,
-      }, p_title: .2, season_rank: { q05: 1, median: 2, q95: 2 } },
-      { driver_id: "alpha", name: "Fixture Alpha", expected_points: {
-        mean: 22.5, q05: 21.9, q95: 23.3, posterior_sd: .4, mcse: .002, max_conditional_mcse: .04,
-      }, p_title: .8, season_rank: { q05: 1, median: 1, q95: 2 } },
-    ],
-    contributions: [
-      { driver_id: "alpha", fit_id, scenario_id, losses: { qualifying_pace: .8, total_race_pace: 1.2, all: 1.7 } },
-      { driver_id: "beta", fit_id, scenario_id, losses: { qualifying_pace: -.2, total_race_pace: -.6, all: -.7 } },
-    ],
-    limitations: ["Synthetic fixture only; no real driver is evaluated."],
-  };
+  return structuredClone(syntheticExport) as CurrentOverallResult;
 }
 
 async function supply(page: Page, result: unknown) {
@@ -104,6 +80,20 @@ const invalid: [string, (result: CurrentOverallResult) => void][] = [
   ["mixed explanation scenario", r => r.contributions[0].scenario_id = "different-scenario"],
   ["missing race explanation", r => delete r.contributions[0].losses.total_race_pace],
   ["duplicate explanation", r => r.contributions[1].driver_id = r.contributions[0].driver_id],
+  ["missing pairwise comparisons", r => r.pairwise = []],
+  ["mixed comparison posterior", r => r.pairwise[0].posterior_key = "d".repeat(64)],
+  ["mixed comparison simulation", r => r.pairwise[0].simulation_key = "d".repeat(64)],
+  ["wrong paired mean", r => r.pairwise[0].points_difference.mean = 3],
+  ["self comparison", r => r.pairwise[0].driver_b = "alpha"],
+  ["unknown comparison driver", r => r.pairwise[0].driver_b = "outsider"],
+  ["missing explanation uncertainty", r => Object.assign(r.contributions[0].losses, { all: 1.7 })],
+  ["unregistered explanation", r => r.contributions[0].losses.extra = r.contributions[0].losses.all],
+  ["failed explanation precision", r => r.contributions[0].losses.all.conditional_precision_passed = false],
+  ["failed paired precision", r => r.pairwise[0].points_difference.conditional_mcse_bound = .1],
+  ["falsified precision bound", r => r.pairwise[0].points_difference.conditional_mcse_bound = 0],
+  ["insufficient replicate inventory", r => r.evidence!.replicates_per_draw = 200],
+  ["mixed explanation posterior", r => r.contributions[0].posterior_key = "d".repeat(64)],
+  ["missing simulation identity", r => r.evidence!.simulation_key = ""],
   ["invalid title probabilities", r => r.standings[0].p_title = .9],
   ["invalid finish range", r => r.standings[0].season_rank.q95 = 3],
 ];
@@ -170,3 +160,21 @@ for (const status of ["established", "not established"] as const) {
     }
   });
 }
+
+
+test("paired comparisons preserve their narrow shared-draw interval and reverse its direction", async ({ page }) => {
+  const result = fixture();
+  expect(currentOverallAvailable(result)).toBe(true);
+  expect(overallPair(result, "alpha", "beta")?.q05).toBe(3.95);
+  expect(overallPair(result, "beta", "alpha")?.q05).toBe(-4.08);
+  await supply(page, result);
+  await page.goto("./#drivers/overall");
+  const pair = page.getByRole("region", { name: "Compare expected performance" });
+  await expect(pair).toContainText("+4.00 points per race");
+  await expect(pair).toContainText("+3.95 to +4.08");
+  await page.getByRole("button", { name: "Inspect Fixture Beta explanation" }).click();
+  await expect(pair).toContainText("−4.00 points per race");
+  await expect(pair).toContainText("−4.08 to −3.95");
+  const explanation = page.getByRole("region", { name: "What explains the estimate?" });
+  await expect(explanation).toContainText("(−0.90 to −0.40)");
+});

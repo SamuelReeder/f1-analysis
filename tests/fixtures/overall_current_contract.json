@@ -1,0 +1,221 @@
+{
+  "schema_version": 2,
+  "model_version": "overall-joint-v1",
+  "target": "current_equal_machinery_and_team",
+  "status": "established",
+  "reason": "Every required check passed in this synthetic display fixture.",
+  "evidence": {
+    "fit_id": "synthetic-joint-fit",
+    "posterior_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "scenario_key": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "simulation_key": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "recorded_at": "2004-01-01T00:00:00Z",
+    "data_as_of": "2003-05",
+    "field": [
+      "beta",
+      "alpha"
+    ],
+    "scenario": {
+      "id": "synthetic-common-calendar",
+      "label": "Synthetic common calendar",
+      "races": 12
+    },
+    "posterior_draws": 4000,
+    "replicates_per_draw": 250000,
+    "checks": {
+      "provenance": {
+        "passed": true,
+        "source": "synthetic/provenance.json",
+        "reason": "Synthetic provenance evidence."
+      },
+      "convergence": {
+        "passed": true,
+        "source": "synthetic/convergence.json",
+        "reason": "Synthetic convergence evidence."
+      },
+      "recovery": {
+        "passed": true,
+        "source": "synthetic/recovery.json",
+        "reason": "Synthetic recovery evidence."
+      },
+      "chronological_prediction": {
+        "passed": true,
+        "source": "synthetic/chronological_prediction.json",
+        "reason": "Synthetic chronological prediction evidence."
+      },
+      "grid_calibration": {
+        "passed": true,
+        "source": "synthetic/grid_calibration.json",
+        "reason": "Synthetic grid calibration evidence."
+      },
+      "race_calibration": {
+        "passed": true,
+        "source": "synthetic/race_calibration.json",
+        "reason": "Synthetic race calibration evidence."
+      },
+      "retirement_calibration": {
+        "passed": true,
+        "source": "synthetic/retirement_calibration.json",
+        "reason": "Synthetic retirement calibration evidence."
+      },
+      "prospective_prediction": {
+        "passed": true,
+        "source": "synthetic/prospective_prediction.json",
+        "reason": "Synthetic prospective prediction evidence."
+      },
+      "simulation_precision": {
+        "passed": true,
+        "source": "synthetic/simulation_precision.json",
+        "reason": "Synthetic simulation precision evidence."
+      }
+    }
+  },
+  "standings": [
+    {
+      "driver_id": "beta",
+      "name": "Fixture Beta",
+      "expected_points": {
+        "mean": 18.5,
+        "q05": 18.1,
+        "q95": 19.3,
+        "posterior_sd": 0.3,
+        "mcse": 0.0002,
+        "max_conditional_mcse": 0.02,
+        "conditional_mcse_bound": 0.025,
+        "conditional_precision_passed": true
+      },
+      "p_title": 0.2,
+      "season_rank": {
+        "q05": 1,
+        "median": 2,
+        "q95": 2
+      }
+    },
+    {
+      "driver_id": "alpha",
+      "name": "Fixture Alpha",
+      "expected_points": {
+        "mean": 22.5,
+        "q05": 21.9,
+        "q95": 23.3,
+        "posterior_sd": 0.4,
+        "mcse": 0.0002,
+        "max_conditional_mcse": 0.02,
+        "conditional_mcse_bound": 0.025,
+        "conditional_precision_passed": true
+      },
+      "p_title": 0.8,
+      "season_rank": {
+        "q05": 1,
+        "median": 1,
+        "q95": 2
+      }
+    }
+  ],
+  "contributions": [
+    {
+      "driver_id": "alpha",
+      "fit_id": "synthetic-joint-fit",
+      "posterior_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "scenario_key": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "simulation_key": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "scenario_id": "synthetic-common-calendar",
+      "losses": {
+        "qualifying_pace": {
+          "mean": 0.8,
+          "q05": 0.6,
+          "q95": 1.0,
+          "posterior_sd": 0.1,
+          "mcse": 0.0002,
+          "max_conditional_mcse": 0.02,
+          "conditional_mcse_bound": 0.05,
+          "conditional_precision_passed": true
+        },
+        "total_race_pace": {
+          "mean": 1.2,
+          "q05": 0.9,
+          "q95": 1.5,
+          "posterior_sd": 0.1,
+          "mcse": 0.0002,
+          "max_conditional_mcse": 0.02,
+          "conditional_mcse_bound": 0.05,
+          "conditional_precision_passed": true
+        },
+        "all": {
+          "mean": 1.7,
+          "q05": 1.1,
+          "q95": 2.1,
+          "posterior_sd": 0.1,
+          "mcse": 0.0002,
+          "max_conditional_mcse": 0.02,
+          "conditional_mcse_bound": 0.05,
+          "conditional_precision_passed": true
+        }
+      }
+    },
+    {
+      "driver_id": "beta",
+      "fit_id": "synthetic-joint-fit",
+      "posterior_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "scenario_key": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "simulation_key": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "scenario_id": "synthetic-common-calendar",
+      "losses": {
+        "qualifying_pace": {
+          "mean": -0.2,
+          "q05": -0.4,
+          "q95": -0.1,
+          "posterior_sd": 0.1,
+          "mcse": 0.0002,
+          "max_conditional_mcse": 0.02,
+          "conditional_mcse_bound": 0.05,
+          "conditional_precision_passed": true
+        },
+        "total_race_pace": {
+          "mean": -0.6,
+          "q05": -0.9,
+          "q95": -0.4,
+          "posterior_sd": 0.1,
+          "mcse": 0.0002,
+          "max_conditional_mcse": 0.02,
+          "conditional_mcse_bound": 0.05,
+          "conditional_precision_passed": true
+        },
+        "all": {
+          "mean": -0.7,
+          "q05": -1.0,
+          "q95": -0.3,
+          "posterior_sd": 0.1,
+          "mcse": 0.0002,
+          "max_conditional_mcse": 0.02,
+          "conditional_mcse_bound": 0.05,
+          "conditional_precision_passed": true
+        }
+      }
+    }
+  ],
+  "pairwise": [
+    {
+      "driver_a": "alpha",
+      "driver_b": "beta",
+      "fit_id": "synthetic-joint-fit",
+      "posterior_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "scenario_key": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "simulation_key": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "scenario_id": "synthetic-common-calendar",
+      "points_difference": {
+        "mean": 4.0,
+        "q05": 3.95,
+        "q95": 4.08,
+        "posterior_sd": 0.1,
+        "mcse": 0.0002,
+        "max_conditional_mcse": 0.02,
+        "conditional_mcse_bound": 0.05,
+        "conditional_precision_passed": true
+      }
+    }
+  ],
+  "limitations": [
+    "Synthetic fixture only; no real driver is evaluated."
+  ]
+}

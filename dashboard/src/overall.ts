@@ -1,5 +1,5 @@
-import contract from "../../contracts/overall.json";
-import type { CurrentOverallEvidence, CurrentOverallResult, OverallResult } from "./types";
+import contract from "../../contracts/overall.json" with { type: "json" };
+import type { CurrentOverallEvidence, CurrentOverallResult, OverallPointSummary, OverallSummaryIdentity, OverallResult } from "./types";
 
 export const overallCheckLabels: Record<string, string> = {
   provenance: "Current source and data",
@@ -22,48 +22,79 @@ export const isSupportedOverall = (result?: OverallResult): boolean =>
 const finite = (v: unknown): v is number => typeof v === "number" && Number.isFinite(v);
 const text = (v: unknown): v is string => typeof v === "string" && v.trim().length > 0;
 const bounded = (v: unknown, low: number, high: number): v is number => finite(v) && v >= low && v <= high;
-const positiveInteger = (v: unknown): v is number => finite(v) && Number.isInteger(v) && v > 0;
+const close = (a: number, b: number): boolean => Math.abs(a - b) <= 32 * Number.EPSILON * Math.max(1, Math.abs(a), Math.abs(b));
+const identityKeys = ["fit_id", "posterior_key", "scenario_key", "simulation_key"] as const;
+const positiveInteger = (v: unknown): v is number => finite(v) && Number.isSafeInteger(v) && v > 0;
 
 export function currentOverallEvidence(result: CurrentOverallResult): CurrentOverallEvidence | null {
   const e = result.evidence;
   if (!e || !text(e.fit_id) || !text(e.recorded_at) || !text(e.data_as_of) ||
+      !identityKeys.slice(1).every(k => typeof e[k] === "string" && /^[0-9a-f]{64}$/.test(e[k])) ||
       !e.scenario || !text(e.scenario.id) || !text(e.scenario.label) || !positiveInteger(e.scenario.races) ||
       !positiveInteger(e.posterior_draws) || !positiveInteger(e.replicates_per_draw) ||
       !Array.isArray(e.field) || e.field.length < 2 || !e.field.every(text) || new Set(e.field).size !== e.field.length ||
-      !e.checks || typeof e.checks !== "object") return null;
+      !e.checks || typeof e.checks !== "object" || Array.isArray(e.checks)) return null;
   return e;
 }
 
 // This is a display safeguard in addition to the producer's artifact checks.
-// The legacy combined gate can never stand in for the successor's evidence.
+// It validates statistics and recorded decisions, not their scientific provenance.
+function validMoments(p: OverallPointSummary | undefined, difference: boolean, replicates: number): boolean {
+  const high = contract.points[0], low = difference ? -high : 0;
+  const bound = high / Math.sqrt(replicates) / (difference ? 1 : 2);
+  return !!p && bounded(p.mean, low, high) && bounded(p.q05, low, high) &&
+    bounded(p.q95, p.q05, high) && finite(p.posterior_sd) && p.posterior_sd >= 0 &&
+    bounded(p.mcse, 0, contract.max_conditional_points_mcse) &&
+    bounded(p.max_conditional_mcse, p.mcse, contract.max_conditional_points_mcse) &&
+    bounded(p.conditional_mcse_bound, 0, contract.max_conditional_points_mcse) &&
+    close(p.conditional_mcse_bound, bound) && p.conditional_precision_passed === true;
+}
+const matchingIdentity = (row: OverallSummaryIdentity, e: CurrentOverallEvidence): boolean =>
+  identityKeys.every(k => row[k] === e[k]) && row.scenario_id === e.scenario.id;
+
 export function currentOverallAvailable(result: CurrentOverallResult): boolean {
   const e = currentOverallEvidence(result);
-  if (result.status !== "established" || result.model_version !== contract.model_version ||
-      result.target !== contract.target || !e || !Array.isArray(result.standings) ||
-      !Array.isArray(result.contributions) || !Array.isArray(result.limitations) ||
+  if (result.schema_version !== contract.schema_version || result.status !== "established" || result.model_version !== contract.model_version ||
+      result.target !== contract.target || !text(result.reason) || !e || !Array.isArray(result.standings) ||
+      !Array.isArray(result.contributions) || !Array.isArray(result.pairwise) || !Array.isArray(result.limitations) ||
       !result.limitations.every(text) || result.standings.length !== e.field.length ||
       !overallRequiredChecks.every(key => e.checks[key]?.passed === true && text(e.checks[key].source) && text(e.checks[key].reason))) return false;
   const ids = result.standings.map(row => row?.driver_id);
   if (new Set(ids).size !== ids.length || !ids.every(id => e.field.includes(id))) return false;
   const n = e.field.length;
   const rowsValid = result.standings.every(row => {
-    const p = row?.expected_points, rank = row?.season_rank;
-    return text(row?.name) && p && rank && bounded(p.mean, 0, contract.points[0]) &&
-      bounded(p.q05, 0, contract.points[0]) && bounded(p.q95, p.q05, contract.points[0]) &&
-      finite(p.posterior_sd) && p.posterior_sd >= 0 &&
-      bounded(p.mcse, 0, contract.max_conditional_points_mcse) &&
-      bounded(p.max_conditional_mcse, p.mcse, contract.max_conditional_points_mcse) &&
+    const rank = row?.season_rank;
+    return text(row?.name) && validMoments(row?.expected_points, false, e.replicates_per_draw) && rank &&
       bounded(row.p_title, 0, 1) && bounded(rank.q05, 1, n) &&
       bounded(rank.q95, rank.q05, n) && bounded(rank.median, rank.q05, rank.q95);
   });
   if (!rowsValid || Math.abs(result.standings.reduce((sum, row) => sum + row.p_title, 0) - 1) >
       contract.title_probability_sum_tolerance) return false;
   const explanations = result.contributions;
-  return explanations.length === n && new Set(explanations.map(row => row?.driver_id)).size === n &&
-    explanations.every(row => row && ids.includes(row.driver_id) && row.fit_id === e.fit_id &&
-      row.scenario_id === e.scenario.id && row.losses &&
-      contract.required_explanations.every(key => finite(row.losses[key])) &&
-      Object.values(row.losses).every(finite));
+  if (explanations.length !== n || new Set(explanations.map(row => row?.driver_id)).size !== n ||
+      !explanations.every(row => row && ids.includes(row.driver_id) && matchingIdentity(row, e) &&
+        row.losses && Object.keys(row.losses).length === contract.required_explanations.length &&
+        contract.required_explanations.every(key => validMoments(row.losses[key], true, e.replicates_per_draw)))) return false;
+  if (result.pairwise.length !== n * (n - 1) / 2) return false;
+  const seen = new Set<string>();
+  const means = new Map(result.standings.map(row => [row.driver_id, row.expected_points.mean]));
+  return result.pairwise.every(pair => {
+    if (!pair || !ids.includes(pair.driver_a) || !ids.includes(pair.driver_b) || pair.driver_a === pair.driver_b ||
+        !matchingIdentity(pair, e) || !validMoments(pair.points_difference, true, e.replicates_per_draw)) return false;
+    const key = JSON.stringify([pair.driver_a, pair.driver_b].sort());
+    if (seen.has(key) || !close(pair.points_difference.mean, means.get(pair.driver_a)! - means.get(pair.driver_b)!)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+// Orient the already-paired interval. Do not subtract marginal driver intervals.
+export function overallPair(result: CurrentOverallResult, first: string, second: string): OverallPointSummary | null {
+  const pair = result.pairwise.find(row => row.driver_a === first && row.driver_b === second ||
+    row.driver_a === second && row.driver_b === first);
+  if (!pair) return null;
+  const p = pair.points_difference;
+  return pair.driver_a === first ? p : { ...p, mean: -p.mean, q05: -p.q95, q95: -p.q05 };
 }
 
 export function currentOverallState(result: CurrentOverallResult): string {

@@ -372,17 +372,30 @@ export interface CurrentOverallEvidence {
   recorded_at: string;
   data_as_of: string;
   fit_id: string;
+  posterior_key: string;
+  scenario_key: string;
+  simulation_key: string;
   field: string[];
   scenario: { id: string; label: string; races: number };
   posterior_draws: number;
   replicates_per_draw: number;
   checks: Record<string, { passed: boolean; source: string; reason: string }>;
 }
+export interface OverallPointSummary {
+  mean: number; q05: number; q95: number; posterior_sd: number;
+  mcse: number; max_conditional_mcse: number;
+  conditional_mcse_bound: number; conditional_precision_passed: boolean;
+}
+export interface OverallSummaryIdentity {
+  fit_id: string; posterior_key: string; scenario_key: string; simulation_key: string; scenario_id: string;
+}
+export interface CurrentOverallPair extends OverallSummaryIdentity {
+  driver_a: string; driver_b: string; points_difference: OverallPointSummary;
+}
 export interface CurrentOverallStanding {
   driver_id: string;
   name: string;
-  expected_points: { mean: number; q05: number; q95: number; posterior_sd: number;
-    mcse: number; max_conditional_mcse: number };
+  expected_points: OverallPointSummary;
   p_title: number;
   season_rank: { q05: number; median: number; q95: number };
 }
@@ -394,7 +407,8 @@ export interface CurrentOverallResult {
   reason: string;
   evidence: CurrentOverallEvidence | null;
   standings: CurrentOverallStanding[];
-  contributions: { driver_id: string; fit_id: string; scenario_id: string; losses: Record<string, number> }[];
+  contributions: (OverallSummaryIdentity & { driver_id: string; losses: Record<string, OverallPointSummary> })[];
+  pairwise: CurrentOverallPair[];
   limitations: string[];
 }
 export type OverallResult = LegacyOverallResult | CurrentOverallResult;

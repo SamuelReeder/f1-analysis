@@ -426,3 +426,47 @@ def test_invalid_declared_inventory_rejected(override):
     kwargs = dict(drivers=FIELD, posterior_shape=(2, 3), replicates=5, n_races=2, identity=IDENTITY)
     with pytest.raises(ValueError):
         OverallSummary(**{**kwargs, **override})
+
+
+def test_adapter_preserves_actual_paired_summaries_without_granting_publication():
+    from analysis.overall_summary import OverallSummary, MAX_BLOCK_REPLICATES
+    from f1rank.overall.publication import CONTRACT, prepare_components, check_payload
+    identity = dict(fit_id="synthetic-fit", posterior_key="a" * 64,
+                    scenario_key="b" * 64, simulation_key="c" * 64)
+    # Choose the existing worst-case precision bound's exact replicate count.
+    # These constant, invented outcomes are not inference or a resource profile.
+    replicates = int((CONTRACT["points"][0] / CONTRACT["max_conditional_points_mcse"]) ** 2)
+    accumulator = OverallSummary(drivers=["alpha", "beta"], posterior_shape=(2, 2),
+        replicates=replicates, n_races=1, identity=identity)
+    for chain in range(2):
+        for start in range(0, replicates, MAX_BLOCK_REPLICATES):
+            count = min(MAX_BLOCK_REPLICATES, replicates - start)
+            points = np.broadcast_to([10. + chain, 12. + chain], (2, count, 2)).copy()
+            result = dict(drivers=["alpha", "beta"], n_races=1, points=points,
+                rank_low=np.broadcast_to([2, 1], points.shape), rank_high=np.broadcast_to([2, 1], points.shape),
+                title_share=np.broadcast_to([0., 1.], points.shape))
+            probes = np.stack([points - 1, points - 2, points - 3], axis=-1)
+            accumulator.add(result, probes, chain=chain, draw_start=0, replicate_start=start, identity=identity)
+    summary = accumulator.finalize()
+    before = copy.deepcopy(summary)
+    prepared = prepare_components(summary, names=dict(alpha="Alpha", beta="Beta"),
+        scenario=dict(id="common-synthetic", label="Synthetic common scenario", races=1),
+        data_as_of="2003-05", recorded_at="2004-01-01T00:00:00Z")
+    assert summary == before
+    assert prepared["pairwise"][0]["points_difference"] == summary["pairwise"][0]["points_difference"]
+    assert prepared["pairwise"][0]["points_difference"]["q05"] == -2.
+    assert prepared["pairwise"][0]["points_difference"]["q95"] == -2.
+    by_id = {row["driver_id"]: row for row in summary["standings"]}
+    marginal_difference = by_id["alpha"]["expected_points"]["q05"] - by_id["beta"]["expected_points"]["q95"]
+    assert marginal_difference != -2.
+    assert all(row["losses"] == original["losses"] for row, original in zip(prepared["contributions"], summary["contributions"]))
+    assert not prepared["scientific_evidence_verified"] and not prepared["publication_allowed"]
+    assert "status" not in prepared and "schema_version" not in prepared
+    assert "finite_mean_probability_greater" not in prepared["pairwise"][0]
+    with pytest.raises(ValueError, match="unestablished"):
+        check_payload(prepared)
+    summary["contributions"][0]["posterior_key"] = "d" * 64
+    with pytest.raises(ValueError, match="Mixed explanation"):
+        prepare_components(summary, names=dict(alpha="Alpha", beta="Beta"),
+            scenario=dict(id="common-synthetic", label="Synthetic common scenario", races=1),
+            data_as_of="2003-05", recorded_at="2004-01-01T00:00:00Z")

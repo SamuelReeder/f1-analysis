@@ -10,6 +10,9 @@ on:
       - 'data/processed/**'
       - 'outputs/**'
       - 'tests/test_dashboard.py'
+      - 'tests/test_portable_publication.py'
+      - 'tests/test_overall_publication.py'
+      - 'tests/fixtures/overall_current_contract.json'
       - '.github/workflows/dashboard.yml'
   pull_request:
     branches: [main, automated-refresh]
@@ -20,6 +23,9 @@ on:
       - 'data/processed/**'
       - 'outputs/**'
       - 'tests/test_dashboard.py'
+      - 'tests/test_portable_publication.py'
+      - 'tests/test_overall_publication.py'
+      - 'tests/fixtures/overall_current_contract.json'
       - '.github/workflows/dashboard.yml'
   workflow_dispatch:
 
@@ -54,7 +60,7 @@ jobs:
       - name: Verify the committed publication
         run: |
           python dashboard/verify_publication.py
-          python -m pytest tests/test_dashboard.py tests/test_portable_publication.py -q
+          python -m pytest tests/test_dashboard.py tests/test_portable_publication.py tests/test_overall_publication.py -q
       - name: Install dashboard dependencies
         run: npm ci --prefix dashboard
       - name: Build for the repository URL

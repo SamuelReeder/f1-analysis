@@ -3,7 +3,7 @@ import { Badge, Empty } from "../components";
 import { date, pct, signed } from "../lib";
 import type { CurrentOverallResult } from "../types";
 import { currentOverallAvailable, currentOverallEvidence, currentOverallReason,
-  currentOverallState, overallCheckLabels, overallRequiredChecks } from "../overall";
+  currentOverallState, overallCheckLabels, overallRequiredChecks, overallPair } from "../overall";
 import { performanceScale, PerformanceKey } from "../performance";
 import RankingHeader from "./RankingHeader";
 
@@ -58,11 +58,15 @@ export function CurrentOverallSummary({ result }: { result: CurrentOverallResult
 
 export default function CurrentOverall({ result }: { result: CurrentOverallResult }) {
   const [selected, setSelected] = useState("");
+  const [compareTo, setCompareTo] = useState("");
   const available = currentOverallAvailable(result);
   const evidence = currentOverallEvidence(result);
   const rows = available ? [...result.standings].sort((a, b) => b.expected_points.mean - a.expected_points.mean) : [];
   const scale = performanceScale(rows.map(row => row.expected_points.mean));
   const driver = rows.find(row => row.driver_id === selected) || rows[0];
+  const opponent = rows.find(row => row.driver_id === compareTo && row.driver_id !== driver?.driver_id)
+    || rows.find(row => row.driver_id !== driver?.driver_id);
+  const pair = available && driver && opponent ? overallPair(result, driver.driver_id, opponent.driver_id) : null;
   const explanation = available && result.contributions.find(row => row.driver_id === driver?.driver_id);
   const labels: Record<string, string> = { qualifying_pace: "Qualifying performance", total_race_pace: "Current race performance", all: "Both together" };
   return <>
@@ -98,14 +102,31 @@ export default function CurrentOverall({ result }: { result: CurrentOverallResul
       {explanation && driver && <section className="panel overall-contributions" aria-labelledby="contribution-title">
         <h2 id="contribution-title">What explains the estimate?</h2><h3>{driver.name}</h3>
         <p>Expected points per race lost when each performance component is set to the field average.</p>
-        <dl>{Object.entries(explanation.losses).map(([name, loss]) => <div key={name}><dt>{labels[name] || name.replaceAll("_", " ")}</dt><dd>{signed(loss, 2)}</dd></div>)}</dl>
+        <dl>{Object.entries(explanation.losses).map(([name, loss]) => <div key={name}>
+          <dt>{labels[name] || name.replaceAll("_", " ")}</dt>
+          <dd>{signed(loss.mean, 2)} <span className="muted">({signed(loss.q05, 2)} to {signed(loss.q95, 2)})</span></dd>
+        </div>)}</dl>
+        <p>Parentheses show the 90% range for the paired change in expected points.</p>
         <p>Each component is changed separately using the same model draws and conditions.
           Correlated components have no unique allocation of credit; these values should not be added.</p>
         <h3>Simulation precision</h3>
-        <p>Numerical standard error of expected points: {driver.expected_points.mcse.toFixed(3)} points per race.
-          This measures simulation error, separately from uncertainty about the driver and variation between seasons.</p>
+        <p>Numerical standard error from season simulation: {driver.expected_points.mcse.toFixed(3)} points per race.
+          This is conditional on the saved posterior; it excludes MCMC error, which requires separate checks.</p>
       </section>}
     </div>
+    {pair && driver && opponent && <section className="panel overall-notes" aria-labelledby="overall-pair-title">
+      <h2 id="overall-pair-title">Compare expected performance</h2>
+      <label htmlFor="overall-comparison-driver">Compare {driver.name} with </label>
+      <select id="overall-comparison-driver" value={opponent.driver_id} onChange={event => setCompareTo(event.target.value)}>
+        {rows.filter(row => row.driver_id !== driver.driver_id).map(row =>
+          <option value={row.driver_id} key={row.driver_id}>{row.name}</option>)}
+      </select>
+      <p>{driver.name} minus {opponent.name}: <strong>{signed(pair.mean, 2)} points per race</strong>.
+        {" "}90% range: <strong>{signed(pair.q05, 2)} to {signed(pair.q95, 2)}</strong>.</p>
+      <p>The range describes uncertainty in their expected-performance difference.
+        Paired draws retain their shared uncertainty. Positive values favor {driver.name}.</p>
+      <p>Conditional simulation standard error: {pair.mcse.toFixed(3)} points per race.</p>
+    </section>}
     {evidence && <section className="panel overall-notes" aria-labelledby="overall-validation-title">
       <h2 id="overall-validation-title">Evidence required for this ranking</h2>
       <dl className="overall-decisions">{overallRequiredChecks.map(key => <div key={key}>
