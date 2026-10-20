@@ -55,7 +55,8 @@ def test_distribution_sampling_broadcast_support_and_pytree_are_preserved():
     assert type(restored) is studentt.StableStudentT
     key = jax.random.PRNGKey(23)
     np.testing.assert_array_equal(original.sample(key, (7,)), stable.sample(key, (7,)))
-    np.testing.assert_array_equal(stable.log_prob(loc), jax.jit(lambda d:d.log_prob(loc))(restored))
+    evaluate = jax.jit(lambda d:d.log_prob(loc))
+    np.testing.assert_array_equal(evaluate(stable), evaluate(restored))
     assert stable.expand((2, 3)).to_event(1).log_prob(jnp.zeros((2, 3))).shape == (2,)
     with pytest.raises(ValueError):
         studentt.StableStudentT(-1., validate_args=True)
