@@ -1,5 +1,11 @@
 # Overall production inference integration
 
+The coordinate-migration evidence below describes the original integration.
+The current implementation also includes the
+[verified equivalent Student-t arithmetic correction](overall_studentt_production_results.md),
+with a distinct inference-method identity and its own complete migration evidence.
+The historical profile failures remain failures.
+
 The production fitting engine can now select the checked conditional weekend
 coordinates and batched lap-control map. Previously those implementations lived
 only in research runners; the default production engine still called the original
