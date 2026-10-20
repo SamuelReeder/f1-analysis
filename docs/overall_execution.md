@@ -207,7 +207,7 @@ another attempt in the exhausted profile or establish inference acceptance.
 | Ability/outcome/numerical uncertainty | Nested simulation, grouped moments and conditional ordering-sensitivity bounds; saved noise examples show that a passing noisy checker cannot establish functional convergence; final qualifying/race contrasts pass in the earlier conditional weekend-coordinate profile; the complete-design continuation failed convergence and its driver-comparison checks | Register and validate functional MCMC diagnostics and near-tie precision under converged posteriors; measure the complete nested workload; numerical profile convergence does not establish ranking precision |
 | Chronological development comparison | Plan defines information horizons and baseline roles; scoring utilities preserve joint draws, conditional panel/condition weights and required events; outcome-free catalogue, joint states and observation kernels have synthetic checks; unseen-circuit extensions and unknown-condition simulation; explicit legacy/grid-only arithmetic and a race-only evidence ablation | Complete source verification, final condition/circuit registration and calibration, uncertainty in learned training factors, classification-conditioning policy and baseline fitting/forecast integration; freeze event inventory, calibration and stopping rules; run every fold |
 | Independent predictive evidence | Prior evidence boundaries are preserved | New prospective registration and predictions for this successor, followed by eligible outcomes |
-| Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence; bounded paired summaries and a fixed synthetic archive-to-summary controller have checked integration paths; the export adapter and both validators preserve complete paired comparisons, explanation uncertainty and matching identities | Authenticated acceptance controller, accepted real-data protocol/scenario integration, full simulation resources and precision, canonical producer and current artifact verification |
+| Canonical producer and explanations | Old failed gate still withholds a ranking; the versioned frontend requires successor evidence; registered production fit-to-candidate simulation, grouped moments, component writer and candidate reader now have checked integration paths; the export adapter and both validators preserve complete paired comparisons, explanation uncertainty and matching identities | Authenticated scientific acceptance controller, accepted real-data protocol/scenario integration, full simulation resources and precision, canonical dashboard producer and current artifact verification |
 | Refresh, caches and rollback | Last-good publication behavior; latest-season result revision detection; tested corrected fetch/build followed by fit failure and retry; immutable raw-history preservation and cache restore | Wire accepted Overall dependencies and demonstrate their complete new, unchanged, corrected, interrupted and failed refreshes; older-season and timing revision policy |
 | Software and runner readiness | Batched states and observation kernels; bounded checked archive loading; capped synthetic resource and software records, including historical condition integration under `development/overall-condition-checks/`; portable receipts now bind scientific contracts, protocols and analysis producers | Accepted-fit integration and end-to-end fitting/refresh resources; workflow-equivalent checks after producer integration; clean environment and intended runner; final deployment source |
 | Deployment | No successor push or deployment | Reviewable accepted artifact, explicit push/merge/release approval, CI and live verification |
@@ -269,6 +269,19 @@ new MCMC, source registration, accepted fit, ranking or deployment was produced.
 The failed full-network profile remains failed. Complete the remaining producer
 and refresh integration before freezing new scientific runs and regenerating
 affected outputs.
+
+The [candidate simulation integration](overall_production_simulation_results.md)
+now consumes a registered production-format fit through bounded archive loading,
+paired simulation, complete summaries and grouped moments. It writes portable
+components only after the fixed conditional precision tests pass and provides a
+reader that rechecks the registered dependencies and full artifact inventory.
+Scientific acceptance and publication remain false. The
+[verification record](../outputs/championship/development/overall-production-simulation-checks-v1/verification.json)
+preserves **277 passing focused checks**, the initial protocol-serialization
+failure and its correction. The fit receipts and real/synthetic role checks use
+invented archives and a fake sampler; there was no MCMC or actual real-driver
+scoring. The complete passing-precision workload, authenticated acceptance,
+public dashboard replacement and full refresh integration remain open.
 
 The numerical profile is registered separately in
 [`overall_profile_protocol.json`](overall_profile_protocol.json). It answers
