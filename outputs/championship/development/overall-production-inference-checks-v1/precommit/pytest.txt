@@ -1,0 +1,647 @@
+........................................................................ [ 40%]
+....................FFFFFFFF..............FFFFFF........................ [ 81%]
+.................................                                        [100%]
+=================================== FAILURES ===================================
+_______ test_checked_archive_full_schedule_matches_direct_paired_summary _______
+
+case = namespace(design=OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  ...test-of-sreeder/pytest-12/test_checked_archive_full_sche0/maps'), save=<function case.<locals>.save at 0x73b7e2587880>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b840134140>
+
+    def test_checked_archive_full_schedule_matches_direct_paired_summary(case, monkeypatch):
+        calls = []
+        generator = controller.paired_simulation_block
+        def inspect(joint, scenarios, **kwargs):
+            chain, start = kwargs["chain"], kwargs["draw_start"]
+            stop = start + len(joint.qualifying)
+            indices = case.design.catalog["field_entries"]
+            for destination, site in SITES.items():
+                expected = case.posterior[site][chain, start:stop]
+                if destination in ("qualifying", "race"):
+                    expected = expected[:, indices]
+                np.testing.assert_array_equal(getattr(joint, destination), expected)
+            result, probes = generator(joint, scenarios, **kwargs)
+            calls.append((copy.deepcopy(kwargs), copy.deepcopy(result), probes.copy()))
+            return result, probes
+        monkeypatch.setattr(controller, "paired_simulation_block", inspect)
+>       result, receipt = execute(case)
+                          ^^^^^^^^^^^^^
+
+tests/test_overall_simulation_controller.py:145: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_overall_simulation_controller.py:95: in execute
+    return controller.execute(case.run, case.design, case.path, case.reference_path, case.output,
+analysis/overall_simulation_controller.py:238: in execute
+    require_committed_sources(protocol["sources"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+expected = {'analysis/overall_simulation_controller.py': '7b8d177377999d8a04b07c36a6153a5267e82355e6aba5a526332b4d36230378', 'ana...246e182', 'docs/overall_paired_simulation.md': 'a9b2aeb6c5660b2dbc87a8994fa65bfe824485825bfcbc0688b3266dd7f3a718', ...}
+
+    def require_committed_sources(expected):
+        for name, fingerprint in expected.items():
+            content = subprocess.check_output(["git", "show", f"HEAD:{name}"], cwd=ROOT)
+            if hashlib.sha256(content).hexdigest() != fingerprint:
+>               raise ValueError("Commit simulation sources before executing the registered workload")
+E               ValueError: Commit simulation sources before executing the registered workload
+
+analysis/overall_simulation_controller.py:81: ValueError
+_____ test_failure_preserves_progress_and_does_not_create_partial_summary ______
+
+case = namespace(design=OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  ...test-of-sreeder/pytest-12/test_failure_preserves_progres0/maps'), save=<function case.<locals>.save at 0x73b8407aade0>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b8407777d0>
+
+    def test_failure_preserves_progress_and_does_not_create_partial_summary(case, monkeypatch):
+        generator = controller.paired_simulation_block
+        calls = 0
+        def fail(joint, scenarios, **kwargs):
+            nonlocal calls
+            calls += 1
+            if calls == 2:
+                raise RuntimeError("Synthetic interrupted block")
+            return generator(joint, scenarios, **kwargs)
+        monkeypatch.setattr(controller, "paired_simulation_block", fail)
+        with pytest.raises(RuntimeError, match="interrupted"):
+>           execute(case)
+
+tests/test_overall_simulation_controller.py:186: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_overall_simulation_controller.py:95: in execute
+    return controller.execute(case.run, case.design, case.path, case.reference_path, case.output,
+analysis/overall_simulation_controller.py:238: in execute
+    require_committed_sources(protocol["sources"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+expected = {'analysis/overall_simulation_controller.py': '7b8d177377999d8a04b07c36a6153a5267e82355e6aba5a526332b4d36230378', 'ana...246e182', 'docs/overall_paired_simulation.md': 'a9b2aeb6c5660b2dbc87a8994fa65bfe824485825bfcbc0688b3266dd7f3a718', ...}
+
+    def require_committed_sources(expected):
+        for name, fingerprint in expected.items():
+            content = subprocess.check_output(["git", "show", f"HEAD:{name}"], cwd=ROOT)
+            if hashlib.sha256(content).hexdigest() != fingerprint:
+>               raise ValueError("Commit simulation sources before executing the registered workload")
+E               ValueError: Commit simulation sources before executing the registered workload
+
+analysis/overall_simulation_controller.py:81: ValueError
+____ test_inputs_changed_while_writing_diagnostic_companion_cannot_complete ____
+
+case = namespace(design=OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  ...test-of-sreeder/pytest-12/test_inputs_changed_while_writ0/maps'), save=<function case.<locals>.save at 0x73b8407ab7e0>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b7e25cf440>
+
+    def test_inputs_changed_while_writing_diagnostic_companion_cannot_complete(case, monkeypatch):
+        writer = controller.write_moments
+        def change_after_write(*args, **kwargs):
+            metadata = writer(*args, **kwargs)
+            case.path.write_text(case.path.read_text()+"\n")
+            return metadata
+        monkeypatch.setattr(controller, "write_moments", change_after_write)
+>       with pytest.raises(ValueError, match="changed during execution"):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'changed during execution'
+E         Actual message: 'Commit simulation sources before executing the registered workload'
+
+tests/test_overall_simulation_controller.py:204: AssertionError
+_______ test_mutated_inputs_cannot_produce_a_completed_summary[protocol] _______
+
+case = namespace(design=OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  ...test-of-sreeder/pytest-12/test_mutated_inputs_cannot_pro0/maps'), save=<function case.<locals>.save at 0x73b8407aba60>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b7e260d730>
+change = 'protocol'
+
+    @pytest.mark.parametrize("change", ["protocol", "reference", "catalog", "receipt", "archive"])
+    def test_mutated_inputs_cannot_produce_a_completed_summary(case, monkeypatch, change):
+        generator = controller.paired_simulation_block
+        altered = False
+        def mutate(joint, scenarios, **kwargs):
+            nonlocal altered
+            result = generator(joint, scenarios, **kwargs)
+            if not altered:
+                if change == "protocol": case.path.write_text(case.path.read_text() + "\n")
+                elif change == "reference": case.reference_path.write_text(case.reference_path.read_text() + "\n")
+                elif change == "catalog": case.design.catalog["mutated"] = True
+                else:
+                    path = case.run / ("receipt.json" if change == "receipt" else "posterior.npz")
+                    with path.open("ab") as handle: handle.write(b"\n")
+                altered = True
+            return result
+        monkeypatch.setattr(controller, "paired_simulation_block", mutate)
+        with pytest.raises(ValueError):
+            execute(case)
+>       assert json.loads((case.output / "receipt.json").read_text())["state"] == "failed_exception"
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_overall_simulation_controller.py:231: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-sreeder/pytest-12/test_mutated_inputs_cannot_pro0/simulation/receipt.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-sreeder/pytest-12/test_mutated_inputs_cannot_pro0/simulation/receipt.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+______ test_mutated_inputs_cannot_produce_a_completed_summary[reference] _______
+
+case = namespace(design=OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  ...test-of-sreeder/pytest-12/test_mutated_inputs_cannot_pro1/maps'), save=<function case.<locals>.save at 0x73b8407abb00>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b7e25b1910>
+change = 'reference'
+
+    @pytest.mark.parametrize("change", ["protocol", "reference", "catalog", "receipt", "archive"])
+    def test_mutated_inputs_cannot_produce_a_completed_summary(case, monkeypatch, change):
+        generator = controller.paired_simulation_block
+        altered = False
+        def mutate(joint, scenarios, **kwargs):
+            nonlocal altered
+            result = generator(joint, scenarios, **kwargs)
+            if not altered:
+                if change == "protocol": case.path.write_text(case.path.read_text() + "\n")
+                elif change == "reference": case.reference_path.write_text(case.reference_path.read_text() + "\n")
+                elif change == "catalog": case.design.catalog["mutated"] = True
+                else:
+                    path = case.run / ("receipt.json" if change == "receipt" else "posterior.npz")
+                    with path.open("ab") as handle: handle.write(b"\n")
+                altered = True
+            return result
+        monkeypatch.setattr(controller, "paired_simulation_block", mutate)
+        with pytest.raises(ValueError):
+            execute(case)
+>       assert json.loads((case.output / "receipt.json").read_text())["state"] == "failed_exception"
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_overall_simulation_controller.py:231: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-sreeder/pytest-12/test_mutated_inputs_cannot_pro1/simulation/receipt.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-sreeder/pytest-12/test_mutated_inputs_cannot_pro1/simulation/receipt.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_______ test_mutated_inputs_cannot_produce_a_completed_summary[catalog] ________
+
+case = namespace(design=OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  ...test-of-sreeder/pytest-12/test_mutated_inputs_cannot_pro2/maps'), save=<function case.<locals>.save at 0x73b8407ab380>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b7e25b2c90>
+change = 'catalog'
+
+    @pytest.mark.parametrize("change", ["protocol", "reference", "catalog", "receipt", "archive"])
+    def test_mutated_inputs_cannot_produce_a_completed_summary(case, monkeypatch, change):
+        generator = controller.paired_simulation_block
+        altered = False
+        def mutate(joint, scenarios, **kwargs):
+            nonlocal altered
+            result = generator(joint, scenarios, **kwargs)
+            if not altered:
+                if change == "protocol": case.path.write_text(case.path.read_text() + "\n")
+                elif change == "reference": case.reference_path.write_text(case.reference_path.read_text() + "\n")
+                elif change == "catalog": case.design.catalog["mutated"] = True
+                else:
+                    path = case.run / ("receipt.json" if change == "receipt" else "posterior.npz")
+                    with path.open("ab") as handle: handle.write(b"\n")
+                altered = True
+            return result
+        monkeypatch.setattr(controller, "paired_simulation_block", mutate)
+        with pytest.raises(ValueError):
+            execute(case)
+>       assert json.loads((case.output / "receipt.json").read_text())["state"] == "failed_exception"
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_overall_simulation_controller.py:231: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-sreeder/pytest-12/test_mutated_inputs_cannot_pro2/simulation/receipt.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-sreeder/pytest-12/test_mutated_inputs_cannot_pro2/simulation/receipt.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_______ test_mutated_inputs_cannot_produce_a_completed_summary[receipt] ________
+
+case = namespace(design=OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  ...test-of-sreeder/pytest-12/test_mutated_inputs_cannot_pro3/maps'), save=<function case.<locals>.save at 0x73b8180bc2c0>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b840774320>
+change = 'receipt'
+
+    @pytest.mark.parametrize("change", ["protocol", "reference", "catalog", "receipt", "archive"])
+    def test_mutated_inputs_cannot_produce_a_completed_summary(case, monkeypatch, change):
+        generator = controller.paired_simulation_block
+        altered = False
+        def mutate(joint, scenarios, **kwargs):
+            nonlocal altered
+            result = generator(joint, scenarios, **kwargs)
+            if not altered:
+                if change == "protocol": case.path.write_text(case.path.read_text() + "\n")
+                elif change == "reference": case.reference_path.write_text(case.reference_path.read_text() + "\n")
+                elif change == "catalog": case.design.catalog["mutated"] = True
+                else:
+                    path = case.run / ("receipt.json" if change == "receipt" else "posterior.npz")
+                    with path.open("ab") as handle: handle.write(b"\n")
+                altered = True
+            return result
+        monkeypatch.setattr(controller, "paired_simulation_block", mutate)
+        with pytest.raises(ValueError):
+            execute(case)
+>       assert json.loads((case.output / "receipt.json").read_text())["state"] == "failed_exception"
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_overall_simulation_controller.py:231: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-sreeder/pytest-12/test_mutated_inputs_cannot_pro3/simulation/receipt.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-sreeder/pytest-12/test_mutated_inputs_cannot_pro3/simulation/receipt.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_______ test_mutated_inputs_cannot_produce_a_completed_summary[archive] ________
+
+case = namespace(design=OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  ...test-of-sreeder/pytest-12/test_mutated_inputs_cannot_pro4/maps'), save=<function case.<locals>.save at 0x73b8180bc180>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b7e260e0f0>
+change = 'archive'
+
+    @pytest.mark.parametrize("change", ["protocol", "reference", "catalog", "receipt", "archive"])
+    def test_mutated_inputs_cannot_produce_a_completed_summary(case, monkeypatch, change):
+        generator = controller.paired_simulation_block
+        altered = False
+        def mutate(joint, scenarios, **kwargs):
+            nonlocal altered
+            result = generator(joint, scenarios, **kwargs)
+            if not altered:
+                if change == "protocol": case.path.write_text(case.path.read_text() + "\n")
+                elif change == "reference": case.reference_path.write_text(case.reference_path.read_text() + "\n")
+                elif change == "catalog": case.design.catalog["mutated"] = True
+                else:
+                    path = case.run / ("receipt.json" if change == "receipt" else "posterior.npz")
+                    with path.open("ab") as handle: handle.write(b"\n")
+                altered = True
+            return result
+        monkeypatch.setattr(controller, "paired_simulation_block", mutate)
+        with pytest.raises(ValueError):
+            execute(case)
+>       assert json.loads((case.output / "receipt.json").read_text())["state"] == "failed_exception"
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_overall_simulation_controller.py:231: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-sreeder/pytest-12/test_mutated_inputs_cannot_pro4/simulation/receipt.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-sreeder/pytest-12/test_mutated_inputs_cannot_pro4/simulation/receipt.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_invalid_or_real_archive_never_enters_development_simulation[failed_fit] _
+
+case = namespace(design=OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  ...test-of-sreeder/pytest-12/test_invalid_or_real_archive_n0/maps'), save=<function case.<locals>.save at 0x73b8180bd440>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b818064ef0>
+change = 'failed_fit'
+
+    @pytest.mark.parametrize("change", ["failed_fit", "real_fit", "wrong_catalog", "missing_site", "wrong_site_shape", "unused_nan"])
+    def test_invalid_or_real_archive_never_enters_development_simulation(case, monkeypatch, change):
+        if change == "failed_fit": case.save(state="failed_convergence")
+        elif change == "real_fit": case.save(synthetic=False)
+        elif change == "wrong_catalog": case.save(catalog={**case.design.catalog, "field":list(reversed(case.design.catalog["field"]))})
+        else:
+            if change == "missing_site": del case.posterior["skill"]
+            elif change == "wrong_site_shape": case.posterior["overall_pace"] = case.posterior["overall_pace"][..., :1]
+            else: case.posterior["unused"][0, 0, 0] = np.nan
+            case.save()
+        monkeypatch.setattr(controller, "paired_simulation_block", lambda *a, **k: pytest.fail("Unexpected simulation"))
+        with pytest.raises(ValueError):
+            execute(case)
+        assert not (case.output / "summary.json").exists()
+>       assert json.loads((case.output / "receipt.json").read_text())["state"] == "failed_exception"
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_overall_simulation_controller.py:282: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-sreeder/pytest-12/test_invalid_or_real_archive_n0/simulation/receipt.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-sreeder/pytest-12/test_invalid_or_real_archive_n0/simulation/receipt.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+__ test_invalid_or_real_archive_never_enters_development_simulation[real_fit] __
+
+case = namespace(design=OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  ...test-of-sreeder/pytest-12/test_invalid_or_real_archive_n1/maps'), save=<function case.<locals>.save at 0x73b8180bc9a0>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b840775250>
+change = 'real_fit'
+
+    @pytest.mark.parametrize("change", ["failed_fit", "real_fit", "wrong_catalog", "missing_site", "wrong_site_shape", "unused_nan"])
+    def test_invalid_or_real_archive_never_enters_development_simulation(case, monkeypatch, change):
+        if change == "failed_fit": case.save(state="failed_convergence")
+        elif change == "real_fit": case.save(synthetic=False)
+        elif change == "wrong_catalog": case.save(catalog={**case.design.catalog, "field":list(reversed(case.design.catalog["field"]))})
+        else:
+            if change == "missing_site": del case.posterior["skill"]
+            elif change == "wrong_site_shape": case.posterior["overall_pace"] = case.posterior["overall_pace"][..., :1]
+            else: case.posterior["unused"][0, 0, 0] = np.nan
+            case.save()
+        monkeypatch.setattr(controller, "paired_simulation_block", lambda *a, **k: pytest.fail("Unexpected simulation"))
+        with pytest.raises(ValueError):
+            execute(case)
+        assert not (case.output / "summary.json").exists()
+>       assert json.loads((case.output / "receipt.json").read_text())["state"] == "failed_exception"
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_overall_simulation_controller.py:282: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-sreeder/pytest-12/test_invalid_or_real_archive_n1/simulation/receipt.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-sreeder/pytest-12/test_invalid_or_real_archive_n1/simulation/receipt.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_invalid_or_real_archive_never_enters_development_simulation[wrong_catalog] _
+
+case = namespace(design=OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  ...test-of-sreeder/pytest-12/test_invalid_or_real_archive_n2/maps'), save=<function case.<locals>.save at 0x73b8180bd3a0>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b82079c500>
+change = 'wrong_catalog'
+
+    @pytest.mark.parametrize("change", ["failed_fit", "real_fit", "wrong_catalog", "missing_site", "wrong_site_shape", "unused_nan"])
+    def test_invalid_or_real_archive_never_enters_development_simulation(case, monkeypatch, change):
+        if change == "failed_fit": case.save(state="failed_convergence")
+        elif change == "real_fit": case.save(synthetic=False)
+        elif change == "wrong_catalog": case.save(catalog={**case.design.catalog, "field":list(reversed(case.design.catalog["field"]))})
+        else:
+            if change == "missing_site": del case.posterior["skill"]
+            elif change == "wrong_site_shape": case.posterior["overall_pace"] = case.posterior["overall_pace"][..., :1]
+            else: case.posterior["unused"][0, 0, 0] = np.nan
+            case.save()
+        monkeypatch.setattr(controller, "paired_simulation_block", lambda *a, **k: pytest.fail("Unexpected simulation"))
+        with pytest.raises(ValueError):
+            execute(case)
+        assert not (case.output / "summary.json").exists()
+>       assert json.loads((case.output / "receipt.json").read_text())["state"] == "failed_exception"
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_overall_simulation_controller.py:282: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-sreeder/pytest-12/test_invalid_or_real_archive_n2/simulation/receipt.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-sreeder/pytest-12/test_invalid_or_real_archive_n2/simulation/receipt.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_invalid_or_real_archive_never_enters_development_simulation[missing_site] _
+
+case = namespace(design=OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  ...test-of-sreeder/pytest-12/test_invalid_or_real_archive_n3/maps'), save=<function case.<locals>.save at 0x73b8407aade0>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b840206810>
+change = 'missing_site'
+
+    @pytest.mark.parametrize("change", ["failed_fit", "real_fit", "wrong_catalog", "missing_site", "wrong_site_shape", "unused_nan"])
+    def test_invalid_or_real_archive_never_enters_development_simulation(case, monkeypatch, change):
+        if change == "failed_fit": case.save(state="failed_convergence")
+        elif change == "real_fit": case.save(synthetic=False)
+        elif change == "wrong_catalog": case.save(catalog={**case.design.catalog, "field":list(reversed(case.design.catalog["field"]))})
+        else:
+            if change == "missing_site": del case.posterior["skill"]
+            elif change == "wrong_site_shape": case.posterior["overall_pace"] = case.posterior["overall_pace"][..., :1]
+            else: case.posterior["unused"][0, 0, 0] = np.nan
+            case.save()
+        monkeypatch.setattr(controller, "paired_simulation_block", lambda *a, **k: pytest.fail("Unexpected simulation"))
+        with pytest.raises(ValueError):
+            execute(case)
+        assert not (case.output / "summary.json").exists()
+>       assert json.loads((case.output / "receipt.json").read_text())["state"] == "failed_exception"
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_overall_simulation_controller.py:282: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-sreeder/pytest-12/test_invalid_or_real_archive_n3/simulation/receipt.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-sreeder/pytest-12/test_invalid_or_real_archive_n3/simulation/receipt.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_invalid_or_real_archive_never_enters_development_simulation[wrong_site_shape] _
+
+case = namespace(design=OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  ...test-of-sreeder/pytest-12/test_invalid_or_real_archive_n4/maps'), save=<function case.<locals>.save at 0x73b8407abb00>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b8fc1eba40>
+change = 'wrong_site_shape'
+
+    @pytest.mark.parametrize("change", ["failed_fit", "real_fit", "wrong_catalog", "missing_site", "wrong_site_shape", "unused_nan"])
+    def test_invalid_or_real_archive_never_enters_development_simulation(case, monkeypatch, change):
+        if change == "failed_fit": case.save(state="failed_convergence")
+        elif change == "real_fit": case.save(synthetic=False)
+        elif change == "wrong_catalog": case.save(catalog={**case.design.catalog, "field":list(reversed(case.design.catalog["field"]))})
+        else:
+            if change == "missing_site": del case.posterior["skill"]
+            elif change == "wrong_site_shape": case.posterior["overall_pace"] = case.posterior["overall_pace"][..., :1]
+            else: case.posterior["unused"][0, 0, 0] = np.nan
+            case.save()
+        monkeypatch.setattr(controller, "paired_simulation_block", lambda *a, **k: pytest.fail("Unexpected simulation"))
+        with pytest.raises(ValueError):
+            execute(case)
+        assert not (case.output / "summary.json").exists()
+>       assert json.loads((case.output / "receipt.json").read_text())["state"] == "failed_exception"
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_overall_simulation_controller.py:282: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-sreeder/pytest-12/test_invalid_or_real_archive_n4/simulation/receipt.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-sreeder/pytest-12/test_invalid_or_real_archive_n4/simulation/receipt.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_invalid_or_real_archive_never_enters_development_simulation[unused_nan] _
+
+case = namespace(design=OverallDesign(qualifying=Design(start_season=2010, events=  event_id  season        date circuit_id  ...test-of-sreeder/pytest-12/test_invalid_or_real_archive_n5/maps'), save=<function case.<locals>.save at 0x73b8180bcf40>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b820566d50>
+change = 'unused_nan'
+
+    @pytest.mark.parametrize("change", ["failed_fit", "real_fit", "wrong_catalog", "missing_site", "wrong_site_shape", "unused_nan"])
+    def test_invalid_or_real_archive_never_enters_development_simulation(case, monkeypatch, change):
+        if change == "failed_fit": case.save(state="failed_convergence")
+        elif change == "real_fit": case.save(synthetic=False)
+        elif change == "wrong_catalog": case.save(catalog={**case.design.catalog, "field":list(reversed(case.design.catalog["field"]))})
+        else:
+            if change == "missing_site": del case.posterior["skill"]
+            elif change == "wrong_site_shape": case.posterior["overall_pace"] = case.posterior["overall_pace"][..., :1]
+            else: case.posterior["unused"][0, 0, 0] = np.nan
+            case.save()
+        monkeypatch.setattr(controller, "paired_simulation_block", lambda *a, **k: pytest.fail("Unexpected simulation"))
+        with pytest.raises(ValueError):
+            execute(case)
+        assert not (case.output / "summary.json").exists()
+>       assert json.loads((case.output / "receipt.json").read_text())["state"] == "failed_exception"
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_overall_simulation_controller.py:282: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-sreeder/pytest-12/test_invalid_or_real_archive_n5/simulation/receipt.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-sreeder/pytest-12/test_invalid_or_real_archive_n5/simulation/receipt.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_overall_simulation_controller.py::test_checked_archive_full_schedule_matches_direct_paired_summary
+FAILED tests/test_overall_simulation_controller.py::test_failure_preserves_progress_and_does_not_create_partial_summary
+FAILED tests/test_overall_simulation_controller.py::test_inputs_changed_while_writing_diagnostic_companion_cannot_complete
+FAILED tests/test_overall_simulation_controller.py::test_mutated_inputs_cannot_produce_a_completed_summary[protocol]
+FAILED tests/test_overall_simulation_controller.py::test_mutated_inputs_cannot_produce_a_completed_summary[reference]
+FAILED tests/test_overall_simulation_controller.py::test_mutated_inputs_cannot_produce_a_completed_summary[catalog]
+FAILED tests/test_overall_simulation_controller.py::test_mutated_inputs_cannot_produce_a_completed_summary[receipt]
+FAILED tests/test_overall_simulation_controller.py::test_mutated_inputs_cannot_produce_a_completed_summary[archive]
+FAILED tests/test_overall_simulation_controller.py::test_invalid_or_real_archive_never_enters_development_simulation[failed_fit]
+FAILED tests/test_overall_simulation_controller.py::test_invalid_or_real_archive_never_enters_development_simulation[real_fit]
+FAILED tests/test_overall_simulation_controller.py::test_invalid_or_real_archive_never_enters_development_simulation[wrong_catalog]
+FAILED tests/test_overall_simulation_controller.py::test_invalid_or_real_archive_never_enters_development_simulation[missing_site]
+FAILED tests/test_overall_simulation_controller.py::test_invalid_or_real_archive_never_enters_development_simulation[wrong_site_shape]
+FAILED tests/test_overall_simulation_controller.py::test_invalid_or_real_archive_never_enters_development_simulation[unused_nan]
+14 failed, 163 passed in 116.04s (0:01:56)
