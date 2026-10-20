@@ -1,0 +1,28 @@
+{
+  "state": "running",
+  "action": "prepare",
+  "started_at": "2026-10-20T01:10:04.825057+00:00",
+  "source_commit": "6ed9ba5c2365bcfbb08eaf73912e8e4e112409c5",
+  "protocol_sha256": "f9ebe588a152cbbc3d670a87a50389a93ad6e4e4a467b9d147b95480b8a34824",
+  "actual_scope": {
+    "Slice": "f1.slice",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-network-precision-prepare.scope",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "ActiveState": "active",
+    "Nice": 19,
+    "environment": {
+      "JAX_PLATFORMS": "cpu",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_ENABLE_X64": "false"
+    }
+  },
+  "mcmc_executed": false,
+  "scientific_acceptance_established": false,
+  "publication_allowed": false,
+  "prepared_attempts": 4
+}
