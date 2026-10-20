@@ -200,7 +200,7 @@ another attempt in the exhausted profile or establish inference acceptance.
 | Shared current qualifying/race model | Joint model and synthetic interface/gradient tests | Fit, recover and calibrate its shared uncertainty |
 | Scientific specification | Executable likelihood/prior definitions and candidate contract | Final numerical/evaluation/prospective protocol before real-data fitting |
 | Complete entrant/cutoff catalog | Cutoff-first data design; outcome-free forecast catalogue; development state propagation reconstructs uncentred history and retains unseen entrants with population uncertainty | Verified as-of source/calendar inventory, accepted-posterior integration and recovery on the real transfer network |
-| Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks; original failed profiles preserved; approved conditional weekend-coordinate profile converges on its complete inventory; full-design density/gradient preflight also completes | Integrate the exact method under the full recovery protocol; measure inference on the remaining required designs; no automatic retuning; full recovery and intended-runner resource measurements remain open |
+| Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks; original failed profiles preserved; checked weekend coordinates and batching now selectable through an explicit production registration; bounded diagnostics and retained sampler extras; original small profile and full-design calculation evidence preserved | Freeze final source and complete recovery/evaluation registrations; resolve the failed full-network inference; full recovery and intended-runner resource measurements remain open |
 | Known-truth recovery and simulation-based calibration | The earlier conditional weekend-coordinate profile converged on its registered connected, confounded and sparse-rookie cases; descriptive truth checks preserve interval misses. The original complete-design profile remains interrupted; its separately recorded continuation exhausted the fixed retry sequence and failed convergence, with saved-array diagnostics independently reproduced. The development evaluator covers state contrasts and observation likelihoods, distinguishes fixed-truth stress cases and requires a complete inventory | Full study registration, power justification and execution, including ranking functionals, confounding and the real transfer network; no failed case or missed truth may be discarded |
 | Coherent weekend simulation | Student-t elimination and shared weekend uncertainty; observation kernels preserve teammate effects, context, order and completion within each joint draw; historical joint condition integration; explicit unseen-circuit outcome and qualifying track-factor extensions | Condition/circuit calibration and final registration, qualifying weather, official-grid eligibility/penalties, common operations, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |
@@ -253,6 +253,22 @@ passing browser checks**, along with the initial fixture/import failures and the
 corrections. These local synthetic/legacy-payload checks do not complete accepted
 real-data export, fresh publication, clean-clone CI or intended-runner readiness.
 The acceptance controller and canonical producer remain open.
+
+The [production inference integration](overall_production_inference.md) now makes
+the verified weekend coordinates, batched control map and bounded diagnostics
+available through an explicit new fitting registration. The runtime modules are
+inside the recursively hashed package and do not import research implementations.
+Each completed attempt retains its sampler extras for diagnostic recounting;
+historical registrations keep their original implementation. The
+[verification record](../outputs/championship/development/overall-production-inference-checks-v1/verification.json)
+preserves **177 passing focused checks** against committed source, including the
+posterior archive, recovery and simulation consumers, together with earlier
+checks and the intermediate uncommitted-source refusal. These are software and
+calculation-equivalence checks with a test double at the sampler boundary. No
+new MCMC, source registration, accepted fit, ranking or deployment was produced.
+The failed full-network profile remains failed. Complete the remaining producer
+and refresh integration before freezing new scientific runs and regenerating
+affected outputs.
 
 The numerical profile is registered separately in
 [`overall_profile_protocol.json`](overall_profile_protocol.json). It answers

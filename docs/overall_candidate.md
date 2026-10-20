@@ -151,6 +151,15 @@ requirements are explicit constants. Constant stochastic coordinates fail;
 structurally constant deterministic coordinates are reported separately. The
 legacy diagnostics and previous accepted/failed runs are not reclassified.
 
+The [production inference integration](overall_production_inference.md) adds an
+explicitly registered path using the checked conditional weekend coordinates,
+batched control map and bounded diagnostics. Its implementations now live under
+the recursively hashed package. Historical registrations retain their original
+implementation; a new registration must bind the current source/data key. The
+runner preserves every completed attempt's requested sampler extras for later
+diagnostic recounting. This integration establishes no new convergence,
+recovery, calibration or publication result.
+
 The existing fixed `artifacts.RETRY` ladder remains the only permitted retry
 policy for the candidate fitter. Do not weaken a threshold after seeing
 results. A code correction changes the source fingerprint and requires a new
