@@ -294,6 +294,15 @@ full-network failure remains failed; complete scientific acceptance, functional
 precision and accepted canonical production remain open. No new fit or public
 payload was produced.
 
+The subsequent [full-network diagnosis](overall_network_diagnosis_results.md)
+retains every exhausted attempt and shows severe within-chain stagnation across
+the scalar parameters, including the separate retirement-risk block. Complete
+gradients are finite at the fixed reconstructed endpoints; this does not identify
+the cause or rescue any chain. The next numerical investigation is a matched
+precision comparison on the same observations and fixed parameter points, before
+another fitting proposal. No fit, prior, retry rule, gate or public payload was
+changed by this read-only analysis.
+
 The numerical profile is registered separately in
 [`overall_profile_protocol.json`](overall_profile_protocol.json). It answers
 whether the inference machinery can run on the specified synthetic designs, and
