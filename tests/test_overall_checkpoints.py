@@ -167,6 +167,53 @@ def test_missing_generation_and_changed_manifest_chain_fail_closed(tmp_path):
             pass
 
 
+def test_changed_tip_draw_count_is_rejected_before_loading_sampler(tmp_path):
+    with Checkpoints(tmp_path, identity()) as saved:
+        saved.append(state())
+        posterior, extras = samples(2)
+        saved.append(state(2), posterior=posterior, extras=extras)
+    path = tmp_path / "checkpoint-000001/manifest.json"
+    record = json.loads(path.read_text())
+    record["draws"] = 3
+    path.write_text(json.dumps(record))
+    with pytest.raises(ValueError, match="dimensions"):
+        with Checkpoints(tmp_path, identity()):
+            pass
+
+
+def test_invalid_restored_iteration_is_rejected_before_sampling(tmp_path):
+    from f1rank.overall.checkpoints import _arrays, digest
+    with Checkpoints(tmp_path, identity()) as saved:
+        saved.append(state())
+    directory = tmp_path / "checkpoint-000000"
+    tree, leaves = encode_state(state(1))
+    (directory / "state.npz").unlink()
+    _arrays(directory / "state.npz", leaves)
+    record = json.loads((directory / "manifest.json").read_text())
+    record["tree"] = tree
+    record["files"]["state.npz"] = digest(directory / "state.npz")
+    (directory / "manifest.json").write_text(json.dumps(record))
+    with Checkpoints(tmp_path, identity()) as saved:
+        with pytest.raises(ValueError, match="iteration"):
+            saved.state()
+
+
+def test_history_changed_during_chunk_write_is_not_sealed_again(tmp_path, monkeypatch):
+    import f1rank.overall.checkpoints as module
+    with Checkpoints(tmp_path, identity()) as saved:
+        saved.append(state())
+        original = module._arrays
+        def corrupt_history(path, arrays):
+            original(path, arrays)
+            with (tmp_path / "checkpoint-000000/state.npz").open("ab") as stream:
+                stream.write(b"changed during write")
+        monkeypatch.setattr(module, "_arrays", corrupt_history)
+        posterior, extras = samples(2)
+        with pytest.raises(ValueError, match="history changed"):
+            saved.append(state(2), posterior=posterior, extras=extras)
+        assert not (tmp_path / "checkpoint-000001").exists()
+
+
 def small_model(data):
     import numpyro
     import numpyro.distributions as dist

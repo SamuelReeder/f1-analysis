@@ -179,6 +179,32 @@ def _load_arrays(path):
         return {k: _numeric(archive[k]) for k in archive.files}
 
 
+def _array_shapes(path):
+    """Inspect compressed members without allocating their retained draw arrays."""
+    import numpy as np
+    result = {}
+    with zipfile.ZipFile(path) as archive:
+        for member in archive.infolist():
+            if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*\.npy", member.filename):
+                raise ValueError("Invalid checkpoint array inventory")
+            name = member.filename[:-4]
+            if name in result:
+                raise ValueError("Duplicate checkpoint array")
+            with archive.open(member) as stream:
+                version = np.lib.format.read_magic(stream)
+                if version == (1, 0):
+                    shape, _, dtype = np.lib.format.read_array_header_1_0(stream)
+                elif version == (2, 0):
+                    shape, _, dtype = np.lib.format.read_array_header_2_0(stream)
+                else:
+                    raise ValueError("Unsupported checkpoint array format")
+                if (dtype.fields or dtype.kind not in "biufc"
+                        or stream.tell()+math.prod(shape)*dtype.itemsize != member.file_size):
+                    raise ValueError("Invalid checkpoint array header or length")
+                result[name] = {"shape": list(shape), "dtype": dtype.str}
+    return result
+
+
 class Checkpoints:
     """Exclusive writer/reader for an immutable registered attempt identity."""
 
@@ -209,8 +235,11 @@ class Checkpoints:
                     os.fsync(stream.fileno())
                 os.replace(temporary, path)
                 _sync_directory(self.root)
+            versions = self._file_versions()
             self.records = self._read_records()
-            self.sealed_files = self._file_versions()
+            if versions != self._file_versions():
+                raise ValueError("Checkpoint history changed during verification")
+            self.sealed_files = versions
             return self
         except BaseException:
             self.lock.close()
@@ -265,6 +294,22 @@ class Checkpoints:
                     or record["start_draw"] != draws or end > self.identity["settings"]["samples"]):
                 raise ValueError("Overlapping or missing checkpoint draws")
             if index:
+                axes = [self.identity["settings"]["chains"], end-draws]
+                if (not isinstance(record["inventory"], dict) or
+                        set(record["inventory"]) != {"posterior", "extras"}):
+                    raise ValueError("Missing checkpoint site inventory")
+                for kind in ("posterior", "extras"):
+                    actual = _array_shapes(directory / f"{kind}.npz")
+                    expected_inventory = record["inventory"][kind]
+                    if not actual or actual.keys() != expected_inventory.keys():
+                        raise ValueError("Checkpoint site inventory does not match arrays")
+                    for name, spec in actual.items():
+                        expected_spec = expected_inventory[name]
+                        if (spec["shape"][:2] != axes or
+                                [spec["shape"][0], *spec["shape"][2:]] != expected_spec["shape"] or
+                                spec["dtype"] != expected_spec["dtype"] or
+                                (kind == "extras" and spec["shape"] != axes)):
+                            raise ValueError("Checkpoint array dimensions or dtype changed")
                 if inventory is not None and record["inventory"] != inventory:
                     raise ValueError("Posterior site inventory changed between chunks")
                 inventory = record["inventory"]
@@ -284,10 +329,22 @@ class Checkpoints:
             return None
         self._unchanged()
         directory = self.root / f"checkpoint-{len(self.records)-1:06d}"
-        return decode_state(self.records[-1]["tree"], _load_arrays(directory / "state.npz"))
+        state = decode_state(self.records[-1]["tree"], _load_arrays(directory / "state.npz"))
+        self._validate_iteration(state, self.draws)
+        self._unchanged()
+        return state
+
+    def _validate_iteration(self, state, draws):
+        import numpy as np
+        settings = self.identity["settings"]
+        indices = np.asarray(state.i)
+        expected_shape = () if settings["chains"] == 1 else (settings["chains"],)
+        if (indices.dtype.kind not in "iu" or indices.shape != expected_shape
+                or not np.all(indices == settings["warmup"]+draws)
+                or draws > settings["samples"]):
+            raise ValueError("Sampler iteration and committed draw counts disagree")
 
     def append(self, state, *, posterior=None, extras=None):
-        import numpy as np
         self._require_lock()
         self._unchanged()
         tree, leaves = encode_state(state)
@@ -317,13 +374,8 @@ class Checkpoints:
             if generation > 1 and inventory != self.records[-1]["inventory"]:
                 raise ValueError("Posterior site inventory changed between chunks")
             draws += axes[1]
-        settings = self.identity["settings"]
-        indices = np.asarray(state.i)
-        expected_shape = () if settings["chains"] == 1 else (settings["chains"],)
-        if (indices.shape != expected_shape or
-                not np.all(indices == settings["warmup"] + draws) or draws > settings["samples"]):
-            raise ValueError("Sampler iteration and committed draw counts disagree")
-        if generation and axes[0] != settings["chains"]:
+        self._validate_iteration(state, draws)
+        if generation and axes[0] != self.identity["settings"]["chains"]:
             raise ValueError("Checkpoint chain count changed")
         directory = Path(tempfile.mkdtemp(prefix=".partial-", dir=self.root))
         _arrays(directory / "state.npz", leaves)
@@ -336,11 +388,16 @@ class Checkpoints:
                       tree=tree, files={p.name: digest(p) for p in sorted(directory.iterdir())})
         _json(directory / "manifest.json", record)
         _sync_directory(directory)
+        self._require_lock()
+        self._unchanged()
         destination = self.root / f"checkpoint-{generation:06d}"
         directory.rename(destination)
         _sync_directory(self.root)
+        versions = self._file_versions()
+        if any(versions.get(name) != value for name, value in self.sealed_files.items()):
+            raise ValueError("Checkpoint history changed during commit")
         self.records.append(record)
-        self.sealed_files = self._file_versions()
+        self.sealed_files = versions
         return record
 
     def chunks(self):
