@@ -292,6 +292,16 @@ def _export_components(output_dir, summary, protocol, reference, *, data_as_of, 
     return digest(path)
 
 
+def _block_inventory(schedule):
+    inventory, last_block = hashlib.sha256(), None
+    for chain in schedule["chains"]:
+        for first, last in schedule["draw_ranges"]:
+            for rep_first, rep_last in schedule["replicate_ranges"]:
+                last_block = [chain, first, last, rep_first, rep_last]
+                inventory.update(json.dumps(last_block, separators=(",", ":")).encode() + b"\n")
+    return inventory.hexdigest(), last_block
+
+
 def execute(run_dir, design, protocol_path, reference_path, output_dir, *, registration_root=ROOT,
             temporary_parent=None):
     """Build an unpublished candidate from a registered fit; never grant acceptance."""
@@ -300,6 +310,9 @@ def execute(run_dir, design, protocol_path, reference_path, output_dir, *, regis
     if output_dir.exists():
         raise FileExistsError("Preserve the existing simulation execution, even if incomplete or failed")
     protocol, protocol_key = committed_protocol(protocol_path, root=registration_root)
+    protocol_bytes = protocol_path.read_bytes()
+    if hashlib.sha256(protocol_bytes).hexdigest() != protocol_key:
+        raise ValueError("Simulation protocol changed after its committed read")
     reference_bytes = reference_path.read_bytes()
     reference = json.loads(reference_bytes)
     reference_key = hashlib.sha256(reference_bytes).hexdigest()
@@ -320,7 +333,7 @@ def execute(run_dir, design, protocol_path, reference_path, output_dir, *, regis
     receipt.update(source_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
         registration_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=registration_root, text=True).strip())
     output_dir.mkdir(parents=True, exist_ok=False)
-    atomic_json(output_dir / "protocol.json", protocol)
+    (output_dir / "protocol.json").write_bytes(protocol_bytes)
     (output_dir / "reference.json").write_bytes(reference_bytes)
     atomic_json(output_dir / "receipt.json", receipt)
     started, inventory = time.monotonic(), hashlib.sha256()
@@ -414,13 +427,16 @@ def load_candidate(output_dir, run_dir, design, protocol_path, reference_path, *
     scenario_key = _hash(dict(reference_sha256=reference_key, race_control=protocol["race_control"],
                              advancing=protocol["advancing"]))
     simulation_key = _hash(dict(protocol_sha256=key, scenario_key=scenario_key, schedule=schedule))
+    block_key, last_block = _block_inventory(schedule)
     if (receipt.get("state") != "complete" or receipt.get("purpose") != PURPOSE
             or receipt.get("protocol_sha256") != key or receipt.get("reference_sha256") != reference_key
             or receipt.get("simulation_key") != simulation_key or receipt.get("fit") != protocol["fit"]
             or receipt.get("synthetic") is not protocol["synthetic"]
             or receipt.get("schedule") != schedule or receipt.get("completed_blocks") != schedule["blocks"]
+            or receipt.get("block_inventory_sha256") != block_key or receipt.get("last_completed_block") != last_block
             or receipt.get("runtime") != protocol["runtime"]
             or receipt.get("scientific_evidence_verified") is not False
+            or receipt.get("reference_source_availability_verified") is not False
             or receipt.get("publication_allowed") is not False
             or digest(output_dir / "protocol.json") != key
             or (output_dir / "reference.json").read_bytes() != reference_bytes
@@ -434,6 +450,7 @@ def load_candidate(output_dir, run_dir, design, protocol_path, reference_path, *
             or summary.get("replicates_per_draw") != protocol["workload"]["replicates"]
             or summary.get("n_races") != len(scenarios) or summary.get("protocol_sha256") != key
             or summary.get("simulation_runtime") != protocol["runtime"]
+            or summary.get("reference_source_availability_verified") is not False
             or summary.get("reference_scenario_id") != reference["scenario_id"]
             or summary.get("unresolved_reference_assumptions") != reference["unresolved_before_publication"]):
         raise ValueError("Candidate summary differs from its registered inventory")
@@ -468,6 +485,10 @@ def load_candidate(output_dir, run_dir, design, protocol_path, reference_path, *
         raise ValueError("Failed-precision candidate must not export ranking components")
     if (receipt_path.read_bytes() != receipt_bytes or Path(reference_path).read_bytes() != reference_bytes
             or digest(protocol_path) != key or protocol["sources"] != source_fingerprints()
+            or digest(output_dir / "protocol.json") != key
+            or (output_dir / "reference.json").read_bytes() != reference_bytes
+            or digest(Path(registration_root) / protocol["fit_registration"]["path"]) != protocol["fit_registration"]["sha256"]
+            or digest(output_dir / "diagnostic_moments.npz") != receipt["diagnostic_moments"]["sha256"]
             or design_identity(design) != identity or protocol["runtime"] != runtime_identity()
             or digest(run_dir / "receipt.json") != protocol["fit"]["receipt_sha256"]
             or digest(output_dir / "summary.json") != receipt["summary_sha256"]

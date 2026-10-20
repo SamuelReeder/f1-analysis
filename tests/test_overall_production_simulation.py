@@ -2,6 +2,7 @@
 import ast
 import copy
 import functools
+from contextlib import contextmanager
 import json
 from pathlib import Path
 import subprocess
@@ -111,6 +112,7 @@ def test_complete_registered_candidate_runs_and_failed_precision_stays_unpublish
     assert receipt["conditional_simulation_precision_passed"] is False
     assert receipt["components_sha256"] is None and not (candidate.output / "components.json").exists()
     assert not receipt["publication_allowed"] and not receipt["scientific_evidence_verified"]
+    assert (candidate.output/"protocol.json").read_bytes() == candidate.path.read_bytes()
     checked, again, components = load(candidate)
     assert checked == summary and again == receipt and components is None
     assert not list(candidate.maps.iterdir())
@@ -171,6 +173,35 @@ def test_simulation_exception_retains_progress_and_prevents_partial_components(c
     assert receipt["state"] == "failed_exception" and receipt["completed_blocks"] == 1
     assert not (candidate.output/"components.json").exists() and not (candidate.output/"summary.json").exists()
     with pytest.raises(ValueError): load(candidate)
+
+
+@pytest.mark.parametrize("change", ["moments", "fit_registration", "protocol_copy", "reference_copy"])
+def test_mutations_after_their_first_check_are_caught_at_candidate_exit(candidate, monkeypatch, change):
+    execute(candidate)
+    original = fitting.checked_archive
+    paths = dict(moments=candidate.output/"diagnostic_moments.npz",
+        fit_registration=candidate.root/candidate.protocol["fit_registration"]["path"],
+        protocol_copy=candidate.output/"protocol.json", reference_copy=candidate.output/"reference.json")
+    @contextmanager
+    def mutate(*args, **kwargs):
+        with original(*args, **kwargs) as checked:
+            yield checked
+        with paths[change].open("ab") as handle: handle.write(b"\n")
+    monkeypatch.setattr(fitting, "checked_archive", mutate)
+    with pytest.raises(ValueError, match="changed while reading"):
+        load(candidate)
+
+
+@pytest.mark.parametrize("change", ["block_inventory_sha256", "last_completed_block", "reference_source_availability_verified"])
+def test_reader_recomputes_inventory_and_retains_unverified_source_status(candidate, change):
+    execute(candidate)
+    path = candidate.output/"receipt.json"
+    receipt = json.loads(path.read_text())
+    receipt[change] = {"block_inventory_sha256":"a"*64, "last_completed_block":[0,0,1,0,1],
+                       "reference_source_availability_verified": True}[change]
+    path.write_text(json.dumps(receipt))
+    with pytest.raises(ValueError, match="inconsistent candidate"):
+        load(candidate)
 
 
 def test_component_writer_keeps_successful_paired_statistics_unpublished(tmp_path):
