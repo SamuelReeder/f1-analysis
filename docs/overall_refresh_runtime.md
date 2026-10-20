@@ -74,7 +74,11 @@ memory limits retained. Changed argument shapes can still require compilation.
 **Benchmark the existing GPU before committing to a larger algorithm redesign.**
 The [device and environment observation](../outputs/championship/development/overall-refresh-runtime-hardware/observation.json)
 confirms a local NVIDIA device and a separate environment with CUDA-enabled JAX
-packages. The active profile explicitly selects CPU. Package presence and device
+packages. The [selected source comparison](../outputs/championship/development/overall-refresh-runtime-hardware/source-comparison.json)
+finds matching Python source bytes for the profile's registered runtime files and
+the additional checkpoint compatibility dependencies in both environments.
+It does not compare compiled backends or establish numerical equivalence.
+The active profile explicitly selects CPU. Package presence and device
 memory observations do not demonstrate that this model can execute correctly or
 fit in available GPU memory. First compare the registered fixed density/gradient
 inventory; then measure a matched complete sampling workload with the same model,
