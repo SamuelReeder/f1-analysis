@@ -1,0 +1,47 @@
+{
+  "purpose": "studentt_equivalent_arithmetic_and_diagnostic_software_checks",
+  "source_commit": "83c70671e210e9d9efa4dbd0eefd2415f618c580",
+  "result": {
+    "passed": 32,
+    "pytest_seconds": 2.16,
+    "exit_code": 0,
+    "external_elapsed": "0:01.95",
+    "peak_rss_kib": 357576
+  },
+  "command_prefix": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--slice=f1.slice",
+    "--unit=f1-studentt-numerics-checks",
+    "-q",
+    "-p",
+    "MemoryMax=3G",
+    "-p",
+    "CPUQuota=200%",
+    "--",
+    "/usr/bin/nice",
+    "-n",
+    "19",
+    "/usr/bin/time",
+    "-v"
+  ],
+  "scope_note": "Captured after this short run completed; inactive properties do not establish active limits.",
+  "coverage": [
+    "Known Cauchy log density and log-degree derivative.",
+    "Location-scale identity and symmetry.",
+    "Temporary arithmetic substitution restores the original method even after an exception; sampling method unchanged.",
+    "Independent pinned arbitrary-precision reference at exact coordinates.",
+    "Complete declared saved-coordinate Cartesian inventory.",
+    "Fixed-budget failures and nonfinite rows retained.",
+    "Earlier fixed-point and diagnostic-reader regressions."
+  ],
+  "output_sha256": {
+    "pytest.txt": "7e20bf672288a8e43eab924b85cb97bdee145ce1810e16868a32a157770e087f",
+    "resources.txt": "20e78875cc04ed826b3fcf4fb84742aed3b8ae7928a688370b22bf8f4e0e7af4",
+    "scope.txt": "3558de85b610e2c819dcb3131c0fbe6394516beb1b36baf057d9535877ecf3f0"
+  },
+  "mcmc_executed": false,
+  "scientific_acceptance_established": false,
+  "publication_allowed": false
+}
