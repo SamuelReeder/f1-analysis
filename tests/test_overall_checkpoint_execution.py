@@ -115,6 +115,13 @@ def _wait_for(predicate, timeout=10):
     raise AssertionError('Fixture did not reach its process boundary')
 
 
+def _sealed_fixture(path):
+    try:
+        return json.loads(path.read_bytes()).get('converged') is False
+    except (FileNotFoundError, json.JSONDecodeError):
+        return False
+
+
 def test_parent_death_requires_child_death_then_reconciles_sealed_result(tmp_path):
     directory = tmp_path / 'attempt'; request = make_request(directory, hold=True)
     definition = tmp_path / 'input.json'; definition.write_bytes(canonical(request))
@@ -127,7 +134,7 @@ def test_parent_death_requires_child_death_then_reconciles_sealed_result(tmp_pat
                               cwd=ROOT, start_new_session=True)
     child = None
     try:
-        _wait_for(lambda: (directory / STAGES[0] / 'result.json').exists())
+        _wait_for(lambda: _sealed_fixture(directory / STAGES[0] / 'result.json'))
         receipt = json.loads((directory / 'receipt.json').read_text())
         child = receipt['invocations'][0]['children'][0]['process']
         parent.kill(); parent.wait()
