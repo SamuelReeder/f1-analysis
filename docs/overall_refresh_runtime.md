@@ -185,6 +185,14 @@ failure. The [bounded archived-diagnostic adapter](overall_checkpoint_diagnostic
 also passes its focused fixture checks. Its complete-attempt integration and
 production-scale cost remain unverified.
 
+The new [sequential attempt executor](overall_checkpoint_execution.md) separates
+sampling/archive work from CPU diagnostics in fresh interpreters. It preserves
+observed process failures and requires process-death and artifact checks before
+recovering an interrupted attempt. Its focused process-boundary verification is
+queued behind the active replay to preserve sequential resource use. Model-worker
+and fixed-retry integration remain pending; this infrastructure is not yet selected
+by a fitting registration.
+
 **Benchmark initialization from the previous accepted joint fit.** Map original
 latent variables by stable driver, event, team and circuit identities; reconstruct
 the new coordinate transforms and initialize added states coherently. Use distinct
