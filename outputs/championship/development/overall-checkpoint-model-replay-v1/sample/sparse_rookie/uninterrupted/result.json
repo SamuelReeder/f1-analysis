@@ -1,0 +1,17 @@
+{
+  "case": "sparse_rookie",
+  "phase": "uninterrupted",
+  "state": "failed",
+  "protocol_sha256": "736e0ff64afeb6c29f532b2d326eff390c35adde687308c28e5f7ac4df9848b2",
+  "started_at": "2026-10-21T22:58:56.408325+00:00",
+  "progress": [],
+  "full_fit_executed": false,
+  "convergence_evaluated": false,
+  "publication_allowed": false,
+  "error": "FileNotFoundError",
+  "message": "[Errno 2] No such file or directory: 'nvidia-smi'",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/sreeder/.codex/worktrees/overall-refresh/f1-analysis/analysis/checkpoint_model_replay/__init__.py\", line 125, in worker\n    record['actual_scope']=precision.scope(p,original,'gpu64_a',args.scope)\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sreeder/.codex/worktrees/overall-refresh/f1-analysis/analysis/backend_precision/__init__.py\", line 97, in scope\n    rows=list(csv.reader(subprocess.check_output(['nvidia-smi','--query-gpu=name,memory.total,memory.free,driver_version','--format=csv,noheader,nounits'],text=True).splitlines()))\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 466, in check_output\n    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'nvidia-smi'\n",
+  "seconds": 0.02077253896277398,
+  "process_max_rss_kib": 44512,
+  "finished_at": "2026-10-21T22:58:56.429122+00:00"
+}
