@@ -1,0 +1,27 @@
+{
+  "case": "connected",
+  "exit_code": 0,
+  "state": "converged",
+  "result_present": true,
+  "result_sha256": "b5b1225316f0f0bc58f977fc25d0ea4785ac0a32e70ccf56762e548faeab0cc6",
+  "log_sha256": "d137265964f432b8be2e7d3ac22d68d9713763e8d65fd81159e4b3f6738bf3b5",
+  "resources_sha256": "ccd7298c187a16d0c2efa6ae0e03c72f7c823657eb9caa76e13e23677935b3f1",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/outputs/championship/development/overall-stable-profile-v1/connected.resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-u",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/analysis/overall_stable_profile.py",
+    "child",
+    "--registration",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/docs/overall_stable_profile_protocol.json",
+    "--unit",
+    "f1-overall-stable-profile-v1.service",
+    "--case",
+    "connected",
+    "--output",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/outputs/championship/development/overall-stable-profile-v1/connected"
+  ]
+}

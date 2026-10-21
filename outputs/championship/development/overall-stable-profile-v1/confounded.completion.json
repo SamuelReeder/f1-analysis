@@ -1,0 +1,27 @@
+{
+  "case": "confounded",
+  "exit_code": 0,
+  "state": "converged",
+  "result_present": true,
+  "result_sha256": "2152d58d547847f37d41408711ba064e1b4f14ffdb79cc8210fa28a418b599bf",
+  "log_sha256": "89cfee13dec8ae2e8baf35e5ccbe0d532be7ac9d38e5f637e0e6c302fdc3e686",
+  "resources_sha256": "e896050dbb00ae2c5e3b6ccc31f2fa51a1d1458221078c41ffb140374ea3edef",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/outputs/championship/development/overall-stable-profile-v1/confounded.resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-u",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/analysis/overall_stable_profile.py",
+    "child",
+    "--registration",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/docs/overall_stable_profile_protocol.json",
+    "--unit",
+    "f1-overall-stable-profile-v1.service",
+    "--case",
+    "confounded",
+    "--output",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/outputs/championship/development/overall-stable-profile-v1/confounded"
+  ]
+}
