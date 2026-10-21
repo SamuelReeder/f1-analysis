@@ -260,7 +260,8 @@ def collected(directory):
 
 
 @pytest.mark.parametrize("chains", [1, 2])
-def test_actual_nuts_chunks_equal_uninterrupted_sampling(tmp_path, chains):
+@pytest.mark.parametrize("chain_method", ["parallel", "vectorized"])
+def test_actual_nuts_chunks_equal_uninterrupted_sampling(tmp_path, chains, chain_method):
     import jax
     import jax.numpy as jnp
     from numpyro.infer import MCMC, NUTS, init_to_median
@@ -269,25 +270,31 @@ def test_actual_nuts_chunks_equal_uninterrupted_sampling(tmp_path, chains):
     data = jnp.array([-.3, .1, .6], dtype=jnp.float32)
     result = run_chunks(small_model, (data,), kwargs={}, settings=settings,
         run_key=hashlib.sha256(b"small-model-fixed-data").hexdigest(), directory=tmp_path,
-        chunk_draws=7, verify_inputs=lambda: None)
+        chunk_draws=7, verify_inputs=lambda: None, chain_method=chain_method)
     assert result["state"] == "draws_complete"
     assert result["publication_allowed"] is False
     sampler = MCMC(NUTS(small_model, target_accept_prob=settings["target_accept"],
                        max_tree_depth=settings["max_tree_depth"],
                        init_strategy=init_to_median(num_samples=settings["init_median_samples"])),
                    num_warmup=settings["warmup"], num_samples=settings["samples"],
-                   num_chains=settings["chains"], chain_method="parallel", progress_bar=False)
+                   num_chains=settings["chains"], chain_method=chain_method, progress_bar=False)
     sampler.run(jax.random.PRNGKey(settings["seed"]), data, extra_fields=EXTRA_FIELDS)
     posterior, extras = collected(tmp_path)
     for key, value in sampler.get_samples(group_by_chain=True).items():
         np.testing.assert_array_equal(posterior[key], value)
     for key, value in sampler.get_extra_fields(group_by_chain=True).items():
         np.testing.assert_array_equal(extras[key], value)
+    with pytest.raises(ValueError, match="different target"):
+        run_chunks(small_model, (data,), kwargs={}, settings=settings,
+            run_key=hashlib.sha256(b"small-model-fixed-data").hexdigest(), directory=tmp_path,
+            chunk_draws=7, verify_inputs=lambda: None,
+            chain_method="vectorized" if chain_method == "parallel" else "parallel")
     jax.clear_caches()
 
 
 @pytest.mark.parametrize("phase", ["warmup", "sampling"])
-def test_actual_process_restart_after_committed_chunk_reproduces_every_sample(tmp_path, phase):
+@pytest.mark.parametrize("chains,chain_method", [(1, "parallel"), (2, "parallel"), (2, "vectorized")])
+def test_actual_process_restart_after_committed_chunk_reproduces_every_sample(tmp_path, phase, chains, chain_method):
     """Use separate interpreters so recovery cannot rely on a live sampler."""
     script = tmp_path / "sample.py"
     script.write_text('''
@@ -307,25 +314,45 @@ def interrupted(self, *args, **kwargs):
 if sys.argv[2] in ("warmup", "sampling"):
     Checkpoints.append = interrupted
 result = run_chunks(small_model, (jnp.array([-.3,.1,.6], dtype=jnp.float32),),
-    kwargs={}, settings=numerical_settings(), chunk_draws=7,
+    kwargs={}, settings=dict(numerical_settings(), chains=int(sys.argv[3])), chunk_draws=7,
     run_key=hashlib.sha256(b"small-model-fixed-data").hexdigest(),
-    directory=Path(sys.argv[1]), verify_inputs=lambda: None)
+    directory=Path(sys.argv[1]), verify_inputs=lambda: None, chain_method=sys.argv[4])
 assert result["state"] == "draws_complete"
 ''')
     root = Path(__file__).resolve().parents[1]
     env = dict(os.environ, PYTHONPATH=os.pathsep.join((str(root), str(root/"tests"))))
+    if chain_method == "vectorized":
+        env["XLA_FLAGS"] = "--xla_force_host_platform_device_count=1"
     resumed, uninterrupted = tmp_path / "resumed", tmp_path / "uninterrupted"
-    first = subprocess.run([sys.executable, str(script), str(resumed), phase],
+    first = subprocess.run([sys.executable, str(script), str(resumed), phase, str(chains), chain_method],
                            env=env, capture_output=True, text=True, timeout=180)
     assert first.returncode == 23, first.stderr
     for directory in (resumed, uninterrupted):
-        result = subprocess.run([sys.executable, str(script), str(directory), "complete"],
+        result = subprocess.run([sys.executable, str(script), str(directory), "complete", str(chains), chain_method],
                                 env=env, capture_output=True, text=True, timeout=180)
         assert result.returncode == 0, result.stderr
     for actual, expected in zip(collected(resumed), collected(uninterrupted)):
         assert actual.keys() == expected.keys()
         for name in actual:
             np.testing.assert_array_equal(actual[name], expected[name])
+
+
+def test_parallel_chains_reject_insufficient_devices_without_fallback(tmp_path, monkeypatch):
+    import jax
+    monkeypatch.setattr(jax, "local_device_count", lambda: 1)
+    with pytest.raises(ValueError, match="Insufficient chain devices"):
+        run_chunks(small_model, (), kwargs={}, settings=dict(numerical_settings(), chains=2),
+            chunk_draws=7, run_key="a"*64, directory=tmp_path,
+            verify_inputs=lambda: None, chain_method="parallel")
+    assert not (tmp_path / "identity.json").exists()
+
+
+def test_unsupported_chain_method_is_rejected_before_initialization(tmp_path):
+    with pytest.raises(ValueError, match="Select parallel or vectorized"):
+        run_chunks(small_model, (), kwargs={}, settings=numerical_settings(),
+            chunk_draws=7, run_key="a"*64, directory=tmp_path,
+            verify_inputs=lambda: None, chain_method="sequential")
+    assert not (tmp_path / "identity.json").exists()
 
 
 def test_changed_inputs_before_commit_do_not_advance_sampling(tmp_path):

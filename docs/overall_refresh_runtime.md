@@ -71,16 +71,20 @@ original total adaptation schedule and saved iteration; its temporary samples
 are not retained as posterior draws. An atomic directory
 rename commits each chunk together with its following state; interrupted partial
 writes remain separate. Identity checks reject a different target or runtime.
-The prepared tests exercise corruption, interruption and numerical replay,
-including recovery in a fresh interpreter. They were prepared while the profile occupied the fitting allocation and
-remain unrun on this branch pending completion of its separate saved-draw audit. This path is not selected by
+The [initial checkpoint verification](../outputs/championship/development/overall-refresh-checkpoints-checks-v1/stdout.txt)
+passes **21** checks, including corruption, interruption, exact comparison with
+uninterrupted sampling and recovery in a fresh interpreter. It tests the initial
+CPU parallel-chain implementation; it is not a production-size runtime benchmark.
+A subsequent explicit vectorized-chain implementation and expanded replay tests
+are now prepared but remain unverified. This path is not selected by
 any registration or production runner and supplies no convergence decision.
 Restoring JAX's weak array typing uses a private conversion function whose source
 is included in the runtime identity; the replay checks must pass under the exact
 intended environment before this compatibility choice can be used.
-Numerical replay of both warmup and retained-sampling interruptions, integration
-with bounded diagnostics and final archives, new-race initialization, and
-measured runtime remain outstanding.
+The original CPU replay checks cover both warmup and retained-sampling
+interruptions. Expanded chain-method checks, integration with bounded diagnostics
+and final archives, new-race initialization, and measured runtime remain
+outstanding.
 
 **Make the existing target resumable and measure where time goes.** After the
 profile audit and checkpoint checks, instrument compilation, warmup, sampling, diagnostics,
@@ -115,8 +119,11 @@ The installed NumPyro implementation falls back from parallel to sequential
 chains when the requested chain count exceeds the available devices. A GPU
 benchmark must explicitly select and record its chain execution method rather
 than inherit that fallback. Vectorized chains are an available experimental
-method; the existing checkpoint implementation currently requires separate
-chain devices and has not validated that alternative.
+method. The new checkpoint path accepts it explicitly and binds the selected
+method and allocator environment into checkpoint identity. Its expanded tests
+include multiple chains on a single logical CPU device and reject implicit
+fallback or changing methods during a resumed attempt. Those expanded tests
+have not yet been run; there is no GPU execution evidence.
 [NumPyro implementation](https://num.pyro.ai/en/stable/_modules/numpyro/infer/mcmc.html).
 
 GPU allocation also needs explicit controls. Disabling preallocation alone does

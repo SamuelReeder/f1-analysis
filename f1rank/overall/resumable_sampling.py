@@ -24,16 +24,20 @@ def runtime_identity():
         python=platform.python_version(), jax=jax.__version__, jaxlib=jaxlib.__version__,
         numpy=np.__version__, numpyro=numpyro.__version__,
         backend=jax.default_backend(), x64=bool(jax.config.jax_enable_x64),
+        matmul_precision=jax.config.jax_default_matmul_precision,
         devices=[str(d.device_kind) for d in jax.local_devices()],
         sampler_sources={module.__name__: digest(inspect.getfile(module))
                          for module in (hmc, hmc_util, mcmc, util, lax)},
         environment={name: os.environ.get(name) for name in (
             "JAX_PLATFORMS", "XLA_FLAGS", "OPENBLAS_NUM_THREADS",
-            "OMP_NUM_THREADS", "MKL_NUM_THREADS", "JAX_ENABLE_COMPILATION_CACHE")})
+            "OMP_NUM_THREADS", "MKL_NUM_THREADS", "JAX_ENABLE_COMPILATION_CACHE",
+            "CUDA_VISIBLE_DEVICES", "JAX_CUDA_VISIBLE_DEVICES",
+            "XLA_PYTHON_CLIENT_ALLOCATOR", "XLA_CLIENT_MEM_FRACTION",
+            "XLA_PYTHON_CLIENT_MEM_FRACTION", "XLA_PYTHON_CLIENT_PREALLOCATE")})
 
 
 def run_chunks(model, args, *, kwargs, settings, run_key, directory, chunk_draws,
-               verify_inputs):
+               verify_inputs, chain_method="parallel"):
     """Continue only the exact attempt; callers own registration and acceptance.
 
     ``verify_inputs`` must validate the frozen registration and complete current
@@ -56,10 +60,13 @@ def run_chunks(model, args, *, kwargs, settings, run_key, directory, chunk_draws
         raise ValueError("Explicit complete sampler and chunk settings required")
     if not isinstance(run_key, str) or len(run_key) != 64 or any(c not in "0123456789abcdef" for c in run_key):
         raise ValueError("A source/data/registration-bound attempt key is required")
-    if jax.local_device_count() < settings["chains"]:
+    if chain_method not in ("parallel", "vectorized"):
+        raise ValueError("Select parallel or vectorized chains explicitly")
+    if chain_method == "parallel" and jax.local_device_count() < settings["chains"]:
         raise ValueError("Insufficient chain devices; do not silently change execution")
     verify_inputs()
     identity = dict(schema=SCHEMA, run_key=run_key, settings=settings, chunk_draws=chunk_draws,
+                    chain_method=chain_method,
                     runtime=runtime_identity(), implementation={
                         "resumable_sampling": digest(__file__),
                         "checkpoints": digest(inspect.getfile(Checkpoints))})
@@ -82,7 +89,7 @@ def run_chunks(model, args, *, kwargs, settings, run_key, directory, chunk_draws
             if key not in samplers:
                 samplers[key] = MCMC(kernel, num_warmup=settings["warmup"],
                     num_samples=count, num_chains=settings["chains"],
-                    chain_method="parallel", progress_bar=False,
+                    chain_method=chain_method, progress_bar=False,
                     postprocess_fn=(lambda values: {}) if warmup else None)
             return samplers[key]
 
@@ -95,6 +102,10 @@ def run_chunks(model, args, *, kwargs, settings, run_key, directory, chunk_draws
                                    model_args=args, model_kwargs=kwargs)
             if settings["chains"] == 1:
                 state = initialize(initial_key)
+            elif chain_method == "vectorized":
+                # NumPyro initializes the full batched state and vectorizes its
+                # transition kernel when given a batch of chain keys.
+                state = initialize(jax.random.split(initial_key, settings["chains"]))
             else:
                 state = jax.pmap(initialize)(jax.random.split(initial_key, settings["chains"]))
             state = jax.block_until_ready(state)
