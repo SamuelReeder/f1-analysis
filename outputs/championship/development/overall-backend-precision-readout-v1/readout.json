@@ -1,0 +1,1392 @@
+{
+  "purpose": "descriptive_readout_of_complete_precision_diagnosis",
+  "cases": [
+    {
+      "case": "connected",
+      "report": "outputs/championship/development/overall-backend-precision-v1/compare/cpu32/connected/result.json",
+      "points": 17,
+      "original_float32_reproduced": {
+        "cpu": true,
+        "gpu": false
+      },
+      "higher_precision_within_original_budgets": true,
+      "pairs": {
+        "original_cpu__cpu32": {
+          "all_bitwise_equal": true,
+          "unequal_fields": 0,
+          "largest_gradient_field": "gradient/age_slope",
+          "largest_gradient": {
+            "shape": [
+              17
+            ],
+            "coordinates": 17,
+            "max_absolute": 0.0,
+            "l2_difference": 0.0,
+            "reference_l2": 315.5639913482618,
+            "relative_l2": 0.0,
+            "largest_flat_index": 0,
+            "left_at_largest": -62.620609283447266,
+            "right_at_largest": -62.620609283447266,
+            "largest_index": [
+              0
+            ],
+            "same_dtype": true,
+            "exact_values": true,
+            "bitwise_equal": true
+          }
+        },
+        "original_gpu__gpu32": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 71,
+          "largest_gradient_field": "gradient/overall_lap_controls_rotated",
+          "largest_gradient": {
+            "shape": [
+              17,
+              108
+            ],
+            "coordinates": 1836,
+            "max_absolute": 0.000171661376953125,
+            "l2_difference": 0.00043619822231144595,
+            "reference_l2": 1126.6643482596903,
+            "relative_l2": 3.8715898216289745e-07,
+            "largest_flat_index": 1115,
+            "left_at_largest": 48.14004898071289,
+            "right_at_largest": 48.140220642089844,
+            "largest_index": [
+              10,
+              35
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu64_a__cpu64_b": {
+          "all_bitwise_equal": true,
+          "unequal_fields": 0,
+          "largest_gradient_field": "gradient/age_slope",
+          "largest_gradient": {
+            "shape": [
+              17
+            ],
+            "coordinates": 17,
+            "max_absolute": 0.0,
+            "l2_difference": 0.0,
+            "reference_l2": 315.56409338415557,
+            "relative_l2": 0.0,
+            "largest_flat_index": 0,
+            "left_at_largest": -62.620528004784404,
+            "right_at_largest": -62.620528004784404,
+            "largest_index": [
+              0
+            ],
+            "same_dtype": true,
+            "exact_values": true,
+            "bitwise_equal": true
+          }
+        },
+        "gpu64_a__gpu64_b": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 67,
+          "largest_gradient_field": "gradient/overall_lap_controls_rotated",
+          "largest_gradient": {
+            "shape": [
+              17,
+              108
+            ],
+            "coordinates": 1836,
+            "max_absolute": 2.0250467969162855e-13,
+            "l2_difference": 5.832333690827823e-13,
+            "reference_l2": 1126.6639954304258,
+            "relative_l2": 5.176639809635227e-16,
+            "largest_flat_index": 359,
+            "left_at_largest": 5.913238198524622,
+            "right_at_largest": 5.913238198524825,
+            "largest_index": [
+              3,
+              35
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu64_a__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 115,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              17
+            ],
+            "coordinates": 17,
+            "max_absolute": 2.703171020357331e-12,
+            "l2_difference": 3.956862478178715e-12,
+            "reference_l2": 24.67841129065499,
+            "relative_l2": 1.6033700190729322e-13,
+            "largest_flat_index": 9,
+            "left_at_largest": -2.9561523278413424,
+            "right_at_largest": -2.9561523278386392,
+            "largest_index": [
+              9
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu32__cpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              17
+            ],
+            "coordinates": 17,
+            "max_absolute": 0.005155745709030768,
+            "l2_difference": 0.0074833417414875815,
+            "reference_l2": 24.67841129065521,
+            "relative_l2": 0.00030323433925105394,
+            "largest_flat_index": 14,
+            "left_at_largest": 4.1986236572265625,
+            "right_at_largest": 4.193467911517532,
+            "largest_index": [
+              14
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "gpu32__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              17
+            ],
+            "coordinates": 17,
+            "max_absolute": 0.004862967694741371,
+            "l2_difference": 0.008954385389711701,
+            "reference_l2": 24.67841129065499,
+            "relative_l2": 0.00036284286229974907,
+            "largest_flat_index": 14,
+            "left_at_largest": 4.198330879211426,
+            "right_at_largest": 4.193467911516684,
+            "largest_index": [
+              14
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "original_cpu__cpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              17
+            ],
+            "coordinates": 17,
+            "max_absolute": 0.005155745709030768,
+            "l2_difference": 0.0074833417414875815,
+            "reference_l2": 24.67841129065521,
+            "relative_l2": 0.00030323433925105394,
+            "largest_flat_index": 14,
+            "left_at_largest": 4.1986236572265625,
+            "right_at_largest": 4.193467911517532,
+            "largest_index": [
+              14
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "original_gpu__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              17
+            ],
+            "coordinates": 17,
+            "max_absolute": 0.004862967694741371,
+            "l2_difference": 0.008954557523710485,
+            "reference_l2": 24.67841129065499,
+            "relative_l2": 0.00036284983738403456,
+            "largest_flat_index": 14,
+            "left_at_largest": 4.198330879211426,
+            "right_at_largest": 4.193467911516684,
+            "largest_index": [
+              14
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        }
+      }
+    },
+    {
+      "case": "confounded",
+      "report": "outputs/championship/development/overall-backend-precision-v1/compare/cpu32/confounded/result.json",
+      "points": 9,
+      "original_float32_reproduced": {
+        "cpu": true,
+        "gpu": false
+      },
+      "higher_precision_within_original_budgets": true,
+      "pairs": {
+        "original_cpu__cpu32": {
+          "all_bitwise_equal": true,
+          "unequal_fields": 0,
+          "largest_gradient_field": "gradient/age_slope",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.0,
+            "l2_difference": 0.0,
+            "reference_l2": 478.6400222125301,
+            "relative_l2": 0.0,
+            "largest_flat_index": 0,
+            "left_at_largest": -111.19934844970703,
+            "right_at_largest": -111.19934844970703,
+            "largest_index": [
+              0
+            ],
+            "same_dtype": true,
+            "exact_values": true,
+            "bitwise_equal": true
+          }
+        },
+        "original_gpu__gpu32": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 70,
+          "largest_gradient_field": "gradient/sd_car_season",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 6.103515625e-05,
+            "l2_difference": 7.387745058770872e-05,
+            "reference_l2": 475.5578355276158,
+            "relative_l2": 1.5534903447809688e-07,
+            "largest_flat_index": 4,
+            "left_at_largest": 368.55255126953125,
+            "right_at_largest": 368.5526123046875,
+            "largest_index": [
+              4
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu64_a__cpu64_b": {
+          "all_bitwise_equal": true,
+          "unequal_fields": 0,
+          "largest_gradient_field": "gradient/age_slope",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.0,
+            "l2_difference": 0.0,
+            "reference_l2": 478.64108197584875,
+            "relative_l2": 0.0,
+            "largest_flat_index": 0,
+            "left_at_largest": -111.19937271937354,
+            "right_at_largest": -111.19937271937354,
+            "largest_index": [
+              0
+            ],
+            "same_dtype": true,
+            "exact_values": true,
+            "bitwise_equal": true
+          }
+        },
+        "gpu64_a__gpu64_b": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 69,
+          "largest_gradient_field": "gradient/sd_car_season",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 3.694822225952521e-13,
+            "l2_difference": 5.105604630032924e-13,
+            "reference_l2": 475.5578619374612,
+            "relative_l2": 1.0736032434060238e-15,
+            "largest_flat_index": 0,
+            "left_at_largest": 99.93831139239215,
+            "right_at_largest": 99.93831139239252,
+            "largest_index": [
+              0
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu64_a__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 101,
+          "largest_gradient_field": "gradient/car_jump_z",
+          "largest_gradient": {
+            "shape": [
+              9,
+              36
+            ],
+            "coordinates": 324,
+            "max_absolute": 3.19033688356285e-12,
+            "l2_difference": 5.371673697805679e-12,
+            "reference_l2": 611.5130064004853,
+            "relative_l2": 8.784234581410885e-15,
+            "largest_flat_index": 180,
+            "left_at_largest": -33.26341248089228,
+            "right_at_largest": -33.26341248088909,
+            "largest_index": [
+              5,
+              0
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu32__cpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.003595221705406715,
+            "l2_difference": 0.004190478388438809,
+            "reference_l2": 14.675495598256054,
+            "relative_l2": 0.0002855425467836861,
+            "largest_flat_index": 3,
+            "left_at_largest": -8.679938316345215,
+            "right_at_largest": -8.683533538050622,
+            "largest_index": [
+              3
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "gpu32__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.003311980433078787,
+            "l2_difference": 0.004765248517924056,
+            "reference_l2": 14.675495598256001,
+            "relative_l2": 0.0003247078428131821,
+            "largest_flat_index": 3,
+            "left_at_largest": -8.680221557617188,
+            "right_at_largest": -8.683533538050266,
+            "largest_index": [
+              3
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "original_cpu__cpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.003595221705406715,
+            "l2_difference": 0.004190478388438809,
+            "reference_l2": 14.675495598256054,
+            "relative_l2": 0.0002855425467836861,
+            "largest_flat_index": 3,
+            "left_at_largest": -8.679938316345215,
+            "right_at_largest": -8.683533538050622,
+            "largest_index": [
+              3
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "original_gpu__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.0033100730844459747,
+            "l2_difference": 0.004764050076696897,
+            "reference_l2": 14.675495598256001,
+            "relative_l2": 0.0003246261800700649,
+            "largest_flat_index": 3,
+            "left_at_largest": -8.68022346496582,
+            "right_at_largest": -8.683533538050266,
+            "largest_index": [
+              3
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        }
+      }
+    },
+    {
+      "case": "sparse_rookie",
+      "report": "outputs/championship/development/overall-backend-precision-v1/compare/cpu32/sparse_rookie/result.json",
+      "points": 17,
+      "original_float32_reproduced": {
+        "cpu": true,
+        "gpu": false
+      },
+      "higher_precision_within_original_budgets": true,
+      "pairs": {
+        "original_cpu__cpu32": {
+          "all_bitwise_equal": true,
+          "unequal_fields": 0,
+          "largest_gradient_field": "gradient/age_slope",
+          "largest_gradient": {
+            "shape": [
+              17
+            ],
+            "coordinates": 17,
+            "max_absolute": 0.0,
+            "l2_difference": 0.0,
+            "reference_l2": 194.82008568895876,
+            "relative_l2": 0.0,
+            "largest_flat_index": 0,
+            "left_at_largest": -14.329703330993652,
+            "right_at_largest": -14.329703330993652,
+            "largest_index": [
+              0
+            ],
+            "same_dtype": true,
+            "exact_values": true,
+            "bitwise_equal": true
+          }
+        },
+        "original_gpu__gpu32": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 69,
+          "largest_gradient_field": "gradient/overall_lap_controls_rotated",
+          "largest_gradient": {
+            "shape": [
+              17,
+              108
+            ],
+            "coordinates": 1836,
+            "max_absolute": 3.4332275390625e-05,
+            "l2_difference": 0.00013741938295465454,
+            "reference_l2": 625.5213549725137,
+            "relative_l2": 2.196877562408608e-07,
+            "largest_flat_index": 1385,
+            "left_at_largest": -33.97654342651367,
+            "right_at_largest": -33.97657775878906,
+            "largest_index": [
+              12,
+              89
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu64_a__cpu64_b": {
+          "all_bitwise_equal": true,
+          "unequal_fields": 0,
+          "largest_gradient_field": "gradient/age_slope",
+          "largest_gradient": {
+            "shape": [
+              17
+            ],
+            "coordinates": 17,
+            "max_absolute": 0.0,
+            "l2_difference": 0.0,
+            "reference_l2": 194.8201457887401,
+            "relative_l2": 0.0,
+            "largest_flat_index": 0,
+            "left_at_largest": -14.329733518400936,
+            "right_at_largest": -14.329733518400936,
+            "largest_index": [
+              0
+            ],
+            "same_dtype": true,
+            "exact_values": true,
+            "bitwise_equal": true
+          }
+        },
+        "gpu64_a__gpu64_b": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 67,
+          "largest_gradient_field": "gradient/overall_lap_controls_rotated",
+          "largest_gradient": {
+            "shape": [
+              17,
+              108
+            ],
+            "coordinates": 1836,
+            "max_absolute": 3.552713678800501e-14,
+            "l2_difference": 1.8926434847733417e-13,
+            "reference_l2": 625.5213903606078,
+            "relative_l2": 3.0257054577817855e-16,
+            "largest_flat_index": 1601,
+            "left_at_largest": 56.15933267139079,
+            "right_at_largest": 56.15933267139076,
+            "largest_index": [
+              14,
+              89
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu64_a__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 113,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              17
+            ],
+            "coordinates": 17,
+            "max_absolute": 5.771827460421264e-12,
+            "l2_difference": 7.001212358814337e-12,
+            "reference_l2": 18.04018110528118,
+            "relative_l2": 3.8808991539252137e-13,
+            "largest_flat_index": 14,
+            "left_at_largest": 2.6144771335291486,
+            "right_at_largest": 2.6144771335349204,
+            "largest_index": [
+              14
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu32__cpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              17
+            ],
+            "coordinates": 17,
+            "max_absolute": 0.001856433384636258,
+            "l2_difference": 0.004251161751568718,
+            "reference_l2": 18.040181105280993,
+            "relative_l2": 0.00023564961608529825,
+            "largest_flat_index": 8,
+            "left_at_largest": 3.7650084495544434,
+            "right_at_largest": 3.7668648829390796,
+            "largest_index": [
+              8
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "gpu32__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              17
+            ],
+            "coordinates": 17,
+            "max_absolute": 0.0033728835806967616,
+            "l2_difference": 0.007789922387723167,
+            "reference_l2": 18.04018110528118,
+            "relative_l2": 0.0004318095446083245,
+            "largest_flat_index": 14,
+            "left_at_largest": 2.6111042499542236,
+            "right_at_largest": 2.6144771335349204,
+            "largest_index": [
+              14
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "original_cpu__cpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              17
+            ],
+            "coordinates": 17,
+            "max_absolute": 0.001856433384636258,
+            "l2_difference": 0.004251161751568718,
+            "reference_l2": 18.040181105280993,
+            "relative_l2": 0.00023564961608529825,
+            "largest_flat_index": 8,
+            "left_at_largest": 3.7650084495544434,
+            "right_at_largest": 3.7668648829390796,
+            "largest_index": [
+              8
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "original_gpu__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              17
+            ],
+            "coordinates": 17,
+            "max_absolute": 0.0033728835806967616,
+            "l2_difference": 0.007791229953271655,
+            "reference_l2": 18.04018110528118,
+            "relative_l2": 0.00043188202534124275,
+            "largest_flat_index": 14,
+            "left_at_largest": 2.6111042499542236,
+            "right_at_largest": 2.6144771335349204,
+            "largest_index": [
+              14
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        }
+      }
+    },
+    {
+      "case": "dominant_teammate",
+      "report": "outputs/championship/development/overall-backend-precision-v1/compare/cpu32/dominant_teammate/result.json",
+      "points": 9,
+      "original_float32_reproduced": {
+        "cpu": true,
+        "gpu": false
+      },
+      "higher_precision_within_original_budgets": true,
+      "pairs": {
+        "original_cpu__cpu32": {
+          "all_bitwise_equal": true,
+          "unequal_fields": 0,
+          "largest_gradient_field": "gradient/age_slope",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.0,
+            "l2_difference": 0.0,
+            "reference_l2": 124.55371573069695,
+            "relative_l2": 0.0,
+            "largest_flat_index": 0,
+            "left_at_largest": 38.172096252441406,
+            "right_at_largest": 38.172096252441406,
+            "largest_index": [
+              0
+            ],
+            "same_dtype": true,
+            "exact_values": true,
+            "bitwise_equal": true
+          }
+        },
+        "original_gpu__gpu32": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 67,
+          "largest_gradient_field": "gradient/overall_lap_controls_rotated",
+          "largest_gradient": {
+            "shape": [
+              9,
+              108
+            ],
+            "coordinates": 972,
+            "max_absolute": 1.71661376953125e-05,
+            "l2_difference": 6.925442552059223e-05,
+            "reference_l2": 334.41153977596105,
+            "relative_l2": 2.0709340822086827e-07,
+            "largest_flat_index": 467,
+            "left_at_largest": -24.32431411743164,
+            "right_at_largest": -24.324296951293945,
+            "largest_index": [
+              4,
+              35
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu64_a__cpu64_b": {
+          "all_bitwise_equal": true,
+          "unequal_fields": 0,
+          "largest_gradient_field": "gradient/age_slope",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.0,
+            "l2_difference": 0.0,
+            "reference_l2": 124.55370824135524,
+            "relative_l2": 0.0,
+            "largest_flat_index": 0,
+            "left_at_largest": 38.1720747963982,
+            "right_at_largest": 38.1720747963982,
+            "largest_index": [
+              0
+            ],
+            "same_dtype": true,
+            "exact_values": true,
+            "bitwise_equal": true
+          }
+        },
+        "gpu64_a__gpu64_b": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 70,
+          "largest_gradient_field": "gradient/overall_lap_controls_rotated",
+          "largest_gradient": {
+            "shape": [
+              9,
+              108
+            ],
+            "coordinates": 972,
+            "max_absolute": 6.039613253960852e-14,
+            "l2_difference": 1.5875925118770097e-13,
+            "reference_l2": 334.41161876008255,
+            "relative_l2": 4.747420313215847e-16,
+            "largest_flat_index": 53,
+            "left_at_largest": 7.194132604095019,
+            "right_at_largest": 7.194132604094959,
+            "largest_index": [
+              0,
+              53
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu64_a__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 107,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 7.86926079854311e-13,
+            "l2_difference": 9.900414180030481e-13,
+            "reference_l2": 11.213137517789011,
+            "relative_l2": 8.829298815183557e-14,
+            "largest_flat_index": 1,
+            "left_at_largest": -4.167749924026161,
+            "right_at_largest": -4.167749924026948,
+            "largest_index": [
+              1
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu32__cpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.001513970549132715,
+            "l2_difference": 0.0018493653079138938,
+            "reference_l2": 11.213137517788633,
+            "relative_l2": 0.0001649284426397199,
+            "largest_flat_index": 5,
+            "left_at_largest": -3.030449628829956,
+            "right_at_largest": -3.0319635993790888,
+            "largest_index": [
+              5
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "gpu32__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.0037714716249066527,
+            "l2_difference": 0.005713616408927391,
+            "reference_l2": 11.213137517789011,
+            "relative_l2": 0.0005095466277714922,
+            "largest_flat_index": 8,
+            "left_at_largest": 4.187220573425293,
+            "right_at_largest": 4.1909920450502,
+            "largest_index": [
+              8
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "original_cpu__cpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.001513970549132715,
+            "l2_difference": 0.0018493653079138938,
+            "reference_l2": 11.213137517788633,
+            "relative_l2": 0.0001649284426397199,
+            "largest_flat_index": 5,
+            "left_at_largest": -3.030449628829956,
+            "right_at_largest": -3.0319635993790888,
+            "largest_index": [
+              5
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "original_gpu__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.003773378973539465,
+            "l2_difference": 0.005715909988896159,
+            "reference_l2": 11.213137517789011,
+            "relative_l2": 0.0005097511717686678,
+            "largest_flat_index": 8,
+            "left_at_largest": 4.18721866607666,
+            "right_at_largest": 4.1909920450502,
+            "largest_index": [
+              8
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        }
+      }
+    },
+    {
+      "case": "era_boundary",
+      "report": "outputs/championship/development/overall-backend-precision-v1/compare/cpu32/era_boundary/result.json",
+      "points": 9,
+      "original_float32_reproduced": {
+        "cpu": true,
+        "gpu": false
+      },
+      "higher_precision_within_original_budgets": true,
+      "pairs": {
+        "original_cpu__cpu32": {
+          "all_bitwise_equal": true,
+          "unequal_fields": 0,
+          "largest_gradient_field": "gradient/age_slope",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.0,
+            "l2_difference": 0.0,
+            "reference_l2": 43.394903290479476,
+            "relative_l2": 0.0,
+            "largest_flat_index": 0,
+            "left_at_largest": 0.510084331035614,
+            "right_at_largest": 0.510084331035614,
+            "largest_index": [
+              0
+            ],
+            "same_dtype": true,
+            "exact_values": true,
+            "bitwise_equal": true
+          }
+        },
+        "original_gpu__gpu32": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 61,
+          "largest_gradient_field": "gradient/overall_lap_controls_rotated",
+          "largest_gradient": {
+            "shape": [
+              9,
+              108
+            ],
+            "coordinates": 972,
+            "max_absolute": 1.1444091796875e-05,
+            "l2_difference": 4.479154781184114e-05,
+            "reference_l2": 252.4645104606256,
+            "relative_l2": 1.774172050167298e-07,
+            "largest_flat_index": 413,
+            "left_at_largest": 53.249000549316406,
+            "right_at_largest": 53.24898910522461,
+            "largest_index": [
+              3,
+              89
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu64_a__cpu64_b": {
+          "all_bitwise_equal": true,
+          "unequal_fields": 0,
+          "largest_gradient_field": "gradient/age_slope",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.0,
+            "l2_difference": 0.0,
+            "reference_l2": 43.39490038005435,
+            "relative_l2": 0.0,
+            "largest_flat_index": 0,
+            "left_at_largest": 0.5100715172248487,
+            "right_at_largest": 0.5100715172248487,
+            "largest_index": [
+              0
+            ],
+            "same_dtype": true,
+            "exact_values": true,
+            "bitwise_equal": true
+          }
+        },
+        "gpu64_a__gpu64_b": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 63,
+          "largest_gradient_field": "gradient/age_slope",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 2.1316282072803006e-14,
+            "l2_difference": 2.897150329470593e-14,
+            "reference_l2": 43.39490038005433,
+            "relative_l2": 6.676246066005983e-16,
+            "largest_flat_index": 2,
+            "left_at_largest": -29.171242463446415,
+            "right_at_largest": -29.171242463446394,
+            "largest_index": [
+              2
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu64_a__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 107,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 2.0392576516314875e-12,
+            "l2_difference": 2.573082160627388e-12,
+            "reference_l2": 54.413024243278876,
+            "relative_l2": 4.7287982912385476e-14,
+            "largest_flat_index": 3,
+            "left_at_largest": 18.939317752738198,
+            "right_at_largest": 18.93931775273616,
+            "largest_index": [
+              3
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu32__cpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.0013139876087411295,
+            "l2_difference": 0.0019345426698602224,
+            "reference_l2": 54.413024243279146,
+            "relative_l2": 3.55529341874279e-05,
+            "largest_flat_index": 5,
+            "left_at_largest": 14.306709289550781,
+            "right_at_largest": 14.308023277159522,
+            "largest_index": [
+              5
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "gpu32__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.0007628875943055391,
+            "l2_difference": 0.0012587781214458385,
+            "reference_l2": 54.413024243278876,
+            "relative_l2": 2.3133765104065566e-05,
+            "largest_flat_index": 0,
+            "left_at_largest": -38.18178939819336,
+            "right_at_largest": -38.182552285787665,
+            "largest_index": [
+              0
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "original_cpu__cpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.0013139876087411295,
+            "l2_difference": 0.0019345426698602224,
+            "reference_l2": 54.413024243279146,
+            "relative_l2": 3.55529341874279e-05,
+            "largest_flat_index": 5,
+            "left_at_largest": 14.306709289550781,
+            "right_at_largest": 14.308023277159522,
+            "largest_index": [
+              5
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "original_gpu__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              9
+            ],
+            "coordinates": 9,
+            "max_absolute": 0.0007628875943055391,
+            "l2_difference": 0.0012587049841439504,
+            "reference_l2": 54.413024243278876,
+            "relative_l2": 2.313242099017178e-05,
+            "largest_flat_index": 0,
+            "left_at_largest": -38.18178939819336,
+            "right_at_largest": -38.182552285787665,
+            "largest_index": [
+              0
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        }
+      }
+    },
+    {
+      "case": "real_network",
+      "report": "outputs/championship/development/overall-backend-precision-v1/compare/cpu32/real_network/result.json",
+      "points": 25,
+      "original_float32_reproduced": {
+        "cpu": true,
+        "gpu": false
+      },
+      "higher_precision_within_original_budgets": true,
+      "pairs": {
+        "original_cpu__cpu32": {
+          "all_bitwise_equal": true,
+          "unequal_fields": 0,
+          "largest_gradient_field": "gradient/age_slope",
+          "largest_gradient": {
+            "shape": [
+              25
+            ],
+            "coordinates": 25,
+            "max_absolute": 0.0,
+            "l2_difference": 0.0,
+            "reference_l2": 9080.496357631839,
+            "relative_l2": 0.0,
+            "largest_flat_index": 0,
+            "left_at_largest": 341.9054870605469,
+            "right_at_largest": 341.9054870605469,
+            "largest_index": [
+              0
+            ],
+            "same_dtype": true,
+            "exact_values": true,
+            "bitwise_equal": true
+          }
+        },
+        "original_gpu__gpu32": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 81,
+          "largest_gradient_field": "gradient/age_slope",
+          "largest_gradient": {
+            "shape": [
+              25
+            ],
+            "coordinates": 25,
+            "max_absolute": 0.0048828125,
+            "l2_difference": 0.011670170865136,
+            "reference_l2": 9080.492546654565,
+            "relative_l2": 1.2851913929972361e-06,
+            "largest_flat_index": 13,
+            "left_at_largest": 2225.5361328125,
+            "right_at_largest": 2225.53125,
+            "largest_index": [
+              13
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu64_a__cpu64_b": {
+          "all_bitwise_equal": true,
+          "unequal_fields": 0,
+          "largest_gradient_field": "gradient/age_slope",
+          "largest_gradient": {
+            "shape": [
+              25
+            ],
+            "coordinates": 25,
+            "max_absolute": 0.0,
+            "l2_difference": 0.0,
+            "reference_l2": 9080.519825613419,
+            "relative_l2": 0.0,
+            "largest_flat_index": 0,
+            "left_at_largest": 341.9283460113792,
+            "right_at_largest": 341.9283460113792,
+            "largest_index": [
+              0
+            ],
+            "same_dtype": true,
+            "exact_values": true,
+            "bitwise_equal": true
+          }
+        },
+        "gpu64_a__gpu64_b": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 81,
+          "largest_gradient_field": "gradient/age_slope",
+          "largest_gradient": {
+            "shape": [
+              25
+            ],
+            "coordinates": 25,
+            "max_absolute": 1.1368683772161603e-11,
+            "l2_difference": 2.915047795171647e-11,
+            "reference_l2": 9080.519825613444,
+            "relative_l2": 3.2102212771444696e-15,
+            "largest_flat_index": 14,
+            "left_at_largest": -2118.8514480283698,
+            "right_at_largest": -2118.8514480283584,
+            "largest_index": [
+              14
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu64_a__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 120,
+          "largest_gradient_field": "gradient/sd_car_season",
+          "largest_gradient": {
+            "shape": [
+              25
+            ],
+            "coordinates": 25,
+            "max_absolute": 8.822098607197404e-11,
+            "l2_difference": 1.1964510351610377e-10,
+            "reference_l2": 2799.8785810026093,
+            "relative_l2": 4.2732247150967534e-14,
+            "largest_flat_index": 21,
+            "left_at_largest": -314.4020299148118,
+            "right_at_largest": -314.4020299149,
+            "largest_index": [
+              21
+            ],
+            "same_dtype": true,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "cpu32__cpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              25
+            ],
+            "coordinates": 25,
+            "max_absolute": 0.21758163685446164,
+            "l2_difference": 0.21916419614963206,
+            "reference_l2": 163.05636353280386,
+            "relative_l2": 0.0013441008458743187,
+            "largest_flat_index": 17,
+            "left_at_largest": -53.66535568237305,
+            "right_at_largest": -53.447774045518585,
+            "largest_index": [
+              17
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "gpu32__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              25
+            ],
+            "coordinates": 25,
+            "max_absolute": 0.2477024865507147,
+            "l2_difference": 0.2492051949396538,
+            "reference_l2": 163.05636353277512,
+            "relative_l2": 0.0015283377449391133,
+            "largest_flat_index": 17,
+            "left_at_largest": -53.69547653198242,
+            "right_at_largest": -53.44777404543171,
+            "largest_index": [
+              17
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "original_cpu__cpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              25
+            ],
+            "coordinates": 25,
+            "max_absolute": 0.21758163685446164,
+            "l2_difference": 0.21916419614963206,
+            "reference_l2": 163.05636353280386,
+            "relative_l2": 0.0013441008458743187,
+            "largest_flat_index": 17,
+            "left_at_largest": -53.66535568237305,
+            "right_at_largest": -53.447774045518585,
+            "largest_index": [
+              17
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        },
+        "original_gpu__gpu64_a": {
+          "all_bitwise_equal": false,
+          "unequal_fields": 123,
+          "largest_gradient_field": "gradient/overall_lap_nu",
+          "largest_gradient": {
+            "shape": [
+              25
+            ],
+            "coordinates": 25,
+            "max_absolute": 0.2478245568632147,
+            "l2_difference": 0.24932106499503323,
+            "reference_l2": 163.05636353277512,
+            "relative_l2": 0.0015290483584525572,
+            "largest_flat_index": 17,
+            "left_at_largest": -53.69559860229492,
+            "right_at_largest": -53.44777404543171,
+            "largest_index": [
+              17
+            ],
+            "same_dtype": false,
+            "exact_values": false,
+            "bitwise_equal": false
+          }
+        }
+      }
+    }
+  ],
+  "sampling_executed": false,
+  "original_screen_changed": false,
+  "publication_allowed": false
+}
