@@ -79,7 +79,7 @@ def finalize(source, destination, *, identity, expected_inventory, verify_inputs
             timings[group+'_archive_seconds'] = time.monotonic()-begun
         saved._require_lock(); saved._unchanged(); verify_inputs()
         record = dict(schema='checkpoint_numeric_archive_v1', state='draws_complete',
-            identity_key=saved.identity_key, identity=identity, inventory=actual, files=hashes,
+            identity_key=saved.identity_key, identity=saved.identity, inventory=actual, files=hashes,
             checkpoint_generations=len(saved.records),
             checkpoint_tip_sha256=digest(saved.root/f'checkpoint-{len(saved.records)-1:06d}'/'manifest.json'),
             convergence_evaluated=False, publication_allowed=False, timings=timings,
