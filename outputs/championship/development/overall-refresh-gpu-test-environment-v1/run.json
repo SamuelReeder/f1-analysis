@@ -1,0 +1,130 @@
+{
+  "purpose": "prepare_missing_gpu_test_dependencies_only",
+  "started_at": "2026-10-21T21:58:21.731030+00:00",
+  "initial_check": {
+    "command": [
+      "/home/sreeder/f1-analysis/.venv-gpu/bin/python",
+      "-c",
+      "import pytest"
+    ],
+    "exit_code": 1,
+    "error": "ModuleNotFoundError: No module named 'pytest'",
+    "gpu_workload_started": false
+  },
+  "packages": [
+    "pytest==9.1.1",
+    "iniconfig==2.3.0",
+    "packaging==26.3",
+    "pluggy==1.6.0",
+    "pygments==2.21.0"
+  ],
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--unit=f1-overall-gpu-test-dependencies-v1",
+    "--slice=f1.slice",
+    "-q",
+    "-p",
+    "MemoryMax=3G",
+    "-p",
+    "CPUQuota=200%",
+    "--",
+    "/usr/bin/nice",
+    "-n",
+    "19",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/sreeder/.codex/worktrees/overall-refresh/f1-analysis/outputs/championship/development/overall-refresh-gpu-test-environment-v1/resources.txt",
+    "/home/sreeder/f1-analysis/.venv-gpu/bin/python",
+    "-m",
+    "pip",
+    "install",
+    "--no-deps",
+    "--disable-pip-version-check",
+    "pytest==9.1.1",
+    "iniconfig==2.3.0",
+    "packaging==26.3",
+    "pluggy==1.6.0",
+    "pygments==2.21.0"
+  ],
+  "numerical_packages_before": {
+    "numpy": {
+      "version": "2.5.3",
+      "file_count": 930,
+      "files_sha256": "949669fc7e502b7be03e6e1bff1d18c44d70f22e8678f324d03348e221d8e5d8"
+    },
+    "scipy": {
+      "version": "1.18.1",
+      "file_count": 1434,
+      "files_sha256": "d4e65364d02e11fa6a24591113b6df97d1e996b33d905f006327a59c50fdc380"
+    },
+    "jax": {
+      "version": "0.11.2",
+      "file_count": 633,
+      "files_sha256": "50be3878e2cb6c94271da22e458e3da6905681d3325117a17862d72eb75a8122"
+    },
+    "jaxlib": {
+      "version": "0.11.2",
+      "file_count": 137,
+      "files_sha256": "7f30367df7a2d70b2c2542bc4d3d336c996bc71637b57767d9639d838f266c0b"
+    },
+    "numpyro": {
+      "version": "0.22.0",
+      "file_count": 99,
+      "files_sha256": "c1ee767b510eadea597854f7ceeb4906d393fffdf2275351784ec72b4bffa87f"
+    },
+    "jax-cuda13-plugin": {
+      "version": "0.11.2",
+      "file_count": 18,
+      "files_sha256": "5c28e645bdc1665b57e48ac4a9f1c00c0384ca921f7de182a8adf40d18c62a9e"
+    },
+    "jax-cuda13-pjrt": {
+      "version": "0.11.2",
+      "file_count": 9,
+      "files_sha256": "577681f2d54df9cc40c775e7ffee9c52eb8b68d92dce0ff69f8dcf81e075fb72"
+    }
+  },
+  "exit_code": 0,
+  "numerical_packages_after": {
+    "numpy": {
+      "version": "2.5.3",
+      "file_count": 930,
+      "files_sha256": "949669fc7e502b7be03e6e1bff1d18c44d70f22e8678f324d03348e221d8e5d8"
+    },
+    "scipy": {
+      "version": "1.18.1",
+      "file_count": 1434,
+      "files_sha256": "d4e65364d02e11fa6a24591113b6df97d1e996b33d905f006327a59c50fdc380"
+    },
+    "jax": {
+      "version": "0.11.2",
+      "file_count": 633,
+      "files_sha256": "50be3878e2cb6c94271da22e458e3da6905681d3325117a17862d72eb75a8122"
+    },
+    "jaxlib": {
+      "version": "0.11.2",
+      "file_count": 137,
+      "files_sha256": "7f30367df7a2d70b2c2542bc4d3d336c996bc71637b57767d9639d838f266c0b"
+    },
+    "numpyro": {
+      "version": "0.22.0",
+      "file_count": 99,
+      "files_sha256": "c1ee767b510eadea597854f7ceeb4906d393fffdf2275351784ec72b4bffa87f"
+    },
+    "jax-cuda13-plugin": {
+      "version": "0.11.2",
+      "file_count": 18,
+      "files_sha256": "5c28e645bdc1665b57e48ac4a9f1c00c0384ca921f7de182a8adf40d18c62a9e"
+    },
+    "jax-cuda13-pjrt": {
+      "version": "0.11.2",
+      "file_count": 9,
+      "files_sha256": "577681f2d54df9cc40c775e7ffee9c52eb8b68d92dce0ff69f8dcf81e075fb72"
+    }
+  },
+  "numerical_package_files_unchanged": true,
+  "seconds": 4.939348259009421,
+  "finished_at": "2026-10-21T21:58:23.871282+00:00"
+}
