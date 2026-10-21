@@ -988,3 +988,21 @@ whose exact checker passes. The full recorded grouped dimensions also complete
 under the local scope caps. No new random draws, fit, changed gate or accepted
 ranking follows. The separate weekend-coordinate experiment remains awaiting
 approval, and full functional MCMC validation remains open.
+
+
+## Corrected computational profile completed
+
+The [completed profile report](overall_stable_profile_results.md) records the
+terminal fixed-ladder results, every failed and successful attempt, separate
+internal/external timings and original synthetic truth-interval summaries.
+Every registered case finished with a converged attempt. The committed metadata
+review finds the original records consistent. Independent numerical reproduction
+from the retained arrays is in progress; it cannot change the original failed
+attempts or grant scientific acceptance.
+
+The full-network workload dominates the recorded cost and its later attempts
+saturate the registered tree-depth limit. Subsequent runtime work prioritizes
+resumable inference, stage measurements and an explicit CPU/GPU comparison under
+the user's existing resource limits. Full recovery, calibration, accepted real-data
+inference, functional precision and production rollout remain outstanding.
+The synthetic profile supplies no actual driver ranking.
