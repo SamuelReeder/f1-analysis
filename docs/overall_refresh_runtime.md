@@ -152,9 +152,13 @@ missing. The [environment preparation record](../outputs/championship/developmen
 preserves that failure and the subsequent pinned test-only installation with
 dependency resolution disabled. It verifies the numerical packages' existing
 files and versions unchanged before and after installation. The original CPU
-runtime was not modified. Full-model fixed-coordinate density/gradient checks,
-matched complete sampling, final archives and diagnostics integration, and an
-intended-runner overnight refresh benchmark remain outstanding.
+runtime was not modified. The [full-model fixed-coordinate comparison](overall_backend_comparison_results.md)
+has since completed every registered case and point. Potential energy and
+complete retained state pass, but full-network gradients fail the frozen screen.
+The failure remains recorded; the GPU sampling benchmark is withheld pending
+numerical diagnosis. Higher-precision fixed-coordinate investigation, matched
+complete sampling, final archives/diagnostics integration and an intended-runner
+overnight refresh benchmark remain outstanding.
 
 **Benchmark initialization from the previous accepted joint fit.** Map original
 latent variables by stable driver, event, team and circuit identities; reconstruct
