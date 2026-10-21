@@ -124,17 +124,37 @@ than inherit that fallback. Vectorized chains are an available experimental
 method. The new checkpoint path accepts it explicitly and binds the selected
 method and allocator environment into checkpoint identity. Its expanded tests
 include multiple chains on a single logical CPU device and reject implicit
-fallback or changing methods during a resumed attempt. Those CPU checks pass; there is no GPU execution evidence yet.
+fallback or changing methods during a resumed attempt. Those CPU checks pass. The
+[local GPU verification](../outputs/championship/development/overall-refresh-gpu-checkpoints-v1/stdout.txt)
+then passes the **4** selected vectorized checks, using the same exact-array
+comparisons. The remaining **25** CPU checks were deselected, not rerun on the
+GPU. The recorded backend is the local NVIDIA device; the tests cover a small
+Normal-model fixture, not the production joint model or a matched speed benchmark.
 [NumPyro implementation](https://num.pyro.ai/en/stable/_modules/numpyro/infer/mcmc.html).
 
 GPU allocation also needs explicit controls. Disabling preallocation alone does
 not establish a device-memory ceiling, and the host systemd memory cap does not
 cap device memory. The benchmark must record its allocator, pool fraction,
-actual device use and remaining capacity for other applications. Avoid the
+actual device use and remaining capacity for other applications. The completed
+[small GPU check](overall_refresh_gpu_checks.json) explicitly uses a BFC pool
+fraction of **0.0625** per process with preallocation disabled, admitting the
+parent and restart child together against observed free memory. Its
+[execution record](../outputs/championship/development/overall-refresh-gpu-checkpoints-v1/run.json)
+preserves before/after device-memory observations; these are not peak device
+memory measurements or a cap on total driver/context allocations. Avoid the
 slow platform allocator as an unexplained performance benchmark choice; first
 verify the installed backend's pool behavior and record the chosen settings
 before running either comparison arm.
 [JAX GPU allocation documentation](https://docs.jax.dev/en/latest/gpu_memory_allocation.html).
+
+The initial GPU-test launch stopped before any workload because `pytest` was
+missing. The [environment preparation record](../outputs/championship/development/overall-refresh-gpu-test-environment-v1/run.json)
+preserves that failure and the subsequent pinned test-only installation with
+dependency resolution disabled. It verifies the numerical packages' existing
+files and versions unchanged before and after installation. The original CPU
+runtime was not modified. Full-model fixed-coordinate density/gradient checks,
+matched complete sampling, final archives and diagnostics integration, and an
+intended-runner overnight refresh benchmark remain outstanding.
 
 **Benchmark initialization from the previous accepted joint fit.** Map original
 latent variables by stable driver, event, team and circuit identities; reconstruct
