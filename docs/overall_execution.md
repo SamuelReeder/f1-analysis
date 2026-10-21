@@ -4,6 +4,31 @@ This ledger tracks the full [plan](overall_model_plan.md). A completed code
 module is not a completed scientific or production requirement. The goal remains
 open until the full acceptance checklist has direct evidence.
 
+## Current runtime work
+
+The user's [next-morning requirement](overall_refresh_runtime.md) is now the
+operational target. The completed [corrected computational profile](overall_stable_profile_results.md)
+and its archive audit remain computational evidence, with all failed attempts
+preserved. They do not complete recovery, calibration or canonical publication.
+
+The [precision investigation](overall_backend_precision_results.md) explains
+material sensitivity in the original failed CPU/GPU comparison without changing
+that failure. The separate [deterministic GPU candidate](overall_backend_determinism_results.md)
+passes the complete fixed-coordinate inventory and exact fresh-process
+repetition. [Checkpoint engineering checks](overall_checkpoint_engineering.md)
+verify staged sampling, fresh-process recovery and bounded archive writing on
+small fixtures. These improvements remain isolated from production fitting.
+
+A [complete-model checkpoint replay](overall_checkpoint_model_replay_protocol.json)
+has now been frozen and [launched under the existing resource limits](../outputs/championship/development/overall-checkpoint-model-replay-launch-v1/launch.json).
+It retains every original synthetic design and tests uninterrupted execution
+against planned warmup and sampling interruptions. Its short engineering
+workload cannot establish convergence, full-fit speed or overnight publication.
+Complete-model replay, bounded diagnostic integration and a full refresh
+benchmark are still required. The historical entries below preserve earlier
+states of the work; their pending approvals and failures are not new successful
+acceptance decisions.
+
 Previous authorization: the user approved the prepared, separate coordinate
 experiment on 2026-10-12. Its [frozen registration](overall_rotation_profile_protocol.json)
 retains the original study inventory, generating truths, seeds, settings and
