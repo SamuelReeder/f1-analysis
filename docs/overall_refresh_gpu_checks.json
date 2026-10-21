@@ -10,7 +10,7 @@
     "OMP_NUM_THREADS": "2",
     "MKL_NUM_THREADS": "2",
     "XLA_PYTHON_CLIENT_ALLOCATOR": "bfc",
-    "XLA_CLIENT_MEM_FRACTION": "0.125",
+    "XLA_CLIENT_MEM_FRACTION": "0.0625",
     "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
   },
   "test_arguments": [
@@ -28,8 +28,9 @@
     "Nice": 19
   },
   "device_admission": {
-    "maximum_pool_fraction": 0.125,
-    "maximum_pool_share_of_observed_free_memory": 0.5
+    "maximum_pool_fraction_per_process": 0.0625,
+    "maximum_concurrent_probe_processes": 2,
+    "maximum_combined_pools_share_of_observed_free_memory": 0.5
   },
   "comparison": "exact_array_equality_to_matching_uninterrupted_and_fresh_process_runs",
   "performance_comparison": false,
