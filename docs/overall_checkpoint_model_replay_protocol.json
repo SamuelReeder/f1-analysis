@@ -1,0 +1,155 @@
+{
+  "id": "overall-checkpoint-model-replay-v1",
+  "purpose": "complete_design_checkpoint_engineering",
+  "studies": [
+    "connected",
+    "confounded",
+    "sparse_rookie",
+    "dominant_teammate",
+    "era_boundary",
+    "real_network"
+  ],
+  "phases": [
+    "uninterrupted",
+    "warmup_stop",
+    "sampling_stop",
+    "resume"
+  ],
+  "expected_exit": {
+    "uninterrupted": 0,
+    "warmup_stop": 23,
+    "sampling_stop": 23,
+    "resume": 0
+  },
+  "settings": {
+    "chains": 4,
+    "warmup": 32,
+    "samples": 25,
+    "seed": 17,
+    "target_accept": 0.9,
+    "max_tree_depth": 10,
+    "init_median_samples": 15
+  },
+  "chunk_draws": 7,
+  "chain_method": "vectorized",
+  "max_phase_seconds": 1800,
+  "terminate_grace_seconds": 10,
+  "environments": {
+    "cpu32": {
+      "JAX_ENABLE_X64": "false",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cpu"
+    },
+    "gpu32": {
+      "JAX_ENABLE_X64": "false",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cuda",
+      "XLA_PYTHON_CLIENT_ALLOCATOR": "bfc",
+      "XLA_CLIENT_MEM_FRACTION": "0.125",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+    },
+    "cpu64_a": {
+      "JAX_ENABLE_X64": "true",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cpu"
+    },
+    "cpu64_b": {
+      "JAX_ENABLE_X64": "true",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cpu"
+    },
+    "gpu64_a": {
+      "JAX_ENABLE_X64": "true",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1 --xla_gpu_exclude_nondeterministic_ops=true",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cuda",
+      "XLA_PYTHON_CLIENT_ALLOCATOR": "bfc",
+      "XLA_CLIENT_MEM_FRACTION": "0.125",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+    },
+    "gpu64_b": {
+      "JAX_ENABLE_X64": "true",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1 --xla_gpu_exclude_nondeterministic_ops=true",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cuda",
+      "XLA_PYTHON_CLIENT_ALLOCATOR": "bfc",
+      "XLA_CLIENT_MEM_FRACTION": "0.125",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+    }
+  },
+  "unset_environment": [
+    "JAX_DEFAULT_MATMUL_PRECISION",
+    "XLA_PYTHON_CLIENT_MEM_FRACTION"
+  ],
+  "resources": {
+    "slice": "f1.slice",
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "Nice": 19
+  },
+  "gpu_admission": {
+    "pool_fraction": 0.125,
+    "max_share_of_observed_free_memory": 0.5
+  },
+  "matmul_precision": null,
+  "interpreter": "/home/sreeder/f1-analysis/.venv-gpu/bin/python",
+  "repetition_requirement": "every_posterior_extra_and_final_sampler_state_bitwise_equal",
+  "full_fit_executed": false,
+  "convergence_evaluated": false,
+  "publication_allowed": false,
+  "scientific_acceptance_allowed": false,
+  "changes_original_screen": false,
+  "registered_at": "2026-10-21T22:58:55.228434+00:00",
+  "source_commit": "0176a98c92e134df61cc8f1294730c798a164e0e",
+  "source_sha256": {
+    "analysis/checkpoint_model_replay/__init__.py": "f337355a5e176c6bf5d749d3155f6fb6b7f1c22ccb94c06cf1d3e4f05f725c23",
+    "analysis/checkpoint_model_replay/__main__.py": "fee783dfe3810692d9f7f1b2785e81446e8f96c4ca1003a54b33f760eb4e8d70",
+    "analysis/checkpoint_sampling/__init__.py": "6795205837a12f1379cfc599a6a3a27a4734699f47215efc4f5946d140e3f16a",
+    "analysis/checkpoint_archive/__init__.py": "355cef7b1130574531b4d924c37658aa94be5b8e2d743a0d5361d07fdb595bd5",
+    "tests/test_overall_checkpoint_model_replay.py": "821aa12df8538b3d2ae694e925b13058003c954c39bb14f7deeb1058c99fe7d4",
+    "docs/overall_checkpoint_model_replay.md": "9bfff500f8455e250015abfe88df3833309cb3fdf827df9915d75e01de429be3"
+  },
+  "evidence_sha256": {
+    "docs/overall_backend_determinism_protocol.json": "b3ca028820ad4ce7ba20257c151f6191d4f46cf27c1831a50faa730550065848",
+    "outputs/championship/development/overall-backend-determinism-v1/compare/cpu32/connected/result.json": "46b107f4bb9a01c8a0794ecfeaff1706bfc8fd6472af2fa56284aaae97a8caf7",
+    "outputs/championship/development/overall-backend-determinism-v1/compare/cpu32/confounded/result.json": "18553460a7e990c2d18af5a815381d0ae80da867941b4cae6a630b2a4250e36a",
+    "outputs/championship/development/overall-backend-determinism-v1/compare/cpu32/sparse_rookie/result.json": "fcd4f92a154a38e7994d2ea7958b7a1808a9840b499ca79266703199ddf96578",
+    "outputs/championship/development/overall-backend-determinism-v1/compare/cpu32/dominant_teammate/result.json": "6ae8264758ea7752dc451c98d4770b550c703e8b5aa5f712ab4d6ae8a85fa4a0",
+    "outputs/championship/development/overall-backend-determinism-v1/compare/cpu32/era_boundary/result.json": "80612b6dec5535fcc04fc72815322b1c9196c9dee54166d64c1330bd8e44e766",
+    "outputs/championship/development/overall-backend-determinism-v1/compare/cpu32/real_network/result.json": "b2704b276f8c409ef502dbb20518dda9291ed18f4a540e0fa5b332e4ac925959",
+    "outputs/championship/development/overall-checkpoint-engineering-checks-v1/run.json": "f3395b4cd5a3deb1f690e4af0f6503571a1177dd2cae0da6b429cf18c60085f7",
+    "outputs/championship/development/overall-checkpoint-engineering-checks-v1/stdout.txt": "86026b0d88fe53f6fb0d5769dc708f52502986c793c58b102dcf268bb3fa2861",
+    "outputs/championship/development/overall-checkpoint-engineering-gpu-checks-v1/run.json": "3d8bf9a11e8b0ccf8444c1099677bdd85dd2e8fcc3b0f0b281957b398b968c98",
+    "outputs/championship/development/overall-checkpoint-engineering-gpu-checks-v1/stdout.txt": "c7b0e150e6554a9aef8d44ca28d02c2c2ac97d36646c965f22ce9735f7fc9947"
+  },
+  "runtime_sha256": {
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/numpyro/util.py": "178173c74cf93631756288727502fd1a83b4ca67a6c68f469d7769825394ad88",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/numpyro/infer/hmc_util.py": "090e7c005db825abaf8eee72eb1a479da989903644603f1deb77af03d4c2622b",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/jax/_src/lax/lax.py": "869db142c0f830b1bae931f3011f95dc6d9abc180e302f604bd9c908c6204739",
+    "/home/sreeder/f1-analysis/.venv-gpu/lib/python3.12/site-packages/numpyro/util.py": "178173c74cf93631756288727502fd1a83b4ca67a6c68f469d7769825394ad88",
+    "/home/sreeder/f1-analysis/.venv-gpu/lib/python3.12/site-packages/numpyro/infer/hmc_util.py": "090e7c005db825abaf8eee72eb1a479da989903644603f1deb77af03d4c2622b",
+    "/home/sreeder/f1-analysis/.venv-gpu/lib/python3.12/site-packages/jax/_src/lax/lax.py": "869db142c0f830b1bae931f3011f95dc6d9abc180e302f604bd9c908c6204739"
+  }
+}
