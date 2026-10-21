@@ -161,8 +161,11 @@ double-precision agreement within the original budgets across every case.
 Original CPU evaluations reproduce bitwise, while GPU repetitions differ in
 both precisions. This supports a separately registered double-precision sampling
 candidate; it does not revise the failed single-precision screen or demonstrate
-exact full-model GPU checkpoint replay. Matched complete sampling, final
-archives/diagnostics integration and an intended-runner overnight refresh
+exact full-model GPU checkpoint replay. The separately registered
+[deterministic GPU candidate](overall_backend_determinism_results.md) subsequently
+passes exact repetition across the complete fixed-input inventory and unchanged
+CPU comparison budgets. Complete-chain restart checks, matched full sampling,
+final archives/diagnostics integration and an intended-runner overnight refresh
 benchmark remain outstanding.
 
 **Benchmark initialization from the previous accepted joint fit.** Map original
