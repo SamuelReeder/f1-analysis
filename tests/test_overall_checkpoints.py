@@ -284,11 +284,15 @@ def test_actual_nuts_chunks_equal_uninterrupted_sampling(tmp_path, chains, chain
         np.testing.assert_array_equal(posterior[key], value)
     for key, value in sampler.get_extra_fields(group_by_chain=True).items():
         np.testing.assert_array_equal(extras[key], value)
-    with pytest.raises(ValueError, match="different target"):
+    other_method = "vectorized" if chain_method == "parallel" else "parallel"
+    rejection = ("Insufficient chain devices"
+                 if other_method == "parallel" and jax.local_device_count() < chains
+                 else "different target")
+    with pytest.raises(ValueError, match=rejection):
         run_chunks(small_model, (data,), kwargs={}, settings=settings,
             run_key=hashlib.sha256(b"small-model-fixed-data").hexdigest(), directory=tmp_path,
             chunk_draws=7, verify_inputs=lambda: None,
-            chain_method="vectorized" if chain_method == "parallel" else "parallel")
+            chain_method=other_method)
     jax.clear_caches()
 
 

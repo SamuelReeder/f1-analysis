@@ -1,0 +1,38 @@
+{
+  "id": "overall-refresh-gpu-checkpoints-v1",
+  "purpose": "tiny_model_gpu_checkpoint_correctness_checks",
+  "environment": {
+    "JAX_PLATFORMS": "cuda",
+    "JAX_ENABLE_X64": "false",
+    "JAX_ENABLE_COMPILATION_CACHE": "false",
+    "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+    "OPENBLAS_NUM_THREADS": "2",
+    "OMP_NUM_THREADS": "2",
+    "MKL_NUM_THREADS": "2",
+    "XLA_PYTHON_CLIENT_ALLOCATOR": "bfc",
+    "XLA_CLIENT_MEM_FRACTION": "0.125",
+    "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+  },
+  "test_arguments": [
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_overall_checkpoints.py",
+    "-k",
+    "vectorized"
+  ],
+  "resources": {
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "slice": "f1.slice",
+    "Nice": 19
+  },
+  "device_admission": {
+    "maximum_pool_fraction": 0.125,
+    "maximum_pool_share_of_observed_free_memory": 0.5
+  },
+  "comparison": "exact_array_equality_to_matching_uninterrupted_and_fresh_process_runs",
+  "performance_comparison": false,
+  "production_model_executed": false,
+  "publication_allowed": false
+}

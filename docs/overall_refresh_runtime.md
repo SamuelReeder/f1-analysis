@@ -75,14 +75,16 @@ The [initial checkpoint verification](../outputs/championship/development/overal
 passes **21** checks, including corruption, interruption, exact comparison with
 uninterrupted sampling and recovery in a fresh interpreter. It tests the initial
 CPU parallel-chain implementation; it is not a production-size runtime benchmark.
-A subsequent explicit vectorized-chain implementation and expanded replay tests
-are now prepared but remain unverified. This path is not selected by
+The subsequent [expanded CPU verification](../outputs/championship/development/overall-refresh-vectorized-checks-v1/stdout.txt)
+passes **29** checks. These include exact uninterrupted comparisons for parallel
+and vectorized chains and fresh-process recovery during warmup and sampling,
+including vectorized chains on a single logical CPU device. This path is not selected by
 any registration or production runner and supplies no convergence decision.
 Restoring JAX's weak array typing uses a private conversion function whose source
 is included in the runtime identity; the replay checks must pass under the exact
 intended environment before this compatibility choice can be used.
 The original CPU replay checks cover both warmup and retained-sampling
-interruptions. Expanded chain-method checks, integration with bounded diagnostics
+interruptions. Integration with bounded diagnostics
 and final archives, new-race initialization, and measured runtime remain
 outstanding.
 
@@ -122,8 +124,7 @@ than inherit that fallback. Vectorized chains are an available experimental
 method. The new checkpoint path accepts it explicitly and binds the selected
 method and allocator environment into checkpoint identity. Its expanded tests
 include multiple chains on a single logical CPU device and reject implicit
-fallback or changing methods during a resumed attempt. Those expanded tests
-have not yet been run; there is no GPU execution evidence.
+fallback or changing methods during a resumed attempt. Those CPU checks pass; there is no GPU execution evidence yet.
 [NumPyro implementation](https://num.pyro.ai/en/stable/_modules/numpyro/infer/mcmc.html).
 
 GPU allocation also needs explicit controls. Disabling preallocation alone does
