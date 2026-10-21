@@ -1,0 +1,1067 @@
+{
+  "purpose": "fixed_full_model_backend_comparison",
+  "operation": "prepare",
+  "case": "real_network",
+  "backend": "cpu",
+  "state": "complete",
+  "protocol_sha256": "6016352dd2494e4c5ebd3f53c4e1aaad0d587e48ab706f3a096df56f87908a81",
+  "started_at": "2026-10-21T22:12:47.252021+00:00",
+  "sampling_executed": false,
+  "publication_allowed": false,
+  "scientific_acceptance_established": false,
+  "actual_scope": {
+    "Slice": "f1.slice",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-overall-backend-prepare-real_network-cpu-v1.scope",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "ActiveState": "active",
+    "Nice": 19,
+    "backend": "cpu",
+    "device_kinds": [
+      "cpu"
+    ]
+  },
+  "cache": "outputs/championship/cache/overall-backend-comparison-v1/prepare/cpu/real_network.npz",
+  "cache_sha256": "c3db1c35f985a04d7968f76931e4bf273db3c6483fa66ad8af1ab0b9a9bb0089",
+  "block_scalars": {
+    "qualifying": {
+      "n_drivers": 84,
+      "n_entries": 7246,
+      "n_cars": 3624,
+      "n_sessions": 1031,
+      "n_events": 344,
+      "n_circuits": 36,
+      "n_team_seasons": 180,
+      "n_spells": 164,
+      "n_era_stints": 222,
+      "n_placebo": 250,
+      "n_stints": 154,
+      "n_car_segments": 8720
+    },
+    "laps": {
+      "n_year": 9,
+      "n_race": 139,
+      "n_driver": 44,
+      "n_ds": 196,
+      "n_car": 91,
+      "n_cr": 1392,
+      "n_dr": 2615,
+      "n_rc": 393
+    },
+    "outcomes": {
+      "n_circuits": 36
+    }
+  },
+  "point_labels": [
+    {
+      "kind": "generating"
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 1,
+      "chain": 0,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 1,
+      "chain": 0,
+      "draw": 799
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 1,
+      "chain": 1,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 1,
+      "chain": 1,
+      "draw": 799
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 1,
+      "chain": 2,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 1,
+      "chain": 2,
+      "draw": 799
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 1,
+      "chain": 3,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 1,
+      "chain": 3,
+      "draw": 799
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 2,
+      "chain": 0,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 2,
+      "chain": 0,
+      "draw": 1599
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 2,
+      "chain": 1,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 2,
+      "chain": 1,
+      "draw": 1599
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 2,
+      "chain": 2,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 2,
+      "chain": 2,
+      "draw": 1599
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 2,
+      "chain": 3,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 2,
+      "chain": 3,
+      "draw": 1599
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 3,
+      "chain": 0,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 3,
+      "chain": 0,
+      "draw": 3199
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 3,
+      "chain": 1,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 3,
+      "chain": 1,
+      "draw": 3199
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 3,
+      "chain": 2,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 3,
+      "chain": 2,
+      "draw": 3199
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 3,
+      "chain": 3,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 3,
+      "chain": 3,
+      "draw": 3199
+    }
+  ],
+  "parameter_shapes": {
+    "sd_level": [],
+    "level_z": [
+      84
+    ],
+    "sd_skill_race": [],
+    "sd_skill_season": [],
+    "skill_z": [
+      7246
+    ],
+    "exp_gain": [],
+    "exp_scale": [],
+    "age_slope": [],
+    "rho": [],
+    "rho_reset": [],
+    "sd_car_race": [],
+    "sd_car_season": [],
+    "sd_car_reset": [],
+    "car_step_z": [
+      3624
+    ],
+    "car_jump_z": [
+      3624
+    ],
+    "sd_car_event": [],
+    "car_total_decentered": [
+      3624
+    ],
+    "sd_track_load": [],
+    "track_load_z": [
+      180
+    ],
+    "mu": [
+      1031
+    ],
+    "sigma0": [],
+    "sigma_tau": [],
+    "sigma_u": [
+      1031
+    ],
+    "nu": [],
+    "sd_compat": [],
+    "compat_z": [
+      222
+    ],
+    "sd_car_segment": [],
+    "car_segment_z": [
+      8720
+    ],
+    "overall_qualifying_link": [],
+    "overall_sd_level": [],
+    "overall_level_z": [
+      84
+    ],
+    "overall_sd_drift_race": [],
+    "overall_sd_drift_season": [],
+    "overall_walk_z": [
+      7246
+    ],
+    "overall_team_link": [],
+    "overall_sd_team": [],
+    "overall_team_z": [
+      222
+    ],
+    "overall_car_link": [],
+    "overall_car_contrast": [
+      163
+    ],
+    "overall_sd_car_day": [],
+    "overall_car_day_z": [
+      3624
+    ],
+    "overall_sd_wear": [],
+    "overall_wear_z": [
+      2615
+    ],
+    "overall_lap_rho": [],
+    "overall_sd_lap": [],
+    "overall_lap_nu": [],
+    "overall_grid_base": [],
+    "overall_sd_grid_circuit": [],
+    "overall_grid_circuit_z": [
+      36
+    ],
+    "overall_grid_wet": [],
+    "overall_grid_sc": [],
+    "overall_pace_base": [],
+    "overall_sd_pace_circuit": [],
+    "overall_pace_circuit_z": [
+      36
+    ],
+    "overall_pace_wet": [],
+    "overall_pace_sc": [],
+    "overall_hazard_base": [],
+    "overall_sd_hazard_circuit": [],
+    "overall_hazard_circuit_z": [
+      36
+    ],
+    "overall_hazard_wet": [],
+    "overall_hazard_sc": [],
+    "overall_weekend_qualifying_scale": [],
+    "overall_weekend_race_scale": [],
+    "overall_weekend_loading": [],
+    "overall_weekend_total_z": [
+      7246
+    ],
+    "overall_weekend_complement_z": [
+      7246
+    ],
+    "overall_lap_controls_rotated": [
+      1481
+    ]
+  },
+  "collector_inventory": {
+    "overall_weekend_qualifying_scale": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_weekend_race_scale": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_weekend_loading": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_weekend_total_z": {
+      "shape": [
+        7246
+      ],
+      "dtype": "<f4",
+      "coordinates": 7246,
+      "itemsize": 4,
+      "bytes_per_draw": 28984
+    },
+    "overall_weekend_complement_z": {
+      "shape": [
+        7246
+      ],
+      "dtype": "<f4",
+      "coordinates": 7246,
+      "itemsize": 4,
+      "bytes_per_draw": 28984
+    },
+    "overall_lap_controls_rotated": {
+      "shape": [
+        1481
+      ],
+      "dtype": "<f4",
+      "coordinates": 1481,
+      "itemsize": 4,
+      "bytes_per_draw": 5924
+    },
+    "sd_level": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "level_z": {
+      "shape": [
+        84
+      ],
+      "dtype": "<f4",
+      "coordinates": 84,
+      "itemsize": 4,
+      "bytes_per_draw": 336
+    },
+    "sd_skill_race": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "sd_skill_season": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "skill_z": {
+      "shape": [
+        7246
+      ],
+      "dtype": "<f4",
+      "coordinates": 7246,
+      "itemsize": 4,
+      "bytes_per_draw": 28984
+    },
+    "exp_gain": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "exp_scale": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "age_slope": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "skill": {
+      "shape": [
+        7246
+      ],
+      "dtype": "<f4",
+      "coordinates": 7246,
+      "itemsize": 4,
+      "bytes_per_draw": 28984
+    },
+    "rho": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "rho_reset": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "sd_car_race": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "sd_car_season": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "sd_car_reset": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "car_step_z": {
+      "shape": [
+        3624
+      ],
+      "dtype": "<f4",
+      "coordinates": 3624,
+      "itemsize": 4,
+      "bytes_per_draw": 14496
+    },
+    "car_jump_z": {
+      "shape": [
+        3624
+      ],
+      "dtype": "<f4",
+      "coordinates": 3624,
+      "itemsize": 4,
+      "bytes_per_draw": 14496
+    },
+    "sd_car_event": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "car_total_decentered": {
+      "shape": [
+        3624
+      ],
+      "dtype": "<f4",
+      "coordinates": 3624,
+      "itemsize": 4,
+      "bytes_per_draw": 14496
+    },
+    "car_total": {
+      "shape": [
+        3624
+      ],
+      "dtype": "<f4",
+      "coordinates": 3624,
+      "itemsize": 4,
+      "bytes_per_draw": 14496
+    },
+    "car": {
+      "shape": [
+        3624
+      ],
+      "dtype": "<f4",
+      "coordinates": 3624,
+      "itemsize": 4,
+      "bytes_per_draw": 14496
+    },
+    "car_event": {
+      "shape": [
+        3624
+      ],
+      "dtype": "<f4",
+      "coordinates": 3624,
+      "itemsize": 4,
+      "bytes_per_draw": 14496
+    },
+    "sd_track_load": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "track_load_z": {
+      "shape": [
+        180
+      ],
+      "dtype": "<f4",
+      "coordinates": 180,
+      "itemsize": 4,
+      "bytes_per_draw": 720
+    },
+    "track_load": {
+      "shape": [
+        180
+      ],
+      "dtype": "<f4",
+      "coordinates": 180,
+      "itemsize": 4,
+      "bytes_per_draw": 720
+    },
+    "car_track": {
+      "shape": [
+        3624
+      ],
+      "dtype": "<f4",
+      "coordinates": 3624,
+      "itemsize": 4,
+      "bytes_per_draw": 14496
+    },
+    "mu": {
+      "shape": [
+        1031
+      ],
+      "dtype": "<f4",
+      "coordinates": 1031,
+      "itemsize": 4,
+      "bytes_per_draw": 4124
+    },
+    "sigma0": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "sigma_tau": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "sigma_u": {
+      "shape": [
+        1031
+      ],
+      "dtype": "<f4",
+      "coordinates": 1031,
+      "itemsize": 4,
+      "bytes_per_draw": 4124
+    },
+    "nu": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "sd_compat": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "compat_z": {
+      "shape": [
+        222
+      ],
+      "dtype": "<f4",
+      "coordinates": 222,
+      "itemsize": 4,
+      "bytes_per_draw": 888
+    },
+    "compat": {
+      "shape": [
+        7246
+      ],
+      "dtype": "<f4",
+      "coordinates": 7246,
+      "itemsize": 4,
+      "bytes_per_draw": 28984
+    },
+    "sd_driver_form": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "driver_form_z": {
+      "shape": [
+        7246
+      ],
+      "dtype": "<f4",
+      "coordinates": 7246,
+      "itemsize": 4,
+      "bytes_per_draw": 28984
+    },
+    "driver_form": {
+      "shape": [
+        7246
+      ],
+      "dtype": "<f4",
+      "coordinates": 7246,
+      "itemsize": 4,
+      "bytes_per_draw": 28984
+    },
+    "sd_car_segment": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "car_segment_z": {
+      "shape": [
+        8720
+      ],
+      "dtype": "<f4",
+      "coordinates": 8720,
+      "itemsize": 4,
+      "bytes_per_draw": 34880
+    },
+    "car_segment": {
+      "shape": [
+        8720
+      ],
+      "dtype": "<f4",
+      "coordinates": 8720,
+      "itemsize": 4,
+      "bytes_per_draw": 34880
+    },
+    "overall_qualifying_link": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_sd_level": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_level_z": {
+      "shape": [
+        84
+      ],
+      "dtype": "<f4",
+      "coordinates": 84,
+      "itemsize": 4,
+      "bytes_per_draw": 336
+    },
+    "overall_sd_drift_race": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_sd_drift_season": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_walk_z": {
+      "shape": [
+        7246
+      ],
+      "dtype": "<f4",
+      "coordinates": 7246,
+      "itemsize": 4,
+      "bytes_per_draw": 28984
+    },
+    "overall_race_skill": {
+      "shape": [
+        7246
+      ],
+      "dtype": "<f4",
+      "coordinates": 7246,
+      "itemsize": 4,
+      "bytes_per_draw": 28984
+    },
+    "overall_team_link": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_sd_team": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_team_z": {
+      "shape": [
+        222
+      ],
+      "dtype": "<f4",
+      "coordinates": 222,
+      "itemsize": 4,
+      "bytes_per_draw": 888
+    },
+    "overall_team": {
+      "shape": [
+        7246
+      ],
+      "dtype": "<f4",
+      "coordinates": 7246,
+      "itemsize": 4,
+      "bytes_per_draw": 28984
+    },
+    "overall_car_link": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_car_contrast": {
+      "shape": [
+        163
+      ],
+      "dtype": "<f4",
+      "coordinates": 163,
+      "itemsize": 4,
+      "bytes_per_draw": 652
+    },
+    "overall_sd_car_day": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_car_day_z": {
+      "shape": [
+        3624
+      ],
+      "dtype": "<f4",
+      "coordinates": 3624,
+      "itemsize": 4,
+      "bytes_per_draw": 14496
+    },
+    "overall_car": {
+      "shape": [
+        3624
+      ],
+      "dtype": "<f4",
+      "coordinates": 3624,
+      "itemsize": 4,
+      "bytes_per_draw": 14496
+    },
+    "overall_shared_weekend": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_sd_day": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_day_z": {
+      "shape": [
+        7246
+      ],
+      "dtype": "<f4",
+      "coordinates": 7246,
+      "itemsize": 4,
+      "bytes_per_draw": 28984
+    },
+    "overall_day": {
+      "shape": [
+        7246
+      ],
+      "dtype": "<f4",
+      "coordinates": 7246,
+      "itemsize": 4,
+      "bytes_per_draw": 28984
+    },
+    "overall_intercept": {
+      "shape": [
+        139
+      ],
+      "dtype": "<f4",
+      "coordinates": 139,
+      "itemsize": 4,
+      "bytes_per_draw": 556
+    },
+    "overall_trend": {
+      "shape": [
+        139
+      ],
+      "dtype": "<f4",
+      "coordinates": 139,
+      "itemsize": 4,
+      "bytes_per_draw": 556
+    },
+    "overall_compound": {
+      "shape": [
+        393
+      ],
+      "dtype": "<f4",
+      "coordinates": 393,
+      "itemsize": 4,
+      "bytes_per_draw": 1572
+    },
+    "overall_sd_wear": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_wear_z": {
+      "shape": [
+        2615
+      ],
+      "dtype": "<f4",
+      "coordinates": 2615,
+      "itemsize": 4,
+      "bytes_per_draw": 10460
+    },
+    "overall_tyre_slope": {
+      "shape": [
+        393
+      ],
+      "dtype": "<f4",
+      "coordinates": 393,
+      "itemsize": 4,
+      "bytes_per_draw": 1572
+    },
+    "overall_traffic": {
+      "shape": [
+        139,
+        3
+      ],
+      "dtype": "<f4",
+      "coordinates": 417,
+      "itemsize": 4,
+      "bytes_per_draw": 1668
+    },
+    "overall_lap_rho": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_sd_lap": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_lap_nu": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_grid_base": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_sd_grid_circuit": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_grid_circuit_z": {
+      "shape": [
+        36
+      ],
+      "dtype": "<f4",
+      "coordinates": 36,
+      "itemsize": 4,
+      "bytes_per_draw": 144
+    },
+    "overall_grid_wet": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_grid_sc": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_grid": {
+      "shape": [
+        144
+      ],
+      "dtype": "<f4",
+      "coordinates": 144,
+      "itemsize": 4,
+      "bytes_per_draw": 576
+    },
+    "overall_pace_base": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_sd_pace_circuit": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_pace_circuit_z": {
+      "shape": [
+        36
+      ],
+      "dtype": "<f4",
+      "coordinates": 36,
+      "itemsize": 4,
+      "bytes_per_draw": 144
+    },
+    "overall_pace_wet": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_pace_sc": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_pace": {
+      "shape": [
+        144
+      ],
+      "dtype": "<f4",
+      "coordinates": 144,
+      "itemsize": 4,
+      "bytes_per_draw": 576
+    },
+    "overall_hazard_base": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_sd_hazard_circuit": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_hazard_circuit_z": {
+      "shape": [
+        36
+      ],
+      "dtype": "<f4",
+      "coordinates": 36,
+      "itemsize": 4,
+      "bytes_per_draw": 144
+    },
+    "overall_hazard_wet": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_hazard_sc": {
+      "shape": [],
+      "dtype": "<f4",
+      "coordinates": 1,
+      "itemsize": 4,
+      "bytes_per_draw": 4
+    },
+    "overall_hazard": {
+      "shape": [
+        144
+      ],
+      "dtype": "<f4",
+      "coordinates": 144,
+      "itemsize": 4,
+      "bytes_per_draw": 576
+    }
+  },
+  "arrays_key": "208662dda10c26f92ea26ebff0a85b48f5591b492c98d98cbe09ca6cd7772e51",
+  "coordinates_key": "429ea26cdce64a75856f2c2e36efe23ccc0ca6c21cd5d65edf979e9041ea5240",
+  "control_rotation_sha256": "cb1d4a21cdf1d0b639851733c2d4747d1e3d7337e946c6e97745e4d55cff07c8",
+  "seconds": 78.67354536696803,
+  "process_max_rss_kib": 1020980,
+  "finished_at": "2026-10-21T22:14:02.157264+00:00"
+}
