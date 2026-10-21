@@ -1,0 +1,1780 @@
+{
+  "purpose": "posthoc_inspection_of_existing_failed_gradient_coordinates",
+  "recorded_at": "2026-10-21T22:19:40.235019+00:00",
+  "actual_scope": {
+    "Slice": "f1.slice",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-overall-backend-readout-v1.scope",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "ActiveState": "active",
+    "Nice": 19
+  },
+  "comparison": "outputs/championship/development/overall-backend-comparison-v1/compare/cpu/real_network/result.json",
+  "comparison_sha256": "361c7e375b50dc04caa13e0b9354da4efe81c6a120631fa2606645ed482f9f4a",
+  "evaluations": [
+    {
+      "path": "outputs/championship/development/overall-backend-comparison-v1/evaluate/cpu/real_network/result.json",
+      "sha256": "56cc99c2b7ec20342a7c82e0d2fa92042dda96fcbcb81bbc66f33d662bc12441"
+    },
+    {
+      "path": "outputs/championship/development/overall-backend-comparison-v1/evaluate/gpu/real_network/result.json",
+      "sha256": "bc9e51fd7851fa56a594996d1bf7ab8d6798c25ae4fe8ece195129493e7272f4"
+    }
+  ],
+  "fields": {
+    "gradient/age_slope": [
+      {
+        "index": [
+          0
+        ],
+        "point": {
+          "kind": "generating"
+        },
+        "cpu": 341.9054870605469,
+        "gpu": 341.9259948730469,
+        "absolute_difference": 0.0205078125,
+        "budget": 0.005683810974121094
+      },
+      {
+        "index": [
+          1
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": 3426.80029296875,
+        "gpu": 3426.7880859375,
+        "absolute_difference": 0.01220703125,
+        "budget": 0.011853600585937499
+      },
+      {
+        "index": [
+          2
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 0,
+          "draw": 799
+        },
+        "cpu": 727.4121704101562,
+        "gpu": 727.4242553710938,
+        "absolute_difference": 0.0120849609375,
+        "budget": 0.006454824340820313
+      },
+      {
+        "index": [
+          3
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 1,
+          "draw": 0
+        },
+        "cpu": 2670.32275390625,
+        "gpu": 2670.307861328125,
+        "absolute_difference": 0.014892578125,
+        "budget": 0.0103406455078125
+      },
+      {
+        "index": [
+          4
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 1,
+          "draw": 799
+        },
+        "cpu": 2627.031494140625,
+        "gpu": 2627.048095703125,
+        "absolute_difference": 0.0166015625,
+        "budget": 0.01025406298828125
+      },
+      {
+        "index": [
+          5
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 2,
+          "draw": 0
+        },
+        "cpu": -122.44924926757812,
+        "gpu": -122.39462280273438,
+        "absolute_difference": 0.05462646484375,
+        "budget": 0.005244898498535156
+      },
+      {
+        "index": [
+          6
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 2,
+          "draw": 799
+        },
+        "cpu": -104.82389068603516,
+        "gpu": -104.7785415649414,
+        "absolute_difference": 0.04534912109375,
+        "budget": 0.005209647781372071
+      },
+      {
+        "index": [
+          9
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": -2459.97705078125,
+        "gpu": -2460.013427734375,
+        "absolute_difference": 0.036376953125,
+        "budget": 0.0099199541015625
+      },
+      {
+        "index": [
+          10
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 0,
+          "draw": 1599
+        },
+        "cpu": -75.90396881103516,
+        "gpu": -75.91199493408203,
+        "absolute_difference": 0.008026123046875,
+        "budget": 0.005151807937622071
+      },
+      {
+        "index": [
+          12
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 1,
+          "draw": 1599
+        },
+        "cpu": 974.2869873046875,
+        "gpu": 974.3145751953125,
+        "absolute_difference": 0.027587890625,
+        "budget": 0.006948573974609375
+      },
+      {
+        "index": [
+          16
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 3,
+          "draw": 1599
+        },
+        "cpu": 1870.7799072265625,
+        "gpu": 1870.75537109375,
+        "absolute_difference": 0.0245361328125,
+        "budget": 0.008741559814453126
+      },
+      {
+        "index": [
+          17
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": 821.2332153320312,
+        "gpu": 821.16015625,
+        "absolute_difference": 0.07305908203125,
+        "budget": 0.006642466430664062
+      },
+      {
+        "index": [
+          19
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 1,
+          "draw": 0
+        },
+        "cpu": -2332.53662109375,
+        "gpu": -2332.498046875,
+        "absolute_difference": 0.03857421875,
+        "budget": 0.009665073242187499
+      },
+      {
+        "index": [
+          21
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 2,
+          "draw": 0
+        },
+        "cpu": -3723.5771484375,
+        "gpu": -3723.604248046875,
+        "absolute_difference": 0.027099609375,
+        "budget": 0.012447154296874999
+      },
+      {
+        "index": [
+          23
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 3,
+          "draw": 0
+        },
+        "cpu": 131.6215057373047,
+        "gpu": 131.63865661621094,
+        "absolute_difference": 0.01715087890625,
+        "budget": 0.005263243011474609
+      }
+    ],
+    "gradient/car_jump_z": [
+      {
+        "index": [
+          5,
+          3173
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 2,
+          "draw": 0
+        },
+        "cpu": -24.140682220458984,
+        "gpu": -24.135169982910156,
+        "absolute_difference": 0.005512237548828125,
+        "budget": 0.005048281364440918
+      },
+      {
+        "index": [
+          6,
+          3173
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 2,
+          "draw": 799
+        },
+        "cpu": -4.618271827697754,
+        "gpu": -4.613014221191406,
+        "absolute_difference": 0.005257606506347656,
+        "budget": 0.005009236543655395
+      },
+      {
+        "index": [
+          13,
+          971
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 2,
+          "draw": 0
+        },
+        "cpu": -37.15026092529297,
+        "gpu": -37.155906677246094,
+        "absolute_difference": 0.005645751953125,
+        "budget": 0.005074300521850586
+      },
+      {
+        "index": [
+          17,
+          2485
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": 197.747802734375,
+        "gpu": 197.75405883789062,
+        "absolute_difference": 0.006256103515625,
+        "budget": 0.00539549560546875
+      },
+      {
+        "index": [
+          17,
+          3072
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": 180.72622680664062,
+        "gpu": 180.718017578125,
+        "absolute_difference": 0.008209228515625,
+        "budget": 0.0053614524536132815
+      },
+      {
+        "index": [
+          17,
+          3092
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": 15.589852333068848,
+        "gpu": 15.58480453491211,
+        "absolute_difference": 0.005047798156738281,
+        "budget": 0.005031179704666138
+      },
+      {
+        "index": [
+          17,
+          3173
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": 29.032026290893555,
+        "gpu": 29.021839141845703,
+        "absolute_difference": 0.010187149047851562,
+        "budget": 0.005058064052581787
+      },
+      {
+        "index": [
+          17,
+          3195
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": 64.08091735839844,
+        "gpu": 64.07476806640625,
+        "absolute_difference": 0.0061492919921875,
+        "budget": 0.0051281618347167966
+      },
+      {
+        "index": [
+          17,
+          3217
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": 90.86790466308594,
+        "gpu": 90.86268615722656,
+        "absolute_difference": 0.005218505859375,
+        "budget": 0.005181735809326172
+      },
+      {
+        "index": [
+          18,
+          971
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 3199
+        },
+        "cpu": 188.50265502929688,
+        "gpu": 188.4967041015625,
+        "absolute_difference": 0.005950927734375,
+        "budget": 0.005377005310058594
+      },
+      {
+        "index": [
+          18,
+          1072
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 3199
+        },
+        "cpu": 51.39410400390625,
+        "gpu": 51.38867950439453,
+        "absolute_difference": 0.00542449951171875,
+        "budget": 0.005102788208007813
+      },
+      {
+        "index": [
+          19,
+          2485
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 1,
+          "draw": 0
+        },
+        "cpu": 85.08349609375,
+        "gpu": 85.07810974121094,
+        "absolute_difference": 0.0053863525390625,
+        "budget": 0.0051701669921875
+      }
+    ],
+    "gradient/nu": [
+      {
+        "index": [
+          0
+        ],
+        "point": {
+          "kind": "generating"
+        },
+        "cpu": -4.966609001159668,
+        "gpu": -5.000865459442139,
+        "absolute_difference": 0.0342564582824707,
+        "budget": 0.00500993321800232
+      },
+      {
+        "index": [
+          1
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": -14.009323120117188,
+        "gpu": -13.94301986694336,
+        "absolute_difference": 0.06630325317382812,
+        "budget": 0.0050280186462402345
+      },
+      {
+        "index": [
+          2
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 0,
+          "draw": 799
+        },
+        "cpu": 68.74131774902344,
+        "gpu": 68.73245239257812,
+        "absolute_difference": 0.0088653564453125,
+        "budget": 0.005137482635498047
+      },
+      {
+        "index": [
+          3
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 1,
+          "draw": 0
+        },
+        "cpu": -0.25818386673927307,
+        "gpu": -0.2973535656929016,
+        "absolute_difference": 0.03916969895362854,
+        "budget": 0.005000516367733479
+      },
+      {
+        "index": [
+          4
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 1,
+          "draw": 799
+        },
+        "cpu": -54.12314224243164,
+        "gpu": -54.14889907836914,
+        "absolute_difference": 0.0257568359375,
+        "budget": 0.005108246284484863
+      },
+      {
+        "index": [
+          5
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 2,
+          "draw": 0
+        },
+        "cpu": 2.9718635082244873,
+        "gpu": 2.9481871128082275,
+        "absolute_difference": 0.023676395416259766,
+        "budget": 0.005005943727016449
+      },
+      {
+        "index": [
+          7
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 3,
+          "draw": 0
+        },
+        "cpu": -4.602523326873779,
+        "gpu": -4.584433078765869,
+        "absolute_difference": 0.018090248107910156,
+        "budget": 0.005009205046653748
+      },
+      {
+        "index": [
+          8
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 3,
+          "draw": 799
+        },
+        "cpu": -16.597976684570312,
+        "gpu": -16.61780548095703,
+        "absolute_difference": 0.01982879638671875,
+        "budget": 0.0050331959533691404
+      },
+      {
+        "index": [
+          10
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 0,
+          "draw": 1599
+        },
+        "cpu": 10.7026948928833,
+        "gpu": 10.718423843383789,
+        "absolute_difference": 0.01572895050048828,
+        "budget": 0.005021405389785767
+      },
+      {
+        "index": [
+          13
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 2,
+          "draw": 0
+        },
+        "cpu": 7.656456470489502,
+        "gpu": 7.704676628112793,
+        "absolute_difference": 0.048220157623291016,
+        "budget": 0.005015312912940979
+      },
+      {
+        "index": [
+          14
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 2,
+          "draw": 1599
+        },
+        "cpu": 0.13697554171085358,
+        "gpu": 0.2299971580505371,
+        "absolute_difference": 0.09302161633968353,
+        "budget": 0.005000273951083422
+      },
+      {
+        "index": [
+          15
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 3,
+          "draw": 0
+        },
+        "cpu": -15.774714469909668,
+        "gpu": -15.748069763183594,
+        "absolute_difference": 0.02664470672607422,
+        "budget": 0.005031549428939819
+      },
+      {
+        "index": [
+          16
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 3,
+          "draw": 1599
+        },
+        "cpu": 13.21947193145752,
+        "gpu": 13.265084266662598,
+        "absolute_difference": 0.045612335205078125,
+        "budget": 0.005026438943862915
+      },
+      {
+        "index": [
+          17
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": -16.027835845947266,
+        "gpu": -16.00579261779785,
+        "absolute_difference": 0.022043228149414062,
+        "budget": 0.0050320556716918945
+      },
+      {
+        "index": [
+          18
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 3199
+        },
+        "cpu": -0.7640866637229919,
+        "gpu": -0.7462677955627441,
+        "absolute_difference": 0.017818868160247803,
+        "budget": 0.005001528173327446
+      },
+      {
+        "index": [
+          19
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 1,
+          "draw": 0
+        },
+        "cpu": -44.05857849121094,
+        "gpu": -44.05318832397461,
+        "absolute_difference": 0.005390167236328125,
+        "budget": 0.005088117156982422
+      },
+      {
+        "index": [
+          21
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 2,
+          "draw": 0
+        },
+        "cpu": 31.168434143066406,
+        "gpu": 31.151546478271484,
+        "absolute_difference": 0.016887664794921875,
+        "budget": 0.005062336868286133
+      },
+      {
+        "index": [
+          23
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 3,
+          "draw": 0
+        },
+        "cpu": -27.527454376220703,
+        "gpu": -27.465431213378906,
+        "absolute_difference": 0.062023162841796875,
+        "budget": 0.005055054908752441
+      }
+    ],
+    "gradient/overall_car_link": [
+      {
+        "index": [
+          6
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 2,
+          "draw": 799
+        },
+        "cpu": -116.29765319824219,
+        "gpu": -116.29149627685547,
+        "absolute_difference": 0.00615692138671875,
+        "budget": 0.005232595306396484
+      },
+      {
+        "index": [
+          17
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": 450.6390380859375,
+        "gpu": 450.6249694824219,
+        "absolute_difference": 0.014068603515625,
+        "budget": 0.0059012780761718755
+      },
+      {
+        "index": [
+          19
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 1,
+          "draw": 0
+        },
+        "cpu": -191.1300811767578,
+        "gpu": -191.12159729003906,
+        "absolute_difference": 0.00848388671875,
+        "budget": 0.005382260162353516
+      },
+      {
+        "index": [
+          21
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 2,
+          "draw": 0
+        },
+        "cpu": -99.49111938476562,
+        "gpu": -99.49705505371094,
+        "absolute_difference": 0.0059356689453125,
+        "budget": 0.0051989822387695315
+      }
+    ],
+    "gradient/overall_lap_controls_rotated": [
+      {
+        "index": [
+          3,
+          1049
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 1,
+          "draw": 0
+        },
+        "cpu": -134.82273864746094,
+        "gpu": -134.82858276367188,
+        "absolute_difference": 0.0058441162109375,
+        "budget": 0.005269645477294922
+      },
+      {
+        "index": [
+          5,
+          1049
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 2,
+          "draw": 0
+        },
+        "cpu": -34.43732452392578,
+        "gpu": -34.443603515625,
+        "absolute_difference": 0.00627899169921875,
+        "budget": 0.005068874649047852
+      },
+      {
+        "index": [
+          12,
+          1049
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 1,
+          "draw": 1599
+        },
+        "cpu": 23.619720458984375,
+        "gpu": 23.614452362060547,
+        "absolute_difference": 0.005268096923828125,
+        "budget": 0.005047239440917969
+      }
+    ],
+    "gradient/overall_lap_nu": [
+      {
+        "index": [
+          6
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 2,
+          "draw": 799
+        },
+        "cpu": -2.7236804962158203,
+        "gpu": -2.717709541320801,
+        "absolute_difference": 0.005970954895019531,
+        "budget": 0.005005447360992432
+      },
+      {
+        "index": [
+          11
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 1,
+          "draw": 0
+        },
+        "cpu": 12.421463012695312,
+        "gpu": 12.431092262268066,
+        "absolute_difference": 0.009629249572753906,
+        "budget": 0.005024842926025391
+      },
+      {
+        "index": [
+          14
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 2,
+          "draw": 1599
+        },
+        "cpu": 33.8593635559082,
+        "gpu": 33.851318359375,
+        "absolute_difference": 0.008045196533203125,
+        "budget": 0.005067718727111817
+      },
+      {
+        "index": [
+          17
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": -53.66535568237305,
+        "gpu": -53.69559860229492,
+        "absolute_difference": 0.030242919921875,
+        "budget": 0.005107330711364746
+      },
+      {
+        "index": [
+          22
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 2,
+          "draw": 3199
+        },
+        "cpu": 7.985942840576172,
+        "gpu": 7.9912109375,
+        "absolute_difference": 0.005268096923828125,
+        "budget": 0.005015971885681153
+      }
+    ],
+    "gradient/overall_qualifying_link": [
+      {
+        "index": [
+          5
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 2,
+          "draw": 0
+        },
+        "cpu": -130.435302734375,
+        "gpu": -130.42919921875,
+        "absolute_difference": 0.006103515625,
+        "budget": 0.00526087060546875
+      },
+      {
+        "index": [
+          12
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 1,
+          "draw": 1599
+        },
+        "cpu": -21.37879180908203,
+        "gpu": -21.372474670410156,
+        "absolute_difference": 0.006317138671875,
+        "budget": 0.005042757583618164
+      }
+    ],
+    "gradient/overall_sd_lap": [
+      {
+        "index": [
+          0
+        ],
+        "point": {
+          "kind": "generating"
+        },
+        "cpu": -72.37894439697266,
+        "gpu": -72.35655975341797,
+        "absolute_difference": 0.0223846435546875,
+        "budget": 0.005144757888793945
+      },
+      {
+        "index": [
+          2
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 0,
+          "draw": 799
+        },
+        "cpu": 868.6232299804688,
+        "gpu": 868.6160278320312,
+        "absolute_difference": 0.0072021484375,
+        "budget": 0.006737246459960938
+      },
+      {
+        "index": [
+          3
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 1,
+          "draw": 0
+        },
+        "cpu": -575.162109375,
+        "gpu": -575.1456909179688,
+        "absolute_difference": 0.01641845703125,
+        "budget": 0.00615032421875
+      },
+      {
+        "index": [
+          6
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 2,
+          "draw": 799
+        },
+        "cpu": 113.67972564697266,
+        "gpu": 113.68742370605469,
+        "absolute_difference": 0.00769805908203125,
+        "budget": 0.005227359451293946
+      },
+      {
+        "index": [
+          7
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 3,
+          "draw": 0
+        },
+        "cpu": -927.3302001953125,
+        "gpu": -927.3471069335938,
+        "absolute_difference": 0.01690673828125,
+        "budget": 0.0068546604003906254
+      },
+      {
+        "index": [
+          8
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 3,
+          "draw": 799
+        },
+        "cpu": -92.19224548339844,
+        "gpu": -92.16881561279297,
+        "absolute_difference": 0.02342987060546875,
+        "budget": 0.005184384490966797
+      },
+      {
+        "index": [
+          9
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": 51.38949203491211,
+        "gpu": 51.40778732299805,
+        "absolute_difference": 0.0182952880859375,
+        "budget": 0.005102778984069824
+      },
+      {
+        "index": [
+          10
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 0,
+          "draw": 1599
+        },
+        "cpu": -233.7021026611328,
+        "gpu": -233.70823669433594,
+        "absolute_difference": 0.006134033203125,
+        "budget": 0.005467404205322266
+      },
+      {
+        "index": [
+          14
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 2,
+          "draw": 1599
+        },
+        "cpu": -681.9006958007812,
+        "gpu": -681.8849487304688,
+        "absolute_difference": 0.0157470703125,
+        "budget": 0.0063638013916015625
+      },
+      {
+        "index": [
+          17
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": -62.57985305786133,
+        "gpu": -62.60650634765625,
+        "absolute_difference": 0.026653289794921875,
+        "budget": 0.005125159706115723
+      },
+      {
+        "index": [
+          18
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 3199
+        },
+        "cpu": -353.02587890625,
+        "gpu": -353.01318359375,
+        "absolute_difference": 0.0126953125,
+        "budget": 0.0057060517578125
+      },
+      {
+        "index": [
+          19
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 1,
+          "draw": 0
+        },
+        "cpu": -244.20571899414062,
+        "gpu": -244.19793701171875,
+        "absolute_difference": 0.007781982421875,
+        "budget": 0.005488411437988281
+      },
+      {
+        "index": [
+          22
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 2,
+          "draw": 3199
+        },
+        "cpu": -170.8013458251953,
+        "gpu": -170.79318237304688,
+        "absolute_difference": 0.0081634521484375,
+        "budget": 0.005341602691650391
+      },
+      {
+        "index": [
+          24
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 3,
+          "draw": 3199
+        },
+        "cpu": 0.3099974989891052,
+        "gpu": 0.3004685640335083,
+        "absolute_difference": 0.009528934955596924,
+        "budget": 0.0050006199949979785
+      }
+    ],
+    "gradient/rho": [
+      {
+        "index": [
+          2
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 0,
+          "draw": 799
+        },
+        "cpu": -135.35934448242188,
+        "gpu": -135.35240173339844,
+        "absolute_difference": 0.0069427490234375,
+        "budget": 0.005270718688964844
+      },
+      {
+        "index": [
+          5
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 2,
+          "draw": 0
+        },
+        "cpu": -50.81061553955078,
+        "gpu": -50.80543899536133,
+        "absolute_difference": 0.005176544189453125,
+        "budget": 0.005101621231079102
+      },
+      {
+        "index": [
+          6
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 2,
+          "draw": 799
+        },
+        "cpu": 324.5098571777344,
+        "gpu": 324.52984619140625,
+        "absolute_difference": 0.019989013671875,
+        "budget": 0.005649019714355469
+      },
+      {
+        "index": [
+          7
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 3,
+          "draw": 0
+        },
+        "cpu": 8.799567222595215,
+        "gpu": 8.805952072143555,
+        "absolute_difference": 0.006384849548339844,
+        "budget": 0.00501759913444519
+      },
+      {
+        "index": [
+          9
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": 134.86550903320312,
+        "gpu": 134.84835815429688,
+        "absolute_difference": 0.01715087890625,
+        "budget": 0.005269731018066407
+      },
+      {
+        "index": [
+          19
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 1,
+          "draw": 0
+        },
+        "cpu": -61.35205841064453,
+        "gpu": -61.34566116333008,
+        "absolute_difference": 0.006397247314453125,
+        "budget": 0.005122704116821289
+      },
+      {
+        "index": [
+          21
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 2,
+          "draw": 0
+        },
+        "cpu": 108.05453491210938,
+        "gpu": 108.04685974121094,
+        "absolute_difference": 0.0076751708984375,
+        "budget": 0.0052161090698242185
+      }
+    ],
+    "gradient/rho_reset": [
+      {
+        "index": [
+          2
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 0,
+          "draw": 799
+        },
+        "cpu": -164.28504943847656,
+        "gpu": -164.27716064453125,
+        "absolute_difference": 0.0078887939453125,
+        "budget": 0.005328570098876953
+      },
+      {
+        "index": [
+          6
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 2,
+          "draw": 799
+        },
+        "cpu": 242.4714813232422,
+        "gpu": 242.483154296875,
+        "absolute_difference": 0.0116729736328125,
+        "budget": 0.005484942962646485
+      },
+      {
+        "index": [
+          9
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": 157.1528778076172,
+        "gpu": 157.147216796875,
+        "absolute_difference": 0.0056610107421875,
+        "budget": 0.0053143057556152345
+      },
+      {
+        "index": [
+          17
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": 292.7542419433594,
+        "gpu": 292.73785400390625,
+        "absolute_difference": 0.016387939453125,
+        "budget": 0.005585508483886719
+      },
+      {
+        "index": [
+          18
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 3199
+        },
+        "cpu": 431.32208251953125,
+        "gpu": 431.314697265625,
+        "absolute_difference": 0.00738525390625,
+        "budget": 0.0058626441650390625
+      },
+      {
+        "index": [
+          19
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 1,
+          "draw": 0
+        },
+        "cpu": 156.9570770263672,
+        "gpu": 156.96385192871094,
+        "absolute_difference": 0.00677490234375,
+        "budget": 0.005313914154052734
+      }
+    ],
+    "gradient/sd_car_reset": [
+      {
+        "index": [
+          0
+        ],
+        "point": {
+          "kind": "generating"
+        },
+        "cpu": 530.0941162109375,
+        "gpu": 530.1187744140625,
+        "absolute_difference": 0.024658203125,
+        "budget": 0.006060188232421875
+      },
+      {
+        "index": [
+          5
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 2,
+          "draw": 0
+        },
+        "cpu": 385.1688537597656,
+        "gpu": 385.2038879394531,
+        "absolute_difference": 0.0350341796875,
+        "budget": 0.005770337707519531
+      },
+      {
+        "index": [
+          6
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 2,
+          "draw": 799
+        },
+        "cpu": 46.82256317138672,
+        "gpu": 46.84742736816406,
+        "absolute_difference": 0.02486419677734375,
+        "budget": 0.005093645126342774
+      },
+      {
+        "index": [
+          7
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 3,
+          "draw": 0
+        },
+        "cpu": 188.70936584472656,
+        "gpu": 188.72903442382812,
+        "absolute_difference": 0.0196685791015625,
+        "budget": 0.005377418731689453
+      },
+      {
+        "index": [
+          8
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 3,
+          "draw": 799
+        },
+        "cpu": -409.08441162109375,
+        "gpu": -409.0690612792969,
+        "absolute_difference": 0.015350341796875,
+        "budget": 0.005818168823242187
+      },
+      {
+        "index": [
+          9
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": 755.3651123046875,
+        "gpu": 755.3560180664062,
+        "absolute_difference": 0.00909423828125,
+        "budget": 0.0065107302246093755
+      },
+      {
+        "index": [
+          11
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 1,
+          "draw": 0
+        },
+        "cpu": -577.4190673828125,
+        "gpu": -577.39306640625,
+        "absolute_difference": 0.0260009765625,
+        "budget": 0.006154838134765625
+      },
+      {
+        "index": [
+          16
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 3,
+          "draw": 1599
+        },
+        "cpu": 381.9404602050781,
+        "gpu": 381.9305725097656,
+        "absolute_difference": 0.0098876953125,
+        "budget": 0.005763880920410156
+      },
+      {
+        "index": [
+          17
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": -991.490478515625,
+        "gpu": -991.5421752929688,
+        "absolute_difference": 0.05169677734375,
+        "budget": 0.00698298095703125
+      },
+      {
+        "index": [
+          18
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 3199
+        },
+        "cpu": -323.2968444824219,
+        "gpu": -323.2883605957031,
+        "absolute_difference": 0.00848388671875,
+        "budget": 0.005646593688964844
+      },
+      {
+        "index": [
+          19
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 1,
+          "draw": 0
+        },
+        "cpu": -784.5172119140625,
+        "gpu": -784.4855346679688,
+        "absolute_difference": 0.03167724609375,
+        "budget": 0.006569034423828125
+      },
+      {
+        "index": [
+          21
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 2,
+          "draw": 0
+        },
+        "cpu": -104.89266204833984,
+        "gpu": -104.91888427734375,
+        "absolute_difference": 0.02622222900390625,
+        "budget": 0.00520978532409668
+      }
+    ],
+    "gradient/sd_car_season": [
+      {
+        "index": [
+          2
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 0,
+          "draw": 799
+        },
+        "cpu": -454.1515808105469,
+        "gpu": -454.13916015625,
+        "absolute_difference": 0.012420654296875,
+        "budget": 0.005908303161621093
+      },
+      {
+        "index": [
+          6
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 2,
+          "draw": 799
+        },
+        "cpu": 1018.5679931640625,
+        "gpu": 1018.5890502929688,
+        "absolute_difference": 0.02105712890625,
+        "budget": 0.007037135986328125
+      },
+      {
+        "index": [
+          7
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 3,
+          "draw": 0
+        },
+        "cpu": -50.13758087158203,
+        "gpu": -50.13007736206055,
+        "absolute_difference": 0.007503509521484375,
+        "budget": 0.0051002751617431645
+      },
+      {
+        "index": [
+          8
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 3,
+          "draw": 799
+        },
+        "cpu": 504.1282653808594,
+        "gpu": 504.1371765136719,
+        "absolute_difference": 0.0089111328125,
+        "budget": 0.006008256530761719
+      },
+      {
+        "index": [
+          9
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": -91.3233642578125,
+        "gpu": -91.34497833251953,
+        "absolute_difference": 0.02161407470703125,
+        "budget": 0.005182646728515625
+      },
+      {
+        "index": [
+          13
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 2,
+          "draw": 0
+        },
+        "cpu": 156.16737365722656,
+        "gpu": 156.1551055908203,
+        "absolute_difference": 0.01226806640625,
+        "budget": 0.0053123347473144535
+      },
+      {
+        "index": [
+          17
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 0
+        },
+        "cpu": 519.0279541015625,
+        "gpu": 519.0148315429688,
+        "absolute_difference": 0.01312255859375,
+        "budget": 0.006038055908203125
+      },
+      {
+        "index": [
+          18
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 3199
+        },
+        "cpu": 1565.822998046875,
+        "gpu": 1565.767333984375,
+        "absolute_difference": 0.0556640625,
+        "budget": 0.008131645996093749
+      },
+      {
+        "index": [
+          19
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 1,
+          "draw": 0
+        },
+        "cpu": -63.60216522216797,
+        "gpu": -63.58211898803711,
+        "absolute_difference": 0.020046234130859375,
+        "budget": 0.005127204330444336
+      },
+      {
+        "index": [
+          20
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 1,
+          "draw": 3199
+        },
+        "cpu": 151.8395538330078,
+        "gpu": 151.8466796875,
+        "absolute_difference": 0.0071258544921875,
+        "budget": 0.005303679107666015
+      },
+      {
+        "index": [
+          21
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 2,
+          "draw": 0
+        },
+        "cpu": -314.4130859375,
+        "gpu": -314.42236328125,
+        "absolute_difference": 0.00927734375,
+        "budget": 0.005628826171875
+      },
+      {
+        "index": [
+          23
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 3,
+          "draw": 0
+        },
+        "cpu": -353.6584167480469,
+        "gpu": -353.6499938964844,
+        "absolute_difference": 0.0084228515625,
+        "budget": 0.005707316833496094
+      }
+    ],
+    "gradient/sd_skill_season": [
+      {
+        "index": [
+          0
+        ],
+        "point": {
+          "kind": "generating"
+        },
+        "cpu": -47.85147476196289,
+        "gpu": -47.84532165527344,
+        "absolute_difference": 0.006153106689453125,
+        "budget": 0.005095702949523926
+      },
+      {
+        "index": [
+          7
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 1,
+          "chain": 3,
+          "draw": 0
+        },
+        "cpu": -579.5110473632812,
+        "gpu": -579.5182495117188,
+        "absolute_difference": 0.0072021484375,
+        "budget": 0.006159022094726563
+      },
+      {
+        "index": [
+          12
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 2,
+          "chain": 1,
+          "draw": 1599
+        },
+        "cpu": 67.72163391113281,
+        "gpu": 67.73429107666016,
+        "absolute_difference": 0.01265716552734375,
+        "budget": 0.005135443267822266
+      },
+      {
+        "index": [
+          18
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 0,
+          "draw": 3199
+        },
+        "cpu": -12.196041107177734,
+        "gpu": -12.186027526855469,
+        "absolute_difference": 0.010013580322265625,
+        "budget": 0.005024392082214356
+      },
+      {
+        "index": [
+          19
+        ],
+        "point": {
+          "kind": "saved_endpoint",
+          "attempt": 3,
+          "chain": 1,
+          "draw": 0
+        },
+        "cpu": 26.183650970458984,
+        "gpu": 26.190353393554688,
+        "absolute_difference": 0.006702423095703125,
+        "budget": 0.005052367301940918
+      }
+    ]
+  },
+  "new_model_evaluations": false,
+  "changes_original_decision": false,
+  "publication_allowed": false
+}
