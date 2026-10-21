@@ -168,6 +168,15 @@ CPU comparison budgets. Complete-chain restart checks, matched full sampling,
 final archives/diagnostics integration and an intended-runner overnight refresh
 benchmark remain outstanding.
 
+The subsequent [checkpoint engineering work](overall_checkpoint_engineering.md)
+adds explicit chunk lowering/compilation/execution measurements and streams
+complete checkpoint attempts into final numeric archives without assembling the
+whole posterior in memory. Its CPU and selected deterministic GPU fixture checks
+pass, including exact fresh-process restart comparisons. The implementation
+remains isolated from production fitting; complete-model chain replay and
+bounded diagnostic integration are the next prerequisites for the full runtime
+benchmark.
+
 **Benchmark initialization from the previous accepted joint fit.** Map original
 latent variables by stable driver, event, team and circuit identities; reconstruct
 the new coordinate transforms and initialize added states coherently. Use distinct
