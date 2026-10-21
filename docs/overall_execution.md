@@ -29,6 +29,14 @@ benchmark are still required. The historical entries below preserve earlier
 states of the work; their pending approvals and failures are not new successful
 acceptance decisions.
 
+The [initial replay execution failed before sampling](overall_checkpoint_model_replay_results.md)
+because its service could not resolve the NVIDIA status utility. That failure
+and every dependent phase are preserved. A capped service preflight verifies the
+corrected command path, and a new execution has launched under the same frozen
+procedure. Separately, the [archived diagnostic adapter checks](overall_checkpoint_diagnostic_results.md)
+now pass with failed reports preserved. Full-model replay, complete-attempt
+integration and measured next-morning operation remain open.
+
 Previous authorization: the user approved the prepared, separate coordinate
 experiment on 2026-10-12. Its [frozen registration](overall_rotation_profile_protocol.json)
 retains the original study inventory, generating truths, seeds, settings and

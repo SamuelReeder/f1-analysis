@@ -177,6 +177,14 @@ remains isolated from production fitting; complete-model chain replay and
 bounded diagnostic integration are the next prerequisites for the full runtime
 benchmark.
 
+The [complete-model replay](overall_checkpoint_model_replay_results.md) is now
+registered. Its initial service launch failed before sampling because the NVIDIA
+status utility was absent from the service's command path; a verified service
+environment and subsequent launch preserve the same procedure and original
+failure. The [bounded archived-diagnostic adapter](overall_checkpoint_diagnostic_results.md)
+also passes its focused fixture checks. Its complete-attempt integration and
+production-scale cost remain unverified.
+
 **Benchmark initialization from the previous accepted joint fit.** Map original
 latent variables by stable driver, event, team and circuit identities; reconstruct
 the new coordinate transforms and initialize added states coherently. Use distinct
