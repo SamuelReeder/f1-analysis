@@ -2,7 +2,7 @@
 
 This implementation priority follows the user's concern that the elapsed
 development work is infeasible after each race. It changes the work order,
-not the running experiment, model, retry ladder or acceptance rules. No faster
+not the registered experiment, model, retry ladder or acceptance rules. No faster
 refresh has been benchmarked by this review.
 
 ## User-selected turnaround
@@ -38,7 +38,7 @@ The schedule and deployment remain unchanged while this requirement is prepared.
   exact registered source, arrays, catalog and settings. Changed data requires a
   new fit. Its attempt timer includes diagnostics; it does not separately measure
   compilation, warmup, retained sampling and diagnostic costs.
-- The [running profile registration](overall_stable_profile_protocol.json)
+- The [CPU profile registration](overall_stable_profile_protocol.json)
   disables persistent compilation caching. The sampler also clears process-local
   JAX caches after each call. Reusing compilation could avoid repeated compiler
   work, but cannot by itself fix expensive sampling or poor mixing.
@@ -53,7 +53,7 @@ The schedule and deployment remain unchanged while this requirement is prepared.
 
 The [exhausted earlier profile](overall_complete_profile_results.md) includes
 poorly mixing attempts and an interrupted execution. The
-[current profile](overall_stable_profile_results.md) is a synthetic computational
+[corrected profile](overall_stable_profile_results.md) is a synthetic computational
 study using corrected arithmetic. Neither workload is an end-to-end measurement
 of updating an accepted ranking after a race. Full model development and
 calibration should be versioned work, reused when its registered scope permits;
@@ -72,8 +72,8 @@ are not retained as posterior draws. An atomic directory
 rename commits each chunk together with its following state; interrupted partial
 writes remain separate. Identity checks reject a different target or runtime.
 The prepared tests exercise corruption, interruption and numerical replay,
-including recovery in a fresh interpreter. They have not been run while the
-active profile occupies the fitting allocation. This path is not selected by
+including recovery in a fresh interpreter. They were prepared while the profile occupied the fitting allocation and
+remain unrun on this branch pending completion of its separate saved-draw audit. This path is not selected by
 any registration or production runner and supplies no convergence decision.
 Restoring JAX's weak array typing uses a private conversion function whose source
 is included in the runtime identity; the replay checks must pass under the exact
@@ -83,7 +83,7 @@ with bounded diagnostics and final archives, new-race initialization, and
 measured runtime remain outstanding.
 
 **Make the existing target resumable and measure where time goes.** After the
-active profile terminates, instrument compilation, warmup, sampling, diagnostics,
+profile audit and checkpoint checks, instrument compilation, warmup, sampling, diagnostics,
 archive writing and simulation separately. Preserve external wall-clock and
 internal timings separately where they disagree. Save chain state, adaptation,
 random keys, completed draws and source/data identities atomically at bounded
@@ -101,15 +101,32 @@ packages. The [selected source comparison](../outputs/championship/development/o
 finds matching Python source bytes for the profile's registered runtime files and
 the additional checkpoint compatibility dependencies in both environments.
 It does not compare compiled backends or establish numerical equivalence.
-The active profile explicitly selects CPU. Package presence and device
+The registered profile explicitly selects CPU. Package presence and device
 memory observations do not demonstrate that this model can execute correctly or
 fit in available GPU memory. First compare the registered fixed density/gradient
 inventory; then measure a matched complete sampling workload with the same model,
 chain/draw inventory and diagnostics. A different chain execution strategy needs
 its own implementation evidence. Keep host-memory and CPU limits, bound device
-allocation, and account for other device use. This must not change the live
-profile's backend. Local GPU performance also would not establish the resource
+allocation, and account for other device use. This must not revise the completed
+profile's recorded backend. Local GPU performance also would not establish the resource
 requirements of the current scheduled workflow or authorize a runner migration.
+
+The installed NumPyro implementation falls back from parallel to sequential
+chains when the requested chain count exceeds the available devices. A GPU
+benchmark must explicitly select and record its chain execution method rather
+than inherit that fallback. Vectorized chains are an available experimental
+method; the existing checkpoint implementation currently requires separate
+chain devices and has not validated that alternative.
+[NumPyro implementation](https://num.pyro.ai/en/stable/_modules/numpyro/infer/mcmc.html).
+
+GPU allocation also needs explicit controls. Disabling preallocation alone does
+not establish a device-memory ceiling, and the host systemd memory cap does not
+cap device memory. The benchmark must record its allocator, pool fraction,
+actual device use and remaining capacity for other applications. Avoid the
+slow platform allocator as an unexplained performance benchmark choice; first
+verify the installed backend's pool behavior and record the chosen settings
+before running either comparison arm.
+[JAX GPU allocation documentation](https://docs.jax.dev/en/latest/gpu_memory_allocation.html).
 
 **Benchmark initialization from the previous accepted joint fit.** Map original
 latent variables by stable driver, event, team and circuit identities; reconstruct
@@ -167,7 +184,7 @@ turnaround or speedup is established yet. If an update cannot meet its registere
 numerical and runtime requirements, retain the last accepted snapshot with its
 cutoff and status. When no accepted snapshot exists, keep Overall unavailable.
 
-The active registered run continues without source or setting changes. These
+The original registered sources and settings remain fixed. These
 subsequent inference changes require their own registration and regeneration of
 affected artifacts. Publication, pushing, merging and cache-release changes
 remain subject to the existing authorization requirements.
