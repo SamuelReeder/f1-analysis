@@ -1,0 +1,961 @@
+{
+  "purpose": "fixed_full_model_backend_comparison",
+  "operation": "evaluate",
+  "case": "real_network",
+  "backend": "gpu",
+  "state": "complete",
+  "protocol_sha256": "6016352dd2494e4c5ebd3f53c4e1aaad0d587e48ab706f3a096df56f87908a81",
+  "started_at": "2026-10-21T22:16:19.724915+00:00",
+  "sampling_executed": false,
+  "publication_allowed": false,
+  "scientific_acceptance_established": false,
+  "actual_scope": {
+    "Slice": "f1.slice",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-overall-backend-evaluate-real_network-gpu-v1.scope",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "ActiveState": "active",
+    "Nice": 19,
+    "device_admission_observation": [
+      [
+        "NVIDIA GeForce RTX 5080",
+        " 16303",
+        " 9111",
+        " 617.42"
+      ]
+    ],
+    "backend": "gpu",
+    "device_kinds": [
+      "NVIDIA GeForce RTX 5080"
+    ]
+  },
+  "prepared": "outputs/championship/development/overall-backend-comparison-v1/prepare/cpu/real_network/result.json",
+  "prepared_sha256": "7a2fc4ca7c9d812516a95cbf29d3383e8ed0ee6389eeb6e1f413414e94b234b6",
+  "cache": "outputs/championship/cache/overall-backend-comparison-v1/evaluate/gpu/real_network.npz",
+  "cache_sha256": "bab387882a1160c6a98bd45f6987f669860bd4f2034b6c0904d61d876d3f60cc",
+  "point_labels": [
+    {
+      "kind": "generating"
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 1,
+      "chain": 0,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 1,
+      "chain": 0,
+      "draw": 799
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 1,
+      "chain": 1,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 1,
+      "chain": 1,
+      "draw": 799
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 1,
+      "chain": 2,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 1,
+      "chain": 2,
+      "draw": 799
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 1,
+      "chain": 3,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 1,
+      "chain": 3,
+      "draw": 799
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 2,
+      "chain": 0,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 2,
+      "chain": 0,
+      "draw": 1599
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 2,
+      "chain": 1,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 2,
+      "chain": 1,
+      "draw": 1599
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 2,
+      "chain": 2,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 2,
+      "chain": 2,
+      "draw": 1599
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 2,
+      "chain": 3,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 2,
+      "chain": 3,
+      "draw": 1599
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 3,
+      "chain": 0,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 3,
+      "chain": 0,
+      "draw": 3199
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 3,
+      "chain": 1,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 3,
+      "chain": 1,
+      "draw": 3199
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 3,
+      "chain": 2,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 3,
+      "chain": 2,
+      "draw": 3199
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 3,
+      "chain": 3,
+      "draw": 0
+    },
+    {
+      "kind": "saved_endpoint",
+      "attempt": 3,
+      "chain": 3,
+      "draw": 3199
+    }
+  ],
+  "field_shapes": {
+    "potential": [
+      25
+    ],
+    "gradient/age_slope": [
+      25
+    ],
+    "gradient/car_jump_z": [
+      25,
+      3624
+    ],
+    "gradient/car_segment_z": [
+      25,
+      8720
+    ],
+    "gradient/car_step_z": [
+      25,
+      3624
+    ],
+    "gradient/car_total_decentered": [
+      25,
+      3624
+    ],
+    "gradient/compat_z": [
+      25,
+      222
+    ],
+    "gradient/exp_gain": [
+      25
+    ],
+    "gradient/exp_scale": [
+      25
+    ],
+    "gradient/level_z": [
+      25,
+      84
+    ],
+    "gradient/mu": [
+      25,
+      1031
+    ],
+    "gradient/nu": [
+      25
+    ],
+    "gradient/overall_car_contrast": [
+      25,
+      163
+    ],
+    "gradient/overall_car_day_z": [
+      25,
+      3624
+    ],
+    "gradient/overall_car_link": [
+      25
+    ],
+    "gradient/overall_grid_base": [
+      25
+    ],
+    "gradient/overall_grid_circuit_z": [
+      25,
+      36
+    ],
+    "gradient/overall_grid_sc": [
+      25
+    ],
+    "gradient/overall_grid_wet": [
+      25
+    ],
+    "gradient/overall_hazard_base": [
+      25
+    ],
+    "gradient/overall_hazard_circuit_z": [
+      25,
+      36
+    ],
+    "gradient/overall_hazard_sc": [
+      25
+    ],
+    "gradient/overall_hazard_wet": [
+      25
+    ],
+    "gradient/overall_lap_controls_rotated": [
+      25,
+      1481
+    ],
+    "gradient/overall_lap_nu": [
+      25
+    ],
+    "gradient/overall_lap_rho": [
+      25
+    ],
+    "gradient/overall_level_z": [
+      25,
+      84
+    ],
+    "gradient/overall_pace_base": [
+      25
+    ],
+    "gradient/overall_pace_circuit_z": [
+      25,
+      36
+    ],
+    "gradient/overall_pace_sc": [
+      25
+    ],
+    "gradient/overall_pace_wet": [
+      25
+    ],
+    "gradient/overall_qualifying_link": [
+      25
+    ],
+    "gradient/overall_sd_car_day": [
+      25
+    ],
+    "gradient/overall_sd_drift_race": [
+      25
+    ],
+    "gradient/overall_sd_drift_season": [
+      25
+    ],
+    "gradient/overall_sd_grid_circuit": [
+      25
+    ],
+    "gradient/overall_sd_hazard_circuit": [
+      25
+    ],
+    "gradient/overall_sd_lap": [
+      25
+    ],
+    "gradient/overall_sd_level": [
+      25
+    ],
+    "gradient/overall_sd_pace_circuit": [
+      25
+    ],
+    "gradient/overall_sd_team": [
+      25
+    ],
+    "gradient/overall_sd_wear": [
+      25
+    ],
+    "gradient/overall_team_link": [
+      25
+    ],
+    "gradient/overall_team_z": [
+      25,
+      222
+    ],
+    "gradient/overall_walk_z": [
+      25,
+      7246
+    ],
+    "gradient/overall_wear_z": [
+      25,
+      2615
+    ],
+    "gradient/overall_weekend_complement_z": [
+      25,
+      7246
+    ],
+    "gradient/overall_weekend_loading": [
+      25
+    ],
+    "gradient/overall_weekend_qualifying_scale": [
+      25
+    ],
+    "gradient/overall_weekend_race_scale": [
+      25
+    ],
+    "gradient/overall_weekend_total_z": [
+      25,
+      7246
+    ],
+    "gradient/rho": [
+      25
+    ],
+    "gradient/rho_reset": [
+      25
+    ],
+    "gradient/sd_car_event": [
+      25
+    ],
+    "gradient/sd_car_race": [
+      25
+    ],
+    "gradient/sd_car_reset": [
+      25
+    ],
+    "gradient/sd_car_season": [
+      25
+    ],
+    "gradient/sd_car_segment": [
+      25
+    ],
+    "gradient/sd_compat": [
+      25
+    ],
+    "gradient/sd_level": [
+      25
+    ],
+    "gradient/sd_skill_race": [
+      25
+    ],
+    "gradient/sd_skill_season": [
+      25
+    ],
+    "gradient/sd_track_load": [
+      25
+    ],
+    "gradient/sigma0": [
+      25
+    ],
+    "gradient/sigma_tau": [
+      25
+    ],
+    "gradient/sigma_u": [
+      25,
+      1031
+    ],
+    "gradient/skill_z": [
+      25,
+      7246
+    ],
+    "gradient/track_load_z": [
+      25,
+      180
+    ],
+    "state/age_slope": [
+      25
+    ],
+    "state/car": [
+      25,
+      3624
+    ],
+    "state/car_event": [
+      25,
+      3624
+    ],
+    "state/car_jump_z": [
+      25,
+      3624
+    ],
+    "state/car_segment": [
+      25,
+      8720
+    ],
+    "state/car_segment_z": [
+      25,
+      8720
+    ],
+    "state/car_step_z": [
+      25,
+      3624
+    ],
+    "state/car_total": [
+      25,
+      3624
+    ],
+    "state/car_total_decentered": [
+      25,
+      3624
+    ],
+    "state/car_track": [
+      25,
+      3624
+    ],
+    "state/compat": [
+      25,
+      7246
+    ],
+    "state/compat_z": [
+      25,
+      222
+    ],
+    "state/driver_form": [
+      25,
+      7246
+    ],
+    "state/driver_form_z": [
+      25,
+      7246
+    ],
+    "state/exp_gain": [
+      25
+    ],
+    "state/exp_scale": [
+      25
+    ],
+    "state/level_z": [
+      25,
+      84
+    ],
+    "state/mu": [
+      25,
+      1031
+    ],
+    "state/nu": [
+      25
+    ],
+    "state/overall_car": [
+      25,
+      3624
+    ],
+    "state/overall_car_contrast": [
+      25,
+      163
+    ],
+    "state/overall_car_day_z": [
+      25,
+      3624
+    ],
+    "state/overall_car_link": [
+      25
+    ],
+    "state/overall_compound": [
+      25,
+      393
+    ],
+    "state/overall_day": [
+      25,
+      7246
+    ],
+    "state/overall_day_z": [
+      25,
+      7246
+    ],
+    "state/overall_grid": [
+      25,
+      144
+    ],
+    "state/overall_grid_base": [
+      25
+    ],
+    "state/overall_grid_circuit_z": [
+      25,
+      36
+    ],
+    "state/overall_grid_sc": [
+      25
+    ],
+    "state/overall_grid_wet": [
+      25
+    ],
+    "state/overall_hazard": [
+      25,
+      144
+    ],
+    "state/overall_hazard_base": [
+      25
+    ],
+    "state/overall_hazard_circuit_z": [
+      25,
+      36
+    ],
+    "state/overall_hazard_sc": [
+      25
+    ],
+    "state/overall_hazard_wet": [
+      25
+    ],
+    "state/overall_intercept": [
+      25,
+      139
+    ],
+    "state/overall_lap_controls_rotated": [
+      25,
+      1481
+    ],
+    "state/overall_lap_nu": [
+      25
+    ],
+    "state/overall_lap_rho": [
+      25
+    ],
+    "state/overall_level_z": [
+      25,
+      84
+    ],
+    "state/overall_pace": [
+      25,
+      144
+    ],
+    "state/overall_pace_base": [
+      25
+    ],
+    "state/overall_pace_circuit_z": [
+      25,
+      36
+    ],
+    "state/overall_pace_sc": [
+      25
+    ],
+    "state/overall_pace_wet": [
+      25
+    ],
+    "state/overall_qualifying_link": [
+      25
+    ],
+    "state/overall_race_skill": [
+      25,
+      7246
+    ],
+    "state/overall_sd_car_day": [
+      25
+    ],
+    "state/overall_sd_day": [
+      25
+    ],
+    "state/overall_sd_drift_race": [
+      25
+    ],
+    "state/overall_sd_drift_season": [
+      25
+    ],
+    "state/overall_sd_grid_circuit": [
+      25
+    ],
+    "state/overall_sd_hazard_circuit": [
+      25
+    ],
+    "state/overall_sd_lap": [
+      25
+    ],
+    "state/overall_sd_level": [
+      25
+    ],
+    "state/overall_sd_pace_circuit": [
+      25
+    ],
+    "state/overall_sd_team": [
+      25
+    ],
+    "state/overall_sd_wear": [
+      25
+    ],
+    "state/overall_shared_weekend": [
+      25
+    ],
+    "state/overall_team": [
+      25,
+      7246
+    ],
+    "state/overall_team_link": [
+      25
+    ],
+    "state/overall_team_z": [
+      25,
+      222
+    ],
+    "state/overall_traffic": [
+      25,
+      139,
+      3
+    ],
+    "state/overall_trend": [
+      25,
+      139
+    ],
+    "state/overall_tyre_slope": [
+      25,
+      393
+    ],
+    "state/overall_walk_z": [
+      25,
+      7246
+    ],
+    "state/overall_wear_z": [
+      25,
+      2615
+    ],
+    "state/overall_weekend_complement_z": [
+      25,
+      7246
+    ],
+    "state/overall_weekend_loading": [
+      25
+    ],
+    "state/overall_weekend_qualifying_scale": [
+      25
+    ],
+    "state/overall_weekend_race_scale": [
+      25
+    ],
+    "state/overall_weekend_total_z": [
+      25,
+      7246
+    ],
+    "state/rho": [
+      25
+    ],
+    "state/rho_reset": [
+      25
+    ],
+    "state/sd_car_event": [
+      25
+    ],
+    "state/sd_car_race": [
+      25
+    ],
+    "state/sd_car_reset": [
+      25
+    ],
+    "state/sd_car_season": [
+      25
+    ],
+    "state/sd_car_segment": [
+      25
+    ],
+    "state/sd_compat": [
+      25
+    ],
+    "state/sd_driver_form": [
+      25
+    ],
+    "state/sd_level": [
+      25
+    ],
+    "state/sd_skill_race": [
+      25
+    ],
+    "state/sd_skill_season": [
+      25
+    ],
+    "state/sd_track_load": [
+      25
+    ],
+    "state/sigma0": [
+      25
+    ],
+    "state/sigma_tau": [
+      25
+    ],
+    "state/sigma_u": [
+      25,
+      1031
+    ],
+    "state/skill": [
+      25,
+      7246
+    ],
+    "state/skill_z": [
+      25,
+      7246
+    ],
+    "state/track_load": [
+      25,
+      180
+    ],
+    "state/track_load_z": [
+      25,
+      180
+    ]
+  },
+  "field_dtypes": {
+    "potential": "<f4",
+    "gradient/age_slope": "<f4",
+    "gradient/car_jump_z": "<f4",
+    "gradient/car_segment_z": "<f4",
+    "gradient/car_step_z": "<f4",
+    "gradient/car_total_decentered": "<f4",
+    "gradient/compat_z": "<f4",
+    "gradient/exp_gain": "<f4",
+    "gradient/exp_scale": "<f4",
+    "gradient/level_z": "<f4",
+    "gradient/mu": "<f4",
+    "gradient/nu": "<f4",
+    "gradient/overall_car_contrast": "<f4",
+    "gradient/overall_car_day_z": "<f4",
+    "gradient/overall_car_link": "<f4",
+    "gradient/overall_grid_base": "<f4",
+    "gradient/overall_grid_circuit_z": "<f4",
+    "gradient/overall_grid_sc": "<f4",
+    "gradient/overall_grid_wet": "<f4",
+    "gradient/overall_hazard_base": "<f4",
+    "gradient/overall_hazard_circuit_z": "<f4",
+    "gradient/overall_hazard_sc": "<f4",
+    "gradient/overall_hazard_wet": "<f4",
+    "gradient/overall_lap_controls_rotated": "<f4",
+    "gradient/overall_lap_nu": "<f4",
+    "gradient/overall_lap_rho": "<f4",
+    "gradient/overall_level_z": "<f4",
+    "gradient/overall_pace_base": "<f4",
+    "gradient/overall_pace_circuit_z": "<f4",
+    "gradient/overall_pace_sc": "<f4",
+    "gradient/overall_pace_wet": "<f4",
+    "gradient/overall_qualifying_link": "<f4",
+    "gradient/overall_sd_car_day": "<f4",
+    "gradient/overall_sd_drift_race": "<f4",
+    "gradient/overall_sd_drift_season": "<f4",
+    "gradient/overall_sd_grid_circuit": "<f4",
+    "gradient/overall_sd_hazard_circuit": "<f4",
+    "gradient/overall_sd_lap": "<f4",
+    "gradient/overall_sd_level": "<f4",
+    "gradient/overall_sd_pace_circuit": "<f4",
+    "gradient/overall_sd_team": "<f4",
+    "gradient/overall_sd_wear": "<f4",
+    "gradient/overall_team_link": "<f4",
+    "gradient/overall_team_z": "<f4",
+    "gradient/overall_walk_z": "<f4",
+    "gradient/overall_wear_z": "<f4",
+    "gradient/overall_weekend_complement_z": "<f4",
+    "gradient/overall_weekend_loading": "<f4",
+    "gradient/overall_weekend_qualifying_scale": "<f4",
+    "gradient/overall_weekend_race_scale": "<f4",
+    "gradient/overall_weekend_total_z": "<f4",
+    "gradient/rho": "<f4",
+    "gradient/rho_reset": "<f4",
+    "gradient/sd_car_event": "<f4",
+    "gradient/sd_car_race": "<f4",
+    "gradient/sd_car_reset": "<f4",
+    "gradient/sd_car_season": "<f4",
+    "gradient/sd_car_segment": "<f4",
+    "gradient/sd_compat": "<f4",
+    "gradient/sd_level": "<f4",
+    "gradient/sd_skill_race": "<f4",
+    "gradient/sd_skill_season": "<f4",
+    "gradient/sd_track_load": "<f4",
+    "gradient/sigma0": "<f4",
+    "gradient/sigma_tau": "<f4",
+    "gradient/sigma_u": "<f4",
+    "gradient/skill_z": "<f4",
+    "gradient/track_load_z": "<f4",
+    "state/age_slope": "<f4",
+    "state/car": "<f4",
+    "state/car_event": "<f4",
+    "state/car_jump_z": "<f4",
+    "state/car_segment": "<f4",
+    "state/car_segment_z": "<f4",
+    "state/car_step_z": "<f4",
+    "state/car_total": "<f4",
+    "state/car_total_decentered": "<f4",
+    "state/car_track": "<f4",
+    "state/compat": "<f4",
+    "state/compat_z": "<f4",
+    "state/driver_form": "<f4",
+    "state/driver_form_z": "<f4",
+    "state/exp_gain": "<f4",
+    "state/exp_scale": "<f4",
+    "state/level_z": "<f4",
+    "state/mu": "<f4",
+    "state/nu": "<f4",
+    "state/overall_car": "<f4",
+    "state/overall_car_contrast": "<f4",
+    "state/overall_car_day_z": "<f4",
+    "state/overall_car_link": "<f4",
+    "state/overall_compound": "<f4",
+    "state/overall_day": "<f4",
+    "state/overall_day_z": "<f4",
+    "state/overall_grid": "<f4",
+    "state/overall_grid_base": "<f4",
+    "state/overall_grid_circuit_z": "<f4",
+    "state/overall_grid_sc": "<f4",
+    "state/overall_grid_wet": "<f4",
+    "state/overall_hazard": "<f4",
+    "state/overall_hazard_base": "<f4",
+    "state/overall_hazard_circuit_z": "<f4",
+    "state/overall_hazard_sc": "<f4",
+    "state/overall_hazard_wet": "<f4",
+    "state/overall_intercept": "<f4",
+    "state/overall_lap_controls_rotated": "<f4",
+    "state/overall_lap_nu": "<f4",
+    "state/overall_lap_rho": "<f4",
+    "state/overall_level_z": "<f4",
+    "state/overall_pace": "<f4",
+    "state/overall_pace_base": "<f4",
+    "state/overall_pace_circuit_z": "<f4",
+    "state/overall_pace_sc": "<f4",
+    "state/overall_pace_wet": "<f4",
+    "state/overall_qualifying_link": "<f4",
+    "state/overall_race_skill": "<f4",
+    "state/overall_sd_car_day": "<f4",
+    "state/overall_sd_day": "<f4",
+    "state/overall_sd_drift_race": "<f4",
+    "state/overall_sd_drift_season": "<f4",
+    "state/overall_sd_grid_circuit": "<f4",
+    "state/overall_sd_hazard_circuit": "<f4",
+    "state/overall_sd_lap": "<f4",
+    "state/overall_sd_level": "<f4",
+    "state/overall_sd_pace_circuit": "<f4",
+    "state/overall_sd_team": "<f4",
+    "state/overall_sd_wear": "<f4",
+    "state/overall_shared_weekend": "<f4",
+    "state/overall_team": "<f4",
+    "state/overall_team_link": "<f4",
+    "state/overall_team_z": "<f4",
+    "state/overall_traffic": "<f4",
+    "state/overall_trend": "<f4",
+    "state/overall_tyre_slope": "<f4",
+    "state/overall_walk_z": "<f4",
+    "state/overall_wear_z": "<f4",
+    "state/overall_weekend_complement_z": "<f4",
+    "state/overall_weekend_loading": "<f4",
+    "state/overall_weekend_qualifying_scale": "<f4",
+    "state/overall_weekend_race_scale": "<f4",
+    "state/overall_weekend_total_z": "<f4",
+    "state/rho": "<f4",
+    "state/rho_reset": "<f4",
+    "state/sd_car_event": "<f4",
+    "state/sd_car_race": "<f4",
+    "state/sd_car_reset": "<f4",
+    "state/sd_car_season": "<f4",
+    "state/sd_car_segment": "<f4",
+    "state/sd_compat": "<f4",
+    "state/sd_driver_form": "<f4",
+    "state/sd_level": "<f4",
+    "state/sd_skill_race": "<f4",
+    "state/sd_skill_season": "<f4",
+    "state/sd_track_load": "<f4",
+    "state/sigma0": "<f4",
+    "state/sigma_tau": "<f4",
+    "state/sigma_u": "<f4",
+    "state/skill": "<f4",
+    "state/skill_z": "<f4",
+    "state/track_load": "<f4",
+    "state/track_load_z": "<f4"
+  },
+  "lowering_seconds": 1.327565648010932,
+  "compile_seconds": 19.092379234032705,
+  "evaluation_seconds": [
+    0.03226928296498954,
+    0.003744441899470985,
+    0.004205086966976523,
+    0.004871572018601,
+    0.004104922991245985,
+    0.015032570925541222,
+    0.005240530939772725,
+    0.004737689974717796,
+    0.007777207065373659,
+    0.004140775999985635,
+    0.007432218990288675,
+    0.0039732110453769565,
+    0.00896140409167856,
+    0.008036577026359737,
+    0.0073862840654328465,
+    0.003900142037309706,
+    0.004206873942166567,
+    0.003822190919891,
+    0.004706103005446494,
+    0.004791596904397011,
+    0.007369361934252083,
+    0.0046993030700832605,
+    0.0045376119669526815,
+    0.005627838079817593,
+    0.005080598057247698
+  ],
+  "transfer_seconds": [
+    0.148824137984775,
+    0.19435104809235781,
+    0.15882672800216824,
+    0.18408109399024397,
+    0.17660961404908448,
+    0.1508214110508561,
+    0.1633066430222243,
+    0.16259751096367836,
+    0.21543557802215219,
+    0.18741634802427143,
+    0.15042208193335682,
+    0.14866343303583562,
+    0.16388588992413133,
+    0.1944135200465098,
+    0.1982477989513427,
+    0.18297567800618708,
+    0.1495368368923664,
+    0.1577755849575624,
+    0.17770598095376045,
+    0.20655788597650826,
+    0.20085558400023729,
+    0.20128805399872363,
+    0.18913953402079642,
+    0.17499928700271994,
+    0.21503304899670184
+  ],
+  "archive_seconds": 0.4552162050968036,
+  "seconds": 27.459691902971826,
+  "process_max_rss_kib": 1515772,
+  "finished_at": "2026-10-21T22:16:45.930222+00:00"
+}
