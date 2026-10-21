@@ -1,0 +1,77 @@
+{
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--unit=f1-checkpoint-engineering-gpu-checks-v1",
+    "--slice=f1.slice",
+    "-q",
+    "-p",
+    "MemoryMax=3G",
+    "-p",
+    "CPUQuota=200%",
+    "--",
+    "/usr/bin/nice",
+    "-n",
+    "19",
+    "/usr/bin/env",
+    "-u",
+    "JAX_DEFAULT_MATMUL_PRECISION",
+    "-u",
+    "XLA_PYTHON_CLIENT_MEM_FRACTION",
+    "JAX_PLATFORMS=cuda",
+    "JAX_ENABLE_X64=true",
+    "JAX_ENABLE_COMPILATION_CACHE=false",
+    "XLA_FLAGS=--xla_force_host_platform_device_count=1 --xla_gpu_exclude_nondeterministic_ops=true",
+    "OPENBLAS_NUM_THREADS=2",
+    "OMP_NUM_THREADS=2",
+    "MKL_NUM_THREADS=2",
+    "XLA_PYTHON_CLIENT_ALLOCATOR=bfc",
+    "XLA_CLIENT_MEM_FRACTION=0.0625",
+    "XLA_PYTHON_CLIENT_PREALLOCATE=false",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/sreeder/.codex/worktrees/overall-refresh/f1-analysis/outputs/championship/development/overall-checkpoint-engineering-gpu-checks-v1/resources.txt",
+    "/home/sreeder/f1-analysis/.venv-gpu/bin/python",
+    "-u",
+    "-c",
+    "import jax,json,pytest,sys; print(json.dumps(dict(backend=jax.default_backend(),devices=[d.device_kind for d in jax.local_devices()],x64=jax.config.x64_enabled)),flush=True); assert jax.default_backend()=='gpu' and jax.config.x64_enabled and len(jax.local_devices())==1; sys.exit(pytest.main(['-q', 'tests/test_overall_checkpoint_sampling.py::test_staged_collection_matches_uninterrupted_numpyro[1-parallel]', 'tests/test_overall_checkpoint_sampling.py::test_staged_collection_matches_uninterrupted_numpyro[2-vectorized]', 'tests/test_overall_checkpoint_sampling.py::test_fresh_process_restart_preserves_full_sequence']))"
+  ],
+  "source_commit": "9b5937c6fc9cda555fe453f1cdeb6383ed6ff351",
+  "source_sha256": {
+    "analysis/checkpoint_sampling/__init__.py": "6795205837a12f1379cfc599a6a3a27a4734699f47215efc4f5946d140e3f16a",
+    "tests/test_overall_checkpoint_sampling.py": "3b8a1dd47b43b198fe2daece02528f21e63110be320196da179f654ea90dd557",
+    "tests/test_overall_checkpoints.py": "1a797d939e70021fc8b216065c323ec417013d71f47b3015dc7b0959189b73e5",
+    "f1rank/overall/checkpoints.py": "450d81280fec2c15340580b9f2e94bc8681aa578e064e9274af4502fabd9d8b1",
+    "f1rank/overall/resumable_sampling.py": "260f8bebff745b0821b7f526517425f3315279c81bc4614c48e41d64b682bda6"
+  },
+  "started_at": "2026-10-21T22:49:44.195121+00:00",
+  "publication_allowed": false,
+  "admission": {
+    "pool_fraction_per_process": 0.0625,
+    "max_simultaneous_gpu_processes": 2,
+    "max_share_of_observed_free_memory": 0.5
+  },
+  "before": [
+    [
+      "NVIDIA GeForce RTX 5080",
+      " 16303",
+      " 12604",
+      " 617.42"
+    ]
+  ],
+  "state": "complete",
+  "exit_code": 0,
+  "seconds": 80.14891458302736,
+  "sources_unchanged": true,
+  "finished_at": "2026-10-21T22:51:00.320845+00:00",
+  "after": [
+    [
+      "NVIDIA GeForce RTX 5080",
+      " 16303",
+      " 12395",
+      " 617.42"
+    ]
+  ]
+}

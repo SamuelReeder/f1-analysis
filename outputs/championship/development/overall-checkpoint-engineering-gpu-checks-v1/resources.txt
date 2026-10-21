@@ -1,0 +1,23 @@
+	Command being timed: "/home/sreeder/f1-analysis/.venv-gpu/bin/python -u -c import jax,json,pytest,sys; print(json.dumps(dict(backend=jax.default_backend(),devices=[d.device_kind for d in jax.local_devices()],x64=jax.config.x64_enabled)),flush=True); assert jax.default_backend()=='gpu' and jax.config.x64_enabled and len(jax.local_devices())==1; sys.exit(pytest.main(['-q', 'tests/test_overall_checkpoint_sampling.py::test_staged_collection_matches_uninterrupted_numpyro[1-parallel]', 'tests/test_overall_checkpoint_sampling.py::test_staged_collection_matches_uninterrupted_numpyro[2-vectorized]', 'tests/test_overall_checkpoint_sampling.py::test_fresh_process_restart_preserves_full_sequence']))"
+	User time (seconds): 81.11
+	System time (seconds): 26.85
+	Percent of CPU this job got: 142%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:16.02
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1276088
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 564
+	Minor (reclaiming a frame) page faults: 7022995
+	Voluntary context switches: 489614
+	Involuntary context switches: 4330
+	Swaps: 0
+	File system inputs: 135389
+	File system outputs: 50744
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
