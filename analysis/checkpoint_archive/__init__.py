@@ -27,7 +27,7 @@ def inventory(saved):
         raise ValueError('No retained checkpoint draws')
     result = {}
     for group, fields in records[0]['inventory'].items():
-        result[group] = {name:dict(shape=[v['shape'][0], saved.draws, *v['shape'][2:]], dtype=v['dtype'])
+        result[group] = {name:dict(shape=[v['shape'][0], saved.draws, *v['shape'][1:]], dtype=v['dtype'])
                          for name,v in fields.items()}
     return result
 
