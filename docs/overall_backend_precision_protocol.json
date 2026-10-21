@@ -1,0 +1,199 @@
+{
+  "id": "overall-backend-precision-v1",
+  "purpose": "posthoc_full_inventory_precision_and_repeatability",
+  "registered_at": "2026-10-21T22:30:02.982568+00:00",
+  "source_commit": "a6337cf6efb2e1d64423bfa51c79496791e987eb",
+  "source_sha256": {
+    "analysis/backend_precision/__init__.py": "db801757a2680b56c8b7bcd1f55aabcf36559e197161d50de4ac5edeea15d869",
+    "analysis/backend_precision/__main__.py": "2f8e94d72beb4a0dc1a4ade9810d2ac910e2b98c40ba011a20593441a627fa14",
+    "tests/test_overall_backend_precision.py": "48776e7d7bbfbfb07994c60159e2360048a8f9df2a2aba29b789d2930a6f099b",
+    "docs/overall_backend_precision.md": "eba5903fa981af93a02d84780904a08cfcaa2adfe3f5da99c9b1600f7f9a3a10"
+  },
+  "evidence_sha256": {
+    "docs/overall_backend_comparison_protocol.json": "6016352dd2494e4c5ebd3f53c4e1aaad0d587e48ab706f3a096df56f87908a81",
+    "outputs/championship/development/overall-backend-comparison-v1/prepare/cpu/connected/result.json": "8b2d5982e905c5569df89d576f4f1b2d66b476f2e275530a904ec840c943047a",
+    "outputs/championship/development/overall-backend-comparison-v1/evaluate/cpu/connected/result.json": "77f0c54035a093533ecbdc37cd0e8ee761e448721c90b03e96248b0ca11e0865",
+    "outputs/championship/development/overall-backend-comparison-v1/evaluate/gpu/connected/result.json": "03ed9e658e2716e6f176250fe8a307269573800380c147d3b1e751261e391f10",
+    "outputs/championship/development/overall-backend-comparison-v1/compare/cpu/connected/result.json": "2a6a51e13e6b5bf6473eac08c40d1087d5f3dbbf81cf525ab5c55fd2d9ed063a",
+    "outputs/championship/development/overall-backend-comparison-v1/prepare/cpu/confounded/result.json": "8d40b13a86e6e2a2a8dcd66f295fae65b105c2b3925e5c0c80988d9c44c78387",
+    "outputs/championship/development/overall-backend-comparison-v1/evaluate/cpu/confounded/result.json": "bc75c6f8d4d4b001ad74be7bf96b82470e6678c444c26d03c15947ee29a62e68",
+    "outputs/championship/development/overall-backend-comparison-v1/evaluate/gpu/confounded/result.json": "16a56651855041089ee0369e92592986687ce9c01e6c9dad09022a88210a9557",
+    "outputs/championship/development/overall-backend-comparison-v1/compare/cpu/confounded/result.json": "105d0578a302463640518c6312003cfe5a165160586645be1f88a69b2b974cee",
+    "outputs/championship/development/overall-backend-comparison-v1/prepare/cpu/sparse_rookie/result.json": "8eefe2e42b8191e5c4fd8b9bcb579d735724710207c659dcd562c4d18d90e0c3",
+    "outputs/championship/development/overall-backend-comparison-v1/evaluate/cpu/sparse_rookie/result.json": "65e243e5dea86885f90de96e5aa255e45eb6f35b18e501956d8f8ae5c97fa0cd",
+    "outputs/championship/development/overall-backend-comparison-v1/evaluate/gpu/sparse_rookie/result.json": "cb6a4c18223d2befe2bc185be9528a08f05450d41e7483b4dfb336bfa723d1bd",
+    "outputs/championship/development/overall-backend-comparison-v1/compare/cpu/sparse_rookie/result.json": "9fdd51ad55ae818b9e670ce8f662767f77734b9f01043c111735b4424ec9b86c",
+    "outputs/championship/development/overall-backend-comparison-v1/prepare/cpu/dominant_teammate/result.json": "15d20537a37d7ac9205c6b5ea6dc60fdbf129c87a207052d2d7d613d6d626cff",
+    "outputs/championship/development/overall-backend-comparison-v1/evaluate/cpu/dominant_teammate/result.json": "f8f39ee609e3cdbaf7f1ffedc03e5f286a02d2ba847fa7cc6a2d75a2e9ff96b5",
+    "outputs/championship/development/overall-backend-comparison-v1/evaluate/gpu/dominant_teammate/result.json": "cfb0a3e724fac04a6aa2301f14e4d863951d510991a2853b257fdb0db2ff6d47",
+    "outputs/championship/development/overall-backend-comparison-v1/compare/cpu/dominant_teammate/result.json": "85c61d9a378d4fcc85d7b625b34065dcdb886982cd2876e07eda756daaecf0e6",
+    "outputs/championship/development/overall-backend-comparison-v1/prepare/cpu/era_boundary/result.json": "d5667fd68452065858da0fa45317e08fda3ced0f77f27db0e780a123ed354056",
+    "outputs/championship/development/overall-backend-comparison-v1/evaluate/cpu/era_boundary/result.json": "7ca1126ecb52b5b617a58e9fa704fce252facdaae8a58cb7c8afde753675a192",
+    "outputs/championship/development/overall-backend-comparison-v1/evaluate/gpu/era_boundary/result.json": "2d1778b0652e2352c3963560066228050b30f98e3b196fef70c0303bbc0175b7",
+    "outputs/championship/development/overall-backend-comparison-v1/compare/cpu/era_boundary/result.json": "cea7b8c75f947820b2f26b226843361299abb2c1b3af9948c331a3f51bcd4231",
+    "outputs/championship/development/overall-backend-comparison-v1/prepare/cpu/real_network/result.json": "7a2fc4ca7c9d812516a95cbf29d3383e8ed0ee6389eeb6e1f413414e94b234b6",
+    "outputs/championship/development/overall-backend-comparison-v1/evaluate/cpu/real_network/result.json": "56cc99c2b7ec20342a7c82e0d2fa92042dda96fcbcb81bbc66f33d662bc12441",
+    "outputs/championship/development/overall-backend-comparison-v1/evaluate/gpu/real_network/result.json": "bc9e51fd7851fa56a594996d1bf7ab8d6798c25ae4fe8ece195129493e7272f4",
+    "outputs/championship/development/overall-backend-comparison-v1/compare/cpu/real_network/result.json": "361c7e375b50dc04caa13e0b9354da4efe81c6a120631fa2606645ed482f9f4a"
+  },
+  "studies": [
+    "connected",
+    "confounded",
+    "sparse_rookie",
+    "dominant_teammate",
+    "era_boundary",
+    "real_network"
+  ],
+  "arms": {
+    "cpu32": [
+      "cpu",
+      "float32"
+    ],
+    "gpu32": [
+      "gpu",
+      "float32"
+    ],
+    "cpu64_a": [
+      "cpu",
+      "float64"
+    ],
+    "cpu64_b": [
+      "cpu",
+      "float64"
+    ],
+    "gpu64_a": [
+      "gpu",
+      "float64"
+    ],
+    "gpu64_b": [
+      "gpu",
+      "float64"
+    ]
+  },
+  "pairs": [
+    [
+      "original_cpu",
+      "cpu32"
+    ],
+    [
+      "original_gpu",
+      "gpu32"
+    ],
+    [
+      "cpu64_a",
+      "cpu64_b"
+    ],
+    [
+      "gpu64_a",
+      "gpu64_b"
+    ],
+    [
+      "cpu64_a",
+      "gpu64_a"
+    ],
+    [
+      "cpu32",
+      "cpu64_a"
+    ],
+    [
+      "gpu32",
+      "gpu64_a"
+    ],
+    [
+      "original_cpu",
+      "cpu64_a"
+    ],
+    [
+      "original_gpu",
+      "gpu64_a"
+    ]
+  ],
+  "environments": {
+    "cpu32": {
+      "JAX_ENABLE_X64": "false",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cpu"
+    },
+    "gpu32": {
+      "JAX_ENABLE_X64": "false",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cuda",
+      "XLA_PYTHON_CLIENT_ALLOCATOR": "bfc",
+      "XLA_CLIENT_MEM_FRACTION": "0.125",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+    },
+    "cpu64_a": {
+      "JAX_ENABLE_X64": "true",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cpu"
+    },
+    "cpu64_b": {
+      "JAX_ENABLE_X64": "true",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cpu"
+    },
+    "gpu64_a": {
+      "JAX_ENABLE_X64": "true",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cuda",
+      "XLA_PYTHON_CLIENT_ALLOCATOR": "bfc",
+      "XLA_CLIENT_MEM_FRACTION": "0.125",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+    },
+    "gpu64_b": {
+      "JAX_ENABLE_X64": "true",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cuda",
+      "XLA_PYTHON_CLIENT_ALLOCATOR": "bfc",
+      "XLA_CLIENT_MEM_FRACTION": "0.125",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+    }
+  },
+  "matmul_precision": null,
+  "unset_environment": [
+    "JAX_DEFAULT_MATMUL_PRECISION",
+    "XLA_PYTHON_CLIENT_MEM_FRACTION"
+  ],
+  "resources": {
+    "slice": "f1.slice",
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "Nice": 19
+  },
+  "gpu_admission": {
+    "pool_fraction": 0.125,
+    "max_share_of_observed_free_memory": 0.5
+  },
+  "lifting": "same_stored_float32_observations_and_coordinates_cast_to_float64_without_regeneration",
+  "rotation": "same_original_numpy_basis_then_conversion_to_execution_precision",
+  "original_float32_reproduction": "complete_dtype_shape_and_bitwise_comparison",
+  "higher_precision_is_exact_truth": false,
+  "sampling_allowed": false,
+  "changes_original_screen": false,
+  "scientific_acceptance_allowed": false,
+  "publication_allowed": false
+}
