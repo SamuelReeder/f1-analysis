@@ -2,9 +2,11 @@
 
 The [prepared verifier](../analysis/overall_stable_profile_diagnostics.py) checks
 every recorded attempt in the [corrected profile](overall_stable_profile.md),
-including failed retries. It has not been executed and its
-[focused tests](../tests/test_overall_stable_profile_diagnostics.py) remain unrun
-while the profile occupies the fitting allocation.
+including failed retries. Its
+[focused tests](../tests/test_overall_stable_profile_diagnostics.py) and the
+metadata reviewer's checks pass in the
+[preserved software-check run](../outputs/championship/development/overall-stable-audit-checks-v1/run.json).
+The original fit archives have not yet been independently audited.
 
 After the fitting service terminates, preserve and commit its original outputs,
 test the metadata reviewer and this verifier, and produce and commit the

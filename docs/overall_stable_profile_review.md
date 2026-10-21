@@ -50,5 +50,6 @@ flags. They must retain later cases after a failed or killed child. Preparation
 of this reviewer is not evidence that the active experiment has finished.
 
 The prepared [saved-array audit](overall_stable_profile_diagnostics.md) extends
-this review to every attempt's complete posterior and sampler extras. Its
-numerical checks remain unrun while the registered fit is active.
+this review to every attempt's complete posterior and sampler extras. The
+[focused reviewer and auditor software checks](../outputs/championship/development/overall-stable-audit-checks-v1/run.json)
+pass. Independent verification of the original fit archives remains outstanding.
