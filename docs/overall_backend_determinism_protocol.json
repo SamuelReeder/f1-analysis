@@ -1,0 +1,124 @@
+{
+  "id": "overall-backend-determinism-v1",
+  "purpose": "prospective_deterministic_gpu_fixed_input_check",
+  "studies": [
+    "connected",
+    "confounded",
+    "sparse_rookie",
+    "dominant_teammate",
+    "era_boundary",
+    "real_network"
+  ],
+  "arms": [
+    "gpu64_a",
+    "gpu64_b"
+  ],
+  "environments": {
+    "cpu32": {
+      "JAX_ENABLE_X64": "false",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cpu"
+    },
+    "gpu32": {
+      "JAX_ENABLE_X64": "false",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cuda",
+      "XLA_PYTHON_CLIENT_ALLOCATOR": "bfc",
+      "XLA_CLIENT_MEM_FRACTION": "0.125",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+    },
+    "cpu64_a": {
+      "JAX_ENABLE_X64": "true",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cpu"
+    },
+    "cpu64_b": {
+      "JAX_ENABLE_X64": "true",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cpu"
+    },
+    "gpu64_a": {
+      "JAX_ENABLE_X64": "true",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1 --xla_gpu_exclude_nondeterministic_ops=true",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cuda",
+      "XLA_PYTHON_CLIENT_ALLOCATOR": "bfc",
+      "XLA_CLIENT_MEM_FRACTION": "0.125",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+    },
+    "gpu64_b": {
+      "JAX_ENABLE_X64": "true",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1 --xla_gpu_exclude_nondeterministic_ops=true",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cuda",
+      "XLA_PYTHON_CLIENT_ALLOCATOR": "bfc",
+      "XLA_CLIENT_MEM_FRACTION": "0.125",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+    }
+  },
+  "unset_environment": [
+    "JAX_DEFAULT_MATMUL_PRECISION",
+    "XLA_PYTHON_CLIENT_MEM_FRACTION"
+  ],
+  "matmul_precision": null,
+  "resources": {
+    "slice": "f1.slice",
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "Nice": 19
+  },
+  "gpu_admission": {
+    "pool_fraction": 0.125,
+    "max_share_of_observed_free_memory": 0.5
+  },
+  "repetition_requirement": "complete_bitwise_equality",
+  "comparison_requirement": "original_unchanged_budgets_against_committed_cpu64_a",
+  "sampling_allowed": false,
+  "publication_allowed": false,
+  "scientific_acceptance_allowed": false,
+  "changes_original_screen": false,
+  "registered_at": "2026-10-21T22:41:19.546953+00:00",
+  "source_commit": "a678cca10180b825187c44f41808cd1cdb53cbb6",
+  "source_sha256": {
+    "analysis/backend_determinism/__init__.py": "23ba5fbb03e0289a68073ca0234b05fc57655dd220786141e7f357e92ebd019c",
+    "analysis/backend_determinism/__main__.py": "58d5653514d8e04f2ac3baf088ca2349efb284cf0e3681e7d4146124c471cf0c",
+    "docs/overall_backend_determinism.md": "98d15824b5b62fd81e3fb4a729895bc1ec2dbc4687b36b2974b5c3843ccbc781"
+  },
+  "evidence_sha256": {
+    "docs/overall_backend_precision_protocol.json": "5e8ca3e86d20793f2a02255c396ebe25662cfbb78516ba47841a4ffa4f12d6f3",
+    "outputs/championship/development/overall-backend-precision-v1/compare/cpu32/connected/result.json": "4baeed853decfa7ea51ba2b18ce38583108701ae8083030b615128b7ec0822f8",
+    "outputs/championship/development/overall-backend-precision-v1/compare/cpu32/confounded/result.json": "ae01167a7f406000034c1f95478318eb8ed876c01193dfc2679734742e21a66a",
+    "outputs/championship/development/overall-backend-precision-v1/compare/cpu32/sparse_rookie/result.json": "cc7612c8494d0dfefa3fa5605b85c21dd619bbcd46fdf48793c86c19ac60fd58",
+    "outputs/championship/development/overall-backend-precision-v1/compare/cpu32/dominant_teammate/result.json": "29713db16226bf7393b74ee42454732b02f1120ae1a5f94591f30c3126ef5fa3",
+    "outputs/championship/development/overall-backend-precision-v1/compare/cpu32/era_boundary/result.json": "14c900cf845ae2f43d2b154f0df0b600d035733af39da0b1afbd2588156efb12",
+    "outputs/championship/development/overall-backend-precision-v1/compare/cpu32/real_network/result.json": "711b583ad3c277e1066f37f95ffd04f8cdcccce6405520d13b19588334861bec",
+    "outputs/championship/development/overall-backend-precision-v1/evaluate/cpu64_a/connected/result.json": "7361626a2b166a365004268e19ca61af15bae59882cb7b252c9019ba4a375993",
+    "outputs/championship/development/overall-backend-precision-v1/evaluate/cpu64_a/confounded/result.json": "8116fcf1b18242ac35095bb4f5ba277406575f75c1062c4800248cbca8fcc833",
+    "outputs/championship/development/overall-backend-precision-v1/evaluate/cpu64_a/sparse_rookie/result.json": "cbc8662e61db9d076b364567de085c0c682ae01141aa45ea08383a7f5450a2ac",
+    "outputs/championship/development/overall-backend-precision-v1/evaluate/cpu64_a/dominant_teammate/result.json": "7a74af78a92a7f5ffcf7975967aab3b7e4c8165620827220a1f31899d99a3340",
+    "outputs/championship/development/overall-backend-precision-v1/evaluate/cpu64_a/era_boundary/result.json": "f44af9160c9696641e6ac9d8ab5edc67c3e363301d54e064284d9789f31b5642",
+    "outputs/championship/development/overall-backend-precision-v1/evaluate/cpu64_a/real_network/result.json": "dcc91fc8bcfd87e678b4648b494c9e7837910b3c21ad00bebd54d3408d8c419f"
+  }
+}
