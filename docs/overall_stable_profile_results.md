@@ -52,9 +52,13 @@ records every registered case as converged. The
 [terminal observation](../outputs/championship/development/overall-stable-profile-v1-terminal/observation.json)
 preserves the launcher completion and original output inventory. The
 [metadata review](../outputs/championship/development/overall-stable-profile-review-v1/review.json)
-finds the complete records consistent, including failed attempts. Independent
-reproduction of the saved-array numerical diagnostics is still running; the
-following tables report the original committed fit outputs.
+finds the complete records consistent, including failed attempts. The
+[independent saved-array audit](../outputs/championship/development/overall-stable-profile-diagnostics-v1/audit.json)
+reproduces every attempt's complete parameter and current-driver contrast
+reports exactly. It also recounts the saved divergences, acceptance probabilities
+and tree-depth-limit fractions, with no discrepancies or changed input files.
+This preserves the original failed attempts as well as the successful retries.
+The following tables report the original committed fit outputs.
 
 This is a computational study with synthetic observations and known truth.
 The real-network case uses the historical driver/team structure but synthetic

@@ -996,9 +996,10 @@ The [completed profile report](overall_stable_profile_results.md) records the
 terminal fixed-ladder results, every failed and successful attempt, separate
 internal/external timings and original synthetic truth-interval summaries.
 Every registered case finished with a converged attempt. The committed metadata
-review finds the original records consistent. Independent numerical reproduction
-from the retained arrays is in progress; it cannot change the original failed
-attempts or grant scientific acceptance.
+review finds the original records consistent. The independent saved-array audit
+now reproduces all complete parameter reports, current-driver contrasts and
+sampler-extra summaries exactly, preserving every failed attempt. This verifies
+the recorded computational result; scientific acceptance remains outstanding.
 
 The full-network workload dominates the recorded cost and its later attempts
 saturate the registered tree-depth limit. Subsequent runtime work prioritizes
