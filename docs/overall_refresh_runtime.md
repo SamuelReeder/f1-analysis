@@ -155,10 +155,15 @@ files and versions unchanged before and after installation. The original CPU
 runtime was not modified. The [full-model fixed-coordinate comparison](overall_backend_comparison_results.md)
 has since completed every registered case and point. Potential energy and
 complete retained state pass, but full-network gradients fail the frozen screen.
-The failure remains recorded; the GPU sampling benchmark is withheld pending
-numerical diagnosis. Higher-precision fixed-coordinate investigation, matched
-complete sampling, final archives/diagnostics integration and an intended-runner
-overnight refresh benchmark remain outstanding.
+The failure remains recorded. The subsequent
+[complete precision diagnosis](overall_backend_precision_results.md) finds
+double-precision agreement within the original budgets across every case.
+Original CPU evaluations reproduce bitwise, while GPU repetitions differ in
+both precisions. This supports a separately registered double-precision sampling
+candidate; it does not revise the failed single-precision screen or demonstrate
+exact full-model GPU checkpoint replay. Matched complete sampling, final
+archives/diagnostics integration and an intended-runner overnight refresh
+benchmark remain outstanding.
 
 **Benchmark initialization from the previous accepted joint fit.** Map original
 latent variables by stable driver, event, team and circuit identities; reconstruct
