@@ -1,0 +1,27 @@
+{
+  "case": "dominant_teammate",
+  "exit_code": 0,
+  "state": "converged",
+  "result_present": true,
+  "result_sha256": "e8fe3c5718908a595b7d59c5fc2f5d6de611a334a3c59658af84a6663f42abd6",
+  "log_sha256": "04812a1977ff18cd2a0bcd475030cad10cd353a9a929f37f6e562d5cf61e8959",
+  "resources_sha256": "d196a2602671fecff91c26f0d5c7518e79233ecb1336876ebdf050bf18540b08",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/outputs/championship/development/overall-stable-profile-v1/dominant_teammate.resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-u",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/analysis/overall_stable_profile.py",
+    "child",
+    "--registration",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/docs/overall_stable_profile_protocol.json",
+    "--unit",
+    "f1-overall-stable-profile-v1.service",
+    "--case",
+    "dominant_teammate",
+    "--output",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/outputs/championship/development/overall-stable-profile-v1/dominant_teammate"
+  ]
+}

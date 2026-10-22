@@ -1,0 +1,27 @@
+{
+  "case": "era_boundary",
+  "exit_code": 0,
+  "state": "converged",
+  "result_present": true,
+  "result_sha256": "703cc5e40d95ed1e75950b19ca2b7a38daa455064bab30c3c5967dec5b2f7c04",
+  "log_sha256": "197ec7b8f17ee0882d04b3e9cefd51710a30faf419366f1f7fa2bde115e9c1ef",
+  "resources_sha256": "4e07706a417cce8e539359d92150d0263dc2072e988ea034710cf10a614fa1d1",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/outputs/championship/development/overall-stable-profile-v1/era_boundary.resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-u",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/analysis/overall_stable_profile.py",
+    "child",
+    "--registration",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/docs/overall_stable_profile_protocol.json",
+    "--unit",
+    "f1-overall-stable-profile-v1.service",
+    "--case",
+    "era_boundary",
+    "--output",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/outputs/championship/development/overall-stable-profile-v1/era_boundary"
+  ]
+}

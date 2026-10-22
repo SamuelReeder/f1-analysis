@@ -1,0 +1,27 @@
+{
+  "case": "real_network",
+  "exit_code": 0,
+  "state": "converged",
+  "result_present": true,
+  "result_sha256": "dc099c46f118344320eae8e8370fb4ab9aa29619b46486142a5b748d863473ee",
+  "log_sha256": "0db0114a006a230c8511470b54a9b24f3ca9ee352515961f440a5f45e2835995",
+  "resources_sha256": "d182bc01563bb727a05da5e8d53ca0126d625a5d0dee90fae4c44225e15257fd",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/outputs/championship/development/overall-stable-profile-v1/real_network.resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-u",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/analysis/overall_stable_profile.py",
+    "child",
+    "--registration",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/docs/overall_stable_profile_protocol.json",
+    "--unit",
+    "f1-overall-stable-profile-v1.service",
+    "--case",
+    "real_network",
+    "--output",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/outputs/championship/development/overall-stable-profile-v1/real_network"
+  ]
+}

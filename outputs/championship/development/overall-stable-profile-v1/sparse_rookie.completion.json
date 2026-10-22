@@ -1,0 +1,27 @@
+{
+  "case": "sparse_rookie",
+  "exit_code": 0,
+  "state": "converged",
+  "result_present": true,
+  "result_sha256": "8709310682571e2b5df98e23d1f8c4f9b539f0c5bdf616d1bc953c80b5c818b9",
+  "log_sha256": "3ce0effddd9235290c440d629f130767abefb75be5c4026aae67566570758e1c",
+  "resources_sha256": "e852cea6f5287cf9ae288c11d1d5a4af66521c4c7a48e59052e46b805fb8912c",
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/outputs/championship/development/overall-stable-profile-v1/sparse_rookie.resources.txt",
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-u",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/analysis/overall_stable_profile.py",
+    "child",
+    "--registration",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/docs/overall_stable_profile_protocol.json",
+    "--unit",
+    "f1-overall-stable-profile-v1.service",
+    "--case",
+    "sparse_rookie",
+    "--output",
+    "/home/sreeder/.codex/worktrees/overall-production/f1-analysis/outputs/championship/development/overall-stable-profile-v1/sparse_rookie"
+  ]
+}

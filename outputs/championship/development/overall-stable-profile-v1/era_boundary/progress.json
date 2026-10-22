@@ -1,0 +1,41 @@
+{
+  "case": "era_boundary",
+  "state": "running",
+  "started_at": "2026-10-20T02:20:33.198080+00:00",
+  "registration_sha256": "87b30c60922d705d955db8cddbec249f31781ca70540f06146967fdcf9bb0eb6",
+  "model_inputs_key": "9515a2b3c481d834396e7980d4fabb52e9ea1c89ff2eb471dcea31d38c094154",
+  "full_recovery_complete": false,
+  "sbc_complete": false,
+  "publication_allowed": false,
+  "actual_resources": {
+    "service": {
+      "Slice": "f1.slice",
+      "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-overall-stable-profile-v1.service",
+      "CPUWeight": "10",
+      "MemoryMax": "13958643712",
+      "Nice": "19",
+      "ActiveState": "active"
+    },
+    "shared_slice": {
+      "CPUWeight": "10",
+      "CPUQuotaPerSecUSec": "4s"
+    },
+    "environment": {
+      "JAX_PLATFORMS": "cpu",
+      "JAX_ENABLE_X64": "false",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=4",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2"
+    }
+  },
+  "stage": "fitting",
+  "original_inputs": {
+    "arrays_key": "5cdb3a3719ecdb04b6ed00c51d511831e2313a5106be4384938a25e921e28f92",
+    "parameters_key": "466555e5f7cd6acb7784b9f6d614d17c339ac19c011be4a869152087ba31287a",
+    "truth_key": "2a6c5a790d2d3841348abbb1a3c74cb7317a0bbb8011d70dd23b0a20ddfc4c57",
+    "seed": 20261024,
+    "role": "prior_predictive"
+  }
+}
