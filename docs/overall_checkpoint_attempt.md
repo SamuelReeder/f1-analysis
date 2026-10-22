@@ -23,7 +23,7 @@ It does not replace failed diagnostics with another criterion.
 The [attempt adapter checks](../outputs/championship/development/overall-checkpoint-attempt-checks-v1/stdout.txt)
 pass **13** tests, including separate real sampler/archive and diagnostic workers,
 interrupted sealing, altered numeric bytes, diagnostic coverage and fixed retry
-selection. The [full-model binding checks](../outputs/championship/development/overall-checkpoint-attempt-profile-checks-v1/stdout.txt)
+selection. The [full-model binding checks](../outputs/championship/development/overall-checkpoint-attempt-profile-checks-v2/stdout.txt)
 pass **7** tests for complete collector axes, unchanged settings/gates, explicit
 worker environments, unique attempt paths and authoritative prior-service state.
 Both recorded executions confirm their checked source files were unchanged.
