@@ -1,8 +1,8 @@
 # Complete-model replay execution status
 
 The [registered engineering procedure](overall_checkpoint_model_replay_protocol.json)
-has not established full-model checkpoint replay yet. It is a short implementation
-check, not a complete fit, convergence result or runtime acceptance benchmark.
+has now completed its six declared designs. It is a short implementation check,
+not a complete fit, convergence result or runtime acceptance benchmark.
 
 ## Initial service launch failed before sampling
 
@@ -16,21 +16,29 @@ had not started and no checkpoint cache existed. Its complete
 therefore reports every design as unavailable. This is an execution failure;
 there are no convergence diagnostics or measured sampling costs from that launch.
 
-## Corrected service environment
+## Corrected full-design engineering replay
 
-The correction explicitly includes `/usr/lib/wsl/lib` in the service's command
-path. A separate capped [service preflight](../outputs/championship/development/overall-checkpoint-service-preflight-v1/run.json)
-then succeeded. Its [output](../outputs/championship/development/overall-checkpoint-service-preflight-v1/stdout.txt)
-verifies utility resolution, actual GPU backend, double precision, registered
-allocator admission and host resource limits inside a systemd service.
+The corrected [execution ledger](../outputs/championship/development/overall-checkpoint-model-replay-execution-v2/execution.json)
+records all four expected phases for each of six cases: connected, confounded,
+sparse rookie, dominant teammate, era boundary and the real network. The cases
+cover uninterrupted sampling, intentional stops during warmup and retained
+draws, and fresh-process resume. The [terminal record](../outputs/championship/development/overall-checkpoint-model-replay-execution-v2/terminal.json)
+confirms every phase was processed and every worker exit matched its registered
+outcome. The service unit and journal had already been collected when its final
+runner exit was checked, so that outer exit remains unobserved.
 
-The [subsequent launch](../outputs/championship/development/overall-checkpoint-model-replay-launch-v2/launch.json)
-uses the same frozen worker code, model, observations, engineering settings and
-comparison rule in a new execution directory. It records the original failed
-execution and successful service preflight. The original failure is preserved.
-No model or fitting-source edit was required. The new execution still requires
-terminal accounting, committed raw artifacts and complete numerical comparison.
+The [numerical comparison](../outputs/championship/development/overall-checkpoint-model-replay-execution-v2/comparison.json)
+passed for all six cases. Each case's posterior and sampler-extras archives have
+matching field inventories, dtypes, shapes and bitwise values between the
+uninterrupted and resumed result. The comparison run record and capped resource
+measurement are saved [here](../outputs/championship/development/overall-checkpoint-model-replay-execution-v2/comparison-fixed-path-v1.json).
+An earlier comparison invocation failed before numerical comparison because it
+used a relative output path; that failure and its resource record are preserved
+in the same execution directory. It did not change model code or settings.
 
-A successful future replay would establish engineering behavior for the declared
-workload. Complete fitting, runtime measurement, scientific acceptance and the
-next-morning refresh remain separate outstanding requirements.
+This replay used the protocol's small fixed engineering workload. It did not run
+a production-length fit, evaluate convergence, measure a representative refresh,
+or authorize publication. The service terminal record explicitly keeps
+`full_fit_executed`, `scientific_acceptance` and `publication_allowed` false.
+The replay shows that the tested checkpoint/resume path preserves its declared
+small-run values; it cannot show that a full update finishes by the next morning.

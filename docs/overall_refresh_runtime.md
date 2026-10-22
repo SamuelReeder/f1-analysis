@@ -172,25 +172,23 @@ The subsequent [checkpoint engineering work](overall_checkpoint_engineering.md)
 adds explicit chunk lowering/compilation/execution measurements and streams
 complete checkpoint attempts into final numeric archives without assembling the
 whole posterior in memory. Its CPU and selected deterministic GPU fixture checks
-pass, including exact fresh-process restart comparisons. The implementation
-remains isolated from production fitting; complete-model chain replay and
-bounded diagnostic integration are the next prerequisites for the full runtime
-benchmark.
-
-The [complete-model replay](overall_checkpoint_model_replay_results.md) is now
-registered. Its initial service launch failed before sampling because the NVIDIA
-status utility was absent from the service's command path; a verified service
-environment and subsequent launch preserve the same procedure and original
-failure. The [bounded archived-diagnostic adapter](overall_checkpoint_diagnostic_results.md)
-also passes its focused fixture checks. Its complete-attempt integration and
-production-scale cost remain unverified.
+pass, including exact fresh-process restart comparisons. The registered
+[complete-model replay](overall_checkpoint_model_replay_results.md) now passes its
+bitwise restart comparison for six fixed engineering designs. These checks remain
+isolated from production fitting and do not establish matched full sampling,
+final diagnostic integration, convergence or production-scale cost. The
+[bounded archived-diagnostic adapter](overall_checkpoint_diagnostic_results.md)
+also passes its focused fixture checks; its integration into a complete registered
+attempt remains unverified.
 
 The new [sequential attempt executor](overall_checkpoint_execution.md) separates
 sampling/archive work from CPU diagnostics in fresh interpreters. It preserves
 observed process failures and requires process-death and artifact checks before
-recovering an interrupted attempt. Its focused process-boundary verification is
-queued behind the active replay to preserve sequential resource use. Model-worker
-and fixed-retry integration remain pending; this infrastructure is not yet selected
+recovering an interrupted attempt. Its [focused process-boundary tests](../outputs/championship/development/overall-checkpoint-execution-checks-v1/stdout.txt)
+pass **10** checks under the registered capped scope, and the test runner confirms
+the checked source files did not change. The [complete-model checkpoint replay](overall_checkpoint_model_replay_results.md)
+also passes its exact comparison across six registered designs. Model-worker and
+fixed-retry integration remain pending; this infrastructure is not yet selected
 by a fitting registration.
 
 **Benchmark initialization from the previous accepted joint fit.** Map original

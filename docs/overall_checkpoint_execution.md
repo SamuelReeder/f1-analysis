@@ -36,6 +36,9 @@ does not invent a successful exit status for the interrupted invocation: its
 unobserved exit remains unobserved. The recovered artifact must independently
 establish the declared stage's completion.
 
-This is unselected development infrastructure. Verification is pending. Full-model
-worker integration, fixed-retry integration and a registered complete runtime
-benchmark remain required; this definition supplies no overnight capability.
+The [focused process-boundary verification](../outputs/championship/development/overall-checkpoint-execution-checks-v1/stdout.txt)
+passes **10** tests under the capped scope, and the [run record](../outputs/championship/development/overall-checkpoint-execution-checks-v1/run.json)
+confirms the checked source files were unchanged. This remains unselected
+development infrastructure. Full-model worker integration, fixed-retry
+integration and a registered complete runtime benchmark remain required; these
+tests supply no overnight capability.
