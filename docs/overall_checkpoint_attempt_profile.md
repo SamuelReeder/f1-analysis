@@ -51,3 +51,10 @@ calibration, predictive evaluation, simulation or publication. Those requirement
 remain in `overall_model_plan.md` and `overall_refresh_runtime.md`. The user's
 next-morning target remains unverified until the complete intended-runner refresh
 is registered, measured and accepted.
+
+The initial frozen selection's [preflight](../outputs/championship/development/overall-checkpoint-fit-preflight-v1/run.json)
+failed before device initialization or sampling: the minimal worker environment
+omitted its user-service-manager connection. A new frozen selection explicitly
+binds the local runtime directory and bus address needed to verify resource
+limits. The initial registration and failed preflight remain preserved. This
+environment repair changes no model, observations, fitting settings or gate.

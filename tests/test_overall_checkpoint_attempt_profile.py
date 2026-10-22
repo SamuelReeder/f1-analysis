@@ -30,6 +30,7 @@ def test_complete_profile_preserves_original_designs_full_settings_and_gates():
     assert p['chunk_draws']==parent['chunk_draws'] and p['chain_method']==parent['chain_method']
     assert p['environments']['sample_and_archive']==parent['environments']['gpu64_a']
     assert p['environments']['diagnostics']==parent['environments']['cpu64_a']
+    assert p['systemd_environment']['DBUS_SESSION_BUS_ADDRESS']=='unix:path='+p['systemd_environment']['XDG_RUNTIME_DIR']+'/bus'
     assert not p['publication_allowed'] and not p['end_to_end_refresh_benchmark']
 
 
@@ -54,7 +55,7 @@ def test_worker_request_uses_explicit_isolated_environments_and_exact_retry_inde
         for stage in request['stages']:
             assert stage['command'][0]==p['interpreters'][stage['name']]
             assert stage['command'][stage['command'].index('--attempt')+1]==str(index)
-            assert stage['environment']==dict(p['environments'][stage['name']],PATH=p['path'],PYTHONUNBUFFERED='1')
+            assert stage['environment']==dict(p['environments'][stage['name']],**p['systemd_environment'],PATH=p['path'],PYTHONUNBUFFERED='1')
             assert not set(stage['environment'])&set(p['unset_environment'])
     changed=copy.deepcopy(spec);changed['settings']['seed']+=20
     with pytest.raises(ValueError):profile.request(tmp_path,changed,ROOT/profile.PARENT,p)

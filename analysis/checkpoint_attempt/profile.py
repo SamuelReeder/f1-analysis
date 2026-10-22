@@ -20,6 +20,7 @@ ROOT = base.ROOT
 PARENT = 'docs/overall_checkpoint_model_replay_protocol.json'
 REPLAY = 'outputs/championship/development/overall-checkpoint-model-replay-execution-v2'
 CHECKS = 'outputs/championship/development/overall-checkpoint-attempt-checks-v1'
+BINDING_CHECKS = 'outputs/championship/development/overall-checkpoint-attempt-profile-checks-v3'
 SOURCES = ('analysis/checkpoint_attempt/__init__.py', 'analysis/checkpoint_attempt/controller.py',
     'analysis/checkpoint_attempt/profile.py', 'analysis/checkpoint_attempt/worker.py',
     'analysis/checkpoint_attempt/__main__.py', 'analysis/checkpoint_attempt/runner.py',
@@ -30,7 +31,7 @@ SOURCES = ('analysis/checkpoint_attempt/__init__.py', 'analysis/checkpoint_attem
 
 
 def definition(parent, original):
-    return dict(id='overall-checkpoint-fit-profile-v1', schema_version=2,
+    return dict(id='overall-checkpoint-fit-profile-v2', schema_version=2,
         status='frozen', purpose='numerical_profile', profile='deterministic_gpu_checkpoint_complete_design',
         inference_method=original['inference_method'],
         registered_model_inputs_key=snapshot()['key'],
@@ -45,6 +46,8 @@ def definition(parent, original):
         interpreters=dict(sample_and_archive=parent['interpreter'],
                          diagnostics='/home/sreeder/f1-analysis/.venv/bin/python'),
         path='/usr/local/bin:/usr/bin:/bin:/usr/lib/wsl/lib',
+        systemd_environment=dict(XDG_RUNTIME_DIR=f'/run/user/{os.getuid()}',
+            DBUS_SESSION_BUS_ADDRESS=f'unix:path=/run/user/{os.getuid()}/bus'),
         full_recovery_complete=False, sbc_complete=False, publication_allowed=False,
         end_to_end_refresh_benchmark=False, changes_original_results=False)
 
@@ -52,6 +55,10 @@ def definition(parent, original):
 def evidence(parent):
     return [PARENT, base.REGISTRATION, f'{REPLAY}/comparison.json', f'{REPLAY}/terminal.json',
         f'{CHECKS}/run.json', f'{CHECKS}/stdout.txt',
+        f'{BINDING_CHECKS}/run.json', f'{BINDING_CHECKS}/stdout.txt',
+        'docs/overall_checkpoint_attempt_profile_protocol.json',
+        'outputs/championship/development/overall-checkpoint-fit-preflight-v1/run.json',
+        'outputs/championship/development/overall-checkpoint-fit-preflight-v1/stdout.txt',
         *[f'{REPLAY}/sample/{case}/resume/result.json' for case in parent['studies']],
         *[f'{replay.precision.RESULTS}/prepare/cpu/{case}/result.json' for case in parent['studies']]]
 
@@ -73,9 +80,13 @@ def freeze(destination):
             or not terminal['all_phases_processed_and_expected']
             or checks['exit_code'] != 0 or not checks['sources_unchanged']):
         raise ValueError('Require complete replay and focused attempt verification')
-    for name,expected in checks['source_sha256'].items():
-        if base.committed(ROOT,name) != expected:
-            raise ValueError('The tested attempt implementation changed')
+    for folder in (CHECKS,BINDING_CHECKS):
+        verified = base.read(ROOT/folder/'run.json')
+        if verified['exit_code'] != 0 or not verified['sources_unchanged']:
+            raise ValueError('Require the complete focused implementation verification')
+        for name,expected in verified['source_sha256'].items():
+            if base.committed(ROOT,name) != expected:
+                raise ValueError('The tested attempt implementation changed')
     diagnostic = distribution('arviz-stats')
     runtime = {str(diagnostic.locate_file(name)):base.sha(diagnostic.locate_file(name))
         for name in diagnostic.files if str(name).startswith('arviz_stats/') and str(name).endswith('.py')}
@@ -139,7 +150,8 @@ def request(directory, spec, protocol, registration):
         name=name, command=[registration['interpreters'][name],'-u','-m','analysis.checkpoint_attempt',
             'worker','--protocol',str(Path(protocol).resolve()),'--directory',str(directory),
             '--case',spec['case'],'--attempt',str(index),'--stage',name],
-        environment=dict(registration['environments'][name],PATH=registration['path'],PYTHONUNBUFFERED='1'),
+        environment=dict(registration['environments'][name],**registration['systemd_environment'],
+                         PATH=registration['path'],PYTHONUNBUFFERED='1'),
         result=name+'/result.json') for name in ('sample_and_archive','diagnostics')])
 
 
