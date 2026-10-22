@@ -20,10 +20,16 @@ contrast report, and recounts sampler extras. The validator checks diagnostic
 site coverage and recomputes the existing gate from the saved metric summaries.
 It does not replace failed diagnostics with another criterion.
 
-This infrastructure requires focused verification and a new committed selection
-before a complete registered model attempt may use it. Small implementation
-fixtures cannot establish convergence, recovery, calibration or production
-turnaround. The existing scientific registrations and public ranking remain
+The [attempt adapter checks](../outputs/championship/development/overall-checkpoint-attempt-checks-v1/stdout.txt)
+pass **13** tests, including separate real sampler/archive and diagnostic workers,
+interrupted sealing, altered numeric bytes, diagnostic coverage and fixed retry
+selection. The [full-model binding checks](../outputs/championship/development/overall-checkpoint-attempt-profile-checks-v1/stdout.txt)
+pass **7** tests for complete collector axes, unchanged settings/gates, explicit
+worker environments, unique attempt paths and authoritative prior-service state.
+Both recorded executions confirm their checked source files were unchanged.
+These are focused engineering checks. A new [computational registration](overall_checkpoint_attempt_profile.md)
+is required before full-model fitting. The fixtures cannot establish convergence,
+recovery, calibration or production turnaround. The existing scientific registrations and public ranking remain
 unchanged. Full synthetic fitting, complete calibration, predictive evaluation,
 canonical publication and the measured end-to-end refresh are still required by
 `overall_model_plan.md`.

@@ -39,6 +39,8 @@ establish the declared stage's completion.
 The [focused process-boundary verification](../outputs/championship/development/overall-checkpoint-execution-checks-v1/stdout.txt)
 passes **10** tests under the capped scope, and the [run record](../outputs/championship/development/overall-checkpoint-execution-checks-v1/run.json)
 confirms the checked source files were unchanged. This remains unselected
-development infrastructure. Full-model worker integration, fixed-retry
-integration and a registered complete runtime benchmark remain required; these
-tests supply no overnight capability.
+development infrastructure. The subsequent [model-attempt adapter](overall_checkpoint_attempt.md)
+connects this executor to complete sampler/archive and diagnostic workers with
+the existing fixed retry controller. Its focused tests pass, while complete-model
+fitting and a registered complete runtime benchmark remain required. These tests
+supply no overnight capability.

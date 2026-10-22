@@ -187,9 +187,14 @@ observed process failures and requires process-death and artifact checks before
 recovering an interrupted attempt. Its [focused process-boundary tests](../outputs/championship/development/overall-checkpoint-execution-checks-v1/stdout.txt)
 pass **10** checks under the registered capped scope, and the test runner confirms
 the checked source files did not change. The [complete-model checkpoint replay](overall_checkpoint_model_replay_results.md)
-also passes its exact comparison across six registered designs. Model-worker and
-fixed-retry integration remain pending; this infrastructure is not yet selected
-by a fitting registration.
+also passes its exact comparison across six registered designs. The subsequent
+[model-attempt adapter](overall_checkpoint_attempt.md) connects the sampler,
+complete archive and diagnostic workers and preserves the original fixed retry
+policy. Its focused adapter and full-model binding checks pass. The separate
+[complete synthetic computational profile](overall_checkpoint_attempt_profile.md)
+selects this tested implementation only through a new committed registration.
+Complete fitting and runtime results remain unmeasured; production fitting and
+publication still require their own acceptance evidence.
 
 **Benchmark initialization from the previous accepted joint fit.** Map original
 latent variables by stable driver, event, team and circuit identities; reconstruct
