@@ -23,8 +23,10 @@ def context():
 def test_complete_profile_preserves_original_designs_full_settings_and_gates():
     parent,previous,p=context()
     for name in ('studies','synthetic','fit_settings','retry','diagnostics','inference_method',
-                 'registered_model_inputs_key'):
-        assert p[name]==previous[name]
+                 'original_model_inputs_key'):
+        if name=='original_model_inputs_key':assert p[name]==previous['registered_model_inputs_key']
+        else:assert p[name]==previous[name]
+    assert p['registered_model_inputs_key']==profile.snapshot()['key']
     assert p['chunk_draws']==parent['chunk_draws'] and p['chain_method']==parent['chain_method']
     assert p['environments']['sample_and_archive']==parent['environments']['gpu64_a']
     assert p['environments']['diagnostics']==parent['environments']['cpu64_a']

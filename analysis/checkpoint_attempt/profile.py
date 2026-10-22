@@ -33,7 +33,8 @@ def definition(parent, original):
     return dict(id='overall-checkpoint-fit-profile-v1', schema_version=2,
         status='frozen', purpose='numerical_profile', profile='deterministic_gpu_checkpoint_complete_design',
         inference_method=original['inference_method'],
-        registered_model_inputs_key=original['registered_model_inputs_key'],
+        registered_model_inputs_key=snapshot()['key'],
+        original_model_inputs_key=original['registered_model_inputs_key'],
         studies=parent['studies'], synthetic=original['synthetic'],
         fit_settings=original['fit_settings'], retry=original['retry'], diagnostics=original['diagnostics'],
         chunk_draws=parent['chunk_draws'], chain_method=parent['chain_method'],
@@ -81,8 +82,8 @@ def freeze(destination):
     if not runtime:
         raise ValueError('Bind the complete installed diagnostic Python sources')
     model = snapshot()
-    if model['key'] != previous['registered_model_inputs_key']:
-        raise ValueError('The frozen complete model or data changed')
+    if any(original['source_sha256'].get(n) != h for n,h in model['inputs'].items()):
+        raise ValueError('The complete source inventory differs from the verified backend/replay implementation')
     value = dict(definition(parent, previous), registered_at=datetime.now(timezone.utc).isoformat(),
         source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
         source_sha256={n:base.committed(ROOT,n) for n in SOURCES},

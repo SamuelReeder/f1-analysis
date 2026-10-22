@@ -7,7 +7,10 @@ stored observations, their original control basis and the complete retained
 collector. Float observations are lifted from their stored original precision;
 they are not regenerated under a new numerical environment. The model, seed
 schedule, full fitting settings, numerical gate and retry ladder are inherited
-from the original stable profile. The new registration preserves that profile's
+from the original stable profile. The new registration binds the current complete source snapshot, including the
+checkpoint modules added after the original profile, while requiring every input
+to match the already verified backend/replay source inventory. It separately
+records the original source key. The new registration preserves that profile's
 failures and selects a different verified computational implementation; it does
 not retrospectively change an earlier registration or its decision.
 
