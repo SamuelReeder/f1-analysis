@@ -1,0 +1,27 @@
+{
+  "state": "failed_before_registration_or_fitting",
+  "exit_code": 1,
+  "command": [
+    "/home/sreeder/f1-analysis/.venv/bin/python",
+    "-m",
+    "analysis.checkpoint_attempt",
+    "freeze",
+    "--output",
+    "docs/overall_checkpoint_attempt_profile_protocol.json"
+  ],
+  "exception": "ValueError",
+  "message": "The frozen complete model or data changed",
+  "reason": "The new checkpoint infrastructure expanded the source snapshot; the old numerical profile key was incorrectly required for the new registration.",
+  "source_commit": "59ef2d5",
+  "current_model_inputs_key": "a037d8851df785bf626a6843cd2d9f352afe0105625d257dd2260d09e0285b7b",
+  "added_inputs": {
+    "f1rank/overall/checkpoints.py": "450d81280fec2c15340580b9f2e94bc8681aa578e064e9274af4502fabd9d8b1",
+    "f1rank/overall/resumable_sampling.py": "260f8bebff745b0821b7f526517425f3315279c81bc4614c48e41d64b682bda6"
+  },
+  "removed_inputs": [],
+  "modified_original_inputs": [],
+  "registration_created": false,
+  "numerical_attempt_started": false,
+  "settings_changed": false,
+  "publication_allowed": false
+}
