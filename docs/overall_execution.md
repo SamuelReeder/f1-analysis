@@ -6,36 +6,41 @@ open until the full acceptance checklist has direct evidence.
 
 ## Current runtime work
 
-The user's [next-morning requirement](overall_refresh_runtime.md) is now the
-operational target. The completed [corrected computational profile](overall_stable_profile_results.md)
-and its archive audit remain computational evidence, with all failed attempts
-preserved. They do not complete recovery, calibration or canonical publication.
+The user's [next-morning requirement](overall_refresh_runtime.md) remains the
+operational target. The [corrected CPU computational profile](overall_stable_profile_results.md)
+completed every original synthetic design under its fixed numerical rules.
+Its independent saved-array audit reproduces every recorded parameter and
+current-driver contrast report and recounts all retained sampler extras.
+Failed attempts and reported synthetic truth-interval misses remain explicit;
+this is computational evidence, not complete recovery, calibration or canonical
+publication. Its committed metadata and report are now [imported into this branch](../outputs/championship/development/overall-stable-profile-metadata-import-v1/import.json)
+without changing the original evidence or moving fit arrays.
 
-The [precision investigation](overall_backend_precision_results.md) explains
-material sensitivity in the original failed CPU/GPU comparison without changing
-that failure. The separate [deterministic GPU candidate](overall_backend_determinism_results.md)
-passes the complete fixed-coordinate inventory and exact fresh-process
-repetition. [Checkpoint engineering checks](overall_checkpoint_engineering.md)
-verify staged sampling, fresh-process recovery and bounded archive writing on
-small fixtures. These improvements remain isolated from production fitting.
+The [precision investigation](overall_backend_precision_results.md) preserves
+the original failed CPU/GPU comparison. A separate
+[deterministic GPU candidate](overall_backend_determinism_results.md) passes the
+fixed-coordinate inventory and exact fresh-process repetition. The subsequent
+[complete-model checkpoint replay](overall_checkpoint_model_replay_results.md)
+passes bitwise comparison of complete posterior, sampler extras and final sampler
+state across all declared engineering designs. That short workload establishes
+restart behavior only; it cannot establish full-fit convergence or runtime.
 
-A [complete-model checkpoint replay](overall_checkpoint_model_replay_protocol.json)
-has now been frozen and [launched under the existing resource limits](../outputs/championship/development/overall-checkpoint-model-replay-launch-v1/launch.json).
-It retains every original synthetic design and tests uninterrupted execution
-against planned warmup and sampling interruptions. Its short engineering
-workload cannot establish convergence, full-fit speed or overnight publication.
-Complete-model replay, bounded diagnostic integration and a full refresh
-benchmark are still required. The historical entries below preserve earlier
-states of the work; their pending approvals and failures are not new successful
-acceptance decisions.
+The [staged model-attempt adapter](overall_checkpoint_attempt.md) now connects
+checkpoint sampling, bounded archive sealing, separate CPU diagnostics and the
+unchanged fixed retry controller. Its focused adapter and binding tests pass.
+The [new complete-fit registration](overall_checkpoint_attempt_profile_v2_protocol.json)
+selects this implementation for every original synthetic design with the full
+existing fit settings, seeds and numerical gates. The [verified capped service launch](../outputs/championship/development/overall-checkpoint-fit-profile-launch-v2/launch.json)
+and [corrected GPU worker preflight](../outputs/championship/development/overall-checkpoint-fit-preflight-v2/result.json)
+are committed. [Full fitting is now running](overall_checkpoint_attempt_profile_results.md);
+terminal inventory, convergence and measured resources remain to be reviewed.
+The earlier registration/source-identity and isolated-service-environment failures
+are preserved and occurred before sampling.
 
-The [initial replay execution failed before sampling](overall_checkpoint_model_replay_results.md)
-because its service could not resolve the NVIDIA status utility. That failure
-and every dependent phase are preserved. A capped service preflight verifies the
-corrected command path, and a new execution has launched under the same frozen
-procedure. Separately, the [archived diagnostic adapter checks](overall_checkpoint_diagnostic_results.md)
-now pass with failed reports preserved. Full-model replay, complete-attempt
-integration and measured next-morning operation remain open.
+Production fitting, accepted-posterior integration and the complete intended-runner
+refresh benchmark remain outstanding. The historical entries below retain their
+original failure and authorization boundaries. They do not grant new acceptance
+or deployment permission, and the goal remains open.
 
 Previous authorization: the user approved the prepared, separate coordinate
 experiment on 2026-10-12. Its [frozen registration](overall_rotation_profile_protocol.json)
@@ -233,8 +238,8 @@ another attempt in the exhausted profile or establish inference acceptance.
 | Shared current qualifying/race model | Joint model and synthetic interface/gradient tests | Fit, recover and calibrate its shared uncertainty |
 | Scientific specification | Executable likelihood/prior definitions and candidate contract | Final numerical/evaluation/prospective protocol before real-data fitting |
 | Complete entrant/cutoff catalog | Cutoff-first data design; outcome-free forecast catalogue; development state propagation reconstructs uncentred history and retains unseen entrants with population uncertainty | Verified as-of source/calendar inventory, accepted-posterior integration and recovery on the real transfer network |
-| Reproducible fit engine | Immutable attempts/caches; shared source/receipt/archive checks; original failed profiles preserved; checked weekend coordinates and batching now selectable through an explicit production registration; bounded diagnostics and retained sampler extras; original small profile and full-design calculation evidence preserved | Freeze final source and complete recovery/evaluation registrations; resolve the failed full-network inference; full recovery and intended-runner resource measurements remain open |
-| Known-truth recovery and simulation-based calibration | The earlier conditional weekend-coordinate profile converged on its registered connected, confounded and sparse-rookie cases; descriptive truth checks preserve interval misses. The original complete-design profile remains interrupted; its separately recorded continuation exhausted the fixed retry sequence and failed convergence, with saved-array diagnostics independently reproduced. The development evaluator covers state contrasts and observation likelihoods, distinguishes fixed-truth stress cases and requires a complete inventory | Full study registration, power justification and execution, including ranking functionals, confounding and the real transfer network; no failed case or missed truth may be discarded |
+| Reproducible fit engine | Immutable attempts/caches and source/archive checks; corrected CPU profile converged across the complete synthetic inventory with an independent saved-array audit; full-design checkpoint replay passes; staged sample/archive/diagnostic workers and fixed retries have focused verification; all historical failures preserved | Review the running full-settings GPU profile; freeze final production source and complete recovery/evaluation registrations; full recovery and intended-runner resource measurements remain open |
+| Known-truth recovery and simulation-based calibration | The corrected CPU computational profile converged for every original synthetic design, with earlier failed attempts and reported truth-interval misses preserved. Its saved-array audit reproduces numerical reports, not full recovery or calibration. Original failed/interrupted studies remain historical evidence. The development evaluator covers state contrasts and observation likelihoods, distinguishes fixed-truth stress cases and requires a complete inventory | Full study registration, power justification and execution, including ranking functionals, confounding and the real transfer network; no failed case or missed truth may be discarded |
 | Coherent weekend simulation | Student-t elimination and shared weekend uncertainty; observation kernels preserve teammate effects, context, order and completion within each joint draw; historical joint condition integration; explicit unseen-circuit outcome and qualifying track-factor extensions | Condition/circuit calibration and final registration, qualifying weather, official-grid eligibility/penalties, common operations, lapping, shortened-race and incident assumptions |
 | Scoring and ties | Explicit distance/race-control scorer, dead-heat allocation, race/qualifying countback and frozen FIA source record; targeted and full-suite checks in `development/overall-event-rule-checks/verification.json` | Generate and calibrate the required race-control and completion inputs end to end; adjudication and qualifying edge cases remain outside the simulator |
 | Ability/outcome/numerical uncertainty | Nested simulation, grouped moments and conditional ordering-sensitivity bounds; saved noise examples show that a passing noisy checker cannot establish functional convergence; final qualifying/race contrasts pass in the earlier conditional weekend-coordinate profile; the complete-design continuation failed convergence and its driver-comparison checks | Register and validate functional MCMC diagnostics and near-tie precision under converged posteriors; measure the complete nested workload; numerical profile convergence does not establish ranking precision |
