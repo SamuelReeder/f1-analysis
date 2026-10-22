@@ -1,0 +1,82 @@
+{
+  "case": "connected",
+  "phase": "warmup_stop",
+  "state": "intentional_stop",
+  "protocol_sha256": "736e0ff64afeb6c29f532b2d326eff390c35adde687308c28e5f7ac4df9848b2",
+  "started_at": "2026-10-21T23:26:38.522858+00:00",
+  "progress": [
+    {
+      "stage": "initialization",
+      "initialization_including_compilation_seconds": 62.879847908974625,
+      "checkpoint_seconds": 0.26837052300106734,
+      "draws": 0,
+      "warmup_completed": 0,
+      "checkpoint_generation": 0
+    },
+    {
+      "stage": "warmup",
+      "steps": 7,
+      "lowering_seconds": 8.53366603096947,
+      "compilation_seconds": 32.10469653096516,
+      "synchronized_execution_seconds": 5.499225853011012,
+      "host_transfer_seconds": 5.059409886598587e-07,
+      "checkpoint_seconds": 0.1641184660838917,
+      "reused_executable": false,
+      "draws": 0,
+      "warmup_completed": 7,
+      "checkpoint_generation": 1
+    }
+  ],
+  "full_fit_executed": false,
+  "convergence_evaluated": false,
+  "publication_allowed": false,
+  "actual_scope": {
+    "Slice": "f1.slice",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-checkpoint-model-replay-execution-v2.service",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "ActiveState": "active",
+    "Nice": 19,
+    "device_admission_observation": [
+      [
+        "NVIDIA GeForce RTX 5080",
+        " 16303",
+        " 11783",
+        " 617.42"
+      ]
+    ],
+    "backend": "gpu",
+    "x64": true,
+    "matmul_precision": null,
+    "device_kinds": [
+      "NVIDIA GeForce RTX 5080"
+    ],
+    "packages": {
+      "numpy": "2.5.3",
+      "scipy": "1.18.1",
+      "jax": "0.11.2",
+      "jaxlib": "0.11.2",
+      "numpyro": "0.22.0"
+    }
+  },
+  "specification": {
+    "protocol_sha256": "736e0ff64afeb6c29f532b2d326eff390c35adde687308c28e5f7ac4df9848b2",
+    "case": "connected",
+    "prepared_sha256": "8b2d5982e905c5569df89d576f4f1b2d66b476f2e275530a904ec840c943047a",
+    "settings": {
+      "chains": 4,
+      "warmup": 32,
+      "samples": 25,
+      "seed": 17,
+      "target_accept": 0.9,
+      "max_tree_depth": 10,
+      "init_median_samples": 15
+    }
+  },
+  "run_key": "db185748687a0f4fe06ed630f6429b6375787b0d9cf705701059339939d10281",
+  "cache": "outputs/championship/cache/overall-checkpoint-model-replay-v1/connected/resumed",
+  "checkpoint_tip_sha256": "02297ebf5d9042eb4d9292f943f9e2eb12623e15a4a43e52a3c3a89c8f6c51ed",
+  "seconds": 112.07903311098926,
+  "process_max_rss_kib": 3441164,
+  "finished_at": "2026-10-21T23:28:26.310966+00:00"
+}

@@ -1,0 +1,127 @@
+{
+  "case": "confounded",
+  "phase": "sampling_stop",
+  "state": "intentional_stop",
+  "protocol_sha256": "736e0ff64afeb6c29f532b2d326eff390c35adde687308c28e5f7ac4df9848b2",
+  "started_at": "2026-10-21T23:41:40.835034+00:00",
+  "progress": [
+    {
+      "stage": "warmup",
+      "steps": 7,
+      "lowering_seconds": 8.854565077926964,
+      "compilation_seconds": 43.449536651023664,
+      "synchronized_execution_seconds": 14.639248737948947,
+      "host_transfer_seconds": 4.1106250137090683e-07,
+      "checkpoint_seconds": 0.14543667307589203,
+      "reused_executable": false,
+      "draws": 0,
+      "warmup_completed": 14,
+      "checkpoint_generation": 2
+    },
+    {
+      "stage": "warmup",
+      "steps": 7,
+      "lowering_seconds": 0.0,
+      "compilation_seconds": 0.0,
+      "synchronized_execution_seconds": 14.188857960049063,
+      "host_transfer_seconds": 4.100147634744644e-07,
+      "checkpoint_seconds": 0.12446778197772801,
+      "reused_executable": true,
+      "draws": 0,
+      "warmup_completed": 21,
+      "checkpoint_generation": 3
+    },
+    {
+      "stage": "warmup",
+      "steps": 7,
+      "lowering_seconds": 0.0,
+      "compilation_seconds": 0.0,
+      "synchronized_execution_seconds": 14.431918581016362,
+      "host_transfer_seconds": 4.6403147280216217e-07,
+      "checkpoint_seconds": 0.1261708129895851,
+      "reused_executable": true,
+      "draws": 0,
+      "warmup_completed": 28,
+      "checkpoint_generation": 4
+    },
+    {
+      "stage": "warmup",
+      "steps": 4,
+      "lowering_seconds": 8.136805312009528,
+      "compilation_seconds": 32.331422486924566,
+      "synchronized_execution_seconds": 7.971137379994616,
+      "host_transfer_seconds": 4.420289769768715e-07,
+      "checkpoint_seconds": 0.137566594989039,
+      "reused_executable": false,
+      "draws": 0,
+      "warmup_completed": 32,
+      "checkpoint_generation": 5
+    },
+    {
+      "stage": "sampling",
+      "steps": 7,
+      "lowering_seconds": 8.69678976200521,
+      "compilation_seconds": 46.36322800803464,
+      "synchronized_execution_seconds": 21.236262471065857,
+      "host_transfer_seconds": 0.05368135799653828,
+      "checkpoint_seconds": 0.12633618200197816,
+      "reused_executable": false,
+      "draws": 7,
+      "warmup_completed": 32,
+      "checkpoint_generation": 6
+    }
+  ],
+  "full_fit_executed": false,
+  "convergence_evaluated": false,
+  "publication_allowed": false,
+  "actual_scope": {
+    "Slice": "f1.slice",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-checkpoint-model-replay-execution-v2.service",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "ActiveState": "active",
+    "Nice": 19,
+    "device_admission_observation": [
+      [
+        "NVIDIA GeForce RTX 5080",
+        " 16303",
+        " 11960",
+        " 617.42"
+      ]
+    ],
+    "backend": "gpu",
+    "x64": true,
+    "matmul_precision": null,
+    "device_kinds": [
+      "NVIDIA GeForce RTX 5080"
+    ],
+    "packages": {
+      "numpy": "2.5.3",
+      "scipy": "1.18.1",
+      "jax": "0.11.2",
+      "jaxlib": "0.11.2",
+      "numpyro": "0.22.0"
+    }
+  },
+  "predecessor_sha256": "03d21ee891838fbf6af66c393468fa867e310cbd9ce90adc93d47937cbf3c2cc",
+  "specification": {
+    "protocol_sha256": "736e0ff64afeb6c29f532b2d326eff390c35adde687308c28e5f7ac4df9848b2",
+    "case": "confounded",
+    "prepared_sha256": "8d40b13a86e6e2a2a8dcd66f295fae65b105c2b3925e5c0c80988d9c44c78387",
+    "settings": {
+      "chains": 4,
+      "warmup": 32,
+      "samples": 25,
+      "seed": 17,
+      "target_accept": 0.9,
+      "max_tree_depth": 10,
+      "init_median_samples": 15
+    }
+  },
+  "run_key": "f2774cc38f81f4c1c67b8c62c0521b9b907e0e606df6754a4905da1322e124bc",
+  "cache": "outputs/championship/cache/overall-checkpoint-model-replay-v1/confounded/resumed",
+  "checkpoint_tip_sha256": "10fc4f4e4b8b743ee4c05220b940c636ee1eb13f4ae2bba6b7ac77839c30fcee",
+  "seconds": 224.813028338016,
+  "process_max_rss_kib": 2753380,
+  "finished_at": "2026-10-21T23:45:13.924651+00:00"
+}

@@ -1,0 +1,1091 @@
+{
+  "case": "sparse_rookie",
+  "phase": "uninterrupted",
+  "state": "complete",
+  "protocol_sha256": "736e0ff64afeb6c29f532b2d326eff390c35adde687308c28e5f7ac4df9848b2",
+  "started_at": "2026-10-21T23:47:34.634098+00:00",
+  "progress": [
+    {
+      "stage": "initialization",
+      "initialization_including_compilation_seconds": 63.720137060037814,
+      "checkpoint_seconds": 0.2622229000553489,
+      "draws": 0,
+      "warmup_completed": 0,
+      "checkpoint_generation": 0
+    },
+    {
+      "stage": "warmup",
+      "steps": 7,
+      "lowering_seconds": 8.824795433902182,
+      "compilation_seconds": 30.84488845593296,
+      "synchronized_execution_seconds": 6.876582446042448,
+      "host_transfer_seconds": 4.0105078369379044e-07,
+      "checkpoint_seconds": 0.13175830605905503,
+      "reused_executable": false,
+      "draws": 0,
+      "warmup_completed": 7,
+      "checkpoint_generation": 1
+    },
+    {
+      "stage": "warmup",
+      "steps": 7,
+      "lowering_seconds": 0.0,
+      "compilation_seconds": 0.0,
+      "synchronized_execution_seconds": 14.629134029033594,
+      "host_transfer_seconds": 4.6298373490571976e-07,
+      "checkpoint_seconds": 0.14356873789802194,
+      "reused_executable": true,
+      "draws": 0,
+      "warmup_completed": 14,
+      "checkpoint_generation": 2
+    },
+    {
+      "stage": "warmup",
+      "steps": 7,
+      "lowering_seconds": 0.0,
+      "compilation_seconds": 0.0,
+      "synchronized_execution_seconds": 10.935242395964451,
+      "host_transfer_seconds": 5.490146577358246e-07,
+      "checkpoint_seconds": 0.1202712079975754,
+      "reused_executable": true,
+      "draws": 0,
+      "warmup_completed": 21,
+      "checkpoint_generation": 3
+    },
+    {
+      "stage": "warmup",
+      "steps": 7,
+      "lowering_seconds": 0.0,
+      "compilation_seconds": 0.0,
+      "synchronized_execution_seconds": 13.062121062073857,
+      "host_transfer_seconds": 7.479684427380562e-07,
+      "checkpoint_seconds": 0.13867505895905197,
+      "reused_executable": true,
+      "draws": 0,
+      "warmup_completed": 28,
+      "checkpoint_generation": 4
+    },
+    {
+      "stage": "warmup",
+      "steps": 4,
+      "lowering_seconds": 8.068248991039582,
+      "compilation_seconds": 35.97001623304095,
+      "synchronized_execution_seconds": 4.4364789630053565,
+      "host_transfer_seconds": 7.270136848092079e-07,
+      "checkpoint_seconds": 0.229728069039993,
+      "reused_executable": false,
+      "draws": 0,
+      "warmup_completed": 32,
+      "checkpoint_generation": 5
+    },
+    {
+      "stage": "sampling",
+      "steps": 7,
+      "lowering_seconds": 10.379515424952842,
+      "compilation_seconds": 38.213992274948396,
+      "synchronized_execution_seconds": 8.690176428994164,
+      "host_transfer_seconds": 0.07935733604244888,
+      "checkpoint_seconds": 0.16146660095546395,
+      "reused_executable": false,
+      "draws": 7,
+      "warmup_completed": 32,
+      "checkpoint_generation": 6
+    },
+    {
+      "stage": "sampling",
+      "steps": 7,
+      "lowering_seconds": 0.0,
+      "compilation_seconds": 0.0,
+      "synchronized_execution_seconds": 8.510301167028956,
+      "host_transfer_seconds": 0.06141669908538461,
+      "checkpoint_seconds": 0.16430364199914038,
+      "reused_executable": true,
+      "draws": 14,
+      "warmup_completed": 32,
+      "checkpoint_generation": 7
+    },
+    {
+      "stage": "sampling",
+      "steps": 7,
+      "lowering_seconds": 0.0,
+      "compilation_seconds": 0.0,
+      "synchronized_execution_seconds": 8.499197629047558,
+      "host_transfer_seconds": 0.070218255976215,
+      "checkpoint_seconds": 0.1645008090417832,
+      "reused_executable": true,
+      "draws": 21,
+      "warmup_completed": 32,
+      "checkpoint_generation": 8
+    },
+    {
+      "stage": "sampling",
+      "steps": 4,
+      "lowering_seconds": 8.938674075063318,
+      "compilation_seconds": 42.432439042953774,
+      "synchronized_execution_seconds": 5.2119373340392485,
+      "host_transfer_seconds": 0.06054454704280943,
+      "checkpoint_seconds": 0.12941886892076582,
+      "reused_executable": false,
+      "draws": 25,
+      "warmup_completed": 32,
+      "checkpoint_generation": 9
+    }
+  ],
+  "full_fit_executed": false,
+  "convergence_evaluated": false,
+  "publication_allowed": false,
+  "actual_scope": {
+    "Slice": "f1.slice",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/f1.slice/f1-checkpoint-model-replay-execution-v2.service",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "ActiveState": "active",
+    "Nice": 19,
+    "device_admission_observation": [
+      [
+        "NVIDIA GeForce RTX 5080",
+        " 16303",
+        " 11731",
+        " 617.42"
+      ]
+    ],
+    "backend": "gpu",
+    "x64": true,
+    "matmul_precision": null,
+    "device_kinds": [
+      "NVIDIA GeForce RTX 5080"
+    ],
+    "packages": {
+      "numpy": "2.5.3",
+      "scipy": "1.18.1",
+      "jax": "0.11.2",
+      "jaxlib": "0.11.2",
+      "numpyro": "0.22.0"
+    }
+  },
+  "specification": {
+    "protocol_sha256": "736e0ff64afeb6c29f532b2d326eff390c35adde687308c28e5f7ac4df9848b2",
+    "case": "sparse_rookie",
+    "prepared_sha256": "8eefe2e42b8191e5c4fd8b9bcb579d735724710207c659dcd562c4d18d90e0c3",
+    "settings": {
+      "chains": 4,
+      "warmup": 32,
+      "samples": 25,
+      "seed": 17,
+      "target_accept": 0.9,
+      "max_tree_depth": 10,
+      "init_median_samples": 15
+    }
+  },
+  "run_key": "88b6fd1bb6cbfe72e7797459f08635757970c485eab8113fc42094b55b5cee0b",
+  "cache": "outputs/championship/cache/overall-checkpoint-model-replay-v1/sparse_rookie/uninterrupted",
+  "sampling": {
+    "state": "draws_complete",
+    "publication_allowed": false,
+    "convergence_evaluated": false,
+    "identity_key": "dd4e5b02de26cabb05b06b41d6187dd6da87bffe7551e68101d5bc24271b1d7d",
+    "resumed_draws": 0,
+    "resumed_warmup": 0,
+    "total_draws": 25,
+    "total_warmup": 32,
+    "checkpoints": 10,
+    "timings": [
+      {
+        "stage": "initialization",
+        "initialization_including_compilation_seconds": 63.720137060037814,
+        "checkpoint_seconds": 0.2622229000553489
+      },
+      {
+        "stage": "warmup",
+        "steps": 7,
+        "lowering_seconds": 8.824795433902182,
+        "compilation_seconds": 30.84488845593296,
+        "synchronized_execution_seconds": 6.876582446042448,
+        "host_transfer_seconds": 4.0105078369379044e-07,
+        "checkpoint_seconds": 0.13175830605905503,
+        "reused_executable": false
+      },
+      {
+        "stage": "warmup",
+        "steps": 7,
+        "lowering_seconds": 0.0,
+        "compilation_seconds": 0.0,
+        "synchronized_execution_seconds": 14.629134029033594,
+        "host_transfer_seconds": 4.6298373490571976e-07,
+        "checkpoint_seconds": 0.14356873789802194,
+        "reused_executable": true
+      },
+      {
+        "stage": "warmup",
+        "steps": 7,
+        "lowering_seconds": 0.0,
+        "compilation_seconds": 0.0,
+        "synchronized_execution_seconds": 10.935242395964451,
+        "host_transfer_seconds": 5.490146577358246e-07,
+        "checkpoint_seconds": 0.1202712079975754,
+        "reused_executable": true
+      },
+      {
+        "stage": "warmup",
+        "steps": 7,
+        "lowering_seconds": 0.0,
+        "compilation_seconds": 0.0,
+        "synchronized_execution_seconds": 13.062121062073857,
+        "host_transfer_seconds": 7.479684427380562e-07,
+        "checkpoint_seconds": 0.13867505895905197,
+        "reused_executable": true
+      },
+      {
+        "stage": "warmup",
+        "steps": 4,
+        "lowering_seconds": 8.068248991039582,
+        "compilation_seconds": 35.97001623304095,
+        "synchronized_execution_seconds": 4.4364789630053565,
+        "host_transfer_seconds": 7.270136848092079e-07,
+        "checkpoint_seconds": 0.229728069039993,
+        "reused_executable": false
+      },
+      {
+        "stage": "sampling",
+        "steps": 7,
+        "lowering_seconds": 10.379515424952842,
+        "compilation_seconds": 38.213992274948396,
+        "synchronized_execution_seconds": 8.690176428994164,
+        "host_transfer_seconds": 0.07935733604244888,
+        "checkpoint_seconds": 0.16146660095546395,
+        "reused_executable": false
+      },
+      {
+        "stage": "sampling",
+        "steps": 7,
+        "lowering_seconds": 0.0,
+        "compilation_seconds": 0.0,
+        "synchronized_execution_seconds": 8.510301167028956,
+        "host_transfer_seconds": 0.06141669908538461,
+        "checkpoint_seconds": 0.16430364199914038,
+        "reused_executable": true
+      },
+      {
+        "stage": "sampling",
+        "steps": 7,
+        "lowering_seconds": 0.0,
+        "compilation_seconds": 0.0,
+        "synchronized_execution_seconds": 8.499197629047558,
+        "host_transfer_seconds": 0.070218255976215,
+        "checkpoint_seconds": 0.1645008090417832,
+        "reused_executable": true
+      },
+      {
+        "stage": "sampling",
+        "steps": 4,
+        "lowering_seconds": 8.938674075063318,
+        "compilation_seconds": 42.432439042953774,
+        "synchronized_execution_seconds": 5.2119373340392485,
+        "host_transfer_seconds": 0.06054454704280943,
+        "checkpoint_seconds": 0.12941886892076582,
+        "reused_executable": false
+      }
+    ]
+  },
+  "archive": {
+    "schema": "checkpoint_numeric_archive_v1",
+    "state": "draws_complete",
+    "identity_key": "dd4e5b02de26cabb05b06b41d6187dd6da87bffe7551e68101d5bc24271b1d7d",
+    "identity": {
+      "chain_method": "vectorized",
+      "chunk_draws": 7,
+      "implementation": {
+        "checkpoints": "450d81280fec2c15340580b9f2e94bc8681aa578e064e9274af4502fabd9d8b1",
+        "collection_runtime": "178173c74cf93631756288727502fd1a83b4ca67a6c68f469d7769825394ad88",
+        "staged_sampling": "6795205837a12f1379cfc599a6a3a27a4734699f47215efc4f5946d140e3f16a"
+      },
+      "run_key": "88b6fd1bb6cbfe72e7797459f08635757970c485eab8113fc42094b55b5cee0b",
+      "runtime": {
+        "backend": "gpu",
+        "devices": [
+          "NVIDIA GeForce RTX 5080"
+        ],
+        "environment": {
+          "CUDA_VISIBLE_DEVICES": null,
+          "JAX_CUDA_VISIBLE_DEVICES": null,
+          "JAX_ENABLE_COMPILATION_CACHE": "false",
+          "JAX_PLATFORMS": "cuda",
+          "MKL_NUM_THREADS": "2",
+          "OMP_NUM_THREADS": "2",
+          "OPENBLAS_NUM_THREADS": "2",
+          "XLA_CLIENT_MEM_FRACTION": "0.125",
+          "XLA_FLAGS": "--xla_force_host_platform_device_count=1 --xla_gpu_exclude_nondeterministic_ops=true",
+          "XLA_PYTHON_CLIENT_ALLOCATOR": "bfc",
+          "XLA_PYTHON_CLIENT_MEM_FRACTION": null,
+          "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+        },
+        "jax": "0.11.2",
+        "jaxlib": "0.11.2",
+        "matmul_precision": null,
+        "numpy": "2.5.3",
+        "numpyro": "0.22.0",
+        "python": "3.12.3",
+        "sampler_sources": {
+          "jax._src.lax.lax": "869db142c0f830b1bae931f3011f95dc6d9abc180e302f604bd9c908c6204739",
+          "numpyro.infer.hmc": "995416932344dab67935608fadde5c8ce00696a84769d369ca22394588d86ec9",
+          "numpyro.infer.hmc_util": "090e7c005db825abaf8eee72eb1a479da989903644603f1deb77af03d4c2622b",
+          "numpyro.infer.mcmc": "85385c5e52441e72310dd7328993514acb5400d1b5a4d005e9437c887d37c8da",
+          "numpyro.infer.util": "1c68d72229c374d6094f36041661c2ddc5a2cdaaf1224f349c984d57b07ee7c5"
+        },
+        "x64": true
+      },
+      "schema": 2,
+      "settings": {
+        "chains": 4,
+        "init_median_samples": 15,
+        "max_tree_depth": 10,
+        "samples": 25,
+        "seed": 17,
+        "target_accept": 0.9,
+        "warmup": 32
+      }
+    },
+    "inventory": {
+      "extras": {
+        "accept_prob": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "diverging": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "|b1"
+        },
+        "num_steps": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<i8"
+        }
+      },
+      "posterior": {
+        "age_slope": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "car": {
+          "shape": [
+            4,
+            25,
+            36
+          ],
+          "dtype": "<f8"
+        },
+        "car_event": {
+          "shape": [
+            4,
+            25,
+            36
+          ],
+          "dtype": "<f8"
+        },
+        "car_jump_z": {
+          "shape": [
+            4,
+            25,
+            36
+          ],
+          "dtype": "<f8"
+        },
+        "car_segment": {
+          "shape": [
+            4,
+            25,
+            108
+          ],
+          "dtype": "<f8"
+        },
+        "car_segment_z": {
+          "shape": [
+            4,
+            25,
+            108
+          ],
+          "dtype": "<f8"
+        },
+        "car_step_z": {
+          "shape": [
+            4,
+            25,
+            36
+          ],
+          "dtype": "<f8"
+        },
+        "car_total": {
+          "shape": [
+            4,
+            25,
+            36
+          ],
+          "dtype": "<f8"
+        },
+        "car_total_decentered": {
+          "shape": [
+            4,
+            25,
+            36
+          ],
+          "dtype": "<f8"
+        },
+        "car_track": {
+          "shape": [
+            4,
+            25,
+            36
+          ],
+          "dtype": "<f8"
+        },
+        "compat": {
+          "shape": [
+            4,
+            25,
+            62
+          ],
+          "dtype": "<f8"
+        },
+        "compat_z": {
+          "shape": [
+            4,
+            25,
+            13
+          ],
+          "dtype": "<f8"
+        },
+        "driver_form": {
+          "shape": [
+            4,
+            25,
+            62
+          ],
+          "dtype": "<f8"
+        },
+        "driver_form_z": {
+          "shape": [
+            4,
+            25,
+            62
+          ],
+          "dtype": "<f8"
+        },
+        "exp_gain": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "exp_scale": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "level_z": {
+          "shape": [
+            4,
+            25,
+            6
+          ],
+          "dtype": "<f8"
+        },
+        "mu": {
+          "shape": [
+            4,
+            25,
+            36
+          ],
+          "dtype": "<f8"
+        },
+        "nu": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_car": {
+          "shape": [
+            4,
+            25,
+            36
+          ],
+          "dtype": "<f8"
+        },
+        "overall_car_contrast": {
+          "shape": [
+            4,
+            25,
+            6
+          ],
+          "dtype": "<f8"
+        },
+        "overall_car_day_z": {
+          "shape": [
+            4,
+            25,
+            36
+          ],
+          "dtype": "<f8"
+        },
+        "overall_car_link": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_compound": {
+          "shape": [
+            4,
+            25,
+            24
+          ],
+          "dtype": "<f8"
+        },
+        "overall_day": {
+          "shape": [
+            4,
+            25,
+            62
+          ],
+          "dtype": "<f8"
+        },
+        "overall_day_z": {
+          "shape": [
+            4,
+            25,
+            62
+          ],
+          "dtype": "<f8"
+        },
+        "overall_grid": {
+          "shape": [
+            4,
+            25,
+            12
+          ],
+          "dtype": "<f8"
+        },
+        "overall_grid_base": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_grid_circuit_z": {
+          "shape": [
+            4,
+            25,
+            3
+          ],
+          "dtype": "<f8"
+        },
+        "overall_grid_sc": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_grid_wet": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_hazard": {
+          "shape": [
+            4,
+            25,
+            12
+          ],
+          "dtype": "<f8"
+        },
+        "overall_hazard_base": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_hazard_circuit_z": {
+          "shape": [
+            4,
+            25,
+            3
+          ],
+          "dtype": "<f8"
+        },
+        "overall_hazard_sc": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_hazard_wet": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_intercept": {
+          "shape": [
+            4,
+            25,
+            12
+          ],
+          "dtype": "<f8"
+        },
+        "overall_lap_controls_rotated": {
+          "shape": [
+            4,
+            25,
+            108
+          ],
+          "dtype": "<f8"
+        },
+        "overall_lap_nu": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_lap_rho": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_level_z": {
+          "shape": [
+            4,
+            25,
+            6
+          ],
+          "dtype": "<f8"
+        },
+        "overall_pace": {
+          "shape": [
+            4,
+            25,
+            12
+          ],
+          "dtype": "<f8"
+        },
+        "overall_pace_base": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_pace_circuit_z": {
+          "shape": [
+            4,
+            25,
+            3
+          ],
+          "dtype": "<f8"
+        },
+        "overall_pace_sc": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_pace_wet": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_qualifying_link": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_race_skill": {
+          "shape": [
+            4,
+            25,
+            62
+          ],
+          "dtype": "<f8"
+        },
+        "overall_sd_car_day": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_sd_day": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_sd_drift_race": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_sd_drift_season": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_sd_grid_circuit": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_sd_hazard_circuit": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_sd_lap": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_sd_level": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_sd_pace_circuit": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_sd_team": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_sd_wear": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_shared_weekend": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_team": {
+          "shape": [
+            4,
+            25,
+            62
+          ],
+          "dtype": "<f8"
+        },
+        "overall_team_link": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_team_z": {
+          "shape": [
+            4,
+            25,
+            13
+          ],
+          "dtype": "<f8"
+        },
+        "overall_traffic": {
+          "shape": [
+            4,
+            25,
+            12,
+            3
+          ],
+          "dtype": "<f8"
+        },
+        "overall_trend": {
+          "shape": [
+            4,
+            25,
+            12
+          ],
+          "dtype": "<f8"
+        },
+        "overall_tyre_slope": {
+          "shape": [
+            4,
+            25,
+            24
+          ],
+          "dtype": "<f8"
+        },
+        "overall_walk_z": {
+          "shape": [
+            4,
+            25,
+            62
+          ],
+          "dtype": "<f8"
+        },
+        "overall_wear_z": {
+          "shape": [
+            4,
+            25,
+            62
+          ],
+          "dtype": "<f8"
+        },
+        "overall_weekend_complement_z": {
+          "shape": [
+            4,
+            25,
+            62
+          ],
+          "dtype": "<f8"
+        },
+        "overall_weekend_loading": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_weekend_qualifying_scale": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_weekend_race_scale": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "overall_weekend_total_z": {
+          "shape": [
+            4,
+            25,
+            62
+          ],
+          "dtype": "<f8"
+        },
+        "rho": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "rho_reset": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "sd_car_event": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "sd_car_race": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "sd_car_reset": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "sd_car_season": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "sd_car_segment": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "sd_compat": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "sd_driver_form": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "sd_level": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "sd_skill_race": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "sd_skill_season": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "sd_track_load": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "sigma0": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "sigma_tau": {
+          "shape": [
+            4,
+            25
+          ],
+          "dtype": "<f8"
+        },
+        "sigma_u": {
+          "shape": [
+            4,
+            25,
+            36
+          ],
+          "dtype": "<f8"
+        },
+        "skill": {
+          "shape": [
+            4,
+            25,
+            62
+          ],
+          "dtype": "<f8"
+        },
+        "skill_z": {
+          "shape": [
+            4,
+            25,
+            62
+          ],
+          "dtype": "<f8"
+        },
+        "track_load": {
+          "shape": [
+            4,
+            25,
+            9
+          ],
+          "dtype": "<f8"
+        },
+        "track_load_z": {
+          "shape": [
+            4,
+            25,
+            9
+          ],
+          "dtype": "<f8"
+        }
+      }
+    },
+    "files": {
+      "posterior.npz": "bac003bfd29739cc70eedf4a7c5d9b4547211ca6853b3e2f6c694f61c71cfe00",
+      "extras.npz": "9e818a6ff769ae0895dd3200c786935f1e7e24a81eb8c4f06ab0b897f1d03148"
+    },
+    "checkpoint_generations": 10,
+    "checkpoint_tip_sha256": "60dfb4591014e524a1b7a2f9f87b28b4f3817da9ee444b88088f85fb3c13957a",
+    "convergence_evaluated": false,
+    "publication_allowed": false,
+    "timings": {
+      "posterior_archive_seconds": 0.5064074529800564,
+      "extras_archive_seconds": 0.00953872804529965
+    },
+    "preseal_seconds": 0.7530757690547034
+  },
+  "archive_manifest_sha256": "77746b1095208abb12ce1e8740881ec48d6641fe5cc6ff763663523b5974ee3d",
+  "checkpoint_tip_sha256": "60dfb4591014e524a1b7a2f9f87b28b4f3817da9ee444b88088f85fb3c13957a",
+  "seconds": 336.43484730203636,
+  "process_max_rss_kib": 3449420,
+  "finished_at": "2026-10-21T23:52:54.736691+00:00"
+}
