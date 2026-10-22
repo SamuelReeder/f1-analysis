@@ -193,8 +193,10 @@ complete archive and diagnostic workers and preserves the original fixed retry
 policy. Its focused adapter and full-model binding checks pass. The separate
 [complete synthetic computational profile](overall_checkpoint_attempt_profile.md)
 selects this tested implementation only through a new committed registration.
-Complete fitting and runtime results remain unmeasured; production fitting and
-publication still require their own acceptance evidence.
+The [corrected registered full-fit execution](overall_checkpoint_attempt_profile_results.md)
+is now running after a successful complete-design GPU worker preflight. Terminal
+fitting, convergence and runtime evidence remains outstanding; production fitting
+and publication still require their own acceptance evidence.
 
 **Benchmark initialization from the previous accepted joint fit.** Map original
 latent variables by stable driver, event, team and circuit identities; reconstruct
