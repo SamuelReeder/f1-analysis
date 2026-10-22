@@ -268,9 +268,10 @@ measure a resumable, warm-initialized update and evaluate sequential inference i
 needed before expanding expensive calibration workloads. Full model-development
 studies are versioned evidence, not a required recurring race-refresh workload.
 The user selected **by the next morning** in America/Toronto for the complete
-race-to-publication turnaround. Establish a precise local deadline before its
-timed acceptance benchmark, cover the race calendar in the intake schedule, and
-report delayed source data separately. The current code has no measured successor
+race-to-publication turnaround. The user subsequently delegated the clock-time
+choice, now fixed in [the operational target](overall_refresh_deadline.json)
+before the complete timed acceptance benchmark. Cover the race calendar in the
+intake schedule and report delayed source data separately. The current code has no measured successor
 update budget. This priority does not change the active fit, its gates or the
 scientific acceptance checklist.
 

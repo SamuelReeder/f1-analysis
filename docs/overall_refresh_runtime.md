@@ -11,8 +11,10 @@ The user selected **"By the next morning"** for updates after a race. The target
 is the following morning in **America/Toronto**, covering source availability,
 fetching, fitting, validation and the published dashboard. It is an operational
 requirement, not a measured capability or a reason to relax scientific gates.
-An exact local deadline must be fixed before registering a timed acceptance
-benchmark; the user has not specified a clock time.
+The user subsequently delegated selection of a suitable morning time. The
+[operational target](overall_refresh_deadline.json) now fixes the local deadline
+before the complete timed acceptance benchmark. This target is not a demonstrated
+capability or a deployment authorization.
 
 The current [refresh workflow](../.github/workflows/refresh.yml) checks on Monday
 and Tuesday. It does not cover the following local morning for every possible
