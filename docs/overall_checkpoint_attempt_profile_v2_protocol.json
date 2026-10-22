@@ -1,0 +1,950 @@
+{
+  "id": "overall-checkpoint-fit-profile-v2",
+  "schema_version": 2,
+  "status": "frozen",
+  "purpose": "numerical_profile",
+  "profile": "deterministic_gpu_checkpoint_complete_design",
+  "inference_method": "conditional_weekend_batched_controls_stable_studentt_v1",
+  "registered_model_inputs_key": "a037d8851df785bf626a6843cd2d9f352afe0105625d257dd2260d09e0285b7b",
+  "original_model_inputs_key": "9515a2b3c481d834396e7980d4fabb52e9ea1c89ff2eb471dcea31d38c094154",
+  "studies": [
+    "connected",
+    "confounded",
+    "sparse_rookie",
+    "dominant_teammate",
+    "era_boundary",
+    "real_network"
+  ],
+  "synthetic": {
+    "connected": {
+      "case": "connected",
+      "seed": 20261020
+    },
+    "confounded": {
+      "case": "confounded",
+      "seed": 20261021
+    },
+    "sparse_rookie": {
+      "case": "sparse_rookie",
+      "seed": 20261022
+    },
+    "dominant_teammate": {
+      "case": "dominant_teammate",
+      "seed": 20261023
+    },
+    "era_boundary": {
+      "case": "era_boundary",
+      "seed": 20261024
+    },
+    "real_network": {
+      "case": "real_network",
+      "seed": 20261025
+    }
+  },
+  "fit_settings": {
+    "warmup": 800,
+    "samples": 800,
+    "chains": 4,
+    "target_accept": 0.9,
+    "max_tree_depth": 10,
+    "init_median_samples": 15,
+    "seed": 0
+  },
+  "retry": [
+    [
+      1,
+      1,
+      null
+    ],
+    [
+      2,
+      2,
+      null
+    ],
+    [
+      3,
+      4,
+      null
+    ],
+    [
+      3,
+      4,
+      0.98
+    ]
+  ],
+  "diagnostics": {
+    "rank_rhat_strict_upper": 1.01,
+    "bulk_ess_min": 400,
+    "tail_ess_min": 400,
+    "mean_mcse_sd_upper": 0.05,
+    "divergences_per_draw_upper": 0.001
+  },
+  "chunk_draws": 7,
+  "chain_method": "vectorized",
+  "environments": {
+    "sample_and_archive": {
+      "JAX_ENABLE_X64": "true",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1 --xla_gpu_exclude_nondeterministic_ops=true",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cuda",
+      "XLA_PYTHON_CLIENT_ALLOCATOR": "bfc",
+      "XLA_CLIENT_MEM_FRACTION": "0.125",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+    },
+    "diagnostics": {
+      "JAX_ENABLE_X64": "true",
+      "JAX_ENABLE_COMPILATION_CACHE": "false",
+      "XLA_FLAGS": "--xla_force_host_platform_device_count=1",
+      "OPENBLAS_NUM_THREADS": "2",
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "JAX_PLATFORMS": "cpu"
+    }
+  },
+  "unset_environment": [
+    "JAX_DEFAULT_MATMUL_PRECISION",
+    "XLA_PYTHON_CLIENT_MEM_FRACTION"
+  ],
+  "resources": {
+    "slice": "f1.slice",
+    "MemoryMax": "3G",
+    "CPUQuota": "200%",
+    "Nice": 19
+  },
+  "shared_slice": {
+    "CPUQuotaPerSecUSec": "4s",
+    "CPUWeight": "10"
+  },
+  "gpu_admission": {
+    "pool_fraction": 0.125,
+    "max_share_of_observed_free_memory": 0.5
+  },
+  "interpreters": {
+    "sample_and_archive": "/home/sreeder/f1-analysis/.venv-gpu/bin/python",
+    "diagnostics": "/home/sreeder/f1-analysis/.venv/bin/python"
+  },
+  "path": "/usr/local/bin:/usr/bin:/bin:/usr/lib/wsl/lib",
+  "systemd_environment": {
+    "XDG_RUNTIME_DIR": "/run/user/1000",
+    "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus"
+  },
+  "full_recovery_complete": false,
+  "sbc_complete": false,
+  "publication_allowed": false,
+  "end_to_end_refresh_benchmark": false,
+  "changes_original_results": false,
+  "registered_at": "2026-10-22T03:13:09.146827+00:00",
+  "source_commit": "dfedbcd62df401bccf2038a18429d9fadd32f04c",
+  "source_sha256": {
+    "analysis/checkpoint_attempt/__init__.py": "57db93f97407adb4bd490431f3037fa9ff751f1377767d2fa97e047174f109f2",
+    "analysis/checkpoint_attempt/controller.py": "05366f395b73b7b8ba4d5f70c2704558da1a8905233bc7671019580316d49451",
+    "analysis/checkpoint_attempt/profile.py": "cd10a555622bddc142e01ac93660f82ce47cd6a38d875e3b10dcc8c76fef12c3",
+    "analysis/checkpoint_attempt/worker.py": "a6b8021ec735a4c16d04b1695d15ee74154f3ac51c53dc0b16f59b72328303a2",
+    "analysis/checkpoint_attempt/__main__.py": "4a0d33daba00d014f41aeafd851eaafab8157d859a096064a6aa7865520e9d23",
+    "analysis/checkpoint_attempt/runner.py": "396a74ced79b386de4030b0f0c3dec197292bb75e6f8d056fe94f11b5cfa216e",
+    "analysis/checkpoint_execution/__init__.py": "b17588c00cc4bccd5a7d44444d911dfdd5cf2ca7315bf995544e19efc6b152c4",
+    "analysis/checkpoint_execution/__main__.py": "5a7c63f2da83921045d0582e0af17dcc61f164b9cce4a8f7ff903affc516ef1e",
+    "analysis/checkpoint_diagnostics/__init__.py": "8a0d9e90105817c3a0113ef9eca36a26124efd895033ec52206468d7cb7da8c5",
+    "tests/test_overall_checkpoint_attempt.py": "c12a523b8f24ce26f9b186c0fc64a276f6c9bc8e225288e07f580fab2c2007e1",
+    "tests/test_overall_checkpoint_attempt_profile.py": "b4473109ae255c5a9a813763d18f3a422506a14e27c060df454c85a2c94e0df8",
+    "docs/overall_checkpoint_attempt.md": "c796ab1861ece6ac396e71654048eef965be90540b88b66b35cb9d7a96699341",
+    "docs/overall_checkpoint_attempt_profile.md": "879b3ef0cc54de6e58404a5872e0c5280ad0c9717d1590b4ada527c4b3e1321f"
+  },
+  "evidence_sha256": {
+    "docs/overall_checkpoint_model_replay_protocol.json": "736e0ff64afeb6c29f532b2d326eff390c35adde687308c28e5f7ac4df9848b2",
+    "docs/overall_stable_profile_protocol.json": "87b30c60922d705d955db8cddbec249f31781ca70540f06146967fdcf9bb0eb6",
+    "outputs/championship/development/overall-checkpoint-model-replay-execution-v2/comparison.json": "c9a7eaef7c702544ae7aefa59447e7cf5d5b4b03bb9ae7498701ef752d9448df",
+    "outputs/championship/development/overall-checkpoint-model-replay-execution-v2/terminal.json": "8b257cf2f87b6d29a8ecb399a30c230296e06b230ca23ce05d880cf8cd5c18c1",
+    "outputs/championship/development/overall-checkpoint-attempt-checks-v1/run.json": "32c6a9c1a0ef70cfe033f56629f32ca07b4472bf34c2404f6b94def7afc4fbd9",
+    "outputs/championship/development/overall-checkpoint-attempt-checks-v1/stdout.txt": "a7f3809ec940bdef9855784f08e1de6d63746da4f92f8f55e6fb5616224760d3",
+    "outputs/championship/development/overall-checkpoint-attempt-profile-checks-v3/run.json": "e6042644593c4a33cc98064837b599fb083257670d60edfc604b74deb9b2ab6c",
+    "outputs/championship/development/overall-checkpoint-attempt-profile-checks-v3/stdout.txt": "04da4a1ef16d2966b66b717dcd535d2104616be8ba69a5d926074d78f2d8946f",
+    "docs/overall_checkpoint_attempt_profile_protocol.json": "680aee116d1f1c3a3e1b964641a7dfe1ffa0d458e0747ea9575a81624b930da9",
+    "outputs/championship/development/overall-checkpoint-fit-preflight-v1/run.json": "c33e9fbbeea63f6fcc0cc3cbed5907870da671c2cd699b65ff96ac6d76e61ea7",
+    "outputs/championship/development/overall-checkpoint-fit-preflight-v1/stdout.txt": "0da88cd0a2396e7de85bc0d4ba886b4e6e06faf81e91ab4c6bba99d6a2e6674e",
+    "outputs/championship/development/overall-checkpoint-model-replay-execution-v2/sample/connected/resume/result.json": "8caf3d5760bd3369bd7d36328c69ff5936d1e459267c009351d4c3ddcf273482",
+    "outputs/championship/development/overall-checkpoint-model-replay-execution-v2/sample/confounded/resume/result.json": "099ecdfc34e64fecd279846ab9ef3e5ce34ead99eb5ed52219e17d6454b81d36",
+    "outputs/championship/development/overall-checkpoint-model-replay-execution-v2/sample/sparse_rookie/resume/result.json": "f3459ac1eba787315945e5241afa1c198bb31de70e7f6cfa2ffee74e591d7de9",
+    "outputs/championship/development/overall-checkpoint-model-replay-execution-v2/sample/dominant_teammate/resume/result.json": "51fdd82f1a38291d385ebf3bd35f651091803dfd8085b7cf4c3a59238a9bffc9",
+    "outputs/championship/development/overall-checkpoint-model-replay-execution-v2/sample/era_boundary/resume/result.json": "ed2ad7c888c21169485d1b17f4aa514e1402e14c1f6c4e672f2c014f636ef2e5",
+    "outputs/championship/development/overall-checkpoint-model-replay-execution-v2/sample/real_network/resume/result.json": "ed328aee6f7360b67672542b5f7d7f063351db713b354c5d33a3e24a3d72ba0d",
+    "outputs/championship/development/overall-backend-comparison-v1/prepare/cpu/connected/result.json": "8b2d5982e905c5569df89d576f4f1b2d66b476f2e275530a904ec840c943047a",
+    "outputs/championship/development/overall-backend-comparison-v1/prepare/cpu/confounded/result.json": "8d40b13a86e6e2a2a8dcd66f295fae65b105c2b3925e5c0c80988d9c44c78387",
+    "outputs/championship/development/overall-backend-comparison-v1/prepare/cpu/sparse_rookie/result.json": "8eefe2e42b8191e5c4fd8b9bcb579d735724710207c659dcd562c4d18d90e0c3",
+    "outputs/championship/development/overall-backend-comparison-v1/prepare/cpu/dominant_teammate/result.json": "15d20537a37d7ac9205c6b5ea6dc60fdbf129c87a207052d2d7d613d6d626cff",
+    "outputs/championship/development/overall-backend-comparison-v1/prepare/cpu/era_boundary/result.json": "d5667fd68452065858da0fa45317e08fda3ced0f77f27db0e780a123ed354056",
+    "outputs/championship/development/overall-backend-comparison-v1/prepare/cpu/real_network/result.json": "7a2fc4ca7c9d812516a95cbf29d3383e8ed0ee6389eeb6e1f413414e94b234b6"
+  },
+  "runtime_sha256": {
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/__init__.py": "9f0a1d70b5a41df85367d79994715052f2ce930b4617877d2ba4b0b6c8e2f6f9",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/_version.py": "9fc7e3aa519d5f8131a3b8dbc9fcae454a138ff020883a2213e63d2796c03387",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/accessors.py": "072d203d8745731948e76c35ed3cc783ca7d78e212a464548518597c9882e969",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/base/__init__.py": "ec75ea15ed242c426c827d5a04d2e967b6c784e159302dced7f3edb6e3294593",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/base/array.py": "6beea13e9094ca7dd69543e6ba2959f156d7bdec91c7b93ff5fc96599a2a8be7",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/base/circular_utils.py": "be713267c5343d3065baba57205c22fb51179b1e739b3994eee3db9a9918ec99",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/base/core.py": "723b32b4bcbbeb9d68bb258026f175e1ac9b0b266a77d63b3e1635a9112bbde7",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/base/dataarray.py": "b124284f8c985d001f60d9fa7bddb11fe2ca71cfd37e1a5eaf4d68b1c7bd21f3",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/base/density.py": "cf4dd113b33043021249bfd600c0aea278b68054592157dcdbb08e88cfe003bd",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/base/diagnostics.py": "ce81d254681d9b027e7e3c6b93f83b8caeeb4afe86bfe7240245562c602fca70",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/base/stats_utils.py": "949173edbd395248bb2902ba67f5fa70fb60dc09e738cb7bf6608208945c3436",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/bayes_factor.py": "7f96ca0cb32b2aed1bff2d511500095d0ede358546aabc8d050c29c1318ca343",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/ecdf_utils.py": "d63591c4af1bc3eea0e7400075ecdb87372eefd2d16e392be2063f6b4ed3427c",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/helper_stats.py": "2f7952138d5a0b952fecccf9a297c57f98c32472e7b6cc2ac48acc432a76d546",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/__init__.py": "b11db3631d45e17caf331b2f249fee7a2a88228e6ab6616da473937e3f1ea4da",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/compare.py": "1c9f871985d8cd35597f84747e1cfe9f7ffec38cc9dd1cd217958fda83617e2a",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/lfo_cv.py": "a80d3b281156a5a0ef412e6966ee6aa25f1002675aad91dfc63fb563a6930471",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/lfo_cv_helper.py": "ee30edefbe31fab0aa6981e24d524716e9249f72b5b128318a8cf04ce5fdcee0",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/loo.py": "30798a414d9d917d0310f709b0b0f2448e796bf58b497ff8eb41e68bf93410a8",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/loo_approximate_posterior.py": "5900df92120c82c0bd1b40d6bf186ef7507adefa990be12304d5f983383f6e48",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/loo_expectations.py": "1a70abca46a672a3b63d5f4fa3c299ae6d111ac6138144cd128bce8fba7daea1",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/loo_helper.py": "60b411ab934e53bdeb90897d776c4a09ef01194c4cf38eecbe84bdb645803f24",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/loo_influence.py": "6b1fb02495a157ff2ba88bc045d0cacb2187e73cdbe4c950632e03da7bbf7520",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/loo_kfold.py": "8c61a9c488d5bf0bbae4eddc133d0ad12bc9495a8ae354baa4948cec02447eba",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/loo_kfold_helper.py": "23b9a3184ed4b3147c43ae47bdf499bb7af1cf49e619274943c430f524883eb5",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/loo_moment_match.py": "54cbe3d6d006d36fcd5c979b95bf583d06802d692032f1dd3590845d5fa2c57b",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/loo_moment_match_helper.py": "464ca0fac6c8519a6e985c45992e0a172cc0f218afb40538c25d83f8533848cb",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/loo_pit.py": "f6bf75d97708377fd77a81386b2d6f235d2aa961d859981176fdf38d9f243e6c",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/loo_score.py": "672f840d4f148955bb4e9806445749cf2d0bad78fc26ac8ecde98368b59239cd",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/loo_subsample.py": "2f19f996030db67a2108fe2b7506a54e88f98d7dec4b1e90d03e37a73a1cd902",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/loo_subsample_helper.py": "92ef2a884665a9296dc608ae4a43b76dd8209ce4933fdc24f3c853dcdc9e8821",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/pymc_helper.py": "c49f37a3e7636e10dad1483a75f01d184264ee09ded2a0951d807f38d8b05c92",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/reloo.py": "7b693e6268b564a403dca7cfbe1ead4efafe9944bf2a6e074d17254a3105c1c1",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/loo/wrapper.py": "33ffb21cc9d2e590f2c1c0ac2ab001be2d7f1b322584841541e0808317c2ac48",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/manipulation.py": "8998970724a178b4df0482751c79ac15117851e41c25b737b69283833f150413",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/metrics.py": "8f4b7412a4440e37d2ef0ed46825525b67f0cd079917757c025253f4c8edc5eb",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/numba/__init__.py": "7091daad14b46b84238beb9c284639853ba495317aaadd915c1a4d1bd5bf3a7c",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/numba/array.py": "9d4005f0557dcdebe490b220857194460968c855dd1cbb1fdbc3270b15877af2",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/numba/dataarray.py": "7675f77da2a0f03f686e31f7b527e278b8dc59e697a35a776c64121fa8b8dac1",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/numba/diagnostics.py": "d9fda2de7afa6d4f99bb3e6c076d21f2e06e0587adda13f80d31ebefe2112f1c",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/numba/intervals.py": "e88d7cddd1e2b0535cc4fae2279a4c2a2f7c3e49985b645741aef03195457a18",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/psense.py": "d64b0e0d65d1a87d4bb23594b618ec0d770931a64fed5088d86724fd8f6bcb3f",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/sampling_diagnostics.py": "7c2e93168022ec1da7acdf43503674261183cad7f60c09189b034fcbf05ee156",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/summary.py": "580ca496fb052d33a9afd1b9cee5db6a1ffe069e74467798dc1e43b286e124ec",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/survival.py": "1a26467cdda052892400106fa61ece614122f3289d794e4f05a7adafb4747840",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/utils.py": "0fd567b465ec68eaf8385597c1188915df077ad0480777494e3ccbb36fbbf5a1",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/validate.py": "e9eff01d86c41fcd07f1b78f2acabaa8b9ca091cf2389bd67bc2d286b7d06b24",
+    "/home/sreeder/f1-analysis/.venv/lib/python3.12/site-packages/arviz_stats/visualization.py": "69f59f7405118f28fb7b4c36d10459dd43b87d6914becf0413208b03476e885d"
+  },
+  "catalogs": {
+    "connected": {
+      "cutoff": "2023-04",
+      "field": [
+        "synthetic_0",
+        "synthetic_1",
+        "synthetic_2",
+        "synthetic_3",
+        "synthetic_4",
+        "synthetic_5"
+      ],
+      "field_entries": [
+        11,
+        23,
+        35,
+        47,
+        59,
+        71
+      ],
+      "circuits": [
+        "track_0",
+        "track_1",
+        "track_2"
+      ],
+      "excluded_context_events": [],
+      "excluded_status_rows": [],
+      "outcome_events": [
+        "2021-01",
+        "2021-02",
+        "2021-03",
+        "2021-04",
+        "2022-01",
+        "2022-02",
+        "2022-03",
+        "2022-04",
+        "2023-01",
+        "2023-02",
+        "2023-03",
+        "2023-04"
+      ],
+      "first_lap_event": "2021-01",
+      "last_lap_event": "2023-04",
+      "synthetic_case": "connected",
+      "generation_seed": 20261020,
+      "experiment": "conditional_observation_design",
+      "real_driver_ranking": false,
+      "inference_method": "conditional_weekend_batched_controls_stable_studentt_v1",
+      "control_rotation_sha256": "fd8235b6254ee2b2ab28bd164df64fcd9c5a920bb2ee0ac77934c4d4f9442bd0",
+      "preflight_sha256": "ab5d3c82d2b1f915066d168c785a6b02980c2f35c4c43fe304326a1809c6bbda"
+    },
+    "confounded": {
+      "cutoff": "2023-04",
+      "field": [
+        "synthetic_0",
+        "synthetic_1",
+        "synthetic_2",
+        "synthetic_3",
+        "synthetic_4",
+        "synthetic_5"
+      ],
+      "field_entries": [
+        11,
+        23,
+        35,
+        47,
+        59,
+        71
+      ],
+      "circuits": [
+        "track_0",
+        "track_1",
+        "track_2"
+      ],
+      "excluded_context_events": [],
+      "excluded_status_rows": [],
+      "outcome_events": [
+        "2021-01",
+        "2021-02",
+        "2021-03",
+        "2021-04",
+        "2022-01",
+        "2022-02",
+        "2022-03",
+        "2022-04",
+        "2023-01",
+        "2023-02",
+        "2023-03",
+        "2023-04"
+      ],
+      "first_lap_event": "2021-01",
+      "last_lap_event": "2023-04",
+      "synthetic_case": "confounded",
+      "generation_seed": 20261021,
+      "experiment": "conditional_observation_design",
+      "real_driver_ranking": false,
+      "inference_method": "conditional_weekend_batched_controls_stable_studentt_v1",
+      "control_rotation_sha256": "fd8235b6254ee2b2ab28bd164df64fcd9c5a920bb2ee0ac77934c4d4f9442bd0",
+      "preflight_sha256": "098c839e872349695b25d16c047d03d078cacd547f9a54abe89e5419fb455db0"
+    },
+    "sparse_rookie": {
+      "cutoff": "2023-04",
+      "field": [
+        "synthetic_0",
+        "synthetic_1",
+        "synthetic_2",
+        "synthetic_3",
+        "synthetic_4",
+        "synthetic_5"
+      ],
+      "field_entries": [
+        11,
+        23,
+        35,
+        47,
+        59,
+        61
+      ],
+      "circuits": [
+        "track_0",
+        "track_1",
+        "track_2"
+      ],
+      "excluded_context_events": [],
+      "excluded_status_rows": [],
+      "outcome_events": [
+        "2021-01",
+        "2021-02",
+        "2021-03",
+        "2021-04",
+        "2022-01",
+        "2022-02",
+        "2022-03",
+        "2022-04",
+        "2023-01",
+        "2023-02",
+        "2023-03",
+        "2023-04"
+      ],
+      "first_lap_event": "2021-01",
+      "last_lap_event": "2023-04",
+      "synthetic_case": "sparse_rookie",
+      "generation_seed": 20261022,
+      "experiment": "conditional_observation_design",
+      "real_driver_ranking": false,
+      "inference_method": "conditional_weekend_batched_controls_stable_studentt_v1",
+      "control_rotation_sha256": "d6a64b7b64eab409fcd3c719bfb22e0abaf5a5c557df623cf31cbf21322a791c",
+      "preflight_sha256": "e690affbed6937490a91eaaa07631d1bee147031dba5d971e3e76f343d3e486c"
+    },
+    "dominant_teammate": {
+      "cutoff": "2023-04",
+      "field": [
+        "synthetic_0",
+        "synthetic_1",
+        "synthetic_2",
+        "synthetic_3",
+        "synthetic_4",
+        "synthetic_5"
+      ],
+      "field_entries": [
+        11,
+        23,
+        35,
+        47,
+        59,
+        71
+      ],
+      "circuits": [
+        "track_0",
+        "track_1",
+        "track_2"
+      ],
+      "excluded_context_events": [],
+      "excluded_status_rows": [],
+      "outcome_events": [
+        "2021-01",
+        "2021-02",
+        "2021-03",
+        "2021-04",
+        "2022-01",
+        "2022-02",
+        "2022-03",
+        "2022-04",
+        "2023-01",
+        "2023-02",
+        "2023-03",
+        "2023-04"
+      ],
+      "first_lap_event": "2021-01",
+      "last_lap_event": "2023-04",
+      "synthetic_case": "dominant_teammate",
+      "generation_seed": 20261023,
+      "experiment": "conditional_observation_design",
+      "real_driver_ranking": false,
+      "inference_method": "conditional_weekend_batched_controls_stable_studentt_v1",
+      "control_rotation_sha256": "fd8235b6254ee2b2ab28bd164df64fcd9c5a920bb2ee0ac77934c4d4f9442bd0",
+      "preflight_sha256": "a3bb8658c2153e047af55f7729c02163839d86396e705da3b9c8e29fa5cf2c5a"
+    },
+    "era_boundary": {
+      "cutoff": "2026-04",
+      "field": [
+        "synthetic_0",
+        "synthetic_1",
+        "synthetic_2",
+        "synthetic_3",
+        "synthetic_4",
+        "synthetic_5"
+      ],
+      "field_entries": [
+        11,
+        23,
+        35,
+        47,
+        59,
+        71
+      ],
+      "circuits": [
+        "track_0",
+        "track_1",
+        "track_2"
+      ],
+      "excluded_context_events": [],
+      "excluded_status_rows": [],
+      "outcome_events": [
+        "2021-01",
+        "2021-02",
+        "2021-03",
+        "2021-04",
+        "2022-01",
+        "2022-02",
+        "2022-03",
+        "2022-04",
+        "2026-01",
+        "2026-02",
+        "2026-03",
+        "2026-04"
+      ],
+      "first_lap_event": "2021-01",
+      "last_lap_event": "2026-04",
+      "synthetic_case": "era_boundary",
+      "generation_seed": 20261024,
+      "experiment": "conditional_observation_design",
+      "real_driver_ranking": false,
+      "inference_method": "conditional_weekend_batched_controls_stable_studentt_v1",
+      "control_rotation_sha256": "fd8235b6254ee2b2ab28bd164df64fcd9c5a920bb2ee0ac77934c4d4f9442bd0",
+      "preflight_sha256": "73716074a3b29776beaf69b030383ddf621a8d304f4fe42d97fb06517509a5df"
+    },
+    "real_network": {
+      "cutoff": "2026-15",
+      "field": [
+        "albon",
+        "alonso",
+        "antonelli",
+        "arvid_lindblad",
+        "bearman",
+        "bortoleto",
+        "bottas",
+        "colapinto",
+        "gasly",
+        "hadjar",
+        "hamilton",
+        "hulkenberg",
+        "lawson",
+        "leclerc",
+        "max_verstappen",
+        "norris",
+        "ocon",
+        "perez",
+        "piastri",
+        "russell",
+        "sainz",
+        "stroll"
+      ],
+      "field_entries": [
+        144,
+        485,
+        544,
+        559,
+        639,
+        678,
+        940,
+        1274,
+        1601,
+        2009,
+        2352,
+        2649,
+        3337,
+        3525,
+        4062,
+        4406,
+        4601,
+        4899,
+        5042,
+        5937,
+        6184,
+        6467
+      ],
+      "circuits": [
+        "albert_park",
+        "americas",
+        "bahrain",
+        "baku",
+        "buddh",
+        "catalunya",
+        "hockenheimring",
+        "hungaroring",
+        "imola",
+        "interlagos",
+        "istanbul",
+        "jeddah",
+        "losail",
+        "madring",
+        "marina_bay",
+        "miami",
+        "monaco",
+        "monza",
+        "mugello",
+        "nurburgring",
+        "portimao",
+        "red_bull_ring",
+        "ricard",
+        "rodriguez",
+        "sepang",
+        "shanghai",
+        "silverstone",
+        "sochi",
+        "spa",
+        "suzuka",
+        "valencia",
+        "vegas",
+        "villeneuve",
+        "yas_marina",
+        "yeongam",
+        "zandvoort"
+      ],
+      "excluded_context_events": [
+        "2018-14"
+      ],
+      "excluded_status_rows": [
+        {
+          "event_id": "2018-18",
+          "driver_id": "ocon",
+          "status": "Disqualified"
+        },
+        {
+          "event_id": "2018-18",
+          "driver_id": "kevin_magnussen",
+          "status": "Disqualified"
+        },
+        {
+          "event_id": "2019-17",
+          "driver_id": "ricciardo",
+          "status": "Disqualified"
+        },
+        {
+          "event_id": "2019-17",
+          "driver_id": "hulkenberg",
+          "status": "Disqualified"
+        },
+        {
+          "event_id": "2019-18",
+          "driver_id": "norris",
+          "status": "Withdrew"
+        },
+        {
+          "event_id": "2020-14",
+          "driver_id": "kevin_magnussen",
+          "status": "Withdrew"
+        },
+        {
+          "event_id": "2021-11",
+          "driver_id": "vettel",
+          "status": "Disqualified"
+        },
+        {
+          "event_id": "2022-02",
+          "driver_id": "mick_schumacher",
+          "status": "Withdrew"
+        },
+        {
+          "event_id": "2023-14",
+          "driver_id": "tsunoda",
+          "status": "Did not start"
+        },
+        {
+          "event_id": "2023-15",
+          "driver_id": "stroll",
+          "status": "Withdrew"
+        },
+        {
+          "event_id": "2023-17",
+          "driver_id": "sainz",
+          "status": "Did not start"
+        },
+        {
+          "event_id": "2023-18",
+          "driver_id": "hamilton",
+          "status": "Disqualified"
+        },
+        {
+          "event_id": "2023-18",
+          "driver_id": "leclerc",
+          "status": "Disqualified"
+        },
+        {
+          "event_id": "2023-19",
+          "driver_id": "alonso",
+          "status": "Withdrew"
+        },
+        {
+          "event_id": "2023-20",
+          "driver_id": "leclerc",
+          "status": "Did not start"
+        },
+        {
+          "event_id": "2024-12",
+          "driver_id": "gasly",
+          "status": "Did not start"
+        },
+        {
+          "event_id": "2024-14",
+          "driver_id": "russell",
+          "status": "Disqualified"
+        },
+        {
+          "event_id": "2024-21",
+          "driver_id": "albon",
+          "status": "Did not start"
+        },
+        {
+          "event_id": "2024-21",
+          "driver_id": "stroll",
+          "status": "Did not start"
+        },
+        {
+          "event_id": "2024-21",
+          "driver_id": "hulkenberg",
+          "status": "Disqualified"
+        },
+        {
+          "event_id": "2025-02",
+          "driver_id": "leclerc",
+          "status": "Disqualified"
+        },
+        {
+          "event_id": "2025-02",
+          "driver_id": "hamilton",
+          "status": "Disqualified"
+        },
+        {
+          "event_id": "2025-02",
+          "driver_id": "gasly",
+          "status": "Disqualified"
+        },
+        {
+          "event_id": "2025-04",
+          "driver_id": "hulkenberg",
+          "status": "Disqualified"
+        },
+        {
+          "event_id": "2025-11",
+          "driver_id": "sainz",
+          "status": "Did not start"
+        },
+        {
+          "event_id": "2025-12",
+          "driver_id": "colapinto",
+          "status": "Did not start"
+        },
+        {
+          "event_id": "2025-16",
+          "driver_id": "hulkenberg",
+          "status": "Did not start"
+        },
+        {
+          "event_id": "2025-22",
+          "driver_id": "norris",
+          "status": "Disqualified"
+        },
+        {
+          "event_id": "2025-22",
+          "driver_id": "piastri",
+          "status": "Disqualified"
+        },
+        {
+          "event_id": "2026-01",
+          "driver_id": "piastri",
+          "status": "Did not start"
+        },
+        {
+          "event_id": "2026-01",
+          "driver_id": "hulkenberg",
+          "status": "Did not start"
+        },
+        {
+          "event_id": "2026-02",
+          "driver_id": "piastri",
+          "status": "Did not start"
+        },
+        {
+          "event_id": "2026-02",
+          "driver_id": "norris",
+          "status": "Did not start"
+        },
+        {
+          "event_id": "2026-02",
+          "driver_id": "bortoleto",
+          "status": "Did not start"
+        },
+        {
+          "event_id": "2026-02",
+          "driver_id": "albon",
+          "status": "Did not start"
+        },
+        {
+          "event_id": "2026-05",
+          "driver_id": "arvid_lindblad",
+          "status": "Did not start"
+        }
+      ],
+      "outcome_events": [
+        "2018-01",
+        "2018-02",
+        "2018-03",
+        "2018-04",
+        "2018-05",
+        "2018-06",
+        "2018-07",
+        "2018-08",
+        "2018-09",
+        "2018-10",
+        "2018-11",
+        "2018-12",
+        "2018-13",
+        "2018-15",
+        "2018-16",
+        "2018-17",
+        "2018-18",
+        "2018-19",
+        "2018-20",
+        "2018-21",
+        "2019-01",
+        "2019-02",
+        "2019-03",
+        "2019-04",
+        "2019-05",
+        "2019-06",
+        "2019-07",
+        "2019-08",
+        "2019-09",
+        "2019-10",
+        "2019-11",
+        "2019-12",
+        "2019-13",
+        "2019-14",
+        "2019-15",
+        "2019-16",
+        "2019-17",
+        "2019-18",
+        "2019-19",
+        "2019-20",
+        "2019-21",
+        "2020-01",
+        "2020-02",
+        "2020-03",
+        "2020-04",
+        "2020-05",
+        "2020-06",
+        "2020-07",
+        "2020-08",
+        "2020-09",
+        "2020-10",
+        "2020-11",
+        "2020-12",
+        "2020-13",
+        "2020-14",
+        "2020-15",
+        "2020-16",
+        "2020-17",
+        "2021-01",
+        "2021-02",
+        "2021-03",
+        "2021-04",
+        "2021-05",
+        "2021-06",
+        "2021-07",
+        "2021-08",
+        "2021-09",
+        "2021-10",
+        "2021-11",
+        "2021-12",
+        "2021-13",
+        "2021-14",
+        "2021-15",
+        "2021-16",
+        "2021-17",
+        "2021-18",
+        "2021-19",
+        "2021-20",
+        "2021-21",
+        "2021-22",
+        "2022-01",
+        "2022-02",
+        "2022-03",
+        "2022-04",
+        "2022-05",
+        "2022-06",
+        "2022-07",
+        "2022-08",
+        "2022-09",
+        "2022-10",
+        "2022-11",
+        "2022-12",
+        "2022-13",
+        "2022-14",
+        "2022-15",
+        "2022-16",
+        "2022-17",
+        "2022-18",
+        "2022-19",
+        "2022-20",
+        "2022-21",
+        "2022-22",
+        "2023-01",
+        "2023-02",
+        "2023-03",
+        "2023-04",
+        "2023-05",
+        "2023-06",
+        "2023-07",
+        "2023-08",
+        "2023-09",
+        "2023-10",
+        "2023-11",
+        "2023-12",
+        "2023-13",
+        "2023-14",
+        "2023-15",
+        "2023-16",
+        "2023-17",
+        "2023-18",
+        "2023-19",
+        "2023-20",
+        "2023-21",
+        "2023-22",
+        "2024-01",
+        "2024-02",
+        "2024-03",
+        "2024-04",
+        "2024-05",
+        "2024-06",
+        "2024-07",
+        "2024-08",
+        "2024-09",
+        "2024-10",
+        "2024-11",
+        "2024-12",
+        "2024-13",
+        "2024-14",
+        "2024-15",
+        "2024-16",
+        "2024-17",
+        "2024-18",
+        "2024-19",
+        "2024-20",
+        "2024-21",
+        "2024-22",
+        "2024-23",
+        "2024-24",
+        "2025-01",
+        "2025-02",
+        "2025-03",
+        "2025-04",
+        "2025-05",
+        "2025-06",
+        "2025-07",
+        "2025-08",
+        "2025-09",
+        "2025-10",
+        "2025-11",
+        "2025-12",
+        "2025-13",
+        "2025-14",
+        "2025-15",
+        "2025-16",
+        "2025-17",
+        "2025-18",
+        "2025-19",
+        "2025-20",
+        "2025-21",
+        "2025-22",
+        "2025-23",
+        "2025-24",
+        "2026-01",
+        "2026-02",
+        "2026-03",
+        "2026-04",
+        "2026-05",
+        "2026-06",
+        "2026-07",
+        "2026-08",
+        "2026-09",
+        "2026-10",
+        "2026-11",
+        "2026-12",
+        "2026-13",
+        "2026-14",
+        "2026-15"
+      ],
+      "first_lap_event": "2018-02",
+      "last_lap_event": "2026-15",
+      "synthetic_case": "real_network",
+      "generation_seed": 20261025,
+      "experiment": "conditional_observation_design",
+      "real_driver_ranking": false,
+      "inference_method": "conditional_weekend_batched_controls_stable_studentt_v1",
+      "control_rotation_sha256": "cb1d4a21cdf1d0b639851733c2d4747d1e3d7337e946c6e97745e4d55cff07c8",
+      "preflight_sha256": "abd1bd2849bbaccfeb75ddbcbc35a1039d65220a6807d86faedd8fd87e625f10"
+    }
+  }
+}
