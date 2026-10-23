@@ -1,7 +1,8 @@
 import type { CSSProperties, ReactNode } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { date, pct, signed } from "../lib";
-import type { Dataset, Estimate, RaceValidation } from "../types";
+import type { Dataset, Estimate, OverallPreview, RaceValidation } from "../types";
+import { previewValidation } from "./Overall";
 import { performanceScale, PerformanceKey } from "../performance";
 import "./Briefing.css";
 
@@ -125,18 +126,21 @@ function RaceChapter({ data }: { data: Dataset }) {
   </Chapter>;
 }
 
-function OverallChapter({ data }: { data: Dataset }) {
+function OverallChapter({ data, preview }: { data: Dataset; preview?: OverallPreview }) {
   const result = data.overall;
   const evidence = result?.status === "established" || result?.status === "not established" ? result.evidence : null;
   const established = result?.status === "established" && evidence?.combined_validation.gate === true && result.standings.length > 0;
-  const rows = established ? [...result.standings].sort((a, b) => b.points_per_race - a.points_per_race) : [];
+  const shown = established ? undefined : preview;
+  const rows = [...(established ? result.standings : shown?.standings || [])].sort((a, b) => b.points_per_race - a.points_per_race);
   const scale = performanceScale(rows.map((row) => row.points_per_race));
   const state = result?.status === "established" && !established ? "not established" : result?.status || "unavailable";
   const reason = result?.status === "established" && !established ? "This release does not contain a validated overall ranking." : result?.reason || "No verified championship results are available in this release yet.";
   return <Chapter title="Overall (equal car)"
-    source={evidence ? <>Recorded {date(evidence.recorded_at)}{evidence.data_as_of && <> · Data through {evidence.data_as_of}</>}</> : "No verified championship release"}
-    description="Experimental · equal average machinery · driver–team effects retained">
-    {established ? <>
+    source={shown ? <>Recorded {date(shown.recorded_at)} · Data through {shown.data_as_of.race_name}</>
+      : evidence ? <>Recorded {date(evidence.recorded_at)}{evidence.data_as_of && <> · Data through {evidence.data_as_of}</>}</> : "No verified championship release"}
+    description={`${shown ? "Preview · not validated" : "Experimental"} · equal average machinery · driver–team effects retained`}>
+    {shown && <div className="briefing-withheld briefing-preview-notice"><h2>Not a validated ranking</h2><p>{previewValidation(shown)} This exploratory preview is shown until a ranking passes.</p></div>}
+    {established || shown ? <>
       <table className="briefing-ranking briefing-overall-table" aria-label="Equal-car championship summary">
         <thead><tr><th scope="col">Driver</th><th scope="col" className="numeric">Points per race</th><th scope="col" className="numeric">Title probability</th><th scope="col" className="numeric">Rank range</th></tr></thead>
         <tbody>{rows.map((row) => <tr className="briefing-ranking-row" key={row.driver_id} style={{ "--performance-color": scale(row.points_per_race) } as CSSProperties}>
@@ -145,17 +149,18 @@ function OverallChapter({ data }: { data: Dataset }) {
         </tr>)}</tbody>
       </table>
       <PerformanceKey points />
-      <p className="briefing-units">{evidence.simulated_seasons.toLocaleString()} simulated seasons · {evidence.n_races_simulated} races per season. Title probability is the share won; rank ranges describe simulated season outcomes.</p>
-      <p className="briefing-takeaway"><strong>{rows[0].name}</strong> has the most expected points per race in this equal-car simulation.</p>
+      <p className="briefing-units">{(shown || evidence!).simulated_seasons.toLocaleString()} simulated seasons · {(shown || evidence!).n_races_simulated} races per season. Title probability is the share won; rank ranges describe simulated season outcomes.</p>
+      <p className="briefing-takeaway"><strong>{rows[0].name}</strong> has the most expected points per race in this equal-car {shown ? "preview" : "simulation"}.{shown && " Positions remain uncertain."}</p>
     </> : <div className="briefing-withheld"><h2>Overall ranking {state}</h2><p>{reason}</p></div>}
     {evidence && <section className="briefing-quality-summary" aria-label="Quality selection">
       <h2>Additional racing qualities</h2>
       <p>{evidence.qualities_entered.length ? evidence.qualities_entered.map(qualityLabel).join(" · ") : "No additional racing qualities entered."}</p>
       <p>Tested but not entered: {evidence.qualities_not_entered.length ? evidence.qualities_not_entered.map(qualityLabel).join(" · ") : "None recorded"}.</p>
+      {shown && <p>The preview nevertheless includes {shown.components.filter((c) => c !== "qualifying_pace").map(qualityLabel).join(" · ") || "no additional qualities"} as a fixed exploratory choice.</p>}
       <p>Excluded test seasons — combined validation: {evidence.excluded_test_seasons.combined_validation.join(", ") || "None recorded"}; race stage: {evidence.excluded_test_seasons.heldout_race_stage.join(", ") || "None recorded"}.</p>
     </section>}
     <p className="briefing-units">This simplified scenario excludes lap-by-lap passing, traffic, pit strategy and wet conditions. It is not a forecast of the real championship.</p>
-    <div className="briefing-actions"><a href="#drivers/overall">Full standings, contributions & validation <ArrowRight size={14} aria-hidden="true" /></a></div>
+    <div className="briefing-actions"><a href="#drivers/overall">{shown ? "Full standings & validation" : "Full standings, contributions & validation"} <ArrowRight size={14} aria-hidden="true" /></a></div>
   </Chapter>;
 }
 
@@ -189,7 +194,7 @@ function EvidenceChapter({ data }: { data: Dataset }) {
   </Chapter>;
 }
 
-export default function Briefing({ data, chapter }: { data: Dataset; chapter: string }) {
+export default function Briefing({ data, chapter, preview }: { data: Dataset; chapter: string; preview?: OverallPreview }) {
   const index = Math.max(0, BRIEFING_CHAPTERS.findIndex((item) => item.id === chapter));
   const current = BRIEFING_CHAPTERS[index];
   const previous = BRIEFING_CHAPTERS[index - 1];
@@ -199,7 +204,7 @@ export default function Briefing({ data, chapter }: { data: Dataset; chapter: st
     {current.id === "qualifying" && <QualifyingChapter data={data} />}
     {current.id === "cars" && <QualifyingChapter data={data} cars />}
     {current.id === "race" && <RaceChapter data={data} />}
-    {current.id === "overall" && <OverallChapter data={data} />}
+    {current.id === "overall" && <OverallChapter data={data} preview={preview} />}
     {current.id === "evidence" && <EvidenceChapter data={data} />}
     <nav className="briefing-controls" aria-label="Briefing controls">
       {previous ? <a href={`#briefing/${previous.id}`}><ArrowLeft size={14} aria-hidden="true" />Previous: {previous.label}</a> : <span />}

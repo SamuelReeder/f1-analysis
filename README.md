@@ -22,7 +22,7 @@ Category links and ordinary next/previous links connect the sections without
 covering the results. Nothing advances automatically.
 
 Every result and conclusion is derived from the loaded release. Race driver/car
-gates remain separate, unverified equal-car standings remain withheld, and
+gates remain separate, the equal-car view shows only a labeled, unvalidated preview, and
 forecast improvement claims use the recorded comparison interval. Full histories,
 comparisons, exports and methodology remain directly accessible, with a return
 link from each detailed view to the relevant section.
@@ -73,6 +73,19 @@ may still train later folds. These decisions and every displayed result value
 come from the verified outputs at publication time; they are not copied from the
 historical research notes. Older dashboard releases without this payload show an
 unavailable status until a new release is published.
+
+Until that gate passes, the view shows the
+[exploratory equal-car preview](docs/championship_preview.md) from
+`dashboard/public/data/overall_preview.json`, labeled **Preview · not validated**
+with its own data cutoff and recording date. It states the failed combined test
+from its recorded summary and has no contribution breakdown. A validated ranking
+always replaces it. `dashboard/verify_publication.py record` rewrites the file
+from `outputs/analysis/championship_preview/` only when the preview's full
+provenance is current. Otherwise it keeps the committed copy, which still shows
+its older cutoff. The receipt binds the file's hash, and CI rebuilds the file from
+the committed preview outputs, so a changed file or changed outputs stop the build.
+The browser rejects a preview that claims validation or a passing gate. The
+[publication record](docs/overall_preview_publication.md) gives the details.
 
 It provides:
 
@@ -165,7 +178,8 @@ A static host must receive updated `data/` files to show subsequent releases. Se
 The total driver race-pace ranking is published; the car race-pace table is withheld
 because it did not pass the prediction and interval-coverage checks. Equal-car
 championship standings remain withheld after regeneration: the combined validation
-gate failed. The Overall view shows the current evidence and reason without a ranking.
+gate failed. The Overall view shows the current evidence and reason, with the
+labeled exploratory preview in place of a validated ranking.
 Portable skill is explicitly experimental. Historical validation files have no run
 manifest and are shown as recorded research, not as fresh acceptance of a new fit.
 
@@ -650,9 +664,10 @@ For the requested provisional result, a separate
 [exploratory equal-car preview](outputs/analysis/championship_preview/preview.html)
 uses the converged current-data qualifying and race-pace fits. Its
 [estimates](outputs/analysis/championship_preview/standings.csv) are explicitly
-unvalidated, retain current driver-team compatibility, and do not enable the
-production Overall view. This preview does not complete the unresolved validation
-goal or change any failed gate.
+unvalidated and retain current driver-team compatibility. On 2026-10-23 the user
+asked for it to appear on the site, labeled as unvalidated, in place of the withheld
+ranking (see the dashboard section above). This preview does not complete the
+unresolved validation goal or change any failed gate.
 
 The subsequent [model audit](docs/championship_model_audit.md) traces Hadjar's
 position to qualifying and current-team effects, compares the independent
