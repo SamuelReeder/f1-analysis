@@ -1,6 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import type { Dataset, OverallResult, RacePace } from "../src/types";
+import type { Dataset, OverallPreview, OverallResult, RacePace } from "../src/types";
 
 let current: Dataset;
 let pointer: { schema_version: number; release: string; url: string; published_at: string };
@@ -14,6 +14,10 @@ test.beforeEach(async ({ request }) => {
 
 async function supply(page: Page, data: Dataset) {
   await page.route("**/data/releases/*.json", (route) => route.fulfill({ json: data }));
+}
+
+async function withholdPreview(page: Page) {
+  await page.route("**/data/overall_preview.json", (route) => route.fulfill({ status: 404 }));
 }
 
 function overallFixture(): OverallResult {
@@ -193,6 +197,7 @@ for (const state of ["not established", "stale", "unavailable", "failed gate", "
     if (state === "failed gate") overall.evidence!.combined_validation.gate = false;
     else if (state !== "legacy") overall.status = state;
     await supply(page, { ...current, overall: state === "legacy" ? undefined : overall });
+    await withholdPreview(page);
     await page.goto("./#briefing/overall");
     const view = page.locator(".briefing-view");
     await expect(view).toBeVisible();
@@ -203,6 +208,22 @@ for (const state of ["not established", "stale", "unavailable", "failed gate", "
     await expect(view).toContainText(/experimental/i);
   });
 }
+
+test("the published equal-car preview is labeled as not validated", async ({ page, request }) => {
+  const preview: OverallPreview = await (await request.get("data/overall_preview.json")).json();
+  expect(preview.validated).toBe(false);
+  expect(preview.combined_validation.gate).toBe(false);
+  await page.goto("./#briefing/overall");
+  const view = page.locator(".briefing-view");
+  await expect(view.locator(".briefing-ranking-row")).toHaveCount(preview.standings.length);
+  const leader = [...preview.standings].sort((a, b) => b.points_per_race - a.points_per_race)[0];
+  await expect(view.locator(".briefing-ranking-row").first()).toContainText(leader.points_per_race.toFixed(2));
+  await expect(view.getByRole("heading", { name: "Not a validated ranking" })).toBeVisible();
+  await expect(view).toContainText("Preview · not validated");
+  await expect(view).toContainText(`${preview.combined_validation.n_races} races`);
+  await expect(view).toContainText("no improvement is established");
+  await expect(view).toContainText(`Data through ${preview.data_as_of.race_name}`);
+});
 
 test("a passed equal-car briefing explains the runtime outcome and exclusions", async ({ page }) => {
   const overall = overallFixture();

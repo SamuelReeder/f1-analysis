@@ -357,6 +357,29 @@ export interface OverallEvidence {
   n_races_simulated: number;
   driver_error_rates_used: boolean;
 }
+export type OverallStanding = OverallResult["standings"][number];
+/** Exploratory equal-car simulation shown while no validated Overall ranking exists. */
+export interface OverallPreview {
+  schema_version: 1;
+  model: string;
+  validated: false;
+  status: string;
+  fit_id: string;
+  recorded_at: string;
+  data_as_of: { event_id: string; race_name: string; date: string };
+  scope: string;
+  headline: string;
+  components: string[];
+  simulated_seasons: number;
+  n_races_simulated: number;
+  driver_error_rates_used: boolean;
+  p_retire_common: number;
+  combined_validation: { n_races: number; seasons: number[]; mean_diff_per_race: number; ci95: number[]; gate: boolean };
+  archive_failures: { study: string; exception: string }[];
+  race_pace_diagnostics: { rhat_max: number; divergences: number; n_draws: number; converged: boolean };
+  race_stage_retries: number;
+  standings: OverallStanding[];
+}
 export interface OverallResult {
   status: "established" | "not established" | "stale" | "unavailable";
   reason: string;

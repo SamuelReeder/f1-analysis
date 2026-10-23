@@ -60,7 +60,8 @@ export default function MethodologyPage({ data }: { data: Dataset }) {
               title probabilities and simulated season rank ranges. It keeps
               driver–team effects and only admits racing qualities supported by
               its entry tests and combined held-out validation. Missing, stale
-              or failed evidence leaves the ranking withheld.
+              or failed evidence leaves the validated ranking withheld; until one
+              passes, an exploratory preview is shown under a “not validated” label.
             </dd>
           </div>
           <div>

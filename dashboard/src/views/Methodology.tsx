@@ -410,8 +410,9 @@ export default function Methodology({ data }: { data: Dataset }) {
             historical research, not a fresh validation of this release.
             Qualifying pace is only one part of driver performance. The
             experimental Overall (equal car) view publishes simulated championship
-            outcomes only when its current provenance and combined validation
-            pass; otherwise it explains why the ranking is withheld. Its evidence
+            outcomes as a validated ranking only when its current provenance and
+            combined validation pass. Until then it shows a labeled exploratory
+            preview and explains why validation is incomplete. Its evidence
             lists admitted qualities and excluded test seasons. Each racing
             quality’s current status appears on Model health.
           </p>

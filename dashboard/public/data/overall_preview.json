@@ -1,0 +1,258 @@
+{
+ "schema_version": 1,
+ "model": "exploratory-fixed-pace-preview",
+ "validated": false,
+ "status": "exploratory preview; validation not established",
+ "fit_id": "d96d05f975e033cda50e",
+ "recorded_at": "2026-10-05T21:07:08.740342+00:00",
+ "data_as_of": {
+  "event_id": "2026-15",
+  "race_name": "Azerbaijan Grand Prix",
+  "date": "2026-09-26"
+ },
+ "scope": "Current qualifying and career race pace beyond qualifying; conditional equal-car simulation",
+ "headline": "Expected points; current driver-team compatibility retained",
+ "components": [
+  "qualifying_pace",
+  "race_specific_pace"
+ ],
+ "simulated_seasons": 2000,
+ "n_races_simulated": 24,
+ "driver_error_rates_used": false,
+ "p_retire_common": 0.14981558992562205,
+ "combined_validation": {
+  "n_races": 207,
+  "seasons": [
+   2016,
+   2026
+  ],
+  "mean_diff_per_race": 0.12543388956410872,
+  "ci95": [
+   -0.02981124744889914,
+   0.2934394047178071
+  ],
+  "gate": false
+ },
+ "archive_failures": [
+  {
+   "study": "championship_archive",
+   "exception": "Archive race pace failed convergence for 2007"
+  },
+  {
+   "study": "championship_archive_conservative",
+   "exception": "Conservative archive pace failed convergence for 2007"
+  }
+ ],
+ "race_pace_diagnostics": {
+  "rhat_max": 1.0093920230865479,
+  "divergences": 0,
+  "n_draws": 3200,
+  "converged": true
+ },
+ "race_stage_retries": 0,
+ "sources": {
+  "outputs/analysis/championship_preview/summary.json": "a0e70fd544d0db1a31c342bda03df792646e7db7c3d2ab38c6f67fd45f0bf09f",
+  "outputs/analysis/championship_preview/standings.csv": "ffb50e7410b4835eeace7d55fe6845099204547c130d3855228f2c064217f2aa",
+  "outputs/analysis/championship_preview/manifest.json": "d23e4dd3ab31abdc84ed7ef48c84046b3a228e0859a956cd36610a636320d382"
+ },
+ "standings": [
+  {
+   "driver_id": "max_verstappen",
+   "name": "Max Verstappen",
+   "points_per_race": 11.182625,
+   "p_title": 0.581,
+   "rank_median": 1.0,
+   "rank_lo": 1,
+   "rank_hi": 6
+  },
+  {
+   "driver_id": "hadjar",
+   "name": "Isack Hadjar",
+   "points_per_race": 6.831979,
+   "p_title": 0.0395,
+   "rank_median": 5.0,
+   "rank_lo": 2,
+   "rank_hi": 16
+  },
+  {
+   "driver_id": "sainz",
+   "name": "Carlos Sainz",
+   "points_per_race": 6.587812,
+   "p_title": 0.0725,
+   "rank_median": 6.0,
+   "rank_lo": 1,
+   "rank_hi": 16
+  },
+  {
+   "driver_id": "norris",
+   "name": "Lando Norris",
+   "points_per_race": 6.498375,
+   "p_title": 0.083,
+   "rank_median": 6.0,
+   "rank_lo": 1,
+   "rank_hi": 18
+  },
+  {
+   "driver_id": "leclerc",
+   "name": "Charles Leclerc",
+   "points_per_race": 6.105104,
+   "p_title": 0.057,
+   "rank_median": 7.0,
+   "rank_lo": 1,
+   "rank_hi": 17
+  },
+  {
+   "driver_id": "antonelli",
+   "name": "Andrea Kimi Antonelli",
+   "points_per_race": 4.979,
+   "p_title": 0.022,
+   "rank_median": 9.0,
+   "rank_lo": 2,
+   "rank_hi": 20
+  },
+  {
+   "driver_id": "arvid_lindblad",
+   "name": "Arvid Lindblad",
+   "points_per_race": 4.732104,
+   "p_title": 0.0105,
+   "rank_median": 10.0,
+   "rank_lo": 3,
+   "rank_hi": 20
+  },
+  {
+   "driver_id": "alonso",
+   "name": "Fernando Alonso",
+   "points_per_race": 4.665188,
+   "p_title": 0.026,
+   "rank_median": 11.0,
+   "rank_lo": 2,
+   "rank_hi": 20
+  },
+  {
+   "driver_id": "perez",
+   "name": "Sergio P\u00e9rez",
+   "points_per_race": 4.590875,
+   "p_title": 0.0295,
+   "rank_median": 11.0,
+   "rank_lo": 2,
+   "rank_hi": 21
+  },
+  {
+   "driver_id": "bortoleto",
+   "name": "Gabriel Bortoleto",
+   "points_per_race": 4.588063,
+   "p_title": 0.0225,
+   "rank_median": 11.0,
+   "rank_lo": 2,
+   "rank_hi": 20
+  },
+  {
+   "driver_id": "bearman",
+   "name": "Oliver Bearman",
+   "points_per_race": 4.562458,
+   "p_title": 0.0205,
+   "rank_median": 11.0,
+   "rank_lo": 2,
+   "rank_hi": 20
+  },
+  {
+   "driver_id": "piastri",
+   "name": "Oscar Piastri",
+   "points_per_race": 4.516312,
+   "p_title": 0.011,
+   "rank_median": 11.0,
+   "rank_lo": 3,
+   "rank_hi": 21
+  },
+  {
+   "driver_id": "hamilton",
+   "name": "Lewis Hamilton",
+   "points_per_race": 4.45325,
+   "p_title": 0.0055,
+   "rank_median": 11.0,
+   "rank_lo": 3,
+   "rank_hi": 20
+  },
+  {
+   "driver_id": "gasly",
+   "name": "Pierre Gasly",
+   "points_per_race": 4.2045,
+   "p_title": 0.0085,
+   "rank_median": 12.0,
+   "rank_lo": 3,
+   "rank_hi": 20
+  },
+  {
+   "driver_id": "russell",
+   "name": "George Russell",
+   "points_per_race": 3.592542,
+   "p_title": 0.0035,
+   "rank_median": 14.0,
+   "rank_lo": 4,
+   "rank_hi": 22
+  },
+  {
+   "driver_id": "albon",
+   "name": "Alexander Albon",
+   "points_per_race": 3.498771,
+   "p_title": 0.001,
+   "rank_median": 14.0,
+   "rank_lo": 5,
+   "rank_hi": 21
+  },
+  {
+   "driver_id": "hulkenberg",
+   "name": "Nico H\u00fclkenberg",
+   "points_per_race": 3.039375,
+   "p_title": 0.003,
+   "rank_median": 16.0,
+   "rank_lo": 5,
+   "rank_hi": 22
+  },
+  {
+   "driver_id": "bottas",
+   "name": "Valtteri Bottas",
+   "points_per_race": 3.004958,
+   "p_title": 0.0035,
+   "rank_median": 16.0,
+   "rank_lo": 4,
+   "rank_hi": 22
+  },
+  {
+   "driver_id": "lawson",
+   "name": "Liam Lawson",
+   "points_per_race": 2.783542,
+   "p_title": 0.0,
+   "rank_median": 16.0,
+   "rank_lo": 7,
+   "rank_hi": 22
+  },
+  {
+   "driver_id": "colapinto",
+   "name": "Franco Colapinto",
+   "points_per_race": 2.432438,
+   "p_title": 0.0,
+   "rank_median": 18.0,
+   "rank_lo": 8,
+   "rank_hi": 22
+  },
+  {
+   "driver_id": "ocon",
+   "name": "Esteban Ocon",
+   "points_per_race": 2.153,
+   "p_title": 0.0,
+   "rank_median": 19.0,
+   "rank_lo": 9,
+   "rank_hi": 22
+  },
+  {
+   "driver_id": "stroll",
+   "name": "Lance Stroll",
+   "points_per_race": 1.997729,
+   "p_title": 0.0,
+   "rank_median": 19.0,
+   "rank_lo": 10,
+   "rank_hi": 22
+  }
+ ]
+}

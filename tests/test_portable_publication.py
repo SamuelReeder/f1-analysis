@@ -62,3 +62,75 @@ def test_new_data_requires_new_publication(exported):
     (root / "data/new_input.json").write_text("{}")
     with pytest.raises(ValueError, match="source inventory changed"):
         publication.verify(root)
+
+
+@pytest.fixture
+def previewed(exported):
+    """The committed exploratory preview outputs, published into the synthetic root."""
+    import shutil
+    root = exported[0]
+    real = Path(__file__).resolve().parents[1]
+    for name in publication.PREVIEW_FILES:
+        target = root / publication.PREVIEW / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(real / publication.PREVIEW / name, target)
+    events = root / "data/processed/events.parquet"
+    events.parent.mkdir(parents=True)
+    shutil.copy(real / "data/processed/events.parquet", events)
+    subprocess.run(["git", "add", "-A"], cwd=root, check=True)
+    preview = root / "dashboard/public/data/overall_preview.json"
+    preview.write_text(json.dumps(publication.preview_payload(root)))
+    receipt_path = root / "dashboard/public/data/publication.json"
+    receipt = json.loads(receipt_path.read_text())
+    receipt["sources"] = {p: publication.digest(root / p) for p in publication.sources(root)}
+    receipt["overall_preview_sha256"] = publication.digest(preview)
+    receipt_path.write_text(json.dumps(receipt))
+    return root, preview, receipt_path
+
+
+def test_preview_verifies_from_committed_outputs(previewed):
+    root, preview, _ = previewed
+    publication.verify(root)
+    data = json.loads(preview.read_text())
+    assert data["validated"] is False and data["combined_validation"]["gate"] is False
+    assert data["standings"] == sorted(data["standings"], key=lambda r: -r["points_per_race"])
+
+
+def test_tampered_preview_rejected(previewed):
+    root, preview, receipt_path = previewed
+    data = json.loads(preview.read_text())
+    data["standings"][0]["points_per_race"] += 1
+    preview.write_text(json.dumps(data))
+    with pytest.raises(ValueError, match="Overall preview changed"):
+        publication.verify(root)
+    # Even with a matching receipt, the file must equal its committed outputs.
+    receipt = json.loads(receipt_path.read_text())
+    receipt["overall_preview_sha256"] = publication.digest(preview)
+    receipt_path.write_text(json.dumps(receipt))
+    with pytest.raises(ValueError, match="disagrees with its committed outputs"):
+        publication.verify(root)
+
+
+def test_preview_outputs_must_match_their_manifest(previewed):
+    root, _, _ = previewed
+    standings = root / publication.PREVIEW / "standings.csv"
+    standings.write_text(standings.read_text().replace("Max Verstappen", "Someone Else"))
+    with pytest.raises(ValueError, match="disagrees with its manifest"):
+        publication.verify(root)
+
+
+def test_preview_marked_as_passing_rejected(previewed):
+    root, _, _ = previewed
+    summary = root / publication.PREVIEW / "summary.json"
+    data = json.loads(summary.read_text())
+    data["gate"] = True
+    summary.write_text(json.dumps(data))
+    with pytest.raises(ValueError):
+        publication.verify(root)
+
+
+def test_recorded_preview_cannot_silently_disappear(previewed):
+    root, preview, _ = previewed
+    preview.unlink()
+    with pytest.raises(ValueError, match="recorded overall preview is missing"):
+        publication.verify(root)

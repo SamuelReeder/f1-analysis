@@ -10,6 +10,7 @@ import type {
   Dataset,
   Discipline,
   Metric,
+  OverallPreview,
   Release,
   RunStatus,
   View,
@@ -52,6 +53,7 @@ function getRoute(): { view: View; discipline: Discipline; chapter: string } {
 export default function App() {
   const [{ view, discipline, chapter }, setRoute] = useState(getRoute);
   const [data, setData] = useState<Dataset>();
+  const [preview, setPreview] = useState<OverallPreview>();
   const [release, setRelease] = useState<Release>();
   const releaseRef = useRef("");
   const [run, setRun] = useState<RunStatus>();
@@ -82,6 +84,13 @@ export default function App() {
         pointer.url !== `releases/${pointer.release}.json`
       )
         throw new Error("This dataset format is not supported.");
+      // Optional: an absent or malformed preview leaves the Overall view withheld.
+      const candidate: OverallPreview | undefined = await get("overall_preview.json").catch(() => undefined);
+      const nextPreview = candidate?.schema_version === 1 && candidate.validated === false &&
+        Array.isArray(candidate.standings) && candidate.standings.length > 0 &&
+        candidate.combined_validation?.gate === false ? candidate : undefined;
+      if (mounted.current)
+        setPreview((old) => old?.fit_id === nextPreview?.fit_id ? old : nextPreview);
       if (pointer.release !== releaseRef.current) {
         const next: Dataset = await get(pointer.url);
         if (
@@ -246,9 +255,9 @@ export default function App() {
                 </div>
               )}
               {view === "briefing" ? (
-                <Briefing data={data} chapter={chapter} />
+                <Briefing data={data} chapter={chapter} preview={preview} />
               ) : view === "drivers" && discipline === "overall" ? (
-                <Overall result={data.overall} />
+                <Overall result={data.overall} preview={preview} dataAsOf={data.meta.data_as_of} />
               ) : view === "drivers" || view === "cars" ? (
                 <Rankings
                   key={view}

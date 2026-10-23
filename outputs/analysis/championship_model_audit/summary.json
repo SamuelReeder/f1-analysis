@@ -1,0 +1,212 @@
+{
+ "status": "exploratory diagnosis; no new validation or model selection",
+ "gate": false,
+ "source_revision": "94d1fe473da52b9e748fe8ae082646b7bc978517",
+ "data_as_of": "2026-15",
+ "fits_run": 0,
+ "baseline_replay_max_abs_points_error": 4.440892098500626e-16,
+ "simulated_seasons_per_seed": 2000,
+ "races_per_season": 24,
+ "seeds": [
+  0,
+  1,
+  2,
+  3,
+  4
+ ],
+ "missing_current_race_residuals": [],
+ "race_coefficients": {
+  "a_car": {
+   "q05": 1.3473342478275299,
+   "median": 1.420320451259613,
+   "q95": 1.5025312721729278
+  },
+  "b_driver": {
+   "q05": 1.9372919917106628,
+   "median": 2.1199012994766235,
+   "q95": 2.2928219199180604
+  },
+  "b_quality": {
+   "q05": 2.230922758579254,
+   "median": 2.6374787092208862,
+   "q95": 3.044175636768341
+  },
+  "c_grid": {
+   "q05": 0.8431327402591705,
+   "median": 0.8980073630809784,
+   "q95": 0.9543269962072373
+  }
+ },
+ "qualifying_hyperparameters": {
+  "sd_driver_form": {
+   "q05": 0.1104510024189949,
+   "median": 0.12052891403436661,
+   "q95": 0.13055355027318
+  },
+  "sd_car_event": {
+   "q05": 0.13240205124020576,
+   "median": 0.14586345851421356,
+   "q95": 0.1586653359234333
+  },
+  "sigma0": {
+   "q05": 0.20779048651456833,
+   "median": 0.21805741637945175,
+   "q95": 0.22832294628024102
+  },
+  "sigma_tau": {
+   "q05": 0.5352459728717804,
+   "median": 0.5639279782772064,
+   "q95": 0.5954764604568481
+  },
+  "nu": {
+   "q05": 3.5780850291252135,
+   "median": 3.8886529207229614,
+   "q95": 4.245210409164429
+  },
+  "sd_car_segment": {
+   "q05": 0.1584903307259083,
+   "median": 0.16807013005018234,
+   "q95": 0.17774219289422036
+  }
+ },
+ "hadjar_qualifying_teammate_comparisons": [
+  {
+   "season": 2025,
+   "teammate": "lawson",
+   "events": 21,
+   "matched_segments": 44,
+   "mean_gap_pct": 0.18698020871796225,
+   "median_gap_pct": 0.16510303032388463,
+   "events_hadjar_faster": 16
+  },
+  {
+   "season": 2025,
+   "teammate": "tsunoda",
+   "events": 2,
+   "matched_segments": 5,
+   "mean_gap_pct": 0.02033439802474582,
+   "median_gap_pct": 0.02033439802474582,
+   "events_hadjar_faster": 1
+  },
+  {
+   "season": 2026,
+   "teammate": "max_verstappen",
+   "events": 10,
+   "matched_segments": 28,
+   "mean_gap_pct": -0.052288684652243345,
+   "median_gap_pct": -0.011146462002338322,
+   "events_hadjar_faster": 5
+  }
+ ],
+ "hadjar_adjusted_race_teammate_comparisons": [
+  {
+   "season": 2025,
+   "teammate": "lawson",
+   "races": 16,
+   "mean_adjusted_gap_pct": 0.2132406260935032,
+   "median_adjusted_gap_pct": 0.1654643260637116,
+   "races_hadjar_faster": 12
+  },
+  {
+   "season": 2025,
+   "teammate": "tsunoda",
+   "races": 1,
+   "mean_adjusted_gap_pct": 0.0278930444294755,
+   "median_adjusted_gap_pct": 0.0278930444294755,
+   "races_hadjar_faster": 1
+  },
+  {
+   "season": 2026,
+   "teammate": "max_verstappen",
+   "races": 8,
+   "mean_adjusted_gap_pct": -0.5416823913623824,
+   "median_adjusted_gap_pct": -0.566956691994331,
+   "races_hadjar_faster": 0
+  }
+ ],
+ "existing_qualifying_structural_sensitivity": [
+  {
+   "variant": "main",
+   "hadjar_in_team_s_median": 0.1676121935248375,
+   "hadjar_order": 2
+  },
+  {
+   "variant": "sens_start2006",
+   "hadjar_in_team_s_median": 0.1809583090245723,
+   "hadjar_order": 2
+  },
+  {
+   "variant": "sens_notrack",
+   "hadjar_in_team_s_median": 0.1660642571747303,
+   "hadjar_order": 2
+  },
+  {
+   "variant": "sens_gausscar",
+   "hadjar_in_team_s_median": 0.1700897298753261,
+   "hadjar_order": 2
+  },
+  {
+   "variant": "sens_notransient",
+   "hadjar_in_team_s_median": 0.1647020168602466,
+   "hadjar_order": 2
+  },
+  {
+   "variant": "sens_noform",
+   "hadjar_in_team_s_median": 0.1822401165962219,
+   "hadjar_order": 2
+  },
+  {
+   "variant": "sens_nocompat",
+   "hadjar_in_team_s_median": 0.1384952656924724,
+   "hadjar_order": 3
+  },
+  {
+   "variant": "sens_splitt",
+   "hadjar_in_team_s_median": 0.1616220228374004,
+   "hadjar_order": 2
+  },
+  {
+   "variant": "sens_drift_x2",
+   "hadjar_in_team_s_median": 0.1656092941761016,
+   "hadjar_order": 2
+  },
+  {
+   "variant": "sens_drift_half",
+   "hadjar_in_team_s_median": 0.1531873069703579,
+   "hadjar_order": 2
+  },
+  {
+   "variant": "sens_team_spell",
+   "hadjar_in_team_s_median": 0.1885085262358188,
+   "hadjar_order": 2
+  },
+  {
+   "variant": "sens_team_era",
+   "hadjar_in_team_s_median": 0.1256048440933227,
+   "hadjar_order": 4
+  }
+ ],
+ "points_tied_for_title_seasons": 17,
+ "points_tied_for_title_fraction": 0.0085,
+ "hadjar_vs_current_teammate_in_team_pace_correlation": 0.7445697514630719,
+ "independent_total_race_validation": {
+  "n_races": 29,
+  "n_predictions": 262,
+  "mse_difference": -0.07724599678967253,
+  "mse_difference_ci95": [
+   -0.10871706511004053,
+   -0.04701104840482828
+  ],
+  "improves": true,
+  "rmse": 0.3644788250961879,
+  "baseline_rmse": 0.458491015949722,
+  "coverage90": 0.9083969465648855,
+  "mean_interval_width": 1.1892505530586601,
+  "baseline_interval_width": 1.4213194494005754,
+  "calibrated": true,
+  "sharper": true,
+  "passed": true
+ },
+ "interpretation": "Scenario differences hold coefficients fixed. They are not refitted models, causal effects or held-out improvements. Pairwise probabilities concern simulated season points; MC errors concern integration accuracy, not uncertainty in ability.",
+ "elapsed_seconds": 3.8401271809998434
+}

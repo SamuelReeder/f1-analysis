@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import fs from "node:fs/promises";
-import type { Dataset, RacePace, OverallResult } from "../src/types";
+import type { Dataset, RacePace, OverallPreview, OverallResult } from "../src/types";
 let current: Dataset;
 
 test.beforeEach(async ({ page, request }) => {
@@ -800,6 +800,7 @@ for (const passed of [true, false]) {
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
     await page.route("**/data/releases/*.json", (route) => route.fulfill({ json: { ...current, overall: fixture } }));
+    await page.route("**/data/overall_preview.json", (route) => route.fulfill({ status: 404 }));
     await page.goto("./#drivers/overall");
     await page.reload();
     const link = page.getByRole("link", { name: "Overall (equal car)", exact: true });
@@ -866,6 +867,7 @@ for (const state of ["stale", "unavailable", "legacy"] as const) {
   test(`equal-car ${state} release never falls back to a ranking`, async ({ page }) => {
     const fixture = { ...overallFixture(), status: state === "legacy" ? "unavailable" : state, evidence: null };
     await page.route("**/data/releases/*.json", (route) => route.fulfill({ json: { ...current, overall: state === "legacy" ? undefined : fixture } }));
+    await page.route("**/data/overall_preview.json", (route) => route.fulfill({ status: 404 }));
     await page.goto("./#drivers/overall");
     await page.reload();
     await expect(page.getByRole("heading", { name: `Overall ranking ${state === "legacy" ? "unavailable" : state}` })).toBeVisible();
@@ -875,10 +877,54 @@ for (const state of ["stale", "unavailable", "legacy"] as const) {
   });
 }
 
+test("the published equal-car preview is labeled, complete and fits phone widths", async ({ page, request }) => {
+  const preview: OverallPreview = await (await request.get("data/overall_preview.json")).json();
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("./#drivers/overall");
+  await expect(page.getByText("Preview · not validated", { exact: true })).toBeVisible();
+  await expect(page.getByText("Not a validated ranking", { exact: true })).toBeVisible();
+  const table = page.getByRole("table", { name: "Equal-car championship standings" });
+  await expect(table.locator("tbody tr")).toHaveCount(preview.standings.length);
+  const leader = preview.standings[0];
+  await expect(table.locator("tbody tr").first()).toContainText(
+    [leader.name, leader.points_per_race.toFixed(2), `${(leader.p_title * 100).toFixed(1)}%`, `${leader.rank_lo}–${leader.rank_hi}`].join(""));
+  const notes = page.getByRole("region", { name: "Why this is a preview" });
+  await expect(notes).toContainText(`${preview.combined_validation.n_races} races`);
+  await expect(notes).toContainText(preview.race_pace_diagnostics.rhat_max.toFixed(3));
+  await expect(page.getByRole("region", { name: "Contribution breakdown" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /contributions$/ })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Which racing qualities passed validation?" })).toBeVisible();
+  for (const width of [1440, 390, 320]) {
+    await page.setViewportSize({ width, height: 900 });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    const audit = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+    expect(audit.violations.map((v) => ({ id: v.id, targets: v.nodes.map((n) => n.target) }))).toEqual([]);
+  }
+  await page.screenshot({ path: "test-results/overall-preview-mobile.png", fullPage: true });
+  expect(errors).toEqual([]);
+});
+
+for (const change of ["validated", "passing gate", "empty"] as const) {
+  test(`an equal-car preview claiming a ${change} state is not shown`, async ({ page, request }) => {
+    const preview: OverallPreview = await (await request.get("data/overall_preview.json")).json();
+    const altered: Record<string, unknown> = change === "validated" ? { ...preview, validated: true }
+      : change === "passing gate" ? { ...preview, combined_validation: { ...preview.combined_validation, gate: true } }
+      : { ...preview, standings: [] };
+    await page.route("**/data/overall_preview.json", (route) => route.fulfill({ json: altered }));
+    await page.goto("./#drivers/overall");
+    await page.reload();
+    await expect(page.getByRole("heading", { name: "Overall ranking not established" })).toBeVisible();
+    await expect(page.getByRole("table")).toHaveCount(0);
+    await expect(page.getByText("Preview · not validated", { exact: true })).toHaveCount(0);
+  });
+}
+
 test("a failed overall gate hides even accidentally supplied standings", async ({ page }) => {
   const fixture = overallFixture();
   fixture.evidence!.combined_validation.gate = false;
   await page.route("**/data/releases/*.json", (route) => route.fulfill({ json: { ...current, overall: fixture } }));
+  await page.route("**/data/overall_preview.json", (route) => route.fulfill({ status: 404 }));
   await page.goto("./#drivers/overall");
   await page.reload();
   await expect(page.getByRole("heading", { name: "Overall ranking not established" })).toBeVisible();
